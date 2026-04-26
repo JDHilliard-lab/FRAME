@@ -1530,21 +1530,49 @@ async function exportElevPNG() {
     const oldOverflow = ws.style.overflow; ws.style.overflow = 'visible';
     const oldWallBg = wall.style.background; wall.style.background = 'transparent';
 
-    // Swap the person's SVG src for an inline data URL so html2canvas can definitely
-    // rasterize it (external SVG <img> tags sometimes silently drop on capture).
+    // PERSON: html2canvas can fail to capture <img src="*.svg"> reliably. Same fix
+    // we used for frames — pre-render to a canvas and overlay it. Inlining the SVG
+    // src as a data URL is also done as a backup in case the canvas overlay fails.
     const personImg = document.getElementById('person');
+    const personWrap = document.getElementById('person-wrap');
     let personOriginalSrc = null;
-    if (personImg) {
+    let personOverlayCanvas = null;
+    let personOriginalDisplay = null;
+    const personIsVisible = personWrap && getComputedStyle(personWrap).display !== 'none';
+
+    if (personImg && personIsVisible) {
+        // Step 1: get the SVG as a data URL (cached after first call)
         const dataUrl = await _getPersonSvgDataUrl();
-        if (dataUrl && personImg.src !== dataUrl) {
-            personOriginalSrc = personImg.getAttribute('src');
-            personImg.src = dataUrl;
-            // Wait for the swapped image to be decoded so it's painted before capture
-            await new Promise(res => {
-                if (personImg.complete && personImg.naturalWidth) return res();
-                personImg.onload = () => res();
-                personImg.onerror = () => res();
-            });
+        if (dataUrl) {
+            // Step 2: load it into an Image object we can drawImage from
+            const img = await _loadImg(dataUrl);
+            if (img && img.naturalWidth) {
+                // Step 3: render to a canvas at the person's on-screen size (3x for crispness)
+                const rect = personImg.getBoundingClientRect();
+                const cssW = Math.max(1, Math.round(rect.width));
+                const cssH = Math.max(1, Math.round(rect.height));
+                const SCALE = 3;
+                personOverlayCanvas = document.createElement('canvas');
+                personOverlayCanvas.width = cssW * SCALE;
+                personOverlayCanvas.height = cssH * SCALE;
+                personOverlayCanvas.style.cssText = `width:${cssW}px; height:${cssH}px; display:block;`;
+                const pctx = personOverlayCanvas.getContext('2d');
+                pctx.drawImage(img, 0, 0, personOverlayCanvas.width, personOverlayCanvas.height);
+
+                // Step 4: hide the original <img>, append our canvas in its place
+                personOriginalDisplay = personImg.style.display;
+                personImg.style.display = 'none';
+                personImg.parentNode.appendChild(personOverlayCanvas);
+            } else {
+                // Fallback: just swap the src (less reliable but better than nothing)
+                personOriginalSrc = personImg.getAttribute('src');
+                personImg.src = dataUrl;
+                await new Promise(res => {
+                    if (personImg.complete && personImg.naturalWidth) return res();
+                    personImg.onload = () => res();
+                    personImg.onerror = () => res();
+                });
+            }
         }
     }
 
@@ -1650,9 +1678,13 @@ async function exportElevPNG() {
         if (wasDark) document.body.classList.remove('light-theme');
         ws.style.overflow = oldOverflow;
         wall.style.background = oldWallBg;
-        // Restore the person's original src if we swapped it
-        if (personImg && personOriginalSrc !== null) {
-            personImg.src = personOriginalSrc;
+        // Restore the person element (overlay canvas removed, img re-shown / src restored)
+        if (personImg) {
+            if (personOverlayCanvas && personOverlayCanvas.parentNode) {
+                personOverlayCanvas.parentNode.removeChild(personOverlayCanvas);
+            }
+            if (personOriginalDisplay !== null) personImg.style.display = personOriginalDisplay;
+            if (personOriginalSrc !== null) personImg.src = personOriginalSrc;
         }
         // Final clean re-render in restored theme
         drawElevAll();
