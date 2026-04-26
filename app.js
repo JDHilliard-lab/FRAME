@@ -14,7 +14,7 @@ let dashLocalLibrary = {};
 const svgMove = `<svg class="svg-icon" viewBox="0 0 24 24"><path d="M5 9l-3 3 3 3M9 5l3-3 3 3M19 9l3 3-3 3M9 19l3 3 3-3M2 12h20M12 2v20"/></svg>`;
 const svgEdit = `<svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>`;
 const svgDup = `<svg class="svg-icon" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
-const svgTrash = `<svg class="svg-icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+const svgTrash = `<svg class="svg-icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>`;
 
 const dashDefaultData = { 
     id: "ART.001", imageCode: "TBD", level: "1", qty: 0, product: "Framed Art", location: "LOBBY", 
@@ -1490,6 +1490,32 @@ function _loadImg(dataUrl) {
     });
 }
 
+// html2canvas sometimes fails to capture <img src="*.svg"> when the SVG is fetched
+// at render time (it can drop silently due to CORS or timing). Preconvert the
+// person SVG to a base64 data URL once and cache it; we swap the img's src to
+// the data URL during export so html2canvas sees an inline image it can rasterize.
+let _personSvgDataUrl = null;
+async function _getPersonSvgDataUrl() {
+    if (_personSvgDataUrl) return _personSvgDataUrl;
+    const personImg = document.getElementById('person');
+    if (!personImg) return null;
+    const src = personImg.getAttribute('src');
+    if (!src || src.startsWith('data:')) { _personSvgDataUrl = src; return _personSvgDataUrl; }
+    try {
+        const res = await fetch(src);
+        if (!res.ok) return null;
+        const ct = res.headers.get('content-type') || 'image/svg+xml';
+        const text = await res.text();
+        // base64-encode the SVG text safely (handles unicode)
+        const b64 = btoa(unescape(encodeURIComponent(text)));
+        _personSvgDataUrl = `data:${ct};base64,${b64}`;
+        return _personSvgDataUrl;
+    } catch (e) {
+        console.warn('Could not inline person SVG:', e);
+        return null;
+    }
+}
+
 async function exportElevPNG() {
     const ws = document.querySelector('#view-elevation .workspace');
     const wrap = document.getElementById('export-wrap');
@@ -1503,6 +1529,24 @@ async function exportElevPNG() {
 
     const oldOverflow = ws.style.overflow; ws.style.overflow = 'visible';
     const oldWallBg = wall.style.background; wall.style.background = 'transparent';
+
+    // Swap the person's SVG src for an inline data URL so html2canvas can definitely
+    // rasterize it (external SVG <img> tags sometimes silently drop on capture).
+    const personImg = document.getElementById('person');
+    let personOriginalSrc = null;
+    if (personImg) {
+        const dataUrl = await _getPersonSvgDataUrl();
+        if (dataUrl && personImg.src !== dataUrl) {
+            personOriginalSrc = personImg.getAttribute('src');
+            personImg.src = dataUrl;
+            // Wait for the swapped image to be decoded so it's painted before capture
+            await new Promise(res => {
+                if (personImg.complete && personImg.naturalWidth) return res();
+                personImg.onload = () => res();
+                personImg.onerror = () => res();
+            });
+        }
+    }
 
     // Track everything we mutate so we can put it back exactly as it was.
     const frameLayer = document.getElementById('frame-layer');
@@ -1606,6 +1650,10 @@ async function exportElevPNG() {
         if (wasDark) document.body.classList.remove('light-theme');
         ws.style.overflow = oldOverflow;
         wall.style.background = oldWallBg;
+        // Restore the person's original src if we swapped it
+        if (personImg && personOriginalSrc !== null) {
+            personImg.src = personOriginalSrc;
+        }
         // Final clean re-render in restored theme
         drawElevAll();
     }
