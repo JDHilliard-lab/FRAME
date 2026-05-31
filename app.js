@@ -220,6 +220,11 @@ let currentElevIndex = 0;
 let elevFrames = elevations[0].frames;
 let elevPersonPos = elevations[0].personPos;
 let elevScale = 1;
+// Precise wall dims resolved each drawElevAll (full precision, not the
+// rounded input field). Sub-renderers read these so edge-gap and other
+// wall-dependent dims don't drift/jitter on unit toggles.
+let elevResolvedWallW = 1;
+let elevResolvedWallH = 1;
 let elevZoomFactor = 1;
 
 let pendingDuplicateIndex = null;
@@ -7886,6 +7891,11 @@ function drawElevAll() {
     let wallW = _wwInput, wallH = _whInput;
     if (_ce && typeof _ce.wallW === 'number' && parseFloat(_ce.wallW.toFixed(2)) === _wwInput) wallW = _ce.wallW;
     if (_ce && typeof _ce.wallH === 'number' && parseFloat(_ce.wallH.toFixed(2)) === _whInput) wallH = _ce.wallH;
+    // Publish the resolved precise wall dims so sub-renderers (edge-gap dims,
+    // group dims, etc.) use the SAME values and don't re-read the rounded
+    // input field (which caused edge-gap lines to jitter on unit toggles).
+    elevResolvedWallW = wallW;
+    elevResolvedWallH = wallH;
     const workspace = document.querySelector('#view-elevation .workspace');
     
     let baseScale = Math.min((workspace.clientWidth - 160)/wallW, (workspace.clientHeight - 160)/wallH);
@@ -8727,8 +8737,10 @@ function drawPerFrameDistanceDims() {
     layer.innerHTML = '';
     // Edge Gap toggle (Layout Guides): when off, hide all distance dims.
     if (typeof dimVisibility !== 'undefined' && !dimVisibility.edgeGap) return;
-    const wallW = parseFloat(document.getElementById('wallW').value) || 1;
-    const wallH = parseFloat(document.getElementById('wallH').value) || 1;
+    // Use the precise resolved wall dims (set by drawElevAll) so edge-gap
+    // lines don't drift relative to frames on unit toggles.
+    const wallW = elevResolvedWallW;
+    const wallH = elevResolvedWallH;
 
     elevFrames.forEach(f => {
         if (!f.active) return;
