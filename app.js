@@ -1,12 +1,30 @@
 // =========================================================================
 // GLOBAL APP STATE & ICONS
 // =========================================================================
+
+// Version indicator. Shown in the header bar (small label + colored dot).
+// Update APP_VERSION on each release. Set APP_BUILD to 'dev' in the dev
+// repo fork — the version pill turns orange to make it visually obvious
+// you're on the development build, not the production one users see.
+const APP_VERSION = '1.0';
+const APP_BUILD = 'prod';  // 'prod' (green dot) or 'dev' (orange dot)
+
 let currentView = 'dashboard';
 let dashUnit = 'in';
 const emptyImgUrl = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 let dashActiveImageObj = new Image(); 
 dashActiveImageObj.src = emptyImgUrl;
 let dashSelectedRowIndex = 0;
+// Multi-selection state for the dashboard table.
+// - dashMultiSelectedIndices: Set of row indices included in the multi-selection
+//   (the primary dashSelectedRowIndex is always conceptually part of it, but
+//    we don't store it in the Set to avoid double-tracking).
+// - dashLastClickedIndex: anchor for shift-range selection. When the user
+//   shift-clicks, the range from this anchor to the new click is selected.
+//   Updated on plain-click and ctrl-click; NOT updated on shift-click so
+//   repeated shift-clicks extend from the same anchor.
+let dashMultiSelectedIndices = new Set();
+let dashLastClickedIndex = 0;
 let dashTempHoverUrl = null;
 let dashLocalLibrary = {}; 
 
@@ -89,6 +107,11 @@ const svgArrowDown  = `<svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 6v
 const svgArrowLeft  = `<svg class="svg-icon" viewBox="0 0 24 24"><path d="M18 12H8M12 8l-4 4 4 4"/></svg>`;
 const svgArrowRight = `<svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 12h10M12 8l4 4-4 4"/></svg>`;
 
+// Edge-gap collapsed icon: a central rectangle (the frame) with four short
+// arrows pointing outward to suggest "distance to wall edges in all 4
+// directions." Compact, distinct from the individual direction icons.
+const svgEdgeGap = `<svg class="svg-icon" viewBox="0 0 24 24"><rect x="9" y="9" width="6" height="6" fill="none"/><path d="M12 7V3M12 21v-4M7 12H3M21 12h-4"/></svg>`;
+
 // Per-frame quick-alignment icons.
 // svgSnapHang: frame outline with a horizontal line through its middle —
 //   suggests "snap this frame's center to a horizontal reference line."
@@ -144,7 +167,7 @@ const dashDefaultData = {
     // are optional: empty values render as blank cells in CSV and are skipped
     // in InDesign spec blocks (no "TBD" placeholders).
     artist: "", artworkTitle: "", artType: "",
-    fColorName: "Standard Black", fHeight: 0, rabbetDepth: 0,
+    fColorName: "", fHeight: 0, rabbetDepth: 0,
     paperType: "Fine Art Paper",
     bleed: 0.25, canvasDepth: "", canvasWrap: "", floaterInset: 0.75,
     // Float Mount fields. useFloatMount controls whether the row uses Mat Controls
@@ -423,13 +446,217 @@ function updateDragSnap() {
 // nudgeSmall/nudgeBig inputs with the (now-removed) sidebar inputs, so
 // existing getNudgeStep() still works since it looks up by ID.
 function openPrecisionModal() {
+    seedAnnotationStyleInputs();
     document.getElementById('precisionModal').style.display = 'flex';
+}
+
+// Seed the Label & Dimension Style inputs (now living in the Settings modal)
+// from the current global annotationStyle.
+function seedAnnotationStyleInputs() {
+    const c = document.getElementById('annotColor');
+    const w = document.getElementById('annotWeight');
+    const fs = document.getElementById('annotFontSize');
+    if (c) { c.value = annotationStyle.color; const hx = document.getElementById('annotColorHex'); if (hx) hx.textContent = annotationStyle.color; }
+    if (w) { w.value = annotationStyle.weight; const wv = document.getElementById('annotWeightVal'); if (wv) wv.textContent = annotationStyle.weight + 'px'; }
+    if (fs) { fs.value = annotationStyle.fontSize; const fv = document.getElementById('annotFontSizeVal'); if (fv) fv.textContent = annotationStyle.fontSize + 'px'; }
+    setAnnotDash(annotationStyle.dash);
+    // Font family dropdown
+    const ff = document.getElementById('annotFontFamily');
+    if (ff) ff.value = annotationStyle.fontFamily || 'Arial, Helvetica, sans-serif';
+    // Weight buttons
+    const fw = annotationStyle.fontWeight || 600;
+    const wReg = document.getElementById('annotWeightReg');
+    const wSemi = document.getElementById('annotWeightSemi');
+    const wBold = document.getElementById('annotWeightBold');
+    if (wReg) wReg.classList.toggle('active', fw === 400);
+    if (wSemi) wSemi.classList.toggle('active', fw === 600);
+    if (wBold) wBold.classList.toggle('active', fw === 700);
+    // SVG frame mode buttons
+    const mTex = document.getElementById('svgModeTexture');
+    const mCol = document.getElementById('svgModeColor');
+    if (mTex) mTex.classList.toggle('active', svgFrameMode === 'texture');
+    if (mCol) mCol.classList.toggle('active', svgFrameMode === 'autocolor');
+}
+
+function setAnnotFontWeight(wt) {
+    annotationStyle.fontWeight = wt;
+    ['annotWeightReg','annotWeightSemi','annotWeightBold'].forEach(id => {
+        const b = document.getElementById(id);
+        if (b) b.classList.remove('active');
+    });
+    const map = { 400: 'annotWeightReg', 600: 'annotWeightSemi', 700: 'annotWeightBold' };
+    const b = document.getElementById(map[wt]);
+    if (b) b.classList.add('active');
+    applyAnnotationStyleFromModal();
+}
+
+function setSvgFrameMode(mode) {
+    svgFrameMode = mode;
+    saveSvgFrameMode();
+    const mTex = document.getElementById('svgModeTexture');
+    const mCol = document.getElementById('svgModeColor');
+    if (mTex) mTex.classList.toggle('active', mode === 'texture');
+    if (mCol) mCol.classList.toggle('active', mode === 'autocolor');
 }
 
 // Returns array of selected-and-active frames (refs into elevFrames).
 // Selection-only contract per user decision — no fallback to all-active.
 function getSelectedFrames() {
     return elevFrames.filter(f => f.selected && f.active);
+}
+
+// ──────────────────────────────────────────────────────────────────────────
+// GROUP DIMENSION CALLOUTS
+// ──────────────────────────────────────────────────────────────────────────
+// A group-dimension is a dashed bounding box drawn around a set of selected
+// frames, with width + height measurement callouts. Stored per-elevation in
+// elevations[i].groupDims. Each entry references frames by LETTER so the box
+// auto-recomputes (tracks frame moves) on every render. Style is per-entry,
+// seeded from the global default below, and editable in the settings popup.
+
+// Global default style for new annotations (group dims, and later text/lines).
+// Persisted to localStorage so a user's preferred look sticks across sessions.
+let annotationStyle = {
+    color: '#e00000',   // red, matching the client's install-drawing convention
+    weight: 2,          // line weight in px
+    dash: true,         // dashed (true) vs solid (false)
+    fontSize: 13,       // measurement label font size in px
+    // Font family for all dimension text. Arial is installed on virtually
+    // every Mac and PC, so SVG exports open without missing-font errors in
+    // Illustrator/InDesign regardless of platform.
+    fontFamily: 'Arial, Helvetica, sans-serif',
+    fontWeight: 600,    // 400=Regular, 600=Semibold, 700=Bold
+};
+
+// SVG export frame mode: 'texture' embeds the rendered frame raster (crisp
+// but large files); 'autocolor' draws frames as solid vector rects colored to
+// match the swatch's average color (tiny files, fully vector). Persisted.
+let svgFrameMode = 'texture';
+
+function loadSvgFrameMode() {
+    try {
+        const v = localStorage.getItem('svgFrameMode');
+        if (v === 'autocolor' || v === 'texture') svgFrameMode = v;
+    } catch (e) { /* default */ }
+}
+function saveSvgFrameMode() {
+    try { localStorage.setItem('svgFrameMode', svgFrameMode); } catch (e) {}
+}
+
+// Compute the average color of an image (drawn small for speed). Returns a
+// hex string. Used by autocolor SVG mode so a wood-grain swatch becomes a
+// representative solid color.
+function averageColorOfImage(img) {
+    try {
+        const c = document.createElement('canvas');
+        const S = 16;
+        c.width = S; c.height = S;
+        const x = c.getContext('2d');
+        x.drawImage(img, 0, 0, S, S);
+        const data = x.getImageData(0, 0, S, S).data;
+        let r = 0, g = 0, b = 0, n = 0;
+        for (let i = 0; i < data.length; i += 4) {
+            if (data[i + 3] < 128) continue; // skip transparent
+            r += data[i]; g += data[i + 1]; b += data[i + 2]; n++;
+        }
+        if (n === 0) return null;
+        r = Math.round(r / n); g = Math.round(g / n); b = Math.round(b / n);
+        return '#' + [r, g, b].map(v => v.toString(16).padStart(2, '0')).join('');
+    } catch (e) { return null; }
+}
+
+function loadAnnotationStyle() {
+    try {
+        const raw = localStorage.getItem('annotationStyle');
+        if (raw) {
+            const s = JSON.parse(raw);
+            if (s && typeof s === 'object') annotationStyle = Object.assign(annotationStyle, s);
+        }
+    } catch (e) { /* keep defaults */ }
+    applyAnnotationStyleToCSSVars();
+}
+
+// Push the current annotationStyle into the :root CSS variables that drive
+// every dimension/label type (arch dims, frame dims, OD tags, center lines,
+// floor/ceiling dims). This is what makes the single style panel control
+// ALL dimension callouts, not just the group dims. The group-dim renderer
+// reads annotationStyle directly (its elements are JS-positioned), but it
+// uses the same source object, so everything stays consistent.
+function applyAnnotationStyleToCSSVars() {
+    const root = document.documentElement;
+    root.style.setProperty('--dim-color', annotationStyle.color);
+    root.style.setProperty('--dim-font-size', (annotationStyle.fontSize || 13) + 'px');
+    root.style.setProperty('--dim-weight', (annotationStyle.weight || 2) + 'px');
+    root.style.setProperty('--dim-line-style', annotationStyle.dash ? 'dashed' : 'solid');
+    root.style.setProperty('--dim-font-family', annotationStyle.fontFamily || 'Arial, Helvetica, sans-serif');
+    root.style.setProperty('--dim-font-weight', annotationStyle.fontWeight || 600);
+}
+
+function saveAnnotationStyle() {
+    try { localStorage.setItem('annotationStyle', JSON.stringify(annotationStyle)); }
+    catch (e) { /* ignore */ }
+}
+
+// Ensure the current elevation has a groupDims array (older saved projects
+// won't have it). Returns the array.
+function getElevGroupDims() {
+    const ce = elevations[currentElevIndex];
+    if (!ce) return [];
+    if (!Array.isArray(ce.groupDims)) ce.groupDims = [];
+    return ce.groupDims;
+}
+
+// Create a group-dimension callout from the currently-selected frames.
+// Needs at least 1 selected frame (1 frame = its own bounding box, which is
+// occasionally useful, but we require 2+ to be meaningful as a "group").
+let groupDimSeq = 0;
+function createGroupDimFromSelection() {
+    const sel = getSelectedFrames();
+    if (sel.length < 2) {
+        showInfoModal('Select Frames First',
+            'Select at least two frames (Shift-click or drag a selection box) before adding a group dimension.');
+        return;
+    }
+    const dims = getElevGroupDims();
+    const entry = {
+        id: 'gd_' + (Date.now().toString(36)) + '_' + (groupDimSeq++),
+        frameLetters: sel.map(f => f.letter),
+        showWidth: true,
+        showHeight: true,
+        // Per-entry style snapshot from the current global default.
+        style: Object.assign({}, annotationStyle),
+    };
+    dims.push(entry);
+    if (typeof dimVisibility !== 'undefined') { dimVisibility.groupBox = true; saveDimVisibility(); }
+    drawElevAll();
+    pushHistory();
+}
+
+// Remove a group dimension by id.
+function removeGroupDim(id) {
+    const dims = getElevGroupDims();
+    const idx = dims.findIndex(d => d.id === id);
+    if (idx >= 0) {
+        dims.splice(idx, 1);
+        drawElevAll();
+        pushHistory();
+    }
+}
+
+// Compute the bounding box (in inches, elevation coords) of the frames a
+// group-dim references. Returns null if no referenced frames are still
+// present/active (e.g. user deleted them after creating the callout).
+function computeGroupDimBBox(entry) {
+    const refs = elevFrames.filter(f => f.active && entry.frameLetters.indexOf(f.letter) >= 0);
+    if (refs.length === 0) return null;
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    refs.forEach(f => {
+        if (f.x < minX) minX = f.x;
+        if (f.y < minY) minY = f.y;
+        if (f.x + f.w > maxX) maxX = f.x + f.w;
+        if (f.y + f.h > maxY) maxY = f.y + f.h;
+    });
+    return { minX, minY, maxX, maxY, w: maxX - minX, h: maxY - minY };
 }
 
 // Nudge selected frames by (dx, dy) inches. dx negative = left, dy negative = down.
@@ -531,9 +758,13 @@ document.addEventListener('keydown', function(e) {
         return;
     }
 
-    // Escape: deselect all
+    // Escape: deselect all (dashboard clears multi-select; elevation deselects frames)
     if (e.key === 'Escape') {
-        deselectAllFrames();
+        if (currentView === 'dashboard') {
+            clearDashMultiSelection();
+        } else {
+            deselectAllFrames();
+        }
         return;
     }
 
@@ -561,10 +792,18 @@ document.addEventListener('keydown', function(e) {
 
 // Capture initial state on load so the first undo has somewhere to go back to.
 // Wrapped in DOMContentLoaded so the rest of the app has finished initializing.
+// Also renders the version pill in the header (depends on the #versionPill
+// element existing in the DOM).
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => pushHistory());
+    document.addEventListener('DOMContentLoaded', () => {
+        pushHistory();
+        renderVersionPill();
+        initDashViewMode();
+    });
 } else {
     pushHistory();
+    renderVersionPill();
+    initDashViewMode();
 }
 // ─────────────────────────────────────────────────────────────────────
 // END UNDO / REDO HISTORY SYSTEM
@@ -768,7 +1007,16 @@ function initMasterApp() {
     selectDashRow(0); 
     populateDashPushSelector();
     updateDimFontSize();
-    loadBundledLibrary(); // fetch library-manifest.json if present, populate dropdowns
+    loadBundledLibrary().then(() => {
+        // After the bundled library is loaded, restore any swatches the user
+        // previously uploaded. Saved entries override bundled ones with the
+        // same code, matching the precedence rule of live syncDashLibraryFolder.
+        restoreCustomLibraryFromStorage();
+    });
+    loadAnnotationStyle(); // restore saved annotation color/weight/dash defaults
+    loadDimVisibility();   // restore saved per-element dimension hide flags
+    loadUnitSuffixPref();  // restore interior unit-suffix on/off preference
+    loadSvgFrameMode();    // restore SVG frame export mode (texture/autocolor)
     
     document.addEventListener('click', function(event) {
         const container = document.getElementById('customSwatchContainer');
@@ -850,7 +1098,571 @@ async function loadBundledLibrary() {
     }
 }
 
+// ──────────────────────────────────────────────────────────────────────────
+// CUSTOM LIBRARY PERSISTENCE (localStorage)
+// ──────────────────────────────────────────────────────────────────────────
+// User-uploaded swatches (from the Sync Folder workflow) get auto-resized
+// to a max dimension and saved to localStorage so they persist across
+// browser sessions. The bundled GitHub library is unaffected — bundled
+// entries store URL paths (strings), not data URLs, so they're naturally
+// excluded from persistence (we serialise only data-URL entries).
+//
+// Size tradeoff: localStorage is ~5MB per domain. Resizing swatches to
+// 600px max keeps each one to ~50-100KB after base64 encoding, so users
+// can store ~50 swatches before hitting the limit.
+//
+// Override semantics: a saved entry with the same vendor/collection/code
+// as a bundled entry wins (matches the existing manual-sync behaviour).
+
+const CUSTOM_LIBRARY_STORAGE_KEY = 'dashCustomLibrary';
+const CUSTOM_LIBRARY_MAX_DIMENSION = 600; // px on the longest side
+const CUSTOM_LIBRARY_QUOTA_BYTES = 5 * 1024 * 1024; // 5MB conservative estimate
+
+// Resize a data URL to fit within maxSize on its longest dimension. Returns
+// the resized data URL via callback. Preserves aspect ratio. PNG output so
+// transparency is kept (frame swatches sometimes use transparent corners).
+// If the source is already smaller than maxSize, pass through unchanged.
+function resizeImageDataUrl(srcDataUrl, maxSize, callback) {
+    const img = new Image();
+    img.onload = () => {
+        const w = img.naturalWidth;
+        const h = img.naturalHeight;
+        if (w <= maxSize && h <= maxSize) {
+            // Already small enough — no resize needed
+            callback(srcDataUrl);
+            return;
+        }
+        const scale = maxSize / Math.max(w, h);
+        const newW = Math.round(w * scale);
+        const newH = Math.round(h * scale);
+        const c = document.createElement('canvas');
+        c.width = newW; c.height = newH;
+        const ctx = c.getContext('2d');
+        ctx.drawImage(img, 0, 0, newW, newH);
+        // PNG (lossless) preserves transparency in frame swatches. The size
+        // saving comes from the dimension reduction, not lossy compression.
+        callback(c.toDataURL('image/png'));
+    };
+    img.onerror = () => callback(srcDataUrl); // fall back to original on error
+    img.src = srcDataUrl;
+}
+
+// Serialise every user-uploaded swatch to localStorage. We walk the
+// dashLocalLibrary structure and only persist entries whose `file` is a
+// data URL string (which is the format manually uploaded swatches use after
+// being read by FileReader.readAsDataURL). Bundled entries have URL paths
+// like "library/vendor/collection/file.png" and are NOT data URLs, so they
+// pass through this filter naturally.
+function saveCustomLibraryToStorage() {
+    try {
+        const customEntries = [];
+        Object.keys(dashLocalLibrary).forEach(vendor => {
+            Object.keys(dashLocalLibrary[vendor]).forEach(collection => {
+                dashLocalLibrary[vendor][collection].forEach(entry => {
+                    // file may be a File object, a URL string (bundled), or a
+                    // data URL string (manually uploaded + resized). We only
+                    // persist data URLs.
+                    if (typeof entry.file === 'string' && entry.file.startsWith('data:')) {
+                        const persisted = {
+                            vendor, collection,
+                            code: entry.code,
+                            width: entry.width,
+                            file: entry.file,
+                        };
+                        if (entry.faceWidth !== undefined) persisted.faceWidth = entry.faceWidth;
+                        if (entry.depth !== undefined) persisted.depth = entry.depth;
+                        if (entry.rabbet !== undefined) persisted.rabbet = entry.rabbet;
+                        customEntries.push(persisted);
+                    }
+                });
+            });
+        });
+        const serialized = JSON.stringify(customEntries);
+        localStorage.setItem(CUSTOM_LIBRARY_STORAGE_KEY, serialized);
+        return { ok: true, count: customEntries.length, bytes: serialized.length };
+    } catch (err) {
+        // Most likely cause: QuotaExceededError. Don't blow up — return the
+        // failure so the caller can surface a friendly message.
+        return { ok: false, error: err.message || String(err) };
+    }
+}
+
+// Restore previously-saved swatches into dashLocalLibrary. Called once on
+// startup AFTER loadBundledLibrary completes. A saved entry overrides a
+// bundled entry with the same vendor/collection/code (same precedence rule
+// as the live syncDashLibraryFolder workflow). After hydration, refreshes
+// the vendor dropdown so the user immediately sees their library.
+function restoreCustomLibraryFromStorage() {
+    try {
+        const raw = localStorage.getItem(CUSTOM_LIBRARY_STORAGE_KEY);
+        if (!raw) return;
+        const entries = JSON.parse(raw);
+        if (!Array.isArray(entries) || entries.length === 0) return;
+        entries.forEach(e => {
+            if (!e.vendor || !e.collection || !e.code || !e.file) return;
+            if (!dashLocalLibrary[e.vendor]) dashLocalLibrary[e.vendor] = {};
+            if (!dashLocalLibrary[e.vendor][e.collection]) dashLocalLibrary[e.vendor][e.collection] = [];
+            const arr = dashLocalLibrary[e.vendor][e.collection];
+            const existing = arr.find(x => x.code === e.code);
+            const entry = {
+                code: e.code,
+                width: e.width,
+                file: e.file, // data URL
+            };
+            if (e.faceWidth !== undefined) entry.faceWidth = e.faceWidth;
+            if (e.depth !== undefined) entry.depth = e.depth;
+            if (e.rabbet !== undefined) entry.rabbet = e.rabbet;
+            if (existing) {
+                // Saved entry overrides bundled (matches sync-folder behaviour)
+                Object.assign(existing, entry);
+            } else {
+                arr.push(entry);
+            }
+        });
+        populateDashVendorDropdown();
+    } catch (err) {
+        // Corrupted JSON or unexpected error — non-fatal. User still gets the
+        // bundled library, just loses their previous personal swatches.
+        console.warn('Could not restore custom library from storage:', err);
+    }
+}
+
+// Return stats about persisted library size for the UI indicator.
+function getCustomLibraryStorageStats() {
+    try {
+        const raw = localStorage.getItem(CUSTOM_LIBRARY_STORAGE_KEY) || '';
+        const bytes = raw.length; // approximate; UTF-16 internally but base64 is ASCII
+        const entries = raw ? JSON.parse(raw) : [];
+        const count = Array.isArray(entries) ? entries.length : 0;
+        const pct = Math.round((bytes / CUSTOM_LIBRARY_QUOTA_BYTES) * 100);
+        return { count, bytes, percentOfLimit: pct };
+    } catch (e) {
+        return { count: 0, bytes: 0, percentOfLimit: 0 };
+    }
+}
+
+// Wipe all persisted custom swatches and remove them from the in-memory
+// library. Used by the "Clear my swatches" UI affordance.
+function clearCustomLibrary() {
+    try {
+        localStorage.removeItem(CUSTOM_LIBRARY_STORAGE_KEY);
+    } catch (e) { /* ignore */ }
+    // Remove all data-URL-backed entries from dashLocalLibrary in memory.
+    Object.keys(dashLocalLibrary).forEach(vendor => {
+        Object.keys(dashLocalLibrary[vendor]).forEach(collection => {
+            dashLocalLibrary[vendor][collection] = dashLocalLibrary[vendor][collection].filter(
+                e => !(typeof e.file === 'string' && e.file.startsWith('data:'))
+            );
+            // Clean up empty collections
+            if (dashLocalLibrary[vendor][collection].length === 0) {
+                delete dashLocalLibrary[vendor][collection];
+            }
+        });
+        // Clean up empty vendors
+        if (Object.keys(dashLocalLibrary[vendor]).length === 0) {
+            delete dashLocalLibrary[vendor];
+        }
+    });
+    populateDashVendorDropdown();
+}
+
+// Visibility flags for the two Layout Guides toggle buttons that don't map
+// to a simple layer (group box + edge gaps). letters/spacing/wall already
+// have their own Layout Guides layer toggles, so they're not duplicated here.
+// Persisted to localStorage. Default: visible.
+let dimVisibility = {
+    groupBox: true,   // group dimension callouts
+    edgeGap: true,    // edge-gap (distance-to-wall) dimensions
+    wallDims: true,   // overall wall width/height dimensions (default ON)
+};
+
+function loadDimVisibility() {
+    try {
+        const raw = localStorage.getItem('dimVisibility');
+        if (raw) {
+            const v = JSON.parse(raw);
+            if (v && typeof v === 'object') dimVisibility = Object.assign(dimVisibility, v);
+        }
+    } catch (e) { /* defaults */ }
+}
+
+function saveDimVisibility() {
+    try { localStorage.setItem('dimVisibility', JSON.stringify(dimVisibility)); }
+    catch (e) { /* ignore */ }
+}
+
+// Does the current elevation have at least one group dimension?
+function anyGroupDimExists() {
+    const ce = elevations[currentElevIndex];
+    return !!(ce && Array.isArray(ce.groupDims) && ce.groupDims.length > 0);
+}
+
+// Does any frame in the current elevation have an edge-gap toggle enabled?
+function anyEdgeGapActive() {
+    return elevFrames.some(f => {
+        const dt = f.distToggles;
+        return dt && (dt.ceiling || dt.floor || dt.left || dt.right);
+    });
+}
+
+// Sync the two Layout Guides toggle buttons' blue (active) state:
+//   - Group Box button: blue when a group dim exists AND it's visible
+//   - Edge Gap button: blue when any edge gap is active AND visible
+// Called after drawElevAll and after creating/removing group dims or edge gaps.
+function syncLayoutGuideButtonStates() {
+    const gbBtn = document.getElementById('groupBoxToggle');
+    if (gbBtn) {
+        const exists = anyGroupDimExists();
+        gbBtn.classList.toggle('active', exists && dimVisibility.groupBox);
+        gbBtn.style.opacity = exists ? '1' : '0.4'; // dim when nothing to toggle
+    }
+    const egBtn = document.getElementById('edgeGapToggle');
+    if (egBtn) {
+        const exists = anyEdgeGapActive();
+        egBtn.classList.toggle('active', exists && dimVisibility.edgeGap);
+        egBtn.style.opacity = exists ? '1' : '0.4';
+    }
+    // Wall dims: always available (not conditional on existence). Keep the
+    // arch-dim-layer display + button blue state in sync with the flag.
+    const wdBtn = document.getElementById('wallDimToggle');
+    const archLayer = document.getElementById('arch-dim-layer');
+    if (archLayer) archLayer.style.display = dimVisibility.wallDims ? 'block' : 'none';
+    if (wdBtn) wdBtn.classList.toggle('active', dimVisibility.wallDims);
+    // Unit suffix toggle: active when interior suffix is shown.
+    const usBtn = document.getElementById('unitSuffixToggle');
+    if (usBtn) usBtn.classList.toggle('active', showUnitSuffix);
+}
+
+// Toggle group-box visibility (only meaningful if one exists).
+function toggleGroupBoxVisibility(btn) {
+    if (!anyGroupDimExists()) return; // nothing to toggle
+    dimVisibility.groupBox = !dimVisibility.groupBox;
+    saveDimVisibility();
+    drawElevAll();
+}
+
+// Toggle edge-gap dimension visibility (only meaningful if one exists).
+function toggleEdgeGapVisibility(btn) {
+    if (!anyEdgeGapActive()) return;
+    dimVisibility.edgeGap = !dimVisibility.edgeGap;
+    saveDimVisibility();
+    drawElevAll();
+}
+
+// Toggle wall dimension visibility (arch-dim-layer). Default ON.
+function toggleWallDims(btn) {
+    dimVisibility.wallDims = !dimVisibility.wallDims;
+    saveDimVisibility();
+    const layer = document.getElementById('arch-dim-layer');
+    if (layer) layer.style.display = dimVisibility.wallDims ? 'block' : 'none';
+    if (btn) btn.classList.toggle('active', dimVisibility.wallDims);
+    drawElevAll();
+}
+
 function toggleTheme() { document.body.classList.toggle('light-theme'); }
+
+// ──────────────────────────────────────────────────────────────────────────
+// DASHBOARD VIEW MODE 2 (preview overlay with resizable container)
+// ──────────────────────────────────────────────────────────────────────────
+// Mode 2 floats the preview-wrapper as a fixed-positioned panel anchored to
+// the right side of the table area. The user can drag the LEFT edge of the
+// preview wider to see the frame in more detail. The container's aspect
+// ratio always matches the CURRENT frame's aspect — so a 12×12 frame shows
+// in a square container, a 31×12 frame shows in a wide rectangle, etc.
+// Empty space around the frame is minimized regardless of frame proportions.
+//
+// State persisted to localStorage:
+//   dashViewMode  — '1' or '2'
+//   dashPreviewSize — user-chosen "longest dimension" in px (e.g. 400)
+
+// User-controlled longest dimension for the Mode 2 preview container. The
+// actual container W/H are derived from this + the current frame aspect.
+let dashPreviewSize = 400;
+const DASH_PREVIEW_SIZE_MIN = 200;
+const DASH_PREVIEW_SIZE_DEFAULT = 400;
+
+// ──────────────────────────────────────────────────────────────────────────
+// OUTER SHADOW TOGGLE
+// ──────────────────────────────────────────────────────────────────────────
+// Global flag: when false, all OUTER drop shadows (frame casting onto the
+// wall) are suppressed in the preview, PNG export, and elevation views.
+// This addresses the workflow problem of dropping exported PNGs into
+// InDesign boxes where the drop shadow shows up as unwanted bleed area
+// outside the frame.
+//
+// INNER shadows (frame casting onto mat 1, mat 1 onto mat 2, etc.) are
+// NOT affected by this toggle — they describe real physical depth and are
+// always rendered. They also get a global ~25% bump in intensity to keep
+// the frame visually grounded when outer shadows are off.
+let dashOuterShadowsOn = true;
+
+// Re-render everything that uses shadows after a toggle change. The CSS
+// classes drive the live preview (via .no-outer-shadows on body), but the
+// PNG renderer and elevation rendering need explicit re-rendering since
+// their shadow values are baked into the draw calls.
+function applyOuterShadowsState(on) {
+    dashOuterShadowsOn = !!on;
+    document.body.classList.toggle('no-outer-shadows', !on);
+    const btn = document.getElementById('outerShadowToggle');
+    if (btn) btn.classList.toggle('active', !on); // button "active" = shadow OFF state
+    // Re-render the dashboard preview (CSS box-shadow on .frame-vis updates
+    // via the class, but the float-mount paper shadow is inline-style so we
+    // also need to re-run updateDashVisualsFromDOM).
+    if (typeof updateDashVisualsFromDOM === 'function') {
+        updateDashVisualsFromDOM();
+    }
+    // Re-render any open elevation view.
+    if (typeof drawElevAll === 'function' && typeof elevations !== 'undefined' && elevations.length > 0) {
+        drawElevAll();
+    }
+}
+
+function toggleOuterShadows() {
+    applyOuterShadowsState(!dashOuterShadowsOn);
+    try {
+        localStorage.setItem('dashOuterShadowsOn', dashOuterShadowsOn ? '1' : '0');
+    } catch (e) { /* private mode — skip persistence */ }
+}
+
+function initOuterShadowsToggle() {
+    try {
+        const saved = localStorage.getItem('dashOuterShadowsOn');
+        if (saved === '0') {
+            // Apply the OFF state. Don't call applyOuterShadowsState until DOM
+            // is ready — set the class directly now, defer render to first
+            // updateDashVisualsFromDOM call.
+            dashOuterShadowsOn = false;
+            document.body.classList.add('no-outer-shadows');
+            const btn = document.getElementById('outerShadowToggle');
+            if (btn) btn.classList.add('active');
+        }
+    } catch (e) { /* ignore */ }
+}
+
+// Compute the container W and H for Mode 2 given the frame's real dimensions.
+// Returns { w, h } in CSS pixels. The longer of the two dimensions equals the
+// user's preferred size; the shorter scales proportionally. Then both are
+// clamped to viewport-safe maxes so the preview never overflows the screen.
+function computeDashPreviewDims(extW, extH) {
+    const ew = Math.max(1, parseFloat(extW) || 1);
+    const eh = Math.max(1, parseFloat(extH) || 1);
+    const aspect = ew / eh;
+    let w, h;
+    if (aspect >= 1) {
+        // Landscape or square — width is the longer dimension
+        w = dashPreviewSize;
+        h = dashPreviewSize / aspect;
+    } else {
+        // Portrait — height is the longer dimension
+        h = dashPreviewSize;
+        w = dashPreviewSize * aspect;
+    }
+    // Viewport-safe clamps. The preview panel has 20px padding around
+    // the container + ~50px for the canvas toolbar below it = ~90px chrome.
+    // Plus the panel sits at top:156 and the right edge is 460px from
+    // viewport right (form pane room).
+    const vpW = window.innerWidth;
+    const vpH = window.innerHeight;
+    const maxW = vpW - 460 - 40 - 40; // form pane + left margin + panel padding
+    const maxH = vpH - 156 - 20 - 50 - 40; // top + bottom margin + toolbar + padding
+    if (w > maxW) {
+        const k = maxW / w;
+        w *= k; h *= k;
+    }
+    if (h > maxH) {
+        const k = maxH / h;
+        w *= k; h *= k;
+    }
+    return { w: Math.max(50, Math.round(w)), h: Math.max(50, Math.round(h)) };
+}
+
+// Apply the computed dims to the preview container's inline style. Only
+// has effect when Mode 2 is active (CSS for Mode 1 keeps its own sizing).
+// Called from updateDashVisualsFromDOM whenever the frame is re-rendered,
+// and from the drag handler during a resize.
+function updateDashPreviewContainerSize() {
+    if (!document.body.classList.contains('dash-view-2')) return;
+    const data = dashProjectData[dashSelectedRowIndex];
+    if (!data) return;
+    const container = document.querySelector('.preview-container');
+    if (!container) return;
+    const dims = computeDashPreviewDims(data.extW, data.extH);
+    container.style.width = dims.w + 'px';
+    container.style.height = dims.h + 'px';
+    container.style.aspectRatio = 'auto';   // override the 1/1 default
+    container.style.maxWidth = 'none';
+    container.style.maxHeight = 'none';
+}
+
+function applyDashViewMode(mode2) {
+    document.body.classList.toggle('dash-view-2', mode2);
+    const btn = document.getElementById('dashViewToggle');
+    if (btn) btn.classList.toggle('active', mode2);
+    if (mode2) {
+        // Restore the saved size before first render so the container is
+        // correct on entry.
+        try {
+            const saved = parseFloat(localStorage.getItem('dashPreviewSize'));
+            if (!isNaN(saved) && saved >= DASH_PREVIEW_SIZE_MIN) {
+                dashPreviewSize = saved;
+            }
+        } catch (e) { /* ignore */ }
+    } else {
+        // Returning to Mode 1: clear the inline style so the CSS-driven
+        // 1/1 aspect + 320px max applies again.
+        const container = document.querySelector('.preview-container');
+        if (container) {
+            container.style.width = '';
+            container.style.height = '';
+            container.style.aspectRatio = '';
+            container.style.maxWidth = '';
+            container.style.maxHeight = '';
+        }
+    }
+    // Re-render the preview after the layout shifts so the frame visual
+    // sizes itself to the new container dimensions.
+    if (typeof updateDashVisualsFromDOM === 'function') {
+        requestAnimationFrame(() => updateDashVisualsFromDOM());
+    }
+}
+
+function toggleDashView() {
+    const wasMode2 = document.body.classList.contains('dash-view-2');
+    applyDashViewMode(!wasMode2);
+    try {
+        localStorage.setItem('dashViewMode', !wasMode2 ? '2' : '1');
+    } catch (e) { /* private mode — skip persistence */ }
+}
+
+// Restore the saved dashboard view mode on page load. Called from the
+// existing init flow alongside theme restoration.
+function initDashViewMode() {
+    try {
+        const savedSize = parseFloat(localStorage.getItem('dashPreviewSize'));
+        if (!isNaN(savedSize) && savedSize >= DASH_PREVIEW_SIZE_MIN) {
+            dashPreviewSize = savedSize;
+        }
+        const saved = localStorage.getItem('dashViewMode');
+        if (saved === '2') {
+            applyDashViewMode(true);
+        }
+    } catch (e) {
+        // Ignore — start in default Mode 1 at default size
+    }
+    // Wire up the drag handle for Mode 2 resize. Runs once on first load.
+    setupDashPreviewDragHandle();
+    // Restore the outer-shadow toggle state (default ON).
+    initOuterShadowsToggle();
+}
+
+// Wire up the left-edge drag handle that lets the user resize the Mode 2
+// preview. The handle is a CSS pseudo-element on .preview-wrapper but we
+// attach the actual drag handlers to the wrapper itself, gated to only
+// react when the mousedown is in the leftmost 10px (the handle region).
+//
+// During drag we update dashPreviewSize based on cursor movement, then call
+// updateDashPreviewContainerSize to apply, then re-render the frame visual
+// so it scales with the new container size. Persist on mouseup.
+function setupDashPreviewDragHandle() {
+    const wrapper = document.querySelector('.preview-wrapper');
+    if (!wrapper) return;
+    if (wrapper.dataset.dragWired) return; // idempotent
+    wrapper.dataset.dragWired = '1';
+    const HANDLE_WIDTH = 10;  // leftmost N pixels react as a drag handle
+    let dragState = null;     // { startX, startSize } when actively dragging
+
+    // Hover state: only show resize cursor when in Mode 2 AND mouse is over
+    // the leftmost N pixels. Pure JS (vs CSS) so we don't need to add a
+    // separate handle element.
+    wrapper.addEventListener('mousemove', (e) => {
+        if (!document.body.classList.contains('dash-view-2')) return;
+        if (dragState) return; // cursor is locked during active drag
+        const rect = wrapper.getBoundingClientRect();
+        const onHandle = (e.clientX - rect.left) < HANDLE_WIDTH;
+        wrapper.style.cursor = onHandle ? 'ew-resize' : '';
+    });
+    wrapper.addEventListener('mouseleave', () => {
+        if (!dragState) wrapper.style.cursor = '';
+    });
+
+    wrapper.addEventListener('mousedown', (e) => {
+        if (!document.body.classList.contains('dash-view-2')) return;
+        const rect = wrapper.getBoundingClientRect();
+        const inHandle = (e.clientX - rect.left) < HANDLE_WIDTH;
+        if (!inHandle) return;
+        e.preventDefault();
+        e.stopPropagation();
+        dragState = { startX: e.clientX, startSize: dashPreviewSize };
+        document.body.style.cursor = 'ew-resize';
+        document.body.style.userSelect = 'none';
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (!dragState) return;
+        // Dragging LEFT (negative delta from start) GROWS the container.
+        // Dragging RIGHT shrinks it.
+        const delta = dragState.startX - e.clientX;
+        let newSize = dragState.startSize + delta;
+        if (newSize < DASH_PREVIEW_SIZE_MIN) newSize = DASH_PREVIEW_SIZE_MIN;
+        // Aspect-aware max-size clamp. `size` is the longest dimension of
+        // the container. Whether that's the WIDTH or the HEIGHT depends on
+        // the current frame's aspect ratio. The other (shorter) dimension
+        // is size/aspect (for landscape) or size*aspect (for portrait), and
+        // it ALSO needs to fit within its viewport limit. So we compute the
+        // max-size in two ways and use the tighter.
+        const vpW = window.innerWidth;
+        const vpH = window.innerHeight;
+        const maxByW = vpW - 460 - 80;  // form pane + side margins
+        const maxByH = vpH - 256;       // top + bottom + toolbar
+        const data = dashProjectData[dashSelectedRowIndex];
+        const ew = Math.max(1, parseFloat(data && data.extW) || 1);
+        const eh = Math.max(1, parseFloat(data && data.extH) || 1);
+        const aspect = ew / eh;
+        let maxSize;
+        if (aspect >= 1) {
+            // Landscape: size = width. Width≤maxByW, height = size/aspect ≤ maxByH
+            maxSize = Math.min(maxByW, maxByH * aspect);
+        } else {
+            // Portrait: size = height. Height≤maxByH, width = size*aspect ≤ maxByW
+            maxSize = Math.min(maxByH, maxByW / aspect);
+        }
+        if (maxSize < DASH_PREVIEW_SIZE_MIN) maxSize = DASH_PREVIEW_SIZE_MIN;
+        if (newSize > maxSize) newSize = maxSize;
+        dashPreviewSize = newSize;
+        updateDashPreviewContainerSize();
+        if (typeof updateDashVisualsFromDOM === 'function') {
+            updateDashVisualsFromDOM();
+        }
+    });
+
+    document.addEventListener('mouseup', () => {
+        if (!dragState) return;
+        dragState = null;
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+        // Persist the chosen size
+        try {
+            localStorage.setItem('dashPreviewSize', String(dashPreviewSize));
+        } catch (e) { /* ignore */ }
+    });
+}
+
+// Re-render the preview when the window resizes. The frame visual is sized
+// from the preview-container's actual dimensions, so a window resize needs
+// to trigger a redraw + size recalculation (so Mode 2's viewport-bound
+// clamps stay valid). Debounced to avoid hammering the renderer.
+(function setupDashResizeListener() {
+    let resizeTimer = null;
+    window.addEventListener('resize', () => {
+        if (resizeTimer) clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            updateDashPreviewContainerSize();
+            if (typeof updateDashVisualsFromDOM === 'function') {
+                updateDashVisualsFromDOM();
+            }
+        }, 200);
+    });
+})();
 
 function renderNavTabs() {
     const container = document.getElementById('nav-tabs-container');
@@ -858,12 +1670,154 @@ function renderNavTabs() {
     
     elevations.forEach((elev, idx) => {
         let isActive = (currentView === 'elevation' && currentElevIndex === idx) ? 'active' : '';
-        html += `<div class="nav-tab ${isActive}" onclick="switchView('elevation', ${idx})">
+        // draggable=true enables HTML5 drag-and-drop. data-tab-idx is read by
+        // the drag handlers to know which tab is being moved + where it's
+        // being dropped. The drag/dragover/drop handlers are wired up
+        // imperatively after innerHTML assignment (cleaner than inline
+        // attributes since they need access to the event object's dataTransfer).
+        html += `<div class="nav-tab ${isActive}" draggable="true" data-tab-idx="${idx}" onclick="switchView('elevation', ${idx})">
                     <span>${elev.name}</span>
                     <span class="tab-close" onclick="deleteElevation(${idx}, event)" title="Delete Wall">×</span>
                  </div>`;
     });
     container.innerHTML = html;
+    // Wire up drag-and-drop on the elevation tabs (skip the Frame Dashboard
+    // tab — it always stays first).
+    container.querySelectorAll('.nav-tab[draggable="true"]').forEach(tab => {
+        tab.addEventListener('dragstart', handleTabDragStart);
+        tab.addEventListener('dragover', handleTabDragOver);
+        tab.addEventListener('dragleave', handleTabDragLeave);
+        tab.addEventListener('drop', handleTabDrop);
+        tab.addEventListener('dragend', handleTabDragEnd);
+    });
+}
+
+// ──────────────────────────────────────────────────────────────────────────
+// ELEVATION TAB DRAG-TO-REORDER
+// ──────────────────────────────────────────────────────────────────────────
+// HTML5 drag-and-drop implementation. The dragged tab's index is stored in
+// dataTransfer (string, since DataTransfer only accepts strings). During
+// dragover, we compute which side of the hovered target the cursor is on
+// to decide whether the drop will be "before" or "after" that target,
+// and apply a CSS class to show a visual drop indicator (colored border).
+// On drop, we splice the elevations array, fix up currentElevIndex so the
+// active tab follows the move, fix up variationOf references, re-render
+// tabs, and push history.
+
+let _draggingTabIdx = null;
+
+function handleTabDragStart(e) {
+    _draggingTabIdx = parseInt(e.currentTarget.dataset.tabIdx, 10);
+    // Use 'move' effect to signal a reorder (vs 'copy'). dataTransfer needs
+    // something set to avoid browsers rejecting the drop in some cases.
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', String(_draggingTabIdx));
+    e.currentTarget.classList.add('dragging');
+}
+
+function handleTabDragOver(e) {
+    e.preventDefault();  // required to enable drop
+    e.dataTransfer.dropEffect = 'move';
+    const tab = e.currentTarget;
+    const targetIdx = parseInt(tab.dataset.tabIdx, 10);
+    if (targetIdx === _draggingTabIdx) return;  // can't drop on self
+    // Decide before-or-after based on cursor position vs tab midpoint
+    const rect = tab.getBoundingClientRect();
+    const midX = rect.left + rect.width / 2;
+    const dropBefore = e.clientX < midX;
+    // Clear both classes on all tabs first, then set the right one on
+    // this target. (Cleaner than tracking which tab last had the indicator.)
+    document.querySelectorAll('.nav-tab.drop-before, .nav-tab.drop-after')
+        .forEach(t => t.classList.remove('drop-before', 'drop-after'));
+    tab.classList.add(dropBefore ? 'drop-before' : 'drop-after');
+}
+
+function handleTabDragLeave(e) {
+    // Only clear if we're really leaving the tab (not just moving over a child)
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+        e.currentTarget.classList.remove('drop-before', 'drop-after');
+    }
+}
+
+function handleTabDrop(e) {
+    e.preventDefault();
+    const targetTab = e.currentTarget;
+    const targetIdx = parseInt(targetTab.dataset.tabIdx, 10);
+    targetTab.classList.remove('drop-before', 'drop-after');
+    if (_draggingTabIdx === null || _draggingTabIdx === targetIdx) return;
+    // Same before-or-after calc as in dragover
+    const rect = targetTab.getBoundingClientRect();
+    const midX = rect.left + rect.width / 2;
+    const dropBefore = e.clientX < midX;
+    let insertIdx = dropBefore ? targetIdx : targetIdx + 1;
+    // Adjust if removing the dragged item from earlier in the array shifts
+    // the target's effective position
+    if (_draggingTabIdx < insertIdx) insertIdx--;
+    reorderElevation(_draggingTabIdx, insertIdx);
+}
+
+function handleTabDragEnd(e) {
+    e.currentTarget.classList.remove('dragging');
+    document.querySelectorAll('.nav-tab.drop-before, .nav-tab.drop-after')
+        .forEach(t => t.classList.remove('drop-before', 'drop-after'));
+    _draggingTabIdx = null;
+}
+
+// Move the elevation at `fromIdx` to `toIdx` in the elevations array.
+// Also fixes up currentElevIndex (so the active tab stays active after
+// the move) and variationOf references (so variation→source links survive
+// the reorder). Pushes history so the reorder is undoable.
+function reorderElevation(fromIdx, toIdx) {
+    if (fromIdx === toIdx) return;
+    if (fromIdx < 0 || fromIdx >= elevations.length) return;
+    if (toIdx < 0 || toIdx >= elevations.length) return;
+
+    // Track which elevation was active so we can restore currentElevIndex
+    // after the splice. Use object identity rather than index because the
+    // index changes during the move.
+    const wasActive = elevations[currentElevIndex];
+
+    // Move via splice-remove + splice-insert. Standard array reorder pattern.
+    const [moved] = elevations.splice(fromIdx, 1);
+    elevations.splice(toIdx, 0, moved);
+
+    // Rebuild variationOf indices. The cleanest way is to map each
+    // variation's old source identity to its new index. We do this by
+    // remembering the source object reference, then looking it up after
+    // the splice. variationOf is just an integer hint; if the source can't
+    // be found (deleted), we clear it.
+    //
+    // Note: this requires us to capture identities BEFORE the splice for
+    // any variations that referenced fromIdx or any index between fromIdx
+    // and toIdx. Easier approach: since variationOf is metadata (currently
+    // unused by any feature), just clear it if the index is now stale.
+    // Simpler and avoids the bookkeeping.
+    elevations.forEach((elev, i) => {
+        if (typeof elev.variationOf !== 'number') return;
+        // If it pointed at the moved item, update to the moved item's new pos
+        if (elev.variationOf === fromIdx) {
+            elev.variationOf = toIdx;
+            return;
+        }
+        // Otherwise, the index may have shifted due to the splice
+        // The moved item went from fromIdx to toIdx; everything between
+        // shifts by 1 in the opposite direction.
+        if (fromIdx < toIdx) {
+            // Moved right: indices in (fromIdx, toIdx] shift left by 1
+            if (elev.variationOf > fromIdx && elev.variationOf <= toIdx) elev.variationOf--;
+        } else {
+            // Moved left: indices in [toIdx, fromIdx) shift right by 1
+            if (elev.variationOf >= toIdx && elev.variationOf < fromIdx) elev.variationOf++;
+        }
+    });
+
+    // Restore currentElevIndex by object identity
+    const newActiveIdx = elevations.indexOf(wasActive);
+    if (newActiveIdx >= 0) currentElevIndex = newActiveIdx;
+
+    renderNavTabs();
+    populateDashPushSelector();
+    pushHistory();
 }
 
 function updateElevationNameFromInput(newName) {
@@ -873,7 +1827,24 @@ function updateElevationNameFromInput(newName) {
 function deleteElevation(idx, e) {
     e.stopPropagation();
     if(confirm("Delete this entire elevation wall? This cannot be undone.")) {
+        // If deleting the source of any variations, promote those variations
+        // to primary status. Otherwise they'd stay flagged as `isVariation`
+        // and get skipped by recalculateDashboardQuantities, making qty
+        // unexpectedly 0 for frames that ARE physically being ordered.
+        elevations.forEach(other => {
+            if (other.variationOf === idx) {
+                delete other.isVariation;
+                delete other.variationOf;
+            }
+        });
         elevations.splice(idx, 1);
+        // Fix up any remaining variationOf indices to account for the splice.
+        // variationOf indices >= idx need to shift down by 1.
+        elevations.forEach(other => {
+            if (typeof other.variationOf === 'number' && other.variationOf > idx) {
+                other.variationOf--;
+            }
+        });
         if (elevations.length === 0) {
             const uf = unitFactor('in', elevUnit);
             let w = parseFloat((185 * uf).toFixed(2));
@@ -887,6 +1858,47 @@ function deleteElevation(idx, e) {
         renderNavTabs(); populateDashPushSelector(); recalculateDashboardQuantities();
         pushHistory();
     }
+}
+
+// Duplicate the currently-active elevation into a new tab inserted right
+// after it. Used when the user wants to show layout variations of the same
+// approved design (e.g. three different arrangements for a client review).
+//
+// Important: the duplicate references the SAME dashboard rows (same .id
+// values on frames) — variations share their underlying product list with
+// the original. This means editing a frame's spec in the dashboard affects
+// every variation that uses it (usually desirable: 'change the mat color
+// once, applies everywhere it's shown').
+//
+// To avoid double-counting in the dashboard's qty column, duplicates are
+// flagged `isVariation: true`. recalculateDashboardQuantities() skips
+// flagged elevations so the qty reflects the number of UNIQUE physical
+// frames, not the number of times they're visualized across variations.
+function duplicateCurrentElevation() {
+    if (currentView !== 'elevation') return;
+    const srcIdx = currentElevIndex;
+    const src = elevations[srcIdx];
+    if (!src) return;
+
+    // Deep clone so subsequent edits to the copy don't bleed into the
+    // original. JSON roundtrip is safe here because everything in an
+    // elevation is plain data (no functions, no DOM refs).
+    const copy = JSON.parse(JSON.stringify(src));
+    copy.name = `${src.name} (Copy)`;
+    copy.isVariation = true;
+    copy.variationOf = srcIdx;
+
+    // Insert right after the source so variations sit next to their
+    // original in the tab strip. Then switch to it so the user lands
+    // on the new tab ready to edit.
+    elevations.splice(srcIdx + 1, 0, copy);
+    currentElevIndex = srcIdx + 1;
+
+    renderNavTabs();
+    populateDashPushSelector();
+    switchView('elevation', srcIdx + 1);
+    recalculateDashboardQuantities();
+    pushHistory();
 }
 
 function addNewElevationTab() {
@@ -1037,7 +2049,13 @@ function loadMasterProject(event) {
 // =========================================================================
 function recalculateDashboardQuantities() {
     let counts = {};
-    elevations.forEach(elev => { elev.frames.forEach(f => { if (f.active && f.id) counts[f.id] = (counts[f.id] || 0) + 1; }); });
+    // Skip variations: a duplicated elevation visualizes the same physical
+    // frames as its source, so counting them would double-bill. Quantities
+    // reflect the number of UNIQUE physical frames across primary walls.
+    elevations.forEach(elev => {
+        if (elev.isVariation) return;
+        elev.frames.forEach(f => { if (f.active && f.id) counts[f.id] = (counts[f.id] || 0) + 1; });
+    });
     dashProjectData.forEach(d => { d.qty = counts[d.id] !== undefined ? counts[d.id] : 0; });
     if (currentView === 'dashboard') { loadDashDataIntoControls(dashProjectData[dashSelectedRowIndex]); renderDashTable(); }
 }
@@ -1354,22 +2372,26 @@ function setUnit(newUnit) {
     // Must use the SAME factor (oldUnit→newUnit) since elevUnit was equal
     // to oldUnit when this call started.
     elevations.forEach(elev => {
-        elev.wallW = parseFloat((parseFloat(elev.wallW) * f).toFixed(2));
-        elev.wallH = parseFloat((parseFloat(elev.wallH) * f).toFixed(2));
+        // Use the SAME rounding precision (4 decimals) for wall, frames, and
+        // person so they don't drift relative to each other across repeated
+        // unit toggles. Mixed precision (wall .toFixed(2) vs frames .toFixed(4))
+        // was causing dimension lines to visibly jitter when switching units.
+        elev.wallW = parseFloat((parseFloat(elev.wallW) * f).toFixed(4));
+        elev.wallH = parseFloat((parseFloat(elev.wallH) * f).toFixed(4));
         elev.frames.forEach(fr => {
             ['w','h','fW','fHeight','rabbetDepth','floaterInset','sbPaperMargin','sbPaperBorder','m1T','m1B','m1L','m1R','m2','x','y'].forEach(p => {
                 fr[p] = parseFloat((parseFloat(fr[p] || 0) * f).toFixed(4));
             });
         });
-        if (elev.personPos) elev.personPos.x = parseFloat((parseFloat(elev.personPos.x || 0) * f).toFixed(2));
+        if (elev.personPos) elev.personPos.x = parseFloat((parseFloat(elev.personPos.x || 0) * f).toFixed(4));
     });
     elevUnit = newUnit;
 
     // Update wall inputs if elevation view is loaded
     const wallWEl = document.getElementById('wallW');
     const wallHEl = document.getElementById('wallH');
-    if (wallWEl && elevations[currentElevIndex]) wallWEl.value = elevations[currentElevIndex].wallW;
-    if (wallHEl && elevations[currentElevIndex]) wallHEl.value = elevations[currentElevIndex].wallH;
+    if (wallWEl && elevations[currentElevIndex]) wallWEl.value = parseFloat(elevations[currentElevIndex].wallW.toFixed(2));
+    if (wallHEl && elevations[currentElevIndex]) wallHEl.value = parseFloat(elevations[currentElevIndex].wallH.toFixed(2));
 
     // Convert all settings-modal inputs (Hang, Font, Nudge, Grid, Drag Snap)
     // and their unit labels.
@@ -1417,8 +2439,401 @@ function selectDashRow(index) {
     if (index >= dashProjectData.length) return; 
     dashSelectedRowIndex = index;
     loadDashDataIntoControls(dashProjectData[index]);
-    document.querySelectorAll('#rfiBody tr').forEach((tr, i) => { tr.classList.toggle('selected', i === index); });
+    applyDashSelectionStyling();
     checkGlobalEditingWarning(dashProjectData[index].id);
+}
+
+// Multi-selection helpers
+// ───────────────────────
+// Visual states layered on each row:
+//   .selected         = the primary selected row (form panel shows this one)
+//   .multi-selected   = also part of the multi-selection but not the primary
+// The primary is always conceptually part of the multi-selection too, but
+// we don't add it to the Set to keep the data clean.
+
+function applyDashSelectionStyling() {
+    document.querySelectorAll('#rfiBody tr').forEach((tr, i) => {
+        tr.classList.toggle('selected', i === dashSelectedRowIndex);
+        tr.classList.toggle('multi-selected', dashMultiSelectedIndices.has(i) && i !== dashSelectedRowIndex);
+    });
+}
+
+// Toggle a row in/out of the multi-selection. If the primary is being
+// toggled OFF, promote one of the remaining multi-selected indices to
+// primary (or clear primary if multi is empty).
+function dashToggleMultiSelect(index) {
+    if (index === dashSelectedRowIndex) {
+        // Toggling off the primary: promote one of the multi-selected to primary,
+        // or if multi is empty, just leave primary (single click would do
+        // that — we're just being graceful for ctrl-click on primary).
+        if (dashMultiSelectedIndices.size > 0) {
+            const next = dashMultiSelectedIndices.values().next().value;
+            dashMultiSelectedIndices.delete(next);
+            selectDashRow(next);
+        }
+        return;
+    }
+    if (dashMultiSelectedIndices.has(index)) {
+        dashMultiSelectedIndices.delete(index);
+    } else {
+        dashMultiSelectedIndices.add(index);
+    }
+    applyDashSelectionStyling();
+}
+
+// Select an inclusive range from `from` to `to`. The primary becomes `to`
+// (mimics standard list-selection UX: shift-click sets the focused row).
+function dashSelectRange(from, to) {
+    if (from > to) [from, to] = [to, from];
+    dashMultiSelectedIndices.clear();
+    for (let i = from; i <= to; i++) {
+        if (i !== to) dashMultiSelectedIndices.add(i);
+    }
+    selectDashRow(to);
+}
+
+// Clear the multi-selection. Primary selection stays. Bound to Esc on
+// the dashboard.
+function clearDashMultiSelection() {
+    if (dashMultiSelectedIndices.size === 0) return;
+    dashMultiSelectedIndices.clear();
+    applyDashSelectionStyling();
+}
+
+// Return all currently-selected row indices in ascending order, including
+// the primary. Used by group operations (drag, move-to).
+function dashGetSelectedIndices() {
+    const set = new Set(dashMultiSelectedIndices);
+    set.add(dashSelectedRowIndex);
+    return Array.from(set).sort((a, b) => a - b);
+}
+
+// ──────────────────────────────────────────────────────────────────────────
+// MOVE TO MODAL
+// ──────────────────────────────────────────────────────────────────────────
+// User picks a target ITEM CODE + Above/Below to relocate selected row(s).
+// Works for single selection (one row) and multi-selection (a group moves
+// together preserving relative order). Helpful when the table has many
+// rows and dragging would be tedious — and matches the "PDF order tracks
+// CSV order" workflow goal.
+
+function openMoveToModal() {
+    if (!dashProjectData || dashProjectData.length < 2) {
+        showInfoModal('Nothing to move', 'You need at least two rows for Move To to make sense.');
+        return;
+    }
+    const selected = dashGetSelectedIndices();
+    const summary = document.getElementById('moveToSummary');
+    if (selected.length === 1) {
+        const row = dashProjectData[selected[0]];
+        summary.innerHTML = `Move <strong>${row.id}</strong> to a new position.`;
+    } else {
+        summary.innerHTML = `Move <strong>${selected.length}</strong> selected rows as a group.`;
+    }
+    // Populate the dropdown with all rows that are NOT in the current
+    // selection (you can't reference yourself).
+    const sel = new Set(selected);
+    const select = document.getElementById('moveToTarget');
+    select.innerHTML = '';
+    dashProjectData.forEach((row, i) => {
+        if (sel.has(i)) return;
+        const opt = document.createElement('option');
+        opt.value = String(i);
+        opt.textContent = row.id || `Row ${i + 1}`;
+        select.appendChild(opt);
+    });
+    if (select.options.length === 0) {
+        showInfoModal('No targets', 'There are no other rows to move next to.');
+        return;
+    }
+    // Default position: above (the radio's default checked attribute already
+    // sets this, but reset in case the user previously chose below)
+    document.querySelector('input[name="moveToPos"][value="above"]').checked = true;
+    document.getElementById('moveToModal').style.display = 'flex';
+}
+
+function applyMoveTo() {
+    const select = document.getElementById('moveToTarget');
+    const targetIdx = parseInt(select.value, 10);
+    if (isNaN(targetIdx)) return;
+    const pos = document.querySelector('input[name="moveToPos"]:checked').value;
+    const insertBefore = pos === 'above' ? targetIdx : targetIdx + 1;
+
+    document.getElementById('moveToModal').style.display = 'none';
+
+    const selected = dashGetSelectedIndices();
+    if (selected.length === 1) {
+        // Single-row move. Adjust insert index if the source was before target.
+        let insertIdx = insertBefore;
+        if (selected[0] < insertIdx) insertIdx--;
+        reorderDashRow(selected[0], insertIdx);
+    } else {
+        reorderDashRows(selected, insertBefore);
+    }
+}
+
+// ──────────────────────────────────────────────────────────────────────────
+// BULK EDIT + DUPLICATE AS SERIES
+// ──────────────────────────────────────────────────────────────────────────
+// Two operations that work on the dashboard multi-selection:
+//   - Bulk Edit: set ONE field to the same value on all selected rows
+//   - Duplicate as Series: from one source row, create N copies with
+//     sequential IDs (e.g. ART.001 → ART.002…ART.012)
+//
+// Both push a single history entry (so Ctrl+Z reverts the whole batch).
+
+// Metadata for which fields can be bulk-edited and how their value input
+// should render. Order here is the order they appear in the dropdown.
+// Notes:
+//   - ITEM CODE, art dimensions, image filename are intentionally excluded
+//     (they're per-row unique, or computed)
+//   - 'select' type uses the options array; 'text' is a free-text input;
+//     'number' is a numeric input
+//   - The 'apply' field stores the property key on the row object
+const BULK_EDITABLE_FIELDS = [
+    { key: 'product',       label: 'Product Type',  type: 'select', options: FRAME_PRODUCTS },
+    { key: 'location',      label: 'Location',      type: 'text' },
+    { key: 'level',         label: 'Level',         type: 'text' },
+    // Note: 'qty' is intentionally excluded — it's a derived value computed
+    // by recalculateDashboardQuantities from elevation frame counts. Bulk
+    // editing it would be silently overwritten on the next recalc.
+    { key: 'artType',       label: 'Art Type',      type: 'text' },
+    { key: 'paperType',     label: 'Paper Type',    type: 'text' },
+    { key: 'fCode',         label: 'Frame Code',    type: 'text' },
+    { key: 'fColorName',    label: 'Frame Color Name', type: 'text' },
+    { key: 'glass',         label: 'Glass',         type: 'text' },
+    { key: 'mount',         label: 'Mount',         type: 'text' },
+    { key: 'hardware',      label: 'Hardware',      type: 'text' },
+    { key: 'backing',       label: 'Backing Board', type: 'text' },
+    { key: 'm1ColorName',   label: 'Mat 1 Color Name', type: 'text' },
+    { key: 'm2ColorName',   label: 'Mat 2 Color Name', type: 'text' },
+    { key: 'prodNotes',     label: 'Production Notes', type: 'text' },
+];
+
+function openBulkEditModal() {
+    if (!dashProjectData || dashProjectData.length === 0) {
+        showInfoModal('Nothing to edit', 'Add some rows first.');
+        return;
+    }
+    const selected = dashGetSelectedIndices();
+    const summary = document.getElementById('bulkEditSummary');
+    if (selected.length === 1) {
+        const row = dashProjectData[selected[0]];
+        summary.innerHTML = `Editing <strong>${row.id}</strong>. Tip: select multiple rows (Shift/Ctrl-click) to edit them all at once.`;
+    } else {
+        summary.innerHTML = `Editing <strong>${selected.length}</strong> selected rows.`;
+    }
+    // Populate the field dropdown
+    const fieldSelect = document.getElementById('bulkEditField');
+    fieldSelect.innerHTML = '';
+    BULK_EDITABLE_FIELDS.forEach((f, i) => {
+        const opt = document.createElement('option');
+        opt.value = String(i);
+        opt.textContent = f.label;
+        fieldSelect.appendChild(opt);
+    });
+    fieldSelect.value = '0';
+    renderBulkEditValueInput();
+    document.getElementById('bulkEditModal').style.display = 'flex';
+}
+
+// Render the value input appropriate to the selected field. Called on modal
+// open and whenever the field dropdown changes. Also updates the preview line.
+function renderBulkEditValueInput() {
+    const fieldIdx = parseInt(document.getElementById('bulkEditField').value, 10);
+    const field = BULK_EDITABLE_FIELDS[fieldIdx];
+    if (!field) return;
+    const container = document.getElementById('bulkEditValueContainer');
+    container.innerHTML = '';
+    let input;
+    if (field.type === 'select') {
+        input = document.createElement('select');
+        field.options.forEach(opt => {
+            const o = document.createElement('option');
+            o.value = opt;
+            o.textContent = opt;
+            input.appendChild(o);
+        });
+    } else if (field.type === 'number') {
+        input = document.createElement('input');
+        input.type = 'number';
+    } else {
+        input = document.createElement('input');
+        input.type = 'text';
+    }
+    input.id = 'bulkEditValueInput';
+    input.style.cssText = 'width:100%; font-size:0.85rem; padding:6px 8px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px; box-sizing:border-box;';
+    // Pre-fill with the primary selected row's current value as a hint
+    const selected = dashGetSelectedIndices();
+    if (selected.length > 0) {
+        const cur = dashProjectData[dashSelectedRowIndex][field.key];
+        if (cur !== undefined && cur !== null) input.value = String(cur);
+    }
+    input.oninput = updateBulkEditPreview;
+    input.onchange = updateBulkEditPreview;
+    container.appendChild(input);
+    updateBulkEditPreview();
+}
+
+function updateBulkEditPreview() {
+    const fieldIdx = parseInt(document.getElementById('bulkEditField').value, 10);
+    const field = BULK_EDITABLE_FIELDS[fieldIdx];
+    if (!field) return;
+    const input = document.getElementById('bulkEditValueInput');
+    const newVal = input ? input.value : '';
+    const selected = dashGetSelectedIndices();
+    const preview = document.getElementById('bulkEditPreview');
+    preview.innerHTML = `Will set <strong>${field.label}</strong> to "<strong>${newVal}</strong>" on ${selected.length} row${selected.length===1?'':'s'}.`;
+}
+
+function applyBulkEdit() {
+    const fieldIdx = parseInt(document.getElementById('bulkEditField').value, 10);
+    const field = BULK_EDITABLE_FIELDS[fieldIdx];
+    if (!field) return;
+    const input = document.getElementById('bulkEditValueInput');
+    if (!input) return;
+    let newVal = input.value;
+    if (field.type === 'number') {
+        const n = parseFloat(newVal);
+        if (isNaN(n)) {
+            showInfoModal('Invalid value', `"${newVal}" isn't a valid number for ${field.label}.`);
+            return;
+        }
+        newVal = n;
+    }
+    const selected = dashGetSelectedIndices();
+    if (selected.length === 0) return;
+
+    // Apply to every selected row
+    selected.forEach(idx => {
+        dashProjectData[idx][field.key] = newVal;
+    });
+
+    // If product was bulk-edited, mirror the Shadow Box auto-flip behavior
+    // (Shadow Box flips useFloatMount to true; everything else flips it to
+    // false). Matches what handleDashProductChange() does for single-row edits.
+    if (field.key === 'product') {
+        selected.forEach(idx => {
+            dashProjectData[idx].useFloatMount = (newVal === 'Framed Art (Shadow Box)');
+        });
+    }
+
+    // Recalc overall dims and re-render. recalculateDashboardQuantities also
+    // refreshes the table view. If the form panel was reflecting one of the
+    // changed rows, reload it so the user sees the new value.
+    recalculateDashboardQuantities();
+    renderDashTable();
+    if (selected.indexOf(dashSelectedRowIndex) >= 0) {
+        loadDashDataIntoControls(dashProjectData[dashSelectedRowIndex]);
+    }
+    pushHistory();
+    document.getElementById('bulkEditModal').style.display = 'none';
+}
+
+// ── DUPLICATE AS SERIES ──
+
+function openDuplicateSeriesModal() {
+    if (!dashProjectData || dashProjectData.length === 0) {
+        showInfoModal('Nothing to duplicate', 'Add a row first.');
+        return;
+    }
+    const sourceIdx = dashSelectedRowIndex;
+    const source = dashProjectData[sourceIdx];
+    document.getElementById('dupSeriesSummary').innerHTML =
+        `Duplicating <strong>${source.id}</strong>. New rows inherit all its settings.`;
+
+    // Default pattern: try to detect the source's ID pattern and reuse it.
+    // E.g. ART.005 → pattern "ART.{n}", starting at 006 (or whatever's next free).
+    const patternInput = document.getElementById('dupSeriesPattern');
+    const startInput = document.getElementById('dupSeriesStart');
+    const padInput = document.getElementById('dupSeriesPad');
+    // Parse source ID: looks for trailing digits
+    const m = source.id.match(/^(.*?)(\d+)(\D*)$/);
+    if (m) {
+        patternInput.value = m[1] + '{n}' + m[3];
+        startInput.value = String(parseInt(m[2], 10) + 1);
+        padInput.value = String(m[2].length);
+    } else {
+        patternInput.value = source.id + '.{n}';
+        startInput.value = '1';
+        padInput.value = '3';
+    }
+    document.getElementById('dupSeriesCount').value = '5';
+    updateDupSeriesPreview();
+    document.getElementById('duplicateSeriesModal').style.display = 'flex';
+}
+
+function buildDupSeriesIds() {
+    const count = parseInt(document.getElementById('dupSeriesCount').value, 10) || 0;
+    const pattern = document.getElementById('dupSeriesPattern').value || 'ART.{n}';
+    const start = parseInt(document.getElementById('dupSeriesStart').value, 10) || 1;
+    const pad = parseInt(document.getElementById('dupSeriesPad').value, 10) || 1;
+    const ids = [];
+    for (let i = 0; i < count; i++) {
+        const n = String(start + i).padStart(pad, '0');
+        ids.push(pattern.replace('{n}', n));
+    }
+    return ids;
+}
+
+function updateDupSeriesPreview() {
+    const ids = buildDupSeriesIds();
+    const previewDiv = document.getElementById('dupSeriesPreview');
+    if (ids.length === 0) {
+        previewDiv.innerHTML = '<span style="color:var(--text-muted);">(no IDs to preview)</span>';
+        return;
+    }
+    // Find collisions with existing rows
+    const existing = new Set(dashProjectData.map(r => r.id));
+    const lines = ids.map(id => {
+        if (existing.has(id)) {
+            return `<span style="color:#e74c3c;">${id} ⚠ collision</span>`;
+        }
+        return id;
+    });
+    previewDiv.innerHTML = lines.join('<br>');
+}
+
+function applyDuplicateSeries() {
+    const ids = buildDupSeriesIds();
+    if (ids.length === 0) {
+        showInfoModal('Nothing to do', 'Set a count of at least 1.');
+        return;
+    }
+    // Validate: check for collisions with existing IDs and with each other
+    const existing = new Set(dashProjectData.map(r => r.id));
+    const collisions = [];
+    const seen = new Set();
+    ids.forEach(id => {
+        if (existing.has(id)) collisions.push(id + ' (exists)');
+        else if (seen.has(id)) collisions.push(id + ' (duplicate in series)');
+        seen.add(id);
+    });
+    if (collisions.length > 0) {
+        showInfoModal('ID collision',
+            `These IDs would collide with existing rows or each other:\n${collisions.slice(0, 8).join('\n')}` +
+            (collisions.length > 8 ? `\n…and ${collisions.length - 8} more` : '') +
+            '\n\nAdjust the starting number or pattern.');
+        return;
+    }
+
+    // Generate the new rows. Source = primary selected row. Each copy deep-
+    // clones the source then overrides the id. Inserted directly after the
+    // source, in order.
+    const sourceIdx = dashSelectedRowIndex;
+    const source = dashProjectData[sourceIdx];
+    const newRows = ids.map(id => {
+        const copy = JSON.parse(JSON.stringify(source));
+        copy.id = id;
+        return copy;
+    });
+    // Insert all new rows just after source
+    dashProjectData.splice(sourceIdx + 1, 0, ...newRows);
+
+    recalculateDashboardQuantities();
+    renderDashTable();
+    pushHistory();
+    document.getElementById('duplicateSeriesModal').style.display = 'none';
 }
 
 function addDashRow() {
@@ -1431,8 +2846,14 @@ function addDashRow() {
     newRow.fW = dashFmt(0.75 * _f);
     newRow.fType = "color"; newRow.fColor = "#000000"; newRow.fCode = "Standard Black";
     
-    dashProjectData.push(newRow);
-    dashSelectedRowIndex = dashProjectData.length - 1;
+    // Insert right after the currently-selected row (so the new row appears
+    // visually adjacent to where the user was working). Falls back to
+    // pushing at the end if the selection is out of bounds (e.g. empty table).
+    const insertAt = (dashSelectedRowIndex >= 0 && dashSelectedRowIndex < dashProjectData.length)
+        ? dashSelectedRowIndex + 1
+        : dashProjectData.length;
+    dashProjectData.splice(insertAt, 0, newRow);
+    dashSelectedRowIndex = insertAt;
     loadDashDataIntoControls(dashProjectData[dashSelectedRowIndex]);
     renderDashTable(); checkGlobalEditingWarning(newRow.id);
     pushHistory();
@@ -1442,8 +2863,14 @@ function duplicateDashRow() {
     const newRow = JSON.parse(JSON.stringify(dashProjectData[dashSelectedRowIndex])); 
     newRow.id = generateNextItemCode(); 
     newRow.qty = 0; 
-    dashProjectData.push(newRow);
-    dashSelectedRowIndex = dashProjectData.length - 1;
+    // Insert right after the source row so the dupe lands visually next to
+    // its original. (Was previously pushing to the end of the array, which
+    // forced users to scroll/search to find the dupe and reorder manually.)
+    const insertAt = (dashSelectedRowIndex >= 0 && dashSelectedRowIndex < dashProjectData.length)
+        ? dashSelectedRowIndex + 1
+        : dashProjectData.length;
+    dashProjectData.splice(insertAt, 0, newRow);
+    dashSelectedRowIndex = insertAt;
     loadDashDataIntoControls(dashProjectData[dashSelectedRowIndex]);
     renderDashTable(); checkGlobalEditingWarning(newRow.id);
     pushHistory();
@@ -1588,7 +3015,13 @@ function dashHtIn(idx, field, val, fromTable) {
         // user isn't typing into a table input.
         renderDashTable();
     }
-    if (field === 'id') recalculateDashboardQuantities();
+    // Recalc qty after id changes — but only for non-table edits. Calling
+    // recalculateDashboardQuantities from a table input re-renders the whole
+    // table, which destroys the input the user is typing into (causes focus
+    // loss + scroll jumps). For renames, the qty is functionally unchanged
+    // anyway (the new id propagates to all elev frame refs at the top of
+    // this function, so total references stay the same).
+    if (field === 'id' && !fromTable) recalculateDashboardQuantities();
 }
 
 // Update only the calculated (display-only) cells of a table row.
@@ -1785,7 +3218,23 @@ function updateDashVisualsFromDOM() {
     }
     document.getElementById('printFileDisplay').innerText = `${dashFmt(printW)} x ${dashFmt(printH)}`;
 
-    const ratio = 300 / Math.max(data.extW, data.extH); 
+    // Frame visual ratio: how many CSS pixels per "real" inch.
+    // In Mode 2, the preview-container's aspect ratio is set to match the
+    // current frame's aspect (via updateDashPreviewContainerSize), so the
+    // frame fits with minimal empty space. We compute ratio as the minimum
+    // of (container_w / frame_w) and (container_h / frame_h), times 0.95
+    // for a small breathing margin. This works for any container shape.
+    updateDashPreviewContainerSize();
+    const previewContainer = document.querySelector('.preview-container');
+    let ratio = 300 / Math.max(data.extW, data.extH); // fallback
+    if (previewContainer) {
+        const r = previewContainer.getBoundingClientRect();
+        if (r.width > 50 && r.height > 50) {
+            const rByW = r.width / data.extW;
+            const rByH = r.height / data.extH;
+            ratio = Math.min(rByW, rByH) * 0.95;
+        }
+    }
     
     fVis.innerHTML = ''; 
     fVis.style.width = (data.extW * ratio) + "px"; fVis.style.height = (data.extH * ratio) + "px";
@@ -1801,7 +3250,10 @@ function updateDashVisualsFromDOM() {
         fVis.className = 'frame-vis';
         fVis.style.border = 'none';
         fVis.style.background = 'transparent';
-        fVis.style.boxShadow = '0 6px 20px rgba(0,0,0,0.35), 0 2px 6px rgba(0,0,0,0.2)';
+        // Outer shadow gated by dashOuterShadowsOn.
+        fVis.style.boxShadow = dashOuterShadowsOn
+            ? '0 6px 20px rgba(0,0,0,0.35), 0 2px 6px rgba(0,0,0,0.2)'
+            : 'none';
     } else if (data.fType === 'color') {
         fVis.className = 'frame-vis frame-vis-solid';
         fVis.style.border = `${effFw_dash * ratio}px solid ${data.fColor}`;
@@ -1896,7 +3348,7 @@ function updateDashVisualsFromDOM() {
         const isTorn = (data.sbPaperEdge || 'clean') === 'torn';
         // Torn edge gets a dashed border in the preview as a visual hint; the export
         // does the actual irregular outline via the canvas renderer.
-        paperVis.style.cssText = `position:absolute; top:${paperY}px; left:${paperX}px; width:${paperW}px; height:${paperH}px; background:${paperColor}; box-shadow: 2px 4px 12px rgba(0,0,0,0.45); ${isTorn ? 'border:1px dashed rgba(0,0,0,0.4); border-radius:2px;' : ''} pointer-events:none;`;
+        paperVis.style.cssText = `position:absolute; top:${paperY}px; left:${paperX}px; width:${paperW}px; height:${paperH}px; background:${paperColor}; box-shadow: 2px 4px 12px rgba(0,0,0,0.56); ${isTorn ? 'border:1px dashed rgba(0,0,0,0.4); border-radius:2px;' : ''} pointer-events:none;`;
         fVis.appendChild(paperVis);
     }
     
@@ -2183,35 +3635,52 @@ function handleDashProductChange(shouldSync = true) {
     const isShadowBox = (val === "Framed Art (Shadow Box)");
     const data = dashProjectData[dashSelectedRowIndex];
 
+    // Persist the chosen product to the row so subsequent reads see the
+    // current state. CSV export picks up data.product directly.
+    if (data) data.product = val;
+
+    // Frameless Canvas: no frame applies, so visually disable the Frame
+    // Style section and the Fr.W / Fr.H / Rabbet cells. The data underneath
+    // stays intact so switching back to a framed product restores prior
+    // values. Other canvas (Floater) keeps these enabled — Floater DOES
+    // have a frame around the canvas.
+    const frameStyleSection = document.getElementById('frameStyleSection');
+    if (frameStyleSection) frameStyleSection.classList.toggle('fl-disabled', isFrameless);
+    document.querySelectorAll('.frame-dim-cell').forEach(el => {
+        el.classList.toggle('fl-disabled', isFrameless);
+    });
+
     // FLOATER & FRAMELESS CANVAS: both hide the mat/float wrapper since neither
     // uses traditional mats or float-mounted paper. Both show canvas settings
-    // (depth, wrap, optional inset). Both hide bleed since canvas is wrapped,
-    // not printed-with-bleed-margin. The Inset field is only meaningful for
-    // Floater (canvas face + shadow gap); Frameless ignores it (no frame to inset from).
+    // (depth, wrap, optional inset). bleedSettings stays visible — Print File
+    // is computed correctly for canvas (uses wrap instead of bleed), and
+    // designers want to see canvas print dimensions for production.
+    // The Inset field is only meaningful for Floater (canvas face + shadow
+    // gap); Frameless ignores it (no frame to inset from).
     if (isFloater || isFrameless) {
         matWrapper.style.display = 'none';
         canvasSettings.style.display = 'grid';
-        bleedSettings.style.display = 'none';
+        bleedSettings.style.display = 'grid';
         // For frameless canvas, dim out the Inset field (it's irrelevant — there's no frame).
         const insetCell = document.getElementById('floaterInset');
         if (insetCell && insetCell.parentElement) {
             insetCell.parentElement.style.opacity = isFrameless ? '0.4' : '1';
             insetCell.disabled = isFrameless;
         }
-        // Default Frameless Canvas to a 2"D stretcher bar when the field is empty.
-        // Studio standard for wrapped canvas. Also auto-fills wrap = depth (no
-        // safety margin per studio convention). User can override after.
-        // Doesn't trigger when switching to Floater since that has its own
-        // rabbet→stretcher relationship.
-        if (isFrameless) {
-            const depthEl = document.getElementById('canvasDepth');
-            const wrapEl = document.getElementById('canvasWrap');
-            const currentDepth = parseFloat(depthEl ? depthEl.value : '') || 0;
-            if (depthEl && currentDepth === 0) {
-                depthEl.value = '2';
-                if (wrapEl && (parseFloat(wrapEl.value) || 0) === 0) {
-                    wrapEl.value = '2';
-                }
+        // Default canvas products (Floater AND Frameless) to a 2"D stretcher
+        // bar + 2" wrap when the field is empty. Studio standard: 2" stretcher
+        // bars are the most common size, and image wraps 2" around the sides
+        // (the remaining stretcher depth becomes back-staple area). User can
+        // override after. Both Floater and Frameless use the same default
+        // because the physical canvas object is identical — what differs is
+        // whether it sits inside a floater frame or not.
+        const depthEl = document.getElementById('canvasDepth');
+        const wrapEl = document.getElementById('canvasWrap');
+        const currentDepth = parseFloat(depthEl ? depthEl.value : '') || 0;
+        if (depthEl && currentDepth === 0) {
+            depthEl.value = '2';
+            if (wrapEl && (parseFloat(wrapEl.value) || 0) === 0) {
+                wrapEl.value = '2';
             }
         }
         if(shouldSync) syncDashAndCalculate();
@@ -2610,45 +4079,89 @@ function syncDashLibraryFolder(e, getPath) {
     if(!f || f.length === 0) return;
     // Note: we MERGE into dashLocalLibrary instead of wiping it, so the bundled
     // library stays available alongside whatever the user is syncing in.
+    //
+    // Each swatch goes through: FileReader (file → data URL) → resize to
+    // CUSTOM_LIBRARY_MAX_DIMENSION → store as a data URL string in entry.file.
+    // After all files finish, persist to localStorage so the swatches survive
+    // browser sessions. The FileReader / resize step is async, so we count
+    // completed files and only finalize once all are done.
     let c = 0;
-    
+    let pendingFiles = 0;
+    let processedFiles = 0;
+
+    const finalize = () => {
+        // Persist all data-URL entries to localStorage. Show the result modal
+        // here (after the saveSync) so the user gets accurate feedback about
+        // both swatches synced AND storage state.
+        const result = saveCustomLibraryToStorage();
+        populateDashVendorDropdown();
+        closeLibrarySyncModal();
+        if (result.ok) {
+            const stats = getCustomLibraryStorageStats();
+            showInfoModal('Library Synced',
+                `Synced ${c} swatches from your local folder.\n\n` +
+                `Persisted ${stats.count} custom swatches to browser storage (${stats.percentOfLimit}% of limit used).\n\n` +
+                `These will reload automatically next time you open the tool.`);
+        } else {
+            showInfoModal('Storage Limit Reached',
+                `Synced ${c} swatches into memory, but couldn't save them all to browser storage:\n\n${result.error}\n\n` +
+                `Try removing some custom swatches via Clear, or push your swatches to the GitHub library for permanent storage.`);
+        }
+    };
+
     for(let file of f) {
         const ext = file.name.split('.').pop().toLowerCase();
         const isImage = file.type.startsWith('image/') || ['jpg', 'jpeg', 'png', 'webp', 'svg'].includes(ext);
         if(!isImage) continue;
-        
+
         const relPath = getPath ? getPath(file) : file.webkitRelativePath;
         const parts = relPath.split('/');
-        const filename = parts[parts.length - 1]; 
+        const filename = parts[parts.length - 1];
         const vendor = parts.length > 2 ? parts[parts.length - 3] : (parts.length > 1 ? parts[parts.length - 2] : parts[0]);
         const collection = parts.length > 2 ? parts[parts.length - 2] : "General";
-        
+
         const parsed = parseSwatchFilename(filename);
         const code = parsed.code;
         const w = parsed.width;
-        
+
         if(!dashLocalLibrary[vendor]) dashLocalLibrary[vendor] = {};
         if(!dashLocalLibrary[vendor][collection]) dashLocalLibrary[vendor][collection] = [];
-        // Avoid pushing a duplicate of an existing bundled entry with the same code
-        const existing = dashLocalLibrary[vendor][collection].find(x => x.code === code);
-        const entry = { code, width: w, file };
-        if (parsed.faceWidth !== undefined) entry.faceWidth = parsed.faceWidth;
-        if (parsed.depth !== undefined) entry.depth = parsed.depth;
-        if (parsed.rabbet !== undefined) entry.rabbet = parsed.rabbet;
-        if (existing) {
-            // user's manual sync overrides bundled entry
-            existing.file = file; existing.width = w;
-            if (parsed.faceWidth !== undefined) existing.faceWidth = parsed.faceWidth;
-            if (parsed.depth !== undefined) existing.depth = parsed.depth;
-            if (parsed.rabbet !== undefined) existing.rabbet = parsed.rabbet;
-        } else {
-            dashLocalLibrary[vendor][collection].push(entry);
-        }
+
         c++;
+        pendingFiles++;
+
+        // Read file → resize → store as data URL. We close over the parsed
+        // metadata + position so each callback knows where to put its result.
+        const reader = new FileReader();
+        // eslint-disable-next-line no-loop-func -- closures intentional here
+        reader.onload = (ev) => {
+            resizeImageDataUrl(ev.target.result, CUSTOM_LIBRARY_MAX_DIMENSION, (resizedDataUrl) => {
+                const existing = dashLocalLibrary[vendor][collection].find(x => x.code === code);
+                const entry = { code, width: w, file: resizedDataUrl };
+                if (parsed.faceWidth !== undefined) entry.faceWidth = parsed.faceWidth;
+                if (parsed.depth !== undefined) entry.depth = parsed.depth;
+                if (parsed.rabbet !== undefined) entry.rabbet = parsed.rabbet;
+                if (existing) {
+                    Object.assign(existing, entry);
+                } else {
+                    dashLocalLibrary[vendor][collection].push(entry);
+                }
+                processedFiles++;
+                if (processedFiles === pendingFiles) finalize();
+            });
+        };
+        reader.onerror = () => {
+            processedFiles++;
+            if (processedFiles === pendingFiles) finalize();
+        };
+        reader.readAsDataURL(file);
     }
-    populateDashVendorDropdown();
-    closeLibrarySyncModal();
-    showInfoModal('Library Synced', `Synced ${c} swatches from your local folder.`);
+
+    // Edge case: no valid images at all (counter never increments)
+    if (pendingFiles === 0) {
+        closeLibrarySyncModal();
+        showInfoModal('No images found', 'The folder contained no image files.');
+    }
 }
 
 // =====================================================================
@@ -2665,6 +4178,58 @@ function openLibrarySyncModal() {
     const zone = document.getElementById('libraryDropZone');
     zone.classList.remove('drag-over', 'processing');
     document.getElementById('libraryDropZoneText').innerText = 'Drop folder here';
+    // Refresh the storage indicator each time the modal opens — counts/bytes
+    // are live so the user always sees current state.
+    refreshLibraryStorageStatus();
+    // Reset the clear button to its idle label (in case it was in
+    // confirm-armed state from a previous open).
+    const clearBtn = document.getElementById('libraryClearBtn');
+    if (clearBtn) {
+        clearBtn.textContent = 'Clear My Saved Swatches';
+        clearBtn.dataset.confirmArmed = '0';
+    }
+}
+
+// Populate the saved-swatches status row inside the sync modal. Called on
+// modal open and after every sync. Reads stats directly from localStorage
+// so the numbers are always live.
+function refreshLibraryStorageStatus() {
+    const el = document.getElementById('libraryStorageStatus');
+    if (!el) return;
+    const stats = getCustomLibraryStorageStats();
+    if (stats.count === 0) {
+        el.innerHTML = '<strong>No saved swatches yet.</strong> Swatches you sync here will persist in your browser for next time.';
+        return;
+    }
+    const kb = (stats.bytes / 1024).toFixed(0);
+    el.innerHTML =
+        `<strong>${stats.count} swatch${stats.count === 1 ? '' : 'es'} saved</strong> in your browser ` +
+        `(${kb} KB, ${stats.percentOfLimit}% of storage used). ` +
+        `Auto-reloads next time you open the tool.`;
+}
+
+// Clear button uses two-step confirm: first click warns + arms; second click
+// within 5 seconds actually clears. Prevents accidental wipes.
+function handleClearCustomLibrary() {
+    const btn = document.getElementById('libraryClearBtn');
+    if (!btn) return;
+    if (btn.dataset.confirmArmed !== '1') {
+        btn.textContent = 'Click again to confirm — this clears all saved swatches';
+        btn.dataset.confirmArmed = '1';
+        // Auto-disarm after 5 seconds so the user doesn't accidentally hit it
+        // later thinking it's the normal button.
+        setTimeout(() => {
+            if (btn.dataset.confirmArmed === '1') {
+                btn.textContent = 'Clear My Saved Swatches';
+                btn.dataset.confirmArmed = '0';
+            }
+        }, 5000);
+        return;
+    }
+    clearCustomLibrary();
+    btn.textContent = 'Clear My Saved Swatches';
+    btn.dataset.confirmArmed = '0';
+    refreshLibraryStorageStatus();
 }
 
 function closeLibrarySyncModal() {
@@ -3136,10 +4701,15 @@ function renderFrameToCanvas(d, swatchImg, opts) {
         c.height = h + (pad * 2);
         const x = c.getContext('2d');
         x.translate(pad, pad);
-        // Outer drop shadow (matches the floater's ambient shadow strength)
-        x.shadowColor = 'rgba(0,0,0,0.55)'; x.shadowBlur = 35; x.shadowOffsetY = 18;
-        x.fillStyle = '#000'; x.fillRect(0, 0, w, h);
-        x.shadowColor = 'transparent';
+        // Outer drop shadow (matches the floater's ambient shadow strength).
+        // Gated on the global toggle — when off, no outer shadow is painted,
+        // resulting in a cleaner PNG for compositing in InDesign without an
+        // unwanted bleed halo around the frame.
+        if (dashOuterShadowsOn) {
+            x.shadowColor = 'rgba(0,0,0,0.55)'; x.shadowBlur = 35; x.shadowOffsetY = 18;
+            x.fillStyle = '#000'; x.fillRect(0, 0, w, h);
+            x.shadowColor = 'transparent';
+        }
         // Cut a transparent hole for the entire face — the artwork composited behind
         // shows through. No baked inner shadow (frameless canvas has no surrounding
         // material to project a shadow onto the artwork).
@@ -3165,10 +4735,18 @@ function renderFrameToCanvas(d, swatchImg, opts) {
     x.translate(pad, pad);
 
     // Outer drop shadow under the whole frame — strong enough to read in elevation
-    // exports where the frame sits on a wall background.
-    x.shadowColor = 'rgba(0,0,0,0.55)'; x.shadowBlur = 35; x.shadowOffsetY = 18;
-    x.fillStyle = '#000'; x.fillRect(0, 0, w, h);
-    x.shadowColor = 'transparent';
+    // exports where the frame sits on a wall background. Gated on the global
+    // toggle — when off, no outer shadow is painted, giving cleaner PNGs for
+    // InDesign compositing without an unwanted bleed halo.
+    if (dashOuterShadowsOn) {
+        x.shadowColor = 'rgba(0,0,0,0.55)'; x.shadowBlur = 35; x.shadowOffsetY = 18;
+        x.fillStyle = '#000'; x.fillRect(0, 0, w, h);
+        x.shadowColor = 'transparent';
+    } else {
+        // Still paint the base frame rectangle so the rails / interior render
+        // correctly on top, just without the drop-shadow layer underneath.
+        x.fillStyle = '#000'; x.fillRect(0, 0, w, h);
+    }
 
     // Shade a color toward black (negative pct) or white (positive pct).
     // pct is a fraction in [-1, 1]. Used by the color-mode 3D shading helpers
@@ -3263,9 +4841,15 @@ function renderFrameToCanvas(d, swatchImg, opts) {
     // The stroke must lie entirely OUTSIDE the clip — if it touches the clip boundary
     // its anti-aliasing leaks across as a 1px black line. Stroke center at (bx-15, by-15)
     // with width 10 means the stroke spans (bx-20..bx-10) — fully outside (bx, by, bw, bh).
+    //
+    // op (opacity) gets multiplied by the global INNER_SHADOW_BOOST factor (~1.25)
+    // so all inner shadows render slightly darker than their original calibration.
+    // This makes the frame look properly "grounded" even when the outer drop
+    // shadow is off (user toggle). Clamped to 1.0 so we don't oversaturate.
     function dIS(bx, by, bw, bh, bl, os, op) {
+        const boostedOp = Math.min(1.0, op * 1.25);
         x.save(); x.beginPath(); x.rect(bx,by,bw,bh); x.clip();
-        x.shadowColor = `rgba(0,0,0,${op})`; x.shadowBlur = bl; x.shadowOffsetY = os;
+        x.shadowColor = `rgba(0,0,0,${boostedOp})`; x.shadowBlur = bl; x.shadowOffsetY = os;
         x.lineWidth = 10; x.strokeStyle = '#000'; x.strokeRect(bx-15, by-15, bw+30, bh+30);
         x.restore();
     }
@@ -3419,9 +5003,11 @@ function renderFrameToCanvas(d, swatchImg, opts) {
         }
 
         // Drop shadow under the paper, projecting onto the backer.
+        // Inner shadow — boosted by ~25% to match other inner-shadow values
+        // (rgba opacity 0.55 * 1.25 = ~0.69, rounded to 0.7).
         // Use a separate save/restore so the shadow doesn't bleed onto subsequent draws.
         x.save();
-        x.shadowColor = 'rgba(0,0,0,0.55)'; x.shadowBlur = 18; x.shadowOffsetX = 2; x.shadowOffsetY = 4;
+        x.shadowColor = 'rgba(0,0,0,0.7)'; x.shadowBlur = 18; x.shadowOffsetX = 2; x.shadowOffsetY = 4;
         x.fillStyle = paperColor;
         x.fill(paperPath);
         x.restore();
@@ -3499,13 +5085,138 @@ function renderFrameToCanvas(d, swatchImg, opts) {
     return { canvas: c, pad: pad, frameW: w, frameH: h };
 }
 
+// Build a Self-Explanatory PNG filename for a row.
+// Format: ITEM_CODE_PRODUCT_FRAMECODE_WxH_M..._R...png
+// Per the FRAME File Naming Proposal:
+//   ART.001_FA_MICH-41-35_24x36_M3_R0.25.png
+//
+// Tokens appear conditionally based on product type and row state.
+// The ITEM CODE is always first — InDesign's AutoFrameSpecs matches by
+// the ART.NNN_ prefix, so users can rename safely as long as they leave
+// the prefix intact.
+//
+// Numeric values in the filename use whatever unit the project is in. To
+// keep names short, the team should export with the project set to inches
+// when possible. Numbers drop trailing zeros (3 instead of 3.0, 2.5
+// instead of 2.50).
+function buildPngFilename(row) {
+    if (!row) return 'Frame.png';
+    // Strip characters that are invalid in filenames on Windows/macOS/Linux.
+    // Slashes, colons, quotes, etc. become underscores; parens are removed
+    // (they're noise in filenames).
+    const sanitize = (s) => String(s || '')
+        .replace(/[\\/:*?"<>|]/g, '_')
+        .replace(/[()]/g, '')
+        .replace(/\s+/g, '_');
+    const itemCode = sanitize(row.id) || 'Frame';
+
+    // Format a numeric value: drop trailing zeros so 3.000 → 3 and 2.500 → 2.5.
+    // Numbers are written in the project's current unit (whatever the row data
+    // is stored in). Values < 0.0001 are treated as 0.
+    const num = (v) => {
+        const n = parseFloat(v);
+        if (isNaN(n) || Math.abs(n) < 0.0001) return '0';
+        // toFixed(4) then strip trailing zeros and trailing dot.
+        let s = n.toFixed(4).replace(/0+$/, '').replace(/\.$/, '');
+        return s;
+    };
+
+    // Product code per the proposal's decoder ring.
+    const product = row.product || '';
+    const useFM = (row.useFloatMount === true);
+    let productCode;
+    if (product === 'Frameless Canvas (Wrapped)') productCode = 'FLW';
+    else if (product === 'Framed Canvas (Floater)') productCode = 'FCF';
+    else if (product === 'Sourced Object')          productCode = 'SO';
+    else if (product === 'Framed Art (Shadow Box)') productCode = 'FAFM';  // Shadow Box = Float Mount
+    else if (useFM)                                 productCode = 'FAFM';  // any other product flagged float-mount
+    else                                            productCode = 'FA';    // Framed Art (default)
+
+    const tokens = [itemCode, productCode];
+
+    // FRAME CODE — sanitized. Omitted for Frameless (no frame) and Sourced
+    // Object (no frame applies). Other products include it even if empty,
+    // skipping only when the field is blank.
+    const frameCodeOmitted = (productCode === 'FLW' || productCode === 'SO');
+    if (!frameCodeOmitted) {
+        const fCode = sanitize(row.fCode);
+        if (fCode) tokens.push(fCode);
+    }
+
+    // SIZE — always included. WxH using extW × extH.
+    const sizeToken = `${num(row.extW)}x${num(row.extH)}`;
+    tokens.push(sizeToken);
+
+    // MAT 1 — only for Framed Art (FA) and Framed Art Shadow Box (FAFM).
+    // Canvas products and Sourced Object don't have mats.
+    const hasMats = (productCode === 'FA');  // standard mat only; FAFM uses float-mount instead
+    if (hasMats && row.m1A !== false) {
+        const T = parseFloat(row.m1T) || 0;
+        const B = parseFloat(row.m1B) || 0;
+        const L = parseFloat(row.m1L) || 0;
+        const R = parseFloat(row.m1R) || 0;
+        if (T + B + L + R > 0) {
+            // Equal on all 4 sides → M<n>; otherwise M<T>T-<B>B-<L>L-<R>R
+            if (T === B && T === L && T === R) {
+                tokens.push(`M${num(T)}`);
+            } else {
+                tokens.push(`M${num(T)}T-${num(B)}B-${num(L)}L-${num(R)}R`);
+            }
+        }
+    }
+
+    // MAT 2 REVEAL — only for Framed Art with Mat 2 active and reveal > 0
+    if (hasMats && row.m2A === true) {
+        const rev = parseFloat(row.m2) || 0;
+        if (rev > 0) tokens.push(`R${num(rev)}`);
+    }
+
+    // FAUX MAT (printed paper border under standard mats) — Framed Art only
+    if (hasMats && row.useFauxMat === true) {
+        const fx = parseFloat(row.sbPaperBorder) || 0;
+        if (fx > 0) tokens.push(`FX${num(fx)}`);
+    }
+
+    // FLOAT MOUNT white border — Shadow Box / Float Mount only
+    if (productCode === 'FAFM') {
+        const fm = parseFloat(row.sbPaperBorder) || 0;
+        // FM0 IS meaningful (bleed edge — no border) per the proposal
+        tokens.push(`FM${num(fm)}`);
+    }
+
+    // FLOATER INSET — Floater canvas only
+    if (productCode === 'FCF') {
+        const inset = parseFloat(row.floaterInset);
+        // Only include if non-default and non-zero. Floater default is 0.75
+        // but spec includes it always since it's the defining gap measurement.
+        if (!isNaN(inset) && inset > 0) {
+            tokens.push(`I${num(inset)}`);
+        }
+    }
+
+    // CANVAS DEPTH — Frameless Canvas only
+    if (productCode === 'FLW') {
+        const depth = parseFloat(row.canvasDepth);
+        if (!isNaN(depth) && depth > 0) {
+            tokens.push(`D${num(depth)}`);
+        }
+    }
+
+    return tokens.join('_') + '.png';
+}
+
 function exportDashNativePNG() {
     const d = dashProjectData[dashSelectedRowIndex];
     // Always render in inches so cm-mode and in-mode exports look identical.
     const dInches = _frameDataInInches(d, dashUnit);
-    const { canvas } = renderFrameToCanvas(dInches, dashActiveImageObj, { dpi: 72, pad: 40 });
+    // Pad reserves transparent space for the drop shadow to render into.
+    // When shadows are off, designers don't want the empty margin — it
+    // makes alignment in InDesign harder (the frame edge ≠ the bounding
+    // box edge). So pad:0 when shadows are off; pad:40 when on.
+    const exportPad = dashOuterShadowsOn ? 40 : 0;
+    const { canvas } = renderFrameToCanvas(dInches, dashActiveImageObj, { dpi: 72, pad: exportPad });
     const a = document.createElement('a');
-    a.download = `${d.id || 'Frame'}.png`;
+    a.download = buildPngFilename(d);
     a.href = canvas.toDataURL("image/png");
     a.click();
 }
@@ -3694,8 +5405,43 @@ function buildSpecStrings(r) {
     }
 
     // ── Mat 1 / Mat 2 — separate lines per the studio template ────────────
-    // Mat 1 dimensions: "3" AA" if all sides equal, else "3"T × 3"B × 3"L × 3"R".
-    // Combined with color: "3" AA, B 97 White".
+    // formatMatSides groups equal-valued sides for readability:
+    //   [3,3,3,3]   → "3" AA"            (all equal — special "all-around" form)
+    //   [3,10,3,3]  → "3" T/L/R × 10" B"   (3 sides match)
+    //   [3,3,5,5]   → "3" T/B × 5" L/R"   (two pairs)
+    //   [3,3,5,6]   → "3" T/B × 5" L × 6" R"
+    //   [3,5,4,6]   → "3" T × 5" B × 4" L × 6" R"  (fully asymmetric — current fallback)
+    //
+    // Algorithm: collect (label, value) pairs; group by value; output groups
+    // in canonical T-B-L-R order; within each group, sort labels in T-B-L-R
+    // order and join with "/". For the all-equal case, switch to "AA".
+    const formatMatSides = (T, B, L, R) => {
+        // All zero/missing → no dims string at all (caller decides what to do).
+        if (T + B + L + R === 0) return '';
+        // All 4 equal AND positive → "3" AA"
+        if (T === B && T === L && T === R && T > 0) {
+            return `${fmt(T)}${sufLoose}AA`;
+        }
+        // Group sides by value. Build a map: value → ordered list of labels.
+        // Iterate in canonical T-B-L-R order so groups stay in reading order.
+        const sides = [['T', T], ['B', B], ['L', L], ['R', R]];
+        const groups = [];  // preserves insertion order
+        const groupIdx = {};
+        for (const [label, val] of sides) {
+            const key = String(val);
+            if (groupIdx[key] === undefined) {
+                groupIdx[key] = groups.length;
+                groups.push({ val, labels: [label] });
+            } else {
+                groups[groupIdx[key]].labels.push(label);
+            }
+        }
+        // Emit each group as "<val><sufTight><labels-joined>". For values of 0
+        // we still emit the side (a 0" side is a valid spec) so all 4 sides
+        // are represented in the output.
+        return groups.map(g => `${fmt(g.val) || 0}${sufTight}${g.labels.join('/')}`).join(' × ');
+    };
+
     let mat1Line = '';
     let mat2Line = '';
     if (m1On) {
@@ -3703,26 +5449,35 @@ function buildSpecStrings(r) {
         const B = parseFloat(r.m1B) || 0;
         const L = parseFloat(r.m1L) || 0;
         const R = parseFloat(r.m1R) || 0;
-        let dims;
-        if (T === B && T === L && T === R && T > 0) {
-            dims = `${fmt(T)}${sufLoose}AA`;
-        } else if (T + B + L + R > 0) {
-            dims = `${fmt(T) || 0}${sufTight}T × ${fmt(B) || 0}${sufTight}B × ${fmt(L) || 0}${sufTight}L × ${fmt(R) || 0}${sufTight}R`;
-        } else {
-            dims = '';
-        }
+        const dims = formatMatSides(T, B, L, R);
         const matName = (r.m1ColorName || '').trim();
         if (dims && matName) mat1Line = `${dims}, ${matName}`;
         else if (dims) mat1Line = dims;
         else if (matName) mat1Line = matName;
     }
     if (m2On) {
-        const m2v = parseFloat(r.m2) || 0;
+        // Mat 2 is a uniform reveal added to every side of Mat 1. Express it
+        // in the same side-grouped form so the relationship to Mat 1 is
+        // immediately readable:
+        //   Mat 1: 3" T/L/R × 10" B
+        //   Mat 2: 4" T/L/R × 11" B   (reveal = 1")
+        // If reveal is 0 the Mat 2 line is omitted (no visible exposure to
+        // describe). Mat 2 name alone still shows for the unusual case of
+        // a 0 reveal with a named board (matches prior behavior).
+        const reveal = parseFloat(r.m2) || 0;
         const m2Name = (r.m2ColorName || '').trim();
-        const m2Str = fmt(m2v);
-        if (m2Str && m2Name) mat2Line = `${m2Str}${sufLoose}Reveal, ${m2Name}`;
-        else if (m2Str) mat2Line = `${m2Str}${sufLoose}Reveal`;
-        else if (m2Name) mat2Line = m2Name;
+        if (reveal > 0) {
+            const T = (parseFloat(r.m1T) || 0) + reveal;
+            const B = (parseFloat(r.m1B) || 0) + reveal;
+            const L = (parseFloat(r.m1L) || 0) + reveal;
+            const R = (parseFloat(r.m1R) || 0) + reveal;
+            const dims = formatMatSides(T, B, L, R);
+            if (dims && m2Name) mat2Line = `${dims}, ${m2Name}`;
+            else if (dims) mat2Line = dims;
+            else if (m2Name) mat2Line = m2Name;
+        } else if (m2Name) {
+            mat2Line = m2Name;
+        }
     }
 
     // ── Matboard (legacy float mount description) ─────────────────────────
@@ -4088,8 +5843,14 @@ function buildDashCSVString() {
             dashFmt(r.extW), dashFmt(r.extH),
             dashFmt(Math.max(0, artW)), dashFmt(Math.max(0, artH)),
             dashFmt(Math.max(0, imgW)), dashFmt(Math.max(0, imgH)),
-            r.canvasDepth ? dashFmt(r.canvasDepth) : '',
-            r.canvasWrap ? dashFmt(r.canvasWrap) : '',
+            // Canvas columns filtered by product: only emit values for actual
+            // canvas products. Without this, a row that visited canvas then
+            // switched back to Framed Art would emit stale canvasDepth/Wrap
+            // values from when the auto-fill set them to "2"/"2". Filtering at
+            // export time keeps the row data intact (so the user can switch
+            // back to canvas without re-typing) while keeping the CSV clean.
+            (iC || iFL) ? (r.canvasDepth ? dashFmt(r.canvasDepth) : '') : '',
+            (iC || iFL) ? (r.canvasWrap ? dashFmt(r.canvasWrap) : '') : '',
             matCell,
             (r.m1A !== false && !matsHidden) ? dashFmt(r.m1T) : '',
             (r.m1A !== false && !matsHidden) ? dashFmt(r.m1R) : '',
@@ -4100,9 +5861,13 @@ function buildDashCSVString() {
             (iFM || isFauxMat) ? dashFmt(Math.max(0, paperSizeW)) : '',
             (iFM || isFauxMat) ? dashFmt(Math.max(0, paperSizeH)) : '',
             (iFM || isFauxMat) ? dashFmt(whiteBorder) : '',
-            frameCell,
-            numOrBlank(r.fW),
-            numOrBlank(r.fHeight),
+            // Frame columns filtered for Frameless Canvas: no frame applies,
+            // so fW/fHeight/rabbet/frameCell are all empty regardless of
+            // what's stored on the row from a previous product switch.
+            // Floater is NOT filtered — it has a real frame around the canvas.
+            iFL ? '' : frameCell,
+            iFL ? '' : numOrBlank(r.fW),
+            iFL ? '' : numOrBlank(r.fHeight),
             r.hardware || '',
             r.backing || '',
             r.mount || '',
@@ -4112,7 +5877,7 @@ function buildDashCSVString() {
             r.artist || '',
             r.artworkTitle || '',
             r.artType || '',
-            numOrBlank(r.rabbetDepth),
+            iFL ? '' : numOrBlank(r.rabbetDepth),
             specs.application,
             specs.matboard,
             JSON.stringify(specs.lines || []),
@@ -4125,13 +5890,14 @@ function buildDashCSVString() {
             r.fCode || '',
             r.fColorName || '',
             r.fColor || '',
-            `${r.id}.png`,
+            buildPngFilename(r),
             // — Raw-inch canonical values. Each is the display value converted
             //   back to inches via unitFactor. Empty for fields that don't apply
-            //   to this product (mats hidden for canvas, paper for non-mount). —
-            dashFmt((parseFloat(r.fW) || 0) * _toIn),
-            dashFmt((parseFloat(r.fHeight) || 0) * _toIn),
-            r.rabbetDepth ? dashFmt(parseFloat(r.rabbetDepth) * _toIn) : '',
+            //   to this product (mats hidden for canvas, frame hidden for
+            //   Frameless, paper for non-mount). —
+            iFL ? '' : dashFmt((parseFloat(r.fW) || 0) * _toIn),
+            iFL ? '' : dashFmt((parseFloat(r.fHeight) || 0) * _toIn),
+            iFL ? '' : (r.rabbetDepth ? dashFmt(parseFloat(r.rabbetDepth) * _toIn) : ''),
             (r.m1A !== false && !matsHidden) ? dashFmt((parseFloat(r.m1T) || 0) * _toIn) : '',
             (r.m1A !== false && !matsHidden) ? dashFmt((parseFloat(r.m1B) || 0) * _toIn) : '',
             (r.m1A !== false && !matsHidden) ? dashFmt((parseFloat(r.m1L) || 0) * _toIn) : '',
@@ -4231,9 +5997,48 @@ function renderDashTable() {
             tr.classList.add('constraint-warning-row');
             tr.title = rowWarnings.map(w => '⚠ ' + w.message).join('\n');
         }
-        tr.addEventListener('click', () => { if (dashSelectedRowIndex !== index) selectDashRow(index); });
+        tr.addEventListener('click', (ev) => {
+            // Don't intercept clicks meant for inputs/buttons/etc inside the row —
+            // those need to focus the input or run their own onclick.
+            const t = ev.target;
+            if (t && t.matches && t.matches('input, textarea, select, button, [contenteditable]')) return;
+
+            if (ev.shiftKey) {
+                // Shift-click: select range from anchor to this row (inclusive).
+                // Doesn't update the anchor — so repeated shift-clicks expand
+                // from the original anchor, matching standard list selection UX.
+                dashSelectRange(dashLastClickedIndex, index);
+            } else if (ev.ctrlKey || ev.metaKey) {
+                // Ctrl/Cmd-click: toggle this row in the multi-selection.
+                // Updates the anchor so subsequent shift-clicks span from here.
+                dashToggleMultiSelect(index);
+                dashLastClickedIndex = index;
+            } else {
+                // Plain click: single-select, clear any multi-selection.
+                if (dashSelectedRowIndex !== index) selectDashRow(index);
+                dashMultiSelectedIndices.clear();
+                dashLastClickedIndex = index;
+                applyDashSelectionStyling();
+            }
+        });
+        // Drag-to-reorder support. draggable=true on the tr enables the
+        // browser's HTML5 drag API. data-row-idx stores the row's position
+        // so the drag/drop handlers know which row to move. The handlers
+        // themselves are wired up in renderDashTable's post-render loop
+        // (see below).
+        tr.draggable = true;
+        tr.dataset.rowIdx = String(index);
+        tr.addEventListener('mousedown', handleDashRowMouseDown);
+        tr.addEventListener('dragstart', handleDashRowDragStart);
+        tr.addEventListener('dragover', handleDashRowDragOver);
+        tr.addEventListener('dragleave', handleDashRowDragLeave);
+        tr.addEventListener('drop', handleDashRowDrop);
+        tr.addEventListener('dragend', handleDashRowDragEnd);
         
         tr.innerHTML = `
+            <td class="drag-handle-cell" title="Drag to reorder">
+                ${svgMove}
+            </td>
             <td><input class="tbl-in" type="number" value="${row.qty}" disabled style="width:30px; opacity:0.6; background:transparent;"></td>
             <td style="font-weight:bold;"><input class="tbl-in" type="text" value="${row.id}" oninput="dashHtIn(${index}, 'id', this.value, true)" ondragstart="event.preventDefault()" style="width:80px; font-weight:bold;"></td>
             <td><select class="tbl-in no-arrow" onchange="dashHtIn(${index}, 'product', this.value)">${FRAME_PRODUCTS.map(p => `<option ${row.product === p ? 'selected' : ''}>${p}</option>`).join('')}</select></td>
@@ -4267,6 +6072,212 @@ function renderDashTable() {
     });
 }
 
+// ──────────────────────────────────────────────────────────────────────────
+// DASHBOARD ROW DRAG-TO-REORDER
+// ──────────────────────────────────────────────────────────────────────────
+// HTML5 drag-and-drop on table rows. Drag any row up or down — a horizontal
+// blue line appears on the target row showing where the drop will land
+// (above or below depending on which half of the target the cursor is on).
+// Releasing the drag moves the row in dashProjectData via reorderDashRow,
+// which preserves the user's selection by object identity (so the same row
+// stays "selected" before and after the move).
+//
+// Why drag the whole row vs just a handle: simpler interaction model, and
+// the input fields already block dragstart via ondragstart="event.preventDefault()"
+// so they remain editable without triggering accidental drags.
+
+let _draggingDashRowIdx = null;
+
+function handleDashRowDragStart(e) {
+    // Defense-in-depth: even with the mousedown-based toggle below, also
+    // bail here if the dragstart's target is somehow editable. The browser's
+    // dragstart can fire with target=TR even when mousedown was on an input,
+    // so the real fix is the mousedown handler — this is just a safety net.
+    const t = e.target;
+    if (t && t.matches) {
+        const isEditable = t.matches('input, textarea, select, [contenteditable], [contenteditable=""], [contenteditable="true"]');
+        if (isEditable) {
+            e.preventDefault();
+            return;
+        }
+    }
+    _draggingDashRowIdx = parseInt(e.currentTarget.dataset.rowIdx, 10);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', String(_draggingDashRowIdx));
+    // If the dragged row is part of the current selection, drag ALL selected
+    // rows as a group — apply row-dragging to each so the user sees what
+    // they're moving. If the dragged row is NOT selected, clear selection
+    // and drag just this one (standard Finder/Explorer behavior).
+    const selected = dashGetSelectedIndices();
+    if (selected.includes(_draggingDashRowIdx) && selected.length > 1) {
+        selected.forEach(i => {
+            const tr = document.querySelector(`#rfiBody tr[data-row-idx="${i}"]`);
+            if (tr) tr.classList.add('row-dragging');
+        });
+    } else {
+        // Not part of multi-select — clear it so the drag affects only this row
+        dashMultiSelectedIndices.clear();
+        if (dashSelectedRowIndex !== _draggingDashRowIdx) {
+            dashSelectedRowIndex = _draggingDashRowIdx;
+            loadDashDataIntoControls(dashProjectData[_draggingDashRowIdx]);
+        }
+        applyDashSelectionStyling();
+        e.currentTarget.classList.add('row-dragging');
+    }
+}
+
+// On mousedown, if the user clicked on an editable element (input/textarea/
+// select/contenteditable), temporarily disable the row's draggable attribute
+// so the browser doesn't start a drag — text-selection-by-drag works normally.
+// Restore draggable on mouseup or mouseleave.
+//
+// This is more reliable than checking dragstart's e.target because the
+// browser's hit-testing between mousedown and dragstart can shift target
+// to the TR even when the user pressed down on an input. The mousedown
+// target is what they actually clicked, before any drag motion.
+function handleDashRowMouseDown(e) {
+    const t = e.target;
+    if (!t || !t.matches) return;
+    const isEditable = t.matches('input, textarea, select, [contenteditable], [contenteditable=""], [contenteditable="true"]');
+    if (isEditable) {
+        const tr = e.currentTarget;
+        tr.draggable = false;
+        // Restore after the click/drag interaction is over. We listen for
+        // mouseup anywhere (in case user releases outside the row) and also
+        // mouseleave on the row as a safety net.
+        const restore = () => {
+            tr.draggable = true;
+            document.removeEventListener('mouseup', restore);
+            tr.removeEventListener('mouseleave', restore);
+        };
+        document.addEventListener('mouseup', restore);
+        tr.addEventListener('mouseleave', restore);
+    }
+}
+
+function handleDashRowDragOver(e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    const row = e.currentTarget;
+    const targetIdx = parseInt(row.dataset.rowIdx, 10);
+    if (targetIdx === _draggingDashRowIdx) return;
+    // Decide above-or-below based on cursor position vs row vertical midpoint
+    const rect = row.getBoundingClientRect();
+    const midY = rect.top + rect.height / 2;
+    const dropAbove = e.clientY < midY;
+    // Clear all existing drop indicators, then set the right one on target
+    document.querySelectorAll('#rfiBody tr.drop-above, #rfiBody tr.drop-below')
+        .forEach(t => t.classList.remove('drop-above', 'drop-below'));
+    row.classList.add(dropAbove ? 'drop-above' : 'drop-below');
+}
+
+function handleDashRowDragLeave(e) {
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+        e.currentTarget.classList.remove('drop-above', 'drop-below');
+    }
+}
+
+function handleDashRowDrop(e) {
+    e.preventDefault();
+    const targetRow = e.currentTarget;
+    const targetIdx = parseInt(targetRow.dataset.rowIdx, 10);
+    targetRow.classList.remove('drop-above', 'drop-below');
+    if (_draggingDashRowIdx === null) return;
+    const rect = targetRow.getBoundingClientRect();
+    const midY = rect.top + rect.height / 2;
+    const dropAbove = e.clientY < midY;
+    const insertBefore = dropAbove ? targetIdx : targetIdx + 1;
+
+    // If the dragged row is part of a multi-selection (>1 rows), move them
+    // all as a group preserving their internal order. Otherwise move just
+    // the single dragged row.
+    const selected = dashGetSelectedIndices();
+    if (selected.includes(_draggingDashRowIdx) && selected.length > 1) {
+        // Don't drop into the selection block
+        if (selected.includes(targetIdx)) return;
+        reorderDashRows(selected, insertBefore);
+    } else {
+        if (_draggingDashRowIdx === targetIdx) return;
+        let insertIdx = insertBefore;
+        if (_draggingDashRowIdx < insertIdx) insertIdx--;
+        reorderDashRow(_draggingDashRowIdx, insertIdx);
+    }
+}
+
+function handleDashRowDragEnd(e) {
+    // Clear row-dragging from ALL rows (group drag could have applied it to many)
+    document.querySelectorAll('#rfiBody tr.row-dragging')
+        .forEach(t => t.classList.remove('row-dragging'));
+    document.querySelectorAll('#rfiBody tr.drop-above, #rfiBody tr.drop-below')
+        .forEach(t => t.classList.remove('drop-above', 'drop-below'));
+    _draggingDashRowIdx = null;
+}
+
+// Move the dashboard row at `fromIdx` to `toIdx`. Preserves the selection
+// by tracking row identity (not index). Pushes history so the reorder is
+// undoable. The dashboard rows are referenced externally by .id, not index,
+// so no other state needs fixing up.
+function reorderDashRow(fromIdx, toIdx) {
+    if (fromIdx === toIdx) return;
+    if (fromIdx < 0 || fromIdx >= dashProjectData.length) return;
+    if (toIdx < 0 || toIdx >= dashProjectData.length) return;
+    // Remember which row was selected by identity so the selection follows
+    // the move (or stays put if a different row was selected).
+    const selectedRow = dashProjectData[dashSelectedRowIndex];
+    const [moved] = dashProjectData.splice(fromIdx, 1);
+    dashProjectData.splice(toIdx, 0, moved);
+    // Restore selection by identity
+    const newSelectedIdx = dashProjectData.indexOf(selectedRow);
+    if (newSelectedIdx >= 0) dashSelectedRowIndex = newSelectedIdx;
+    renderDashTable();
+    pushHistory();
+}
+
+// Move multiple rows (by their CURRENT indices) to a new position. The rows
+// are moved as a contiguous block in their original relative order. The
+// target position is given in CURRENT indexing (where to insert "before"
+// counting from the unmoved array). After the move, the same rows remain
+// selected (multi-select preserved by row identity).
+//
+// Implementation: pull the selected rows out of the array (captured by
+// identity), compute the insert index after removal accounting for which
+// of the removed rows came before the target, then splice them back in.
+function reorderDashRows(indices, insertBefore) {
+    if (!indices || indices.length === 0) return;
+    // Sort ascending so the slice/splice math is straightforward
+    const sortedIdx = [...indices].sort((a, b) => a - b);
+
+    // Capture the row objects by identity (so we can find them after splice)
+    const movingRows = sortedIdx.map(i => dashProjectData[i]);
+    const primaryRow = dashProjectData[dashSelectedRowIndex];
+
+    // Adjust insertBefore: every selected row before insertBefore shifts the
+    // target down by one when we remove them.
+    let adjustedInsert = insertBefore;
+    for (const i of sortedIdx) {
+        if (i < insertBefore) adjustedInsert--;
+    }
+
+    // Remove the selected rows (descending so indices stay valid)
+    for (let i = sortedIdx.length - 1; i >= 0; i--) {
+        dashProjectData.splice(sortedIdx[i], 1);
+    }
+    // Insert the block at the adjusted position
+    dashProjectData.splice(adjustedInsert, 0, ...movingRows);
+
+    // Restore primary + multi selection by identity
+    const newPrimary = dashProjectData.indexOf(primaryRow);
+    if (newPrimary >= 0) dashSelectedRowIndex = newPrimary;
+    dashMultiSelectedIndices.clear();
+    movingRows.forEach(r => {
+        const i = dashProjectData.indexOf(r);
+        if (i >= 0 && i !== dashSelectedRowIndex) dashMultiSelectedIndices.add(i);
+    });
+
+    renderDashTable();
+    pushHistory();
+}
+
 // =========================================================================
 // VIEW 2: ELEVATION LOGIC
 // =========================================================================
@@ -4279,8 +6290,16 @@ function updateElevWall() {
     drawElevAll();
 }
 function updateDimFontSize() {
-    const size = document.getElementById('elevDimFontSize').value || 12;
-    document.documentElement.style.setProperty('--dim-font-size', size + 'px');
+    // The dedicated elevDimFontSize input was merged into the Label &
+    // Dimension Style section (annotFontSize). If the old input still exists
+    // (older cached HTML), honor it; otherwise the font size is driven by
+    // annotationStyle via applyAnnotationStyleToCSSVars().
+    const el = document.getElementById('elevDimFontSize');
+    if (el) {
+        document.documentElement.style.setProperty('--dim-font-size', (el.value || 12) + 'px');
+    } else if (typeof applyAnnotationStyleToCSSVars === 'function') {
+        applyAnnotationStyleToCSSVars();
+    }
 }
 
 function autoElevRelabel() {
@@ -4288,7 +6307,230 @@ function autoElevRelabel() {
     let letterMap = {};
     sortedFrames.forEach((f, i) => { letterMap[f.letter] = getElevLetter(i); f.letter = getElevLetter(i); });
     sortedFrames.forEach(f => { if (f.dimTo && f.dimTo.length > 0) f.dimTo = f.dimTo.map(t => letterMap[t] || t); });
-    elevFrames = sortedFrames; initElevControls(); drawElevAll();
+    elevFrames = sortedFrames;
+    // CRITICAL: also assign the sorted array back into the elevation's stored
+    // .frames slot, otherwise switching views will overwrite elevFrames from
+    // the stale unsorted reference and lose the sort. This was the bug behind
+    // "Sort A-Z gets undone after switching views and coming back."
+    if (elevations[currentElevIndex]) elevations[currentElevIndex].frames = sortedFrames;
+    initElevControls(); drawElevAll();
+    pushHistory();
+}
+
+// ──────────────────────────────────────────────────────────────────────────
+// ITEM CODE EDITING (from the elevation panel)
+// ──────────────────────────────────────────────────────────────────────────
+// Two entry points:
+//   - renameFrameId: single-frame rename triggered by the inline input under
+//     each panel row. User types a new code → it's applied to the underlying
+//     dashboard row (which propagates everywhere by id reference).
+//   - renumberElevation: bulk re-number all frames in the active elevation
+//     using a template like "ART.{LOC}-{LET}". Optionally reorders the
+//     dashboard rows to match the elevation's letter order.
+//
+// Both functions share the same invariant: ITEM CODE is a property of the
+// dashboard row. Frames in elevations reference the row by id. So renaming
+// the row's id requires updating every frame in every elevation that
+// referenced the OLD id. The dashboard row itself is the single source of
+// truth; we keep all frame.id references in sync.
+
+// Apply a single rename from the inline editor input.
+// inputEl is the <input>; idx is the frame's index in elevFrames.
+function renameFrameId(inputEl, idx) {
+    const newId = (inputEl.value || '').trim();
+    const oldId = inputEl.dataset.originalId;
+    if (!newId || newId === oldId) {
+        inputEl.value = oldId;  // restore if blank
+        return;
+    }
+    // Collision check: is newId already used by a DIFFERENT dashboard row?
+    const collidingRow = dashProjectData.find(r => r.id === newId && r.id !== oldId);
+    if (collidingRow) {
+        showInfoModal(
+            'Code already in use',
+            `"${newId}" is already used by another dashboard row. Pick a different code, or delete the conflicting row first.`
+        );
+        inputEl.value = oldId;
+        return;
+    }
+    applyIdRename(oldId, newId);
+    inputEl.dataset.originalId = newId;
+    pushHistory();
+}
+
+// Core rename: update the dashboard row's id + every frame.id reference in
+// every elevation. Caller is responsible for collision-checking and for
+// pushing history.
+function applyIdRename(oldId, newId) {
+    if (oldId === newId) return;
+    // Rename in dashboard
+    const dashRow = dashProjectData.find(r => r.id === oldId);
+    if (dashRow) dashRow.id = newId;
+    // Update every elevation's frame references
+    elevations.forEach(elev => {
+        elev.frames.forEach(f => { if (f.id === oldId) f.id = newId; });
+    });
+    // Re-render to show the change
+    initElevControls();
+    drawElevAll();
+    if (currentView === 'dashboard') renderDashTable();
+    populateDashPushSelector();
+}
+
+// Bulk re-number all frames in the current elevation following a template.
+// Default template: "ART.{LOC}-{LET}" where {LOC} is a 3-digit location
+// number (padded) and {LET} is the frame's elevation letter (A, B, C...).
+//
+// Two passes to avoid temporary collisions during the rename:
+//   1. Rename everything to a temporary unique prefix ("__TMP_<idx>__")
+//   2. Rename from temp → final code
+// This way if the final code "ART.001-A" happens to match another existing
+// id mid-rename, we won't trip the collision check.
+//
+// If reorderDashboard is true, also reorders dashProjectData so the
+// re-numbered rows appear contiguously at the top in elevation letter order.
+function renumberElevation(template, locValue, reorderDashboard) {
+    if (!elevFrames || elevFrames.length === 0) return;
+    template = template || 'ART.{LOC}-{LET}';
+    const locStr = String(locValue || '001').padStart(3, '0');
+
+    // Compute the target id for each frame based on its current letter.
+    // We sort by letter so the iteration order is deterministic (A, B, C...).
+    // The output map preserves original order for the reorder step.
+    const sortedFrames = [...elevFrames].sort((a, b) => {
+        const la = a.letter || '', lb = b.letter || '';
+        if (la.length !== lb.length) return la.length - lb.length;
+        return la < lb ? -1 : la > lb ? 1 : 0;
+    });
+
+    // Build the rename plan: [{oldId, newId}, ...]
+    const plan = sortedFrames.map(f => ({
+        oldId: f.id,
+        newId: template.replace('{LOC}', locStr).replace('{LET}', f.letter || ''),
+        letter: f.letter,
+    }));
+
+    // Validate: any duplicate newIds in the plan itself?
+    const seen = new Set();
+    for (const p of plan) {
+        if (seen.has(p.newId)) {
+            showInfoModal(
+                'Template Produces Duplicate Codes',
+                `The template "${template}" with location "${locStr}" would produce duplicate codes (e.g. "${p.newId}"). Try a template that includes {LET} so each frame gets a unique suffix.`
+            );
+            return;
+        }
+        seen.add(p.newId);
+    }
+
+    // Validate: any newIds that collide with EXISTING dashboard rows not in
+    // this elevation? (Frames already in this elevation are OK — they're
+    // the ones being renamed.)
+    const frameIdsInThisElev = new Set(elevFrames.map(f => f.id));
+    for (const p of plan) {
+        // Skip if this code is one we're currently renaming away from
+        if (frameIdsInThisElev.has(p.newId)) continue;
+        // Skip if newId is the row's own oldId (no real change)
+        if (p.newId === p.oldId) continue;
+        // Otherwise check the dashboard
+        if (dashProjectData.some(r => r.id === p.newId)) {
+            showInfoModal(
+                'Code Conflict',
+                `"${p.newId}" is already used by a dashboard row outside this elevation. Pick a different location number or delete the conflicting row first.`
+            );
+            return;
+        }
+    }
+
+    // Two-pass rename. Pass 1: every frame → unique temp id.
+    // Capturing stamp ONCE outside the loop is critical — each Date.now()
+    // call returns a different value, which would mean pass 1 writes to one
+    // temp id and pass 2 looks for a different one. Single stamp ensures
+    // pass 1's outputs are exactly what pass 2 reads.
+    const stamp = Date.now();
+    plan.forEach((p, i) => {
+        applyIdRename(p.oldId, `__RNTMP_${i}_${stamp}__`);
+    });
+    // Pass 2: temp id → final newId.
+    plan.forEach((p, i) => {
+        applyIdRename(`__RNTMP_${i}_${stamp}__`, p.newId);
+    });
+
+    // Optional: reorder dashboard rows so the re-numbered ones are contiguous
+    // at the top of the table in elevation letter order. Preserves the
+    // selection by identity.
+    if (reorderDashboard) {
+        const reorderedIds = plan.map(p => p.newId);
+        const selectedRow = dashProjectData[dashSelectedRowIndex];
+        // Partition: rows in our plan (in plan order), then everything else
+        // in its current relative order.
+        const inPlan = [];
+        const rest = [];
+        dashProjectData.forEach(row => {
+            const idx = reorderedIds.indexOf(row.id);
+            if (idx >= 0) inPlan[idx] = row;
+            else rest.push(row);
+        });
+        // Filter out any undefined gaps (defensive — every reorderedId
+        // should resolve to a row, but just in case)
+        const ordered = inPlan.filter(Boolean);
+        dashProjectData.length = 0;
+        ordered.forEach(r => dashProjectData.push(r));
+        rest.forEach(r => dashProjectData.push(r));
+        // Restore selection by identity
+        const newIdx = dashProjectData.indexOf(selectedRow);
+        if (newIdx >= 0) dashSelectedRowIndex = newIdx;
+        if (currentView === 'dashboard') renderDashTable();
+    }
+
+    pushHistory();
+}
+
+// Modal: open with sensible defaults. Location defaults to the current
+// elevation's index + 1 (so wall 1 = "001", wall 2 = "002") padded to 3 digits.
+function openRenumberModal() {
+    if (currentView !== 'elevation' || !elevFrames || elevFrames.length === 0) {
+        showInfoModal('Nothing to re-number', 'Add some frames to this elevation first, then come back to this button.');
+        return;
+    }
+    const defaultLoc = String((currentElevIndex || 0) + 1).padStart(3, '0');
+    document.getElementById('renumberLoc').value = defaultLoc;
+    // Don't reset template — let it persist across opens so a project's
+    // chosen convention sticks
+    if (!document.getElementById('renumberTemplate').value) {
+        document.getElementById('renumberTemplate').value = 'ART.{LOC}-{LET}';
+    }
+    document.getElementById('renumberReorderDash').checked = true;
+    updateRenumberPreview();
+    document.getElementById('renumberModal').style.display = 'flex';
+}
+
+// Refresh the preview area based on current template + location inputs.
+// Shows each frame's letter → resulting ITEM CODE, one line per frame.
+function updateRenumberPreview() {
+    const tmpl = document.getElementById('renumberTemplate').value || 'ART.{LOC}-{LET}';
+    const locRaw = document.getElementById('renumberLoc').value || '';
+    // Pad if pure-numeric, otherwise leave as-is (lets user put alpha codes like "LBY")
+    const loc = /^\d+$/.test(locRaw) ? locRaw.padStart(3, '0') : locRaw;
+    const sortedFrames = [...elevFrames].sort((a, b) => {
+        const la = a.letter || '', lb = b.letter || '';
+        if (la.length !== lb.length) return la.length - lb.length;
+        return la < lb ? -1 : la > lb ? 1 : 0;
+    });
+    const lines = sortedFrames.map(f => {
+        const newId = tmpl.replace('{LOC}', loc).replace('{LET}', f.letter || '');
+        return `${f.letter || '?'}: <strong>${f.id}</strong> → <strong style="color:var(--accent);">${newId}</strong>`;
+    });
+    document.getElementById('renumberPreview').innerHTML = lines.join('<br>');
+}
+
+// Read modal inputs and run renumberElevation. Closes the modal on success.
+function applyRenumber() {
+    const tmpl = document.getElementById('renumberTemplate').value || 'ART.{LOC}-{LET}';
+    const loc = document.getElementById('renumberLoc').value || '001';
+    const reorder = document.getElementById('renumberReorderDash').checked;
+    document.getElementById('renumberModal').style.display = 'none';
+    renumberElevation(tmpl, loc, reorder);
 }
 
 function initElevControls() {
@@ -4304,14 +6546,35 @@ function initElevControls() {
                 <svg class="svg-icon elev-empty-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 2"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>
                 <h4>No frames on this wall yet</h4>
                 <p>Build frames in the <strong>Frame Dashboard</strong>, then use <strong>Push to Wall</strong> to send them here.</p>
-                <p class="elev-empty-tip">Or click <strong>Import Frames</strong> and select frames from the dropdown, then click <strong>+ Add</strong> above to place a generic frame and customize it inline.</p>
+                <p class="elev-empty-tip">Or click <strong>+ Add</strong> above to place a generic frame and customize it inline.</p>
             </div>
         `;
         return;
     }
     let html = ``;
-    elevFrames.forEach((f, idx) => {
-        const activeNeighbors = elevFrames.filter(n => n.letter !== f.letter && n.active);
+    // Render rows sorted by letter (A, B, C, D, ...) regardless of the
+    // underlying elevFrames array order. This decouples panel order from
+    // array storage order — important because various code paths can leave
+    // the array order desynced from letter order (e.g. after some sequences
+    // of sort + view switch + edit). The original index is preserved as
+    // `idx` so event handlers (which look up elevFrames[idx]) still work.
+    const renderOrder = elevFrames
+        .map((f, idx) => ({ f, idx }))
+        .sort((a, b) => {
+            // Letter comparison handles single-letter (A < B) and multi-letter
+            // labels (Z < AA) by length-then-string sort.
+            const la = a.f.letter || '';
+            const lb = b.f.letter || '';
+            if (la.length !== lb.length) return la.length - lb.length;
+            return la < lb ? -1 : la > lb ? 1 : 0;
+        });
+    renderOrder.forEach(({ f, idx }) => {
+        const activeNeighbors = elevFrames.filter(n => n.letter !== f.letter && n.active).slice().sort((a, b) => {
+            const la = a.letter || '';
+            const lb = b.letter || '';
+            if (la.length !== lb.length) return la.length - lb.length;
+            return la < lb ? -1 : la > lb ? 1 : 0;
+        });
         const targetButtons = activeNeighbors.map(n => `<button class="toggle-status ${f.dimTo.includes(n.letter)?'active':''}" style="padding:1px 3px; font-size:8px; border-radius:2px;" onclick="toggleElevDimTarget(${idx}, '${n.letter}', event)">${n.letter}</button>`).join('');
 
         // 4 distance-dim icon buttons: ↑ ceiling, ↓ floor, ← left wall, → right wall.
@@ -4329,6 +6592,11 @@ function initElevControls() {
         // uses .active class on icon-btn which matches the .grouped treatment
         // (accent background, white arrow). Tooltips use the consistent
         // "Distance to <wall>" pattern.
+        // Count of active edge-gap toggles — used for the indicator dot on
+        // the collapsed edge-gap button. Showing the count instead of just
+        // a binary on/off makes it possible to glance at the row and see
+        // "ah, this frame has 2 distance dims set."
+        const dtActiveCount = (dt.ceiling?1:0) + (dt.floor?1:0) + (dt.left?1:0) + (dt.right?1:0);
         html += `
             <div class="compact-frame-item" data-frame-letter="${f.letter}">
                 <div class="frame-item-top-row">
@@ -4336,10 +6604,18 @@ function initElevControls() {
                         <span class="frame-letter-large">${f.letter}</span>
                     </div>
                     <div class="frame-item-icons">
-                        <!-- WALL ALIGN column: 2 quick-snap buttons (to hang height,
-                             to wall center). Header lives once in column header above.
-                             Operates per-frame, independent of selection/grouping. -->
-                        <div class="wall-align-group">
+                        <!-- ITEM CODE — matches header item-code column via shared grid template. -->
+                        <div class="frame-col">
+                            <input type="text" class="frame-item-id frame-item-id-edit frame-item-id-inline"
+                                   value="${f.id}"
+                                   data-original-id="${f.id}"
+                                   onchange="renameFrameId(this, ${idx})"
+                                   onclick="event.stopPropagation()"
+                                   ondragstart="event.preventDefault()"
+                                   title="Edit ITEM CODE — applies to all elevations using this frame">
+                        </div>
+                        <!-- WALL ALIGN — 2 sub-buttons inside this column. -->
+                        <div class="frame-col" style="gap:0; flex-direction:row;">
                             <div style="width:26px; display:flex; justify-content:center;">
                                 <button class="icon-btn" title="Snap to Hang Height" onclick="snapFrameToHang(${idx}, event)">${svgSnapHang}</button>
                             </div>
@@ -4347,46 +6623,38 @@ function initElevControls() {
                                 <button class="icon-btn" title="Snap to Wall Center" onclick="snapFrameToWallCenter(${idx}, event)">${svgSnapWallCenter}</button>
                             </div>
                         </div>
-                        <!-- EDGE GAP column: 4 distance-to-wall toggles. Label lives
-                             in the column header (one EDGE GAP label total, above
-                             the whole list). Per-frame state lives in f.distToggles. -->
-                        <div class="edge-gap-group">
-                            <div style="width:26px; display:flex; justify-content:center;">
-                                <button class="icon-btn ${dt.ceiling?'active':''}" title="Ceiling" onclick="toggleFrameDistDim(${idx}, 'ceiling', event)">${svgArrowUp}</button>
-                            </div>
-                            <div style="width:26px; display:flex; justify-content:center;">
-                                <button class="icon-btn ${dt.floor?'active':''}" title="Floor" onclick="toggleFrameDistDim(${idx}, 'floor', event)">${svgArrowDown}</button>
-                            </div>
-                            <div style="width:26px; display:flex; justify-content:center;">
-                                <button class="icon-btn ${dt.left?'active':''}" title="Left Wall" onclick="toggleFrameDistDim(${idx}, 'left', event)">${svgArrowLeft}</button>
-                            </div>
-                            <div style="width:26px; display:flex; justify-content:center;">
-                                <button class="icon-btn ${dt.right?'active':''}" title="Right Wall" onclick="toggleFrameDistDim(${idx}, 'right', event)">${svgArrowRight}</button>
-                            </div>
+                        <!-- EDGE GAP collapsed: opens popover. -->
+                        <div class="frame-col">
+                            <button class="icon-btn edge-gap-trigger ${dtActiveCount>0?'has-active':''}" title="Edge Gap — distance to wall edges" onclick="openEdgeGapPopover(${idx}, this, event)">
+                                ${svgEdgeGap}
+                                ${dtActiveCount>0 ? `<span class="edge-gap-badge">${dtActiveCount}</span>` : ''}
+                            </button>
                         </div>
-                        <div style="width:38px; display:flex; justify-content:center;">
+                        <!-- Toggle (active on/off). -->
+                        <div class="frame-col">
                             <button class="pill-toggle ${f.active?'active':''}" title="${f.active?'Hide on elevation':'Show on elevation'}" onclick="toggleElevActive(${idx}, event)">
                                 <span class="pill-toggle-knob"></span>
                             </button>
                         </div>
-                        <div style="width:28px; display:flex; justify-content:center;">
+                        <!-- Move/Group. -->
+                        <div class="frame-col">
                             <button class="icon-btn ${f.isGrouped ? 'grouped' : ''}" title="Move/Group" onclick="toggleElevGroup(${idx}, event)">${svgMove}</button>
                         </div>
-                        <div style="width:26px; display:flex; justify-content:center;">
+                        <!-- Edit. -->
+                        <div class="frame-col">
                             <button class="icon-btn" title="Edit Master" onclick="jumpToDashboard('${f.id}')">${svgEdit}</button>
                         </div>
-                        <div style="width:26px; display:flex; justify-content:center;">
+                        <!-- Dupe. -->
+                        <div class="frame-col">
                             <button class="icon-btn" title="Duplicate" onclick="duplicateElevFrame(${idx}, event)">${svgDup}</button>
                         </div>
-                        <div style="width:26px; display:flex; justify-content:center;">
+                        <!-- Del. -->
+                        <div class="frame-col">
                             <button class="icon-btn" title="Remove" onclick="removeElevFrame(${idx}, event)">${svgTrash}</button>
                         </div>
                     </div>
                 </div>
-                <div class="frame-item-id-row">
-                    <span class="frame-item-id">(${f.id})</span>
-                    ${targetButtons ? `<span class="frame-item-targets-inline">${targetButtons}</span>` : ''}
-                </div>
+                ${targetButtons ? `<div class="frame-item-targets-row"><span class="frame-item-targets-inline">${targetButtons}</span></div>` : ''}
             </div>`;
     });
     container.innerHTML = html;
@@ -4412,9 +6680,153 @@ function toggleFrameDistDim(idx, which, e) {
     const f = elevFrames[idx];
     if (!f.distToggles) f.distToggles = { ceiling: false, floor: false, left: false, right: false };
     f.distToggles[which] = !f.distToggles[which];
+    // If enabling, make sure edge-gap dims are visible so it shows.
+    if (f.distToggles[which] && typeof dimVisibility !== 'undefined') {
+        dimVisibility.edgeGap = true;
+        saveDimVisibility();
+    }
     initElevControls();
     drawElevAll();
     pushHistory();
+}
+
+// ──────────────────────────────────────────────────────────────────────────
+// EDGE GAP POPOVER
+// ──────────────────────────────────────────────────────────────────────────
+// One global popover element, repositioned and repopulated each time it
+// opens. Clicking a direction toggle inside the popover updates the canvas
+// + the trigger's badge WITHOUT rebuilding the panel — so the popover stays
+// open for fast multi-toggle workflows. Click outside or on the trigger
+// again to close.
+//
+// State:
+//   _edgeGapPopoverOpen: bool — whether the popover is currently shown
+//   _edgeGapPopoverIdx:  frame index whose toggles the popover controls
+//   _edgeGapPopoverTrigger: the button that opened it (for re-anchoring)
+
+let _edgeGapPopoverOpen = false;
+let _edgeGapPopoverIdx = null;
+let _edgeGapPopoverTrigger = null;
+
+function openEdgeGapPopover(idx, triggerBtn, e) {
+    if (e) e.stopPropagation();
+    // Toggle behavior: clicking the same trigger again closes the popover
+    if (_edgeGapPopoverOpen && _edgeGapPopoverIdx === idx) {
+        closeEdgeGapPopover();
+        return;
+    }
+    _edgeGapPopoverIdx = idx;
+    _edgeGapPopoverTrigger = triggerBtn;
+    _edgeGapPopoverOpen = true;
+
+    let pop = document.getElementById('edgeGapPopover');
+    if (!pop) {
+        pop = document.createElement('div');
+        pop.id = 'edgeGapPopover';
+        pop.className = 'edge-gap-popover';
+        document.body.appendChild(pop);
+    }
+    renderEdgeGapPopover();
+    positionEdgeGapPopover();
+    // Bind outside-click dismissal on next tick so the current click doesn't
+    // immediately dismiss the popover we just opened.
+    setTimeout(() => {
+        document.addEventListener('click', edgeGapPopoverOutsideClick, true);
+    }, 0);
+}
+
+function closeEdgeGapPopover() {
+    _edgeGapPopoverOpen = false;
+    _edgeGapPopoverIdx = null;
+    _edgeGapPopoverTrigger = null;
+    const pop = document.getElementById('edgeGapPopover');
+    if (pop) pop.style.display = 'none';
+    document.removeEventListener('click', edgeGapPopoverOutsideClick, true);
+}
+
+function edgeGapPopoverOutsideClick(e) {
+    const pop = document.getElementById('edgeGapPopover');
+    if (!pop) return;
+    if (pop.contains(e.target)) return;
+    // Also don't close if user clicked the trigger button (its own onclick
+    // will toggle the popover off — letting outside-click ALSO close would
+    // re-open it via the toggle logic, which is confusing).
+    if (_edgeGapPopoverTrigger && _edgeGapPopoverTrigger.contains(e.target)) return;
+    closeEdgeGapPopover();
+}
+
+function renderEdgeGapPopover() {
+    const pop = document.getElementById('edgeGapPopover');
+    if (!pop) return;
+    const f = elevFrames[_edgeGapPopoverIdx];
+    if (!f) return;
+    const dt = f.distToggles || { ceiling: false, floor: false, left: false, right: false };
+    pop.innerHTML = `
+        <div class="edge-gap-popover-grid">
+            <div></div>
+            <button class="icon-btn ${dt.ceiling?'active':''}" title="Ceiling" onclick="toggleEdgeGapFromPopover('ceiling')">${svgArrowUp}</button>
+            <div></div>
+            <button class="icon-btn ${dt.left?'active':''}" title="Left Wall" onclick="toggleEdgeGapFromPopover('left')">${svgArrowLeft}</button>
+            <div class="edge-gap-popover-center"></div>
+            <button class="icon-btn ${dt.right?'active':''}" title="Right Wall" onclick="toggleEdgeGapFromPopover('right')">${svgArrowRight}</button>
+            <div></div>
+            <button class="icon-btn ${dt.floor?'active':''}" title="Floor" onclick="toggleEdgeGapFromPopover('floor')">${svgArrowDown}</button>
+            <div></div>
+        </div>
+    `;
+    pop.style.display = 'block';
+}
+
+function positionEdgeGapPopover() {
+    const pop = document.getElementById('edgeGapPopover');
+    if (!pop || !_edgeGapPopoverTrigger) return;
+    const rect = _edgeGapPopoverTrigger.getBoundingClientRect();
+    // Anchor below the trigger by default, but flip above if not enough room
+    const popHeight = 116;  // approximate; refine if content changes
+    const popWidth = 110;
+    let top = rect.bottom + 4;
+    let left = rect.left + rect.width / 2 - popWidth / 2;
+    // Clamp to viewport
+    if (top + popHeight > window.innerHeight - 8) {
+        top = rect.top - popHeight - 4;
+    }
+    if (left < 8) left = 8;
+    if (left + popWidth > window.innerWidth - 8) left = window.innerWidth - popWidth - 8;
+    pop.style.top = top + 'px';
+    pop.style.left = left + 'px';
+}
+
+// Toggle a direction from inside the popover. Updates frame state, redraws
+// the canvas dimensions, and updates the trigger's badge in place — without
+// rebuilding the panel, so the popover stays open for multiple toggles.
+function toggleEdgeGapFromPopover(which) {
+    const idx = _edgeGapPopoverIdx;
+    if (idx === null) return;
+    const f = elevFrames[idx];
+    if (!f.distToggles) f.distToggles = { ceiling: false, floor: false, left: false, right: false };
+    f.distToggles[which] = !f.distToggles[which];
+    if (f.distToggles[which] && typeof dimVisibility !== 'undefined') {
+        dimVisibility.edgeGap = true;
+        saveDimVisibility();
+    }
+    drawElevAll();
+    pushHistory();
+    // Re-render the popover so its own active states refresh
+    renderEdgeGapPopover();
+    // Update the trigger button's badge in place
+    if (_edgeGapPopoverTrigger) {
+        const dt = f.distToggles;
+        const count = (dt.ceiling?1:0)+(dt.floor?1:0)+(dt.left?1:0)+(dt.right?1:0);
+        const oldBadge = _edgeGapPopoverTrigger.querySelector('.edge-gap-badge');
+        if (oldBadge) oldBadge.remove();
+        _edgeGapPopoverTrigger.classList.toggle('has-active', count > 0);
+        if (count > 0) {
+            const badge = document.createElement('span');
+            badge.className = 'edge-gap-badge';
+            badge.textContent = String(count);
+            _edgeGapPopoverTrigger.appendChild(badge);
+        }
+    }
 }
 
 // Hover pairing + click-to-select highlight: panels and frames on the wall
@@ -4828,6 +7240,28 @@ const HELP_REFERENCE_DATA = [
                 body: 'The sun/moon icon in the header toggles light/dark. The choice persists between sessions.'
             }
         ]
+    },
+    {
+        id: 'version',
+        title: 'Version',
+        intro: 'About this build of the FRAME tool.',
+        entries: [
+            {
+                title: 'Current Version',
+                // Body is built dynamically when the section renders so it
+                // picks up the live APP_VERSION / APP_BUILD constants. The
+                // marker placeholders below are replaced at render time.
+                body: '<strong>Version:</strong> {{APP_VERSION}}<br><strong>Build:</strong> {{APP_BUILD}}<br><br>The colored dot in the header pill indicates which build you\'re on at a glance: <strong style="color:#46c772;">green</strong> for production, <strong style="color:#f0883e;">orange</strong> for development.'
+            },
+            {
+                title: 'What\'s New',
+                body: 'Edit this section in <code>HELP_REFERENCE_DATA</code> (in <code>app.js</code>) to list changes per release. Suggested format: most recent changes at the top, dated.<br><br>Example:<br><strong>v1.0</strong> — Initial production release. MM/CM/IN unit support, Mat 1 + Mat 2 + Faux Mat + Float Mount, batch ZIP PNG export, InDesign AutoFrameSpecs integration with raw-inch CSV columns.'
+            },
+            {
+                title: 'Reporting Issues',
+                body: 'If something\'s not working as expected, note your version (shown above) and the steps to reproduce. Screenshots help. Send to the project maintainer.'
+            }
+        ]
     }
 ];
 
@@ -4877,10 +7311,22 @@ function renderHelpRefSection(sectionId) {
     const section = HELP_REFERENCE_DATA.find(s => s.id === sectionId);
     if (!section) return;
     const content = document.getElementById('helpRefContent');
+    // Placeholder substitution: any {{TOKEN}} in entry bodies gets replaced
+    // with the live value from this map. Keeps the data structure static
+    // while letting dynamic values (current version, build) flow through.
+    const replacements = {
+        '{{APP_VERSION}}': APP_VERSION,
+        '{{APP_BUILD}}': APP_BUILD,
+    };
+    const fill = (s) => {
+        let out = s;
+        for (const k in replacements) out = out.split(k).join(replacements[k]);
+        return out;
+    };
     let html = `<h4>${section.title}</h4>`;
-    if (section.intro) html += `<p class="help-section-intro">${section.intro}</p>`;
+    if (section.intro) html += `<p class="help-section-intro">${fill(section.intro)}</p>`;
     section.entries.forEach(e => {
-        html += `<div class="help-entry"><h5>${e.title}</h5><p>${e.body}</p></div>`;
+        html += `<div class="help-entry"><h5>${e.title}</h5><p>${fill(e.body)}</p></div>`;
     });
     content.innerHTML = html;
     // Update active nav button
@@ -4923,6 +7369,27 @@ function setHelpVideoUrl(url, type) {
     }
 }
 
+// ──────────────────────────────────────────────────────────────────────────
+// VERSION PILL
+// ──────────────────────────────────────────────────────────────────────────
+// Populates the version indicator in the header bar using APP_VERSION and
+// APP_BUILD constants from the top of this file. Called once on page load.
+// The pill shows e.g. "v1.0" with a colored dot — green for production,
+// orange for development. Click opens Help modal scrolled to Version section.
+function renderVersionPill() {
+    const pill = document.getElementById('versionPill');
+    if (!pill) return;
+    pill.textContent = 'v' + APP_VERSION + (APP_BUILD === 'dev' ? '-dev' : '');
+    pill.classList.toggle('dev', APP_BUILD === 'dev');
+}
+
+function openVersionInfo() {
+    // Open the help modal, jump to the version section, scroll into view.
+    openHelpModal();
+    setHelpTab('reference');
+    renderHelpRefSection('version');
+}
+
 function confirmDuplicate(type) {
     if (pendingDuplicateIndex === null) return;
     const idx = pendingDuplicateIndex;
@@ -4956,18 +7423,16 @@ function toggleElevLayer(id, btn) {
 
     // Special behavior: when turning Person ON, if the figure is currently
     // outside the visible wall (which is the default at x=-60), pull it
-    // back to just inside the left edge so the user can see it. Otherwise
-    // users have to zoom out, find the figure, and drag it onto the wall
-    // — a confusing experience. If they HAVE placed it on the wall, we
-    // respect their position and don't move it.
+    // Person first-show convenience: if the figure has NEVER been moved by
+    // the user (still at its default spawn position and not yet flagged as
+    // placed), pull it just inside the left edge so it's findable. Once the
+    // user has dragged it anywhere — including parking it beside the wall —
+    // we lock that position and never auto-move it again.
     if (id === 'person-wrap' && isHidden && elevPersonPos) {
-        const wallW = parseFloat(document.getElementById('wallW').value) || 185;
-        const isOffWall = elevPersonPos.x < 0 || elevPersonPos.x > wallW;
-        if (isOffWall) {
-            // Place just inside the left edge — accounting for the figure's
-            // visual width. The person SVG is roughly 20 inches wide so we
-            // offset by 6 inches to leave a small margin.
+        const neverPlaced = !elevPersonPos.placed;
+        if (neverPlaced) {
             elevPersonPos.x = parseFloat((6 * unitFactor('in', elevUnit)).toFixed(2));
+            elevPersonPos.placed = true; // from now on, respect user position
             drawElevAll();
             pushHistory();
         }
@@ -5063,7 +7528,7 @@ async function batchDownloadAllFramesAsZip() {
             }
 
             const row = dashProjectData[i];
-            const baseName = (row.id || `Frame_${i + 1}`).replace(/[\\/:*?"<>|]/g, '_');
+            const baseName = buildPngFilename(row).replace(/\.png$/i, '');
             let fileName = `${baseName}.png`;
             if (usedNames[fileName]) {
                 let n = 2;
@@ -5084,7 +7549,10 @@ async function batchDownloadAllFramesAsZip() {
             try {
                 const swatchImg = row.swatchDataUrl ? await _loadImg(row.swatchDataUrl) : null;
                 const dInches = _frameDataInInches(row, dashUnit);
-                const { canvas } = renderFrameToCanvas(dInches, swatchImg, { dpi: 72, pad: 40 });
+                // Match single-PNG export: no pad when shadows are off so the
+                // bounding box equals the frame edge (easier InDesign alignment).
+                const exportPad = dashOuterShadowsOn ? 40 : 0;
+                const { canvas } = renderFrameToCanvas(dInches, swatchImg, { dpi: 72, pad: exportPad });
                 // canvas.toBlob is async via a callback — wrap in a Promise so
                 // we can await it. Quality arg N/A for PNG (it's lossless).
                 const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
@@ -5406,7 +7874,18 @@ function snapFrameToWallCenter(idx, e) {
 }
 
 function drawElevAll() {
-    const wallW = parseFloat(document.getElementById('wallW').value) || 1; const wallH = parseFloat(document.getElementById('wallH').value) || 1;
+    // Prefer the precise stored wall dims over the input field (which displays
+    // a 2-decimal rounded value). Reading the rounded field while frames use
+    // precise values caused the wall to drift relative to the frames on unit
+    // toggles (dimension-line jitter). If the stored value rounds to the same
+    // 2-decimal display as the input, the user hasn't just typed a new number,
+    // so we use the precise stored value; otherwise honor the input edit.
+    const _ce = elevations[currentElevIndex];
+    const _wwInput = parseFloat(document.getElementById('wallW').value) || 1;
+    const _whInput = parseFloat(document.getElementById('wallH').value) || 1;
+    let wallW = _wwInput, wallH = _whInput;
+    if (_ce && typeof _ce.wallW === 'number' && parseFloat(_ce.wallW.toFixed(2)) === _wwInput) wallW = _ce.wallW;
+    if (_ce && typeof _ce.wallH === 'number' && parseFloat(_ce.wallH.toFixed(2)) === _whInput) wallH = _ce.wallH;
     const workspace = document.querySelector('#view-elevation .workspace');
     
     let baseScale = Math.min((workspace.clientWidth - 160)/wallW, (workspace.clientHeight - 160)/wallH);
@@ -5438,6 +7917,7 @@ function drawElevAll() {
     const labelLayer = document.getElementById('label-layer'); labelLayer.innerHTML = '';
     const odLayer = document.getElementById('od-layer'); odLayer.innerHTML = '';
     const centerLayer = document.getElementById('frame-center-layer'); centerLayer.innerHTML = '';
+    const groupDimLayer = document.getElementById('group-dim-layer'); if (groupDimLayer) groupDimLayer.innerHTML = '';
     
     elevFrames.forEach((f, idx) => {
         if(!f.active) return;
@@ -5459,25 +7939,36 @@ function drawElevAll() {
         const sbPaperBorderVal = useFM ? (parseFloat(f.sbPaperBorder) || 0) : 0;
         const effFw = f.fW;
 
+        // Outer drop-shadow strings (used by all three render branches below).
+        // Gated on dashOuterShadowsOn: when off, the shadow halo is suppressed
+        // so elevations match the toggle-off PNG export look.
+        const elevOuterShadow = dashOuterShadowsOn
+            ? `0 ${16 * elevScale}px ${40 * elevScale}px rgba(0,0,0,0.45), 0 ${6 * elevScale}px ${12 * elevScale}px rgba(0,0,0,0.3)`
+            : 'none';
+
         if (isFrameless) {
             // Frameless canvas: no rails, no border. Just a drop shadow halo
             // around the canvas-face area to suggest depth on the wall.
             el.classList.add('frame-vis-solid');
             el.style.border = 'none';
             el.style.background = 'transparent';
-            el.style.boxShadow = `0 ${16 * elevScale}px ${40 * elevScale}px rgba(0,0,0,0.45), 0 ${6 * elevScale}px ${12 * elevScale}px rgba(0,0,0,0.3)`;
+            el.style.boxShadow = elevOuterShadow;
         } else if (f.fType === 'color') {
             el.classList.add('frame-vis-solid');
             el.style.border = `${effFw * elevScale}px solid ${f.fColor || '#1a1a1a'}`;
             el.style.setProperty('--frame-color', f.fColor || '#1a1a1a');
-            // Outer drop shadow: deeper ambient + tighter contact shadow for clear lift
-            el.style.boxShadow = `0 0 0 1.5px ${f.fColor || '#1a1a1a'}, 0 ${16 * elevScale}px ${40 * elevScale}px rgba(0,0,0,0.45), 0 ${6 * elevScale}px ${12 * elevScale}px rgba(0,0,0,0.3)`;
+            // Frame color outline (1.5px) is part of the frame visual, NOT an
+            // outer shadow, so it stays regardless of the toggle. Only the
+            // ambient/contact shadows are conditional.
+            el.style.boxShadow = dashOuterShadowsOn
+                ? `0 0 0 1.5px ${f.fColor || '#1a1a1a'}, 0 ${16 * elevScale}px ${40 * elevScale}px rgba(0,0,0,0.45), 0 ${6 * elevScale}px ${12 * elevScale}px rgba(0,0,0,0.3)`
+                : `0 0 0 1.5px ${f.fColor || '#1a1a1a'}`;
         } else {
             el.classList.add('frame-vis-image');
             el.style.setProperty('--fW', (effFw * elevScale) + 'px');
             el.style.setProperty('--frame-W', (f.w * elevScale) + 'px');
             el.style.setProperty('--frame-bg', `url(${f.swatchDataUrl})`);
-            el.style.boxShadow = `0 ${16 * elevScale}px ${40 * elevScale}px rgba(0,0,0,0.45), 0 ${6 * elevScale}px ${12 * elevScale}px rgba(0,0,0,0.3)`;
+            el.style.boxShadow = elevOuterShadow;
             const rails = ['top', 'bottom', 'left', 'right'];
             rails.forEach(pos => {
                 const rail = document.createElement('div'); rail.className = `frame-rail rail-${pos}`; rail.innerHTML = `<div class="rail-bg"></div>`; el.appendChild(rail);
@@ -5665,6 +8156,33 @@ function drawElevAll() {
     // uses fresh DOM selection on each call.
     wireElevHoverPairing();
 
+    // Render group-dimension callouts (dashed bounding boxes + measurements)
+    // for the current elevation. Done after frames so the boxes overlay them.
+    renderGroupDims();
+
+    // Unit legend (top-left corner of the wall). Shown only when the interior
+    // suffix is OFF — so the reader knows what unit the bare numbers are in.
+    // When the suffix is ON, every number is self-labeling and the legend is
+    // hidden to avoid redundancy.
+    (function renderUnitLegend() {
+        const wallEl = document.getElementById('wall');
+        if (!wallEl) return;
+        let legend = document.getElementById('elev-unit-legend');
+        if (legend) legend.remove();
+        if (showUnitSuffix) return; // suffix on → no legend needed
+        legend = document.createElement('div');
+        legend.id = 'elev-unit-legend';
+        legend.className = 'elev-unit-legend';
+        legend.textContent = unitLegendText();
+        wallEl.appendChild(legend);
+    })();
+
+    // Sync the Group Box + Edge Gap Layout Guides buttons' blue state to
+    // reflect whether those annotations currently exist + are visible.
+    if (typeof syncLayoutGuideButtonStates === 'function') {
+        syncLayoutGuideButtonStates();
+    }
+
     // Wall-background click handler: clicking on the wall but NOT on a frame
     // clears all selections. event.target === wall ensures we only clear when
     // the click is on the wall itself, not on a child element (frames, hang
@@ -5677,8 +8195,212 @@ function drawElevAll() {
     };
 }
 
-// ─────────────────────────────────────────────────────────────────────
-// SNAP-TO-OTHER-FRAMES while dragging
+// Render all group-dimension callouts for the current elevation into
+// #group-dim-layer. Each callout = dashed bbox + width line (above) + height
+// line (left) + measurement labels. Recomputed every drawElevAll so the box
+// tracks frame moves automatically.
+function renderGroupDims() {
+    const layer = document.getElementById('group-dim-layer');
+    if (!layer) return;
+    layer.innerHTML = '';
+    // Hide panel: skip group boxes entirely when hidden.
+    if (typeof dimVisibility !== 'undefined' && !dimVisibility.groupBox) return;
+    const dims = getElevGroupDims();
+    if (!dims.length) return;
+
+    const wallH = parseFloat(document.getElementById('wallH').value) || 1;
+    // Convert elevation-inch coords → layer pixels. x grows right; the layer's
+    // y grows DOWN, but frame y is measured from the BOTTOM, so we flip:
+    //   pxTop = (wallH - (y + h)) * scale
+    const sx = (inches) => inches * elevScale;
+    const pxTopOf = (yBottomInches, hInches) => (wallH - (yBottomInches + hInches)) * elevScale;
+
+    dims.forEach(entry => {
+        const bbox = computeGroupDimBBox(entry);
+        if (!bbox) return; // referenced frames gone
+
+        const st = entry.style || annotationStyle;
+        const color = st.color || '#e00000';
+        const weight = st.weight || 2;
+        const dashCss = st.dash ? `${Math.max(4, weight * 3)}px ${Math.max(3, weight * 2)}px` : 'none';
+        const fontSize = st.fontSize || 13;
+
+        // Bounding box in layer pixels. Expanded OUTWARD by GAP so the dashed
+        // line sits just outside the frames rather than overlapping their
+        // edges. Dimension + extension lines anchor to this expanded box.
+        const GAP = 5;
+        const boxLeft = sx(bbox.minX) - GAP;
+        const boxTop = pxTopOf(bbox.minY, bbox.h) - GAP;
+        const boxW = sx(bbox.w) + GAP * 2;
+        const boxH = sx(bbox.h) + GAP * 2;
+
+        // ── Inner bounding rectangle: DASHED (per client convention) ──
+        const rect = document.createElement('div');
+        rect.style.cssText =
+            `position:absolute; left:${boxLeft}px; top:${boxTop}px; width:${boxW}px; height:${boxH}px;` +
+            `border:${weight}px dashed ${color}; box-sizing:border-box;` +
+            `pointer-events:none; z-index:1;`;
+        layer.appendChild(rect);
+
+        // mkLine: a straight line. `lineStyle` ('solid' | 'dashed') lets us
+        // make dimension lines solid and extension lines dashed.
+        const mkLine = (x, y, w, h, lineStyle) => {
+            const ls = lineStyle || 'solid';
+            const d = document.createElement('div');
+            d.style.cssText =
+                `position:absolute; left:${x}px; top:${y}px; ` +
+                (w > h
+                    ? `width:${w}px; height:0; border-top:${weight}px ${ls} ${color};`
+                    : `height:${h}px; width:0; border-left:${weight}px ${ls} ${color};`) +
+                `pointer-events:none; z-index:1;`;
+            return d;
+        };
+        // Small end-tick perpendicular to a dimension line (always solid).
+        const mkTick = (cx, cy, vertical) => {
+            const TICK = 6;
+            const d = document.createElement('div');
+            if (vertical) {
+                d.style.cssText = `position:absolute; left:${cx}px; top:${cy - TICK}px; height:${TICK * 2}px; width:0; border-left:${weight}px solid ${color}; pointer-events:none; z-index:1;`;
+            } else {
+                d.style.cssText = `position:absolute; left:${cx - TICK}px; top:${cy}px; width:${TICK * 2}px; height:0; border-top:${weight}px solid ${color}; pointer-events:none; z-index:1;`;
+            }
+            return d;
+        };
+        // Measurement label — opaque white background so the number stays
+        // readable even where dimension/extension lines cross. No border
+        // (cleaner look per user preference).
+        const mkLabel = (text, cx, cy) => {
+            const l = document.createElement('div');
+            l.textContent = text;
+            const fam = (st.fontFamily || annotationStyle.fontFamily || 'Arial, Helvetica, sans-serif');
+            const fwt = (st.fontWeight || annotationStyle.fontWeight || 600);
+            l.style.cssText =
+                `position:absolute; left:${cx}px; top:${cy}px; transform:translate(-50%,-50%);` +
+                `color:${color}; font-size:${fontSize}px; font-weight:${fwt}; font-family:${fam}; white-space:nowrap;` +
+                `background:#fff; padding:1px 5px; border-radius:3px;` +
+                `pointer-events:none; z-index:4;`;
+            return l;
+        };
+
+        const OFFSET = 26; // px gap between bbox and dimension line
+
+        // ── WIDTH dimension line (above the box) — SOLID line, DASHED extensions ──
+        if (entry.showWidth !== false) {
+            const lineY = boxTop - OFFSET;
+            layer.appendChild(mkLine(boxLeft, lineY, boxW, 0, 'solid'));   // solid dim line
+            layer.appendChild(mkTick(boxLeft, lineY, true));
+            layer.appendChild(mkTick(boxLeft + boxW, lineY, true));
+            // Dashed extension lines from box corners up to the dim line
+            layer.appendChild(mkLine(boxLeft, lineY, 0, OFFSET, 'dashed'));
+            layer.appendChild(mkLine(boxLeft + boxW, lineY, 0, OFFSET, 'dashed'));
+            layer.appendChild(mkLabel(elevFmtU(bbox.w), boxLeft + boxW / 2, lineY));
+        }
+
+        // ── HEIGHT dimension line (left of the box) — SOLID line, DASHED extensions ──
+        if (entry.showHeight !== false) {
+            const lineX = boxLeft - OFFSET;
+            layer.appendChild(mkLine(lineX, boxTop, 0, boxH, 'solid'));    // solid dim line
+            layer.appendChild(mkTick(lineX, boxTop, false));
+            layer.appendChild(mkTick(lineX, boxTop + boxH, false));
+            // Dashed extension lines from box corners out to the dim line
+            layer.appendChild(mkLine(lineX, boxTop, OFFSET, 0, 'dashed'));
+            layer.appendChild(mkLine(lineX, boxTop + boxH, OFFSET, 0, 'dashed'));
+            const hl = mkLabel(elevFmtU(bbox.h), lineX, boxTop + boxH / 2);
+            hl.style.transform = 'translate(-50%,-50%) rotate(-90deg)';
+            layer.appendChild(hl);
+        }
+    });
+}
+
+// Unit suffix for measurement labels (", cm, mm).
+function unitSuffix() {
+    if (elevUnit === 'in') return '"';
+    return ' ' + elevUnit;
+}
+
+// Whether INTERIOR dimension labels (spacing, group box, hang height, edge
+// gaps) include the unit suffix. Default OFF for a cleaner look that fits
+// tight spaces; a corner legend shows the active unit instead. The OUTER
+// wall dimensions ALWAYS show their suffix regardless (plenty of room
+// outside the elevation), so they bypass this toggle.
+let showUnitSuffix = false;
+
+function loadUnitSuffixPref() {
+    try {
+        const raw = localStorage.getItem('showUnitSuffix');
+        if (raw !== null) showUnitSuffix = (raw === '1');
+    } catch (e) { /* default */ }
+}
+
+function saveUnitSuffixPref() {
+    try { localStorage.setItem('showUnitSuffix', showUnitSuffix ? '1' : '0'); }
+    catch (e) { /* ignore */ }
+}
+
+// Format an INTERIOR dimension value: number + suffix only when the toggle
+// is on. Use this everywhere except the outer wall dims.
+function elevFmtU(val) {
+    return elevFmt(val) + (showUnitSuffix ? unitSuffix() : '');
+}
+
+// Human-readable unit name for the corner legend.
+function unitLegendText() {
+    const names = { in: 'INCHES', cm: 'CENTIMETERS', mm: 'MILLIMETERS' };
+    return 'ALL DIMENSIONS IN ' + (names[elevUnit] || elevUnit.toUpperCase());
+}
+
+// Toggle the interior-suffix preference + re-render. Updates the button
+// state and the legend visibility.
+function toggleUnitSuffix(btn) {
+    showUnitSuffix = !showUnitSuffix;
+    saveUnitSuffixPref();
+    if (btn) btn.classList.toggle('active', showUnitSuffix);
+    drawElevAll();
+}
+
+// ── Annotation style modal ──
+function openAnnotationStyleModal() {
+    // The standalone style modal was merged into Settings. Redirect.
+    openPrecisionModal();
+}
+
+function closeAnnotationStyleModal() {
+    document.getElementById('precisionModal').style.display = 'none';
+    pushHistory(); // the style changes to existing callouts are undoable
+}
+
+function setAnnotDash(on) {
+    annotationStyle.dash = !!on;
+    const onBtn = document.getElementById('annotDashOn');
+    const offBtn = document.getElementById('annotDashOff');
+    if (onBtn) onBtn.classList.toggle('active', !!on);
+    if (offBtn) offBtn.classList.toggle('active', !on);
+    applyAnnotationStyleFromModal();
+}
+
+// Read the modal inputs into annotationStyle, propagate to all existing
+// group dims, persist, and re-render. Called live on every input change so
+// the user sees the effect immediately.
+function applyAnnotationStyleFromModal() {
+    const c = document.getElementById('annotColor');
+    const w = document.getElementById('annotWeight');
+    const fs = document.getElementById('annotFontSize');
+    if (c) { annotationStyle.color = c.value; const hx = document.getElementById('annotColorHex'); if (hx) hx.textContent = c.value; }
+    if (w) { annotationStyle.weight = parseInt(w.value, 10) || 2; const wv = document.getElementById('annotWeightVal'); if (wv) wv.textContent = annotationStyle.weight + 'px'; }
+    if (fs) { annotationStyle.fontSize = parseInt(fs.value, 10) || 13; const fv = document.getElementById('annotFontSizeVal'); if (fv) fv.textContent = annotationStyle.fontSize + 'px'; }
+    const ff = document.getElementById('annotFontFamily');
+    if (ff) annotationStyle.fontFamily = ff.value;
+    // Propagate to every existing group dim across ALL elevations so the
+    // style is consistent project-wide.
+    elevations.forEach(elev => {
+        if (Array.isArray(elev.groupDims)) {
+            elev.groupDims.forEach(gd => { gd.style = Object.assign({}, annotationStyle); });
+        }
+    });
+    applyAnnotationStyleToCSSVars(); // update arch dims, frame dims, OD tags, etc.
+    saveAnnotationStyle();
+    drawElevAll();
+}
 // ─────────────────────────────────────────────────────────────────────
 // When a frame is dragged, after the normal whole-inch snapping, we check
 // if any of its key alignment points (left edge, right edge, center) come
@@ -5835,6 +8557,7 @@ function makeElevDraggable(el, idx) {
             }
             if(idx === 'person') { 
                 elevPersonPos.x -= dx; 
+                elevPersonPos.placed = true; // user moved it — lock position
             } else { 
                 let frame = elevFrames[idx]; let prevX = frame.x; let prevY = frame.y;
                 // Step 1: whole-unit snap (existing behavior)
@@ -5910,10 +8633,40 @@ function drawElevGuides(wallW, wallH) {
 
     const hangVal = getHangHeight();
     if(hangVal < wallH) {
+        // Horizontal hang line — just the dashed line. The "HANG HEIGHT" label
+        // sits above the vertical floor-to-hang dimension on the left.
         const hl = document.createElement('div'); hl.className = 'hang-guide';
         hl.style.bottom = (hangVal * elevScale) + 'px';
-        hl.innerHTML = `<span class="hang-label">HANG HEIGHT: ${elevFmt(hangVal)}${unitInfo(elevUnit).suffix}</span>`;
         guideLayer.appendChild(hl);
+
+        // Floor-to-hangline vertical dimension. Shows the hang height as a
+        // measured callout from the floor up to the hang line. Positioned a
+        // small inset from the left wall edge so it doesn't overlap the
+        // wall-height arch dim that sits just outside the wall on the left.
+        // Shown whenever guides are visible (part of the guide layer).
+        const dimXIn = 8 * unitFactor('in', elevUnit); // inset from left edge
+        const dimXpx = dimXIn * elevScale;
+        const hangPx = hangVal * elevScale;
+        const TICK = 6;
+
+        const fh = document.createElement('div');
+        fh.className = 'floor-hang-dim';
+        fh.setAttribute('data-dim-type', 'floor-art');
+        fh.style.cssText =
+            `position:absolute; left:${dimXpx}px; bottom:0; height:${hangPx}px; width:0; z-index:1;`;
+        fh.innerHTML =
+            // vertical dimension line
+            `<div style="position:absolute; left:0; top:0; bottom:0; width:0; border-left:var(--dim-weight) solid var(--dim-color);"></div>` +
+            // floor tick
+            `<div style="position:absolute; left:${-TICK}px; bottom:0; width:${TICK * 2}px; height:0; border-top:var(--dim-weight) solid var(--dim-color);"></div>` +
+            // hang-line tick
+            `<div style="position:absolute; left:${-TICK}px; top:0; width:${TICK * 2}px; height:0; border-top:var(--dim-weight) solid var(--dim-color);"></div>` +
+            // "HANG HEIGHT" label, horizontal, above the top tick of this line
+            `<div style="position:absolute; left:0; top:-6px; transform:translate(-50%,-100%); color:var(--dim-color); font-family:var(--dim-font-family); font-size:calc(var(--dim-font-size) * 0.85); font-weight:600; letter-spacing:0.5px; white-space:nowrap; background:rgba(255,255,255,0.85); padding:1px 5px; border-radius:3px;">HANG HEIGHT</div>` +
+            // the number, centered between the line ends (rotated to read
+            // along the vertical line).
+            `<div style="position:absolute; left:0; top:50%; transform:translate(-50%,-50%) rotate(-90deg); color:var(--dim-color); font-family:var(--dim-font-family); font-size:var(--dim-font-size); font-weight:600; white-space:nowrap; background:rgba(255,255,255,0.85); padding:0 4px;">${elevFmtU(hangVal)}</div>`;
+        guideLayer.appendChild(fh);
     }
     
     const offsetDist = 6 * unitFactor('in', elevUnit);
@@ -5941,14 +8694,14 @@ function drawElevTargetedSpacing() {
                         let gapX = rightF.x - (leftF.x + leftF.w);
                         let oTop = Math.max(leftF.y, rightF.y); let oBot = Math.min(leftF.y + leftF.h, rightF.y + rightF.h);
                         let anchorY = oBot > oTop ? oTop + (oBot - oTop)/2 : (leftF.y + leftF.h/2 + rightF.y + rightF.h/2)/2;
-                        createElevArchSpacing(leftF.x + leftF.w, anchorY, rightF.x, anchorY, 'h', layer, elevFmt(gapX));
+                        createElevArchSpacing(leftF.x + leftF.w, anchorY, rightF.x, anchorY, 'h', layer, elevFmtU(gapX));
                     }
                     let botF = f1.y < f2.y ? f1 : f2; let topF = f1.y < f2.y ? f2 : f1;
                     if (topF.y >= botF.y + botF.h) {
                         let gapY = topF.y - (botF.y + botF.h);
                         let oLeft = Math.max(botF.x, topF.x); let oRight = Math.min(botF.x + botF.w, topF.x + topF.w);
                         let anchorX = oRight > oLeft ? oLeft + (oRight - oLeft)/2 : (botF.x + botF.w/2 + topF.x + topF.w/2)/2;
-                        createElevArchSpacing(anchorX, botF.y + botF.h, anchorX, topF.y, 'v', layer, elevFmt(gapY));
+                        createElevArchSpacing(anchorX, botF.y + botF.h, anchorX, topF.y, 'v', layer, elevFmtU(gapY));
                     }
                     drawnPairs.add(pairId);
                 }
@@ -5972,6 +8725,8 @@ function drawPerFrameDistanceDims() {
     const layer = document.getElementById('floor-ceiling-layer');
     if (!layer) return;
     layer.innerHTML = '';
+    // Edge Gap toggle (Layout Guides): when off, hide all distance dims.
+    if (typeof dimVisibility !== 'undefined' && !dimVisibility.edgeGap) return;
     const wallW = parseFloat(document.getElementById('wallW').value) || 1;
     const wallH = parseFloat(document.getElementById('wallH').value) || 1;
 
@@ -5989,28 +8744,28 @@ function drawPerFrameDistanceDims() {
         if (dt.ceiling) {
             const ceilingDist = wallH - (f.y + f.h);
             if (ceilingDist > 0) {
-                createElevArchSpacing(verticalAnchorX, f.y + f.h, verticalAnchorX, wallH, 'v', layer, elevFmt(ceilingDist));
+                createElevArchSpacing(verticalAnchorX, f.y + f.h, verticalAnchorX, wallH, 'v', layer, elevFmtU(ceilingDist));
             }
         }
         // FLOOR distance: from bottom of frame down to 0
         if (dt.floor) {
             const floorDist = f.y;
             if (floorDist > 0) {
-                createElevArchSpacing(verticalAnchorX, 0, verticalAnchorX, f.y, 'v', layer, elevFmt(floorDist));
+                createElevArchSpacing(verticalAnchorX, 0, verticalAnchorX, f.y, 'v', layer, elevFmtU(floorDist));
             }
         }
         // LEFT WALL distance: from left of frame back to 0
         if (dt.left) {
             const leftDist = f.x;
             if (leftDist > 0) {
-                createElevArchSpacing(0, horizontalAnchorY, f.x, horizontalAnchorY, 'h', layer, elevFmt(leftDist));
+                createElevArchSpacing(0, horizontalAnchorY, f.x, horizontalAnchorY, 'h', layer, elevFmtU(leftDist));
             }
         }
         // RIGHT WALL distance: from right of frame to wallW
         if (dt.right) {
             const rightDist = wallW - (f.x + f.w);
             if (rightDist > 0) {
-                createElevArchSpacing(f.x + f.w, horizontalAnchorY, wallW, horizontalAnchorY, 'h', layer, elevFmt(rightDist));
+                createElevArchSpacing(f.x + f.w, horizontalAnchorY, wallW, horizontalAnchorY, 'h', layer, elevFmtU(rightDist));
             }
         }
     });
@@ -6034,7 +8789,7 @@ function createElevArchDim(x1, y1, x2, y2, type, label, container, isWallOuter) 
         const width = Math.abs(x2 - x1) * elevScale;
         dim.style.width = width + 'px';
         dim.innerHTML = `
-            ${isWallOuter ? `<div style="position:absolute; left:0; top:0; width:1px; height:${offset}px; border-left:1.5px dashed var(--guide-color);"></div><div style="position:absolute; right:0; top:0; width:1px; height:${offset}px; border-left:1.5px dashed var(--guide-color);"></div>` : ''}
+            ${isWallOuter ? `<div style="position:absolute; left:0; top:0; width:1px; height:${offset}px; border-left:var(--dim-weight) dashed var(--dim-color);"></div><div style="position:absolute; right:0; top:0; width:1px; height:${offset}px; border-left:var(--dim-weight) dashed var(--dim-color);"></div>` : ''}
             <div class="dim-line-segment"></div>
             <span class="arch-label-new">${label}</span>
             <div class="dim-line-segment"></div>
@@ -6043,7 +8798,7 @@ function createElevArchDim(x1, y1, x2, y2, type, label, container, isWallOuter) 
         const height = Math.abs(y2 - y1) * elevScale;
         dim.style.height = height + 'px';
         dim.innerHTML = `
-            ${isWallOuter ? `<div style="position:absolute; left:0; bottom:0; height:1px; width:${offset}px; border-top:1.5px dashed var(--guide-color);"></div><div style="position:absolute; left:0; top:0; height:1px; width:${offset}px; border-top:1.5px dashed var(--guide-color);"></div>` : ''}
+            ${isWallOuter ? `<div style="position:absolute; left:0; bottom:0; height:1px; width:${offset}px; border-top:var(--dim-weight) dashed var(--dim-color);"></div><div style="position:absolute; left:0; top:0; height:1px; width:${offset}px; border-top:var(--dim-weight) dashed var(--dim-color);"></div>` : ''}
             <div class="dim-line-segment-v"></div>
             <span class="arch-label-new">${label}</span>
             <div class="dim-line-segment-v"></div>
@@ -6389,6 +9144,481 @@ async function exportElevPNG() {
             if (personOriginalSrc !== null) personImg.src = personOriginalSrc;
         }
         // Final clean re-render in restored theme
+        drawElevAll();
+    }
+}
+
+// ──────────────────────────────────────────────────────────────────────────
+// SVG (VECTOR) ELEVATION EXPORT
+// ──────────────────────────────────────────────────────────────────────────
+// Exports the current elevation as an SVG: all annotations (dimension lines,
+// ticks, text, group boxes, guides, legend) become crisp native vector;
+// frame swatch textures embed as base64 raster <image> (they're photos, so
+// raster is correct). Opens cleanly in Illustrator / InDesign.
+//
+// Approach: render the elevation at a fixed export scale, then walk the
+// rendered DOM inside #wall and translate each element into SVG. Walking the
+// live DOM (rather than re-deriving geometry) guarantees the SVG matches
+// exactly what's on screen, including all dimension geometry.
+
+// Escape text for safe inclusion in SVG.
+function _svgEsc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+// Parse a CSS color + border shorthand into {width, style, color}.
+function _parseBorder(borderStr) {
+    if (!borderStr || borderStr === 'none') return null;
+    // e.g. "2px dashed rgb(224, 0, 0)" — color may contain spaces (rgb()).
+    const m = borderStr.match(/^([\d.]+)px\s+(solid|dashed|dotted)\s+(.+)$/);
+    if (!m) return null;
+    return { width: parseFloat(m[1]), style: m[2], color: m[3].trim() };
+}
+
+// Build a frame as nested VECTOR shapes for the SVG export (rail + mats +
+// reveal + faux mat + float paper + art opening), mirroring the PNG
+// renderer's geometry. `pos` is the on-canvas rect {x,y,w,h} in SVG px.
+// `frameColor` is the rail color (frame fColor, or sampled swatch average for
+// image swatches). Returns an array of SVG element strings.
+function buildFrameSVG(f, pos, unit, frameColor) {
+    const parts = [];
+    const px = pos.x, py = pos.y, pw = pos.w, ph = pos.h;
+    const sclX = pw / (f.w || 1);
+    const sclY = ph / (f.h || 1);
+    const S = (sclX + sclY) / 2;
+
+    const isC = (f.product === 'Framed Canvas (Floater)');
+    const isFrameless = (f.product === 'Frameless Canvas (Wrapped)');
+    const useFM = !isC && (f.useFloatMount === true);
+
+    const shade = (hex, pct) => {
+        const m = /^#?([\da-f]{3}|[\da-f]{6})$/i.exec(hex || '');
+        if (!m) return hex;
+        let h = m[1]; if (h.length === 3) h = h.split('').map(c => c + c).join('');
+        let r = parseInt(h.slice(0,2),16), g = parseInt(h.slice(2,4),16), b = parseInt(h.slice(4,6),16);
+        const adj = v => pct >= 0 ? Math.round(v + (255-v)*pct) : Math.round(v*(1+pct));
+        return '#' + [adj(r),adj(g),adj(b)].map(v => Math.max(0,Math.min(255,v)).toString(16).padStart(2,'0')).join('');
+    };
+    // A rectangle with a rectangular hole punched out (fill-rule evenodd).
+    // outer = {x,y,w,h}, hole = {x,y,w,h}. Paints only the ring between them,
+    // leaving the hole transparent down to whatever's behind the SVG.
+    const ringPath = (outer, hole, fill) => {
+        const o = `M ${outer.x.toFixed(1)} ${outer.y.toFixed(1)} h ${outer.w.toFixed(1)} v ${outer.h.toFixed(1)} h ${(-outer.w).toFixed(1)} Z`;
+        const hpath = `M ${hole.x.toFixed(1)} ${hole.y.toFixed(1)} h ${hole.w.toFixed(1)} v ${hole.h.toFixed(1)} h ${(-hole.w).toFixed(1)} Z`;
+        return `<path d="${o} ${hpath}" fill-rule="evenodd" fill="${fill}"/>`;
+    };
+    const strokeRect = (x,y,w,h,stroke,sw) =>
+        `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="${h.toFixed(1)}" fill="none" stroke="${stroke}" stroke-width="${sw||1}"/>`;
+
+    if (isFrameless) {
+        // No frame, no mats — just an outline marking the canvas face. Fully
+        // open (transparent) so artwork behind shows through.
+        parts.push(strokeRect(px, py, pw, ph, shade(frameColor||'#888', -0.2), 1));
+        return parts;
+    }
+
+    const fwPx = (f.fW || 1.25) * S;
+    const ix = px + fwPx, iy = py + fwPx, iw = pw - fwPx*2, ih = ph - fwPx*2;
+
+    // ── Compute the FINAL art-opening rectangle for this product ──
+    let aX, aY, aW, aH;
+    if (isC) {
+        const insetPx = ((f.floaterInset !== undefined ? f.floaterInset : 0.75)) * S;
+        aX = px + insetPx; aY = py + insetPx; aW = pw - insetPx*2; aH = ph - insetPx*2;
+    } else if (useFM) {
+        const marginPx = (parseFloat(f.sbPaperMargin)||0) * S;
+        const borderPx = (parseFloat(f.sbPaperBorder)||0) * S;
+        aX = ix + marginPx + borderPx; aY = iy + marginPx + borderPx;
+        aW = iw - (marginPx+borderPx)*2; aH = ih - (marginPx+borderPx)*2;
+    } else {
+        let cX = ix, cY = iy, cW = iw, cH = ih;
+        const m1On = (f.m1A !== false);
+        const m2On = (m1On && f.m2A === true);
+        if (m1On) {
+            const mT=(f.m1T||0)*S, mB=(f.m1B||0)*S, mL=(f.m1L||0)*S, mR=(f.m1R||0)*S;
+            cX = ix+mL; cY = iy+mT; cW = iw-mL-mR; cH = ih-mT-mB;
+            if (m2On) {
+                const revPx = (parseFloat(f.m2)||0) * S;
+                cX += revPx; cY += revPx; cW -= revPx*2; cH -= revPx*2;
+            }
+        }
+        if (f.useFauxMat === true) {
+            const fbPx = (parseFloat(f.sbPaperBorder)||0) * S;
+            cX += fbPx; cY += fbPx; cW -= fbPx*2; cH -= fbPx*2;
+        }
+        aX = cX; aY = cY; aW = cW; aH = cH;
+    }
+    if (aW < 0) aW = 0; if (aH < 0) aH = 0;
+    const hole = { x: aX, y: aY, w: aW, h: aH };
+
+    // ── FRAME RAIL: full outer rect minus the art opening, as a ring ──
+    parts.push(ringPath({x:px,y:py,w:pw,h:ph}, hole, frameColor || '#333'));
+    // Miter lines
+    const mc = shade(frameColor || '#333', -0.35);
+    parts.push(`<line x1="${px.toFixed(1)}" y1="${py.toFixed(1)}" x2="${ix.toFixed(1)}" y2="${iy.toFixed(1)}" stroke="${mc}" stroke-width="0.75"/>`);
+    parts.push(`<line x1="${(px+pw).toFixed(1)}" y1="${py.toFixed(1)}" x2="${(ix+iw).toFixed(1)}" y2="${iy.toFixed(1)}" stroke="${mc}" stroke-width="0.75"/>`);
+    parts.push(`<line x1="${px.toFixed(1)}" y1="${(py+ph).toFixed(1)}" x2="${ix.toFixed(1)}" y2="${(iy+ih).toFixed(1)}" stroke="${mc}" stroke-width="0.75"/>`);
+    parts.push(`<line x1="${(px+pw).toFixed(1)}" y1="${(py+ph).toFixed(1)}" x2="${(ix+iw).toFixed(1)}" y2="${(iy+ih).toFixed(1)}" stroke="${mc}" stroke-width="0.75"/>`);
+    // Rail inner edge outline
+    parts.push(strokeRect(ix, iy, iw, ih, shade(frameColor||'#333', -0.2), 0.75));
+
+    if (isC) {
+        // Floater: dark shadow-gap ring between rail inner edge and the opening.
+        parts.push(ringPath({x:ix,y:iy,w:iw,h:ih}, hole, shade(frameColor||'#333',-0.5)));
+        parts.push(strokeRect(aX, aY, aW, aH, shade(frameColor||'#333',-0.2), 1));
+        return parts;
+    }
+
+    if (useFM) {
+        const backerColor = f.sbBackerColorHex || '#ffffff';
+        const paperColor = f.sbPaperColorHex || '#ffffff';
+        const marginPx = (parseFloat(f.sbPaperMargin)||0) * S;
+        // Backer ring: frame interior minus opening
+        parts.push(ringPath({x:ix,y:iy,w:iw,h:ih}, hole, backerColor));
+        parts.push(strokeRect(ix, iy, iw, ih, '#cccccc', 0.75));
+        // Paper ring: paper rect minus opening
+        const ppx = ix+marginPx, ppy = iy+marginPx, ppw = iw-marginPx*2, pph = ih-marginPx*2;
+        parts.push(ringPath({x:ppx,y:ppy,w:ppw,h:pph}, hole, paperColor));
+        parts.push(strokeRect(ppx, ppy, ppw, pph, shade(paperColor,-0.15), 0.75));
+        parts.push(strokeRect(aX, aY, aW, aH, '#999', 0.5));
+        return parts;
+    }
+
+    // STANDARD MATS — each painted as a ring (its rect minus the art opening),
+    // so no layer ever covers the opening.
+    const m1On = (f.m1A !== false);
+    const m2On = (m1On && f.m2A === true);
+    const mat1Color = f.m1ColorHex || '#ffffff';
+    const mat2Color = f.m2ColorHex || '#ffffff';
+
+    if (m1On) {
+        // Mat 1 fills the rail interior (minus opening)
+        parts.push(ringPath({x:ix,y:iy,w:iw,h:ih}, hole, mat1Color));
+        parts.push(strokeRect(ix, iy, iw, ih, '#cccccc', 0.75));
+        const mT=(f.m1T||0)*S, mB=(f.m1B||0)*S, mL=(f.m1L||0)*S, mR=(f.m1R||0)*S;
+        const m2rX = ix+mL, m2rY = iy+mT, m2rW = iw-mL-mR, m2rH = ih-mT-mB;
+        if (m2On) {
+            // Mat 2 ring: its rect minus opening, painted over mat1's inner area
+            parts.push(ringPath({x:m2rX,y:m2rY,w:m2rW,h:m2rH}, hole, mat2Color));
+            parts.push(strokeRect(m2rX, m2rY, m2rW, m2rH, '#cccccc', 0.75));
+        }
+    }
+
+    if (f.useFauxMat === true) {
+        // White paper ring sits just outside the art opening
+        const fbPx = (parseFloat(f.sbPaperBorder)||0) * S;
+        const fxr = { x: aX - fbPx, y: aY - fbPx, w: aW + fbPx*2, h: aH + fbPx*2 };
+        parts.push(ringPath(fxr, hole, '#ffffff'));
+        parts.push(strokeRect(fxr.x, fxr.y, fxr.w, fxr.h, '#cccccc', 0.75));
+    }
+
+    // Art-opening outline (the hole is already transparent through all rings)
+    if (aW > 0 && aH > 0) {
+        parts.push(strokeRect(aX, aY, aW, aH, '#999', 0.5));
+    }
+
+    return parts;
+}
+
+// Measure rendered text width (px) for snug SVG chip sizing.
+let _svgMeasureCtx = null;
+function _measureSvgText(text, fontSize, fontWeight, fontFamily) {
+    if (!_svgMeasureCtx) {
+        _svgMeasureCtx = document.createElement('canvas').getContext('2d');
+    }
+    _svgMeasureCtx.font = `${fontWeight || 600} ${fontSize}px ${fontFamily || 'Arial, sans-serif'}`;
+    return _svgMeasureCtx.measureText(text).width;
+}
+
+async function exportElevSVG() {
+    const wall = document.getElementById('wall');
+    if (!wall) return;
+
+    const oldZoom = elevZoomFactor;
+    const wasDark = !document.body.classList.contains('light-theme');
+    elevZoomFactor = 1;
+    document.body.classList.add('light-theme');
+    drawElevAll();
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+    try {
+        const wallW = parseFloat(document.getElementById('wallW').value) || 1;
+        const wallH = parseFloat(document.getElementById('wallH').value) || 1;
+        const wallWpx = wallW * elevScale;
+        const wallHpx = wallH * elevScale;
+
+        // Asymmetric padding (mirrors the PNG export rules):
+        //  - BOTTOM + RIGHT: tight, so the elevation anchors to the bottom-right
+        //    corner of the floor — easy to snap to a guide/corner in InDesign.
+        //    Small TIGHT margin keeps outer dims from being clipped at the edge.
+        //  - LEFT: extra room for the character if parked outside the wall, plus
+        //    the wall-height dimension that sits outside the left edge.
+        //  - TOP: normal room for the wall-width dimension above.
+        // Measure the ACTUAL rendered content bounds (wall + frames + dims +
+        // character + labels) so the artboard hugs the real content. We then
+        // anchor flush to the right + bottom (tiny safety margin) for easy
+        // corner-snapping in InDesign, and keep generous room on the left
+        // (character) + top (wall-width dim).
+        const wallRect0 = wall.getBoundingClientRect();
+        let minL = wallRect0.left, minT = wallRect0.top;
+        let maxR = wallRect0.right, maxB = wallRect0.bottom;
+        // Walk every rendered element inside the elevation that contributes
+        // visible content, expanding the bounds.
+        const boundsEls = [];
+        ['frame-layer','arch-dim-layer','dim-layer','floor-ceiling-layer',
+         'frame-center-layer','guide-layer','label-layer','od-layer',
+         'group-dim-layer'].forEach(id => {
+            const lyr = document.getElementById(id);
+            if (lyr && getComputedStyle(lyr).display !== 'none') boundsEls.push(lyr);
+        });
+        const personWrapB = document.getElementById('person-wrap');
+        if (personWrapB && getComputedStyle(personWrapB).display !== 'none') {
+            boundsEls.push(document.getElementById('person'));
+        }
+        boundsEls.forEach(container => {
+            const kids = container.id ? container.querySelectorAll('*') : [container];
+            const list = container.tagName === 'IMG' ? [container] : kids;
+            list.forEach(el => {
+                const r = el.getBoundingClientRect();
+                if (r.width === 0 && r.height === 0) return;
+                if (r.left < minL) minL = r.left;
+                if (r.top < minT) minT = r.top;
+                if (r.right > maxR) maxR = r.right;
+                if (r.bottom > maxB) maxB = r.bottom;
+            });
+        });
+
+        const SAFE = 6;          // tiny margin so content isn't literally at the edge
+        const LEFT_EXTRA = 40;   // a little extra breathing room on the left for the character
+        const contentLeft = minL - LEFT_EXTRA;
+        const contentTop = minT - SAFE;
+        const contentRight = maxR + SAFE;
+        const contentBottom = maxB + SAFE;
+
+        const svgW = contentRight - contentLeft;
+        const svgH = contentBottom - contentTop;
+
+        // Map screen coords → SVG coords: content's top-left → (0,0).
+        const ox = -contentLeft;
+        const oy = -contentTop;
+
+        const cssRoot = getComputedStyle(document.documentElement);
+        const dimColor = (cssRoot.getPropertyValue('--dim-color') || '#e00000').trim();
+        const dimFont = (cssRoot.getPropertyValue('--dim-font-family') || 'sans-serif').trim();
+        const wallLine = (cssRoot.getPropertyValue('--wall-line') || '#333').trim();
+
+        // Z-buckets — concatenated back→front at the end so numbers always win.
+        const backLayer = [];   // frames + person (behind everything)
+        const midLayer = [];    // lines, boxes, guides
+        const frontLayer = [];  // ALL text / numbers / labels
+
+        const rectToSvg = (el) => {
+            const r = el.getBoundingClientRect();
+            return { x: r.left + ox, y: r.top + oy, w: r.width, h: r.height };
+        };
+
+        // ── WALL outline: transparent fill (no fill), just the stroke ──
+        {
+            const wp = rectToSvg(wall);
+            midLayer.push(`<rect x="${wp.x.toFixed(1)}" y="${wp.y.toFixed(1)}" width="${wp.w.toFixed(1)}" height="${wp.h.toFixed(1)}" fill="none" stroke="${wallLine}" stroke-width="2"/>`);
+        }
+
+        // ── FRAMES (back layer): embed as <image> ──
+        for (const f of elevFrames) {
+            if (!f.active) continue;
+            const el = wall.querySelector(`.frame-vis[data-frame-letter="${f.letter}"]`);
+            if (!el) continue;
+            const pos = rectToSvg(el);
+            try {
+                const swatchImg = f.swatchDataUrl ? await _loadImg(f.swatchDataUrl) : null;
+
+                if (svgFrameMode === 'autocolor') {
+                    // Build the frame as a vector construction (rail + mats +
+                    // reveal + paper + art opening) instead of a flat square.
+                    // For image swatches, sample the average color for the rail.
+                    let railColor = f.fColor || '#333333';
+                    if (swatchImg) {
+                        const avg = averageColorOfImage(swatchImg);
+                        if (avg) railColor = avg;
+                    }
+                    const frameParts = buildFrameSVG(f, pos, elevUnit, railColor);
+                    frameParts.forEach(s => backLayer.push(s));
+                    continue;
+                }
+
+                // texture mode: embed the rendered frame raster
+                const renderData = Object.assign({}, f, { extW: f.w, extH: f.h });
+                const dInches = _frameDataInInches(renderData, elevUnit);
+                const prevShadow = dashOuterShadowsOn;
+                dashOuterShadowsOn = false;
+                const { canvas } = renderFrameToCanvas(dInches, swatchImg, { dpi: 150, pad: 0 });
+                dashOuterShadowsOn = prevShadow;
+                if (!canvas.width || !canvas.height) throw new Error('zero-size canvas');
+                const dataUrl = canvas.toDataURL('image/png');
+                backLayer.push(`<image x="${pos.x.toFixed(1)}" y="${pos.y.toFixed(1)}" width="${pos.w.toFixed(1)}" height="${pos.h.toFixed(1)}" xlink:href="${dataUrl}" preserveAspectRatio="none"/>`);
+            } catch (err) {
+                backLayer.push(`<rect x="${pos.x.toFixed(1)}" y="${pos.y.toFixed(1)}" width="${pos.w.toFixed(1)}" height="${pos.h.toFixed(1)}" fill="${f.fColor || '#222'}"/>`);
+            }
+        }
+
+        // ── PERSON (back layer): inline the character SVG as editable vector ──
+        const personWrap = document.getElementById('person-wrap');
+        const personImg = document.getElementById('person');
+        if (personWrap && personImg && getComputedStyle(personWrap).display !== 'none') {
+            try {
+                const pos = rectToSvg(personImg);
+                // Fetch the character SVG source so we can inline it (editable
+                // vector). _personSvgDataUrl caches a data URL; decode it.
+                let svgText = null;
+                const dataUrl = await _getPersonSvgDataUrl();
+                if (dataUrl && dataUrl.startsWith('data:image/svg')) {
+                    const comma = dataUrl.indexOf(',');
+                    const meta = dataUrl.substring(0, comma);
+                    const payload = dataUrl.substring(comma + 1);
+                    svgText = meta.includes('base64') ? atob(payload) : decodeURIComponent(payload);
+                }
+                if (svgText) {
+                    // Extract the inner SVG content + its viewBox so we can scale
+                    // it into the target box via a nested <svg>.
+                    const vbMatch = svgText.match(/viewBox\s*=\s*"([^"]+)"/i);
+                    const inner = svgText.replace(/^[\s\S]*?<svg[^>]*>/i, '').replace(/<\/svg>\s*$/i, '');
+                    const vb = vbMatch ? vbMatch[1] : `0 0 ${pos.w} ${pos.h}`;
+                    backLayer.push(`<svg x="${pos.x.toFixed(1)}" y="${pos.y.toFixed(1)}" width="${pos.w.toFixed(1)}" height="${pos.h.toFixed(1)}" viewBox="${vb}" preserveAspectRatio="xMidYMid meet">${inner}</svg>`);
+                } else {
+                    // Fallback: embed as <image> using the data URL
+                    backLayer.push(`<image x="${pos.x.toFixed(1)}" y="${pos.y.toFixed(1)}" width="${pos.w.toFixed(1)}" height="${pos.h.toFixed(1)}" xlink:href="${dataUrl}" preserveAspectRatio="xMidYMid meet"/>`);
+                }
+            } catch (err) { /* skip person on error */ }
+        }
+
+        // ── ANNOTATION ELEMENTS: walk layers, route text→front, lines→mid ──
+        const annotationLayers = [
+            'arch-dim-layer', 'dim-layer', 'floor-ceiling-layer',
+            'frame-center-layer', 'guide-layer', 'label-layer',
+            'od-layer', 'group-dim-layer',
+        ];
+
+        const emitEl = (el) => {
+            const cs = getComputedStyle(el);
+            if (cs.display === 'none' || cs.visibility === 'hidden') return;
+
+            const txt = (el.childNodes.length === 1 && el.childNodes[0].nodeType === 3)
+                ? el.textContent.trim() : '';
+
+            if (txt) {
+                // TEXT → front layer (always on top of lines).
+                const pos = rectToSvg(el);
+                const fontSize = parseFloat(cs.fontSize) || 13;
+                const color = cs.color || dimColor;
+                const fw = cs.fontWeight || '600';
+                const bg = cs.backgroundColor;
+                const hasBg = bg && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent';
+                const transform = cs.transform;
+                let rotate = 0;
+                if (transform && transform !== 'none' && transform.includes('matrix')) {
+                    const m = transform.match(/matrix\(([^)]+)\)/);
+                    if (m) {
+                        const v = m[1].split(',').map(parseFloat);
+                        rotate = Math.round(Math.atan2(v[1], v[0]) * 180 / Math.PI);
+                    }
+                }
+                const cx = pos.x + pos.w / 2;
+                const cy = pos.y + pos.h / 2;
+                const g = rotate ? ` transform="rotate(${rotate} ${cx.toFixed(1)} ${cy.toFixed(1)})"` : '';
+                if (hasBg) {
+                    // Snug chip sized to the MEASURED text, not the DOM box
+                    // (the DOM box includes padding/offsets, which made the
+                    // chip look misaligned). Measure via canvas with the same
+                    // font, then pad slightly.
+                    const tm = _measureSvgText(txt, fontSize, fw, dimFont);
+                    const padX = 4, padY = 2;
+                    const chipW = tm + padX * 2;
+                    const chipH = fontSize + padY * 2;
+                    frontLayer.push(`<g${g}>`);
+                    frontLayer.push(`<rect x="${(cx - chipW/2).toFixed(1)}" y="${(cy - chipH/2).toFixed(1)}" width="${chipW.toFixed(1)}" height="${chipH.toFixed(1)}" fill="#ffffff" rx="2"/>`);
+                    frontLayer.push(`<text x="${cx.toFixed(1)}" y="${cy.toFixed(1)}" font-family="${_svgEsc(dimFont)}" font-size="${fontSize}" font-weight="${fw}" fill="${color}" text-anchor="middle" dominant-baseline="central">${_svgEsc(txt)}</text>`);
+                    frontLayer.push(`</g>`);
+                } else {
+                    frontLayer.push(`<text x="${cx.toFixed(1)}" y="${cy.toFixed(1)}"${g} font-family="${_svgEsc(dimFont)}" font-size="${fontSize}" font-weight="${fw}" fill="${color}" text-anchor="middle" dominant-baseline="central">${_svgEsc(txt)}</text>`);
+                }
+                return;
+            }
+
+            // LINES / BOXES → mid layer.
+            const pos = rectToSvg(el);
+            const bTop = _parseBorder(cs.borderTop);
+            const bLeft = _parseBorder(cs.borderLeft);
+            const bBottom = _parseBorder(cs.borderBottom);
+            const bRight = _parseBorder(cs.borderRight);
+
+            if (bTop && bLeft && bBottom && bRight && pos.w > 2 && pos.h > 2) {
+                const dash = bTop.style === 'dashed' ? ` stroke-dasharray="${bTop.width*3},${bTop.width*2}"` : '';
+                midLayer.push(`<rect x="${pos.x.toFixed(1)}" y="${pos.y.toFixed(1)}" width="${pos.w.toFixed(1)}" height="${pos.h.toFixed(1)}" fill="none" stroke="${bTop.color}" stroke-width="${bTop.width}"${dash}/>`);
+                return;
+            }
+            if (bTop && pos.h < 4 && pos.w >= 2) {
+                const dash = bTop.style === 'dashed' ? ` stroke-dasharray="${bTop.width*3},${bTop.width*2}"` : '';
+                const y = pos.y + bTop.width / 2;
+                midLayer.push(`<line x1="${pos.x.toFixed(1)}" y1="${y.toFixed(1)}" x2="${(pos.x+pos.w).toFixed(1)}" y2="${y.toFixed(1)}" stroke="${bTop.color}" stroke-width="${bTop.width}"${dash}/>`);
+                return;
+            }
+            if (bLeft && pos.w < 4 && pos.h >= 2) {
+                const dash = bLeft.style === 'dashed' ? ` stroke-dasharray="${bLeft.width*3},${bLeft.width*2}"` : '';
+                const x = pos.x + bLeft.width / 2;
+                midLayer.push(`<line x1="${x.toFixed(1)}" y1="${pos.y.toFixed(1)}" x2="${x.toFixed(1)}" y2="${(pos.y+pos.h).toFixed(1)}" stroke="${bLeft.color}" stroke-width="${bLeft.width}"${dash}/>`);
+                return;
+            }
+            const bg = cs.backgroundColor;
+            const hasBg = bg && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent';
+            if (hasBg && (pos.w < 4 || pos.h < 4) && (pos.w >= 2 || pos.h >= 2)) {
+                if (pos.h <= pos.w) {
+                    const y = pos.y + pos.h / 2;
+                    midLayer.push(`<line x1="${pos.x.toFixed(1)}" y1="${y.toFixed(1)}" x2="${(pos.x+pos.w).toFixed(1)}" y2="${y.toFixed(1)}" stroke="${bg}" stroke-width="${Math.max(1,pos.h).toFixed(1)}"/>`);
+                } else {
+                    const x = pos.x + pos.w / 2;
+                    midLayer.push(`<line x1="${x.toFixed(1)}" y1="${pos.y.toFixed(1)}" x2="${x.toFixed(1)}" y2="${(pos.y+pos.h).toFixed(1)}" stroke="${bg}" stroke-width="${Math.max(1,pos.w).toFixed(1)}"/>`);
+                }
+            }
+        };
+
+        const walk = (node) => {
+            for (const child of node.children) {
+                emitEl(child);
+                if (child.children.length > 0) walk(child);
+            }
+        };
+
+        annotationLayers.forEach(layerId => {
+            const layer = document.getElementById(layerId);
+            if (!layer) return;
+            if (getComputedStyle(layer).display === 'none') return;
+            walk(layer);
+        });
+
+        // Assemble: back (frames+person) → mid (lines/boxes) → front (text).
+        const parts = [];
+        parts.push(`<?xml version="1.0" encoding="UTF-8"?>`);
+        parts.push(`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${svgW.toFixed(1)}" height="${svgH.toFixed(1)}" viewBox="0 0 ${svgW.toFixed(1)} ${svgH.toFixed(1)}">`);
+        // NOTE: no background rect — keeps the SVG transparent so it composites
+        // cleanly in InDesign. (The wall itself is transparent/stroke-only.)
+        parts.push(`<g id="frames-and-character">`); parts.push(...backLayer); parts.push(`</g>`);
+        parts.push(`<g id="lines-and-boxes">`); parts.push(...midLayer); parts.push(`</g>`);
+        parts.push(`<g id="numbers-and-labels">`); parts.push(...frontLayer); parts.push(`</g>`);
+        parts.push(`</svg>`);
+        const svgStr = parts.join('\n');
+
+        const blob = new Blob([svgStr], { type: 'image/svg+xml' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        const elevName = (elevations[currentElevIndex] && elevations[currentElevIndex].name) || `Elevation_${currentElevIndex + 1}`;
+        a.download = elevName.replace(/[\\/:*?"<>|]/g, '_') + '.svg';
+        a.href = url;
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } finally {
+        if (wasDark) document.body.classList.remove('light-theme');
+        elevZoomFactor = oldZoom;
         drawElevAll();
     }
 }
