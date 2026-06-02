@@ -25,10 +25,24 @@
     --table-row-selected: #1e3a5f;
 
     --art-color: rgba(100, 100, 100, 0.4); 
-    --arch-line: #000000; 
     --guide-color: #555555; 
-    
-    --dim-font-size: 12px;
+
+    /* ── Unified dimension & label style ──
+     * Every dimension/label type (frame dims, wall/arch dims, OD tags,
+     * group dims, center lines) reads these. The Label & Dimension Style
+     * panel writes them as inline styles on :root via JS, overriding these
+     * defaults. Default look matches the group-dimension callouts: red,
+     * sans-serif, medium weight, dashed. */
+    --dim-color: #e00000;
+    --dim-font-size: 13px;
+    --dim-font-family: Arial, Helvetica, sans-serif;
+    --dim-font-weight: 600;
+    --dim-weight: 2px;
+    --dim-line-style: dashed;
+
+    /* Legacy alias — arch dims used --arch-line for their black color.
+     * Repointed to the unified --dim-color so they follow the panel. */
+    --arch-line: var(--dim-color);
 }
 
 .light-theme {
@@ -69,9 +83,73 @@ body:not(.light-theme) .logo-dark { display: block !important; }
 .nav-tabs { display: flex; height: 100%; align-items: center; overflow-x: auto; -ms-overflow-style: none; scrollbar-width: none; }
 .nav-tabs::-webkit-scrollbar { display: none; }
 
-.nav-tab { display: flex; align-items: center; gap: 8px; background: transparent; border: none; color: var(--text-muted); font-size: 0.75rem; font-weight: bold; height: 100%; padding: 0 15px; cursor: pointer; transition: 0.2s; white-space: nowrap; border-bottom: 3px solid transparent; }
+.nav-tab { display: flex; align-items: center; gap: 8px; background: transparent; border: none; color: var(--text-muted); font-size: 0.75rem; font-weight: bold; height: 100%; padding: 0 15px; cursor: pointer; transition: 0.2s; white-space: nowrap; border-bottom: 3px solid transparent; position: relative; }
 .nav-tab:hover { background: var(--bg-subpanel); color: var(--text-strong); }
 .nav-tab.active { background: var(--bg-main); color: var(--accent); border-bottom: 3px solid var(--accent); }
+
+/* Drag-to-reorder visual states for elevation tabs.
+ * .dragging fades the tab being moved so the user sees what they grabbed.
+ * .drop-before / .drop-after show a 3px colored bar on the appropriate edge
+ *   of the target tab indicating where the dragged tab will land on release.
+ * Uses the accent color to feel consistent with active-tab styling. */
+.nav-tab.dragging { opacity: 0.4; }
+.nav-tab.drop-before::before,
+.nav-tab.drop-after::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--accent);
+    pointer-events: none;
+}
+.nav-tab.drop-before::before { left: -1px; }
+.nav-tab.drop-after::after { right: -1px; }
+
+/* ──────────────────────────────────────────────────────────────────────
+ * DASHBOARD ROW DRAG-TO-REORDER
+ * Drag handle column on the left of each row + visual drop indicators
+ * (3px accent bars on top or bottom edges of the target row).
+ * ────────────────────────────────────────────────────────────────────── */
+.drag-handle-col,
+.drag-handle-cell {
+    width: 22px;
+    padding: 0;
+    text-align: center;
+    user-select: none;
+}
+.drag-handle-cell {
+    cursor: grab;
+    color: var(--text-muted);
+    opacity: 0.5;
+    transition: opacity 0.15s, color 0.15s;
+}
+.drag-handle-cell:hover {
+    opacity: 1;
+    color: var(--accent);
+}
+.drag-handle-cell:active {
+    cursor: grabbing;
+}
+.drag-handle-cell .svg-icon {
+    width: 14px;
+    height: 14px;
+    pointer-events: none;
+}
+
+/* Dragging state on the row being moved */
+#rfiBody tr.row-dragging { opacity: 0.4; }
+
+/* Drop position indicators: use box-shadow inset to draw a 3px accent bar
+ * on the top or bottom edge of the target row. Pseudo-elements on table
+ * cells have unreliable positioning due to table layout quirks; box-shadow
+ * is simpler and works across the full row width without breaking layout. */
+#rfiBody tr.drop-above {
+    box-shadow: inset 0 3px 0 0 var(--accent);
+}
+#rfiBody tr.drop-below {
+    box-shadow: inset 0 -3px 0 0 var(--accent);
+}
 .tab-close { font-size: 14px; font-weight: bold; opacity: 0.5; transition: 0.2s; }
 .tab-close:hover { opacity: 1; color: var(--btn-danger); }
 
@@ -132,12 +210,97 @@ th { background: var(--table-header); position: sticky; top: 0; font-weight: bol
 tr { transition: 0.1s; background: var(--bg-panel); }
 tr:hover { background: var(--table-row-hover); }
 tr.selected { background: var(--table-row-selected); border-left: 4px solid var(--accent); }
+/* Multi-selected secondaries — same idea as .selected but muted, so the
+ * primary still reads as "the active row" (form panel reflects it). */
+tr.multi-selected {
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    border-left: 4px solid color-mix(in srgb, var(--accent) 50%, transparent);
+}
 .tbl-in { width: 100%; border: none; background: transparent; font-size: inherit; font-family: inherit; padding: 2px; margin: 0; outline: none; color: inherit; box-sizing: border-box;}
 .tbl-in:focus { border-bottom: 1px solid var(--accent); }
 
 .preview-wrapper { position: sticky; top: 0; background: var(--bg-panel); z-index: 100; padding: 15px; border-bottom: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
 .preview-container { background: var(--bg-input); border-radius: 8px; width: 100%; max-width: 320px; aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; background-image: linear-gradient(45deg, rgba(128,128,128,0.1) 25%, transparent 25%), linear-gradient(-45deg, rgba(128,128,128,0.1) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, rgba(128,128,128,0.1) 75%), linear-gradient(-45deg, transparent 75%, rgba(128,128,128,0.1) 75%); background-size: 20px 20px; border: 1px solid var(--border-color); margin-bottom: 10px;}
 .controls { padding: 8px 15px; flex-shrink: 0; display: flex; flex-direction: column; }
+
+/* Dashboard view mode 2 — preview as a resizable floating overlay.
+ * Activated by `body.dash-view-2`. The base Mode 1 layout (header, project
+ * toolbar, table, form pane) is COMPLETELY UNCHANGED. Only the
+ * .preview-wrapper lifts out of flow and becomes a fixed-positioned panel
+ * anchored to the right side of the table area.
+ *
+ * The preview-container INSIDE the wrapper is sized by JS (see
+ * updateDashPreviewContainerSize) to match the current frame's aspect
+ * ratio at the user's preferred "longest dimension" — so the frame
+ * always fits with minimal empty space. The user can drag the LEFT edge
+ * of the panel to make it bigger (dashPreviewSize grows, both W and H
+ * scale up proportionally).
+ *
+ *   ┌──[Project header — UNCHANGED]──────────────────────┐
+ *   │ [table — visible behind/around the floating panel] │
+ *   │                  ┌────────────────┐  ┌─────────┐   │
+ *   │                  │  Preview       │  │  Form   │   │
+ *   │                  │  (sized to     │  │ (440px) │   │
+ *   │                  │   frame aspect)│  │         │   │
+ *   │                  │  + toolbar     │  │         │   │
+ *   │                  └────────────────┘  │         │   │
+ *   │                  ↑ left edge is      └─────────┘   │
+ *   │                    drag handle                      │
+ *   └────────────────────────────────────────────────────┘
+ */
+body.dash-view-2 #view-dashboard .dash-right-pane .preview-wrapper {
+    position: fixed;
+    top: 156px;
+    right: 460px; /* anchored to the right, just left of the 440px form pane */
+    left: auto;
+    bottom: auto;
+    width: auto;
+    z-index: 50;
+    background: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    padding: 20px;
+    padding-left: 24px;  /* extra space on the left edge to make the drag handle reachable */
+    align-items: center;
+    justify-content: flex-start;  /* preview-container first, then toolbar below */
+    /* Drag handle hint: a subtle accent-colored vertical strip on the left
+     * edge. Becomes more visible on hover (via cursor change in JS, plus
+     * this static hint). */
+    border-left: 4px solid var(--accent);
+}
+body.dash-view-2 #view-dashboard .dash-right-pane .preview-wrapper .preview-container {
+    /* JS sets explicit width/height via inline style (see
+     * updateDashPreviewContainerSize). These rules override the Mode 1
+     * defaults (320px max-width, 1/1 aspect ratio) so JS can take control. */
+    max-width: none;
+    max-height: none;
+    width: 400px;  /* default before JS sets actual size */
+    height: 400px;
+    aspect-ratio: auto;
+    margin-bottom: 10px;
+}
+
+/* When the toggle is active, give the button a tinted background so the
+ * user can see at a glance which mode is active. */
+#dashViewToggle.active {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+}
+
+/* Outer-shadow toggle. Active (= shadows OFF) gets the same accent tint so
+ * the user can see at a glance that shadow suppression is on. */
+#outerShadowToggle.active {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+}
+/* When shadows are OFF (active state), dim the "shadow trail" rect in the
+ * icon so the SVG visually mirrors the on/off state. */
+#outerShadowToggle.active svg rect[opacity] {
+    opacity: 0;
+}
 
 /* Dashboard Toolbar */
 .dash-toolbar { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; background: var(--bg-subpanel); padding: 8px; border-radius: 6px; border: 1px solid var(--border-color); align-items: center; }
@@ -216,6 +379,16 @@ tr.selected { background: var(--table-row-selected); border-left: 4px solid var(
 .section-title:hover { color: var(--accent); }
 .section-title.section-title-static { cursor: default; }
 .section-title.section-title-static:hover { color: var(--text-strong); }
+
+/* fl-disabled: applied to sections/inputs that don't apply to the current
+ * product type. Examples: Frame Style section + Fr.W/Fr.H/Rabbet fields are
+ * irrelevant for Frameless Canvas. Greys them out + blocks input but leaves
+ * the underlying data intact so switching products doesn't lose state. */
+.fl-disabled {
+    opacity: 0.35;
+    pointer-events: none;
+    user-select: none;
+}
 .collapsible-section { display: none; margin-bottom: 4px; }
 .collapsible-section.open { display: block; }
 
@@ -393,11 +566,214 @@ select.no-arrow::-ms-expand { display: none; }
     line-height: 1.3;
 }
 .elev-frame-list { flex: 1; overflow-y: auto; padding: 10px 20px; }
+
+/* Empty-state shown inside #frame-controls when an elevation has no frames.
+ * Centered, muted, with a soft dashed-square icon. The strong tags inside
+ * the copy ("Frame Dashboard", "Push to Wall", "+ Add") match the actual
+ * UI labels users will look for. */
+.elev-empty-state {
+    padding: 20px 14px 24px;
+    text-align: center;
+    color: var(--text-muted);
+}
+.elev-empty-icon {
+    width: 36px;
+    height: 36px;
+    color: var(--text-muted);
+    opacity: 0.55;
+    margin: 0 auto 10px;
+    display: block;
+}
+.elev-empty-state h4 {
+    font-size: 0.78rem;
+    color: var(--text-strong);
+    margin: 0 0 8px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+.elev-empty-state p {
+    font-size: 0.7rem;
+    line-height: 1.45;
+    margin: 0 0 10px;
+    color: var(--text-muted);
+}
+.elev-empty-state p.elev-empty-tip {
+    font-size: 0.65rem;
+    opacity: 0.85;
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border-color);
+}
+.elev-empty-state strong {
+    color: var(--text-main);
+    font-weight: 600;
+}
+
+/* ──────────────── HELP MODAL ────────────────
+ * Two-tab modal (Video, Reference). Tabs are flat buttons with a colored
+ * underline for the active state. Reference is a two-column layout: left
+ * sidebar of section names, right content panel. Active section in the
+ * sidebar gets an accent background. */
+.help-tabs {
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid var(--border-color);
+}
+.help-tab {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 8px 14px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: 0.15s;
+    margin-bottom: -1px;  /* overlap parent's border so active tab "owns" the seam */
+}
+.help-tab:hover {
+    color: var(--text-main);
+}
+.help-tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+
+/* Reference: sidebar of sections */
+.help-ref-nav {
+    width: 180px;
+    border-right: 1px solid var(--border-color);
+    padding: 14px 0;
+    overflow-y: auto;
+    flex-shrink: 0;
+    background: var(--bg-main);
+}
+.help-ref-nav button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: none;
+    padding: 8px 18px;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: 0.15s;
+    border-left: 2px solid transparent;
+}
+.help-ref-nav button:hover {
+    color: var(--text-main);
+    background: var(--bg-panel);
+}
+.help-ref-nav button.active {
+    color: var(--accent);
+    background: var(--bg-panel);
+    border-left-color: var(--accent);
+    font-weight: 600;
+}
+
+/* Reference: content panel */
+.help-ref-content {
+    flex: 1;
+    padding: 20px 26px;
+    overflow-y: auto;
+    color: var(--text-main);
+}
+.help-ref-content h4 {
+    margin: 0 0 4px;
+    font-size: 0.95rem;
+    color: var(--text-strong);
+    font-weight: 600;
+}
+.help-ref-content .help-section-intro {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin: 0 0 18px;
+    line-height: 1.45;
+}
+.help-ref-content .help-entry {
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px dashed var(--border-color);
+}
+.help-ref-content .help-entry:last-child {
+    border-bottom: none;
+}
+.help-ref-content .help-entry h5 {
+    margin: 0 0 4px;
+    font-size: 0.78rem;
+    color: var(--text-strong);
+    font-weight: 600;
+}
+.help-ref-content .help-entry p {
+    margin: 0;
+    font-size: 0.72rem;
+    line-height: 1.5;
+    color: var(--text-main);
+}
+.help-ref-content .help-entry strong {
+    color: var(--text-strong);
+    font-weight: 600;
+}
+.help-ref-content .help-kbd {
+    display: inline-block;
+    padding: 1px 6px;
+    background: var(--bg-input);
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    font-family: monospace;
+    font-size: 0.7rem;
+    color: var(--text-main);
+    margin: 0 1px;
+}
+
+/* Version pill in the header — shows "v1.0" + colored status dot.
+ * Green dot when APP_BUILD='prod', orange when 'dev', so it's visually
+ * obvious which build users are on. Click opens Help → Version section. */
+.version-pill {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 8px;
+    font-size: 0.65rem;
+    font-family: monospace;
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.15s;
+    user-select: none;
+    background: var(--bg-input);
+}
+.version-pill:hover {
+    color: var(--text-strong);
+    border-color: var(--text-muted);
+}
+.version-pill::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #46c772;        /* default prod green */
+    flex-shrink: 0;
+}
+/* When the pill carries the 'dev' modifier, the dot turns orange and the
+ * pill border picks up a faint orange tint to make the development build
+ * unmistakable at a glance. */
+.version-pill.dev::before {
+    background: #f0883e;
+}
+.version-pill.dev {
+    border-color: #f0883e88;
+    color: #f0883e;
+}
 .workspace { flex: 1; position: relative; overflow: auto; display: flex; background: var(--bg-main);}
 #export-wrap { padding: 80px; min-width: max-content; min-height: max-content; margin: auto; display: flex; justify-content: center; align-items: center; background: transparent; }
 
 /* Light grey wall default for crisp dimensional text contrast */
-#wall { background: #f0f2f5; border-bottom: 4px solid var(--arch-line); border-left: 1px solid var(--arch-line); border-right: 1px solid var(--arch-line); border-top: 1px solid var(--arch-line); position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
+#wall { background: #f0f2f5; border-bottom: 4px solid var(--wall-line, #333); border-left: 1px solid var(--wall-line, #333); border-right: 1px solid var(--wall-line, #333); border-top: 1px solid var(--wall-line, #333); position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
 
 .draggable { position: absolute; cursor: move; user-select: none; z-index: 10; }
 .person { opacity: 0.9; z-index: 20; pointer-events: none; }
@@ -451,13 +827,27 @@ body.dragging-frame .frame-vis:hover {
 .mat2-visual { border-style: solid; border-color: var(--m2-color, #ffffff); box-sizing: border-box; position: absolute; z-index: 3; box-shadow: inset 0 2px 6px rgba(0,0,0,0.3), 0 2px 5px rgba(0,0,0,0.15); pointer-events: none; background: transparent; }
 .art-visual { background: var(--art-color); display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; font-weight: bold; position: absolute; z-index: 4; border: 1px solid #aaa; box-sizing: border-box; box-shadow: inset 0 2px 8px rgba(0,0,0,0.2); text-align: center; pointer-events: none; transition: background 0.1s, color 0.1s;}
 
-/* Clean ID Tags - No White Fuzz, pure transparency box */
-.frame-id-tag { position: absolute; font-weight: 900; color: #000; line-height: 1; z-index: 30; pointer-events: none; transform: translate(4px, -4px); text-shadow: none; font-size: calc(var(--dim-font-size) * 1.2); }
-.od-id-tag { position: absolute; font-weight: 900; color: #555; line-height: 1; z-index: 30; pointer-events: none; transform: translate(calc(-100% - 4px), -4px); text-shadow: none; font-size: calc(var(--dim-font-size) * 0.85); }
+/* Clean ID Tags - No White Fuzz, pure transparency box.
+ * Color + font now driven by the unified --dim-* variables. Relative size
+ * multipliers preserved so the visual hierarchy stays (frame tags larger,
+ * OD tags smaller). */
+.frame-id-tag { position: absolute; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; color: var(--dim-color); font-family: var(--dim-font-family); line-height: 1; z-index: 30; pointer-events: none; transform: translate(4px, -4px); text-shadow: none; font-size: calc(var(--dim-font-size) * 1.2); background: rgba(255,255,255,0.8); padding: 2px 3px; border-radius: 2px; }
+.od-id-tag { position: absolute; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; color: var(--dim-color); font-family: var(--dim-font-family); line-height: 1; z-index: 30; pointer-events: none; transform: translate(calc(-100% - 4px), -4px); text-shadow: none; font-size: calc(var(--dim-font-size) * 0.85); background: rgba(255,255,255,0.8); padding: 2px 3px; border-radius: 2px; }
 
 /* All grid layers hidden by default */
 #label-layer, #od-layer, #dim-layer, #guide-layer, #grid-layer, #frame-center-layer { display: none; }
-.dim-layer, .guide-layer, .grid-layer, .arch-dim-layer, .od-layer, .frame-center-layer, .label-layer { position: absolute; inset: 0; pointer-events: none; z-index: 5; }
+.dim-layer, .grid-layer, .arch-dim-layer, .od-layer, .frame-center-layer, .label-layer { position: absolute; inset: 0; pointer-events: none; z-index: 20; }
+/* Guide layer (wall-center + hang-height lines + floor-to-hang dim) sits
+ * ABOVE frames (z-index 10) so these reference lines read over the artwork.
+ * The dimension layers above sit even higher so dim callouts win over the
+ * guide lines where they overlap (keeps numbers readable). */
+.guide-layer { position: absolute; inset: 0; pointer-events: none; z-index: 15; }
+/* Group-dimension callouts. The layer itself ignores pointer events so it
+ * doesn't block frame interaction; only the delete (×) buttons inside opt
+ * back into pointer-events. Slightly higher z-index so dashed boxes read
+ * above frames. */
+.group-dim-layer { position: absolute; inset: 0; pointer-events: none; z-index: 21; }
+.group-dim-layer > div[title] { pointer-events: auto; }
 .grid-layer { z-index: 2; } 
 
 /* ========================================= */
@@ -466,27 +856,28 @@ body.dragging-frame .frame-vis:hover {
 .arch-dim { position: absolute; display: flex; align-items: center; justify-content: center; z-index: 40; }
 .arch-dim-h { height: 1px; flex-direction: row; }
 .arch-dim-v { width: 1px; flex-direction: column; }
-.dim-line-segment { flex: 1; height: 1.5px; background: var(--arch-line); }
-.dim-line-segment-v { flex: 1; width: 1.5px; background: var(--arch-line); }
+.dim-line-segment { flex: 1; height: var(--dim-weight); background: var(--arch-line); }
+.dim-line-segment-v { flex: 1; width: var(--dim-weight); background: var(--arch-line); }
 
-.arch-label-new { font-size: var(--dim-font-size); font-family: "Times New Roman", Times, serif; font-weight: bold; color: #000; padding: 0 6px; white-space: nowrap; background: transparent; }
+.arch-label-new { display: inline-flex; align-items: center; justify-content: center; line-height: 1; font-size: var(--dim-font-size); font-family: var(--dim-font-family); font-weight: var(--dim-font-weight); color: var(--dim-color); padding: 2px 6px; white-space: nowrap; background: #ffffff; border-radius: 3px; box-sizing: border-box; }
 
-.hang-guide { position: absolute; width: 100%; border-top: 2px dashed var(--accent); }
+.hang-guide { position: absolute; width: 100%; border-top: var(--dim-weight) dashed var(--dim-color); }
 .hang-label { 
     position: absolute; 
-    bottom: 2px;  /* sits just above the dashed line */
-    right: 10px; 
-    color: var(--accent); 
-    font-size: 10px; 
-    font-weight: bold; 
-    background: var(--bg-panel); 
+    bottom: 4px;  /* sits just above the dashed line */
+    right: 40px; 
+    color: var(--dim-color); 
+    font-family: var(--dim-font-family);
+    font-size: var(--dim-font-size); 
+    font-weight: 600; 
+    letter-spacing: 0.5px;
+    background: rgba(255,255,255,0.85); 
     padding: 1px 6px; 
     border-radius: 3px; 
     white-space: nowrap;
-    border: 1px solid var(--accent);
 }
-.center-guide { position: absolute; height: 100%; border-left: 1.5px dashed var(--guide-color); display: flex; justify-content: center; }
-.center-label { position: absolute; top: 10px; color: var(--guide-color); font-size: 10px; font-weight: bold; left: 5px; }
+.center-guide { position: absolute; height: 100%; border-left: var(--dim-weight) dashed var(--dim-color); display: flex; justify-content: center; }
+.center-label { position: absolute; display: inline-flex; align-items: center; line-height: 1; top: 10px; color: var(--dim-color); font-family: var(--dim-font-family); font-size: var(--dim-font-size); font-weight: var(--dim-font-weight); left: 5px; background: rgba(255,255,255,0.8); padding: 2px 5px; border-radius: 3px; white-space: nowrap; }
 .crosshair-h { position: absolute; height: 1px; border-top: 1px dashed #aaa; }
 .crosshair-v { position: absolute; width: 1px; border-left: 1px dashed #aaa; }
 
@@ -504,7 +895,11 @@ body.dragging-frame .frame-vis:hover {
     gap: 6px;
     width: 100%;
 }
-.frame-item-label { flex: 1; min-width: 0; }
+/* Natural width — just contains the large letter. The ITEM CODE input
+ * (frame-item-id-inline) sits to the right of this. The icon row pushes
+ * to the far right via margin-left:auto. */
+.frame-item-label { min-width: 0; flex-shrink: 0; }
+.frame-item-top-row .frame-item-icons { margin-left: auto; }
 
 /* Frame ID + letter-target row: lives directly below the top icon row.
  * Contains the (ART.001) ID and the letter target buttons inline. Wraps
@@ -523,11 +918,136 @@ body.dragging-frame .frame-vis:hover {
     line-height: 1.2;
     flex-shrink: 0;
 }
+
+/* Editable ITEM CODE input — disguised as a muted label until you interact
+ * with it. Hover/focus brings up a subtle background + border to signal
+ * editability. The bordered "active" state matches the project's input
+ * styling elsewhere.
+ *
+ * Note on specificity: the global `input[type="text"]` rule sets width:100%,
+ * which would otherwise override these 80px widths in flex containers
+ * (because attribute-selector specificity beats plain class). We use
+ * `input.frame-item-id-edit` so class+element beats attribute+element. */
+input.frame-item-id-edit {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    padding: 0 4px;
+    font-family: inherit;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    width: 80px;
+    max-width: 80px;
+    min-width: 0;
+    height: 18px;
+    outline: none;
+    transition: 0.15s;
+    box-sizing: border-box;
+}
+input.frame-item-id-edit:hover {
+    background: var(--bg-input);
+    border-color: var(--border-color);
+    color: var(--text-main);
+}
+input.frame-item-id-edit:focus {
+    background: var(--bg-input);
+    border-color: var(--accent);
+    color: var(--text-strong);
+}
 .frame-item-targets-inline {
     display: inline-flex;
     flex-wrap: wrap;
     gap: 2px;
     align-items: center;
+}
+
+/* Inline ITEM CODE variant — used in the top row of the panel item. Sized
+ * to fill its grid column (which is 100px wide). Border always visible so
+ * users know it's editable; hover/focus intensify the border + background.
+ * Prefixed with `input.` to override the global `input[type="text"] { width: 100% }`
+ * rule (attribute selector specificity would otherwise win). */
+input.frame-item-id-inline {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    flex-shrink: 0;
+    flex-grow: 0;
+    border: 1px solid var(--border-color);
+    background: var(--bg-input);
+    color: var(--text-main);
+}
+
+/* Container for the target letter chips, now on its own row below the
+ * top-row controls. Only renders when there are actual targets, so frames
+ * with no dimensions to peers stay single-row-tall. Tight padding + starts
+ * at the letter column so chips appear directly below the frame letter. */
+.frame-item-targets-row {
+    padding-top: 2px;
+    padding-left: 0;
+}
+.frame-item-targets-row .frame-item-targets-inline {
+    gap: 1px;
+}
+
+/* Collapsed edge-gap group — single button instead of 4. Width matches the
+ * column header (26px). */
+.edge-gap-group-collapsed {
+    width: 26px;
+}
+
+/* The edge-gap trigger button + its count badge.
+ * .has-active changes the button background so it stands out when any
+ * direction is toggled on, even before noticing the badge. */
+.edge-gap-trigger {
+    position: relative;
+}
+.edge-gap-trigger.has-active {
+    background: color-mix(in srgb, var(--accent) 18%, transparent);
+    color: var(--accent);
+}
+.edge-gap-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.55rem;
+    font-weight: bold;
+    line-height: 1;
+    min-width: 13px;
+    height: 13px;
+    padding: 0 3px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+/* Floating popover for the 4 edge-gap direction toggles. Anchored to the
+ * trigger button by positionEdgeGapPopover; centered around the button. */
+.edge-gap-popover {
+    position: fixed;
+    z-index: 1000;
+    background: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 8px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    display: none;
+}
+.edge-gap-popover-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 28px);
+    grid-template-rows: repeat(3, 28px);
+    gap: 2px;
+    place-items: center;
+}
+.edge-gap-popover-center {
+    width: 12px;
+    height: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 2px;
 }
 
 /* Large letter label (A, B, C, ...) on the top row of each frame panel.
@@ -611,7 +1131,25 @@ button#matLinkBtn.active:hover { background: transparent !important; color: var(
  * active state. Used by the per-frame distance dim toggles (↑↓←→). */
 .icon-btn.active { background: var(--accent) !important; color: white; }
 .dim-btn.active { background: var(--text-strong); color: var(--bg-main); border-color: var(--text-strong); }
-.frame-item-icons { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
+.frame-item-icons {
+    /* Use CSS Grid with the same template as the header for guaranteed
+     * column alignment. .elev-col-icons uses the same template via the
+     * --elev-col-template CSS variable. Each column has an explicit width
+     * matching the header. */
+    display: grid;
+    grid-template-columns: var(--elev-col-template);
+    align-items: center;
+    column-gap: 4px;
+    flex-shrink: 0;
+}
+/* Generic column wrapper inside .frame-item-icons. The grid handles widths
+ * (the inline width attribute is now redundant but harmless). */
+.frame-col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+}
 
 /* WALL ALIGN group: 2 quick-snap buttons (snap to hang, snap to wall center).
  * Sits at the FAR LEFT of the icon row. Matches column header width
@@ -638,10 +1176,22 @@ button#matLinkBtn.active:hover { background: transparent !important; color: var(
     gap: 2px;
 }
 
+/* Shared grid template — both .elev-col-icons (header) and .frame-item-icons
+ * (row) use this exact template, guaranteeing column-by-column alignment.
+ * Columns: Item Code | Wall Align | Edge | Toggle | Move | Edit | Dupe | Del */
+.elev-sidebar {
+    --elev-col-template: 100px 52px 26px 38px 26px 26px 26px 26px;
+}
 .elev-col-header { display: flex; align-items: flex-end; justify-content: space-between; padding: 0 10px 4px; border-bottom: 1px solid var(--border-color); margin-bottom: 2px; gap: 6px; }
 .elev-col-left { flex: 1; min-width: 0; }
 .elev-sort-btn { width: auto; font-size: 0.6rem; padding: 3px 8px; height: 22px; }
-.elev-col-icons { display: flex; align-items: flex-end; gap: 4px; flex-shrink: 0; }
+.elev-col-icons {
+    display: grid;
+    grid-template-columns: var(--elev-col-template);
+    align-items: flex-end;
+    column-gap: 4px;
+    flex-shrink: 0;
+}
 .elev-col-label { display: flex; align-items: flex-end; justify-content: center; text-align: center; }
 .elev-col-label span { font-size: 0.45rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; line-height: 1.2; }
 .elev-col-iconbtn { background: transparent; border: none; padding: 0; margin: 0; color: var(--text-muted); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; line-height: 1; }
@@ -652,3 +1202,22 @@ button#matLinkBtn.active:hover { background: transparent !important; color: var(
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+/* Unit legend — top-left corner of the elevation wall. Shown when the
+ * interior dimension suffix is toggled off, so bare numbers are unambiguous. */
+.elev-unit-legend {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 22;
+    color: var(--dim-color);
+    font-family: var(--dim-font-family);
+    font-size: calc(var(--dim-font-size) * 0.9);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    background: rgba(255,255,255,0.9);
+    border: 1px solid var(--dim-color);
+    border-radius: 3px;
+    padding: 3px 8px;
+    pointer-events: none;
+    white-space: nowrap;
+}
