@@ -773,7 +773,7 @@ select.no-arrow::-ms-expand { display: none; }
 #export-wrap { padding: 80px; min-width: max-content; min-height: max-content; margin: auto; display: flex; justify-content: center; align-items: center; background: transparent; }
 
 /* Light grey wall default for crisp dimensional text contrast */
-#wall { background: #f0f2f5; border-bottom: 4px solid var(--wall-line, #333); border-left: 1px solid var(--wall-line, #333); border-right: 1px solid var(--wall-line, #333); border-top: 1px solid var(--wall-line, #333); position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
+#wall { background: #f0f2f5; border-bottom: 1px solid var(--wall-line, #333); border-left: 1px solid var(--wall-line, #333); border-right: 1px solid var(--wall-line, #333); border-top: 1px solid var(--wall-line, #333); position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
 
 .draggable { position: absolute; cursor: move; user-select: none; z-index: 10; }
 .person { opacity: 0.9; z-index: 20; pointer-events: none; }
@@ -836,17 +836,18 @@ body.dragging-frame .frame-vis:hover {
 
 /* All grid layers hidden by default */
 #label-layer, #od-layer, #dim-layer, #guide-layer, #grid-layer, #frame-center-layer { display: none; }
-.dim-layer, .grid-layer, .arch-dim-layer, .od-layer, .frame-center-layer, .label-layer { position: absolute; inset: 0; pointer-events: none; z-index: 20; }
+.dim-layer, .grid-layer, .arch-dim-layer, .od-layer, .frame-center-layer, .label-layer { position: absolute; inset: 0; pointer-events: none; z-index: 30; }
+#frame-layer { position: absolute; inset: 0; z-index: 18; }
 /* Guide layer (wall-center + hang-height lines + floor-to-hang dim) sits
  * ABOVE frames (z-index 10) so these reference lines read over the artwork.
  * The dimension layers above sit even higher so dim callouts win over the
  * guide lines where they overlap (keeps numbers readable). */
-.guide-layer { position: absolute; inset: 0; pointer-events: none; z-index: 15; }
+.guide-layer { position: absolute; inset: 0; pointer-events: none; z-index: 29; }
 /* Group-dimension callouts. The layer itself ignores pointer events so it
  * doesn't block frame interaction; only the delete (×) buttons inside opt
  * back into pointer-events. Slightly higher z-index so dashed boxes read
  * above frames. */
-.group-dim-layer { position: absolute; inset: 0; pointer-events: none; z-index: 21; }
+.group-dim-layer { position: absolute; inset: 0; pointer-events: none; z-index: 31; }
 .group-dim-layer > div[title] { pointer-events: auto; }
 .grid-layer { z-index: 2; } 
 
@@ -864,20 +865,29 @@ body.dragging-frame .frame-vis:hover {
 .hang-guide { position: absolute; width: 100%; border-top: var(--dim-weight) dashed var(--dim-color); }
 .hang-label { 
     position: absolute; 
-    bottom: 4px;  /* sits just above the dashed line */
-    right: 40px; 
+    right: 100%;            /* sit OUTSIDE the wall, left of its left edge */
+    top: 50%;
+    /* Vertical orientation, reading bottom-to-top (conventional for a
+       left-side label), centered on the dashed hang line. */
+    writing-mode: vertical-rl;
+    transform: translateY(-50%) rotate(180deg);
+    transform-origin: center;
+    margin-right: 6px;      /* gap from the wall edge */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
     color: var(--dim-color); 
     font-family: var(--dim-font-family);
     font-size: var(--dim-font-size); 
-    font-weight: 600; 
-    letter-spacing: 0.5px;
+    font-weight: var(--dim-font-weight); 
     background: rgba(255,255,255,0.85); 
-    padding: 1px 6px; 
+    padding: 6px 2px; 
     border-radius: 3px; 
     white-space: nowrap;
 }
 .center-guide { position: absolute; height: 100%; border-left: var(--dim-weight) dashed var(--dim-color); display: flex; justify-content: center; }
-.center-label { position: absolute; display: inline-flex; align-items: center; line-height: 1; top: 10px; color: var(--dim-color); font-family: var(--dim-font-family); font-size: var(--dim-font-size); font-weight: var(--dim-font-weight); left: 5px; background: rgba(255,255,255,0.8); padding: 2px 5px; border-radius: 3px; white-space: nowrap; }
+.center-label { position: absolute; bottom: 100%; left: 0; transform: translate(-50%, -6px); display: inline-flex; align-items: center; line-height: 1; color: var(--dim-color); font-family: var(--dim-font-family); font-size: var(--dim-font-size); font-weight: var(--dim-font-weight); background: rgba(255,255,255,0.8); padding: 2px 6px; border-radius: 3px; white-space: nowrap; }
 .crosshair-h { position: absolute; height: 1px; border-top: 1px dashed #aaa; }
 .crosshair-v { position: absolute; width: 1px; border-left: 1px dashed #aaa; }
 
@@ -1221,3 +1231,14 @@ button#matLinkBtn.active:hover { background: transparent !important; color: var(
     pointer-events: none;
     white-space: nowrap;
 }
+
+/* Drag grip for manually repositioning dimension lines. Excluded from exports
+ * via data-export-skip / data-html2canvas-ignore. */
+.dim-drag-grip { pointer-events: auto; }
+.arch-dim:hover .dim-drag-grip { opacity: 0.85; }
+
+/* Custom measured-line tool button active state */
+#lineToolBtn.active { background: var(--accent, #3b82f6); color: #fff; border-color: var(--accent, #3b82f6); }
+#lineToolBtn.active .svg-icon { stroke: #fff; }
+.custom-line { pointer-events: auto; cursor: move; }
+.custom-line .arch-label-new { pointer-events: auto; }
