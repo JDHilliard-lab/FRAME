@@ -7,7 +7,7 @@
 // repo fork — the version pill turns orange to make it visually obvious
 // you're on the development build, not the production one users see.
 const APP_VERSION = '1.1';
-const APP_BUILD = 'dev';  // 'prod' (green dot) or 'dev' (orange dot)
+const APP_BUILD = 'prod';  // 'prod' (green dot) or 'dev' (orange dot)
 
 let currentView = 'dashboard';
 let dashUnit = 'in';
