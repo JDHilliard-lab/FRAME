@@ -603,7 +603,7 @@
                         <!-- Group Dimension Box + Edge Gap toggles. These turn
                              blue (active) when the corresponding annotation
                              exists, and clicking them shows/hides it. -->
-                        <div class="layout-guides-grid" style="grid-template-columns: repeat(4, 1fr); margin-top:6px;">
+                        <div class="layout-guides-grid" style="grid-template-columns: repeat(5, 1fr); margin-top:6px;">
                             <button class="layout-guide-btn toggle-status active" id="wallDimToggle" title="Wall Dimensions — show/hide overall wall width &amp; height dimensions" onclick="toggleWallDims(this)">
                                 <svg class="svg-icon" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="11" fill="none"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
                             </button>
@@ -616,7 +616,14 @@
                             <button class="layout-guide-btn toggle-status" id="unitSuffixToggle" title="Unit Suffix — show/hide the unit (in/cm/mm) after interior dimension numbers. Outer wall dims always show it." onclick="toggleUnitSuffix(this)">
                                 <svg class="svg-icon" viewBox="0 0 24 24"><text x="12" y="16" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor" stroke="none">”</text><path d="M4 19h16" stroke-width="1.5"/></svg>
                             </button>
+                            <button class="layout-guide-btn toggle-status" id="customLinesToggle" title="Custom Lines — show/hide measurement lines drawn with the measure tool" onclick="toggleCustomLinesVisibility(this)">
+                                <svg class="svg-icon" viewBox="0 0 24 24"><path d="M3 17 L17 3" stroke-width="1.6"/><path d="M2 14 L6 18 M5 11 L9 15 M8 8 L12 12 M11 5 L15 9" stroke-width="1.2"/></svg>
+                            </button>
                         </div>
+                        <button class="action-btn btn-secondary" id="resetDimPosBtn" onclick="resetDimOffsets()" title="Reset any manually-dragged dimension lines back to their default positions" style="width:100%; height:26px; margin-top:6px; font-size:0.6rem; letter-spacing:0.3px; display:flex; align-items:center; justify-content:center; gap:6px;">
+                            <svg class="svg-icon" viewBox="0 0 24 24" style="width:13px;height:13px;"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+                            RESET DIMENSION POSITIONS
+                        </button>
                     </div>
 
                 </div>
@@ -703,6 +710,9 @@
                 <button class="action-btn btn-secondary" id="shortcutsBtn" title="Keyboard shortcuts" onclick="document.getElementById('shortcutsModal').style.display='flex'" style="position:absolute; top:10px; left:10px; z-index:50; width:32px; height:28px; padding:0; display:flex; align-items:center; justify-content:center;">
                     <svg class="svg-icon" viewBox="0 0 24 24" style="width:18px;height:18px;"><rect x="2" y="6" width="20" height="12" rx="2" fill="none"/><line x1="6" y1="10" x2="6" y2="10"/><line x1="10" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="14" y2="10"/><line x1="18" y1="10" x2="18" y2="10"/><line x1="7" y1="14" x2="17" y2="14"/></svg>
                 </button>
+                <button class="action-btn btn-secondary" id="lineToolBtn" title="Measure tool (M) — click two points to draw a custom dimension line. Snaps to frame/wall/floor/ceiling edges. Horizontal or vertical." onclick="toggleLineTool()" style="position:absolute; top:10px; left:50px; z-index:50; width:32px; height:28px; padding:0; display:flex; align-items:center; justify-content:center;">
+                    <svg class="svg-icon" viewBox="0 0 24 24" style="width:18px;height:18px;"><path d="M3 17 L17 3" stroke-width="1.6"/><path d="M2 14 L6 18 M5 11 L9 15 M8 8 L12 12 M11 5 L15 9" stroke-width="1.2"/></svg>
+                </button>
                 <div id="export-wrap">
                     <div id="wall">
                         <div id="grid-layer" class="grid-layer"></div>
@@ -713,6 +723,7 @@
                         <div id="guide-layer" class="guide-layer"></div>
                         <div id="od-layer" class="od-layer"></div>
                         <div id="group-dim-layer" class="group-dim-layer"></div>
+                        <div id="custom-lines-layer" class="dim-layer" style="z-index:32;"></div>
                         <div id="label-layer" class="label-layer"></div>
                         
                         <div id="person-wrap" class="draggable" style="position:absolute; bottom:0; left:-60px; z-index:20; display:none;">
@@ -1084,26 +1095,27 @@
     <div style="background:var(--bg-panel); padding:20px; border-radius:8px; width:440px; border:1px solid var(--border-color); box-shadow:0 15px 35px rgba(0,0,0,0.4); max-height: 90vh; overflow-y: auto;">
         <h3 style="margin-top:0; margin-bottom: 14px; font-size:1.1rem; color:var(--text-strong);">Settings</h3>
 
-        <!-- UNIT: in, cm, mm. Single source of truth for unit choice;
-             moved out of the Wall row to free up sidebar space. Calls
-             setElevUnit() which converts all stored values + labels. -->
+        <!-- UNIT + HEIGHTS row: unit choice, hang height, and baseboard height
+             share one row to keep the panel compact. setElevUnit() converts
+             all stored values + labels. Baseboard draws a horizontal line at
+             that height (0 = off), same lineweight as the wall line. -->
         <div style="margin-bottom: 12px;">
-            <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.7px; font-weight:600; margin-bottom: 6px;">Units</div>
-            <div class="unit-toggle unit-toggle-3" style="height:34px; width:100%;">
-                <button id="elevBtnInch" class="active" onclick="setElevUnit('in')">IN</button>
-                <button id="elevBtnCm" onclick="setElevUnit('cm')">CM</button>
-                <button id="elevBtnMm" onclick="setElevUnit('mm')">MM</button>
-            </div>
-        </div>
-
-        <!-- HEIGHTS: hang line. Font size moved to the Label & Dimension
-             Style section below (single source of truth for dim font size). -->
-        <div style="margin-bottom: 12px;">
-            <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.7px; font-weight:600; margin-bottom: 6px;">Heights</div>
-            <div style="background:var(--bg-subpanel); padding:12px; border-radius:6px; border:1px solid var(--border-color);">
-                <div>
-                    <label style="font-size:0.65rem; color:var(--text-muted); display:block; margin-bottom:4px;" title="Center of art height. Gallery/museum standard is 57&quot;">Hang Height</label>
-                    <input type="number" id="hangHeight" value="57" oninput="drawElevAll()" onchange="pushHistory()" style="padding: 6px; font-size: 0.85rem; width:100%; text-align: center; box-sizing:border-box;">
+            <div style="display:flex; gap:10px; align-items:flex-end;">
+                <div style="flex:1.4;">
+                    <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.7px; font-weight:600; margin-bottom: 6px;">Units</div>
+                    <div class="unit-toggle unit-toggle-3" style="height:34px; width:100%;">
+                        <button id="elevBtnInch" class="active" onclick="setElevUnit('in')">IN</button>
+                        <button id="elevBtnCm" onclick="setElevUnit('cm')">CM</button>
+                        <button id="elevBtnMm" onclick="setElevUnit('mm')">MM</button>
+                    </div>
+                </div>
+                <div style="flex:1;">
+                    <label style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.7px; font-weight:600; display:block; margin-bottom:6px;" title="Center of art height. Gallery/museum standard is 57&quot;">Hang Height</label>
+                    <input type="number" id="hangHeight" value="57" oninput="drawElevAll()" onchange="pushHistory()" style="padding: 7px 6px; font-size: 0.85rem; width:100%; text-align: center; box-sizing:border-box; height:34px;">
+                </div>
+                <div style="flex:1;">
+                    <label style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.7px; font-weight:600; display:block; margin-bottom:6px;" title="Baseboard height from the floor. 0 = no baseboard.">Baseboard</label>
+                    <input type="number" id="baseboardHeight" value="4" oninput="updateBaseboard()" onchange="pushHistory()" style="padding: 7px 6px; font-size: 0.85rem; width:100%; text-align: center; box-sizing:border-box; height:34px;">
                 </div>
             </div>
         </div>
@@ -1196,6 +1208,10 @@
                 <label style="display:flex; align-items:center; gap:8px; margin-top:10px; font-size:0.7rem; color:var(--text-main); cursor:pointer;" title="Show red alignment guide lines that snap frames to each other, the wall, and the hang line while dragging.">
                     <input type="checkbox" id="snapEnabledToggle" checked onchange="toggleSnapEnabled(this.checked)" style="width:15px; height:15px; cursor:pointer;">
                     Snap to alignment guides (red lines while dragging)
+                </label>
+                <label style="display:flex; align-items:center; gap:8px; margin-top:8px; font-size:0.7rem; color:var(--text-main); cursor:pointer;" title="When dragging a dimension line, snap its position to whole-inch increments and align it with other dimension lines (e.g. matching left/right edge-gap lines).">
+                    <input type="checkbox" id="dimSnapEnabledToggle" checked onchange="toggleDimSnapEnabled(this.checked)" style="width:15px; height:15px; cursor:pointer;">
+                    Snap dimension lines (increments &amp; align to each other)
                 </label>
             </div>
         </div>
