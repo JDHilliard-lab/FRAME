@@ -7,7 +7,7 @@
 // repo fork — the version pill turns orange to make it visually obvious
 // you're on the development build, not the production one users see.
 const APP_VERSION = '1.1';
-const APP_BUILD = 'prod';  // 'prod' (green dot) or 'dev' (orange dot)
+const APP_BUILD = 'dev';  // 'prod' (green dot) or 'dev' (orange dot)
 
 let currentView = 'dashboard';
 let dashUnit = 'in';
@@ -8871,7 +8871,7 @@ function drawElevGuides(wallW, wallH) {
     cl.style.left = ((wallW / 2) * elevScale) + 'px'; cl.style.bottom = '0px';
     // WALL CENTER label sits OUTSIDE the wall, just above the top of the
     // center line (was inside near the top, where it clashed with frames/dims).
-    cl.innerHTML = `<span class="center-label">WALL CENTER</span>`;
+    cl.innerHTML = `<span class="center-label">WALL\u00A0CENTER</span>`;
     guideLayer.appendChild(cl);
 
     const hangVal = getHangHeight();
@@ -10575,6 +10575,31 @@ async function exportElevPNG() {
             scale: 3,
             useCORS: true,
             allowTaint: true,
+            onclone: (clonedDoc) => {
+                // html2canvas renders `writing-mode: vertical-rl` + rotate(180)
+                // upside-down. In the CLONE only, rebuild the hang label as
+                // plain horizontal text rotated -90° (reads bottom→top, matching
+                // the screen). Screen/SVG output is unaffected.
+                //
+                // Positioning must NOT depend on the text width: when horizontal
+                // the box is wide, so anchoring by right:100% pushes it too far
+                // left (onto the wall-height dim line). Instead we rotate about
+                // the element's CENTER and use percentage translates (which
+                // reference the element's own border-box) so the rotated block
+                // lands centered just-left-of the wall edge, on the hang line,
+                // regardless of how long the label text is.
+                clonedDoc.querySelectorAll('.hang-label').forEach(el => {
+                    el.style.writingMode = 'horizontal-tb';
+                    el.style.whiteSpace = 'nowrap';
+                    el.style.padding = '2px 6px';
+                    el.style.marginRight = '0';
+                    el.style.transformOrigin = 'center';
+                    // translate(50%,-50%) rotate(-90deg): centers the rotated
+                    // block at the wall's left edge on the line; the -20px in X
+                    // tucks it just outside the wall (clear of the red dim line).
+                    el.style.transform = 'translate(calc(50% - 20px), -50%) rotate(-90deg)';
+                });
+            },
         });
         const a = document.createElement('a');
         a.download = `${elevations[currentElevIndex].name.replace(/[^a-z0-9]/gi, '_')}.png`;
