@@ -3648,6 +3648,14 @@ function importDashCSV(e) {
             d.fW = cellNum(cols, 'Frame (Width)', 1.25);
             d.fHeight = cellNum(cols, 'Frame (Height)', 0);
             d.rabbetDepth = cellNum(cols, 'Rabbet Depth', 0);
+            // Floater face width (swatch _f tag), stored in inches in the CSV.
+            // Restore in the current dashboard unit. Only meaningful for floaters.
+            {
+                const rawFace = cellOr(cols, 'RAW Frame Face W (in)', '');
+                if (rawFace !== '' && !isNaN(parseFloat(rawFace))) {
+                    d._faceWidth = dashFmt(parseFloat(rawFace) * unitFactor('in', dashUnit));
+                }
+            }
 
             // Float mount fields. These are populated only when product is float-mount-active.
             // Auto-detect by reading the FM Backer Name column — if present, the row uses float mount.
@@ -5474,7 +5482,13 @@ function buildSpecStrings(r) {
     // Skipped entirely for Wrapped Canvas (no frame at all).
     let frameSize = '';
     if (!isFL) {
-        const fwStr = fmt(r.fW);
+        // For floaters, the visible frame "width" is the canvas FACE width (the
+        // swatch _f tag, stored as _faceWidth), not the moulding profile width.
+        let widthForSize = r.fW;
+        if (isC && r._faceWidth !== undefined && r._faceWidth !== null && r._faceWidth !== '' && parseFloat(r._faceWidth) > 0) {
+            widthForSize = r._faceWidth;
+        }
+        const fwStr = fmt(widthForSize);
         const fhStr = fmt(r.fHeight);
         const rabStr = fmt(r.rabbetDepth);
         const parts = [];
@@ -5663,9 +5677,13 @@ function buildSpecStrings(r) {
         const fwSwatch = parseFloat(r._faceWidth);
         if (!isNaN(fInset) && !isNaN(fwSwatch) && fInset > fwSwatch) {
             const reveal = fInset - fwSwatch;
-            floatRevealLine = `${fmt(reveal) || 0}" AA`;
+            floatRevealLine = `${fmt(reveal) || 0}${sufLoose}AA`;
         } else {
-            floatRevealLine = '0.25" AA';
+            // Studio default 0.25" — expressed in the CURRENT display unit so
+            // the value and its suffix never disagree (e.g. cm value with an
+            // inch mark). 0.25in → 0.635cm → 6.35mm.
+            const defReveal = 0.25 * unitFactor('in', _u);
+            floatRevealLine = `${fmt(defReveal)}${sufLoose}AA`;
         }
     }
 
@@ -5673,7 +5691,7 @@ function buildSpecStrings(r) {
     let stretcherLine = '';
     if (isC || isFL) {
         const cd = parseFloat(r.canvasDepth) || 0;
-        if (cd > 0) stretcherLine = `${fmt(cd)}"`;
+        if (cd > 0) stretcherLine = `${fmt(cd)}${sufTight}`;
     }
 
     // ── Substrate (any product where user typed something) ─────────────────
@@ -5874,9 +5892,11 @@ function buildDashCSVString() {
         // in whatever output unit the user picks, so one CSV can be re-rendered
         // in any of IN/CM/MM cleanly.
         `RAW Frame W (in),RAW Frame H (in),RAW Rabbet (in),` +
+        `RAW Frame Face W (in),` +
         `RAW Mat T (in),RAW Mat B (in),RAW Mat L (in),RAW Mat R (in),` +
         `RAW Mat 2 Reveal (in),` +
-        `RAW Paper W (in),RAW Paper H (in),RAW White Border (in)\n`;
+        `RAW Paper W (in),RAW Paper H (in),RAW White Border (in),` +
+        `RAW Float Reveal (in),RAW Stretcher Depth (in)\n`;
 
     dashProjectData.forEach(r => {
         // Factor to convert this row's display values back to inches.
@@ -5992,6 +6012,11 @@ function buildDashCSVString() {
             iFL ? '' : dashFmt((parseFloat(r.fW) || 0) * _toIn),
             iFL ? '' : dashFmt((parseFloat(r.fHeight) || 0) * _toIn),
             iFL ? '' : (r.rabbetDepth ? dashFmt(parseFloat(r.rabbetDepth) * _toIn) : ''),
+            // Floater face width (the swatch's _f tag): the visible frame face
+            // on a floater. Used by the InDesign spec script as the floater's
+            // "Frame Size" width. Only floaters have it; blank otherwise.
+            (iC && r._faceWidth !== undefined && r._faceWidth !== null && r._faceWidth !== '')
+                ? dashFmt((parseFloat(r._faceWidth) || 0) * _toIn) : '',
             (r.m1A !== false && !matsHidden) ? dashFmt((parseFloat(r.m1T) || 0) * _toIn) : '',
             (r.m1A !== false && !matsHidden) ? dashFmt((parseFloat(r.m1B) || 0) * _toIn) : '',
             (r.m1A !== false && !matsHidden) ? dashFmt((parseFloat(r.m1L) || 0) * _toIn) : '',
@@ -5999,7 +6024,24 @@ function buildDashCSVString() {
             (r.m2A && !matsHidden) ? dashFmt((parseFloat(r.m2) || 0) * _toIn) : '',
             (iFM || isFauxMat) ? dashFmt(Math.max(0, paperSizeW) * _toIn) : '',
             (iFM || isFauxMat) ? dashFmt(Math.max(0, paperSizeH) * _toIn) : '',
-            (iFM || isFauxMat) ? dashFmt(whiteBorder * _toIn) : ''
+            (iFM || isFauxMat) ? dashFmt(whiteBorder * _toIn) : '',
+            // RAW Float Reveal (in): the air gap on a floater. Derived as
+            // floaterInset - faceWidth when both known, else the studio default
+            // 0.25". Always in inches so the script can render it in any unit.
+            (function() {
+                if (!iC) return '';
+                const fi = parseFloat(r.floaterInset);
+                const fwS = parseFloat(r._faceWidth);
+                let revIn;
+                if (!isNaN(fi) && !isNaN(fwS) && fi > fwS) {
+                    revIn = (fi - fwS) * _toIn;   // display units → inches
+                } else {
+                    revIn = 0.25;                  // studio default, already inches
+                }
+                return dashFmt(revIn);
+            })(),
+            // RAW Stretcher Depth (in): canvas depth in inches (canvas products).
+            (iC || iFL) ? (r.canvasDepth ? dashFmt(parseFloat(r.canvasDepth) * _toIn) : '') : ''
         ];
         csv += d.map(s => `"${String(s).replace(/"/g, '""')}"`).join(',') + '\n';
     });
