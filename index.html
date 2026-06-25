@@ -14,6 +14,9 @@
          works even when CDNs are unreachable. ~95KB. Used by
          batchDownloadAllFramesAsZip() to bundle PNGs + CSV into one download. -->
     <script src="lib-jszip.min.js"></script>
+    <!-- jsPDF: vendored locally (lib-jspdf.min.js) so the presentation-PDF
+         export works with no build step / CDN, matching the GitHub-web workflow. -->
+    <script src="lib-jspdf.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -25,10 +28,11 @@
             <img class="nav-logo logo-dark" src="Frame_logo_light.svg" alt="Frame Logo" style="height:28px; display:block;">
             <img class="nav-logo logo-light" src="Frame_logo_Dark.svg" alt="Frame Logo" style="height:28px; display:none;">
         </div>
+        <div class="nav-tabs-fixed" id="nav-tabs-fixed"></div>
         <div class="nav-tabs" id="nav-tabs-container"></div>
         <button class="nav-add-tab" onclick="addNewElevationTab()">+ Add Wall</button>
         
-        <div style="margin-left: auto; display: flex; gap: 8px; align-items: center;">
+        <div style="margin-left: auto; display: flex; gap: 8px; align-items: center; flex-shrink: 0;">
             <button class="action-btn btn-secondary" style="width:auto;" onclick="toggleTheme()" title="Toggle Light/Dark Theme">
                 <svg class="svg-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
             </button>
@@ -82,9 +86,15 @@
                 <button id="globalBtnCm" onclick="setUnit('cm')">CM</button>
                 <button id="globalBtnMm" onclick="setUnit('mm')">MM</button>
             </div>
+            <button class="action-btn btn-secondary" style="width:auto; padding:0 10px;" title="Set up and generate the presentation / spec PDF" onclick="openSpecPdfModal()">
+                <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+                <span style="font-size:0.7rem; margin-left:4px;">Spec PDF</span>
+            </button>
             <button class="action-btn btn-secondary" style="width:auto;" onclick="document.getElementById('masterLoad').click()">Load Project</button>
             <input type="file" id="masterLoad" accept=".json" style="display:none;" onchange="loadMasterProject(event)">
             <button class="action-btn" style="width:auto;" onclick="saveMasterProject()">Save Project</button>
+            <button class="action-btn btn-secondary" style="width:auto;" onclick="openVersionsModal()" title="Save and compare project versions">Versions</button>
+            <button class="action-btn btn-secondary" style="width:auto;" onclick="openBulkReplaceModal()" title="Replace artwork across many pieces at once">Bulk Images</button>
             <!-- Version pill: rendered into by renderVersionPill() in app.js
                  using APP_VERSION + APP_BUILD constants. Green dot = prod,
                  orange dot = dev. Click opens Help → Version section so
@@ -163,25 +173,25 @@
                 </div>
             </div>
 
-            <div class="dash-right-pane">
+            <div class="dash-right-pane" id="dashRightPane">
                 <div class="preview-wrapper">
                     <div class="preview-container">
                         <div id="dash-frame-visual" class="frame-vis frame-vis-image" style="position:relative;">
                             </div>
                     </div>
-                    <div class="dash-toolbar" style="width:100%; margin-bottom:0; flex-shrink: 0; display:flex; gap:6px;">
+                    <div class="dash-toolbar" style="width:100%; margin-bottom:0; flex-shrink: 0; display:flex; gap:5px; flex-wrap:nowrap; align-items:center;">
                         
-                        <div style="display: flex; gap: 4px; align-items: center; flex: 2.5;">
-                            <div style="position: relative; flex: 1;">
-                                <select id="dashPushSelector" class="action-btn btn-secondary" style="font-size: 0.7rem; justify-content: space-between; padding: 0 8px; width: 100%; -webkit-appearance: none; appearance: none; cursor:pointer;">
+                        <div style="display: flex; gap: 4px; align-items: center; flex: 1.6 1 0; min-width:0;">
+                            <div style="position: relative; flex: 1; min-width:0;">
+                                <select id="dashPushSelector" class="action-btn btn-secondary" style="font-size: 0.68rem; justify-content: space-between; padding: 0 8px; width: 100%; -webkit-appearance: none; appearance: none; cursor:pointer;">
                                     <option value="">-- Push to Wall --</option>
                                 </select>
                                 <svg class="svg-icon" style="width:12px; height:12px; position:absolute; right:8px; top:7px; pointer-events:none;" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
                             </div>
-                            <button class="action-btn" style="width:auto; font-size: 0.7rem; padding: 0 10px;" onclick="pushFrameToElevation()">Send</button>
+                            <button class="action-btn" style="width:auto; font-size: 0.7rem; padding: 0 9px; flex-shrink:0;" onclick="pushFrameToElevation()">Send</button>
                         </div>
                         
-                        <div style="width: 1px; height: 20px; background: var(--border-color); margin: 0 2px;"></div>
+                        <div style="width: 1px; height: 20px; background: var(--border-color); margin: 0 1px; flex-shrink:0;"></div>
 
                         <button class="action-btn btn-secondary" style="flex: 0 0 26px; padding:0;" title="Download Frame PNG" onclick="exportDashNativePNG()">
                             <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 15V3M7 10l5 5 5-5M3 19h18"/></svg>
@@ -225,6 +235,27 @@
                             <div><label>Location</label><input type="text" id="m_location" oninput="syncDashAndCalculate()"></div>
                         </div>
 
+                        <!-- Artwork image: uploaded per row (Upload button or drag-drop),
+                             shown inside the frame opening in the elevation "beauty"
+                             view + presentation PDF. -->
+                        <div style="margin-top:8px;">
+                            <label style="display:block; margin-bottom:4px;">Artwork</label>
+                            <div id="m_artworkDrop" class="art-drop-zone" style="display:flex; align-items:center; gap:10px; padding:8px; border:1px dashed var(--border-color); border-radius:6px; background:var(--bg-input);">
+                                <div id="m_artworkThumb" style="width:38px; height:38px; border:1px solid var(--border-color); border-radius:4px; background:var(--bg-panel) center/cover no-repeat; flex-shrink:0; display:flex; align-items:center; justify-content:center; color:var(--text-muted);">
+                                    <svg class="svg-icon" style="width:18px; height:18px;" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1" fill="none"/><circle cx="8.5" cy="10" r="1.5" fill="currentColor" stroke="none"/><path d="M5 17l4.5-5 3 3.5L16 11l3 4" fill="none"/></svg>
+                                </div>
+                                <button type="button" class="action-btn btn-secondary" style="flex:1 1 auto; min-width:140px; height:34px; padding:0 8px; font-size:0.66rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" onclick="document.getElementById('m_artworkFile').click()">Upload / Drag &amp; Drop Here</button>
+                                <button type="button" id="m_artworkClear" class="action-btn btn-secondary" style="flex:0 0 auto; width:48px; height:34px; padding:0; font-size:0.62rem; display:none;" onclick="clearDashArtwork()">Clear</button>
+                                <input type="file" id="m_artworkFile" accept="image/*" style="display:none;" onchange="handleDashArtworkUpload(event)">
+                            </div>
+                            <div id="m_artCropControls" style="display:none; align-items:center; gap:8px; margin-top:6px;">
+                                <span style="font-size:0.6rem; color:var(--text-muted); white-space:nowrap;">Drag image to pan · Zoom</span>
+                                <input type="range" id="m_artZoom" min="1" max="3" step="0.05" value="1" style="flex:1;" oninput="setArtZoomFromSlider()">
+                                <button type="button" class="action-btn btn-secondary" style="flex:1 1 0; min-width:0; height:26px; padding:0 6px; font-size:0.62rem; white-space:nowrap;" onclick="resetArtCrop()">Reset</button>
+                                <button type="button" id="m_fitToImageBtn" class="action-btn btn-secondary" title="Fit OD to image ratio — resize the frame so the opening matches the artwork's proportions" onclick="fitODToImage()" style="flex:1 1 0; min-width:0; height:26px; padding:0 6px; font-size:0.62rem; font-weight:700; white-space:nowrap;">1:1</button>
+                            </div>
+                        </div>
+
                         <!-- Artist / Title / Art Type were visible form fields earlier in
                              the build; per studio decision they're now hand-entered as
                              captions next to the image in InDesign instead of auto-flowing
@@ -237,9 +268,17 @@
                         <!-- OD + frame profile geometry. Fr. W is the visible frame face;
                              Fr. H is the total profile depth from front to back; Rabbet is
                              the L-pocket depth where art/glass/backing stack up. -->
-                        <div class="grid-row-5" style="display:grid; grid-template-columns: repeat(5, 1fr); gap: 4px;">
-                            <div><label>OD W</label><input type="number" step="0.125" id="extW" oninput="syncDashAndCalculate()"></div>
-                            <div><label>OD H</label><input type="number" step="0.125" id="extH" oninput="syncDashAndCalculate()"></div>
+                        <div class="grid-row-5" style="display:grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 4px; align-items:end;">
+                            <div>
+                                <label>OD W × H</label>
+                                <div style="display:flex; align-items:stretch; gap:3px;">
+                                    <input type="number" step="0.125" id="extW" oninput="handleODInput('W')" style="min-width:0; flex:1;">
+                                    <button type="button" id="odLockBtn" title="Lock OD width/height ratio — when on, changing one scales the other to keep the proportion" onclick="toggleODLock()" style="flex:0 0 22px; width:22px; padding:0; border:1px solid var(--border-color); border-radius:4px; background:var(--bg-panel); color:var(--text-muted); display:flex; align-items:center; justify-content:center; cursor:pointer;">
+                                        <svg class="svg-icon" style="width:12px; height:12px;" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>
+                                    </button>
+                                    <input type="number" step="0.125" id="extH" oninput="handleODInput('H')" style="min-width:0; flex:1;">
+                                </div>
+                            </div>
                             <div class="frame-dim-cell"><label title="Visible frame face width">Fr. W</label><input type="number" step="0.125" id="fW" oninput="syncDashAndCalculate()"></div>
                             <div class="frame-dim-cell"><label title="Total profile depth front-to-back">Fr. H</label><input type="number" step="0.0625" id="fHeight" oninput="syncDashAndCalculate()" placeholder="depth"></div>
                             <div class="frame-dim-cell"><label title="Depth of L-pocket where art sits">Rabbet</label><input type="number" step="0.0625" id="rabbetDepth" oninput="handleRabbetChange()" placeholder="depth"></div>
@@ -565,6 +604,12 @@
                             <button class="action-btn btn-secondary" style="width:38px; height:26px; padding:0; flex-shrink:0; font-size:0.6rem; font-weight:700; letter-spacing:0.5px;" title="Export elevation as SVG (crisp vector — opens in Illustrator/InDesign)" onclick="exportElevSVG()">
                                 SVG
                             </button>
+                            <button class="action-btn btn-secondary" style="width:54px; height:26px; padding:0; flex-shrink:0; font-size:0.55rem; font-weight:700; letter-spacing:0.4px;" title="Export ALL elevations as PNG into a single ZIP" onclick="bulkExportElevations('png')">
+                                ALL PNG
+                            </button>
+                            <button class="action-btn btn-secondary" style="width:54px; height:26px; padding:0; flex-shrink:0; font-size:0.55rem; font-weight:700; letter-spacing:0.4px;" title="Export ALL elevations as SVG into a single ZIP" onclick="bulkExportElevations('svg')">
+                                ALL SVG
+                            </button>
                         </div>
                     </div>
 
@@ -574,7 +619,7 @@
                          moved to the Wall Dimensions title row. -->
                     <div class="section-title" onclick="toggleDashSection('elev-sec-layout', this)">Layout Guides <span><svg class="svg-icon" style="width:10px; height:10px;" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></span></div>
                     <div id="elev-sec-layout" class="collapsible-section open">
-                        <div class="layout-guides-grid" style="margin-bottom: 6px;">
+                        <div class="layout-guides-grid" style="grid-template-columns: repeat(5, 1fr); margin-bottom: 6px;">
                             <button class="layout-guide-btn toggle-status" id="labelToggle" title="Labels - Add letter labels to organize your frames (A, B, C…)" onclick="toggleElevLayer('label-layer', this)">
                                 <svg class="svg-icon" viewBox="0 0 24 24"><path d="M4 4h11l5 5v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"/><circle cx="16" cy="8" r="1.5" fill="currentColor" stroke="none"/></svg>
                             </button>
@@ -585,25 +630,19 @@
                                 <svg class="svg-icon" viewBox="0 0 24 24"><path d="M4 12h2M9 12h2M14 12h2M19 12h2M4 8v8M21 8v8"/></svg>
                             </button>
                             <button class="layout-guide-btn toggle-status" id="personToggle" title="Person - Add 6 foot tall character to reference scale" onclick="toggleElevLayer('person-wrap', this)">
-                                <!-- Stick figure: head (small circle), body line, arms out, legs splayed -->
                                 <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><path d="M12 7v8M8 11l4-2 4 2M12 15l-3 5M12 15l3 5"/></svg>
                             </button>
-                        </div>
-                        <div class="layout-guides-grid" style="grid-template-columns: repeat(3, 1fr);">
                             <button class="layout-guide-btn toggle-status" id="guideToggle" title="Guides - show center and hanging height guide lines" onclick="toggleElevLayer('guide-layer', this)">
                                 <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 3v18M9 6h6M9 10h6M9 14h6M9 18h6"/></svg>
                             </button>
+                        </div>
+                        <div class="layout-guides-grid" style="grid-template-columns: repeat(5, 1fr); margin-bottom:6px;">
                             <button class="layout-guide-btn toggle-status" id="gridToggle" title="Grid — Show grid to help layout, adjust size in Settings" onclick="toggleElevLayer('grid-layer', this)">
                                 <svg class="svg-icon" viewBox="0 0 24 24"><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
                             </button>
                             <button class="layout-guide-btn toggle-status" id="frameCenterToggle" title="Centers — Show frame center crosshairs" onclick="toggleElevLayer('frame-center-layer', this)">
                                 <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v6M12 16v6M2 12h6M16 12h6"/></svg>
                             </button>
-                        </div>
-                        <!-- Group Dimension Box + Edge Gap toggles. These turn
-                             blue (active) when the corresponding annotation
-                             exists, and clicking them shows/hides it. -->
-                        <div class="layout-guides-grid" style="grid-template-columns: repeat(5, 1fr); margin-top:6px;">
                             <button class="layout-guide-btn toggle-status active" id="wallDimToggle" title="Wall Dimensions — show/hide overall wall width &amp; height dimensions" onclick="toggleWallDims(this)">
                                 <svg class="svg-icon" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="11" fill="none"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
                             </button>
@@ -613,11 +652,19 @@
                             <button class="layout-guide-btn toggle-status" id="edgeGapToggle" title="Edge Gap — show/hide distance-to-wall-edge dimensions" onclick="toggleEdgeGapVisibility(this)">
                                 <svg class="svg-icon" viewBox="0 0 24 24"><rect x="9" y="9" width="6" height="6" fill="none"/><path d="M12 7V3M12 21v-4M7 12H3M21 12h-4"/></svg>
                             </button>
+                        </div>
+                        <div class="layout-guides-grid" style="grid-template-columns: repeat(4, 1fr);">
                             <button class="layout-guide-btn toggle-status" id="unitSuffixToggle" title="Unit Suffix — show/hide the unit (in/cm/mm) after interior dimension numbers. Outer wall dims always show it." onclick="toggleUnitSuffix(this)">
                                 <svg class="svg-icon" viewBox="0 0 24 24"><text x="12" y="16" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor" stroke="none">”</text><path d="M4 19h16" stroke-width="1.5"/></svg>
                             </button>
                             <button class="layout-guide-btn toggle-status" id="customLinesToggle" title="Custom Lines — show/hide measurement lines drawn with the measure tool" onclick="toggleCustomLinesVisibility(this)">
                                 <svg class="svg-icon" viewBox="0 0 24 24"><path d="M3 17 L17 3" stroke-width="1.6"/><path d="M2 14 L6 18 M5 11 L9 15 M8 8 L12 12 M11 5 L15 9" stroke-width="1.2"/></svg>
+                            </button>
+                            <button class="layout-guide-btn toggle-status active" id="artworkToggle" title="Artwork — show/hide uploaded artwork inside frame openings. Off = transparent openings (export with no image)." onclick="toggleArtworkVisibility(this)">
+                                <svg class="svg-icon" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1" fill="none"/><circle cx="8.5" cy="10" r="1.5" fill="currentColor" stroke="none"/><path d="M5 17l4.5-5 3 3.5L16 11l3 4" fill="none"/></svg>
+                            </button>
+                            <button class="layout-guide-btn toggle-status" id="imageCodeToggle" title="Image Code — show/hide the artwork's image code beneath each frame (bottom-right). Exports to PNG/SVG; handy for matching print files by code." onclick="toggleImageCodeVisibility(this)">
+                                <svg class="svg-icon" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="11" rx="1" fill="none"/><path d="M8 19h8" stroke-width="1.5"/><path d="M10 19l-0.5 2M14 19l0.5 2" stroke-width="1.2"/></svg>
                             </button>
                         </div>
                         <button class="action-btn btn-secondary" id="resetDimPosBtn" onclick="resetDimOffsets()" title="Reset any manually-dragged dimension lines back to their default positions" style="width:100%; height:26px; margin-top:6px; font-size:0.6rem; letter-spacing:0.3px; display:flex; align-items:center; justify-content:center; gap:6px;">
@@ -778,8 +825,8 @@
 
         <!-- RUNNING STATE -->
         <div id="batchZipRunning">
-            <h3 style="margin-top:0; margin-bottom: 4px; font-size:1.05rem; color:var(--text-strong);">Building Frame Pack</h3>
-            <p style="font-size:0.7rem; color:var(--text-muted); margin: 0 0 16px 0;">
+            <h3 id="batchZipTitle" style="margin-top:0; margin-bottom: 4px; font-size:1.05rem; color:var(--text-strong);">Building Frame Pack</h3>
+            <p id="batchZipDesc" style="font-size:0.7rem; color:var(--text-muted); margin: 0 0 16px 0;">
                 Generating PNG files and bundling with the project CSV into a single ZIP.
             </p>
             <div style="background: var(--border-color); border-radius: 4px; height: 8px; overflow:hidden; margin-bottom: 8px;">
@@ -795,7 +842,7 @@
 
         <!-- DONE STATE -->
         <div id="batchZipDone" style="display:none;">
-            <h3 style="margin-top:0; margin-bottom: 8px; font-size:1.05rem; color:var(--text-strong);">Frame Pack Ready</h3>
+            <h3 id="batchZipDoneTitle" style="margin-top:0; margin-bottom: 8px; font-size:1.05rem; color:var(--text-strong);">Frame Pack Ready</h3>
             <p id="batchZipDoneMsg" style="font-size:0.75rem; color:var(--text-main); margin: 0 0 18px 0; line-height: 1.4;">…</p>
             <button class="action-btn" style="width:100%; height:32px; font-size:0.75rem;" onclick="document.getElementById('batchZipModal').style.display='none'">Close</button>
         </div>
@@ -869,38 +916,21 @@
     </div>
 </div>
 
-<!-- Bulk Edit modal. Set one field on all currently-selected rows.
-     Field dropdown lists only bulk-safe fields (no ITEM CODE, no per-frame
-     unique dimensions). Value input type swaps based on selected field —
-     text/number/select — handled in renderBulkEditValueInput. -->
-<div id="bulkEditModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; align-items:center; justify-content:center; backdrop-filter: blur(2px);">
-    <div style="background:var(--bg-panel); padding:24px; border-radius:8px; width:480px; max-height:85vh; overflow-y:auto; border:1px solid var(--border-color); box-shadow:0 15px 35px rgba(0,0,0,0.4);">
-        <h3 style="margin-top:0; margin-bottom:4px; font-size:1.05rem; color:var(--text-strong);">Bulk Edit</h3>
-        <p id="bulkEditSummary" style="font-size:0.7rem; color:var(--text-muted); margin:0 0 16px 0;">
-            <!-- populated by openBulkEditModal -->
-        </p>
-
-        <div style="margin-bottom:12px;">
-            <label style="display:block; font-size:0.65rem; font-weight:bold; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.3px; margin-bottom:4px;">Field to edit</label>
-            <select id="bulkEditField" style="width:100%; font-size:0.85rem; padding:6px 8px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px; box-sizing:border-box;" onchange="renderBulkEditValueInput()">
-                <!-- populated by openBulkEditModal -->
-            </select>
+<!-- Bulk Edit modal. The REAL dashboard form panel (#dashRightPane) is moved
+     into #bulkFormMount on open and moved back on close. Edits go to a scratch
+     object — nothing in the project changes until Apply. Fields that differ
+     across the selected rows are greyed out. Built/torn down in app.js. -->
+<div id="bulkEditModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.55); z-index:9999; align-items:flex-start; justify-content:center; backdrop-filter: blur(3px); overflow-y:auto; padding:24px 0;">
+    <div style="background:var(--bg-panel); border-radius:8px; max-width:96vw; max-height:92vh; overflow:hidden; border:1px solid var(--border-color); box-shadow:0 15px 35px rgba(0,0,0,0.5); display:inline-flex; flex-direction:column;">
+        <div style="padding:14px 18px 10px; border-bottom:1px solid var(--border-color); flex-shrink:0; width:430px; max-width:92vw; box-sizing:border-box;">
+            <h3 style="margin:0; font-size:1.05rem; color:var(--text-strong);">Bulk Edit</h3>
+            <p id="bulkEditSummary" style="font-size:0.66rem; color:var(--text-muted); margin:3px 0 0 0; line-height:1.4; white-space:normal;"><!-- summary --></p>
         </div>
-
-        <div style="margin-bottom:18px;">
-            <label style="display:block; font-size:0.65rem; font-weight:bold; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.3px; margin-bottom:4px;">New value</label>
-            <div id="bulkEditValueContainer">
-                <!-- input rendered by renderBulkEditValueInput based on field type -->
-            </div>
-        </div>
-
-        <p id="bulkEditPreview" style="font-size:0.7rem; color:var(--text-muted); margin:0 0 18px 0; min-height:1.4em;">
-            <!-- live preview text -->
-        </p>
-
-        <div style="display:flex; gap:8px; justify-content:flex-end;">
-            <button class="action-btn btn-secondary" style="height:32px; padding:0 16px; font-size:0.75rem;" onclick="document.getElementById('bulkEditModal').style.display='none'">Cancel</button>
-            <button class="action-btn" style="height:32px; padding:0 16px; font-size:0.75rem;" onclick="applyBulkEdit()">Apply</button>
+        <!-- The real dashboard form panel gets moved in here. -->
+        <div id="bulkFormMount" style="overflow-y:auto; overflow-x:hidden; padding:0; width:fit-content; max-width:92vw; align-self:center;"></div>
+        <div style="display:flex; gap:8px; justify-content:flex-end; padding:12px 18px; border-top:1px solid var(--border-color); flex-shrink:0; width:430px; max-width:92vw; box-sizing:border-box;">
+            <button class="action-btn btn-secondary" style="height:32px; padding:0 16px; font-size:0.75rem;" onclick="cancelBulkEdit()">Cancel</button>
+            <button class="action-btn" style="height:32px; padding:0 18px; font-size:0.75rem;" onclick="applyBulkEdit()">Apply to Selected</button>
         </div>
     </div>
 </div>
@@ -986,6 +1016,458 @@
         <div style="display:flex; gap:8px; justify-content:flex-end;">
             <button class="action-btn btn-secondary" style="height:32px; padding:0 16px; font-size:0.75rem;" onclick="document.getElementById('moveToModal').style.display='none'">Cancel</button>
             <button class="action-btn" style="height:32px; padding:0 16px; font-size:0.75rem;" onclick="applyMoveTo()">Apply</button>
+        </div>
+    </div>
+</div>
+
+<!-- Presentation PDF setup modal. Triggered by the "Spec PDF" button. Collects
+     the elements FRAME can't auto-derive (project code / version / location for
+     the footer) plus a per-section include checklist. Sections not yet built
+     emit labeled placeholder pages so the full deck skeleton is visible. -->
+<div id="specPdfModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; align-items:flex-start; justify-content:center; backdrop-filter: blur(2px); overflow-y:auto; padding:24px 0;">
+    <div id="specPdfPanel" style="background:var(--bg-panel); padding:24px; border-radius:8px; width:520px; max-height:88vh; overflow-y:auto; border:1px solid var(--border-color); box-shadow:0 15px 35px rgba(0,0,0,0.4);">
+        <h3 style="margin-top:0; margin-bottom:4px; font-size:1.05rem; color:var(--text-strong);">Project</h3>
+        <p id="specPdfSummary" style="font-size:0.7rem; color:var(--text-muted); margin:0 0 16px 0;"><!-- populated by openSpecPdfModal --></p>
+
+        <div style="margin-bottom:14px;">
+            <label style="display:block; font-size:0.65rem; font-weight:bold; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.3px; margin-bottom:4px;">Preset <span style="font-weight:normal; text-transform:none;">(starting point — fine-tune below)</span></label>
+            <select id="specPdfPreset" style="width:100%; font-size:0.85rem; padding:6px 8px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px; box-sizing:border-box;">
+                <option value="concept">Concept</option>
+                <option value="development">Development</option>
+                <option value="spec" selected>Spec / Presentation</option>
+                <option value="install">Install Guide</option>
+            </select>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-bottom:16px;">
+            <div style="flex:2;">
+                <label style="display:block; font-size:0.65rem; font-weight:bold; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.3px; margin-bottom:4px;">Project Code</label>
+                <input type="text" id="specPdfCode" placeholder="MARN-CAESARS-PALACE-HIGH-LIMIT" style="width:100%; font-family:monospace; font-size:0.8rem; padding:6px 8px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px; box-sizing:border-box;">
+            </div>
+            <div style="flex:1;">
+                <label style="display:block; font-size:0.65rem; font-weight:bold; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.3px; margin-bottom:4px;">Version</label>
+                <input type="text" id="specPdfVersion" placeholder="V1" style="width:100%; font-size:0.85rem; padding:6px 8px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px; box-sizing:border-box;">
+            </div>
+        </div>
+        <div style="margin-bottom:18px;">
+            <label style="display:block; font-size:0.65rem; font-weight:bold; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.3px; margin-bottom:4px;">Location</label>
+            <input type="text" id="specPdfLocation" placeholder="Las Vegas, NV" style="width:100%; font-size:0.85rem; padding:6px 8px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px; box-sizing:border-box;">
+        </div>
+
+        <div style="margin-bottom:18px; display:none;">
+            <label style="display:block; font-size:0.65rem; font-weight:bold; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.3px; margin-bottom:4px;">Floorplan image <span style="font-weight:normal; text-transform:none;">(for the Floorplan Key page)</span></label>
+            <div style="display:flex; align-items:center; gap:8px;">
+                <button class="action-btn btn-secondary" style="width:auto; height:30px; padding:0 12px; font-size:0.75rem;" onclick="document.getElementById('specPdfFloorplanFile').click()">Choose image…</button>
+                <button class="action-btn btn-secondary" style="width:auto; height:30px; padding:0 12px; font-size:0.75rem;" onclick="openFloorplanMarkup()">Mark up placements…</button>
+                <span id="specPdfFloorplanStatus" style="font-size:0.72rem; color:var(--text-muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">No file chosen</span>
+                <input type="file" id="specPdfFloorplanFile" accept="image/*" style="display:none;" onchange="loadSpecPdfFloorplan(event)">
+            </div>
+        </div>
+
+        <label style="display:block; font-size:0.65rem; font-weight:bold; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.3px; margin-bottom:8px;">Include pages</label>
+        <div style="display:flex; flex-direction:column; gap:7px; margin-bottom:14px; font-size:0.8rem; color:var(--text-main);">
+            <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="specInc_cover" checked style="cursor:pointer;"> Cover <button type="button" class="icon-btn" title="Edit cover" onclick="openFixedPageEditor('cover')"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></button></label>
+            <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="specInc_timeline" checked style="cursor:pointer;"> Process &amp; Timeline <span style="color:var(--text-muted); font-size:0.7rem;">(phases below)</span></label>
+            <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="specInc_understanding" checked style="cursor:pointer;"> Project Understanding <span style="color:var(--text-muted); font-size:0.7rem;">(copy below)</span></label>
+            <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="specInc_narrative" checked style="cursor:pointer;"> Art Narrative <button type="button" class="icon-btn" title="Edit narrative" onclick="openFixedPageEditor('narrative')"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></button></label>
+            <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="specInc_strategy" checked style="cursor:pointer;"> Art Collection Strategy <span style="color:var(--text-muted); font-size:0.7rem;">(3 tiers below)</span></label>
+            <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="specInc_moodboard" checked style="cursor:pointer;"> Layout pages <span style="color:var(--text-muted); font-size:0.7rem;">(moodboard / breaker / etc.)</span></label>
+            <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="specInc_frameRec" checked style="cursor:pointer;"> Frame Recommendations <span style="color:var(--text-muted); font-size:0.7rem;">(frames used in project)</span></label>
+            <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="specInc_floorplanKey" checked style="cursor:pointer;"> Floorplan Key <span style="color:var(--text-muted); font-size:0.7rem;">(plan + pins)</span></label>
+            <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="specInc_spec" checked style="cursor:pointer;"> Spec Pages <span style="color:var(--text-muted); font-size:0.7rem;">(one per artworked piece)</span></label>
+            <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="specInc_slogan" checked style="cursor:pointer;"> Good Art. Good People. <button type="button" class="icon-btn" title="Edit Good Art Good People" onclick="openFixedPageEditor('slogan')"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></button></label>
+            <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" id="specInc_contacts" checked style="cursor:pointer;"> Thank You / Contacts <button type="button" class="icon-btn" title="Edit contacts" onclick="openContactsEditor()"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></button></label>
+        </div>
+
+        <div id="specPdfProseBlock" style="display:none;">
+        <label style="display:block; font-size:0.65rem; font-weight:bold; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.3px; margin:6px 0 4px;">Process &amp; timeline <span style="font-weight:normal; text-transform:none;">(one per line: Phase | Timeframe)</span></label>
+        <textarea id="specPdfTimeline" rows="3" placeholder="Concept &amp; Narrative | Weeks 1–2&#10;Art Development | Weeks 3–6&#10;Specification | Weeks 7–8&#10;Production &amp; Install | Weeks 9–14" style="width:100%; font-size:0.74rem; line-height:1.4; padding:6px 8px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px; box-sizing:border-box; resize:vertical; font-family:monospace;"></textarea>
+
+        <label style="display:flex; align-items:center; justify-content:space-between; font-size:0.65rem; font-weight:bold; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.3px; margin:10px 0 4px;"><span>Project understanding <span style="font-weight:normal; text-transform:none;">(body copy)</span></span><button type="button" onclick="openCopyEditor('specPdfUnderstanding','Project Understanding')" style="font-size:0.6rem; text-transform:none; letter-spacing:0; padding:1px 7px; background:transparent; color:var(--text-muted); border:1px solid var(--border-color); border-radius:3px; cursor:pointer;">Edit &#8599;</button></label>
+        <textarea id="specPdfUnderstanding" rows="3" placeholder="Our understanding of the space and audience…" style="width:100%; font-size:0.78rem; line-height:1.4; padding:6px 8px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px; box-sizing:border-box; resize:vertical;"></textarea>
+
+        <label style="display:flex; align-items:center; justify-content:space-between; font-size:0.65rem; font-weight:bold; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.3px; margin:10px 0 4px;"><span>Art narrative <span style="font-weight:normal; text-transform:none;">(body copy for the narrative page)</span></span><button type="button" onclick="openCopyEditor('specPdfNarrative','Art Narrative')" style="font-size:0.6rem; text-transform:none; letter-spacing:0; padding:1px 7px; background:transparent; color:var(--text-muted); border:1px solid var(--border-color); border-radius:3px; cursor:pointer;">Edit &#8599;</button></label>
+        <textarea id="specPdfNarrative" rows="3" placeholder="The art program for…" style="width:100%; font-size:0.78rem; line-height:1.4; padding:6px 8px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px; box-sizing:border-box; resize:vertical;"></textarea>
+
+        <label style="display:flex; align-items:center; justify-content:space-between; font-size:0.65rem; font-weight:bold; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.3px; margin:10px 0 4px;"><span>Art collection strategy <span style="font-weight:normal; text-transform:none;">(one short paragraph per tier)</span></span><span style="display:flex; gap:4px;"><button type="button" title="Edit Primary" onclick="openCopyEditor('specPdfStrategyPrimary','Strategy &mdash; Primary')" style="font-size:0.6rem; text-transform:none; letter-spacing:0; padding:1px 7px; background:transparent; color:var(--text-muted); border:1px solid var(--border-color); border-radius:3px; cursor:pointer;">P &#8599;</button><button type="button" title="Edit Secondary" onclick="openCopyEditor('specPdfStrategySecondary','Strategy &mdash; Secondary')" style="font-size:0.6rem; text-transform:none; letter-spacing:0; padding:1px 7px; background:transparent; color:var(--text-muted); border:1px solid var(--border-color); border-radius:3px; cursor:pointer;">S &#8599;</button><button type="button" title="Edit Tertiary" onclick="openCopyEditor('specPdfStrategyTertiary','Strategy &mdash; Tertiary')" style="font-size:0.6rem; text-transform:none; letter-spacing:0; padding:1px 7px; background:transparent; color:var(--text-muted); border:1px solid var(--border-color); border-radius:3px; cursor:pointer;">T &#8599;</button></span></label>
+        <textarea id="specPdfStrategyPrimary" rows="2" placeholder="Primary — Fine Art Original: …" style="width:100%; font-size:0.74rem; line-height:1.4; padding:6px 8px; margin-bottom:6px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px; box-sizing:border-box; resize:vertical; border-left:3px solid #E2231A;"></textarea>
+        <textarea id="specPdfStrategySecondary" rows="2" placeholder="Secondary — Licensed Reproduction: …" style="width:100%; font-size:0.74rem; line-height:1.4; padding:6px 8px; margin-bottom:6px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px; box-sizing:border-box; resize:vertical; border-left:3px solid #1F9E4A;"></textarea>
+        <textarea id="specPdfStrategyTertiary" rows="2" placeholder="Tertiary — Licensed Reproduction: …" style="width:100%; font-size:0.74rem; line-height:1.4; padding:6px 8px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px; box-sizing:border-box; resize:vertical; border-left:3px solid #2D5BD6;"></textarea>
+
+        <label style="display:block; font-size:0.65rem; font-weight:bold; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.3px; margin:10px 0 4px;">Moodboard</label>
+        <div style="display:flex; align-items:center; gap:8px;">
+            <button class="action-btn btn-secondary" style="width:auto; height:30px; padding:0 12px; font-size:0.75rem;" onclick="openMoodboardModal()">Edit layout pages…</button>
+            <span id="specPdfMoodboardCount" style="font-size:0.72rem; color:var(--text-muted);">0 pages</span>
+        </div>
+        </div>
+
+        <div style="display:none;">
+        <label style="display:block; font-size:0.65rem; font-weight:bold; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.3px; margin:10px 0 4px;">Contacts <span style="font-weight:normal; text-transform:none;">(one per line: Name | Role | Email | Phone)</span></label>
+        <textarea id="specPdfContacts" rows="3" placeholder="Laurenn Machin | Creative Director | lmachin@farmboyfinearts.com | 604-200-4018" style="width:100%; font-size:0.74rem; line-height:1.4; padding:6px 8px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px; box-sizing:border-box; resize:vertical; font-family:monospace;"></textarea>
+        <p style="font-size:0.64rem; color:var(--text-muted); margin:8px 0 0; line-height:1.4;">Narrative &amp; contacts save with the project. Commas also work as field separators.</p>
+        </div>
+
+        <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:16px;">
+            <button class="action-btn btn-secondary" style="height:32px; padding:0 16px; font-size:0.75rem;" onclick="closeDeckStudio()">Close</button>
+            <button class="action-btn" style="height:32px; padding:0 16px; font-size:0.75rem;" onclick="applySpecPdfModal()">Generate PDF</button>
+        </div>
+    </div>
+</div>
+
+<!-- Mark Up Floorplan modal. Place a numbered pin per item on the plan; pins
+     are colored by category and link to spec pages in the exported PDF. -->
+<div id="fpMarkupModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:10000; align-items:center; justify-content:center; backdrop-filter: blur(2px);">
+    <div style="background:var(--bg-panel); border:1px solid var(--border-color); border-radius:8px; width:92vw; max-width:1100px; height:86vh; display:flex; flex-direction:column; box-shadow:0 15px 35px rgba(0,0,0,0.4);">
+        <div style="padding:14px 18px; border-bottom:1px solid var(--border-color); display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
+            <div>
+                <h3 style="margin:0; font-size:1.05rem; color:var(--text-strong);">Mark Up Floorplan</h3>
+                <p id="fpMarkupHint" style="margin:2px 0 0; font-size:0.7rem; color:var(--text-muted);">Click an item, then click the plan to drop its pin. Drag a pin to move; double-click to remove.</p>
+            </div>
+            <div style="display:flex; gap:8px; flex-shrink:0;">
+                <button class="action-btn btn-secondary" style="width:auto; height:30px; padding:0 12px; font-size:0.75rem;" onclick="document.getElementById('fpMarkupFile').click()">Change plan…</button>
+                <button class="action-btn" style="width:auto; height:30px; padding:0 16px; font-size:0.75rem;" onclick="closeFloorplanMarkup()">Done</button>
+                <input type="file" id="fpMarkupFile" accept="image/*" style="display:none;" onchange="loadSpecPdfFloorplan(event, true)">
+            </div>
+        </div>
+        <div id="fpLevelBar" style="padding:8px 18px; border-bottom:1px solid var(--border-color); display:flex; align-items:center; gap:6px; flex-wrap:wrap;"><!-- level tabs injected --></div>
+        <div style="flex:1; display:flex; min-height:0;">
+            <div id="fpPlanArea" style="flex:1; position:relative; overflow:auto; background:var(--bg-input); display:flex; align-items:center; justify-content:center; padding:12px;">
+                <!-- plan image + pins injected by renderFloorplanMarkup -->
+            </div>
+            <div id="fpTray" style="width:290px; flex-shrink:0; border-left:1px solid var(--border-color); overflow-y:auto; padding:10px 12px;">
+                <!-- item rows injected by renderFloorplanMarkup -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Presentation PDF preview modal. Shows the generated PDF in an iframe with
+     a Download button (the PDF itself is static; editing happens in FRAME). -->
+<!-- Deck Studio: live three-pane preview/editor -->
+<div id="deckStudioModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:10000; align-items:center; justify-content:center; backdrop-filter: blur(2px);">
+    <div style="background:var(--bg-panel); border:1px solid var(--border-color); border-radius:8px; width:96vw; height:92vh; display:flex; flex-direction:column; box-shadow:0 15px 35px rgba(0,0,0,0.4);">
+        <div style="padding:12px 18px; border-bottom:1px solid var(--border-color); display:flex; align-items:center; gap:10px;">
+            <h3 style="margin:0; font-size:1.05rem; color:var(--text-strong);">Deck Studio</h3>
+            <div style="display:flex; gap:4px; margin-left:8px;">
+                <button id="dsTabBtnProject" onclick="_dsTab('project')" style="height:28px; padding:0 14px; font-size:0.74rem; border:1px solid var(--border-color); border-radius:5px; cursor:pointer; background:#6a6aff; color:#fff;">Project</button>
+                <button id="dsTabBtnPages" onclick="_dsTab('pages')" style="height:28px; padding:0 14px; font-size:0.74rem; border:1px solid var(--border-color); border-radius:5px; cursor:pointer; background:var(--bg-input); color:var(--text-main);">Pages</button>
+            </div>
+            <span style="flex:1;"></span>
+            <button id="dsApprovedBtn" onclick="_dsToggleApproved()" title="Stamp every page APPROVED (client sign-off)" style="width:auto; height:32px; padding:0 14px; font-size:0.72rem; font-weight:700; letter-spacing:0.04em; border-radius:5px; cursor:pointer; border:1.5px solid var(--border-color); background:var(--bg-input); color:var(--text-main);">APPROVED</button>
+            <button id="dsSaveBtn" class="action-btn" style="width:auto; height:32px; padding:0 16px; font-size:0.75rem;" onclick="_dsSave()">Save</button>
+            <button class="action-btn btn-secondary" style="width:auto; height:32px; padding:0 16px; font-size:0.75rem;" onclick="closeDeckStudio()">Done</button>
+        </div>
+        <div id="dsTabProject" style="flex:1; overflow-y:auto; padding:18px; display:flex; justify-content:center; align-items:flex-start;"><!-- project settings panel reparented here --></div>
+        <div id="dsTabPages" style="flex:1; display:none; min-height:0; flex-direction:column;">
+            <div id="dsToolbar" style="flex-shrink:0; border-bottom:1px solid var(--border-color); padding:7px 12px; display:flex; align-items:center; gap:6px; background:var(--bg-panel);">
+                <button onclick="_dsAddTextBox()" class="action-btn btn-secondary" title="Add text box" style="width:30px; height:30px; min-width:30px; padding:0; box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center;"><span style="font:700 15px Georgia,serif;">T</span></button>
+                <button onclick="_dsAddImageBox()" class="action-btn btn-secondary" title="Add image" style="width:30px; height:30px; min-width:30px; padding:0; box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></button>
+                <button onclick="_dsAddArrow('arrow')" class="action-btn btn-secondary" title="Add straight arrow" style="width:30px; height:30px; min-width:30px; padding:0; box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="20" x2="20" y2="4"/><polyline points="10 4 20 4 20 14"/></svg></button>
+                <button onclick="_dsAddArrow('elbow')" class="action-btn btn-secondary" title="Add elbow arrow" style="width:30px; height:30px; min-width:30px; padding:0; box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 5 4 19 16 19"/><polyline points="11 14 16 19 11 24" transform="rotate(-45 16 19)"/><polyline points="12 15 17 20"/></svg></button>
+                <button id="dsTypeBtn" onclick="_dsOpenTypeMenu(event)" class="action-btn btn-secondary" title="Type styles — titles, paragraphs, captions (font, size, colour)" style="width:30px; height:30px; min-width:30px; padding:0; box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center;"><span style="font:700 14px Georgia,serif; letter-spacing:-1px;">Aa</span></button>
+                <button id="dsStyleGear" onclick="_dsOpenSettingsMenu(event)" class="action-btn btn-secondary" title="Page settings" style="width:30px; height:30px; min-width:30px; padding:0; box-sizing:border-box; display:inline-flex; align-items:center; justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+                <input type="file" id="dsAnnImageFile" accept="image/*" style="display:none" onchange="_dsImageFilePicked(this)">
+                <button id="dsBuildBtn" onclick="_dsBuildPage()" class="action-btn btn-secondary" title="Render an exact preview of how this spec page will export (auto-refreshes after edits)" style="height:30px; padding:0 12px; box-sizing:border-box; font-size:0.7rem; font-weight:700; display:inline-flex; align-items:center; justify-content:center; gap:5px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Preview</button>
+                <span style="width:1px; height:20px; background:var(--border-color); margin:0 2px;"></span>
+                <span id="dsSelGroup" style="display:inline-flex; align-items:center; gap:6px; opacity:0.4; pointer-events:none;">
+                    <button id="dsAnnBold" onclick="_dsAnnToggle('bold')" title="Bold" class="action-btn btn-secondary" style="width:30px; height:30px; min-width:30px; padding:0; box-sizing:border-box; font-weight:800; font-size:0.8rem; display:inline-flex; align-items:center; justify-content:center;">B</button>
+                    <button id="dsAnnItalic" onclick="_dsAnnToggle('italic')" title="Italic" class="action-btn btn-secondary" style="width:30px; height:30px; min-width:30px; padding:0; box-sizing:border-box; font-style:italic; font-size:0.8rem; display:inline-flex; align-items:center; justify-content:center;">I</button>
+                    <button id="dsAnnAlignBtn" onclick="_dsAnnCycleAlign()" title="Align (cycle)" class="action-btn btn-secondary" style="width:30px; height:30px; min-width:30px; padding:0; box-sizing:border-box; font-size:0.7rem; display:inline-flex; align-items:center; justify-content:center;">L</button>
+                    <button onclick="_dsAnnBump(-1)" title="Smaller" class="action-btn btn-secondary" style="width:30px; height:30px; min-width:30px; padding:0; box-sizing:border-box; font-size:0.8rem; display:inline-flex; align-items:center; justify-content:center;">A−</button>
+                    <span id="dsAnnSizeLbl" style="font-size:0.7rem; color:var(--text-muted); min-width:22px; text-align:center;">—</span>
+                    <button onclick="_dsAnnBump(1)" title="Bigger" class="action-btn btn-secondary" style="width:30px; height:30px; min-width:30px; padding:0; box-sizing:border-box; font-size:0.95rem; display:inline-flex; align-items:center; justify-content:center;">A+</button>
+                    <input type="color" id="dsAnnColor" onchange="_dsAnnSet('color', this.value)" title="Colour" value="#222222" style="width:30px; height:30px; min-width:30px; box-sizing:border-box; border:1px solid var(--border-color); border-radius:4px; background:var(--bg-input); cursor:pointer; padding:1px;">
+                    <button id="dsAnnDelete" onclick="_dsDeleteAnnot()" title="Delete selected" class="action-btn btn-secondary" style="width:30px; height:30px; min-width:30px; padding:0; box-sizing:border-box; color:#c0392b; display:inline-flex; align-items:center; justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                </span>
+                <span style="flex:1;"></span>
+                <span id="dsSelHint" style="font-size:0.66rem; color:var(--text-muted);">Select a box to style it · double-click to edit · drag to move</span>
+            </div>
+            <div style="flex:1; display:flex; min-height:0;">
+                <div id="dsRail" style="width:200px; flex-shrink:0; border-right:1px solid var(--border-color); overflow-y:auto; padding:12px;"><!-- thumbnails --></div>
+                <div id="dsCenter" style="flex:1; min-width:0; display:flex; align-items:center; justify-content:center; padding:24px; background:var(--bg-input); overflow:auto;"><!-- live page mock --></div>
+                <div id="dsTools" style="width:280px; flex-shrink:0; border-left:1px solid var(--border-color); overflow-y:auto; padding:16px;"><!-- per-page tools --></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- PDF build progress (shown while the presentation is generating) -->
+<div id="pdfBuildOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.72); z-index:10050; align-items:center; justify-content:center; backdrop-filter: blur(3px);">
+    <div style="background:var(--bg-panel); border:1px solid var(--border-color); border-radius:10px; padding:26px 30px; width:88vw; max-width:380px; box-shadow:0 18px 40px rgba(0,0,0,0.5); text-align:center;">
+        <div style="font-size:1rem; font-weight:700; color:var(--text-strong); margin-bottom:4px;">Generating presentation</div>
+        <div id="pdfBuildLabel" style="font-size:0.75rem; color:var(--text-muted); margin-bottom:14px;">Preparing…</div>
+        <div style="height:8px; border-radius:5px; background:var(--bg-input); overflow:hidden;">
+            <div id="pdfBuildBar" style="height:100%; width:4%; background:#6a6aff; border-radius:5px; transition:width 0.18s ease;"></div>
+        </div>
+        <div style="font-size:0.65rem; color:var(--text-muted); margin-top:12px;">Larger projects take longer — this window will close when it's ready.</div>
+    </div>
+</div>
+
+<div id="specPdfPreviewModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:10001; align-items:center; justify-content:center; backdrop-filter: blur(2px);">
+    <div style="background:var(--bg-panel); border:1px solid var(--border-color); border-radius:8px; width:94vw; max-width:1200px; height:90vh; display:flex; flex-direction:column; box-shadow:0 15px 35px rgba(0,0,0,0.4);">
+        <div style="padding:12px 18px; border-bottom:1px solid var(--border-color); display:flex; align-items:center; justify-content:space-between;">
+            <h3 style="margin:0; font-size:1.05rem; color:var(--text-strong);">Presentation PDF — Preview</h3>
+            <div style="display:flex; gap:8px;">
+                <button class="action-btn" style="width:auto; height:30px; padding:0 16px; font-size:0.75rem;" onclick="downloadSpecPdfPreview()">Download</button>
+                <button class="action-btn btn-secondary" style="width:auto; height:30px; padding:0 14px; font-size:0.75rem;" onclick="closeSpecPdfPreview()">Close</button>
+            </div>
+        </div>
+        <iframe id="specPdfPreviewFrame" title="PDF preview" style="flex:1; width:100%; border:0; background:#525659;"></iframe>
+    </div>
+</div>
+
+<!-- Moodboard manager. Add/caption/remove reference images for the moodboard
+     page(s). Images are downscaled on import and saved with the project. -->
+<div id="moodboardModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:10000; align-items:center; justify-content:center; backdrop-filter: blur(2px);">
+    <div style="background:var(--bg-panel); border:1px solid var(--border-color); border-radius:8px; width:94vw; max-width:1100px; height:88vh; display:flex; flex-direction:column; box-shadow:0 15px 35px rgba(0,0,0,0.4);">
+        <div style="padding:14px 18px; border-bottom:1px solid var(--border-color); display:flex; align-items:center; justify-content:space-between;">
+            <div>
+                <h3 style="margin:0; font-size:1.05rem; color:var(--text-strong);">Moodboard</h3>
+                <p style="margin:2px 0 0; font-size:0.7rem; color:var(--text-muted);">Drag to arrange, drag the corner to scale, click to select. Add text notes and arrows to annotate. The canvas matches the page.</p>
+            </div>
+            <div style="display:flex; gap:8px;">
+                <button class="action-btn btn-secondary" title="Add image" style="width:34px; height:30px; padding:0; display:inline-flex; align-items:center; justify-content:center;" onclick="document.getElementById('moodboardFile').click()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></button>
+                <button class="action-btn btn-secondary" title="Add text" style="width:34px; height:30px; padding:0; display:inline-flex; align-items:center; justify-content:center;" onclick="addMoodboardText()"><span style="font:700 16px Georgia, serif;">T</span></button>
+                <button class="action-btn btn-secondary" title="Add straight arrow" style="width:34px; height:30px; padding:0; display:inline-flex; align-items:center; justify-content:center;" onclick="addMoodboardArrow()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></button>
+                <button class="action-btn btn-secondary" title="Add elbow arrow" style="width:34px; height:30px; padding:0; display:inline-flex; align-items:center; justify-content:center;" onclick="addMoodboardElbow()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 4 5 15 17 15"/><polyline points="13 11 17 15 13 19"/></svg></button>
+                <button class="action-btn btn-secondary" title="Default styles" style="width:34px; height:30px; padding:0; display:inline-flex; align-items:center; justify-content:center;" onclick="openDeckStyles()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+                <span id="mbModeLabel" style="font-size:0.78rem; color:var(--text-muted); margin-left:8px;"></span>
+                <button class="action-btn btn-secondary" title="Add project artwork (framed mockup + spec)" style="width:auto; height:30px; padding:0 12px; font-size:0.75rem;" onclick="_mbArtPickerOpen()">Artwork</button>
+                <button class="action-btn btn-secondary" title="Layout templates" style="width:auto; height:30px; padding:0 12px; font-size:0.75rem;" onclick="openTemplatesModal()">Templates</button>
+                <button class="action-btn" style="width:auto; height:30px; padding:0 16px; font-size:0.75rem;" onclick="closeMoodboardModal()">Done</button>
+                <input type="file" id="moodboardFile" accept="image/*" multiple style="display:none;" onchange="addMoodboardImages(event)">
+            </div>
+        </div>
+        <div id="mbPageControls" style="padding:8px 14px; border-bottom:1px solid var(--border-color); display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <button class="action-btn btn-secondary" title="Move page up" style="width:auto; height:26px; padding:0 9px; font-size:0.72rem;" onclick="moveLayoutPage(-1)">▲</button>
+            <button class="action-btn btn-secondary" title="Move page down" style="width:auto; height:26px; padding:0 9px; font-size:0.72rem;" onclick="moveLayoutPage(1)">▼</button>
+            <label style="font-size:0.68rem; color:var(--text-muted); display:flex; align-items:center; gap:4px;">Move to <select id="mbMoveTo" onchange="_mbMoveToPos(this.value)" title="Move this page to a specific position" style="height:26px; font-size:0.7rem; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px;"></select></label>
+            <span style="width:1px; height:18px; background:var(--border-color);"></span>
+            <select id="mbPageType" onchange="_mbSetPageType(this.value)" title="Page type" style="height:26px; font-size:0.7rem; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px;">
+                <option value="moodboard">Moodboard</option><option value="breaker">Breaker</option><option value="keyword">Keyword</option><option value="inspo">Inspo</option>
+            </select>
+            <input id="mbPageTitle" type="text" placeholder="Page title" oninput="_mbSetPageTitle(this.value)" style="width:116px; height:26px; font-size:0.72rem; padding:0 8px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px;">
+            <label style="font-size:0.68rem; color:var(--text-muted); display:flex; align-items:center; gap:4px;">Goes <select id="mbPagePlace" onchange="_mbSetPagePlace(this.value)" title="Where this page lands in the deck" style="height:26px; font-size:0.7rem; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px;">
+                <option value="afterStrategy">Layout block (default)</option>
+                <option value="afterCover">After Cover</option>
+                <option value="afterTimeline">After Timeline</option>
+                <option value="afterUnderstanding">After Understanding</option>
+                <option value="afterNarrative">After Narrative</option>
+                <option value="beforeFloorplan">Before Floorplan/Spec</option>
+                <option value="afterSpec">After Spec pages</option>
+                <option value="beforeContacts">Before Thank You</option>
+            </select></label>
+            <span style="flex:1;"></span>
+            <button class="action-btn btn-secondary" style="width:auto; height:26px; padding:0 10px; font-size:0.72rem;" onclick="addLayoutPage('moodboard')">+ Page</button>
+            <button class="action-btn btn-secondary" style="width:auto; height:26px; padding:0 10px; font-size:0.72rem;" onclick="duplicateLayoutPage()">Duplicate</button>
+            <button class="action-btn btn-secondary" style="width:auto; height:26px; padding:0 10px; font-size:0.72rem;" onclick="deleteLayoutPage()">Delete page</button>
+        </div>
+        <div style="flex:1; display:flex; min-height:0;">
+            <div id="moodboardPages" style="flex:0 0 134px; display:flex; flex-direction:column; gap:6px; overflow-y:auto; padding:10px; border-right:1px solid var(--border-color); background:rgba(0,0,0,0.06);"><!-- page thumbnails --></div>
+            <div style="flex:1; display:flex; align-items:center; justify-content:center; padding:14px; overflow:auto; background:rgba(0,0,0,0.14); min-height:0;">
+                <div id="moodboardCanvas" style="position:relative; width:100%; max-width:880px; aspect-ratio:936/540; background:#ffffff; box-shadow:0 2px 14px rgba(0,0,0,0.35);">
+                    <!-- tiles injected by renderMoodboardCanvas -->
+                </div>
+            </div>
+        </div>
+        <div style="padding:10px 14px; border-top:1px solid var(--border-color); display:flex; align-items:center; gap:8px;">
+            <input id="mbCaption" type="text" placeholder="Select an element" disabled oninput="_mbInput(this.value)" style="flex:1; font-size:0.75rem; padding:6px 8px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px;">
+            <div id="mbImgCtl" style="display:none; align-items:center; gap:6px;">
+                <span style="font-size:0.66rem; color:var(--text-muted);">Zoom</span>
+                <input id="mbZoom" type="range" min="1" max="4" step="0.05" value="1" oninput="_mbSetZoom(this.value)" title="Zoom image inside frame" style="width:84px;">
+                <span style="font-size:0.66rem; color:var(--text-muted);">Caption</span>
+                <span style="display:inline-flex; align-items:center; border:1px solid var(--border-color); border-radius:4px; overflow:hidden;">
+                    <button onclick="_mbNudgeCapSize(-0.003)" title="Smaller" style="width:26px; height:30px; border:0; background:transparent; color:var(--text-main); cursor:pointer;">A-</button>
+                    <span id="mbCapSizeVal" style="min-width:24px; text-align:center; font-size:0.7rem; color:var(--text-muted);">20</span>
+                    <button onclick="_mbNudgeCapSize(0.003)" title="Larger" style="width:26px; height:30px; border:0; background:transparent; color:var(--text-main); cursor:pointer;">A+</button>
+                </span>
+                <select id="mbCapSide" onchange="_mbSetCapSide(this.value)" title="Caption position" style="height:30px; font-size:0.72rem; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px;">
+                    <option value="bottom">Bottom</option>
+                    <option value="top">Top</option>
+                    <option value="left">Left</option>
+                    <option value="right">Right</option>
+                </select>
+            </div>
+            <div id="mbTextCtl" style="display:none; align-items:center; gap:6px;">
+                <select id="mbParaStyle" onchange="_mbApplyParaStyle(this.value)" title="Apply a paragraph style" style="height:30px; font-size:0.72rem; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px;">
+                    <option value="">Style…</option>
+                    <option value="heading">Heading</option>
+                    <option value="subhead">Subhead</option>
+                    <option value="body">Body</option>
+                    <option value="caption">Caption</option>
+                    <option value="quote">Quote</option>
+                </select>
+                <select id="mbFont" onchange="_mbSetFont(this.value)" title="Font" style="height:30px; font-size:0.72rem; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px;">
+                    <option value="display">Druk (display)</option>
+                    <option value="serif">Messina (serif)</option>
+                    <option value="sans">Helvetica (sans)</option>
+                </select>
+                <span style="display:inline-flex; align-items:center; border:1px solid var(--border-color); border-radius:4px; overflow:hidden;">
+                    <button onclick="_mbNudgeSize(-0.005)" title="Smaller" style="width:26px; height:30px; border:0; background:transparent; color:var(--text-main); cursor:pointer;">A-</button>
+                    <span id="mbSizeVal" style="min-width:26px; text-align:center; font-size:0.7rem; color:var(--text-muted);">45</span>
+                    <button onclick="_mbNudgeSize(0.005)" title="Larger" style="width:26px; height:30px; border:0; background:transparent; color:var(--text-main); cursor:pointer;">A+</button>
+                </span>
+                <input id="mbTextColor" type="color" value="#222222" oninput="_mbSetTextColor(this.value)" title="Text color" style="width:30px; height:30px; padding:0; border:1px solid var(--border-color); border-radius:4px; background:none; cursor:pointer;">
+                <button onclick="_mbApplyToAll('text')" title="Apply this font, size and color to every text element" style="height:30px; padding:0 10px; font-size:0.68rem; background:transparent; color:var(--text-muted); border:1px solid var(--border-color); border-radius:4px; cursor:pointer;">Apply to all</button>
+            </div>
+            <div id="mbArrowCtl" style="display:none; align-items:center; gap:6px;">
+                <input id="mbArrowColor" type="color" value="#9aa0a6" oninput="_mbSetArrowColor(this.value)" title="Arrow color" style="width:30px; height:30px; padding:0; border:1px solid var(--border-color); border-radius:4px; background:none; cursor:pointer;">
+                <span style="display:inline-flex; align-items:center; border:1px solid var(--border-color); border-radius:4px; overflow:hidden;">
+                    <button onclick="_mbNudgeWeight(-0.3)" title="Thinner" style="width:26px; height:30px; border:0; background:transparent; color:var(--text-main); cursor:pointer;">−</button>
+                    <span id="mbWtVal" style="min-width:30px; text-align:center; font-size:0.7rem; color:var(--text-muted);">1.2</span>
+                    <button onclick="_mbNudgeWeight(0.3)" title="Thicker" style="width:26px; height:30px; border:0; background:transparent; color:var(--text-main); cursor:pointer;">+</button>
+                </span>
+                <button onclick="_mbApplyToAll('arrow')" title="Apply this color and weight to every arrow" style="height:30px; padding:0 10px; font-size:0.68rem; background:transparent; color:var(--text-muted); border:1px solid var(--border-color); border-radius:4px; cursor:pointer;">Apply to all</button>
+            </div>
+            <button id="mbFront" class="action-btn btn-secondary" disabled style="width:auto; height:30px; padding:0 12px; font-size:0.72rem;" onclick="_mbToFront()">Bring to front</button>
+            <button id="mbBack" class="action-btn btn-secondary" disabled style="width:auto; height:30px; padding:0 12px; font-size:0.72rem;" onclick="_mbToBack()">Send to back</button>
+            <button id="mbDelete" class="action-btn btn-secondary" disabled style="width:auto; height:30px; padding:0 12px; font-size:0.72rem;" onclick="_mbDelete()">Delete</button>
+        </div>
+    </div>
+</div>
+
+<!-- Copy editor popup. Focused writing area for a prose field with a live word
+     count + soft limit tuned to that page's text column. -->
+<div id="copyEditModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.65); z-index:10001; align-items:center; justify-content:center; backdrop-filter: blur(2px);">
+    <div style="background:var(--bg-panel); border:1px solid var(--border-color); border-radius:8px; width:90vw; max-width:680px; display:flex; flex-direction:column; box-shadow:0 15px 35px rgba(0,0,0,0.4);">
+        <div style="padding:14px 18px; border-bottom:1px solid var(--border-color);">
+            <h3 id="copyEditTitle" style="margin:0; font-size:1.05rem; color:var(--text-strong);">Edit copy</h3>
+        </div>
+        <div style="padding:16px 18px;">
+            <textarea id="copyEditArea" rows="12" oninput="updateCopyCount()" style="width:100%; font-size:0.92rem; line-height:1.5; padding:10px 12px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px; box-sizing:border-box; resize:vertical;"></textarea>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-top:10px;">
+                <span id="copyEditCount" style="font-size:0.72rem; color:var(--text-muted);">0 / 0 words</span>
+                <div style="display:flex; gap:8px;">
+                    <button class="action-btn btn-secondary" style="width:auto; height:32px; padding:0 16px; font-size:0.75rem;" onclick="closeCopyEditor()">Cancel</button>
+                    <button class="action-btn" style="width:auto; height:32px; padding:0 16px; font-size:0.75rem;" onclick="saveCopyEditor()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Artwork picker: drop a project frame (mockup + spec) onto a layout page -->
+<div id="artPickerModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.65); z-index:10002; align-items:center; justify-content:center; backdrop-filter: blur(2px);">
+    <div style="background:var(--bg-panel); border:1px solid var(--border-color); border-radius:8px; width:92vw; max-width:560px; max-height:82vh; display:flex; flex-direction:column; box-shadow:0 15px 35px rgba(0,0,0,0.4);">
+        <div style="padding:14px 18px; border-bottom:1px solid var(--border-color); display:flex; align-items:center; justify-content:space-between;">
+            <div>
+                <h3 style="margin:0; font-size:1.05rem; color:var(--text-strong);">Add artwork</h3>
+                <p style="margin:2px 0 0; font-size:0.7rem; color:var(--text-muted);">Drops a framed mockup + its spec onto this page. Arrange them salon-style.</p>
+            </div>
+            <button class="action-btn" style="width:auto; height:30px; padding:0 16px; font-size:0.75rem;" onclick="_mbCloseArtPicker()">Done</button>
+        </div>
+        <div style="padding:8px 18px; border-bottom:1px solid var(--border-color); display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+            <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-size:0.74rem; color:var(--text-main);"><input type="checkbox" id="artCompactSpec" style="cursor:pointer;"> Compact spec <span style="color:var(--text-muted); font-size:0.68rem;">(Art Type · Matboard · Overall)</span></label>
+            <span style="flex:1;"></span>
+            <button class="action-btn btn-secondary" style="width:auto; height:28px; padding:0 12px; font-size:0.72rem;" onclick="_mbAddAllArtwork()">Add all to this page</button>
+        </div>
+        <div id="artPickerList" style="flex:1; overflow-y:auto; padding:10px 18px;"><!-- artwork rows --></div>
+    </div>
+</div>
+
+<!-- Contacts editor: structured add/remove for the Thank You page -->
+<div id="contactsModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.65); z-index:10001; align-items:center; justify-content:center; backdrop-filter: blur(2px);">
+    <div style="background:var(--bg-panel); border:1px solid var(--border-color); border-radius:8px; width:92vw; max-width:680px; max-height:84vh; display:flex; flex-direction:column; box-shadow:0 15px 35px rgba(0,0,0,0.4);">
+        <div style="padding:14px 18px; border-bottom:1px solid var(--border-color); display:flex; align-items:center; justify-content:space-between;">
+            <div>
+                <h3 style="margin:0; font-size:1.05rem; color:var(--text-strong);">Thank You — contacts</h3>
+                <p style="margin:2px 0 0; font-size:0.7rem; color:var(--text-muted);">These appear on the Thank You page. Add or remove people as needed.</p>
+            </div>
+            <button class="action-btn" style="width:auto; height:30px; padding:0 16px; font-size:0.75rem;" onclick="closeContactsEditor()">Done</button>
+        </div>
+        <div id="contactsRows" style="flex:1; overflow-y:auto; padding:16px 18px;"><!-- contact rows --></div>
+        <div style="padding:12px 18px; border-top:1px solid var(--border-color);">
+            <button class="action-btn btn-secondary" style="width:auto; height:32px; padding:0 14px; font-size:0.74rem;" onclick="addContact()">+ Add contact</button>
+        </div>
+    </div>
+</div>
+
+<!-- Layout templates: starter layouts per page type + your saved/shared ones -->
+<div id="templatesModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.65); z-index:10001; align-items:center; justify-content:center; backdrop-filter: blur(2px);">
+    <div style="background:var(--bg-panel); border:1px solid var(--border-color); border-radius:8px; width:92vw; max-width:820px; height:80vh; display:flex; flex-direction:column; box-shadow:0 15px 35px rgba(0,0,0,0.4);">
+        <div style="padding:14px 18px; border-bottom:1px solid var(--border-color); display:flex; align-items:center; justify-content:space-between;">
+            <div>
+                <h3 style="margin:0; font-size:1.05rem; color:var(--text-strong);">Layout templates</h3>
+                <p style="margin:2px 0 0; font-size:0.7rem; color:var(--text-muted);">Apply to the current page, or drop in as a new page. Image frames are placeholders — fill them after.</p>
+            </div>
+            <button class="action-btn" style="width:auto; height:30px; padding:0 16px; font-size:0.75rem;" onclick="closeTemplatesModal()">Done</button>
+        </div>
+        <div style="padding:10px 18px; border-bottom:1px solid var(--border-color); display:flex; gap:6px; flex-wrap:wrap;">
+            <button id="tplTab_cover" onclick="_tplSetTab('cover')">Cover</button>
+            <button id="tplTab_narrative" onclick="_tplSetTab('narrative')">Narrative</button>
+            <button id="tplTab_slogan" onclick="_tplSetTab('slogan')">Good Art</button>
+            <button id="tplTab_moodboard" onclick="_tplSetTab('moodboard')">Moodboard</button>
+            <button id="tplTab_breaker" onclick="_tplSetTab('breaker')">Breaker</button>
+            <button id="tplTab_keyword" onclick="_tplSetTab('keyword')">Keyword</button>
+            <button id="tplTab_inspo" onclick="_tplSetTab('inspo')">Inspo</button>
+        </div>
+        <div id="tplCards" style="flex:1; overflow-y:auto; padding:16px 18px; display:flex; flex-wrap:wrap; gap:14px; align-content:flex-start;"><!-- cards --></div>
+        <div style="padding:12px 18px; border-top:1px solid var(--border-color); display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <button class="action-btn btn-secondary" style="width:auto; height:32px; padding:0 14px; font-size:0.74rem;" onclick="saveCurrentAsTemplate()">Save current page as template</button>
+            <span style="flex:1;"></span>
+            <button class="action-btn btn-secondary" style="width:auto; height:32px; padding:0 14px; font-size:0.74rem;" onclick="exportTemplates()">Export…</button>
+            <button class="action-btn btn-secondary" style="width:auto; height:32px; padding:0 14px; font-size:0.74rem;" title="Download studio-defaults.json to commit to the repo (shared templates + contacts for everyone)" onclick="exportStudioDefaults()">Export studio defaults…</button>
+            <button class="action-btn btn-secondary" style="width:auto; height:32px; padding:0 14px; font-size:0.74rem;" onclick="document.getElementById('tplImportFile').click()">Import…</button>
+            <input type="file" id="tplImportFile" accept="application/json,.json" style="display:none;" onchange="importTemplates(event)">
+        </div>
+    </div>
+</div>
+
+<!-- Default styles: one place to set arrow / text / caption defaults for the
+     whole deck, plus a reapply so existing elements stay consistent. -->
+<div id="deckStylesModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.65); z-index:10001; align-items:center; justify-content:center; backdrop-filter: blur(2px);">
+    <div style="background:var(--bg-panel); border:1px solid var(--border-color); border-radius:8px; width:90vw; max-width:460px; display:flex; flex-direction:column; box-shadow:0 15px 35px rgba(0,0,0,0.4);">
+        <div style="padding:14px 18px; border-bottom:1px solid var(--border-color);">
+            <h3 style="margin:0; font-size:1.05rem; color:var(--text-strong);">Default styles</h3>
+            <p style="margin:2px 0 0; font-size:0.7rem; color:var(--text-muted);">New elements use these. "Reapply" pushes them onto everything already in the layout.</p>
+        </div>
+        <div style="padding:16px 18px; display:flex; flex-direction:column; gap:14px;">
+            <div>
+                <div style="font-size:0.65rem; font-weight:bold; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.3px; margin-bottom:6px;">Arrows</div>
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <label style="font-size:0.75rem; color:var(--text-main); display:flex; align-items:center; gap:6px;">Color <input id="dsArrowColor" type="color" oninput="_dsSet('arrowColor', this.value)" style="width:30px; height:28px; padding:0; border:1px solid var(--border-color); border-radius:4px; background:none; cursor:pointer;"></label>
+                    <label style="font-size:0.75rem; color:var(--text-main); display:flex; align-items:center; gap:6px;">Weight
+                        <span style="display:inline-flex; align-items:center; border:1px solid var(--border-color); border-radius:4px; overflow:hidden;">
+                            <button onclick="_dsNudge('arrowWeight', -0.3, 0.5, 6)" style="width:26px; height:28px; border:0; background:transparent; color:var(--text-main); cursor:pointer;">−</button>
+                            <span id="dsArrowWtVal" style="min-width:30px; text-align:center; font-size:0.72rem; color:var(--text-muted);">1.2</span>
+                            <button onclick="_dsNudge('arrowWeight', 0.3, 0.5, 6)" style="width:26px; height:28px; border:0; background:transparent; color:var(--text-main); cursor:pointer;">+</button>
+                        </span>
+                    </label>
+                </div>
+            </div>
+            <div>
+                <div style="font-size:0.65rem; font-weight:bold; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.3px; margin-bottom:6px;">Text</div>
+                <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                    <select id="dsTextFont" onchange="_dsSet('textFont', this.value)" style="height:28px; font-size:0.72rem; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px;">
+                        <option value="display">Druk</option><option value="serif">Messina</option><option value="sans">Helvetica</option>
+                    </select>
+                    <span style="display:inline-flex; align-items:center; border:1px solid var(--border-color); border-radius:4px; overflow:hidden;">
+                        <button onclick="_dsNudge('textSize', -0.005, 0.02, 0.22)" style="width:26px; height:28px; border:0; background:transparent; color:var(--text-main); cursor:pointer;">A-</button>
+                        <span id="dsTextSizeVal" style="min-width:26px; text-align:center; font-size:0.72rem; color:var(--text-muted);">45</span>
+                        <button onclick="_dsNudge('textSize', 0.005, 0.02, 0.22)" style="width:26px; height:28px; border:0; background:transparent; color:var(--text-main); cursor:pointer;">A+</button>
+                    </span>
+                    <label style="font-size:0.75rem; color:var(--text-main); display:flex; align-items:center; gap:6px;">Color <input id="dsTextColor" type="color" oninput="_dsSet('textColor', this.value)" style="width:30px; height:28px; padding:0; border:1px solid var(--border-color); border-radius:4px; background:none; cursor:pointer;"></label>
+                </div>
+            </div>
+            <div>
+                <div style="font-size:0.65rem; font-weight:bold; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.3px; margin-bottom:6px;">Image captions</div>
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <span style="display:inline-flex; align-items:center; border:1px solid var(--border-color); border-radius:4px; overflow:hidden;">
+                        <button onclick="_dsNudge('capSize', -0.003, 0.01, 0.08)" style="width:26px; height:28px; border:0; background:transparent; color:var(--text-main); cursor:pointer;">A-</button>
+                        <span id="dsCapSizeVal" style="min-width:26px; text-align:center; font-size:0.72rem; color:var(--text-muted);">20</span>
+                        <button onclick="_dsNudge('capSize', 0.003, 0.01, 0.08)" style="width:26px; height:28px; border:0; background:transparent; color:var(--text-main); cursor:pointer;">A+</button>
+                    </span>
+                    <label style="font-size:0.75rem; color:var(--text-main); display:flex; align-items:center; gap:6px;">Position
+                        <select id="dsCapSide" onchange="_dsSet('capSide', this.value)" style="height:28px; font-size:0.72rem; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px;">
+                            <option value="bottom">Bottom</option><option value="top">Top</option><option value="left">Left</option><option value="right">Right</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div style="padding:12px 18px; border-top:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;">
+            <button class="action-btn btn-secondary" style="width:auto; height:32px; padding:0 14px; font-size:0.74rem;" onclick="_mbReapplyStyles()" title="Apply these defaults to every element already in the layout">Reapply to everything</button>
+            <button class="action-btn" style="width:auto; height:32px; padding:0 18px; font-size:0.75rem;" onclick="closeDeckStyles()">Done</button>
         </div>
     </div>
 </div>
@@ -1180,6 +1662,46 @@
             </div>
         </div>
 
+        <!-- IMAGE CODE STYLE: controls the artwork image-code caption beneath
+             each frame (color, size, font). Separate from dimension styling so
+             codes can be made subtle (e.g. light grey). Wired to
+             applyImageCodeStyleFromModal(); persists to localStorage. -->
+        <div style="margin-bottom: 12px;">
+            <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.7px; font-weight:600; margin-bottom: 6px;">Image Code Style</div>
+            <div style="background:var(--bg-subpanel); padding:12px; border-radius:6px; border:1px solid var(--border-color); display:flex; flex-direction:column; gap:12px;">
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <span style="font-size:0.65rem; color:var(--text-muted); width:80px;">Color</span>
+                    <input type="color" id="imgCodeColor" value="#222222" style="width:40px; height:28px; padding:0; border:1px solid var(--border-color); border-radius:4px; cursor:pointer;" oninput="applyImageCodeStyleFromModal()">
+                    <span id="imgCodeColorHex" style="font-size:0.65rem; color:var(--text-muted); font-family:monospace;">#222222</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <span style="font-size:0.65rem; color:var(--text-muted); width:80px;">Size</span>
+                    <input type="range" id="imgCodeFontSize" min="6" max="20" step="1" value="10" style="flex:1;" oninput="applyImageCodeStyleFromModal()">
+                    <span id="imgCodeFontSizeVal" style="font-size:0.65rem; color:var(--text-muted); width:30px; text-align:right;">10px</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <span style="font-size:0.65rem; color:var(--text-muted); width:80px;">Font</span>
+                    <select id="imgCodeFontFamily" onchange="applyImageCodeStyleFromModal()" style="flex:1; padding:5px; font-size:0.75rem;">
+                        <option value="Arial, Helvetica, sans-serif">Arial (universal)</option>
+                        <option value="Helvetica, Arial, sans-serif">Helvetica</option>
+                        <option value="'Segoe UI', Tahoma, sans-serif">Segoe UI</option>
+                        <option value="Verdana, Geneva, sans-serif">Verdana</option>
+                        <option value="Tahoma, Geneva, sans-serif">Tahoma</option>
+                        <option value="'Courier New', monospace">Courier New</option>
+                    </select>
+                </div>
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <span style="font-size:0.65rem; color:var(--text-muted); width:80px;">Weight</span>
+                    <div class="unit-toggle" style="height:26px; flex:1;">
+                        <button id="imgCodeWeightReg" type="button" class="active" onclick="setImageCodeWeight(400)">REGULAR</button>
+                        <button id="imgCodeWeightSemi" type="button" onclick="setImageCodeWeight(600)">SEMIBOLD</button>
+                        <button id="imgCodeWeightBold" type="button" onclick="setImageCodeWeight(700)">BOLD</button>
+                    </div>
+                </div>
+                <p style="font-size:0.6rem; color:var(--text-muted); margin:0; line-height:1.4;">Controls the image-code caption beneath each frame (toggle it on via the Image Code button in Layout Guides). Tip: light grey keeps codes subtle in presentations.</p>
+            </div>
+        </div>
+
         <!-- GRID & SNAP: visual grid spacing + drag snap-to-grid increment.
              These are independent: grid is purely visual (how far apart the
              gridlines render), snap controls what the dragged frame's
@@ -1249,17 +1771,27 @@
     <div style="background:var(--bg-panel); padding:20px; border-radius:8px; width:380px; border:1px solid var(--border-color); box-shadow:0 15px 35px rgba(0,0,0,0.4);">
         <h3 style="margin-top:0; margin-bottom:12px; font-size:1.1rem; color:var(--text-strong);">Keyboard Shortcuts</h3>
         <div style="display:grid; grid-template-columns: auto 1fr; gap: 6px 12px; font-size:0.75rem; color:var(--text-main); line-height: 1.5;">
+            <div style="grid-column:1/-1; font-size:0.62rem; text-transform:uppercase; letter-spacing:0.6px; color:var(--text-muted); font-weight:700; margin-top:2px;">Frames</div>
             <kbd class="kbd-key">&larr;&nbsp;&uarr;&nbsp;&rarr;&nbsp;&darr;</kbd><span>Nudge selected frames by small step</span>
             <kbd class="kbd-key">Shift&nbsp;+&nbsp;Arrow</kbd><span>Nudge by big step</span>
             <kbd class="kbd-key">Delete</kbd><span>Remove selected frames</span>
             <kbd class="kbd-key">Esc</kbd><span>Deselect all frames</span>
             <kbd class="kbd-key">Ctrl&nbsp;+&nbsp;D</kbd><span>Duplicate selected frame</span>
             <kbd class="kbd-key">Ctrl&nbsp;+&nbsp;G</kbd><span>Group / ungroup selected frames</span>
+            <kbd class="kbd-key">Click</kbd><span>Select one frame</span>
+            <kbd class="kbd-key">Ctrl&nbsp;+&nbsp;Click</kbd><span>Add/remove from multi-selection</span>
+
+            <div style="grid-column:1/-1; font-size:0.62rem; text-transform:uppercase; letter-spacing:0.6px; color:var(--text-muted); font-weight:700; margin-top:8px;">Measure Line Tool</div>
+            <kbd class="kbd-key">M</kbd><span>Toggle the measure-line tool on / off</span>
+            <kbd class="kbd-key">&larr;&nbsp;&uarr;&nbsp;&rarr;&nbsp;&darr;</kbd><span>Move the selected measure line (small step)</span>
+            <kbd class="kbd-key">Shift&nbsp;+&nbsp;Arrow</kbd><span>Move the selected measure line (big step)</span>
+            <kbd class="kbd-key">Delete</kbd><span>Remove the selected measure line</span>
+            <kbd class="kbd-key">Esc</kbd><span>Exit the tool / clear the selected line</span>
+
+            <div style="grid-column:1/-1; font-size:0.62rem; text-transform:uppercase; letter-spacing:0.6px; color:var(--text-muted); font-weight:700; margin-top:8px;">Project</div>
             <kbd class="kbd-key">Ctrl&nbsp;+&nbsp;Z</kbd><span>Undo</span>
             <kbd class="kbd-key">Ctrl&nbsp;+&nbsp;Shift&nbsp;+&nbsp;Z</kbd><span>Redo</span>
             <kbd class="kbd-key">Ctrl&nbsp;+&nbsp;S</kbd><span>Save project</span>
-            <kbd class="kbd-key">Click</kbd><span>Select one frame</span>
-            <kbd class="kbd-key">Ctrl&nbsp;+&nbsp;Click</kbd><span>Add/remove from multi-selection</span>
         </div>
         <button class="action-btn" style="width:100%; height:32px; font-size:0.75rem; margin-top:16px;" onclick="document.getElementById('shortcutsModal').style.display='none'">Done</button>
     </div>
@@ -1337,8 +1869,28 @@
 <!-- Drop-zone visual states. .drag-over fires while a drag is hovering over the
      zone; .processing while files are being read. -->
 <style>
+    @font-face { font-family: 'Druk'; src: url('fonts/Druk-Bold.ttf') format('truetype'); font-weight: 700; font-display: swap; }
+    @font-face { font-family: 'Messina'; src: url('fonts/MessinaSerif-Regular.ttf') format('truetype'); font-weight: 400; font-display: swap; }
+    @font-face { font-family: 'Messina'; src: url('fonts/MessinaSerif-Bold.ttf') format('truetype'); font-weight: 700; font-display: swap; }
     #libraryDropZone.drag-over { border-color: var(--accent); background: rgba(74, 144, 226, 0.08); }
     #libraryDropZone.processing { opacity: 0.5; pointer-events: none; }
+    /* Elevation tab strip: scroll horizontally instead of squishing the tabs
+       when there are a lot of walls, and keep the fixed tab, + Add Wall, and the
+       right-hand button group from being compressed. */
+    .app-top-nav { flex-wrap: nowrap; }
+    #nav-tabs-container {
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: thin;
+    }
+    #nav-tabs-container .nav-tab { flex: 0 0 auto !important; white-space: nowrap; }
+    #nav-tabs-container::-webkit-scrollbar { height: 6px; }
+    #nav-tabs-container::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+    .app-top-nav > .nav-tabs-fixed, .app-top-nav > .nav-add-tab { flex: 0 0 auto; white-space: nowrap; }
 </style>
 
 <script src="app.js"></script>
