@@ -6,7 +6,7 @@
 // Update APP_VERSION on each release. Set APP_BUILD to 'dev' in the dev
 // repo fork — the version pill turns orange to make it visually obvious
 // you're on the development build, not the production one users see.
-const APP_VERSION = '1.1';
+const APP_VERSION = '2.5';
 const APP_BUILD = 'dev';  // 'prod' (green dot) or 'dev' (orange dot)
 
 let currentView = 'dashboard';
@@ -190,7 +190,10 @@ const dashDefaultData = {
     swatchDataUrl: "", swatchName: "",
     m1A: true, m1T: 3, m1B: 3, m1L: 3, m1R: 3, m1Locked: false, m1ColorName: "B 97 White", m1ColorHex: "#ffffff",
     m2A: false, m2: 0.25, m2ColorName: "B 97 White", m2ColorHex: "#ffffff", matsLinked: true,
-    glass: "2mm Standard", hardware: "3-Point Security", mount: "Standard Mount", backing: "Foamcore", notes: "", prodNotes: "" 
+    glass: "2mm Standard", hardware: "3-Point Security", mount: "Standard Mount", backing: "Foamcore", notes: "", prodNotes: "",
+    // Floorplan markup: normalized pin position (0–1) on the plan, and art
+    // category (drives pin/list color + legend). null = not yet placed.
+    planX: null, planY: null, category: ""
 };
 let dashProjectData = [ JSON.parse(JSON.stringify(dashDefaultData)) ];
 
@@ -218,6 +221,9 @@ function unitFactor(from, to) {
 let elevations = [{ name: "Elevation 1", frames: [], wallW: 185, wallH: 108, personPos: { x: -60 } }];
 let currentElevIndex = 0;
 let elevFrames = elevations[0].frames;
+// When true, uploaded artwork images fill frame openings in the elevation.
+// The PDF "beauty" page uses true; the technical drawing page sets it false.
+let _showArtwork = true;
 let elevPersonPos = elevations[0].personPos;
 let elevScale = 1;
 // Precise wall dims resolved each drawElevAll (full precision, not the
@@ -252,12 +258,580 @@ const MAX_HISTORY = 50;
 let undoStack = [];
 let redoStack = [];
 
+// Floorplan image used by the Floorplan Key page + Mark Up Floorplan tool.
+// Held as a data URL on a project-level global so it persists with save/load
+// and autosave (added to those payloads), unlike the earlier session-only var.
+let floorplanImageData = '';
+let floorplanImageName = '';
+// Multiple floor-plan levels (Level 1/2/3…). Each row carries a `level` index.
+// Legacy single-plan projects migrate into Level 1.
+let floorplanLevels = [];        // [{ name, imageData, imageName }]
+let _fpLevel = 0;                // active level in the markup tool
+function _fpMigrate() {
+    if (!Array.isArray(floorplanLevels) || !floorplanLevels.length) {
+        floorplanLevels = [{ name: 'Level 1', imageData: floorplanImageData || '', imageName: floorplanImageName || '' }];
+    }
+    floorplanLevels.forEach((lv, i) => {
+        if (!lv || typeof lv !== 'object') { floorplanLevels[i] = { name: 'Level ' + (i + 1), imageData: '', imageName: '' }; return; }
+        if (typeof lv.name !== 'string' || !lv.name) lv.name = 'Level ' + (i + 1);
+        if (typeof lv.imageData !== 'string') lv.imageData = '';
+        if (typeof lv.imageName !== 'string') lv.imageName = '';
+    });
+    if (_fpLevel < 0 || _fpLevel >= floorplanLevels.length) _fpLevel = 0;
+}
+function _fpActive() { _fpMigrate(); return floorplanLevels[_fpLevel]; }
+// Per-level 1-based callout number for each item (in dashProjectData order),
+// matching the Floorplan Key page numbering exactly.
+function _fpNumbers() {
+    const counts = {}, map = {};
+    (dashProjectData || []).forEach(it => { if (!it) return; const lv = it.level || 0; counts[lv] = (counts[lv] || 0) + 1; map[it.id] = counts[lv]; });
+    return map;
+}
+// Plan callout numbers come from the ART code itself, not a running count.
+// Set-pieces (ART.005-A, -B, -C, -D) share one group → one pin labelled "05".
+function _artGroupKey(code) {
+    const c = (code == null ? '' : String(code)).trim();
+    const stripped = c.replace(/[-_\s]*[A-Za-z]\d*$/, '');   // drop a trailing piece suffix (-A, -B1…)
+    return (/\d/.test(stripped) && stripped) ? stripped : c; // keep pure-letter codes intact
+}
+function _artGroupNum(code) {
+    const key = _artGroupKey(code);
+    const m = key.match(/(\d+(?:\.\d+)?)\s*$/);              // last numeric token (allow dotted, e.g. 3.26)
+    if (!m) return (key || '').slice(-2) || '00';
+    const tok = m[1];
+    if (tok.indexOf('.') >= 0) return tok;                   // dotted codes keep their form
+    const n = parseInt(tok, 10);
+    return isNaN(n) ? tok : String(n).padStart(2, '0');      // 005 → "05", 1 → "01"
+}
+// Collapse dashProjectData into placement groups (one pin per group). Placement
+// (planX/planY/level) is taken from the first placed member.
+function _fpGroups() {
+    const order = [], map = {};
+    (dashProjectData || []).forEach(r => {
+        if (!r) return;
+        const k = _artGroupKey(r.id || '');
+        if (!map[k]) { map[k] = { key: k, num: _artGroupNum(r.id || ''), ids: [], rows: [], level: (r.level || 0), category: r.category || '', location: r.location || '', planX: null, planY: null }; order.push(k); }
+        const g = map[k];
+        g.ids.push(r.id || ''); g.rows.push(r);
+        if (r.planX != null && r.planY != null && g.planX == null) { g.planX = r.planX; g.planY = r.planY; g.level = (r.level || 0); }
+        if (!g.category && r.category) g.category = r.category;
+        if (!g.location && r.location) g.location = r.location;
+    });
+    return order.map(k => map[k]);
+}
+function _fpFindGroup(key) { return _fpGroups().find(g => g.key === key); }
+
+// Editorial copy for the narrative + thank-you pages. Persisted with the
+// project (save/load + autosave), edited in the Presentation PDF dialog.
+// contacts: one per line, "Name | Role | Email | Phone" (commas also accepted).
+let editorialContent = { narrative: '', contacts: '', understanding: '', strategy: { primary: '', secondary: '', tertiary: '' }, layoutPages: [], templates: [], coverPage: { elements: [] }, narrativePage: { elements: [] }, sloganPage: { elements: [] }, understandingPage: { elements: [] }, strategyPage: { elements: [] }, specTemplate: 'classic', specTemplateOverrides: {}, approvedStamp: false, approvedPages: {}, approvalStatus: {}, specCodeStyle: { font: 'display', size: 16, color: '#141414' }, paragraphStyle: { font: 'sans', size: 16, color: '#222222' }, titleStyle: { font: 'display', size: 22, color: '#141414' }, wireframe: false, specArtOnly: {}, manualGroups: [], scaleOpts: { codes: 'frames', elevThumb: false }, elevBreakers: false, breakerNoPlan: false, breakerMeasure: false, annotations: {}, timeline: '', styles: { arrowColor: '#9aa0a6', arrowWeight: 1.2, textFont: 'serif', textSize: 0.045, textColor: '#222222', capSize: 0.02, capSide: 'bottom' } };
+// Normalize an older / hand-edited project on load. The main hazard is a unit
+// mislabel: centimetre (or millimetre) geometry saved with an 'in' flag, which
+// makes a 108 cm wall load as a 9-foot-tall 274" wall and shrinks the 72" person
+// to a sliver. We infer the true unit from the wall height and relabel — values
+// are left untouched, only the interpretation is corrected.
+function _migrateLoadedProject(data) {
+    if (!data || typeof data !== 'object') return data;
+    try {
+        const els = Array.isArray(data.elevations) ? data.elevations : [];
+        const heights = els.map(e => parseFloat(e && e.wallH)).filter(v => !isNaN(v) && v > 0).sort((a, b) => a - b);
+        const flagsAgree = (data.dashUnit || data.elevUnit || 'in') === (data.elevUnit || data.dashUnit || 'in');
+        if (heights.length && flagsAgree) {
+            const medH = heights[Math.floor(heights.length / 2)];
+            const declared = data.dashUnit || data.elevUnit || 'in';
+            const plausible = (h) => h >= 48 && h <= 240;          // real walls: 4 ft – 20 ft
+            if (!plausible(medH * unitFactor(declared, 'in'))) {
+                const cand = ['in', 'cm', 'mm'].find(u => plausible(medH * unitFactor(u, 'in')));
+                if (cand && cand !== declared) { data.dashUnit = cand; data.elevUnit = cand; data._unitAutoFixed = { from: declared, to: cand }; }
+            }
+        }
+    } catch (e) { /* never let migration block a load */ }
+    return data;
+}
+
+function _editorialDefaults() { return { narrative: '', contacts: '', understanding: '', strategy: { primary: '', secondary: '', tertiary: '' }, layoutPages: [], templates: [], coverPage: { elements: [] }, narrativePage: { elements: [] }, sloganPage: { elements: [] }, understandingPage: { elements: [] }, strategyPage: { elements: [] }, specTemplate: 'classic', specTemplateOverrides: {}, approvedStamp: false, approvedPages: {}, approvalStatus: {}, specCodeStyle: { font: 'display', size: 16, color: '#141414' }, paragraphStyle: { font: 'sans', size: 16, color: '#222222' }, titleStyle: { font: 'display', size: 22, color: '#141414' }, wireframe: false, specArtOnly: {}, manualGroups: [], scaleOpts: { codes: 'frames', elevThumb: false }, elevBreakers: false, breakerNoPlan: false, breakerMeasure: false, annotations: {}, timeline: '', styles: { arrowColor: '#9aa0a6', arrowWeight: 1.2, textFont: 'serif', textSize: 0.045, textColor: '#222222', capSize: 0.02, capSide: 'bottom' } }; }
+function _deckStyles() { if (!editorialContent.styles) editorialContent.styles = { arrowColor: '#9aa0a6', arrowWeight: 1.2, textFont: 'serif', textSize: 0.045, textColor: '#222222', capSize: 0.02, capSide: 'bottom' }; return editorialContent.styles; }
+
+// ── Layout pages ──────────────────────────────────────────────────────────
+// The freeform canvas edits ONE page (_mbPageIndex); the deck emits them all.
+// _mbEls() returns the current page's element array, so the editor functions
+// stay page-agnostic. Legacy single-array projects fold into page 1.
+let _mbPageIndex = 0;
+function _mbDefaultTitle(type) { return type === 'keyword' ? 'KEYWORDS' : type === 'inspo' ? 'INSPIRATION' : type === 'breaker' ? '' : type === 'divider' ? 'SECTION' : type === 'bio' ? 'ARTIST BIO' : type === 'plan' ? 'PLAN VIEW' : type === 'custom' ? 'PAGE' : type === 'toc' ? 'CONTENTS' : type === 'artindex' ? 'ARTWORK INDEX' : 'MOODBOARD'; }
+function _mbMigratePages() {
+    const ec = editorialContent;
+    if (!Array.isArray(ec.layoutPages) || !ec.layoutPages.length) {
+        ec.layoutPages = [{ id: 'pg' + Date.now(), type: 'moodboard', title: 'MOODBOARD', elements: [] }];
+    }
+    if (Array.isArray(ec.moodboard) && ec.moodboard.length && !(ec.layoutPages[0].elements || []).length) {
+        ec.layoutPages[0].elements = ec.moodboard;   // fold legacy single moodboard in
+    }
+    if ('moodboard' in ec) { try { delete ec.moodboard; } catch (e) { ec.moodboard = undefined; } }
+    ec.layoutPages.forEach(p => {
+        if (!p.id) p.id = 'pg' + Math.random().toString(36).slice(2);
+        if (typeof p.type !== 'string') p.type = 'moodboard';
+        if (typeof p.title !== 'string') p.title = _mbDefaultTitle(p.type);
+        if (typeof p.place !== 'string') p.place = 'afterStrategy';
+        if (!Array.isArray(p.elements)) p.elements = [];
+    });
+    if (_mbPageIndex < 0 || _mbPageIndex >= ec.layoutPages.length) _mbPageIndex = 0;
+    if (!Array.isArray(ec.templates)) ec.templates = [];
+    if (!ec.coverPage || !Array.isArray(ec.coverPage.elements)) ec.coverPage = { elements: [] };
+    if (!ec.narrativePage || !Array.isArray(ec.narrativePage.elements)) ec.narrativePage = { elements: [] };
+    if (!ec.sloganPage || !Array.isArray(ec.sloganPage.elements)) ec.sloganPage = { elements: [] };
+    if (!ec.understandingPage || !Array.isArray(ec.understandingPage.elements)) ec.understandingPage = { elements: [] };
+    if (!ec.strategyPage || !Array.isArray(ec.strategyPage.elements)) ec.strategyPage = { elements: [] };
+    if (typeof ec.specTemplate !== 'string' || !SPEC_TEMPLATES[ec.specTemplate]) ec.specTemplate = 'classic';
+    if (!ec.specTemplateOverrides || typeof ec.specTemplateOverrides !== 'object') ec.specTemplateOverrides = {};
+    if (typeof ec.approvedStamp !== 'boolean') ec.approvedStamp = false;
+    if (!ec.approvedPages || typeof ec.approvedPages !== 'object') ec.approvedPages = {};
+    if (!ec.approvalStatus || typeof ec.approvalStatus !== 'object') ec.approvalStatus = {};
+    Object.keys(ec.approvedPages).forEach(k => { if (ec.approvedPages[k] && !ec.approvalStatus[k]) ec.approvalStatus[k] = 'approved'; });
+    if (!ec.specCodeStyle || typeof ec.specCodeStyle !== 'object') ec.specCodeStyle = { font: 'display', size: 16, color: '#141414' };
+    if (!ec.paragraphStyle || typeof ec.paragraphStyle !== 'object') ec.paragraphStyle = { font: 'sans', size: 16, color: '#222222' };
+    if (!ec.titleStyle || typeof ec.titleStyle !== 'object') ec.titleStyle = { font: 'display', size: 22, color: '#141414' };
+    if (typeof ec.wireframe !== 'boolean') ec.wireframe = false;
+    if (!ec.specArtOnly || typeof ec.specArtOnly !== 'object') ec.specArtOnly = {};
+    if (!Array.isArray(ec.manualGroups)) ec.manualGroups = [];
+    if (!ec.scaleOpts || typeof ec.scaleOpts !== 'object') ec.scaleOpts = { codes: 'frames', elevThumb: false };
+    if (typeof ec.elevBreakers !== 'boolean') ec.elevBreakers = false;
+    if (typeof ec.breakerNoPlan !== 'boolean') ec.breakerNoPlan = false;
+    if (typeof ec.breakerMeasure !== 'boolean') ec.breakerMeasure = false;
+    if (!ec.annotations || typeof ec.annotations !== 'object') ec.annotations = {};
+}
+// When set, the editor targets a fixed page (e.g. the Cover) instead of the
+// layout-pages flow. Everything reads through _mbEls()/_mbPage(), so this is
+// the only hinge needed to reuse the whole canvas for fixed pages.
+let _mbEditTarget = null;
+function _mbPage() { if (_mbEditTarget) return _mbEditTarget.page; _mbMigratePages(); return editorialContent.layoutPages[_mbPageIndex]; }
+function _mbEls() { return _mbPage().elements; }
+function _mbAutosave() { if (typeof scheduleAutosave === 'function') scheduleAutosave(); }
+function _mbSwitchPage(i) {
+    _mbMigratePages();
+    if (i < 0 || i >= editorialContent.layoutPages.length) return;
+    _mbPageIndex = i; _mbSelected = -1;
+    if (_mbPlacing) { _mbPlacing = false; _mbDraft = null; }
+    renderMoodboardCanvas();
+}
+function addLayoutPage(type) {
+    _mbMigratePages();
+    const t = type || 'moodboard';
+    editorialContent.layoutPages.splice(_mbPageIndex + 1, 0, { id: 'pg' + Math.random().toString(36).slice(2), type: t, title: _mbDefaultTitle(t), elements: [] });
+    _mbPageIndex += 1; _mbSelected = -1;
+    renderMoodboardCanvas(); _mbAutosave();
+}
+function duplicateLayoutPage() {
+    _mbMigratePages();
+    const src = editorialContent.layoutPages[_mbPageIndex];
+    editorialContent.layoutPages.splice(_mbPageIndex + 1, 0, { id: 'pg' + Math.random().toString(36).slice(2), type: src.type, title: src.title, elements: JSON.parse(JSON.stringify(src.elements || [])) });
+    _mbPageIndex += 1; _mbSelected = -1;
+    renderMoodboardCanvas(); _mbAutosave();
+}
+function deleteLayoutPage() {
+    _mbMigratePages();
+    const pages = editorialContent.layoutPages;
+    if (pages.length <= 1) { pages[0].elements = []; }
+    else { pages.splice(_mbPageIndex, 1); if (_mbPageIndex >= pages.length) _mbPageIndex = pages.length - 1; }
+    _mbSelected = -1; renderMoodboardCanvas(); _mbAutosave();
+}
+function moveLayoutPage(dir) {
+    _mbMigratePages();
+    const pages = editorialContent.layoutPages;
+    const j = _mbPageIndex + dir;
+    if (j < 0 || j >= pages.length) return;
+    const tmp = pages[_mbPageIndex]; pages[_mbPageIndex] = pages[j]; pages[j] = tmp;
+    _mbPageIndex = j; renderMoodboardCanvas(); _mbAutosave();
+}
+function _mbSetPageType(v) { const p = _mbPage(); p.type = v; p.title = _mbDefaultTitle(v); renderMoodboardCanvas(); _mbAutosave(); }
+function _mbSetPageTitle(v) { _mbPage().title = v; renderMoodboardCanvas(); _mbAutosave(); }
+function _mbSetPagePlace(v) { _mbPage().place = v; _mbAutosave(); }
+function _mbMoveToPos(v) { const to = parseInt(v, 10) - 1; if (!isNaN(to)) _mbReorderPages(_mbPageIndex, to); }
+let _mbDragPageFrom = -1;
+function _mbEscapeHtml(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+// Read-only miniature render of a page's elements into an HTML string.
+function _mbThumbInner(page, wpx, hpx) {
+    const els = (page.elements || []).slice().sort((a, b) => (a.z || 0) - (b.z || 0));
+    let html = '', svg = '';
+    els.forEach(t => {
+        const ty = _elType(t);
+        if (ty === 'image') {
+            const boxW = (t.w || 0.28) * wpx, boxH = (typeof t.h === 'number' ? t.h : (t.w || 0.28) * (936 / 540) / (t.aspect || 1.33)) * hpx;
+            const base = 'position:absolute;left:' + ((t.x || 0) * wpx) + 'px;top:' + ((t.y || 0) * hpx) + 'px;width:' + boxW + 'px;height:' + boxH + 'px;overflow:hidden;';
+            if (t.img) {
+                const cv = _coverRect(boxW, boxH, t.aspect || 1.33, t.zoom || 1, t.panX || 0, t.panY || 0);
+                html += '<div style="' + base + '"><img src="' + t.img + '" style="position:absolute;left:' + cv.offX + 'px;top:' + cv.offY + 'px;width:' + cv.dW + 'px;height:' + cv.dH + 'px;max-width:none;"></div>';
+            } else {
+                html += '<div style="' + base + 'background:#e6e6e6;border:1px solid #cfcfcf;"></div>';
+            }
+        } else if (ty === 'text') {
+            const _famMap = { display: "'Druk','Arial Narrow',Arial,sans-serif", serif: "'Messina',Georgia,serif", sans: "Arial,Helvetica,sans-serif" };
+            const _fam = _famMap[t.font] || _famMap.serif;
+            html += '<div style="position:absolute;left:' + ((t.x || 0) * wpx) + 'px;top:' + ((t.y || 0) * hpx) + 'px;width:' + ((t.w || 0.3) * wpx) + 'px;font-size:' + Math.max(2, (t.size || 0.045) * hpx) + 'px;line-height:1.1;color:' + (t.color || '#222') + ';overflow:hidden;font-family:' + _fam + ';' + (t.bold ? 'font-weight:700;' : '') + (t.italic ? 'font-style:italic;' : '') + '">' + _mbEscapeHtml(t.text || '') + '</div>';
+        } else if (ty === 'arrow') {
+            svg += '<line x1="' + ((t.x1 || 0) * wpx) + '" y1="' + ((t.y1 || 0) * hpx) + '" x2="' + ((t.x2 || 0) * wpx) + '" y2="' + ((t.y2 || 0) * hpx) + '" stroke="' + (t.color || '#9aa0a6') + '" stroke-width="' + Math.max(0.5, (t.weight || 1.2) * 0.6) + '"/>';
+        } else if (ty === 'elbow' && Array.isArray(t.pts) && t.pts.length > 1) {
+            const pts = t.pts.map(p => ((p.x || 0) * wpx) + ',' + ((p.y || 0) * hpx)).join(' ');
+            svg += '<polyline points="' + pts + '" fill="none" stroke="' + (t.color || '#9aa0a6') + '" stroke-width="' + Math.max(0.5, (t.weight || 1.2) * 0.6) + '"/>';
+        }
+    });
+    if (svg) html += '<svg width="' + wpx + '" height="' + hpx + '" style="position:absolute;left:0;top:0;pointer-events:none;">' + svg + '</svg>';
+    if (page.title) html += '<div style="position:absolute;left:2px;top:1px;font:700 ' + Math.max(3, 0.06 * hpx) + "px 'Druk','Arial Narrow',Arial,sans-serif;color:#111;\">" + _mbEscapeHtml(page.title) + '</div>';
+    return html;
+}
+function _mbReorderPages(from, to) {
+    _mbMigratePages();
+    const pages = editorialContent.layoutPages;
+    if (from === to || from < 0 || from >= pages.length || to < 0 || to >= pages.length) return;
+    const curId = pages[_mbPageIndex] && pages[_mbPageIndex].id;
+    const moved = pages.splice(from, 1)[0];
+    pages.splice(to, 0, moved);
+    const ni = pages.findIndex(p => p.id === curId);
+    _mbPageIndex = ni >= 0 ? ni : Math.min(to, pages.length - 1);
+    renderMoodboardCanvas(); _mbAutosave();
+}
+function _mbRenderPageStrip() {
+    const strip = document.getElementById('moodboardPages');
+    if (!strip) return;
+    if (_mbDrag) return;   // don't rebuild thumbnails mid element-drag (perf)
+    if (_mbEditTarget) return;   // fixed-page mode has no layout strip
+    _mbMigratePages();
+    const pages = editorialContent.layoutPages;
+    const W = 104, H = Math.round(104 * 540 / 936);
+    strip.innerHTML = '';
+    pages.forEach((p, i) => {
+        const tile = document.createElement('div');
+        tile.draggable = true;
+        tile.style.cssText = 'flex:0 0 auto; width:' + W + 'px; cursor:pointer; border-radius:4px; padding:2px; background:' + (i === _mbPageIndex ? '#6a6aff' : 'transparent') + ';';
+        const inner = document.createElement('div');
+        inner.style.cssText = 'position:relative; width:' + W + 'px; height:' + H + 'px; background:#fff; overflow:hidden; border:1px solid var(--border-color); border-radius:3px;';
+        inner.innerHTML = _mbThumbInner(p, W, H);
+        const lab = document.createElement('div');
+        lab.textContent = (i + 1) + (p.title ? ' · ' + p.title : ' · ' + (p.type || 'page'));
+        lab.style.cssText = 'font-size:0.6rem; color:' + (i === _mbPageIndex ? '#fff' : 'var(--text-muted)') + '; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:2px;';
+        tile.appendChild(inner); tile.appendChild(lab);
+        tile.onclick = () => _mbSwitchPage(i);
+        tile.ondragstart = (e) => { _mbDragPageFrom = i; try { e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', String(i)); } catch (_) {} };
+        tile.ondragover = (e) => { e.preventDefault(); try { e.dataTransfer.dropEffect = 'move'; } catch (_) {} tile.style.outline = '2px dashed #6a6aff'; };
+        tile.ondragleave = () => { tile.style.outline = ''; };
+        tile.ondrop = (e) => { e.preventDefault(); tile.style.outline = ''; if (_mbDragPageFrom >= 0 && _mbDragPageFrom !== i) _mbReorderPages(_mbDragPageFrom, i); _mbDragPageFrom = -1; };
+        strip.appendChild(tile);
+    });
+    const pt = document.getElementById('mbPageType'); if (pt) pt.value = pages[_mbPageIndex].type || 'moodboard';
+    const ti = document.getElementById('mbPageTitle'); if (ti && document.activeElement !== ti) ti.value = pages[_mbPageIndex].title || '';
+    const pl = document.getElementById('mbPagePlace'); if (pl) pl.value = pages[_mbPageIndex].place || 'afterStrategy';
+    const mv = document.getElementById('mbMoveTo');
+    if (mv) {
+        let opt = '';
+        for (let k = 0; k < pages.length; k++) opt += '<option value="' + (k + 1) + '"' + (k === _mbPageIndex ? ' selected' : '') + '>' + (k + 1) + '</option>';
+        mv.innerHTML = opt;
+    }
+}
+
+// ── Layout templates ───────────────────────────────────────────────────────
+// Built-in starter layouts (4 per page type) + user-saved templates (stored in
+// editorialContent.templates, so they persist and can be exported/shared).
+// Image entries are empty placeholders the user fills by click or drag-drop.
+function _tImg(x, y, w, h, z) { return { type: 'image', img: '', aspect: 1.33, x: x, y: y, w: w, h: h, zoom: 1, panX: 0, panY: 0, capSize: 0.02, capSide: 'bottom', z: z || 1 }; }
+function _tTxt(text, x, y, w, size, z, font, color) { return { type: 'text', text: text, x: x, y: y, w: w, size: size || 0.05, color: color || '#222222', font: font || 'display', z: z || 5 }; }
+const LAYOUT_TEMPLATES = {
+    slogan: [
+        { name: 'Good Art Good People', els: () => [_tTxt('GOOD ART.', .08, .34, .84, .14, 5, 'display', '#1a1a1a'), _tTxt('GOOD PEOPLE.', .08, .54, .84, .14, 6, 'display', '#1a1a1a')] },
+        { name: 'Centered', els: () => [_tTxt('GOOD ART. GOOD PEOPLE.', .08, .42, .84, .1, 5, 'display', '#1a1a1a')] },
+        { name: 'Over image', els: () => [_tImg(0, 0, 1, 1), _tTxt('GOOD ART.', .08, .36, .84, .13, 5, 'display', '#ffffff'), _tTxt('GOOD PEOPLE.', .08, .55, .84, .13, 6, 'display', '#ffffff')] },
+        { name: 'Statement + tag', els: () => [_tTxt('GOOD ART. GOOD PEOPLE.', .08, .38, .84, .1, 5, 'display', '#1a1a1a'), _tTxt('Farmboy Fine Arts', .08, .56, .6, .03, 6, 'serif', '#555555')] }
+    ],
+    cover: [
+        { name: 'Hero', els: () => [_tImg(0, 0, 1, 1), _tTxt('PROJECT NAME', .06, .72, .7, .085, 5, 'display', '#ffffff'), _tTxt('Art Program', .06, .84, .6, .032, 6, 'serif', '#ffffff')] },
+        { name: 'Centered', els: () => [_tImg(0, 0, 1, 1), _tTxt('PROJECT NAME', .1, .42, .8, .1, 5, 'display', '#ffffff')] },
+        { name: 'Lower band', els: () => [_tImg(0, 0, 1, .74), _tTxt('PROJECT NAME', .06, .8, .7, .08, 5, 'display', '#1a1a1a'), _tTxt('Art Program', .06, .91, .5, .03, 6, 'serif', '#555555')] },
+        { name: 'Split', els: () => [_tImg(0, 0, .54, 1), _tTxt('PROJECT NAME', .6, .4, .36, .075, 5, 'display', '#1a1a1a'), _tTxt('Art Program', .6, .52, .34, .03, 6, 'serif', '#555555')] }
+    ],
+    narrative: [
+        { name: 'Classic', els: () => [_tTxt('ART NARRATIVE', .06, .12, .6, .06, 6, 'display', '#1a1a1a'), _tTxt('Tell the story of the collection here.', .06, .26, .54, .03, 5, 'serif', '#222222')] },
+        { name: 'Two column', els: () => [_tTxt('ART NARRATIVE', .06, .12, .6, .06, 6, 'display', '#1a1a1a'), _tTxt('First column of the narrative copy.', .06, .26, .42, .026, 5, 'serif', '#222222'), _tTxt('Second column of the narrative copy.', .52, .26, .42, .026, 5, 'serif', '#222222')] },
+        { name: 'Image + copy', els: () => [_tImg(.06, .14, .4, .66, 1), _tTxt('ART NARRATIVE', .52, .14, .42, .055, 6, 'display', '#1a1a1a'), _tTxt('Narrative copy beside the image.', .52, .27, .42, .028, 5, 'serif', '#222222')] },
+        { name: 'Lead image', els: () => [_tImg(.06, .12, .88, .4, 1), _tTxt('ART NARRATIVE', .06, .56, .6, .05, 6, 'display', '#1a1a1a'), _tTxt('Narrative copy below the lead image.', .06, .67, .88, .026, 5, 'serif', '#222222')] }
+    ],
+    understanding: [
+        { name: 'Classic', els: () => [_tTxt('PROJECT UNDERSTANDING', .06, .12, .7, .06, 6, 'display', '#1a1a1a'), _tTxt('Goals, audience, site context, and what success looks like.', .06, .26, .54, .03, 5, 'serif', '#222222')] },
+        { name: 'Two column', els: () => [_tTxt('PROJECT UNDERSTANDING', .06, .12, .8, .06, 6, 'display', '#1a1a1a'), _tTxt('First column of the brief.', .06, .26, .42, .026, 5, 'serif', '#222222'), _tTxt('Second column of the brief.', .52, .26, .42, .026, 5, 'serif', '#222222')] },
+        { name: 'Image + copy', els: () => [_tImg(.06, .14, .4, .66, 1), _tTxt('PROJECT UNDERSTANDING', .52, .14, .42, .055, 6, 'display', '#1a1a1a'), _tTxt('The brief beside a reference image.', .52, .27, .42, .028, 5, 'serif', '#222222')] },
+        { name: 'Lead image', els: () => [_tImg(.06, .12, .88, .4, 1), _tTxt('PROJECT UNDERSTANDING', .06, .56, .7, .05, 6, 'display', '#1a1a1a'), _tTxt('The brief below the lead image.', .06, .67, .88, .026, 5, 'serif', '#222222')] }
+    ],
+    strategy: [
+        { name: 'Three tiers', els: () => [_tTxt('ART COLLECTION STRATEGY', .06, .1, .88, .055, 6, 'display', '#1a1a1a'), _tTxt('Primary', .06, .24, .28, .032, 6, 'display', '#1a1a1a'), _tTxt('Primary strategy copy.', .06, .31, .28, .026, 5, 'serif', '#222222'), _tTxt('Secondary', .37, .24, .28, .032, 6, 'display', '#1a1a1a'), _tTxt('Secondary strategy copy.', .37, .31, .28, .026, 5, 'serif', '#222222'), _tTxt('Tertiary', .68, .24, .28, .032, 6, 'display', '#1a1a1a'), _tTxt('Tertiary strategy copy.', .68, .31, .28, .026, 5, 'serif', '#222222')] },
+        { name: 'Stacked', els: () => [_tTxt('ART COLLECTION STRATEGY', .06, .1, .88, .055, 6, 'display', '#1a1a1a'), _tTxt('Primary strategy copy.', .06, .26, .88, .03, 5, 'serif', '#222222'), _tTxt('Secondary strategy copy.', .06, .46, .88, .03, 5, 'serif', '#222222'), _tTxt('Tertiary strategy copy.', .06, .66, .88, .03, 5, 'serif', '#222222')] },
+        { name: 'Image + tiers', els: () => [_tImg(.06, .14, .36, .66, 1), _tTxt('ART COLLECTION STRATEGY', .48, .12, .46, .05, 6, 'display', '#1a1a1a'), _tTxt('Primary strategy copy.', .48, .26, .46, .026, 5, 'serif', '#222222'), _tTxt('Secondary strategy copy.', .48, .44, .46, .026, 5, 'serif', '#222222'), _tTxt('Tertiary strategy copy.', .48, .62, .46, .026, 5, 'serif', '#222222')] },
+        { name: 'Single statement', els: () => [_tTxt('ART COLLECTION STRATEGY', .06, .12, .88, .06, 6, 'display', '#1a1a1a'), _tTxt('One clear strategic direction for the collection.', .06, .3, .8, .045, 5, 'serif', '#222222')] }
+    ],
+    moodboard: [
+        { name: 'Grid 2×3', els: () => [_tImg(.06, .15, .28, .33), _tImg(.36, .15, .28, .33), _tImg(.66, .15, .28, .33), _tImg(.06, .52, .28, .33), _tImg(.36, .52, .28, .33), _tImg(.66, .52, .28, .33)] },
+        { name: 'Hero + three', els: () => [_tImg(.06, .15, .46, .7), _tImg(.55, .15, .39, .21), _tImg(.55, .39, .39, .21), _tImg(.55, .63, .39, .21)] },
+        { name: 'Salon cluster', els: () => [_tImg(.08, .16, .3, .36), _tImg(.4, .14, .22, .26), _tImg(.64, .18, .26, .3), _tImg(.12, .55, .24, .28), _tImg(.38, .46, .3, .36), _tImg(.7, .52, .22, .3)] },
+        { name: 'Feature + note', els: () => [_tImg(.06, .16, .52, .66), _tTxt('Add a short note about this grouping.', .62, .2, .32, .04, 5, 'serif')] }
+    ],
+    breaker: [
+        { name: 'Full bleed', els: () => [_tImg(0, 0, 1, 1)] },
+        { name: 'Image + quote', els: () => [_tImg(0, 0, 1, 1), _tTxt('A short, evocative line.', .12, .42, .76, .09, 5, 'display', '#ffffff')] },
+        { name: 'Split', els: () => [_tImg(0, 0, .5, 1), _tTxt('Section title', .56, .42, .4, .08, 5, 'display')] },
+        { name: 'Title band', els: () => [_tImg(0, 0, 1, .72), _tTxt('SECTION', .06, .78, .88, .1, 5, 'display')] }
+    ],
+    keyword: [
+        { name: 'Three columns', els: () => [_tTxt('Word one', .06, .3, .28, .07, 5), _tTxt('Word two', .37, .3, .28, .07, 5), _tTxt('Word three', .68, .3, .28, .07, 5)] },
+        { name: 'Stacked', els: () => [_tTxt('First', .1, .2, .8, .12, 5), _tTxt('Second', .1, .42, .8, .12, 4), _tTxt('Third', .1, .64, .8, .12, 3)] },
+        { name: 'Two-up', els: () => [_tTxt('Left idea', .08, .32, .4, .09, 5), _tTxt('Right idea', .54, .32, .4, .09, 5)] },
+        { name: 'Statement', els: () => [_tTxt('One bold statement.', .1, .38, .8, .11, 5, 'display')] }
+    ],
+    inspo: [
+        { name: 'Grid 2×2', els: () => [_tImg(.08, .16, .4, .32), _tImg(.52, .16, .4, .32), _tImg(.08, .52, .4, .32), _tImg(.52, .52, .4, .32)] },
+        { name: 'Strip', els: () => [_tImg(.05, .34, .21, .32), _tImg(.28, .34, .21, .32), _tImg(.51, .34, .21, .32), _tImg(.74, .34, .21, .32)] },
+        { name: 'Image + notes', els: () => [_tImg(.06, .16, .5, .66), _tTxt('Note one', .6, .2, .34, .045, 5, 'serif'), _tTxt('Note two', .6, .38, .34, .045, 5, 'serif'), _tTxt('Note three', .6, .56, .34, .045, 5, 'serif')] },
+        { name: 'Feature', els: () => [_tImg(.18, .16, .64, .62)] }
+    ],
+    divider: [
+        { name: 'Section title', els: () => [_tTxt('SECTION TITLE', .08, .42, .84, .12, 5, 'display', '#1a1a1a')] },
+        { name: 'Title + subtitle', els: () => [_tTxt('SECTION TITLE', .08, .38, .84, .1, 5, 'display', '#1a1a1a'), _tTxt('A short subtitle for this section.', .08, .54, .84, .035, 6, 'serif', '#666666')] },
+        { name: 'Over image', els: () => [_tImg(0, 0, 1, 1), _tTxt('SECTION TITLE', .08, .42, .84, .12, 5, 'display', '#ffffff')] }
+    ],
+    bio: [
+        { name: 'Portrait + bio', els: () => [_tImg(.06, .14, .34, .66, 1), _tTxt('ARTIST NAME', .46, .14, .48, .06, 5, 'display', '#1a1a1a'), _tTxt('Artist biography — background, practice, and relevance to this collection.', .46, .26, .48, .028, 6, 'serif', '#222222')] },
+        { name: 'Text only', els: () => [_tTxt('ARTIST NAME', .06, .14, .8, .06, 5, 'display', '#1a1a1a'), _tTxt('Artist biography copy.', .06, .26, .62, .03, 6, 'serif', '#222222')] },
+        { name: 'Lead image', els: () => [_tImg(.06, .12, .88, .4, 1.6), _tTxt('ARTIST NAME', .06, .56, .7, .05, 5, 'display', '#1a1a1a'), _tTxt('Artist biography below the lead image.', .06, .67, .88, .026, 6, 'serif', '#222222')] }
+    ],
+    plan: [
+        { name: 'Full plan', els: () => [_tImg(.06, .12, .88, .78, 1.6)] },
+        { name: 'Plan + caption', els: () => [_tImg(.06, .1, .88, .72, 1.8), _tTxt('Floor plan — level / zone', .06, .86, .7, .03, 6, 'serif', '#666666')] },
+        { name: 'Title + plan', els: () => [_tTxt('PLAN VIEW', .06, .08, .7, .055, 5, 'display', '#1a1a1a'), _tImg(.06, .2, .88, .68, 1.7)] }
+    ],
+    custom: [
+        { name: 'Title + image', els: () => [_tTxt('PAGE TITLE', .06, .1, .7, .06, 5, 'display', '#1a1a1a'), _tImg(.06, .22, .6, .6, 1)] },
+        { name: 'Image + copy', els: () => [_tImg(.06, .14, .5, .66, 1), _tTxt('PAGE TITLE', .62, .14, .32, .05, 5, 'display', '#1a1a1a'), _tTxt('Copy goes here.', .62, .27, .32, .028, 6, 'serif', '#222222')] },
+        { name: 'Blank', els: () => [] }
+    ]
+};
+let _tplType = 'moodboard';
+// Single-spec page arrangements. Coords are fractions of the full page (0..1).
+// 'classic' is the original renderer (art left, spec below, elevation lower-right).
+// Each other template places: artwork (baked frame mockup), code (under art),
+// title (the application), spec (dotted-leader block), elevation (wall thumbnail).
+const SPEC_TEMPLATES = {
+    classic: { label: 'Classic', legacy: true },
+    frameRight: {
+        label: 'Frame right',
+        title: { x: .06, y: .15, size: 19, align: 'left', field: 'id' },
+        spec: { x: .06, y: .2, w: .4 },
+        elevation: { x: .06, y: .62, w: .4, h: .26 },
+        artwork: { x: .49, y: .16, w: .47, h: .76, align: 'right' },
+        code: { align: 'right', size: 13, gap: 14, field: 'imageCode' }
+    },
+    frameLeft: {
+        label: 'Frame left',
+        artwork: { x: .06, y: .12, w: .42, h: .56, align: 'center' },
+        code: { align: 'center', size: 13, gap: 14, field: 'imageCode' },
+        title: { x: .54, y: .15, size: 19, align: 'left', field: 'id' },
+        spec: { x: .54, y: .26, w: .4 },
+        elevation: { x: .54, y: .62, w: .4, h: .26 }
+    },
+    centeredHero: {
+        label: 'Centered hero',
+        artwork: { x: .3, y: .1, w: .4, h: .48, align: 'center' },
+        code: { align: 'center', size: 13, gap: 14, field: 'imageCode' },
+        title: { x: .06, y: .14, size: 16, align: 'left', field: 'id' },
+        spec: { x: .3, y: .66, w: .4 },
+        elevation: { x: .06, y: .64, w: .2, h: .24 }
+    },
+    installGuide: {
+        label: 'Install guide — dimensioned elevation',
+        custom: true
+    },
+    setRight: {
+        label: 'Stacked (A / B / C)',
+        group: true
+    },
+    setRow: {
+        label: 'Side by side (diptych / triptych)',
+        group: true,
+        row: true
+    },
+    setScale: {
+        label: 'To scale (as hung)',
+        group: true,
+        scale: true
+    },
+    custom: {
+        label: 'Custom (free layout)',
+        freeform: true
+    }
+};
+function _tplTabCss(active) { return 'height:28px; padding:0 12px; font-size:0.72rem; border:1px solid var(--border-color); border-radius:4px; cursor:pointer; ' + (active ? 'background:#6a6aff; color:#fff; border-color:#6a6aff;' : 'background:var(--bg-input); color:var(--text-main);'); }
+function openTemplatesModal() {
+    const m = document.getElementById('templatesModal'); if (!m) return;
+    if (typeof _loadStudioDefaults === 'function') _loadStudioDefaults();
+    _mbMigratePages();
+    if (_mbEditTarget && LAYOUT_TEMPLATES[_mbEditTarget.key]) { _tplType = _mbEditTarget.key; }
+    else { const ct = _mbPage().type; _tplType = LAYOUT_TEMPLATES[ct] ? ct : 'moodboard'; }
+    _tplRenderCards(_tplType); m.style.display = 'flex';
+}
+function closeTemplatesModal() { const m = document.getElementById('templatesModal'); if (m) m.style.display = 'none'; }
+function _tplSetTab(type) { _tplType = type; _tplRenderCards(type); }
+function _tplApply(els, type, asNew) {
+    const copy = JSON.parse(JSON.stringify(els || []));
+    if (asNew && !_mbEditTarget) addLayoutPage(type);
+    const pg = _mbPage();
+    if (_mbEditTarget) {
+        pg.elements = copy;   // fixed page keeps its intrinsic type (cover/narrative)
+    } else {
+        const wasDefault = (!pg.title || pg.title === _mbDefaultTitle(pg.type));
+        pg.elements = copy; pg.type = type;
+        if (wasDefault) pg.title = _mbDefaultTitle(type);
+    }
+    _mbSelected = -1;
+    if (typeof pushHistory === 'function') pushHistory();
+    closeTemplatesModal();
+    renderMoodboardCanvas(); _mbAutosave();
+}
+function saveCurrentAsTemplate() {
+    const pg = _mbPage();
+    const name = (window.prompt('Name this template:', pg.title || (pg.type + ' template')) || '').trim();
+    if (!name) return;
+    const els = JSON.parse(JSON.stringify(pg.elements || [])).map(e => { if ((e.type || 'image') === 'image') e.img = ''; return e; });   // strip image data — templates are structural
+    editorialContent.templates = editorialContent.templates || [];
+    editorialContent.templates.push({ name: name, type: pg.type || 'moodboard', elements: els });
+    _tplType = pg.type || 'moodboard';
+    _tplRenderCards(_tplType); _mbAutosave();
+}
+function deleteTemplate(idx) {
+    if (!Array.isArray(editorialContent.templates)) return;
+    editorialContent.templates.splice(idx, 1);
+    _tplRenderCards(_tplType); _mbAutosave();
+}
+function exportTemplates() {
+    const data = JSON.stringify(editorialContent.templates || [], null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'frame-layout-templates.json';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+function importTemplates(ev) {
+    const f = ev.target.files && ev.target.files[0]; if (!f) { return; }
+    const r = new FileReader();
+    r.onload = () => {
+        try {
+            const arr = JSON.parse(r.result);
+            if (Array.isArray(arr)) {
+                editorialContent.templates = (editorialContent.templates || []).concat(arr.filter(t => t && Array.isArray(t.elements)));
+                _tplRenderCards(_tplType); _mbAutosave();
+            } else { if (typeof showInfoModal === 'function') showInfoModal('Import failed', 'That file is not a templates list.'); }
+        } catch (e) { if (typeof showInfoModal === 'function') showInfoModal('Import failed', 'Could not read that templates file.'); }
+    };
+    r.readAsText(f); ev.target.value = '';
+}
+// ── Studio defaults (shared templates + contacts, committed to the repo) ─────
+// Fetched once per session from studio-defaults.json sitting next to index.html.
+// Studio templates show alongside the built-ins (not per-project, not deletable);
+// studio contacts seed the Thank You page when a project has none. Publishing is
+// just committing the JSON that exportStudioDefaults() produces.
+let studioDefaults = { templates: [], contacts: '' };
+let _studioDefaultsLoaded = false;
+async function _loadStudioDefaults() {
+    if (_studioDefaultsLoaded) return;
+    _studioDefaultsLoaded = true;
+    try {
+        const r = await fetch('studio-defaults.json', { cache: 'no-store' });
+        if (!r.ok) return;
+        const d = await r.json();
+        if (d && typeof d === 'object') {
+            studioDefaults.templates = Array.isArray(d.templates) ? d.templates.filter(t => t && Array.isArray(t.elements)) : [];
+            studioDefaults.contacts = (typeof d.contacts === 'string') ? d.contacts : '';
+        }
+        const m = document.getElementById('templatesModal');
+        if (m && m.style.display !== 'none' && typeof _tplRenderCards === 'function') _tplRenderCards(_tplType);
+    } catch (e) { /* no studio defaults published — that's fine */ }
+}
+function exportStudioDefaults() {
+    const tpls = (editorialContent.templates || []).map(t => ({
+        name: t.name, type: t.type || 'moodboard',
+        elements: (t.elements || []).map(e => { const c = Object.assign({}, e); if ((c.type || 'image') === 'image') c.img = ''; return c; })
+    }));
+    const data = JSON.stringify({ templates: tpls, contacts: editorialContent.contacts || '' }, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'studio-defaults.json';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    if (typeof showInfoModal === 'function') showInfoModal('Studio defaults exported', 'Commit studio-defaults.json to the repo root (the folder with index.html). After that, anyone opening FRAME gets these templates and default contacts automatically.');
+}
+function _mbFillImage(i) {
+    const input = document.createElement('input'); input.type = 'file'; input.accept = 'image/*';
+    input.onchange = (e) => {
+        const f = e.target.files && e.target.files[0]; if (!f) return;
+        _downscaleImageFile(f, 1000, 0.82, (url, name, w, h) => {
+            const el = _mbEls()[i]; if (!el || !url) return;
+            el.img = url; el.aspect = (w && h) ? (w / h) : 1.33; el.panX = 0; el.panY = 0; el.zoom = 1;
+            if (typeof pushHistory === 'function') pushHistory();
+            renderMoodboardCanvas(); _mbAutosave();
+        });
+    };
+    input.click();
+}
+function _mbDropImage(e, i) {
+    e.preventDefault(); e.stopPropagation();
+    const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    if (!f || !/^image\//.test(f.type)) return;
+    _downscaleImageFile(f, 1000, 0.82, (url, name, w, h) => {
+        const el = _mbEls()[i]; if (!el || !url) return;
+        el.img = url; el.aspect = (w && h) ? (w / h) : 1.33; el.panX = 0; el.panY = 0; el.zoom = 1;
+        if (typeof pushHistory === 'function') pushHistory();
+        renderMoodboardCanvas(); _mbAutosave();
+    });
+}
+function _tplRenderCards(type) {
+    const wrap = document.getElementById('tplCards'); if (!wrap) return;
+    _mbMigratePages();
+    ['cover', 'narrative', 'slogan', 'moodboard', 'breaker', 'keyword', 'inspo'].forEach(tp => { const b = document.getElementById('tplTab_' + tp); if (b) b.style.cssText = _tplTabCss(tp === type); });
+    wrap.innerHTML = '';
+    const W = 150, H = Math.round(150 * 540 / 936);
+    const cards = (LAYOUT_TEMPLATES[type] || []).map(b => ({ name: b.name, els: b.els(), user: false }));
+    (editorialContent.templates || []).forEach((t, idx) => { if ((t.type || 'moodboard') === type) cards.push({ name: t.name || 'Untitled', els: t.elements || [], user: true, idx: idx }); });
+    (studioDefaults.templates || []).forEach(t => { if ((t.type || 'moodboard') === type) cards.push({ name: t.name || 'Untitled', els: t.elements || [], user: false, studio: true }); });
+    cards.forEach(card => {
+        const c = document.createElement('div');
+        c.style.cssText = 'width:' + W + 'px; border:1px solid var(--border-color); border-radius:6px; overflow:hidden; background:var(--bg-input);';
+        const thumb = document.createElement('div');
+        thumb.style.cssText = 'position:relative; width:' + W + 'px; height:' + H + 'px; background:#fff; overflow:hidden; border-bottom:1px solid var(--border-color);';
+        thumb.innerHTML = _mbThumbInner({ elements: card.els, title: '' }, W, H);
+        const name = document.createElement('div'); name.textContent = card.name; name.style.cssText = 'font-size:0.72rem; color:var(--text-main); padding:5px 7px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;';
+        if (card.studio) { const bdg = document.createElement('span'); bdg.textContent = ' · studio'; bdg.style.cssText = 'font-size:0.62rem; color:#6a6aff; font-weight:600;'; name.appendChild(bdg); }
+        const row = document.createElement('div'); row.style.cssText = 'display:flex; gap:4px; padding:0 7px 7px;';
+        const bApply = document.createElement('button'); bApply.textContent = 'Apply'; bApply.className = 'action-btn'; bApply.style.cssText = 'flex:1; height:26px; font-size:0.68rem; padding:0;'; bApply.onclick = () => _tplApply(card.els, type, false);
+        const bNew = document.createElement('button'); bNew.textContent = '+ Page'; bNew.className = 'action-btn btn-secondary'; bNew.style.cssText = 'flex:1; height:26px; font-size:0.68rem; padding:0;'; bNew.onclick = () => _tplApply(card.els, type, true);
+        row.appendChild(bApply); row.appendChild(bNew);
+        if (card.user) { const bDel = document.createElement('button'); bDel.textContent = '✕'; bDel.className = 'action-btn btn-secondary'; bDel.title = 'Delete template'; bDel.style.cssText = 'width:26px; height:26px; font-size:0.68rem; padding:0;'; bDel.onclick = () => deleteTemplate(card.idx); row.appendChild(bDel); }
+        c.appendChild(thumb); c.appendChild(name); c.appendChild(row); wrap.appendChild(c);
+    });
+}
+
+
+// Art categories — drive the numbered-pin colors on the floorplan and the
+// page legend, matching the studio's Primary/Secondary/Tertiary convention.
+// A row's `category` field holds one of these keys ('' = none/neutral).
+const ART_CATEGORIES = [
+    { key: '',          label: 'None',      sub: '',                      color: '#444444' },
+    { key: 'primary',   label: 'Primary',   sub: 'Fine Art Original',     color: '#E2231A' },
+    { key: 'secondary', label: 'Secondary', sub: 'Licensed Reproduction', color: '#1F9E4A' },
+    { key: 'tertiary',  label: 'Tertiary',  sub: 'Licensed Reproduction', color: '#2D5BD6' },
+];
+function categoryColor(key) {
+    const c = ART_CATEGORIES.find(c => c.key === (key || ''));
+    return c ? c.color : '#444444';
+}
+
 // Snapshot current project state as a plain JS object (deep-cloned).
 function snapshotProjectState() {
     return {
         dashProjectData: JSON.parse(JSON.stringify(dashProjectData)),
         elevations: JSON.parse(JSON.stringify(elevations)),
         currentElevIndex: currentElevIndex,
+        editorial: JSON.parse(JSON.stringify(editorialContent)),
     };
 }
 
@@ -278,6 +852,7 @@ function restoreProjectState(snap) {
     elevations.length = 0;
     cloned.elevations.forEach(e => elevations.push(e));
     currentElevIndex = cloned.currentElevIndex;
+    if (cloned.editorial) editorialContent = cloned.editorial;
     // Re-bind derived globals
     if (elevations[currentElevIndex]) {
         elevFrames = elevations[currentElevIndex].frames;
@@ -365,6 +940,17 @@ function refreshAllViews() {
     // value indices match the actual data. Without this, ctrl+z past an "add
     // dashboard row" event would leave the dropdown showing stale row counts.
     if (typeof populateElevBulkList === 'function') populateElevBulkList();
+
+    // Layout editor — if open, reflect restored layout/cover content and
+    // re-resolve the fixed-page edit target (its object was replaced).
+    if (typeof renderMoodboardCanvas === 'function') {
+        if (_mbEditTarget && _mbEditTarget.key === 'cover') {
+            if (!editorialContent.coverPage || !Array.isArray(editorialContent.coverPage.elements)) editorialContent.coverPage = { elements: [] };
+            _mbEditTarget.page = editorialContent.coverPage;
+        }
+        const mm = document.getElementById('moodboardModal');
+        if (mm && mm.style.display !== 'none') { _mbSelected = -1; renderMoodboardCanvas(); }
+    }
 }
 
 // Update Undo/Redo button enabled state based on stack contents.
@@ -452,6 +1038,7 @@ function updateDragSnap() {
 // existing getNudgeStep() still works since it looks up by ID.
 function openPrecisionModal() {
     seedAnnotationStyleInputs();
+    _syncImageCodeStyleControls();
     const snapCb = document.getElementById('snapEnabledToggle');
     if (snapCb) snapCb.checked = elevSnapEnabled;
     const dimSnapCb = document.getElementById('dimSnapEnabledToggle');
@@ -901,6 +1488,10 @@ function performAutosave() {
             type: 'master-studio-autosave-v1',
             timestamp: Date.now(),
             projName: projName,
+            floorplan: floorplanImageData,
+            floorplanName: floorplanImageName,
+            floorplanLevels: floorplanLevels,
+            editorial: editorialContent,
             data: snapshotProjectState(),  // reuses the undo snapshot format
         };
         localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(payload));
@@ -945,6 +1536,11 @@ function checkAutosaveOnLoad() {
         const projName = payload.projName || 'Untitled';
         if (confirm(`Found unsaved work from ${timeStr}\n("${projName}")\n\nRestore it?\n\nClick OK to restore, Cancel to discard.`)) {
             restoreProjectState(payload.data);
+            floorplanImageData = payload.floorplan || '';
+            floorplanImageName = payload.floorplanName || '';
+            floorplanLevels = Array.isArray(payload.floorplanLevels) ? payload.floorplanLevels : [];
+            _fpLevel = 0; _fpMigrate();
+            editorialContent = Object.assign(_editorialDefaults(), payload.editorial || {});
             refreshAllViews();
             // After restore, push fresh history (clearing prior so undo doesn't
             // jump back to the pre-restore empty state).
@@ -961,9 +1557,142 @@ function checkAutosaveOnLoad() {
     }
 }
 
+// ─────────────────────────────────────────────────────────────────────────
+// Version history (revision tracking). Full project snapshots are large, so
+// they live in IndexedDB (much larger quota than localStorage). A light
+// metadata record per version powers the list and the comparison view.
+// ─────────────────────────────────────────────────────────────────────────
+const VDB_NAME = 'frameVersions';
+function _vdb() {
+    return new Promise((res, rej) => {
+        if (!window.indexedDB) { rej(new Error('no-idb')); return; }
+        const req = indexedDB.open(VDB_NAME, 1);
+        req.onupgradeneeded = (e) => { const db = e.target.result; if (!db.objectStoreNames.contains('vmeta')) db.createObjectStore('vmeta', { keyPath: 'id' }); if (!db.objectStoreNames.contains('vdata')) db.createObjectStore('vdata', { keyPath: 'id' }); };
+        req.onsuccess = () => res(req.result);
+        req.onerror = () => rej(req.error);
+    });
+}
+async function _vListMeta() { const db = await _vdb(); return new Promise((res, rej) => { const rq = db.transaction('vmeta', 'readonly').objectStore('vmeta').getAll(); rq.onsuccess = () => res(rq.result || []); rq.onerror = () => rej(rq.error); }); }
+async function _vGetData(id) { const db = await _vdb(); return new Promise((res, rej) => { const rq = db.transaction('vdata', 'readonly').objectStore('vdata').get(id); rq.onsuccess = () => res(rq.result ? rq.result.payload : null); rq.onerror = () => rej(rq.error); }); }
+async function _vPut(id, label, meta, payload) { const db = await _vdb(); return new Promise((res, rej) => { const tx = db.transaction(['vmeta', 'vdata'], 'readwrite'); tx.oncomplete = () => res(); tx.onerror = () => rej(tx.error); tx.objectStore('vmeta').put({ id: id, label: label, date: Date.now(), meta: meta }); tx.objectStore('vdata').put({ id: id, payload: payload }); }); }
+async function _vDelete(id) { const db = await _vdb(); return new Promise((res, rej) => { const tx = db.transaction(['vmeta', 'vdata'], 'readwrite'); tx.oncomplete = () => res(); tx.onerror = () => rej(tx.error); tx.objectStore('vmeta').delete(id); tx.objectStore('vdata').delete(id); }); }
+
+function _versionSnapshot() {
+    return {
+        projName: (document.getElementById('g_projName') || {}).value || 'Untitled',
+        floorplan: floorplanImageData, floorplanName: floorplanImageName,
+        floorplanLevels: JSON.parse(JSON.stringify(floorplanLevels || [])),
+        editorial: JSON.parse(JSON.stringify(editorialContent)),
+        data: snapshotProjectState(),
+    };
+}
+function _versionRestore(snap) {
+    restoreProjectState(snap.data);
+    floorplanImageData = snap.floorplan || ''; floorplanImageName = snap.floorplanName || '';
+    floorplanLevels = Array.isArray(snap.floorplanLevels) ? snap.floorplanLevels : [];
+    _fpLevel = 0; _fpMigrate();
+    editorialContent = Object.assign(_editorialDefaults(), snap.editorial || {});
+    refreshAllViews();
+    undoStack.length = 0; redoStack.length = 0; _isFirstHistoryPush = true; pushHistory(); markDirty();
+}
+function _versionMeta() {
+    const pieces = (dashProjectData || []).filter(r => r && (r.id || r.imageCode)).map(r => ({ id: (r.id || '') + '', code: (r.imageCode || r.artworkFile || '') + '', status: _pieceStatus(r), w: r.extW, h: r.extH }));
+    let pages = 0; try { pages = (_deckPageList() || []).length; } catch (e) {}
+    return { projName: (document.getElementById('g_projName') || {}).value || 'Untitled', pieces: pieces, pages: pages, statusCounts: _statusCounts(), specTemplate: editorialContent.specTemplate || 'classic' };
+}
+async function _vSaveCurrent(label) {
+    const id = 'v_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    await _vPut(id, label || ('Version ' + new Date().toLocaleString()), _versionMeta(), _versionSnapshot());
+}
+function _vDiff(aPieces, bPieces) {
+    const am = {}, bm = {}; (aPieces || []).forEach(p => am[p.id] = p); (bPieces || []).forEach(p => bm[p.id] = p);
+    const added = [], removed = [], statusChanged = [], sizeChanged = [];
+    (bPieces || []).forEach(p => { if (!am[p.id]) added.push(p.id); });
+    (aPieces || []).forEach(p => { const q = bm[p.id]; if (!q) { removed.push(p.id); return; } if (p.status !== q.status) statusChanged.push({ id: p.id, from: p.status, to: q.status }); if (p.w !== q.w || p.h !== q.h) sizeChanged.push(p.id); });
+    return { added: added, removed: removed, statusChanged: statusChanged, sizeChanged: sizeChanged };
+}
+
+function openVersionsModal() {
+    const old = document.getElementById('versionsModal'); if (old) old.remove();
+    const ov = document.createElement('div'); ov.id = 'versionsModal';
+    ov.style.cssText = 'position:fixed; inset:0; z-index:100040; background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center;';
+    const card = document.createElement('div');
+    card.style.cssText = 'background:var(--bg-panel,#1d1d20); border:1px solid var(--border-color); border-radius:10px; width:640px; max-width:94vw; max-height:88vh; display:flex; flex-direction:column; overflow:hidden;';
+    card.innerHTML = '<div style="display:flex; align-items:center; justify-content:space-between; padding:16px 18px; border-bottom:1px solid var(--border-color);">'
+        + '<div style="font-size:0.95rem; font-weight:700; color:var(--text-main);">Versions</div>'
+        + '<button id="vClose" style="border:none; background:none; color:var(--text-muted); font-size:1.2rem; cursor:pointer; line-height:1;">\u00d7</button></div>';
+    const body = document.createElement('div'); body.style.cssText = 'padding:16px 18px; overflow:auto;';
+    const saveRow = document.createElement('div'); saveRow.style.cssText = 'display:flex; gap:8px; margin-bottom:14px;';
+    const inp = document.createElement('input'); inp.type = 'text'; inp.placeholder = 'Label this version (e.g. V1 sent to client)\u2026';
+    inp.style.cssText = 'flex:1; font-size:0.78rem; padding:8px 10px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:5px;';
+    const saveBtn = document.createElement('button'); saveBtn.textContent = 'Save current as version'; saveBtn.className = 'action-btn'; saveBtn.style.cssText = 'width:auto; padding:0 14px; font-size:0.76rem;';
+    saveBtn.onclick = async () => { saveBtn.disabled = true; try { await _vSaveCurrent(inp.value.trim()); inp.value = ''; await _versionsRender(); } catch (e) { showInfoModal('Versions', 'Could not save the version. ' + ((e && e.message === 'no-idb') ? 'Your browser blocked local database storage (private mode?). Use Save Project to a file instead.' : 'Storage may be full.')); } saveBtn.disabled = false; };
+    saveRow.appendChild(inp); saveRow.appendChild(saveBtn); body.appendChild(saveRow);
+    const list = document.createElement('div'); list.id = 'vList'; body.appendChild(list);
+    const cmp = document.createElement('div'); cmp.id = 'vCompare'; cmp.style.cssText = 'margin-top:6px;'; body.appendChild(cmp);
+    card.appendChild(body); ov.appendChild(card); document.body.appendChild(ov);
+    ov.onclick = (e) => { if (e.target === ov) ov.remove(); };
+    card.querySelector('#vClose').onclick = () => ov.remove();
+    _versionsRender();
+}
+async function _versionsRender() {
+    const list = document.getElementById('vList'); if (!list) return;
+    list.innerHTML = '<div style="font-size:0.74rem; color:var(--text-muted);">Loading\u2026</div>';
+    let metas = [];
+    try { metas = await _vListMeta(); } catch (e) { list.innerHTML = '<div style="font-size:0.74rem; color:#c08a2e;">Version storage isn\u2019t available in this browser (private mode?). You can still Save Project to a file.</div>'; return; }
+    metas.sort((a, b) => b.date - a.date);
+    if (!metas.length) { list.innerHTML = '<div style="font-size:0.74rem; color:var(--text-muted); padding:8px 0;">No versions yet. Save one above to start tracking revisions.</div>'; return; }
+    list.innerHTML = '';
+    metas.forEach(m => {
+        const meta = m.meta || {};
+        const row = document.createElement('div');
+        row.style.cssText = 'border:1px solid var(--border-color); border-radius:7px; padding:11px 12px; margin-bottom:9px;';
+        const top = document.createElement('div'); top.style.cssText = 'display:flex; align-items:center; justify-content:space-between; gap:10px;';
+        const t = document.createElement('div'); t.style.cssText = 'min-width:0;';
+        t.innerHTML = '<div style="font-size:0.8rem; font-weight:700; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + _esc(m.label || 'Version') + '</div>'
+            + '<div style="font-size:0.64rem; color:var(--text-muted); margin-top:2px;">' + new Date(m.date).toLocaleString() + '</div>';
+        top.appendChild(t);
+        const btns = document.createElement('div'); btns.style.cssText = 'display:flex; gap:6px; flex:0 0 auto;';
+        const mk = (label, primary, on) => { const b = document.createElement('button'); b.textContent = label; b.style.cssText = 'font-size:0.66rem; font-weight:600; padding:6px 10px; border-radius:5px; cursor:pointer; border:1px solid ' + (primary ? '#6a6aff' : 'var(--border-color)') + '; background:' + (primary ? '#6a6aff' : 'transparent') + '; color:' + (primary ? '#fff' : 'var(--text-main)') + ';'; b.onclick = on; return b; };
+        btns.appendChild(mk('Compare', false, () => _vRenderCompare(m)));
+        btns.appendChild(mk('Restore', true, () => _vRestore(m.id, m.label)));
+        btns.appendChild(mk('\u2715', false, async () => { if (confirm('Delete this version permanently?')) { await _vDelete(m.id); _versionsRender(); const c = document.getElementById('vCompare'); if (c) c.innerHTML = ''; } }));
+        top.appendChild(btns); row.appendChild(top);
+        const sc = meta.statusCounts || {};
+        const stats = document.createElement('div'); stats.style.cssText = 'font-size:0.64rem; color:var(--text-muted); margin-top:7px;';
+        stats.innerHTML = (meta.pages || 0) + ' pages \u00b7 ' + ((meta.pieces || []).length) + ' pieces &nbsp;&nbsp;'
+            + STATUS_ORDER.map(s => '<span style="color:' + _statusColor(s) + ';">\u25cf</span> ' + (sc[s] || 0)).join('&nbsp;&nbsp;');
+        row.appendChild(stats);
+        list.appendChild(row);
+    });
+}
+async function _vRestore(id, label) {
+    if (!confirm('Restore "' + (label || 'this version') + '"?\n\nYour current work will first be saved as a new version, then the project will be replaced.')) return;
+    try { await _vSaveCurrent('Auto-backup before restore \u2014 ' + new Date().toLocaleString()); } catch (e) {}
+    let payload = null; try { payload = await _vGetData(id); } catch (e) {}
+    if (!payload) { showInfoModal('Restore', 'Could not load that version\u2019s data.'); return; }
+    _versionRestore(payload);
+    const ov = document.getElementById('versionsModal'); if (ov) ov.remove();
+    showInfoModal('Restored', 'The project was restored from "' + _esc(label || 'version') + '". Your previous work was saved as an auto-backup version.');
+}
+function _vRenderCompare(m) {
+    const c = document.getElementById('vCompare'); if (!c) return;
+    const cur = _versionMeta();
+    const d = _vDiff((m.meta || {}).pieces || [], cur.pieces);
+    const sl = (s) => _statusLabel(s);
+    const part = (title, items) => items && items.length ? '<div style="margin-top:8px;"><div style="font-size:0.66rem; font-weight:700; color:var(--text-main);">' + title + ' (' + items.length + ')</div><div style="font-size:0.64rem; color:var(--text-muted); margin-top:2px; line-height:1.5;">' + items.map(_esc).join(', ') + '</div></div>' : '';
+    const statusPart = d.statusChanged.length ? '<div style="margin-top:8px;"><div style="font-size:0.66rem; font-weight:700; color:var(--text-main);">Status changes (' + d.statusChanged.length + ')</div>' + d.statusChanged.map(x => '<div style="font-size:0.64rem; color:var(--text-muted); margin-top:2px;">' + _esc(x.id) + ': <span style="color:' + _statusColor(x.from) + ';">' + sl(x.from) + '</span> \u2192 <span style="color:' + _statusColor(x.to) + ';">' + sl(x.to) + '</span></div>').join('') + '</div>' : '';
+    const pagesDelta = (cur.pages || 0) - ((m.meta || {}).pages || 0);
+    const head = '<div style="font-size:0.76rem; font-weight:700; color:var(--text-main); margin-bottom:4px;">Compared with current</div>'
+        + '<div style="font-size:0.64rem; color:var(--text-muted);">"' + _esc(m.label || 'Version') + '" \u2192 current &nbsp;\u00b7&nbsp; pages ' + (pagesDelta === 0 ? 'unchanged' : (pagesDelta > 0 ? '+' + pagesDelta : pagesDelta)) + '</div>';
+    let inner = head + part('Added pieces', d.added) + part('Removed pieces', d.removed) + statusPart + part('Resized pieces', d.sizeChanged);
+    if (!d.added.length && !d.removed.length && !d.statusChanged.length && !d.sizeChanged.length && pagesDelta === 0) inner += '<div style="font-size:0.66rem; color:var(--text-muted); margin-top:8px;">No structural differences from the current project.</div>';
+    c.style.cssText = 'margin-top:6px; padding:12px; border:1px solid var(--border-color); border-radius:7px; background:var(--bg-input);';
+    c.innerHTML = inner;
+}
+
 // Save the project to a JSON file with a sensible name. Thin wrapper over
-// saveMasterProject for use by the Ctrl+S handler. saveMasterProject itself
-// handles markClean and clearAutosave so we don't need to duplicate here.
+// saveMasterProject for use by the Ctrl+S handler.
 function saveProjectWithIndicator() {
     if (typeof saveMasterProject === 'function') saveMasterProject();
 }
@@ -998,10 +1727,18 @@ if (document.readyState === 'loading') {
         // init code (which calls pushHistory) has finished. Otherwise the
         // restore would be overwritten by the initial pushHistory.
         setTimeout(checkAutosaveOnLoad, 200);
+        if (typeof wireDashArtworkDrops === 'function') wireDashArtworkDrops();
+        if (typeof _wireArtPan === 'function') _wireArtPan();
+        if (typeof wireElevArtworkDrop === 'function') wireElevArtworkDrop();
+        if (typeof _loadStudioDefaults === 'function') _loadStudioDefaults();
     });
 } else {
     updateDirtyIndicator();
     setTimeout(checkAutosaveOnLoad, 200);
+    if (typeof wireDashArtworkDrops === 'function') wireDashArtworkDrops();
+        if (typeof _wireArtPan === 'function') _wireArtPan();
+    if (typeof wireElevArtworkDrop === 'function') wireElevArtworkDrop();
+    if (typeof _loadStudioDefaults === 'function') _loadStudioDefaults();
 }
 // ─────────────────────────────────────────────────────────────────────
 // END SAVE / AUTOSAVE / UNSAVED-CHANGES
@@ -1346,7 +2083,54 @@ let dimVisibility = {
     edgeGap: true,    // edge-gap (distance-to-wall) dimensions
     wallDims: true,   // overall wall width/height dimensions (default ON)
     customLines: true, // custom measure-tool lines
+    imageCode: false,  // artwork image-code caption beneath each frame (opt-in)
 };
+
+// Styling for the image-code caption beneath each frame. Persisted separately
+// so codes can be made subtle (e.g. light grey) without affecting dimensions.
+let imageCodeStyle = {
+    color: '#222222',
+    size: 10,
+    font: 'Arial, Helvetica, sans-serif',
+    weight: 400,
+};
+function saveImageCodeStyle() {
+    try { localStorage.setItem('frameImageCodeStyle', JSON.stringify(imageCodeStyle)); } catch (e) {}
+}
+function loadImageCodeStyle() {
+    try {
+        const v = JSON.parse(localStorage.getItem('frameImageCodeStyle'));
+        if (v && typeof v === 'object') imageCodeStyle = Object.assign(imageCodeStyle, v);
+    } catch (e) {}
+}
+loadImageCodeStyle();
+
+function _syncImageCodeStyleControls() {
+    const c = document.getElementById('imgCodeColor'); if (c) c.value = imageCodeStyle.color;
+    const ch = document.getElementById('imgCodeColorHex'); if (ch) ch.textContent = imageCodeStyle.color;
+    const s = document.getElementById('imgCodeFontSize'); if (s) s.value = imageCodeStyle.size;
+    const sv = document.getElementById('imgCodeFontSizeVal'); if (sv) sv.textContent = imageCodeStyle.size + 'px';
+    const f = document.getElementById('imgCodeFontFamily'); if (f) f.value = imageCodeStyle.font;
+    [['imgCodeWeightReg',400],['imgCodeWeightSemi',600],['imgCodeWeightBold',700]].forEach(([id,w]) => {
+        const btn = document.getElementById(id); if (btn) btn.classList.toggle('active', imageCodeStyle.weight === w);
+    });
+}
+function applyImageCodeStyleFromModal() {
+    const c = document.getElementById('imgCodeColor');
+    const s = document.getElementById('imgCodeFontSize');
+    const f = document.getElementById('imgCodeFontFamily');
+    if (c) { imageCodeStyle.color = c.value; const ch = document.getElementById('imgCodeColorHex'); if (ch) ch.textContent = c.value; }
+    if (s) { imageCodeStyle.size = parseInt(s.value, 10) || 10; const sv = document.getElementById('imgCodeFontSizeVal'); if (sv) sv.textContent = imageCodeStyle.size + 'px'; }
+    if (f) imageCodeStyle.font = f.value;
+    saveImageCodeStyle();
+    drawElevAll();
+}
+function setImageCodeWeight(w) {
+    imageCodeStyle.weight = w;
+    _syncImageCodeStyleControls();
+    saveImageCodeStyle();
+    drawElevAll();
+}
 
 function loadDimVisibility() {
     try {
@@ -1410,6 +2194,9 @@ function syncLayoutGuideButtonStates() {
         clBtn.classList.toggle('active', exists && dimVisibility.customLines);
         clBtn.style.opacity = exists ? '1' : '0.4';
     }
+    // Image-code caption toggle: active when the flag is on.
+    const icBtn = document.getElementById('imageCodeToggle');
+    if (icBtn) icBtn.classList.toggle('active', dimVisibility.imageCode);
 }
 
 // Toggle group-box visibility (only meaningful if one exists).
@@ -1445,6 +2232,19 @@ function toggleCustomLinesVisibility(btn) {
     dimVisibility.customLines = !dimVisibility.customLines;
     saveDimVisibility();
     if (btn) btn.classList.toggle('active', dimVisibility.customLines);
+    drawElevAll();
+}
+
+function toggleArtworkVisibility(btn) {
+    _showArtwork = !_showArtwork;
+    if (btn) btn.classList.toggle('active', _showArtwork);
+    drawElevAll();
+}
+
+function toggleImageCodeVisibility(btn) {
+    dimVisibility.imageCode = !dimVisibility.imageCode;
+    saveDimVisibility();
+    if (btn) btn.classList.toggle('active', dimVisibility.imageCode);
     drawElevAll();
 }
 
@@ -1755,8 +2555,24 @@ function setupDashPreviewDragHandle() {
 
 function renderNavTabs() {
     const container = document.getElementById('nav-tabs-container');
-    let html = `<div class="nav-tab ${currentView==='dashboard'?'active':''}" onclick="switchView('dashboard')">Frame Dashboard</div><div class="tab-divider"></div>`;
-    
+    const fixed = document.getElementById('nav-tabs-fixed');
+    const dashHtml = `<div class="nav-tab ${currentView==='dashboard'?'active':''}" onclick="switchView('dashboard')">Frame Dashboard</div><div class="tab-divider"></div>`;
+
+    // Preserve the horizontal scroll position across rebuilds — innerHTML
+    // assignment resets scrollLeft to 0, which made the bar jump to the far
+    // left after deleting/renaming a far-right elevation.
+    const prevScroll = container.scrollLeft;
+
+    let html = '';
+    if (fixed) {
+        // Frame Dashboard tab lives in the fixed (non-scrolling) container so
+        // it stays pinned while the elevation tabs scroll beside it.
+        fixed.innerHTML = dashHtml;
+    } else {
+        // Fallback for stale HTML: keep the old single-container layout.
+        html = dashHtml;
+    }
+
     elevations.forEach((elev, idx) => {
         let isActive = (currentView === 'elevation' && currentElevIndex === idx) ? 'active' : '';
         // draggable=true enables HTML5 drag-and-drop. data-tab-idx is read by
@@ -1770,6 +2586,7 @@ function renderNavTabs() {
                  </div>`;
     });
     container.innerHTML = html;
+    container.scrollLeft = prevScroll;
     // Wire up drag-and-drop on the elevation tabs (skip the Frame Dashboard
     // tab — it always stays first).
     container.querySelectorAll('.nav-tab[draggable="true"]').forEach(tab => {
@@ -1779,6 +2596,31 @@ function renderNavTabs() {
         tab.addEventListener('drop', handleTabDrop);
         tab.addEventListener('dragend', handleTabDragEnd);
     });
+
+    // Overflow ergonomics for projects with many elevations:
+    // 1) Vertical mouse-wheel over the tab bar scrolls it horizontally
+    //    (wired once — guarded by a flag on the container).
+    if (!container._wheelWired) {
+        container._wheelWired = true;
+        container.addEventListener('wheel', (e) => {
+            // Only intercept when the bar actually overflows and the wheel is
+            // predominantly vertical (trackpads emit real deltaX themselves).
+            if (container.scrollWidth <= container.clientWidth) return;
+            if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+            e.preventDefault();
+            container.scrollLeft += e.deltaY;
+        }, { passive: false });
+    }
+    // 2) Keep the ACTIVE tab visible — when switching/adding elevations the
+    //    active tab may sit past the right edge; bring it into view.
+    const activeTab = container.querySelector('.nav-tab.active');
+    if (activeTab && container.scrollWidth > container.clientWidth) {
+        const cRect = container.getBoundingClientRect();
+        const tRect = activeTab.getBoundingClientRect();
+        if (tRect.left < cRect.left || tRect.right > cRect.right) {
+            activeTab.scrollIntoView({ inline: 'nearest', block: 'nearest' });
+        }
+    }
 }
 
 // ──────────────────────────────────────────────────────────────────────────
@@ -2046,7 +2888,7 @@ function saveMasterProject() {
     }
     const getStr = (id) => document.getElementById(id).value;
     const globalMeta = { projName: getStr('g_projName'), desc: getStr('g_desc'), date: getStr('g_date'), issued: getStr('g_issued'), client: getStr('g_client'), attn: getStr('g_attn'), delivery: getStr('g_delivery') };
-    const masterData = { type: 'master-studio-v6', dashUnit: dashUnit, elevUnit: elevUnit, globalMeta: globalMeta, dashProjectData: dashProjectData, elevations: elevations };
+    const masterData = { type: 'master-studio-v6', dashUnit: dashUnit, elevUnit: elevUnit, globalMeta: globalMeta, dashProjectData: dashProjectData, elevations: elevations, floorplanImage: floorplanImageData, floorplanImageName: floorplanImageName, floorplanLevels: floorplanLevels, editorial: editorialContent };
     const blob = new Blob([JSON.stringify(masterData, null, 2)], { type: 'application/json' });
     // Filename uses the user's Project Name + today's date so multiple
     // projects don't overwrite each other in Downloads.
@@ -2066,6 +2908,7 @@ function loadMasterProject(event) {
         try {
             const data = JSON.parse(e.target.result);
             if (data.type && data.type.startsWith('master-studio')) {
+                _migrateLoadedProject(data);   // auto-correct mislabeled units etc.
                 // Unit handling: prefer dashUnit (it's the CSV-canonical one).
                 // If only elevUnit exists (older format edge case) use that.
                 // Force both internal vars equal to the chosen value since
@@ -2080,6 +2923,11 @@ function loadMasterProject(event) {
                 }
                 if (data.dashProjectData) dashProjectData = data.dashProjectData;
                 if (data.elevations) elevations = data.elevations;
+                floorplanImageData = data.floorplanImage || '';
+                floorplanImageName = data.floorplanImageName || '';
+                floorplanLevels = Array.isArray(data.floorplanLevels) ? data.floorplanLevels : [];
+                _fpLevel = 0; _fpMigrate();
+                editorialContent = Object.assign(_editorialDefaults(), data.editorial || {});
                 // If the loaded project had divergent dashUnit / elevUnit
                 // (a relic of the pre-unified era), the elevations array
                 // values are in elevUnit while dashProjectData is in
@@ -2128,6 +2976,9 @@ function loadMasterProject(event) {
             }
             if (typeof markClean === 'function') markClean();
             if (typeof clearAutosave === 'function') clearAutosave();
+            if (data._unitAutoFixed && typeof showInfoModal === 'function') {
+                showInfoModal('Units auto-corrected', 'This project was labeled "' + data._unitAutoFixed.from + '" but its measurements looked like "' + data._unitAutoFixed.to + '" (for example, a 108-unit-tall wall). FRAME corrected the unit to ' + data._unitAutoFixed.to + ' so the elevation, person, and hang heights scale correctly. Save the project to keep the fix.');
+            }
         } catch (err) { alert("Invalid project file."); }
     };
     reader.readAsText(file); event.target.value = '';
@@ -2192,7 +3043,7 @@ function importSelectedFramesBulk() {
             fW: (parseFloat(f.fW) || 1.25) * factor, fType: f.fType || 'color', fColor: f.fColor || '#1a1a1a', fCode: f.fCode || '', swatchDataUrl: f.swatchDataUrl || '',
             product: f.product || '', floaterInset: (parseFloat(f.floaterInset) || 0.75) * factor,
             // Phase A fields carried through. Dimensional ones get factor-converted; text fields pass through.
-            artist: f.artist || '', artworkTitle: f.artworkTitle || '', artType: f.artType || '',
+            artist: f.artist || '', artworkTitle: f.artworkTitle || '', artType: f.artType || '', artworkUrl: f.artworkUrl || '', artworkFile: f.artworkFile || '', imageCode: f.imageCode || '', artworkW: f.artworkW||0, artworkH: f.artworkH||0, artZoom: f.artZoom||1, artPanX: f.artPanX||0, artPanY: f.artPanY||0,
             fColorName: f.fColorName || '', paperType: f.paperType || '',
             fHeight: (parseFloat(f.fHeight) || 0) * factor,
             rabbetDepth: (parseFloat(f.rabbetDepth) || 0) * factor,
@@ -2201,8 +3052,8 @@ function importSelectedFramesBulk() {
             useFloatMount: f.useFloatMount === true,
             sbBackerColorHex: f.sbBackerColorHex || '#ffffff', sbBackerColorName: f.sbBackerColorName || 'B 97 White',
             sbPaperColorHex: f.sbPaperColorHex || '#ffffff', sbPaperColorName: f.sbPaperColorName || 'White',
-            sbPaperMargin: (parseFloat(f.sbPaperMargin) || 1.5) * factor,
-            sbPaperBorder: (parseFloat(f.sbPaperBorder) || 0.5) * factor,
+            sbPaperMargin: (isNaN(parseFloat(f.sbPaperMargin)) ? 1.5 : parseFloat(f.sbPaperMargin)) * factor,
+            sbPaperBorder: (isNaN(parseFloat(f.sbPaperBorder)) ? 0.5 : parseFloat(f.sbPaperBorder)) * factor,
             sbPaperEdge: f.sbPaperEdge || 'clean',
             sbPaperEdgeSeed: f.sbPaperEdgeSeed || 0,
             m1T: (parseFloat(f.m1T) || 0) * factor, m1B: (parseFloat(f.m1B) || 0) * factor, m1L: (parseFloat(f.m1L) || 0) * factor, m1R: (parseFloat(f.m1R) || 0) * factor,
@@ -2256,15 +3107,15 @@ function pushFrameToElevation() {
         w: (parseFloat(f.extW) || 24) * factor, h: (parseFloat(f.extH) || 30) * factor,
         fW: (parseFloat(f.fW) || 1.25) * factor, fType: f.fType || 'color', fColor: f.fColor || '#1a1a1a', fCode: f.fCode || '', swatchDataUrl: f.swatchDataUrl || '',
         product: f.product || '', floaterInset: (parseFloat(f.floaterInset) || 0.75) * factor,
-        artist: f.artist || '', artworkTitle: f.artworkTitle || '', artType: f.artType || '',
+        artist: f.artist || '', artworkTitle: f.artworkTitle || '', artType: f.artType || '', artworkUrl: f.artworkUrl || '', artworkFile: f.artworkFile || '', imageCode: f.imageCode || '', artworkW: f.artworkW||0, artworkH: f.artworkH||0, artZoom: f.artZoom||1, artPanX: f.artPanX||0, artPanY: f.artPanY||0,
         fColorName: f.fColorName || '', paperType: f.paperType || '',
         fHeight: (parseFloat(f.fHeight) || 0) * factor,
         rabbetDepth: (parseFloat(f.rabbetDepth) || 0) * factor,
         useFloatMount: f.useFloatMount === true,
         sbBackerColorHex: f.sbBackerColorHex || '#ffffff', sbBackerColorName: f.sbBackerColorName || 'B 97 White',
         sbPaperColorHex: f.sbPaperColorHex || '#ffffff', sbPaperColorName: f.sbPaperColorName || 'White',
-        sbPaperMargin: (parseFloat(f.sbPaperMargin) || 1.5) * factor,
-        sbPaperBorder: (parseFloat(f.sbPaperBorder) || 0.5) * factor,
+        sbPaperMargin: (isNaN(parseFloat(f.sbPaperMargin)) ? 1.5 : parseFloat(f.sbPaperMargin)) * factor,
+        sbPaperBorder: (isNaN(parseFloat(f.sbPaperBorder)) ? 0.5 : parseFloat(f.sbPaperBorder)) * factor,
         sbPaperEdge: f.sbPaperEdge || 'clean',
         sbPaperEdgeSeed: f.sbPaperEdgeSeed || 0,
         m1T: (parseFloat(f.m1T) || 0) * factor, m1B: (parseFloat(f.m1B) || 0) * factor, m1L: (parseFloat(f.m1L) || 0) * factor, m1R: (parseFloat(f.m1R) || 0) * factor,
@@ -2366,8 +3217,8 @@ function pushUpdatesToElevations(dashIndex) {
                 f.sbBackerColorName = d.sbBackerColorName || 'B 97 White';
                 f.sbPaperColorHex = d.sbPaperColorHex || '#ffffff';
                 f.sbPaperColorName = d.sbPaperColorName || 'White';
-                f.sbPaperMargin = (parseFloat(d.sbPaperMargin) || 1.5) * factor;
-                f.sbPaperBorder = (parseFloat(d.sbPaperBorder) || 0.5) * factor;
+                f.sbPaperMargin = (isNaN(parseFloat(d.sbPaperMargin)) ? 1.5 : parseFloat(d.sbPaperMargin)) * factor;
+                f.sbPaperBorder = (isNaN(parseFloat(d.sbPaperBorder)) ? 0.5 : parseFloat(d.sbPaperBorder)) * factor;
                 f.sbPaperEdge = d.sbPaperEdge || 'clean';
                 f.sbPaperEdgeSeed = d.sbPaperEdgeSeed || 0;
                 f.paperType = d.paperType || '';
@@ -2386,6 +3237,17 @@ function pushUpdatesToElevations(dashIndex) {
                 f.artist = d.artist || '';
                 f.artworkTitle = d.artworkTitle || '';
                 f.artType = d.artType || '';
+
+                // Uploaded artwork image + its source filename (extension dropped).
+                // Syncing here is what makes artwork appear live in the elevation
+                // when added on the dashboard (previously required a re-import).
+                f.artworkUrl = d.artworkUrl || '';
+                f.artworkFile = d.artworkFile || '';
+                f.artworkW = d.artworkW || 0;
+                f.artworkH = d.artworkH || 0;
+                f.artZoom = d.artZoom || 1;
+                f.artPanX = d.artPanX || 0;
+                f.artPanY = d.artPanY || 0;
             }
         });
     });
@@ -2671,33 +3533,48 @@ function applyMoveTo() {
 //
 // Both push a single history entry (so Ctrl+Z reverts the whole batch).
 
-// Metadata for which fields can be bulk-edited and how their value input
-// should render. Order here is the order they appear in the dropdown.
-// Notes:
-//   - ITEM CODE, art dimensions, image filename are intentionally excluded
-//     (they're per-row unique, or computed)
-//   - 'select' type uses the options array; 'text' is a free-text input;
-//     'number' is a numeric input
-//   - The 'apply' field stores the property key on the row object
-const BULK_EDITABLE_FIELDS = [
-    { key: 'product',       label: 'Product Type',  type: 'select', options: FRAME_PRODUCTS },
-    { key: 'location',      label: 'Location',      type: 'text' },
-    { key: 'level',         label: 'Level',         type: 'text' },
-    // Note: 'qty' is intentionally excluded — it's a derived value computed
-    // by recalculateDashboardQuantities from elevation frame counts. Bulk
-    // editing it would be silently overwritten on the next recalc.
-    { key: 'artType',       label: 'Art Type',      type: 'text' },
-    { key: 'paperType',     label: 'Paper Type',    type: 'text' },
-    { key: 'fCode',         label: 'Frame Code',    type: 'text' },
-    { key: 'fColorName',    label: 'Frame Color Name', type: 'text' },
-    { key: 'glass',         label: 'Glass',         type: 'text' },
-    { key: 'mount',         label: 'Mount',         type: 'text' },
-    { key: 'hardware',      label: 'Hardware',      type: 'text' },
-    { key: 'backing',       label: 'Backing Board', type: 'text' },
-    { key: 'm1ColorName',   label: 'Mat 1 Color Name', type: 'text' },
-    { key: 'm2ColorName',   label: 'Mat 2 Color Name', type: 'text' },
-    { key: 'prodNotes',     label: 'Production Notes', type: 'text' },
-];
+// ── BULK EDIT (real dashboard form, scratch-edited) ──────────────────────────
+// Instead of a separate mini-form, Bulk Edit MOVES the actual dashboard form
+// panel into a blurred "Bulk Edit" modal. Because it's the real form node
+// (moved, not cloned), it's a 1:1 of the dashboard with no invented fields and
+// the frame code + swatch visible together. Edits go to a standalone SCRATCH
+// object (see syncDashAndCalculate's _bulkEditing branch) so NOTHING in the
+// project changes until Apply. Fields whose values differ across the selected
+// rows are greyed out — you can only bulk-change fields the rows already share.
+
+let _bulkEditing = false;
+let _bulkScratch = null;       // the row object the moved form reads/writes
+let _bulkBaseline = null;      // snapshot of the scratch at open (to diff on Apply)
+let _bulkSelected = [];        // real selected row indices to apply to
+let _bulkFormHome = null;      // { parent, next } to restore the moved panel
+let _bulkSavedIndex = 0;       // dashSelectedRowIndex to restore
+
+// Map each comparable data key → the input element id(s) it lives in, so we can
+// (a) detect which fields differ across the selection and (b) grey those out.
+// Item Code / Image Code / dimensions are per-row unique and always locked.
+const BULK_FIELD_ELEMENTS = {
+    product: ['m_product'], location: ['m_location'], level: ['m_level'],
+    artType: ['m_artType'], paperType: ['m_paperType'],
+    fW: ['fW'], fHeight: ['fHeight'], rabbetDepth: ['rabbetDepth'],
+    fColor: ['fColor'], fCode: ['m_fCode'], fColorName: ['m_fColorName'],
+    m1T: ['m1T'], m1B: ['m1B'], m1L: ['m1L'], m1R: ['m1R'],
+    m1ColorName: ['m1_color'], m1ColorHex: ['m1_colorHex'],
+    m2: ['m2'], m2ColorName: ['m2_color'], m2ColorHex: ['m2_colorHex'],
+    glass: ['m_glass'], hardware: ['m_hardware'], mount: ['m_mount'],
+    backing: ['m_backing'], notes: ['m_notes'], prodNotes: ['m_prodNotes'],
+    canvasDepth: ['canvasDepth'], canvasWrap: ['canvasWrap'], floaterInset: ['floaterInset'],
+    bleed: ['m_bleed'],
+    // Float Mount paper fields (the panel shown when FLOAT mode is on).
+    sbBackerColorName: ['sbBackerColorName'], sbBackerColorHex: ['sbBackerColorHex'],
+    sbPaperColorName: ['sbPaperColorName'], sbPaperColorHex: ['sbPaperColorHex'],
+    sbPaperMargin: ['sbPaperMargin'], sbPaperBorder: ['sbPaperBorder'],
+};
+// Mode/data keys with NO single dedicated input (driven by toggle buttons or
+// derived) that must still be diffed + carried on Apply so things like the
+// MAT↔FLOAT mode switch, faux-mat toggle, and paper-edge style propagate.
+const BULK_EXTRA_KEYS = ['useFloatMount', 'useFauxMat', 'sbPaperEdge'];
+// Keys that are inherently per-row and must never be bulk-applied.
+const BULK_LOCKED_ELEMENTS = ['m_itemCode', 'm_imageCode', 'extW', 'extH', 'm_qty'];
 
 function openBulkEditModal() {
     if (!dashProjectData || dashProjectData.length === 0) {
@@ -2705,119 +3582,155 @@ function openBulkEditModal() {
         return;
     }
     const selected = dashGetSelectedIndices();
+    _bulkSelected = selected.slice();
+    _bulkSavedIndex = dashSelectedRowIndex;
+
+    // Header summary.
     const summary = document.getElementById('bulkEditSummary');
     if (selected.length === 1) {
-        const row = dashProjectData[selected[0]];
-        summary.innerHTML = `Editing <strong>${row.id}</strong>. Tip: select multiple rows (Shift/Ctrl-click) to edit them all at once.`;
+        summary.innerHTML = `Editing <strong>${dashProjectData[selected[0]].id}</strong>. Tip: select multiple rows (Shift/Ctrl-click) to bulk edit. Greyed fields differ across the selection.`;
     } else {
-        summary.innerHTML = `Editing <strong>${selected.length}</strong> selected rows.`;
+        summary.innerHTML = `Editing <strong>${selected.length}</strong> rows. Greyed-out fields differ across the selection — only fields the rows share can be changed together.`;
     }
-    // Populate the field dropdown
-    const fieldSelect = document.getElementById('bulkEditField');
-    fieldSelect.innerHTML = '';
-    BULK_EDITABLE_FIELDS.forEach((f, i) => {
-        const opt = document.createElement('option');
-        opt.value = String(i);
-        opt.textContent = f.label;
-        fieldSelect.appendChild(opt);
-    });
-    fieldSelect.value = '0';
-    renderBulkEditValueInput();
+
+    // Scratch = deep copy of the PRIMARY row. The form edits this, never the
+    // real data. (structuredClone falls back to JSON for older engines.)
+    const primary = dashProjectData[dashSelectedRowIndex];
+    _bulkScratch = (typeof structuredClone === 'function') ? structuredClone(primary) : JSON.parse(JSON.stringify(primary));
+
+    _bulkEditing = true;
+
+    // Move the real form panel into the modal mount, then load the scratch.
+    const pane = document.getElementById('dashRightPane');
+    const mount = document.getElementById('bulkFormMount');
+    if (pane && mount) {
+        _bulkFormHome = { parent: pane.parentNode, next: pane.nextSibling };
+        mount.appendChild(pane);
+        pane.classList.add('bulk-mode');
+    }
+    loadDashDataIntoControls(_bulkScratch);
+
+    // Grey out fields that differ across the selection (+ always-locked ones).
+    _bulkApplyDifferingGreyout(selected);
+
+    // Baseline AFTER loading the form, so Apply diffs only the user's changes.
+    _bulkBaseline = (typeof structuredClone === 'function') ? structuredClone(_bulkScratch) : JSON.parse(JSON.stringify(_bulkScratch));
+
     document.getElementById('bulkEditModal').style.display = 'flex';
 }
 
-// Render the value input appropriate to the selected field. Called on modal
-// open and whenever the field dropdown changes. Also updates the preview line.
-function renderBulkEditValueInput() {
-    const fieldIdx = parseInt(document.getElementById('bulkEditField').value, 10);
-    const field = BULK_EDITABLE_FIELDS[fieldIdx];
-    if (!field) return;
-    const container = document.getElementById('bulkEditValueContainer');
-    container.innerHTML = '';
-    let input;
-    if (field.type === 'select') {
-        input = document.createElement('select');
-        field.options.forEach(opt => {
-            const o = document.createElement('option');
-            o.value = opt;
-            o.textContent = opt;
-            input.appendChild(o);
-        });
-    } else if (field.type === 'number') {
-        input = document.createElement('input');
-        input.type = 'number';
-    } else {
-        input = document.createElement('input');
-        input.type = 'text';
-    }
-    input.id = 'bulkEditValueInput';
-    input.style.cssText = 'width:100%; font-size:0.85rem; padding:6px 8px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px; box-sizing:border-box;';
-    // Pre-fill with the primary selected row's current value as a hint
-    const selected = dashGetSelectedIndices();
-    if (selected.length > 0) {
-        const cur = dashProjectData[dashSelectedRowIndex][field.key];
-        if (cur !== undefined && cur !== null) input.value = String(cur);
-    }
-    input.oninput = updateBulkEditPreview;
-    input.onchange = updateBulkEditPreview;
-    container.appendChild(input);
-    updateBulkEditPreview();
-}
-
-function updateBulkEditPreview() {
-    const fieldIdx = parseInt(document.getElementById('bulkEditField').value, 10);
-    const field = BULK_EDITABLE_FIELDS[fieldIdx];
-    if (!field) return;
-    const input = document.getElementById('bulkEditValueInput');
-    const newVal = input ? input.value : '';
-    const selected = dashGetSelectedIndices();
-    const preview = document.getElementById('bulkEditPreview');
-    preview.innerHTML = `Will set <strong>${field.label}</strong> to "<strong>${newVal}</strong>" on ${selected.length} row${selected.length===1?'':'s'}.`;
-}
-
-function applyBulkEdit() {
-    const fieldIdx = parseInt(document.getElementById('bulkEditField').value, 10);
-    const field = BULK_EDITABLE_FIELDS[fieldIdx];
-    if (!field) return;
-    const input = document.getElementById('bulkEditValueInput');
-    if (!input) return;
-    let newVal = input.value;
-    if (field.type === 'number') {
-        const n = parseFloat(newVal);
-        if (isNaN(n)) {
-            showInfoModal('Invalid value', `"${newVal}" isn't a valid number for ${field.label}.`);
-            return;
+// Disable inputs for keys whose value isn't shared by every selected row, plus
+// the always-locked per-row fields. Differing inputs get a title hint + dim.
+function _bulkApplyDifferingGreyout(selected) {
+    const sameAcross = (key) => {
+        const first = dashProjectData[selected[0]][key];
+        return selected.every(i => String(dashProjectData[i][key] === undefined ? '' : dashProjectData[i][key]) === String(first === undefined ? '' : first));
+    };
+    const setDisabled = (id, off, reason) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.disabled = off;
+        const cell = el.closest('div');
+        if (cell) cell.classList.toggle('bulk-locked-field', off);
+        if (off && reason) el.title = reason;
+    };
+    // Reset any previous greyout first.
+    Object.values(BULK_FIELD_ELEMENTS).flat().concat(BULK_LOCKED_ELEMENTS).forEach(id => setDisabled(id, false, ''));
+    // Per-row unique fields: always locked.
+    BULK_LOCKED_ELEMENTS.forEach(id => setDisabled(id, true, 'Per-row value — not bulk-editable'));
+    // Differing fields: lock.
+    Object.keys(BULK_FIELD_ELEMENTS).forEach(key => {
+        if (!sameAcross(key)) {
+            BULK_FIELD_ELEMENTS[key].forEach(id => setDisabled(id, true, 'Differs across selected rows — change them individually'));
         }
-        newVal = n;
-    }
-    const selected = dashGetSelectedIndices();
-    if (selected.length === 0) return;
+    });
+}
 
-    // Apply to every selected row
-    selected.forEach(idx => {
-        dashProjectData[idx][field.key] = newVal;
+// Apply: diff the scratch against its baseline; copy changed + editable fields
+// to every selected row. Excludes locked/differing fields (their inputs are
+// disabled, so they can't have changed anyway).
+function applyBulkEdit() {
+    if (!_bulkEditing || !_bulkScratch || !_bulkBaseline) { _bulkTeardown(false); return; }
+
+    // Which data keys did the user actually change?
+    const changedKeys = [];
+    const lockedIds = new Set(BULK_LOCKED_ELEMENTS);
+    Object.keys(BULK_FIELD_ELEMENTS).forEach(key => {
+        // Skip if any mapped input is disabled (locked/differing).
+        const anyDisabled = BULK_FIELD_ELEMENTS[key].some(id => { const el = document.getElementById(id); return el && el.disabled; });
+        if (anyDisabled) return;
+        const a = _bulkScratch[key], b = _bulkBaseline[key];
+        if (String(a === undefined ? '' : a) !== String(b === undefined ? '' : b)) changedKeys.push(key);
+    });
+    // Mode/derived keys without a dedicated input (MAT↔FLOAT, faux mat, edge).
+    BULK_EXTRA_KEYS.forEach(key => {
+        const a = _bulkScratch[key], b = _bulkBaseline[key];
+        if (String(a === undefined ? '' : a) !== String(b === undefined ? '' : b)) changedKeys.push(key);
+    });
+    // If the MAT↔FLOAT mode itself changed, carry the complete float-paper field
+    // set so every selected row fully switches mode (not just the toggle flag).
+    const floatModeChanged = changedKeys.indexOf('useFloatMount') >= 0;
+    const floatCarry = ['useFloatMount', 'sbBackerColorName', 'sbBackerColorHex', 'sbPaperColorName', 'sbPaperColorHex', 'sbPaperMargin', 'sbPaperBorder', 'sbPaperEdge'];
+
+    // Frame swatch: if the user picked a library swatch, fType becomes 'image'
+    // and swatchDataUrl/swatchName/fW/fHeight/rabbet change — carry those too.
+    const swatchChanged = _bulkScratch.swatchDataUrl !== _bulkBaseline.swatchDataUrl || _bulkScratch.swatchName !== _bulkBaseline.swatchName || _bulkScratch.fType !== _bulkBaseline.fType;
+    const carryWithSwatch = ['fType', 'swatchDataUrl', 'swatchName', 'fW', 'fHeight', 'rabbetDepth', 'fCode', 'product', 'floaterInset', '_faceWidth', 'useFloatMount'];
+
+    if (changedKeys.length === 0 && !swatchChanged) { _bulkTeardown(false); return; }
+
+    _bulkSelected.forEach(idx => {
+        const target = dashProjectData[idx];
+        changedKeys.forEach(k => { target[k] = _bulkScratch[k]; });
+        if (floatModeChanged) floatCarry.forEach(k => { if (_bulkScratch[k] !== undefined) target[k] = _bulkScratch[k]; });
+        if (swatchChanged) carryWithSwatch.forEach(k => { if (_bulkScratch[k] !== undefined) target[k] = _bulkScratch[k]; });
+        // Keep the Shadow Box float-mount flag consistent if product changed.
+        if (changedKeys.indexOf('product') >= 0) target.useFloatMount = (_bulkScratch.product === 'Framed Art (Shadow Box)');
     });
 
-    // If product was bulk-edited, mirror the Shadow Box auto-flip behavior
-    // (Shadow Box flips useFloatMount to true; everything else flips it to
-    // false). Matches what handleDashProductChange() does for single-row edits.
-    if (field.key === 'product') {
-        selected.forEach(idx => {
-            dashProjectData[idx].useFloatMount = (newVal === 'Framed Art (Shadow Box)');
-        });
-    }
-
-    // Recalc overall dims and re-render. recalculateDashboardQuantities also
-    // refreshes the table view. If the form panel was reflecting one of the
-    // changed rows, reload it so the user sees the new value.
-    recalculateDashboardQuantities();
-    renderDashTable();
-    if (selected.indexOf(dashSelectedRowIndex) >= 0) {
-        loadDashDataIntoControls(dashProjectData[dashSelectedRowIndex]);
-    }
-    pushHistory();
-    document.getElementById('bulkEditModal').style.display = 'none';
+    _bulkTeardown(true);
 }
+
+// Restore: move the form panel home, exit bulk mode, reload the real row.
+// commit=true means we just applied (recalc/render/history + push elevations).
+function _bulkTeardown(commit) {
+    _bulkEditing = false;
+    const pane = document.getElementById('dashRightPane');
+    if (pane && _bulkFormHome && _bulkFormHome.parent) {
+        pane.classList.remove('bulk-mode');
+        _bulkFormHome.parent.insertBefore(pane, _bulkFormHome.next);
+    }
+    _bulkFormHome = null;
+
+    // Clear any greyout so the live form is fully editable again.
+    Object.values(BULK_FIELD_ELEMENTS).flat().concat(BULK_LOCKED_ELEMENTS).forEach(id => {
+        const el = document.getElementById(id); if (el) { el.disabled = false; const c = el.closest('div'); if (c) c.classList.remove('bulk-locked-field'); }
+    });
+    // m_qty is genuinely always disabled (auto-calculated) — restore that.
+    const qty = document.getElementById('m_qty'); if (qty) qty.disabled = true;
+
+    document.getElementById('bulkEditModal').style.display = 'none';
+
+    // Restore selection + the live form to the real primary row.
+    dashSelectedRowIndex = Math.min(_bulkSavedIndex, dashProjectData.length - 1);
+    _bulkScratch = null; _bulkBaseline = null;
+
+    if (commit) {
+        recalculateDashboardQuantities();
+        renderDashTable();
+        _bulkSelected.forEach(idx => { if (typeof pushUpdatesToElevations === 'function') pushUpdatesToElevations(idx); });
+        if (typeof loadDashDataIntoControls === 'function' && dashProjectData[dashSelectedRowIndex]) loadDashDataIntoControls(dashProjectData[dashSelectedRowIndex]);
+        if (typeof updateDashVisualsFromDOM === 'function') updateDashVisualsFromDOM();
+        pushHistory();
+    } else {
+        if (typeof loadDashDataIntoControls === 'function' && dashProjectData[dashSelectedRowIndex]) loadDashDataIntoControls(dashProjectData[dashSelectedRowIndex]);
+        if (typeof updateDashVisualsFromDOM === 'function') updateDashVisualsFromDOM();
+        renderDashTable();
+    }
+}
+
+function cancelBulkEdit() { _bulkTeardown(false); }
+
 
 // ── DUPLICATE AS SERIES ──
 
@@ -3002,6 +3915,8 @@ function loadDashDataIntoControls(data) {
     setVal('m_artist', data.artist !== undefined ? data.artist : '');
     setVal('m_artworkTitle', data.artworkTitle !== undefined ? data.artworkTitle : '');
     setVal('m_artType', data.artType !== undefined ? data.artType : '');
+    updateDashArtworkThumb(data.artworkUrl || '');
+    if (typeof _syncArtCropControls === 'function') _syncArtCropControls();
     setVal('m_fColorName', data.fColorName !== undefined ? data.fColorName : 'Standard Black');
     // Render zero-valued numeric fields as blank instead of "0" so the input is
     // empty when the user clicks in. Otherwise the leading "0" gets prepended to
@@ -3165,10 +4080,10 @@ function syncDashAndCalculate() {
     const getRaw = (id) => { const el = document.getElementById(id); return el ? el.value : ""; };
     const getVal = (id) => parseFloat(getRaw(id)) || 0;
     const getStr = (id) => getRaw(id);
-    const row = dashProjectData[dashSelectedRowIndex];
+    const row = _bulkEditing ? (_bulkScratch || {}) : dashProjectData[dashSelectedRowIndex];
     
     const oldId = row.id; const newId = getStr('m_itemCode');
-    if (oldId !== newId) { elevations.forEach(elev => { elev.frames.forEach(f => { if (f.id === oldId) f.id = newId; }); }); }
+    if (!_bulkEditing && oldId !== newId) { elevations.forEach(elev => { elev.frames.forEach(f => { if (f.id === oldId) f.id = newId; }); }); }
 
     const isColor = getStr('fType') === 'color';
     const isLinked = document.getElementById('matLinkBtn').classList.contains('active');
@@ -3182,11 +4097,24 @@ function syncDashAndCalculate() {
     // M2 can never be active if M1 is off (M2 sits inside M1).
     const m2Active = m1Active && document.getElementById('m2Toggle').classList.contains('active');
 
-    dashProjectData[dashSelectedRowIndex] = {
+    const _assembledRow = {
         id: newId, imageCode: getStr('m_imageCode'), level: getStr('m_level'), qty: getVal('m_qty'), product: getStr('m_product'), location: getStr('m_location'),
         // Phase A artwork attribution fields. Empty values are preserved as-is — they
         // render as blank cells in CSV and skipped lines in the InDesign spec block.
         artist: getStr('m_artist'), artworkTitle: getStr('m_artworkTitle'), artType: getStr('m_artType'),
+        artworkUrl: row.artworkUrl || '',
+        artworkFile: row.artworkFile || '',
+        artworkW: row.artworkW || 0,
+        artworkH: row.artworkH || 0,
+        artZoom: row.artZoom || 1,
+        artPanX: row.artPanX || 0,
+        artPanY: row.artPanY || 0,
+        // Floorplan markup: pin position (normalized 0–1) + art category. Not
+        // surfaced in this form — set via the Mark Up Floorplan tool — so carry
+        // them through unchanged on every sync, or they'd be wiped on edit.
+        planX: (row.planX === undefined ? null : row.planX),
+        planY: (row.planY === undefined ? null : row.planY),
+        category: row.category || '',
         // Frame profile geometry: face width (fW) is the visible frame edge; fHeight is the
         // total profile depth front-to-back; rabbetDepth is the L-pocket depth where
         // mat/print/glass/backing stack up. fHeight ≥ rabbetDepth (rabbet is a notch in the rail).
@@ -3227,7 +4155,19 @@ function syncDashAndCalculate() {
         sbPaperEdgeSeed: row.sbPaperEdgeSeed || 0,
         glass: getStr('m_glass'), hardware: getStr('m_hardware'), mount: getStr('m_mount'), backing: getStr('m_backing'), notes: getStr('m_notes'), prodNotes: getStr('m_prodNotes')
     };
-    
+
+    // BULK EDIT scratch mode: the moved-in dashboard form edits a standalone
+    // scratch object — NOT real project data. We only refresh the live preview;
+    // no table render, no elevation push, no recalc. Nothing is committed until
+    // the user clicks Apply (which diffs the scratch against its baseline).
+    if (_bulkEditing) {
+        _bulkScratch = _assembledRow;
+        updateDashVisualsFromDOM();
+        return;
+    }
+
+    dashProjectData[dashSelectedRowIndex] = _assembledRow;
+
     updateDashVisualsFromDOM(); renderDashTable(); pushUpdatesToElevations(dashSelectedRowIndex);
     // Validate the just-saved row and update warning indicators on the dashboard form.
     // The project table renders its own warnings via renderDashTable() above.
@@ -3236,7 +4176,7 @@ function syncDashAndCalculate() {
 }
 
 function updateDashVisualsFromDOM() {
-    const data = dashProjectData[dashSelectedRowIndex];
+    const data = _bulkEditing ? (_bulkScratch || {}) : dashProjectData[dashSelectedRowIndex];
     const fVis = document.getElementById('dash-frame-visual');
     const viewObj = document.getElementById('view-dashboard');
     
@@ -3442,13 +4382,16 @@ function updateDashVisualsFromDOM() {
         const isTorn = (data.sbPaperEdge || 'clean') === 'torn';
         // Torn edge gets a dashed border in the preview as a visual hint; the export
         // does the actual irregular outline via the canvas renderer.
-        paperVis.style.cssText = `position:absolute; top:${paperY}px; left:${paperX}px; width:${paperW}px; height:${paperH}px; background:${paperColor}; box-shadow: 2px 4px 12px rgba(0,0,0,0.56); ${isTorn ? 'border:1px dashed rgba(0,0,0,0.4); border-radius:2px;' : ''} pointer-events:none;`;
+        paperVis.style.cssText = `position:absolute; box-sizing:border-box; top:${paperY}px; left:${paperX}px; width:${paperW}px; height:${paperH}px; background:${paperColor}; box-shadow: 2px 4px 12px rgba(0,0,0,0.56); ${isTorn ? 'border:1px dashed rgba(0,0,0,0.4); border-radius:2px;' : ''} pointer-events:none;`;
         fVis.appendChild(paperVis);
     }
     
     const artVis = document.createElement('div'); artVis.className = 'art-visual'; artVis.id = 'dash-art-visual';
     // For floater, frameless, & float mount: subtle dashed border (suggests transparent opening) instead of a heavy 4px black stroke.
     artVis.style.border = (isCanvas || isFrameless || useFM) ? "1px dashed rgba(0,0,0,0.25)" : "1px solid #aaa";
+    // Float mount / frameless: opaque print fill so the white paper beneath
+    // doesn't bleed through (keeps dashboard + elevation identical).
+    if (isFrameless || useFM) artVis.style.background = 'rgb(120,120,120)';
     
     let artTopOffset, artLeftOffset;
     if (isCanvas) {
@@ -3475,10 +4418,52 @@ function updateDashVisualsFromDOM() {
     }
     
     artVis.style.top = artTopOffset + "px"; artVis.style.left = artLeftOffset + "px";
-    artVis.style.width = (Math.max(0, finalW) * ratio) + "px"; artVis.style.height = (Math.max(0, finalH) * ratio) + "px";
+    // Faux mat: the visible artwork sits INSIDE the white faux border. Inset the
+    // art opening by the border on each side so the white band shows around the
+    // uploaded image (without this, the image covered the faux mat entirely).
+    let artW = Math.max(0, finalW), artH = Math.max(0, finalH);
+    let artT = artTopOffset, artL = artLeftOffset;
+    if (effFauxOn) {
+        const fb = (parseFloat(data.sbPaperBorder) || 0);
+        artT += fb * ratio; artL += fb * ratio;
+        artW = Math.max(0, finalW - fb * 2); artH = Math.max(0, finalH - fb * 2);
+        artVis.style.top = artT + "px"; artVis.style.left = artL + "px";
+    }
+    artVis.style.width = (artW * ratio) + "px"; artVis.style.height = (artH * ratio) + "px";
+    // Uploaded artwork: positioned inner <img> using the shared crop geometry
+    // (pan/zoom), clipped to the opening. Matches the elevation + exports exactly.
+    const dashHasArt = !!data.artworkUrl;
+    if (dashHasArt) {
+        artVis.style.boxShadow = 'none';
+        artVis.style.overflow = 'hidden';
+        artVis.style.cursor = 'grab';
+        const ow = artW * ratio, oh = artH * ratio;
+        const ar = (data.artworkW && data.artworkH) ? (data.artworkW / data.artworkH) : 0;
+        const rect = computeArtDrawRect(ow, oh, ar, data.artZoom, data.artPanX, data.artPanY);
+        const aimg = document.createElement('img');
+        aimg.src = data.artworkUrl;
+        aimg.draggable = false;
+        aimg.style.cssText = `position:absolute; left:${rect.dx}px; top:${rect.dy}px; width:${rect.dw}px; height:${rect.dh}px; pointer-events:none; user-select:none; display:block;`;
+        // Self-heal: if we don't have the artwork's real dimensions yet (e.g. it
+        // was uploaded before dimensions were tracked), capture them from the
+        // loaded image and re-render so the true aspect ratio is used (prevents
+        // the image stretching to fill the opening when the frame is resized).
+        if (!data.artworkW || !data.artworkH) {
+            aimg.addEventListener('load', () => {
+                const nw = aimg.naturalWidth, nh = aimg.naturalHeight;
+                if (nw && nh && (!data.artworkW || !data.artworkH)) {
+                    data.artworkW = nw; data.artworkH = nh;
+                    updateDashVisualsFromDOM();
+                }
+            });
+        }
+        artVis.appendChild(aimg);
+    }
     // Suffix matches the unit. unitInfo() gives '"' for IN, ' cm' for CM, ' mm' for MM.
     const dashSuf = unitInfo(dashUnit).suffix;
-    artVis.innerText = `${dashFmt(Math.max(0, finalW))}${dashSuf} × ${dashFmt(Math.max(0, finalH))}${dashSuf}`;
+    if (!dashHasArt) {
+        artVis.innerText = `${dashFmt(Math.max(0, finalW))}${dashSuf} × ${dashFmt(Math.max(0, finalH))}${dashSuf}`;
+    }
     fVis.appendChild(artVis);
 }
 
@@ -3695,6 +4680,7 @@ function importDashCSV(e) {
             // Hidden columns — Artist/Title/Art Type for caption use
             d.artist = cellOr(cols, 'Artist', '');
             d.artworkTitle = cellOr(cols, 'Artwork Title', '');
+            d.artworkFile = cellOr(cols, 'Artwork Filename', '');
             d.artType = cellOr(cols, 'Art Type', '');
 
             // Production fields
@@ -4041,7 +5027,7 @@ function setShadowBoxEdge(val) {
 // switching modes just changes which one renders.
 function setMatFloatMode(mode) {
     const useFloat = (mode === 'float');
-    const row = dashProjectData[dashSelectedRowIndex];
+    const row = _bulkEditing ? _bulkScratch : dashProjectData[dashSelectedRowIndex];
     if (row) row.useFloatMount = useFloat;
     applyMatFloatModeUI(useFloat);
     syncDashAndCalculate();
@@ -4642,67 +5628,501 @@ function updateDashCustomSwatchDropdown() {
     s.onmouseleave = restoreDashThumbnail;
 }
 
+// Core swatch applier — writes a library swatch's full data onto a row's data
+// object (profile image, width, code, type=image; plus depth/rabbet and, for
+// floater collections, inset + faceWidth). Pure data: no DOM/form writes, so
+// it's safe to call in a loop for bulk edits. `dataUrl` is the resolved image.
+// Returns true if it changed the row.
+// ── Artwork image (per-row) ──────────────────────────────────────────────
+// Uploaded image that fills the frame opening in the elevation "beauty" view
+// and the presentation PDF. Downscaled on import to bound memory/project size
+// while keeping presentation-grade resolution.
+// Shared artwork importer: downscales any image File to a bounded JPEG data URL
+// and hands back {dataUrl, baseName} via callback. Used by the file picker and
+// all drag-and-drop targets so behavior is identical everywhere.
+function processArtworkFile(file, onReady) {
+    if (!file || !/^image\//.test(file.type)) {
+        showInfoModal('Not an image', 'Please drop or choose an image file (JPG, PNG, etc.).');
+        return;
+    }
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+        const img = new Image();
+        img.onload = () => {
+            const MAX = 1200;
+            let w = img.naturalWidth, h = img.naturalHeight;
+            if (w > MAX || h > MAX) { const s = MAX / Math.max(w, h); w = Math.round(w * s); h = Math.round(h * s); }
+            const c = document.createElement('canvas');
+            c.width = w; c.height = h;
+            c.getContext('2d').drawImage(img, 0, 0, w, h);
+            const dataUrl = c.toDataURL('image/jpeg', 0.85);
+            const baseName = (file.name || '').replace(/\.[^.]+$/, '');
+            onReady(dataUrl, baseName, w, h);
+        };
+        img.onerror = () => showInfoModal('Image Error', 'That file could not be read as an image.');
+        img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
+// ── Artwork crop geometry (single source of truth) ───────────────────────
+// Given an opening (openW × openH) and the artwork aspect ratio, plus the
+// per-frame crop {zoom, panX, panY}, return the image's draw rect in the
+// opening's own coordinate space (origin = opening top-left). Cover-fit at
+// zoom=1; pan shifts which part shows; result is clamped so the opening is
+// always fully covered (no gaps). Used identically by every render path so
+// the preview, elevation, PNG, and SVG can never drift.
+function computeArtDrawRect(openW, openH, ar, zoom, panX, panY) {
+    zoom = zoom || 1; panX = panX || 0; panY = panY || 0;
+    if (!ar || !isFinite(ar) || ar <= 0) ar = (openH > 0 ? openW / openH : 1); // fallback: fill, no crop
+    const openAr = (openH > 0) ? openW / openH : 1;
+    let dw, dh;
+    if (ar > openAr) { dh = openH; dw = openH * ar; }   // image wider → match height
+    else { dw = openW; dh = openW / ar; }               // image taller → match width
+    dw *= zoom; dh *= zoom;
+    let dx = (openW - dw) / 2 + panX * openW;
+    let dy = (openH - dh) / 2 + panY * openH;
+    // Clamp so the image always covers the opening (no transparent gaps).
+    dx = Math.min(0, Math.max(openW - dw, dx));
+    dy = Math.min(0, Math.max(openH - dh, dy));
+    return { dx, dy, dw, dh };
+}
+
+// File-picker path (Upload button / explorer).
+function handleDashArtworkUpload(e) {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    processArtworkFile(file, (dataUrl, baseName, w, h) => applyArtworkToCurrentRow(dataUrl, baseName, w, h));
+    e.target.value = '';  // allow re-uploading the same file
+}
+
+// Assign artwork to the currently-selected dashboard row (used by form + dash
+// preview drops). Honors bulk-edit scratch mode.
+function applyArtworkToCurrentRow(dataUrl, baseName, w, h) {
+    const row = _bulkEditing ? _bulkScratch : dashProjectData[dashSelectedRowIndex];
+    if (row) {
+        row.artworkUrl = dataUrl; row.artworkFile = baseName;
+        if (w) row.artworkW = w; if (h) row.artworkH = h;
+        // Fresh image → reset crop to centered cover.
+        row.artZoom = 1; row.artPanX = 0; row.artPanY = 0;
+        // Auto-populate the Image Code from the dropped filename (this is what
+        // flows to the CSV + the bottom-right caption in InDesign).
+        row.imageCode = baseName;
+        const ic = document.getElementById('m_imageCode'); if (ic) ic.value = baseName;
+    }
+    updateDashArtworkThumb(dataUrl);
+    _syncArtCropControls();
+    syncDashAndCalculate();
+}
+
+// Assign artwork to a specific dashboard row by index, then live-sync to its
+// elevation frames. Used when dropping onto an elevation frame (mapped by id).
+function applyArtworkToRowIndex(idx, dataUrl, baseName, w, h) {
+    const row = dashProjectData[idx];
+    if (!row) return;
+    row.artworkUrl = dataUrl; row.artworkFile = baseName;
+    if (w) row.artworkW = w; if (h) row.artworkH = h;
+    row.artZoom = 1; row.artPanX = 0; row.artPanY = 0;
+    row.imageCode = baseName;
+    pushUpdatesToElevations(idx);
+    if (idx === dashSelectedRowIndex) {
+        updateDashArtworkThumb(dataUrl);
+        const ic = document.getElementById('m_imageCode'); if (ic) ic.value = baseName;
+        _syncArtCropControls();
+    }
+    drawElevAll();
+    pushHistory();
+}
+
+// ── Bulk artwork replacement (relink-by-code) ────────────────────────────
+// Drop in a batch of revised images named to match pieces; auto-match each
+// file to a piece by image code / item code / filename and swap the artwork.
+let _bulkReplacePending = [];
+function _bulkNorm(s) { return (s || '').toString().toLowerCase().replace(/\.[^.]+$/, '').replace(/[^a-z0-9]/g, ''); }
+function _bulkMatchPieces(basename) {
+    const nb = _bulkNorm(basename); if (!nb) return [];
+    const out = [];
+    (dashProjectData || []).forEach((r, i) => { if (!r) return; if ([r.imageCode, r.artworkFile, r.id].some(c => c && _bulkNorm(c) === nb)) out.push(i); });
+    return out;
+}
+function _processArtworkP(file) { return new Promise((res) => { try { processArtworkFile(file, (dataUrl, baseName, w, h) => res({ dataUrl: dataUrl, baseName: baseName, w: w, h: h })); } catch (e) { res(null); } }); }
+function _bulkApplyArtwork(idx, dataUrl, w, h) {
+    const row = dashProjectData[idx]; if (!row) return;
+    row.artworkUrl = dataUrl; if (w) row.artworkW = w; if (h) row.artworkH = h;
+    row.artZoom = 1; row.artPanX = 0; row.artPanY = 0;        // fresh image → centered cover
+    if (typeof pushUpdatesToElevations === 'function') pushUpdatesToElevations(idx);
+}
+function openBulkReplaceModal() {
+    const old = document.getElementById('bulkReplaceModal'); if (old) old.remove();
+    _bulkReplacePending = [];
+    const ov = document.createElement('div'); ov.id = 'bulkReplaceModal';
+    ov.style.cssText = 'position:fixed; inset:0; z-index:100040; background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center;';
+    const card = document.createElement('div');
+    card.style.cssText = 'background:var(--bg-panel,#1d1d20); border:1px solid var(--border-color); border-radius:10px; width:620px; max-width:94vw; max-height:88vh; display:flex; flex-direction:column; overflow:hidden;';
+    card.innerHTML = '<div style="display:flex; align-items:center; justify-content:space-between; padding:16px 18px; border-bottom:1px solid var(--border-color);"><div style="font-size:0.95rem; font-weight:700; color:var(--text-main);">Bulk replace artwork</div><button id="brClose" style="border:none; background:none; color:var(--text-muted); font-size:1.2rem; cursor:pointer; line-height:1;">\u00d7</button></div>';
+    const bodyEl = document.createElement('div'); bodyEl.style.cssText = 'padding:16px 18px; overflow:auto;';
+    const intro = document.createElement('p'); intro.style.cssText = 'font-size:0.72rem; color:var(--text-muted); line-height:1.55; margin:0 0 12px;';
+    intro.innerHTML = 'Choose revised image files named to match your pieces \u2014 by <b>image code</b>, <b>item code</b>, or original filename. Each file replaces the matching piece\u2019s artwork; the code and caption stay the same. Matching ignores case, spaces, dashes and the extension, so <i>ART-001.jpg</i> matches <i>ART.001</i>.';
+    bodyEl.appendChild(intro);
+    const pick = document.createElement('input'); pick.type = 'file'; pick.accept = 'image/*'; pick.multiple = true; pick.style.cssText = 'font-size:0.74rem; color:var(--text-main); margin-bottom:12px;';
+    pick.onchange = (e) => _bulkReplacePicked(e.target.files);
+    bodyEl.appendChild(pick);
+    const res = document.createElement('div'); res.id = 'brResults'; bodyEl.appendChild(res);
+    const foot = document.createElement('div'); foot.id = 'brFoot'; foot.style.cssText = 'display:flex; justify-content:flex-end; gap:8px; margin-top:12px;';
+    bodyEl.appendChild(foot);
+    card.appendChild(bodyEl); ov.appendChild(card); document.body.appendChild(ov);
+    ov.onclick = (e) => { if (e.target === ov) ov.remove(); };
+    card.querySelector('#brClose').onclick = () => ov.remove();
+}
+async function _bulkReplacePicked(fileList) {
+    const files = Array.from(fileList || []).filter(f => f && /^image\//.test(f.type));
+    const res = document.getElementById('brResults'), foot = document.getElementById('brFoot');
+    if (!res) return;
+    if (!files.length) { res.innerHTML = '<div style="font-size:0.72rem; color:#c08a2e;">No image files selected.</div>'; return; }
+    res.innerHTML = '<div style="font-size:0.72rem; color:var(--text-muted);">Reading ' + files.length + ' file' + (files.length === 1 ? '' : 's') + '\u2026</div>';
+    _bulkReplacePending = [];
+    for (const f of files) {
+        const r = await _processArtworkP(f); if (!r) continue;
+        _bulkReplacePending.push({ fileName: f.name, baseName: r.baseName, dataUrl: r.dataUrl, w: r.w, h: r.h, matches: _bulkMatchPieces(r.baseName) });
+    }
+    const matched = _bulkReplacePending.filter(p => p.matches.length);
+    let html = '<div style="font-size:0.74rem; color:var(--text-main); font-weight:700; margin-bottom:8px;">' + matched.length + ' of ' + _bulkReplacePending.length + ' files matched a piece</div>';
+    html += '<div style="max-height:320px; overflow:auto; border:1px solid var(--border-color); border-radius:6px;">';
+    _bulkReplacePending.forEach(p => {
+        const ok = p.matches.length > 0;
+        const targets = ok ? p.matches.map(i => (dashProjectData[i].id || dashProjectData[i].imageCode || ('row ' + (i + 1)))).join(', ') : '';
+        html += '<div style="display:flex; align-items:center; gap:10px; padding:7px 10px; border-bottom:1px solid var(--border-color);">'
+            + '<img src="' + p.dataUrl + '" style="width:34px; height:34px; object-fit:cover; border-radius:3px; flex:0 0 auto; background:#fff;">'
+            + '<div style="flex:1; min-width:0;"><div style="font-size:0.7rem; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + _esc(p.fileName) + '</div>'
+            + '<div style="font-size:0.62rem; color:' + (ok ? '#1a7f37' : '#c08a2e') + '; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + (ok ? '\u2192 ' + _esc(targets) : 'no matching piece') + '</div></div>'
+            + '<span style="flex:0 0 auto; font-size:0.9rem; color:' + (ok ? '#1a7f37' : '#c08a2e') + ';">' + (ok ? '\u2713' : '\u2014') + '</span></div>';
+    });
+    html += '</div>';
+    res.innerHTML = html;
+    foot.innerHTML = '';
+    const apply = document.createElement('button'); apply.className = 'action-btn'; apply.style.cssText = 'width:auto; padding:0 16px; font-size:0.78rem;'; apply.textContent = 'Replace ' + matched.length + ' image' + (matched.length === 1 ? '' : 's'); apply.disabled = !matched.length; if (!matched.length) apply.style.opacity = '0.5';
+    apply.onclick = _bulkReplaceApply;
+    foot.appendChild(apply);
+}
+function _bulkReplaceApply() {
+    let updated = 0; const seen = {};
+    _bulkReplacePending.forEach(p => { p.matches.forEach(idx => { _bulkApplyArtwork(idx, p.dataUrl, p.w, p.h); seen[idx] = 1; updated++; }); });
+    if (updated) {
+        if (typeof pushHistory === 'function') pushHistory();
+        if (typeof scheduleAutosave === 'function') scheduleAutosave();
+        if (typeof markDirty === 'function') markDirty();
+        if (typeof refreshAllViews === 'function') refreshAllViews();
+        if (typeof dashSelectedRowIndex !== 'undefined' && seen[dashSelectedRowIndex] && typeof updateDashArtworkThumb === 'function') { const r = dashProjectData[dashSelectedRowIndex]; if (r) updateDashArtworkThumb(r.artworkUrl || ''); }
+    }
+    const ov = document.getElementById('bulkReplaceModal'); if (ov) ov.remove();
+    showInfoModal('Bulk replace', updated ? (updated + ' piece' + (updated === 1 ? '' : 's') + ' updated with new artwork.') : 'Nothing was updated.');
+}
+
+// ── Drag-and-drop wiring ─────────────────────────────────────────────────
+// A small helper to make any element a highlightable image drop zone.
+function _wireImageDropZone(el, onFile, opts) {
+    if (!el || el._artDropWired) return;
+    el._artDropWired = true;
+    const hi = (opts && opts.highlightClass) || 'art-drop-hover';
+    el.addEventListener('dragover', (e) => {
+        if (!e.dataTransfer) return;
+        // Only react to file drags.
+        if (Array.from(e.dataTransfer.types || []).indexOf('Files') === -1) return;
+        e.preventDefault(); e.stopPropagation();
+        e.dataTransfer.dropEffect = 'copy';
+        el.classList.add(hi);
+    });
+    el.addEventListener('dragleave', (e) => { el.classList.remove(hi); });
+    el.addEventListener('drop', (e) => {
+        if (!e.dataTransfer) return;
+        const file = e.dataTransfer.files && e.dataTransfer.files[0];
+        if (!file) return;
+        e.preventDefault(); e.stopPropagation();
+        el.classList.remove(hi);
+        onFile(file, e);
+    });
+}
+
+// Wire the dashboard drop zones (form artwork row + the preview opening).
+// Called once after DOM is ready; safe to call repeatedly (guarded).
+function wireDashArtworkDrops() {
+    const formZone = document.getElementById('m_artworkDrop');
+    if (formZone) _wireImageDropZone(formZone, (file) => {
+        processArtworkFile(file, (u, n) => applyArtworkToCurrentRow(u, n));
+    });
+    // The dashboard preview opening (delegated: the .art-visual is rebuilt each
+    // render, so wire the stable container and check the target on drop).
+    const previewWrap = document.getElementById('dash-frame-visual');
+    if (previewWrap) _wireImageDropZone(previewWrap, (file) => {
+        processArtworkFile(file, (u, n) => applyArtworkToCurrentRow(u, n));
+    });
+}
+
+// Elevation: dropping an image onto a frame maps it to that frame's dashboard
+// row (by id). Delegated on the stable #frame-layer; resolves which frame from
+// the drop target.
+function wireElevArtworkDrop() {
+    const layer = document.getElementById('frame-layer');
+    if (!layer || layer._artDropWired) return;
+    layer._artDropWired = true;
+    const clearHi = () => layer.querySelectorAll('.art-drop-hover').forEach(n => n.classList.remove('art-drop-hover'));
+    layer.addEventListener('dragover', (e) => {
+        if (!e.dataTransfer || Array.from(e.dataTransfer.types || []).indexOf('Files') === -1) return;
+        const fEl = e.target.closest && e.target.closest('.frame-vis');
+        if (!fEl) return;
+        e.preventDefault(); e.stopPropagation(); e.dataTransfer.dropEffect = 'copy';
+        clearHi(); fEl.classList.add('art-drop-hover');
+    });
+    layer.addEventListener('dragleave', (e) => {
+        const fEl = e.target.closest && e.target.closest('.frame-vis');
+        if (fEl) fEl.classList.remove('art-drop-hover');
+    });
+    layer.addEventListener('drop', (e) => {
+        if (!e.dataTransfer) return;
+        const fEl = e.target.closest && e.target.closest('.frame-vis');
+        const file = e.dataTransfer.files && e.dataTransfer.files[0];
+        if (!fEl || !file) return;
+        e.preventDefault(); e.stopPropagation();
+        clearHi();
+        const letter = fEl.getAttribute('data-frame-letter');
+        const frame = elevFrames.find(f => f.letter === letter);
+        if (!frame) { showInfoModal('No frame', 'Could not match that frame.'); return; }
+        // Map to the dashboard row by id.
+        const rowIdx = dashProjectData.findIndex(r => r.id === frame.id);
+        processArtworkFile(file, (u, n) => {
+            if (rowIdx >= 0) {
+                applyArtworkToRowIndex(rowIdx, u, n);
+            } else {
+                // Frame not linked to a dashboard row — set on the frame directly.
+                frame.artworkUrl = u; frame.artworkFile = n; drawElevAll(); pushHistory();
+            }
+        });
+    });
+}
+
+function clearDashArtwork() {
+    const row = _bulkEditing ? _bulkScratch : dashProjectData[dashSelectedRowIndex];
+    if (row) {
+        row.artworkUrl = ''; row.artworkFile = ''; row.imageCode = '';
+        row.artZoom = 1; row.artPanX = 0; row.artPanY = 0; row.artworkW = 0; row.artworkH = 0;
+    }
+    const ic = document.getElementById('m_imageCode'); if (ic) ic.value = '';
+    updateDashArtworkThumb('');
+    _syncArtCropControls();
+    syncDashAndCalculate();
+}
+
+// The row whose crop the dashboard controls edit (bulk-aware).
+function _artCropRow() {
+    return _bulkEditing ? _bulkScratch : dashProjectData[dashSelectedRowIndex];
+}
+
+// Show/seed the zoom slider + reset row only when the selected row has artwork.
+function _syncArtCropControls() {
+    const wrap = document.getElementById('m_artCropControls');
+    const row = _artCropRow();
+    const has = !!(row && row.artworkUrl);
+    if (wrap) wrap.style.display = has ? 'flex' : 'none';
+    const zs = document.getElementById('m_artZoom');
+    if (zs && row) zs.value = row.artZoom || 1;
+}
+
+// OD aspect-ratio lock. When on, editing OD W or OD H scales the other to keep
+// the overall-dimension proportion (handy for resizing without distorting).
+let _odLocked = false;
+function toggleODLock() {
+    _odLocked = !_odLocked;
+    const btn = document.getElementById('odLockBtn');
+    if (btn) {
+        btn.classList.toggle('active', _odLocked);
+        btn.style.background = _odLocked ? 'var(--accent)' : 'var(--bg-panel)';
+        btn.style.color = _odLocked ? '#fff' : 'var(--text-muted)';
+        btn.style.borderColor = _odLocked ? 'var(--accent)' : 'var(--border-color)';
+    }
+}
+
+// OD input handler — honors the lock by scaling the partner dimension.
+let _odSyncing = false;
+function handleODInput(which) {
+    if (_odLocked && !_odSyncing) {
+        const wEl = document.getElementById('extW');
+        const hEl = document.getElementById('extH');
+        const w = parseFloat(wEl.value), h = parseFloat(hEl.value);
+        // Use the value BEFORE this edit to derive the ratio: pull from the row.
+        const row = _bulkEditing ? _bulkScratch : dashProjectData[dashSelectedRowIndex];
+        const prevW = row ? parseFloat(row.extW) : NaN;
+        const prevH = row ? parseFloat(row.extH) : NaN;
+        if (prevW > 0 && prevH > 0) {
+            const ratio = prevW / prevH;
+            _odSyncing = true;
+            if (which === 'W' && w > 0) hEl.value = +(w / ratio).toFixed(3);
+            else if (which === 'H' && h > 0) wEl.value = +(h * ratio).toFixed(3);
+            _odSyncing = false;
+        }
+    }
+    syncDashAndCalculate();
+}
+
+// Resize the frame so the OPENING matches the artwork's aspect ratio. Keeps the
+// current OD width and adjusts OD height (opening = OD minus frame face + mats).
+function fitODToImage() {
+    const row = _bulkEditing ? _bulkScratch : dashProjectData[dashSelectedRowIndex];
+    if (!row || !row.artworkUrl || !row.artworkW || !row.artworkH) {
+        showInfoModal('No artwork', 'Add artwork to this piece first, then fit the frame to its ratio.');
+        return;
+    }
+    const artAR = row.artworkW / row.artworkH;          // image aspect (W/H)
+    const num = (id, fallback) => { const v = parseFloat((document.getElementById(id) || {}).value); return isNaN(v) ? (fallback || 0) : v; };
+    const odW = num('extW', parseFloat(row.extW) || 0);
+    if (odW <= 0) return;
+
+    // Total border between the OD edge and the VISIBLE artwork, computed per axis
+    // (horizontal = left side, vertical = top side) so it matches every layer the
+    // renderer insets by: frame face + mat1 + mat2 + faux-mat border.
+    const isColor = (row.fType === 'color');
+    const fW = isColor ? 0 : num('fW');
+    const m1On = (row.m1A === true) || (document.getElementById('m1Active') && document.getElementById('m1Active').checked);
+    const m1L = m1On ? num('m1L', parseFloat(row.m1L) || 0) : 0;
+    const m1T = m1On ? num('m1T', parseFloat(row.m1T) || 0) : 0;
+    const m2 = num('m2', parseFloat(row.m2) || 0);      // mat2 reveal (applies both axes)
+    const fauxOn = (row.useFauxMat === true);
+    const faux = fauxOn ? (parseFloat(row.sbPaperBorder) || num('sbPaperBorder')) : 0;
+    const borderW = fW + m1L + m2 + faux;               // per-side, horizontal
+    const borderH = fW + m1T + m2 + faux;               // per-side, vertical
+
+    const openingW = odW - 2 * borderW;
+    if (openingW <= 0) { showInfoModal('Too small', 'The frame width is too small for this operation. Reduce mats or increase OD width.'); return; }
+    const openingH = openingW / artAR;
+    const newODH = +(openingH + 2 * borderH).toFixed(3);
+    document.getElementById('extH').value = newODH;
+    row.extH = newODH;
+    // Reset crop — the opening now matches the image, so it sits edge-to-edge.
+    row.artZoom = 1; row.artPanX = 0; row.artPanY = 0;
+    _syncArtCropControls();
+    syncDashAndCalculate();
+}
+
+
+function setArtZoomFromSlider() {
+    const row = _artCropRow(); if (!row) return;
+    const zs = document.getElementById('m_artZoom');
+    row.artZoom = parseFloat(zs.value) || 1;
+    // Re-clamp pan against the new zoom by re-applying current pan (clamped in render).
+    syncDashAndCalculate();
+}
+
+function resetArtCrop() {
+    const row = _artCropRow(); if (!row) return;
+    row.artZoom = 1; row.artPanX = 0; row.artPanY = 0;
+    _syncArtCropControls();
+    syncDashAndCalculate();
+}
+
+// Drag-to-pan inside the dashboard preview opening. Wired (guarded) on the
+// #dash-frame-visual; only active when the selected row has artwork. Pan is
+// stored as a fraction of the opening, so it maps 1:1 to every render path.
+function _wireArtPan() {
+    const fv = document.getElementById('dash-frame-visual');
+    if (!fv || fv._artPanWired) return;
+    fv._artPanWired = true;
+    let dragging = false, startX = 0, startY = 0, startPanX = 0, startPanY = 0, openW = 0, openH = 0;
+    fv.addEventListener('mousedown', (e) => {
+        const row = _artCropRow();
+        if (!row || !row.artworkUrl) return;
+        const art = fv.querySelector('.art-visual');
+        if (!art) return;
+        const r = art.getBoundingClientRect();
+        // Only start a pan if the press is within the opening.
+        if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) return;
+        dragging = true; startX = e.clientX; startY = e.clientY;
+        startPanX = row.artPanX || 0; startPanY = row.artPanY || 0;
+        openW = r.width; openH = r.height;
+        e.preventDefault();
+        fv.style.cursor = 'grabbing';
+    });
+    window.addEventListener('mousemove', (e) => {
+        if (!dragging) return;
+        const row = _artCropRow(); if (!row) return;
+        row.artPanX = startPanX + (e.clientX - startX) / openW;
+        row.artPanY = startPanY + (e.clientY - startY) / openH;
+        // Live re-render of just the preview (cheap) — full sync on mouseup.
+        updateDashVisualsFromDOM();
+    });
+    window.addEventListener('mouseup', () => {
+        if (!dragging) return;
+        dragging = false; fv.style.cursor = '';
+        syncDashAndCalculate();  // commit + push to elevation + history
+    });
+}
+
+function updateDashArtworkThumb(dataUrl) {
+    const thumb = document.getElementById('m_artworkThumb');
+    const clearBtn = document.getElementById('m_artworkClear');
+    if (thumb) {
+        thumb.style.backgroundImage = dataUrl ? `url(${dataUrl})` : 'none';
+        // Hide the placeholder icon when an image is shown.
+        const icon = thumb.querySelector('svg');
+        if (icon) icon.style.display = dataUrl ? 'none' : '';
+    }
+    if (clearBtn) clearBtn.style.display = dataUrl ? 'inline-block' : 'none';
+}
+
+function applySwatchToRow(rowIdx, collectionName, item, dataUrl) {
+    // In bulk-edit mode, target the scratch object (the form's data source),
+    // never a real project row. rowIdx is ignored while bulk editing.
+    const row = _bulkEditing ? _bulkScratch : dashProjectData[rowIdx];
+    if (!row || !item) return false;
+    const _uf = unitFactor('in', dashUnit);
+    row.fType = 'image';
+    row.fW = dashFmt(item.width * _uf);
+    row.fCode = item.code;
+    row.swatchDataUrl = dataUrl;
+    row.swatchName = item.code;
+
+    // Floater collections: switch product + derive inset/faceWidth.
+    const isFloaterCollection = /floater/i.test(collectionName || '');
+    if (isFloaterCollection) {
+        row.product = 'Framed Canvas (Floater)';
+        row.useFloatMount = false;
+        if (item.faceWidth !== undefined) {
+            row.floaterInset = dashFmt((parseFloat(item.faceWidth) + FLOATER_SHADOW_REVEAL) * _uf);
+            row._faceWidth = dashFmt(parseFloat(item.faceWidth) * _uf);
+        }
+    }
+    // Depth / rabbet from the swatch metadata if encoded.
+    if (item.depth !== undefined) row.fHeight = dashFmt(parseFloat(item.depth) * _uf);
+    if (item.rabbet !== undefined) row.rabbetDepth = dashFmt(parseFloat(item.rabbet) * _uf);
+    return true;
+}
+
 function loadDashFromCustomLibrary(idx) {
     const v = document.getElementById('libVendor').value; const c = document.getElementById('libCollection').value;
     if(!v || !c || idx === undefined) return;
     const item = dashLocalLibrary[v][c][idx];
     _libEntryToDataUrl(item.file).then(u => {
-        // Library swatches store dimensions in inches; convert to whatever
-        // the dashboard unit is via unitFactor (works for IN/CM/MM).
-        const _uf = unitFactor('in', dashUnit);
-        const w = dashFmt(item.width * _uf);
-        document.getElementById('fW').value = w; document.getElementById('m_fCode').value = item.code;
-        dashProjectData[dashSelectedRowIndex].fType = 'image'; dashProjectData[dashSelectedRowIndex].fW = w; dashProjectData[dashSelectedRowIndex].fCode = item.code;
-        dashProjectData[dashSelectedRowIndex].swatchDataUrl = u; dashProjectData[dashSelectedRowIndex].swatchName = item.code;
+        // Apply the full swatch to the active row (single source of truth).
+        applySwatchToRow(dashSelectedRowIndex, c, item, u);
+        const row = _bulkEditing ? _bulkScratch : dashProjectData[dashSelectedRowIndex];
+
+        // Reflect the new values in the form controls.
+        document.getElementById('fW').value = row.fW;
+        document.getElementById('m_fCode').value = row.fCode;
         document.getElementById('view-dashboard').style.setProperty('--frame-bg', `url(${u})`);
-        // Sync the Library/Solid toggle and trigger the redraw via syncDashAndCalculate
         document.getElementById('fType').value = 'image';
         document.getElementById('fTypeBtnLibrary').classList.add('active');
         document.getElementById('fTypeBtnSolid').classList.remove('active');
 
-        // Auto-detect floater profiles: if the collection name contains "Floater" (case-insensitive),
-        // switch the product to "Framed Canvas (Floater)" so mats get disabled and the floater inset
-        // takes effect. The user can override the product manually after if it's a misclassification.
-        const isFloaterCollection = /floater/i.test(c);
         const productSelect = document.getElementById('m_product');
-        if (isFloaterCollection && productSelect && productSelect.value !== "Framed Canvas (Floater)") {
+        if (/floater/i.test(c) && productSelect && productSelect.value !== "Framed Canvas (Floater)") {
             productSelect.value = "Framed Canvas (Floater)";
-            // handleDashProductChange toggles the canvasSettings panel; pass shouldSync=false because
-            // we're about to sync below via dashActiveImageObj.onload.
             handleDashProductChange(false);
         }
-
-        // Auto-derive the floater inset from the swatch's encoded face width:
-        //   inset = faceWidth + FLOATER_SHADOW_REVEAL (studio standard 0.25")
-        // This means a swatch named MICH-306-30_1.75_0.625 gets inset 0.875" automatically.
-        // Only applies to floaters; the input remains user-editable for tweaks.
-        if (isFloaterCollection && item.faceWidth !== undefined) {
-            const computedInset = parseFloat(item.faceWidth) + FLOATER_SHADOW_REVEAL;
-            const insetInUnits = dashFmt(computedInset * _uf);
-            const insetInput = document.getElementById('floaterInset');
-            if (insetInput) insetInput.value = insetInUnits;
-            dashProjectData[dashSelectedRowIndex].floaterInset = insetInUnits;
-            // Persist the swatch's faceWidth on the row too (in display units) so
-            // buildSpecStrings can compute Float Reveal = floaterInset - faceWidth.
-            // Without this we'd have to assume the studio-default 0.25" reveal.
-            const faceInUnits = dashFmt(parseFloat(item.faceWidth) * _uf);
-            dashProjectData[dashSelectedRowIndex]._faceWidth = faceInUnits;
-        }
-
-        // Auto-fill Frame Height (profile depth) and Rabbet Depth from the swatch's
-        // metadata if encoded in the filename (_d<depth> and _r<rabbet> tags).
-        // Both are starting values — the user can edit them after for vendor-specific
-        // adjustments. Convert to current display units (IN/CM/MM) before writing.
-        if (item.depth !== undefined) {
-            const depthInUnits = dashFmt(parseFloat(item.depth) * _uf);
-            const fHeightInput = document.getElementById('fHeight');
-            if (fHeightInput) fHeightInput.value = depthInUnits;
-        }
-        if (item.rabbet !== undefined) {
-            const rabbetInUnits = dashFmt(parseFloat(item.rabbet) * _uf);
-            const rabbetInput = document.getElementById('rabbetDepth');
-            if (rabbetInput) rabbetInput.value = rabbetInUnits;
-        }
+        const insetInput = document.getElementById('floaterInset');
+        if (insetInput && row.floaterInset !== undefined) insetInput.value = row.floaterInset;
+        const fHeightInput = document.getElementById('fHeight');
+        if (fHeightInput && row.fHeight !== undefined) fHeightInput.value = row.fHeight;
+        const rabbetInput = document.getElementById('rabbetDepth');
+        if (rabbetInput && row.rabbetDepth !== undefined) rabbetInput.value = row.rabbetDepth;
 
         dashActiveImageObj.src = u; dashActiveImageObj.onload = () => syncDashAndCalculate();
     }).catch(err => {
@@ -5170,6 +6590,23 @@ function renderFrameToCanvas(d, swatchImg, opts) {
         x.strokeStyle = "#aaaaaa"; x.lineWidth = 1; x.strokeRect(aX, aY, aW, aH);
     }
 
+    // Optional artwork fill: paint the uploaded image cover-fit into the opening,
+    // ON TOP of the opening treatment (which would otherwise overpaint it). Default
+    // (no artworkImg) leaves the opening transparent for InDesign compositing.
+    if (opts.artworkImg && !opts.wireframe && aW > 0 && aH > 0) {
+        x.save();
+        x.beginPath(); x.rect(aX, aY, aW, aH); x.clip();
+        const iw = opts.artworkImg.naturalWidth || opts.artworkImg.width;
+        const ih = opts.artworkImg.naturalHeight || opts.artworkImg.height;
+        if (iw && ih) {
+            const crop = opts.artCrop || {};
+            const ar = iw / ih;
+            const r = computeArtDrawRect(aW, aH, ar, crop.zoom, crop.panX, crop.panY);
+            x.drawImage(opts.artworkImg, aX + r.dx, aY + r.dy, r.dw, r.dh);
+        }
+        x.restore();
+    }
+
     // Optional art-opening size label (for elevation export — dashboard already shows this elsewhere)
     if (opts.showArtLabel && aW > 0 && aH > 0) {
         const unitSuffix = unitInfo(opts.unit || 'in').suffix;
@@ -5307,16 +6744,5044 @@ function buildPngFilename(row) {
     return tokens.join('_') + '.png';
 }
 
-function exportDashNativePNG() {
+// ── Presentation PDF: individual spec page (one piece per page) ───────────
+// Structure mirrors the studio reference: item code top-left, frame swatch
+// chip, the framed artwork with its filename caption, a dotted-leader spec
+// block, and a footer (page number). Built in-browser with jsPDF (vendored),
+// reusing renderFrameToCanvas (artwork baked in) + buildSpecStrings. This is a
+// clean structural first version — exact styling is meant to be iterated on.
+// Draw the bottom-right scale cluster: a thin-bordered box containing a 6-ft
+// person silhouette and the piece thumbnail(s) drawn at the SAME real-world
+// scale, so viewers can read the art's size against the figure. `pieces` is an
+// array of { dataUrl, wIn, hIn } (overall framed size in inches).
+function _drawScaleCluster(doc, x, y, w, h, pieces) {
+    // Box
+    doc.setDrawColor(180, 180, 180);
+    doc.setLineWidth(0.75);
+    doc.setFillColor(255, 255, 255);
+    doc.rect(x, y, w, h, 'S');
+
+    const pad = 10;
+    const innerH = h - pad * 2;
+    const baseY = y + h - pad;            // feet sit on this baseline
+    // Person is 6 ft = 72". Fit the figure to ~85% of the inner height.
+    const figH = innerH * 0.85;
+    const ptPerIn = figH / 72;            // shared real-world scale for the box
+    const figX = x + pad;
+    // — Person silhouette (simple, drawn in vector) —
+    doc.setFillColor(40, 40, 40);
+    const fw = figH * 0.16;               // shoulder width ~ proportional
+    const cx = figX + fw / 2;
+    const headR = figH * 0.045;
+    // head
+    doc.circle(cx, baseY - figH + headR, headR, 'F');
+    // body (rounded rect-ish: torso + legs as a tapered blob via two rects)
+    const torsoTop = baseY - figH + headR * 2 + 1;
+    const torsoH = (baseY - torsoTop) * 0.55;
+    doc.setFillColor(40, 40, 40);
+    doc.roundedRect(cx - fw / 2, torsoTop, fw, torsoH, fw * 0.3, fw * 0.3, 'F');
+    // legs (two narrow rects)
+    const legW = fw * 0.34, legGap = fw * 0.12;
+    const legTop = torsoTop + torsoH - 1;
+    const legH = baseY - legTop;
+    doc.rect(cx - legGap / 2 - legW, legTop, legW, legH, 'F');
+    doc.rect(cx + legGap / 2, legTop, legW, legH, 'F');
+
+    // — Thumbnails to the right of the figure, same scale, bottom-aligned —
+    let tx = figX + fw + 12;
+    pieces.forEach(pc => {
+        if (!pc.dataUrl || !pc.wIn || !pc.hIn) return;
+        const tw = pc.wIn * ptPerIn, th = pc.hIn * ptPerIn;
+        // clamp to the box if a piece is very tall
+        const scale = Math.min(1, innerH / th);
+        const dw = tw * scale, dh = th * scale;
+        if (tx + dw > x + w - pad) return;  // out of room — skip overflow
+        try { doc.addImage(pc.dataUrl, 'JPEG', tx, baseY - dh, dw, dh); } catch (e) {}
+        tx += dw + 8;
+    });
+}
+
+// Composite an entire elevation onto a canvas (beauty view: artwork baked in),
+// with one frame featured (full color) and the others faded. Used by the spec
+// page so the elevation itself carries the scale + context. Self-contained:
+// reuses renderFrameToCanvas, draws its own wall + person, does NOT touch the
+// live elevation DOM. Returns { canvas, wIn, hIn } or null.
+async function renderElevationToCanvas(elev, featuredId, opts) {
+    opts = opts || {};
+    if (!elev || !elev.frames || !elev.frames.length) return null;
+    const dpi = opts.dpi || 28;            // px per inch for the WHOLE wall (placed small)
+    const unit = (typeof elevUnit !== 'undefined') ? elevUnit : 'in';
+    const toIn = (v) => parseFloat(v) * unitFactor(unit, 'in');
+    let ppi = dpi;
+    const wallWin = toIn(elev.wallW) || 120;
+    const wallHin = toIn(elev.wallH) || 96;
+
+    // Person: real silhouette at 72". Its x (elevation units) may be negative
+    // (standing left of the wall) — reserve canvas margin so it fits.
+    const personHin = 72;
+    let personXin = elev.personPos ? toIn(elev.personPos.x || 0) : -toIn(20);
+    const padIn = 6;
+    const leftExtraIn = Math.max(0, -(personXin)) + padIn;
+    const totalWin = leftExtraIn + wallWin + padIn;
+    const totalHin = wallHin + padIn;
+
+    // Large walls (e.g. 185"x108") at a high dpi can blow past the canvas pixel
+    // budget. Reduce ppi to fit instead of giving up and rendering nothing.
+    const maxPx = 38e6;
+    if (totalWin > 0 && totalHin > 0 && totalWin * totalHin * ppi * ppi > maxPx) {
+        ppi = Math.max(4, Math.floor(Math.sqrt(maxPx / (totalWin * totalHin))));
+    }
+    const cw = Math.round(totalWin * ppi);
+    const ch = Math.round(totalHin * ppi);
+    if (cw <= 0 || ch <= 0) return null;
+    const c = document.createElement('canvas');
+    c.width = cw; c.height = ch;
+    const x = c.getContext('2d');
+    x.fillStyle = '#ffffff'; x.fillRect(0, 0, cw, ch);
+
+    // Wall origin within the canvas.
+    const wallLeftPx = leftExtraIn * ppi;
+    const wallTopPx = padIn * ppi;
+    const floorPx = wallTopPx + wallHin * ppi;        // wall bottom = floor
+    const wallW_px = wallWin * ppi, wallH_px = wallHin * ppi;
+    const lw = Math.max(1, Math.round(ppi * 0.06));   // wall lineweight
+
+    // — Wall outline (the wall lines) —
+    x.strokeStyle = '#333333'; x.lineWidth = lw;
+    x.strokeRect(wallLeftPx, wallTopPx, wallW_px, wallH_px);
+
+    // — Baseboard line at the real baseboard height from the floor —
+    let bbIn = 4;
+    try { const b = getBaseboardHeight(); if (!isNaN(b)) bbIn = toIn(b); } catch (e) {}
+    if (bbIn > 0 && bbIn < wallHin) {
+        const by = floorPx - bbIn * ppi;
+        x.beginPath(); x.moveTo(wallLeftPx, by); x.lineTo(wallLeftPx + wallW_px, by); x.stroke();
+    }
+
+    // — Person silhouette: real SVG asset (fallback to a drawn figure) —
+    const pPx = wallLeftPx + personXin * ppi;
+    const pH = personHin * ppi;
+    let drewSvg = false;
+    try {
+        const psvg = await _loadImg('Character_Lady_walk.svg');
+        if (psvg && (psvg.naturalWidth || psvg.width)) {
+            const ar = (psvg.naturalWidth || psvg.width) / (psvg.naturalHeight || psvg.height);
+            x.drawImage(psvg, pPx, floorPx - pH, pH * ar, pH);
+            drewSvg = true;
+        }
+    } catch (e) {}
+    if (!drewSvg) {
+        x.fillStyle = 'rgba(40,40,40,0.9)';
+        const fw = pH * 0.16, fcx = pPx + fw / 2, headR = pH * 0.045, baseY = floorPx;
+        x.beginPath(); x.arc(fcx, baseY - pH + headR, headR, 0, Math.PI * 2); x.fill();
+        const torsoTop = baseY - pH + headR * 2 + ppi * 0.5, torsoH = (baseY - torsoTop) * 0.55;
+        x.fillRect(fcx - fw / 2, torsoTop, fw, torsoH);
+        const legW = fw * 0.34, legGap = fw * 0.12, legTop = torsoTop + torsoH;
+        x.fillRect(fcx - legGap / 2 - legW, legTop, legW, baseY - legTop);
+        x.fillRect(fcx + legGap / 2, legTop, legW, baseY - legTop);
+    }
+
+    // — Frames: featured full opacity, others faded —
+    for (const f of elev.frames) {
+        if (!f || f.active === false) continue;
+        const fWin = toIn(f.w), fHin = toIn(f.h);
+        const fx = wallLeftPx + toIn(f.x) * ppi;
+        const fy = floorPx - (toIn(f.y) + fHin) * ppi;   // y from floor (bottom)
+        const isFeatured = (!featuredId || f.id === featuredId);
+        let artworkImg = null;
+        if (!opts.wireframe && f.artworkUrl) { try { artworkImg = await _loadImg(f.artworkUrl); } catch (e) {} }
+        let swatchImg = null;
+        if (f.fType === 'image' && f.swatchDataUrl) { try { swatchImg = await _loadImg(f.swatchDataUrl); } catch (e) {} }
+        // Convert the WHOLE frame (outer size + mats + moulding + rabbet) from
+        // the elevation unit to inches. Passing 'in' here left the mats in cm/mm,
+        // so they ballooned in cm and blew up the thumbnail in mm.
+        const dInches = _frameDataInInches(Object.assign({}, f, { extW: f.w, extH: f.h }), unit);
+        const fr = renderFrameToCanvas(dInches, swatchImg, {
+            dpi, pad: 0, artworkImg,
+            artCrop: { zoom: f.artZoom, panX: f.artPanX, panY: f.artPanY },
+        });
+        if (!fr || !fr.canvas) continue;
+        x.save();
+        x.globalAlpha = isFeatured ? 1 : 0.28;
+        x.drawImage(fr.canvas, fx, fy, fWin * ppi, fHin * ppi);
+        x.restore();
+    }
+    return { canvas: c, wIn: totalWin, hIn: totalHin, wallLeftFrac: (cw ? wallLeftPx / cw : 0), wallRightFrac: (cw ? (wallLeftPx + wallW_px) / cw : 1) };
+}
+
+// Logo cache — load once per session. Files live in the repo root (upload the
+// Ford + Farmboy logos there). Missing logos are skipped gracefully.
+let _pdfLogoCache = null;
+async function _getPdfLogos() {
+    if (_pdfLogoCache) return _pdfLogoCache;
+    const out = { farmboy: null, farmboyAR: 8 };
+    try {
+        const fb = await _loadImg('Farmboy_WordmarkIcon_K.jpg');
+        if (fb && (fb.naturalWidth || fb.width)) { out.farmboy = fb; out.farmboyAR = (fb.naturalWidth || fb.width) / (fb.naturalHeight || fb.height); }
+    } catch (e) {}
+    _pdfLogoCache = out;
+    return out;
+}
+
+// ── Brand font embedding ──────────────────────────────────────────────────
+// jsPDF can only embed TrueType, so the studio OTFs were converted to TTF
+// (Druk-Bold, MessinaSerif Regular/Bold/Italic) and live in /fonts. They're
+// fetched once, base64'd, cached, and registered into each generated PDF.
+// Roles: display = Druk (titles), serif = Messina (footer line, cover subhead),
+// everything else stays on jsPDF's built-in Helvetica. Missing/failed fonts
+// fall back to Helvetica so export never breaks.
+const PDF_FONT_FACES = [
+    { file: 'Druk-Bold.ttf',                  family: 'Druk',    style: 'bold' },
+    { file: 'Druk-Bold.ttf',                  family: 'Druk',    style: 'normal' },
+    { file: 'MessinaSerif-Regular.ttf',       family: 'Messina', style: 'normal' },
+    { file: 'MessinaSerif-Bold.ttf',          family: 'Messina', style: 'bold' },
+    { file: 'MessinaSerif-RegularItalic.ttf', family: 'Messina', style: 'italic' },
+];
+let _pdfFontB64 = null;       // { filename: base64 } — fetched once per session
+let _pdfFontFams = {};        // { family: true } — what registered into the current doc
+
+function _abToB64(buf) {
+    let bin = ''; const bytes = new Uint8Array(buf); const chunk = 0x8000;
+    for (let i = 0; i < bytes.length; i += chunk) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
+    return btoa(bin);
+}
+
+async function _loadPdfFontData() {
+    if (_pdfFontB64) return _pdfFontB64;
+    const files = Array.from(new Set(PDF_FONT_FACES.map(f => f.file)));
+    const out = {};
+    for (const file of files) {
+        try {
+            const r = await fetch('fonts/' + file, { cache: 'force-cache' });
+            if (!r.ok) throw new Error(r.status);
+            out[file] = _abToB64(await r.arrayBuffer());
+        } catch (e) { /* missing/failed font — fallback to Helvetica applies */ }
+    }
+    _pdfFontB64 = out;
+    return out;
+}
+
+async function _registerPdfFonts(doc) {
+    _pdfFontFams = {};
+    const data = await _loadPdfFontData();
+    PDF_FONT_FACES.forEach(face => {
+        const b64 = data[face.file];
+        if (!b64) return;
+        try {
+            doc.addFileToVFS(face.file, b64);
+            doc.addFont(face.file, face.family, face.style);
+            _pdfFontFams[face.family] = true;
+        } catch (e) {}
+    });
+}
+
+// Resolve a role to a registered family, else Helvetica.
+function _font(role) {
+    const fam = role === 'display' ? 'Druk' : (role === 'serif' ? 'Messina' : null);
+    return (fam && _pdfFontFams[fam]) ? fam : 'helvetica';
+}
+
+// Footer drawn on every page: page number + project line (left), Farmboy
+// wordmark (right). Logos optional. `pageNum` is 1-based. `meta` (optional)
+// holds { code, version, location } from the Presentation PDF modal; when
+// present, the rich studio footer line is drawn, otherwise just the number.
+function _drawPdfFooter(doc, logos, pageNum, meta) {
+    const PW = doc.internal.pageSize.getWidth();
+    const PH = doc.internal.pageSize.getHeight();
+    const M = 40;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8);
+    doc.setTextColor(120, 120, 120);
+    doc.text(String(pageNum), M, PH - 20);
+    // Rich project line, e.g.:
+    //   "PROJECT NAME – LOCATION  |  CODE.VERSION   Copyright © YEAR Farmboy …"
+    if (meta) {
+        const g = (id) => { const el = document.getElementById(id); return el ? (el.value || '').trim() : ''; };
+        const name = (g('g_projName') || 'Art Program').toUpperCase();
+        const loc = (meta.location || '').trim().toUpperCase();
+        const code = (meta.code || '').trim();
+        const ver = (meta.version || '').trim();
+        const year = new Date().getFullYear();
+        let line = name;
+        if (loc) line += ' \u2013 ' + loc;
+        if (code) line += '   |   ' + code + (ver ? '.' + ver : '');
+        line += '    Copyright \u00A9 ' + year + ' Farmboy Fine Arts Inc. | All rights reserved';
+        doc.setFont(_font('serif'), 'normal');
+        doc.setFontSize(5.8);
+        doc.text(line, M + 14, PH - 20);
+    }
+    // Right side: Farmboy wordmark only (matches the studio's own pages).
+    const rx = PW - M;
+    if (logos && logos.farmboy) {
+        const ar = logos.farmboyAR || 8;
+        const h = 11, w = h * ar;
+        try { doc.addImage(logos.farmboy, 'JPEG', rx - w, PH - 27, w, h); } catch (e) {}
+    }
+}
+
+// Placeholder page for deck sections not yet built (floorplan key, frame
+// recommendations, narrative, contacts, slogan). Emits a clearly-labeled page
+// in correct deck order so the full presentation skeleton — order, footer,
+// page count — is visible and reviewable before each section is implemented.
+function _drawPlaceholderPage(doc, logos, pageNum, meta, title, subtitle) {
+    const PW = doc.internal.pageSize.getWidth();
+    const PH = doc.internal.pageSize.getHeight();
+    const M = 40;
+    // Dashed "to be built" frame filling the live area.
+    doc.setDrawColor(200, 200, 200);
+    doc.setLineWidth(0.75);
+    doc.setLineDashPattern([4, 4], 0);
+    doc.rect(M, M, PW - M * 2, PH - M * 2 - 16, 'S');
+    doc.setLineDashPattern([], 0);
+    // Title (top-left, matching the studio page-title treatment).
+    doc.setFont(_font('display'), 'bold');
+    doc.setFontSize(22);
+    doc.setTextColor(20, 20, 20);
+    doc.text((title || 'SECTION').toString(), M + 24, M + 44);
+    if (subtitle) {
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(10);
+        doc.setTextColor(110, 110, 110);
+        doc.text(subtitle.toString(), M + 24, M + 64);
+    }
+    // Centered "placeholder" tag.
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.setTextColor(180, 180, 180);
+    doc.text('PLACEHOLDER \u2014 NOT YET BUILT', PW / 2, PH / 2, { align: 'center' });
+    doc.setTextColor(20, 20, 20);
+    _drawPdfFooter(doc, logos, pageNum, meta);
+}
+
+// Floorplan KEY page — the clickable hub. Real data-driven version: title +
+// numbered callout list (id + location from each row) + the floorplan image
+// (uploaded via the Presentation PDF modal; placeholder if none). Each list
+// row links to that item's spec page when one exists (idToPage map). Numbered
+// PINS placed ON the plan are deferred until per-item coordinates exist; the
+// list numbers still establish the legend the pins will use. `items` is the
+// full row set; `idToPage` maps item id -> spec page number.
+function _drawFloorplanKeyPage(doc, logos, pageNum, meta, entries, planImg, levelName) {
+    const PW = doc.internal.pageSize.getWidth();
+    const PH = doc.internal.pageSize.getHeight();
+    const M = 40;
+    const hx = (h) => { const m = (h || '#444444').replace('#', ''); return [parseInt(m.slice(0, 2), 16), parseInt(m.slice(2, 4), 16), parseInt(m.slice(4, 6), 16)]; };
+
+    // — Title —
+    doc.setFont(_font('display'), 'bold');
+    doc.setFontSize(26);
+    doc.setTextColor(20, 20, 20);
+    doc.text('FLOORPLAN', M, M + 14);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.setTextColor(110, 110, 110);
+    doc.text((levelName ? ('PROPOSED FLOOR PLAN \u2014 ' + levelName.toUpperCase()) : 'PROPOSED FLOOR PLAN'), M, M + 30);
+    doc.setTextColor(20, 20, 20);
+
+    // — Floorplan image (right) — drawn first so pins can sit on its rect —
+    const planX = PW * 0.42;
+    const planY = M + 30;
+    const planW = PW - M - planX;
+    const planH = PH - planY - 60;
+    let planRect = null;
+    if (planImg && (planImg.naturalWidth || planImg.width)) {
+        const iw = planImg.naturalWidth || planImg.width;
+        const ih = planImg.naturalHeight || planImg.height;
+        const fit = Math.min(planW / iw, planH / ih);
+        const dw = iw * fit, dh = ih * fit;
+        const dx = planX + (planW - dw) / 2, dy = planY + (planH - dh) / 2;
+        try { doc.addImage(planImg, 'JPEG', dx, dy, dw, dh); } catch (e) {
+            try { doc.addImage(planImg, 'PNG', dx, dy, dw, dh); } catch (e2) {}
+        }
+        planRect = { dx, dy, dw, dh };
+    } else {
+        doc.setDrawColor(200, 200, 200); doc.setLineWidth(0.75);
+        doc.setLineDashPattern([4, 4], 0);
+        doc.rect(planX, planY, planW, planH, 'S');
+        doc.setLineDashPattern([], 0);
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(8);
+        doc.setTextColor(160, 160, 160);
+        doc.text('FLOORPLAN IMAGE \u2014 upload one in the Presentation PDF dialog', planX + planW / 2, planY + planH / 2, { align: 'center' });
+        doc.setTextColor(20, 20, 20);
+    }
+
+    // — Callout list (left ~38%) —
+    const listX = M;
+    const listTop = M + 56;
+    const listRight = PW * 0.40;
+    const listW = listRight - listX;
+    const rowH = 16;
+    const availH = PH - 72 - listTop;        // leave room above footer + legend
+    const rowsPerCol = Math.max(1, Math.floor(availH / rowH));
+    const cols = (entries.length > rowsPerCol) ? 2 : 1;
+    const colW = listW / cols;
+
+    if (!entries.length) {
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(140, 140, 140);
+        doc.text('No items yet.', listX, listTop + 12);
+        doc.setTextColor(20, 20, 20);
+    }
+
+    entries.forEach((en, i) => {
+        const col = Math.floor(i / rowsPerCol);
+        if (col >= cols) return;             // overflow guard (rare)
+        const rowInCol = i % rowsPerCol;
+        const x = listX + col * colW;
+        const y = listTop + rowInCol * rowH;
+        const num = (en.num || '').toString();
+        const [cr, cg, cb] = hx(categoryColor(en.category));
+        const br = 6;                         // bubble radius
+        const bcx = x + br, bcy = y + 4;
+        doc.setFillColor(cr, cg, cb);
+        doc.circle(bcx, bcy, br, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(6.5);
+        doc.text(num, bcx, bcy + 0.5, { align: 'center', baseline: 'middle' });
+        doc.setTextColor(20, 20, 20);
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5);
+        const codes = (en.codes || '').toString();
+        const loc = (en.location || '').toString();
+        const label = loc ? `${codes}  |  ${loc}` : codes;
+        const tx = x + br * 2 + 8;
+        const fitted = doc.splitTextToSize(label, colW - (br * 2 + 12))[0] || label;
+        doc.text(fitted, tx, bcy, { baseline: 'middle' });
+        if (en.linkPage) doc.link(x, y - 4, colW - 6, rowH, { pageNumber: en.linkPage });
+    });
+
+    // — Pins on the plan (one per placed group) —
+    if (planRect) {
+        entries.forEach((en) => {
+            if (en.planX == null || en.planY == null) return;
+            const px = planRect.dx + en.planX * planRect.dw;
+            const py = planRect.dy + en.planY * planRect.dh;
+            const [cr, cg, cb] = hx(categoryColor(en.category));
+            const pr = 8;
+            doc.setFillColor(cr, cg, cb);
+            doc.setDrawColor(255, 255, 255); doc.setLineWidth(1);
+            doc.circle(px, py, pr, 'FD');
+            doc.setTextColor(255, 255, 255);
+            doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5);
+            doc.text((en.num || '').toString(), px, py + 0.5, { align: 'center', baseline: 'middle' });
+            doc.setTextColor(20, 20, 20);
+            if (en.linkPage) doc.link(px - pr, py - pr, pr * 2, pr * 2, { pageNumber: en.linkPage });
+        });
+    }
+
+    // — Legend (categories actually used) —
+    const usedKeys = [];
+    entries.forEach(en => { const k = en.category || ''; if (k && usedKeys.indexOf(k) < 0) usedKeys.push(k); });
+    if (usedKeys.length) {
+        let lx = M, ly = PH - 50;
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(8);
+        usedKeys.forEach(k => {
+            const cat = ART_CATEGORIES.find(c => c.key === k);
+            if (!cat) return;
+            const [r, g, b] = hx(cat.color);
+            doc.setFillColor(r, g, b);
+            doc.rect(lx, ly, 9, 9, 'F');
+            doc.setTextColor(60, 60, 60);
+            doc.text(cat.label, lx + 13, ly + 7);
+            lx += 13 + doc.getTextWidth(cat.label) + 18;
+        });
+        doc.setTextColor(20, 20, 20);
+    }
+
+    _drawPdfFooter(doc, logos, pageNum, meta);
+}
+
+// ── Frame Recommendations (data-driven) ───────────────────────────────────
+// Loads frames/frames.json once and caches it. Matching is tolerant: codes are
+// normalized (uppercase, strip non-alphanumerics) so "MICH 301-10",
+// "MICH-301-10", and the id "MICH_301-10" all resolve to the same entry.
+let _frameLibCache = null;
+async function _loadFrameLibrary() {
+    if (_frameLibCache) return _frameLibCache;
+    const norm = (s) => (s || '').toString().toUpperCase().replace(/[^A-Z0-9]/g, '');
+    try {
+        const r = await fetch('frames/frames.json', { cache: 'no-store' });
+        if (!r.ok) throw new Error(r.status);
+        const data = await r.json();
+        const map = {};
+        (data.frames || []).forEach(f => { if (f.code) map[norm(f.code)] = f; if (f.id) map[norm(f.id)] = f; });
+        _frameLibCache = { map, base: data.imageBase || 'frames/corners/', norm };
+    } catch (e) {
+        _frameLibCache = { map: {}, base: 'frames/corners/', norm, error: String(e) };
+    }
+    return _frameLibCache;
+}
+
+// Frame size string from a row, used when the library has no entry (e.g. plain
+// color frames). Mirrors the buildSpecStrings format: "<W>"W × <D>"D, R <r>"".
+function _frameSizeStringForRow(row) {
+    const u = (typeof dashUnit !== 'undefined') ? dashUnit : 'in';
+    const suf = u === 'in' ? '"' : (' ' + u + ' ');
+    const fmt = (v) => { const n = parseFloat(v); if (isNaN(n) || n === 0) return null; return parseFloat(n.toFixed(3)).toString(); };
+    const w = fmt(row.fW), h = fmt(row.fHeight), rb = fmt(row.rabbetDepth);
+    const parts = [];
+    if (w) parts.push(`${w}${suf}W`);
+    if (h) parts.push(`${h}${suf}D`);
+    let s = parts.join(' \u00D7 ');
+    if (rb) s = s ? `${s}, R ${rb}${suf}` : `R ${rb}${suf}`;
+    return s || '';
+}
+
+// Build the unique set of frames specified across all rows, with swatch image,
+// size string, and a usage count. Image priority: library corner (by code) →
+// the row's own image swatch → a flat color chip. Wrapped canvas has no frame.
+async function _collectProjectFrames() {
+    const lib = await _loadFrameLibrary();
+    const items = (typeof dashProjectData !== 'undefined' && dashProjectData) ? dashProjectData : [];
+    const byKey = {};
+    const order = [];
+    for (const r of items) {
+        if (!r) continue;
+        if (r.product === 'Frameless Canvas (Wrapped)') continue;   // no frame
+        const code = (r.fCode || '').trim();
+        const finish = (r.fColorName || '').trim();
+        if (!code && !finish && !(r.fType === 'image' && r.swatchDataUrl)) continue;
+        const key = (code + '|' + finish).toUpperCase();
+        if (!byKey[key]) { byKey[key] = { code, finish, count: 0, row: r }; order.push(key); }
+        byKey[key].count++;
+    }
+    const out = [];
+    for (const key of order) {
+        const e = byKey[key];
+        const entry = lib.map[lib.norm(e.code)] || null;
+        let img = null, color = null;
+        if (entry && entry.corner) { try { img = await _loadImg(lib.base + entry.corner); } catch (x) {} }
+        if (!img && e.row.fType === 'image' && e.row.swatchDataUrl) { try { img = await _loadImg(e.row.swatchDataUrl); } catch (x) {} }
+        if (!img && e.row.fType === 'color') color = e.row.fColor || '#000000';
+        const sizeText = (entry && entry.sizeText) ? entry.sizeText : _frameSizeStringForRow(e.row);
+        const codeDisp = e.code.replace(/^([A-Za-z]+)-(\d)/, '$1 $2');
+        out.push({ code: codeDisp, finish: e.finish, sizeText, count: e.count, img, color });
+    }
+    return out;
+}
+
+// One Frame Recommendations page: a 3-column grid of frame cards (swatch + code
+// + finish + size + usage count). `frames` is one page's worth (≤ 9).
+function _drawFrameRecPage(doc, logos, pageNum, meta, frames) {
+    const PW = doc.internal.pageSize.getWidth();
+    const PH = doc.internal.pageSize.getHeight();
+    const M = 40;
+    const hx = (h) => { const m = (h || '#000000').replace('#', ''); return [parseInt(m.slice(0, 2), 16), parseInt(m.slice(2, 4), 16), parseInt(m.slice(4, 6), 16)]; };
+
+    doc.setFont(_font('display'), 'bold'); doc.setFontSize(26); doc.setTextColor(20, 20, 20);
+    doc.text('FRAME RECOMMENDATIONS', M, M + 14);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(110, 110, 110);
+    doc.text('Frames specified across the project', M, M + 30);
+    doc.setTextColor(20, 20, 20);
+
+    if (!frames.length) {
+        doc.setFontSize(9); doc.setTextColor(140, 140, 140);
+        doc.text('No frames specified yet. Set frame codes on your pieces, then regenerate.', M, M + 60);
+        doc.setTextColor(20, 20, 20);
+        _drawPdfFooter(doc, logos, pageNum, meta);
+        return;
+    }
+
+    const cols = 3, gap = 22, rowGap = 20;
+    const gridTop = M + 50, gridLeft = M;
+    const cardW = (PW - 2 * M - (cols - 1) * gap) / cols;
+    const swatchH = 92, textH = 58, cardH = swatchH + textH;
+
+    frames.forEach((f, i) => {
+        const c = i % cols, rr = Math.floor(i / cols);
+        const x = gridLeft + c * (cardW + gap);
+        const y = gridTop + rr * (cardH + rowGap);
+        // Swatch
+        if (f.img && (f.img.naturalWidth || f.img.width)) {
+            const iw = f.img.naturalWidth || f.img.width, ih = f.img.naturalHeight || f.img.height;
+            const fit = Math.min(cardW / iw, swatchH / ih);
+            const dw = iw * fit, dh = ih * fit;
+            const dx = x + (cardW - dw) / 2, dy = y + (swatchH - dh) / 2;
+            try { doc.addImage(f.img, 'JPEG', dx, dy, dw, dh); } catch (e) { try { doc.addImage(f.img, 'PNG', dx, dy, dw, dh); } catch (e2) {} }
+        } else if (f.color) {
+            const [r, g, b] = hx(f.color); doc.setFillColor(r, g, b); doc.rect(x, y, cardW, swatchH, 'F');
+        } else {
+            doc.setDrawColor(210, 210, 210); doc.setLineWidth(0.5);
+            doc.setLineDashPattern([3, 3], 0); doc.rect(x, y, cardW, swatchH, 'S'); doc.setLineDashPattern([], 0);
+            doc.setFont('helvetica', 'normal'); doc.setFontSize(7); doc.setTextColor(170, 170, 170);
+            doc.text('no swatch', x + cardW / 2, y + swatchH / 2, { align: 'center', baseline: 'middle' });
+            doc.setTextColor(20, 20, 20);
+        }
+        doc.setDrawColor(225, 225, 225); doc.setLineWidth(0.5); doc.rect(x, y, cardW, swatchH, 'S');
+        // Text block
+        let ty = y + swatchH + 13;
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(9); doc.setTextColor(20, 20, 20);
+        doc.text(f.code || '\u2014', x, ty); ty += 12;
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(80, 80, 80);
+        if (f.finish) { doc.text(doc.splitTextToSize(f.finish, cardW)[0] || f.finish, x, ty); ty += 11; }
+        if (f.sizeText) { doc.text(doc.splitTextToSize(f.sizeText, cardW)[0] || f.sizeText, x, ty); ty += 11; }
+        doc.setFontSize(7); doc.setTextColor(140, 140, 140);
+        doc.text(`Used on ${f.count} piece${f.count === 1 ? '' : 's'}`, x, ty);
+        doc.setTextColor(20, 20, 20);
+    });
+
+    _drawPdfFooter(doc, logos, pageNum, meta);
+}
+
+// Studio block for the Thank You page (stable across projects).
+const STUDIO_ADDRESS = ['FARMBOY FINE ARTS\u00AE', 'Suite 307 - 1930 Pandora St', 'Vancouver, BC, Canada  V5L 0C7', 'farmboyfinearts.com'];
+const STUDIO_COPYRIGHT = 'All rights reserved. No part of this document may be reproduced, distributed, or transmitted in any form or by any means, including photocopying, recording, or other electronic or mechanical methods, without the prior written permission of Farmboy Fine Arts.';
+
+// Art Narrative page: title (display) + body copy (serif).
+// Process & Timeline page: a horizontal phase timeline. raw is one phase per
+// line, "Label | Timeframe" (commas also accepted).
+function _drawTimelinePage(doc, logos, pageNum, meta, raw) {
+    const PW = doc.internal.pageSize.getWidth();
+    const PH = doc.internal.pageSize.getHeight();
+    const M = 40;
+    doc.setFont(_font('display'), 'bold'); doc.setFontSize(26); doc.setTextColor(20, 20, 20);
+    doc.text('PROCESS & TIMELINE', M, M + 14);
+
+    const phases = (raw || '').split('\n').map(l => l.trim()).filter(Boolean).map(l => {
+        const p = l.split(/\s*[|,]\s*/);
+        return { label: p[0] || '', when: p[1] || '' };
+    });
+    if (!phases.length) {
+        doc.setFont(_font('serif'), 'normal'); doc.setFontSize(10); doc.setTextColor(150, 150, 150);
+        doc.text('Add phases in the Presentation PDF dialog (one per line: Phase | Timeframe).', M, M + 50);
+        doc.setTextColor(20, 20, 20);
+        _drawPdfFooter(doc, logos, pageNum, meta);
+        return;
+    }
+    const n = phases.length;
+    const x0 = M + 24, x1 = PW - M - 24;
+    const midY = PH * 0.50;
+    const step = n > 1 ? (x1 - x0) / (n - 1) : 0;
+    const wrapW = (step ? step * 0.92 : (x1 - x0));
+    doc.setDrawColor(205, 205, 205); doc.setLineWidth(1); doc.line(x0, midY, x1, midY);
+    phases.forEach((p, i) => {
+        const cx = n > 1 ? x0 + i * step : (x0 + x1) / 2;
+        doc.setFillColor(40, 40, 40); doc.setDrawColor(255, 255, 255); doc.setLineWidth(1.5);
+        doc.circle(cx, midY, 5, 'FD');
+        doc.setFont(_font('display'), 'bold'); doc.setFontSize(15); doc.setTextColor(20, 20, 20);
+        doc.text(String(i + 1).padStart(2, '0'), cx, midY - 48, { align: 'center' });
+        doc.setFont(_font('serif'), 'bold'); doc.setFontSize(10); doc.setTextColor(20, 20, 20);
+        doc.text(doc.splitTextToSize(p.label, wrapW), cx, midY - 32, { align: 'center', baseline: 'top' });
+        if (p.when) {
+            doc.setFont(_font('serif'), 'normal'); doc.setFontSize(8.5); doc.setTextColor(110, 110, 110);
+            doc.text(doc.splitTextToSize(p.when, wrapW), cx, midY + 18, { align: 'center', baseline: 'top' });
+            doc.setTextColor(20, 20, 20);
+        }
+    });
+    _drawPdfFooter(doc, logos, pageNum, meta);
+}
+
+// Generic prose page: display title + serif body column. Reused by Art
+// Narrative and Project Understanding.
+function _drawProsePage(doc, logos, pageNum, meta, title, body, hint) {
+    const PW = doc.internal.pageSize.getWidth();
+    const PH = doc.internal.pageSize.getHeight();
+    const M = 40;
+    doc.setFont(_font('display'), 'bold'); doc.setFontSize(26); doc.setTextColor(20, 20, 20);
+    doc.text(title, M, M + 14);
+    const text = (body || '').trim();
+    if (!text) {
+        doc.setFont(_font('serif'), 'normal'); doc.setFontSize(10); doc.setTextColor(150, 150, 150);
+        doc.text(hint || 'Add copy in the Presentation PDF dialog.', M, M + 50);
+        doc.setTextColor(20, 20, 20);
+    } else {
+        doc.setFont(_font('serif'), 'normal'); doc.setFontSize(12); doc.setTextColor(45, 45, 45);
+        doc.setLineHeightFactor(1.5);
+        const lines = doc.splitTextToSize(text, PW * 0.60);
+        doc.text(lines, M, M + 56, { baseline: 'top' });
+        doc.setLineHeightFactor(1.15);
+        doc.setTextColor(20, 20, 20);
+    }
+    _drawPdfFooter(doc, logos, pageNum, meta);
+}
+
+// Art Collection Strategy: three tier columns (Primary/Secondary/Tertiary),
+// each a color bar + tier label + sublabel + description. strategy is
+// { primary, secondary, tertiary } of editorial copy.
+function _drawStrategyPage(doc, logos, pageNum, meta, strategy) {
+    const PW = doc.internal.pageSize.getWidth();
+    const PH = doc.internal.pageSize.getHeight();
+    const M = 40;
+    const hx = (h) => { const m = (h || '#444444').replace('#', ''); return [parseInt(m.slice(0, 2), 16), parseInt(m.slice(2, 4), 16), parseInt(m.slice(4, 6), 16)]; };
+    doc.setFont(_font('display'), 'bold'); doc.setFontSize(26); doc.setTextColor(20, 20, 20);
+    doc.text('ART COLLECTION STRATEGY', M, M + 14);
+
+    const tiers = ART_CATEGORIES.filter(c => c.key);   // drop "None"
+    const s = strategy || {};
+    const gap = 28;
+    const colW = (PW - 2 * M - (tiers.length - 1) * gap) / tiers.length;
+    const top = M + 64;
+    tiers.forEach((cat, i) => {
+        const x = M + i * (colW + gap);
+        const [r, g, b] = hx(cat.color);
+        doc.setFillColor(r, g, b);
+        doc.rect(x, top, colW, 6, 'F');               // tier color bar
+        doc.setFont(_font('display'), 'bold'); doc.setFontSize(15); doc.setTextColor(20, 20, 20);
+        doc.text(cat.label.toUpperCase(), x, top + 26);
+        if (cat.sub) {
+            doc.setFont(_font('serif'), 'normal'); doc.setFontSize(9); doc.setTextColor(110, 110, 110);
+            doc.text(cat.sub, x, top + 40);
+        }
+        const copy = (s[cat.key] || '').trim();
+        doc.setFont(_font('serif'), 'normal'); doc.setFontSize(10); doc.setTextColor(50, 50, 50);
+        doc.setLineHeightFactor(1.45);
+        if (copy) {
+            doc.text(doc.splitTextToSize(copy, colW), x, top + 58, { baseline: 'top' });
+        } else {
+            doc.setTextColor(170, 170, 170);
+            doc.text(doc.splitTextToSize('Add ' + cat.label.toLowerCase() + ' strategy copy in the dialog.', colW), x, top + 58, { baseline: 'top' });
+        }
+        doc.setLineHeightFactor(1.15);
+        doc.setTextColor(20, 20, 20);
+    });
+    _drawPdfFooter(doc, logos, pageNum, meta);
+}
+
+// Moodboard page: freeform layout of image / text / arrow elements, drawn
+// back-to-front by z. Elements carry normalized coords + a loaded _img (images).
+function _drawMoodboardPage(doc, logos, pageNum, meta, tiles, pageTitle, pageType) {
+    const PW = doc.internal.pageSize.getWidth();
+    const PH = doc.internal.pageSize.getHeight();
+    const M = 40;
+    const isBreaker = (pageType === 'breaker');
+    const title = (typeof pageTitle === 'string') ? pageTitle : 'MOODBOARD';
+    if (title && !isBreaker) { doc.setFont(_font('display'), 'bold'); doc.setFontSize(26); doc.setTextColor(20, 20, 20); doc.text(title, M, M + 14); }
+
+    const order = tiles.map((t, i) => i).sort((a, b) => (tiles[a].z || 0) - (tiles[b].z || 0));
+    const _hex = (h) => { const m = /^#?([0-9a-f]{6})$/i.exec(h || ''); if (!m) return [55, 55, 55]; const n = parseInt(m[1], 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; };
+    const _fontRole = (f) => f === 'display' ? _font('display') : (f === 'sans' ? 'helvetica' : _font('serif'));
+    order.forEach(idx => {
+        const t = tiles[idx]; const ty = t.type || 'image';
+        if (ty === 'arrow') {
+            const Ax = (t.x1 || 0) * PW, Ay = (t.y1 || 0) * PH, Bx = (t.x2 || 0) * PW, By = (t.y2 || 0) * PH;
+            const c = _hex(t.color || '#9aa0a6'), wt = Math.max(0.4, t.weight || 1.2);
+            doc.setDrawColor(c[0], c[1], c[2]); doc.setLineWidth(wt); doc.line(Ax, Ay, Bx, By);
+            const ang = Math.atan2(By - Ay, Bx - Ax), hl = 6 + wt * 2.2, ha = Math.PI / 7;
+            const p1x = Bx - hl * Math.cos(ang - ha), p1y = By - hl * Math.sin(ang - ha);
+            const p2x = Bx - hl * Math.cos(ang + ha), p2y = By - hl * Math.sin(ang + ha);
+            doc.setFillColor(c[0], c[1], c[2]); doc.triangle(Bx, By, p1x, p1y, p2x, p2y, 'F');
+            return;
+        }
+        if (ty === 'elbow') {
+            const pts = (t.pts || []).map(p => ({ x: (p.x || 0) * PW, y: (p.y || 0) * PH }));
+            if (pts.length >= 2) {
+                const c = _hex(t.color || '#9aa0a6'), wt = Math.max(0.4, t.weight || 1.2);
+                doc.setDrawColor(c[0], c[1], c[2]); doc.setLineWidth(wt);
+                for (let k = 0; k < pts.length - 1; k++) doc.line(pts[k].x, pts[k].y, pts[k + 1].x, pts[k + 1].y);
+                const a = pts[pts.length - 2], b = pts[pts.length - 1];
+                const ang = Math.atan2(b.y - a.y, b.x - a.x), hl = 6 + wt * 2.2, ha = Math.PI / 7;
+                doc.setFillColor(c[0], c[1], c[2]);
+                doc.triangle(b.x, b.y, b.x - hl * Math.cos(ang - ha), b.y - hl * Math.sin(ang - ha), b.x - hl * Math.cos(ang + ha), b.y - hl * Math.sin(ang + ha), 'F');
+            }
+            return;
+        }
+        if (ty === 'text') {
+            const fs = Math.max(6, Math.min(60, (t.size || 0.045) * PH));
+            const c = _hex(t.color || '#222222');
+            doc.setFont(_fontRole(t.font), 'normal'); doc.setFontSize(fs); doc.setTextColor(c[0], c[1], c[2]);
+            doc.text(doc.splitTextToSize(t.text || '', (t.w || 0.4) * PW), (t.x || 0) * PW, (t.y || 0) * PH, { baseline: 'top' });
+            doc.setTextColor(20, 20, 20);
+            return;
+        }
+        const im = t._img;
+        const x = (typeof t.x === 'number' ? t.x : 0.06) * PW;
+        const y = (typeof t.y === 'number' ? t.y : 0.12) * PH;
+        const w = (typeof t.w === 'number' ? t.w : 0.28) * PW;
+        const aspImg = (im && im.naturalWidth && im.naturalHeight) ? (im.naturalWidth / im.naturalHeight) : (t.aspect || 1.33);
+        const h = (typeof t.h === 'number' ? t.h : (t.w * (936 / 540) / (t.aspect || 1.33))) * PH;
+        if (im && (im.naturalWidth || im.width)) {
+            try {
+                const cropped = _cropToCanvas(im, w, h, aspImg, t.zoom || 1, t.panX || 0, t.panY || 0);
+                doc.addImage(cropped, 'JPEG', x, y, w, h);
+            } catch (e) { try { doc.addImage(im, 'JPEG', x, y, w, h); } catch (e2) {} }
+        } else {
+            doc.setDrawColor(220, 220, 220); doc.setLineWidth(0.5); doc.rect(x, y, w, h, 'S');
+        }
+        if (t.caption) {
+            const cs = Math.max(6, Math.min(40, (t.capSize || 0.02) * PH));
+            const side = t.capSide || 'bottom';
+            doc.setFont(_font('serif'), 'normal'); doc.setFontSize(cs); doc.setTextColor(90, 90, 90);
+            const lineH = cs * 1.2;
+            const lines = doc.splitTextToSize(t.caption, w);
+            const totalH = lines.length * lineH;
+            let cx = x, cy = y + h + 3, align = 'left';
+            if (side === 'top') { cy = y - 3 - totalH; }
+            else if (side === 'left') { cx = x - 5; cy = y; align = 'right'; }
+            else if (side === 'right') { cx = x + w + 5; cy = y; }
+            doc.text(lines, cx, cy, { baseline: 'top', align: align });
+            doc.setTextColor(20, 20, 20);
+        }
+    });
+    if (!isBreaker) _drawPdfFooter(doc, logos, pageNum, meta);
+}
+
+// "Good Art. Good People." slogan page (display).
+function _drawSloganPage(doc, logos, pageNum, meta) {
+    const PW = doc.internal.pageSize.getWidth();
+    const PH = doc.internal.pageSize.getHeight();
+    const M = 40;
+    doc.setFont(_font('display'), 'bold'); doc.setTextColor(20, 20, 20); doc.setFontSize(54);
+    const cy = PH * 0.42;
+    doc.text('GOOD ART.', M, cy);
+    doc.text('GOOD PEOPLE.', M, cy + 52);
+    _drawPdfFooter(doc, logos, pageNum, meta);
+}
+
+// Thank You / contacts page. contactsRaw: one per line, fields separated by
+// "|" or "," as Name, Role, Email, Phone. Renders a grid + studio block.
+function _drawTOCPage(doc, logos, pageNum, meta, entries) {
+    const PW = 936, PH = 540, M = 54;
+    doc.setFillColor(255, 255, 255); doc.rect(0, 0, PW, PH, 'F');
+    doc.setFont(_font('display'), 'bold'); doc.setFontSize(30); doc.setTextColor(20, 20, 20);
+    doc.text('CONTENTS', M, M + 24);
+    let y = M + 66; const rowH = 25, maxY = PH - M - 14;
+    doc.setFontSize(12.5);
+    (entries || []).forEach(e => {
+        if (y > maxY) return;
+        doc.setFont(_font('serif'), 'normal'); doc.setTextColor(40, 40, 40);
+        const label = (e.label || '') + ''; doc.text(label, M, y);
+        const lw = doc.getTextWidth(label);
+        const ps = (e.page || '') + ''; const pw = doc.getTextWidth(ps);
+        const px = PW - M - pw; doc.text(ps, px, y);
+        const ds = M + lw + 8, de = px - 8;
+        if (de > ds) { doc.setLineDashPattern([0.5, 2.5], 0); doc.setDrawColor(185, 185, 185); doc.setLineWidth(0.5); doc.line(ds, y - 3.5, de, y - 3.5); doc.setLineDashPattern([], 0); }
+        y += rowH;
+    });
+    _drawPdfFooter(doc, logos, pageNum, meta);
+}
+function _drawArtIndexPage(doc, logos, pageNum, meta, entries) {
+    const PW = 936, PH = 540, M = 54;
+    doc.setFillColor(255, 255, 255); doc.rect(0, 0, PW, PH, 'F');
+    doc.setFont(_font('display'), 'bold'); doc.setFontSize(30); doc.setTextColor(20, 20, 20);
+    doc.text('ARTWORK INDEX', M, M + 24);
+    const counts = _statusCounts();
+    let sx = M; doc.setFont(_font('serif'), 'normal'); doc.setFontSize(9.5);
+    STATUS_ORDER.forEach(s => { const d = STATUS_DEFS[s]; const rgb = _annHexToRgb(d.color); doc.setFillColor(rgb.r, rgb.g, rgb.b); doc.circle(sx + 3, M + 40, 3, 'F'); doc.setTextColor(110, 110, 110); const t = d.label + ' ' + counts[s]; doc.text(t, sx + 10, M + 43); sx += 12 + doc.getTextWidth(t) + 16; });
+    const topY = M + 70, colGap = 44, cols = 2, colW = (PW - M * 2 - colGap * (cols - 1)) / cols, rowH = 16.5, maxRows = Math.floor((PH - M - topY) / rowH);
+    doc.setFontSize(9.5);
+    (entries || []).forEach((e, i) => {
+        const col = Math.floor(i / maxRows); if (col >= cols) return;
+        const row = i % maxRows; const x = M + col * (colW + colGap); const y = topY + row * rowH;
+        const rgb = _annHexToRgb(_statusColor(e.status)); doc.setFillColor(rgb.r, rgb.g, rgb.b); doc.circle(x + 3, y - 3, 3, 'F');
+        let left = (e.id || '') + (e.code ? '   ' + e.code : '');
+        if (left.length > 44) left = left.slice(0, 43) + '\u2026';
+        const ps = (e.page || '\u2014') + '';
+        doc.setFont(_font('serif'), 'normal'); doc.setTextColor(40, 40, 40);
+        doc.text(left, x + 12, y);
+        const pw = doc.getTextWidth(ps); doc.text(ps, x + colW - pw, y);
+    });
+    if ((entries || []).length > maxRows * cols) { doc.setFont(_font('serif'), 'italic'); doc.setFontSize(8); doc.setTextColor(150, 150, 150); doc.text('+ ' + ((entries.length - maxRows * cols)) + ' more pieces', M, PH - M + 4); }
+    _drawPdfFooter(doc, logos, pageNum, meta);
+}
+function _drawThankYouPage(doc, logos, pageNum, meta, contactsRaw) {
+    const PW = doc.internal.pageSize.getWidth();
+    const PH = doc.internal.pageSize.getHeight();
+    const M = 40;
+    doc.setFont(_font('display'), 'bold'); doc.setTextColor(20, 20, 20); doc.setFontSize(26);
+    doc.text('THANK YOU FOR', M, M + 18);
+    doc.text('YOUR CONSIDERATION.', M, M + 18 + 28);
+
+    const contacts = (contactsRaw || '').split('\n').map(l => l.trim()).filter(Boolean).map(l => {
+        const p = l.split(/\s*[|,]\s*/);
+        return { name: p[0] || '', role: p[1] || '', email: p[2] || '', phone: p[3] || '' };
+    });
+    const gridTop = M + 96;
+    const cols = Math.min(4, Math.max(1, contacts.length));
+    const colW = (PW - 2 * M) / Math.max(cols, 1);
+    contacts.forEach((c, i) => {
+        const cc = i % cols, rr = Math.floor(i / cols);
+        const x = M + cc * colW;
+        let y = gridTop + rr * 66;
+        doc.setFont(_font('serif'), 'bold'); doc.setFontSize(10); doc.setTextColor(20, 20, 20);
+        doc.text(c.name, x, y); y += 13;
+        doc.setFont(_font('serif'), 'normal'); doc.setFontSize(8); doc.setTextColor(90, 90, 90);
+        if (c.role) { doc.text(c.role, x, y); y += 11; }
+        if (c.email) { doc.text(c.email, x, y); y += 11; }
+        if (c.phone) { doc.text(c.phone, x, y); y += 11; }
+        doc.setTextColor(20, 20, 20);
+    });
+
+    let ay = PH - 122;
+    doc.setFont(_font('serif'), 'normal'); doc.setFontSize(8); doc.setTextColor(60, 60, 60);
+    STUDIO_ADDRESS.forEach(line => { doc.text(line, M, ay); ay += 11; });
+    ay += 6;
+    doc.setFontSize(6.5); doc.setTextColor(120, 120, 120);
+    const year = new Date().getFullYear();
+    const cLines = doc.splitTextToSize('\u00A9' + year + ' Farmboy Fine Arts Inc. ' + STUDIO_COPYRIGHT, PW * 0.5);
+    doc.text(cLines, M, ay, { baseline: 'top' });
+    doc.setTextColor(20, 20, 20);
+
+    _drawPdfFooter(doc, logos, pageNum, meta);
+}
+
+// Cover / title page using the project metadata fields (g_projName etc.).
+function _drawCoverPage(doc, logos) {
+    const PW = doc.internal.pageSize.getWidth();
+    const PH = doc.internal.pageSize.getHeight();
+    const M = 56;
+    const g = (id) => { const el = document.getElementById(id); return el ? (el.value || '').trim() : ''; };
+    const projName = g('g_projName') || 'Art Program';
+    const client = g('g_client');
+    const desc = g('g_desc');
+    const date = g('g_date');
+    const issued = g('g_issued');
+
+    // Big project title, vertically centered-ish in the upper third.
+    doc.setFont(_font('display'), 'bold');
+    doc.setTextColor(20, 20, 20);
+    doc.setFontSize(34);
+    const titleY = PH * 0.40;
+    const titleLines = doc.splitTextToSize(projName, PW - M * 2);
+    doc.text(titleLines, M, titleY);
+
+    // Sub-line: client / description.
+    let sy = titleY + 24 + (titleLines.length - 1) * 30;
+    doc.setFont(_font('serif'), 'normal');
+    doc.setFontSize(13);
+    doc.setTextColor(90, 90, 90);
+    if (client) { doc.text(client, M, sy); sy += 18; }
+    if (desc) { doc.text(doc.splitTextToSize(desc, PW - M * 2), M, sy); sy += 16; }
+
+    // Meta block lower-left: date / issued by.
+    doc.setFontSize(9);
+    doc.setTextColor(130, 130, 130);
+    let my = PH - 90;
+    if (date) { doc.text('Date: ' + date, M, my); my += 13; }
+    if (issued) { doc.text('Issued by: ' + issued, M, my); my += 13; }
+
+    // Logo lower-right on the cover: Farmboy wordmark only.
+    const rx = PW - M;
+    if (logos && logos.farmboy) {
+        const ar = logos.farmboyAR || 8;
+        const h = 20, w = h * ar;
+        try { doc.addImage(logos.farmboy, 'JPEG', rx - w, PH - 84, w, h); } catch (e) {}
+    }
+    // Thin rule under the title.
+    doc.setDrawColor(200, 200, 200); doc.setLineWidth(0.75);
+    doc.line(M, titleY + 10, PW - M, titleY + 10);
+}
+
+async function exportSpecPagePDF(opts) {
+    opts = opts || {};
+    if (window._specPdfBusy) return;
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+        showInfoModal('PDF unavailable', 'The PDF engine failed to load. Try a hard refresh.');
+        return;
+    }
+    window._specPdfBusy = true;
+    try {
+        await _buildSpecPagePDF(opts);
+    } catch (e) {
+        console.error('PDF build failed:', e);
+        if (typeof showInfoModal === 'function') showInfoModal('PDF error', 'Something went wrong while building the PDF. Try again, or simplify the project if it persists.');
+    } finally {
+        window._specPdfBusy = false;
+        if (typeof _pdfHideOverlay === 'function') _pdfHideOverlay();
+    }
+}
+
+// ── PDF build progress overlay ────────────────────────────────────────────
+function _pdfShowOverlay() { const o = document.getElementById('pdfBuildOverlay'); if (o) o.style.display = 'flex'; }
+function _pdfHideOverlay() { const o = document.getElementById('pdfBuildOverlay'); if (o) o.style.display = 'none'; }
+function _pdfProgress(frac, label) {
+    const bar = document.getElementById('pdfBuildBar'); const lab = document.getElementById('pdfBuildLabel');
+    if (bar) bar.style.width = (Math.max(0, Math.min(1, frac)) * 100) + '%';
+    if (lab && label) lab.textContent = label;
+}
+function _pdfYield() { return new Promise(r => setTimeout(r, 0)); }
+
+// ── Deck Studio: live three-pane preview/editor (thumbnails | mock | tools) ──
+// Center is a live HTML mock (instant), not the real PDF — the true PDF is still
+// produced by Generate. This is the shell; per-page-type tool panels and inline
+// floorplan placement get wired into the right pane in following passes.
+let _dsIndex = 0;
+let _dsPages = [];
+function _dsInclude() {
+    const ck = (id, d) => { const e = document.getElementById(id); return e ? !!e.checked : d; };
+    return {
+        cover: ck('specInc_cover', true), timeline: ck('specInc_timeline', false),
+        understanding: ck('specInc_understanding', true), narrative: ck('specInc_narrative', true),
+        strategy: ck('specInc_strategy', true), frameRec: ck('specInc_frameRec', false),
+        floorplanKey: ck('specInc_floorplanKey', true), spec: ck('specInc_spec', true),
+        slogan: ck('specInc_slogan', true), contacts: ck('specInc_contacts', true)
+    };
+}
+// Resolve the spec layout for one page. The GLOBAL template is the structural
+// default; a group template (Set) always wins because it changes page count.
+// Otherwise a per-page override (single layouts only) takes precedence.
+function _specTplResolve(unitKey) {
+    const g = (editorialContent.specTemplate || 'classic');
+    if (SPEC_TEMPLATES[g] && SPEC_TEMPLATES[g].group) return g;
+    const ov = (editorialContent.specTemplateOverrides || {})[unitKey];
+    if (ov && SPEC_TEMPLATES[ov] && !SPEC_TEMPLATES[ov].group) return ov;
+    return g;
+}
+function _deckPageList() {
+    _mbMigratePages(); _fpMigrate();
+    const inc = _dsInclude();
+    const ec = editorialContent;
+    const pages = [];
+    const layoutAt = (anchor) => (ec.layoutPages || []).forEach(p => { if (p.afterKey) return; if ((p.place || 'afterStrategy') === anchor) pages.push({ kind: 'layout', type: p.type || 'moodboard', title: p.title || _mbDefaultTitle(p.type || 'moodboard') || 'Layout', page: p }); });
+    if (inc.cover) pages.push({ kind: 'fixed', fixed: 'cover', type: 'cover', title: 'Cover', page: ec.coverPage });
+    layoutAt('afterCover');
+    if (inc.timeline) pages.push({ kind: 'card', type: 'timeline', title: 'Process / Timeline' });
+    layoutAt('afterTimeline');
+    if (inc.understanding) pages.push({ kind: 'fixed', fixed: 'understanding', type: 'understanding', title: 'Project Understanding', page: ec.understandingPage, text: ec.understanding });
+    layoutAt('afterUnderstanding');
+    if (inc.narrative) pages.push({ kind: 'fixed', fixed: 'narrative', type: 'narrative', title: 'Art Narrative', page: ec.narrativePage, text: ec.narrative });
+    layoutAt('afterNarrative');
+    if (inc.strategy) { const s = ec.strategy || {}; pages.push({ kind: 'fixed', fixed: 'strategy', type: 'strategy', title: 'Art Collection Strategy', page: ec.strategyPage, text: [s.primary, s.secondary, s.tertiary].filter(Boolean).join('\n\n') }); }
+    layoutAt('afterStrategy');
+    if (inc.frameRec) pages.push({ kind: 'card', type: 'frameRec', title: 'Frame Recommendations' });
+    layoutAt('beforeFloorplan');
+    const rows = (dashProjectData || []).filter(r => r && (r.id || r.artworkUrl));
+    const specTplKey = ec.specTemplate || 'classic';
+    const isGroupSpec = !!(SPEC_TEMPLATES[specTplKey] && SPEC_TEMPLATES[specTplKey].group);
+    const unitsFor = (rs) => _buildSpecUnits(rs, isGroupSpec || (_elevBreakers() && specTplKey !== 'installGuide'));
+    const specUnit = (u) => {
+        if (u._manual) { return { kind: 'spec', type: 'spec', title: u.members.map(m => m.id).join(' + ') || 'Set', row: u.rep, members: u.members, _ovKey: u.key, _specTpl: (u.layout || 'setRow'), _manual: true }; }
+        const ok = (isGroupSpec ? u.key : (u.rep.id || ''));
+        return { kind: 'spec', type: 'spec', title: (isGroupSpec ? u.key : u.rep.id) || 'Spec', row: u.rep, members: u.members, _ovKey: ok, _specTpl: _specTplResolve(ok) };
+    };
+    const isInstall = (specTplKey === 'installGuide');
+    const _useBreakers = _elevBreakers() && !isGroupSpec && !isInstall;
+    // When the breaker checkbox is on, group the pieces (by art-group) so each
+    // wall-group gets a full-page elevation breaker, then individual spec pages
+    // in the per-piece template the user has chosen.
+    const _breakerPages = (u) => {
+        const out = []; const members = u.members || [];
+        let ge = null, gi = -1, best = 0;
+        (elevations || []).forEach((e, ei) => { if (!e || !e.frames) return; let c = 0; members.forEach(m => { if (e.frames.some(fr => fr && fr.id === m.id)) c++; }); if (c > best) { best = c; ge = e; gi = ei; } });
+        const code = _breakerCodeFor(u);
+        if (ge) out.push({ kind: 'spec', type: 'install', _install: true, elev: Object.assign({}, ge, { name: code, _noPlan: _breakerNoPlan(), _measure: _breakerMeasure(), _idx: gi }), _elevIdx: gi, _groupKey: u.key, title: code, _ovKey: 'elevgrp:' + u.key, _specTpl: 'installGuide', row: {} });
+        members.forEach(m => out.push({ kind: 'spec', type: 'spec', title: (m.id || 'Spec'), row: m, members: [m], _ovKey: (m.id || ''), _specTpl: _specTplResolve(m.id || '') }));
+        return out;
+    };
+    const specPagesFor = (u) => (_useBreakers && !u._manual) ? _breakerPages(u) : [specUnit(u)];
+    const installDescs = () => (elevations || []).map((e, ei) => ({ e: e, ei: ei }))
+        .filter(o => o.e && o.e.frames && o.e.frames.some(f => f && f.active !== false))
+        .map(o => ({ kind: 'spec', type: 'install', _install: true, elev: o.e, _elevIdx: o.ei, title: (o.e.name || ('Elevation ' + (o.ei + 1))), _ovKey: 'elev:' + o.ei, _specTpl: 'installGuide', row: {} }));
+    const units = unitsFor(rows);
+    if (isInstall) {
+        // Install guide: one page per elevation (the walls from the Elevations
+        // tab), shown in full — no per-piece duplicates.
+        if (inc.floorplanKey) {
+            const lvlOf = (x) => { const n = parseInt(x, 10); return isNaN(n) ? 0 : n; };
+            const emit = [];
+            floorplanLevels.forEach((lv, li) => { const used = (li === 0) || !!lv.imageData || rows.some(r => lvlOf(r.level) === li); if (used) emit.push(li); });
+            if (!emit.length) emit.push(0);
+            emit.forEach(li => pages.push({ kind: 'floorplan', type: 'floorplan', title: (floorplanLevels[li] && floorplanLevels[li].name) || ('Level ' + (li + 1)), level: li }));
+        }
+        if (inc.spec) installDescs().forEach(d => pages.push(d));
+    } else if (inc.floorplanKey) {
+        const lvlOf = (x) => { const n = parseInt(x, 10); return isNaN(n) ? 0 : n; };
+        const emit = [];
+        floorplanLevels.forEach((lv, li) => { const used = (li === 0) || !!lv.imageData || rows.some(r => lvlOf(r.level) === li) || (dashProjectData || []).some(it => lvlOf(it.level) === li); if (used) emit.push(li); });
+        if (!emit.length) emit.push(0);
+        const covered = {};
+        emit.forEach(li => {
+            covered[li] = true;
+            pages.push({ kind: 'floorplan', type: 'floorplan', title: (floorplanLevels[li] && floorplanLevels[li].name) || ('Level ' + (li + 1)), level: li });
+            if (inc.spec) units.filter(u => lvlOf(u.rep.level) === li).forEach(u => specPagesFor(u).forEach(d => pages.push(d)));
+        });
+        if (inc.spec) units.forEach(u => { if (!covered[lvlOf(u.rep.level)]) specPagesFor(u).forEach(d => pages.push(d)); });
+    } else if (inc.spec) {
+        units.forEach(u => specPagesFor(u).forEach(d => pages.push(d)));
+    }
+    layoutAt('afterSpec');
+    if (inc.slogan) pages.push({ kind: 'fixed', fixed: 'slogan', type: 'slogan', title: 'Good Art Good People', page: ec.sloganPage });
+    layoutAt('beforeContacts');
+    if (inc.contacts) pages.push({ kind: 'card', type: 'contacts', title: 'Thank You', text: ec.contacts });
+    // User-inserted pages anchored after a specific page (page management).
+    (ec.layoutPages || []).forEach(p => {
+        if (!p.afterKey) return;
+        const d = { kind: 'layout', type: p.type || 'moodboard', title: p.title || _mbDefaultTitle(p.type || 'moodboard') || 'Page', page: p };
+        if (p.afterKey === '__start__') { pages.unshift(d); return; }
+        let idx = -1;
+        for (let i = pages.length - 1; i >= 0; i--) { if (_deckPageKey(pages[i]) === p.afterKey) { idx = i; break; } }
+        if (idx < 0) { pages.push(d); return; }
+        let j = idx + 1;
+        while (j < pages.length && pages[j].kind === 'layout' && pages[j].page && pages[j].page.afterKey === p.afterKey) j++;
+        pages.splice(j, 0, d);
+    });
+    return pages;
+}
+function _deckMockHTML(desc, w, h) {
+    const pg = (desc.kind === 'layout' || desc.kind === 'fixed') ? desc.page : null;
+    const hasEls = pg && Array.isArray(pg.elements) && pg.elements.length;
+    if (hasEls) return _mbThumbInner(pg, w, h);
+    const pad = Math.round(w * 0.06);
+    const fs = (frac) => Math.max(7, Math.round(h * frac));
+    const wrap = (inner, bg) => '<div style="position:absolute; inset:0; background:' + (bg || '#ffffff') + "; overflow:hidden; font-family:'Messina',Georgia,serif;\">" + inner + '</div>';
+    const DRUK = "'Druk','Arial Narrow',Arial,sans-serif";
+    if (desc.kind === 'layout' && (desc.type === 'toc' || desc.type === 'artindex')) {
+        const title = desc.type === 'toc' ? 'CONTENTS' : 'ARTWORK INDEX';
+        let rows = '';
+        if (desc.type === 'toc') {
+            rows = _deckTocList(_dsPages).map(e => '<div style="display:flex; justify-content:space-between; gap:8px; font-size:' + fs(0.034) + 'px; color:#333; padding:' + Math.round(h * 0.007) + 'px 0; border-bottom:1px solid #f0f0f0;"><span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">' + _esc(e.label) + '</span><span style="color:#999;">' + (e.idx + 1) + '</span></div>').join('');
+        } else {
+            rows = _artIndexList().map(e => { const pn = _dsPageNumForPiece(e.id); return '<div style="display:flex; align-items:center; gap:6px; font-size:' + fs(0.026) + 'px; color:#333; padding:' + Math.round(h * 0.004) + 'px 0; border-bottom:1px solid #f5f5f5;"><span style="flex:0 0 auto; width:' + fs(0.022) + 'px; height:' + fs(0.022) + 'px; border-radius:50%; background:' + _statusColor(e.status) + ';"></span><span style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">' + _esc(e.id) + (e.code ? ' \u00b7 ' + _esc(e.code) : '') + '</span><span style="color:#999;">' + (pn || '\u2014') + '</span></div>'; }).join('');
+        }
+        let summary = '';
+        if (desc.type === 'artindex') { const c = _statusCounts(); summary = '<div style="font-size:' + fs(0.024) + 'px; color:#888; margin-bottom:' + Math.round(h * 0.02) + 'px;">' + STATUS_ORDER.map(s => '<span style="color:' + _statusColor(s) + ';">\u25cf</span> ' + _statusLabel(s) + ' ' + c[s]).join('&nbsp;&nbsp;') + '</div>'; }
+        return wrap('<div style="position:absolute; left:' + pad + 'px; top:' + pad + 'px; right:' + pad + 'px; bottom:' + pad + 'px; overflow:hidden;"><div style="font-family:' + DRUK + '; font-weight:700; color:#111; font-size:' + fs(0.07) + 'px; text-transform:uppercase; margin-bottom:' + Math.round(h * 0.02) + 'px;">' + title + '</div>' + summary + rows + '</div>');
+    }
+    if (desc.kind === 'fixed' && desc.fixed === 'cover') {
+        const nm = (typeof globalMeta !== 'undefined' && globalMeta && (globalMeta.projName || globalMeta.projectName)) || 'PROJECT NAME';
+        return wrap('<div style="position:absolute; left:' + pad + 'px; bottom:' + pad + 'px; right:' + pad + 'px;"><div style="font-family:' + DRUK + '; font-weight:700; color:#111; font-size:' + fs(0.12) + 'px; line-height:1.05;">' + _esc(nm) + '</div><div style="color:#666; font-size:' + fs(0.05) + 'px; margin-top:4px;">Art Program Presentation</div></div>', '#f3f1ec');
+    }
+    if (desc.kind === 'prose' || (desc.kind === 'fixed') || desc.kind === 'card') {
+        const body = (desc.text || '').toString();
+        const bodyHtml = body ? _esc(body).replace(/\n/g, '<br>') : '<span style="color:#bbb;">(empty — add a template or copy via this page\u2019s tools)</span>';
+        return wrap('<div style="position:absolute; left:' + pad + 'px; top:' + pad + 'px; right:' + pad + 'px;"><div style="font-family:' + DRUK + '; font-weight:700; color:#111; font-size:' + fs(0.08) + 'px; text-transform:uppercase; letter-spacing:0.02em;">' + _esc(desc.title) + '</div><div style="color:#333; font-size:' + fs(0.04) + 'px; line-height:1.5; margin-top:' + Math.round(h * 0.05) + 'px; max-height:' + Math.round(h * 0.7) + 'px; overflow:hidden;">' + bodyHtml + '</div></div>');
+    }
+    if (desc.kind === 'floorplan') {
+        const lv = floorplanLevels[desc.level] || {};
+        let inner = '<div style="position:absolute; left:' + pad + 'px; top:' + Math.round(pad * 0.5) + 'px; font-weight:800; color:#111; font-size:' + fs(0.06) + 'px;">FLOORPLAN — ' + _esc((lv.name || ('Level ' + (desc.level + 1))).toUpperCase()) + '</div>';
+        const planTop = Math.round(h * 0.16), planH = h - planTop - pad, planW = w - pad * 2, planL = pad;
+        if (lv.imageData) {
+            inner += '<div style="position:absolute; left:' + planL + 'px; top:' + planTop + 'px; width:' + planW + 'px; height:' + planH + 'px; background:#fafafa; border:1px solid #eee;"><img src="' + lv.imageData + '" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain;">';
+            _fpGroups().filter(g => (g.level || 0) === desc.level && g.planX != null && g.planY != null).forEach(g => {
+                inner += '<div style="position:absolute; left:' + (g.planX * 100) + '%; top:' + (g.planY * 100) + '%; transform:translate(-50%,-50%); min-width:' + fs(0.05) + 'px; height:' + fs(0.05) + 'px; padding:0 3px; border-radius:99px; background:' + categoryColor(g.category) + '; color:#fff; font-size:' + fs(0.03) + 'px; font-weight:700; display:flex; align-items:center; justify-content:center; border:1px solid #fff;">' + _esc(g.num) + '</div>';
+            });
+            inner += '</div>';
+        } else {
+            inner += '<div style="position:absolute; left:' + planL + 'px; top:' + planTop + 'px; width:' + planW + 'px; height:' + planH + 'px; background:#fafafa; border:1px dashed #ccc; display:flex; align-items:center; justify-content:center; color:#bbb; font-size:' + fs(0.04) + 'px;">No plan image for this level</div>';
+        }
+        return wrap(inner);
+    }
+    if (desc.kind === 'spec') {
+        const r = desc.row || {};
+        let lines = [];
+        try { const s = buildSpecStrings(r); if (s && s.lines) lines = s.lines.map(l => l.label + '  ' + (l.value || '')); } catch (e) {}
+        const _artOnly = _specArtOnly(desc._ovKey || (r.id || ''));
+        if (_artOnly) lines = [];
+        const tplKey = (desc._previewTpl || desc._specTpl || editorialContent.specTemplate || 'classic');
+        const tpl = SPEC_TEMPLATES[tplKey];
+        const codeFs = fs(0.06);
+        const box = (x, y, bw, bh, label, bake) => '<div ' + (bake || '') + ' style="position:absolute; left:' + Math.round(x * w) + 'px; top:' + Math.round(y * h) + 'px; width:' + Math.round(bw * w) + 'px; height:' + Math.round(bh * h) + 'px; background:#f4f4f4; border:1px solid #e6e6e6; display:flex; align-items:center; justify-content:center; color:#bbb; font-size:' + fs(0.03) + 'px; overflow:hidden;">' + label + '</div>';
+        const txt = (x, y, bw, html, size, weight, fam) => '<div style="position:absolute; left:' + Math.round(x * w) + 'px; top:' + Math.round(y * h) + 'px; width:' + Math.round(bw * w) + 'px; color:#222; font-size:' + size + 'px; line-height:1.6; font-weight:' + (weight || 400) + ';' + (fam ? 'font-family:' + fam + ';' : '') + '">' + html + '</div>';
+        const DRUK = "'Druk','Arial Narrow',Arial,sans-serif", SANS = 'Arial,Helvetica,sans-serif';
+        let inner = '';
+        if (tpl && tpl.freeform) {
+            // Custom free layout: blank page; mockups/text/images are annotations.
+            return wrap('');
+        }
+        if (!tpl || tpl.legacy) {
+            // Classic: code top-left, artwork left, spec right
+            inner += txt(0.06, 0.04, 0.6, _esc(r.id || 'SPEC'), codeFs, 800, DRUK);
+            inner += box(0.06, 0.18, 0.34, 0.5, 'artwork', 'data-bake="artwork"');
+            inner += txt(0.44, 0.18, 0.5, lines.slice(0, 14).map(_esc).join('<br>'), fs(0.03), 400, SANS);
+        } else if (tpl.custom) {
+            // Install guide: real wall elevation on the right, plan bottom-left.
+            const _ig = desc._install ? (desc.elev || {}) : null;
+            const _igAct = _ig && _ig.frames ? _ig.frames.filter(f => f && f.active !== false) : [];
+            const _igTitle = _ig ? (_ig.name || '') : (r.location || r.category || r.id || '');
+            const _igCode = _ig ? (_igAct.length === 1 ? (_igAct[0].id || '') : '') : (r.id || '');
+            inner += txt(0.06, 0.04, 0.5, _esc(('' + _igTitle).toUpperCase()), codeFs, 800, DRUK);
+            inner += txt(0.06, 0.135, 0.4, 'ARTWORK DETAILS', fs(0.028), 800, DRUK);
+            if (_igCode) inner += txt(0.06, 0.2, 0.3, _esc(('' + _igCode)), fs(0.032), 700, DRUK);
+            if (_ig && _ig._noPlan) {
+                inner += box(0.08, 0.18, 0.84, 0.74, 'elevation', 'data-bake="elevation"');
+            } else {
+                inner += box(0.42, 0.16, 0.54, 0.72, 'elevation', 'data-bake="elevation"');
+                inner += box(0.06, 0.58, 0.3, 0.32, 'Floorplan');
+            }
+        } else if (tpl.group) {
+            const isScaleM = !!tpl.scale;
+            const members = (desc.members && desc.members.length) ? desc.members.slice(0, isScaleM ? 12 : 4) : [r, r];
+            const n = Math.max(1, members.length);
+            const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'];
+            inner += txt(0.05, 0.02, 0.7, _esc((desc.title || r.id || '').toString().toUpperCase()), codeFs, 800, DRUK);
+            if (isScaleM) {
+                let _ge = null, _bc = 0;
+                (typeof elevations !== 'undefined' ? elevations : []).forEach(e => { if (!e || !e.frames) return; let c = 0; members.forEach(m => { if (e.frames.some(f => f && f.id === m.id)) c++; }); if (c > _bc) { _bc = c; _ge = e; } });
+                const geo = members.map(m => { if (_ge && _ge.frames) { const fr = _ge.frames.find(f => f && f.id === m.id); if (fr) return { x: parseFloat(fr.x) || 0, y: parseFloat(fr.y) || 0, w: parseFloat(fr.w) || 0, h: parseFloat(fr.h) || 0 }; } return null; });
+                const regX = 0.40, regY = 0.16, regW = 0.56, regH = 0.74;
+                const haveGeo = geo.length && geo.every(g => g && g.w > 0 && g.h > 0);
+                const boxes = [];
+                if (haveGeo) {
+                    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+                    geo.forEach(g => { minX = Math.min(minX, g.x); minY = Math.min(minY, g.y); maxX = Math.max(maxX, g.x + g.w); maxY = Math.max(maxY, g.y + g.h); });
+                    const bbW = Math.max(0.01, maxX - minX), bbH = Math.max(0.01, maxY - minY);
+                    const sc = Math.min((regW * w) / bbW, (regH * h) / bbH);
+                    const offX = regX * w + ((regW * w) - bbW * sc) / 2, offY = regY * h + ((regH * h) - bbH * sc) / 2;
+                    members.forEach((m, i) => { const g = geo[i]; boxes.push({ letter: letters[i] || ('' + (i + 1)), x: (offX + (g.x - minX) * sc) / w, y: (offY + (maxY - (g.y + g.h)) * sc) / h, bw: (g.w * sc) / w, bh: (g.h * sc) / h, idx: i }); });
+                } else {
+                    const dims = members.map(m => ({ w: Math.max(1, parseFloat(m.extW) || 10), h: Math.max(1, parseFloat(m.extH) || 10) }));
+                    const gap = 0.5; const totalW = dims.reduce((a, d) => a + d.w, 0) + gap * (dims.length - 1); const maxH = dims.reduce((a, d) => Math.max(a, d.h), 0);
+                    const sc = Math.min((regW * w) / totalW, (regH * h) / maxH); let x = regX * w + ((regW * w) - totalW * sc) / 2; const baseY = (regY + regH) * h;
+                    members.forEach((m, i) => { const d = dims[i]; const bw = d.w * sc, bh = d.h * sc; boxes.push({ letter: letters[i] || ('' + (i + 1)), x: x / w, y: (baseY - bh) / h, bw: bw / w, bh: bh / h, idx: i }); x += bw + gap * sc; });
+                }
+                boxes.forEach(b => { inner += box(b.x, b.y, b.bw, b.bh, '', 'data-bake="artwork" data-member-idx="' + b.idx + '"'); inner += txt(b.x, Math.max(0, b.y - 0.028), 0.06, _esc(b.letter), fs(0.024), 800, DRUK); });
+                const _so = _scaleOpts();
+                if (_so.elevThumb) inner += box(0.80, 0.80, 0.16, 0.14, 'ELEVATION');
+                if (_so.codes === 'legend') inner += txt(0.40, 0.82, 0.4, '<b>IMAGE CODES</b> &nbsp; ' + members.map((m, i) => _esc((letters[i] || '') + ' ' + (m.imageCode || m.id || ''))).join(' &nbsp; '), fs(0.02), 400, SANS);
+                const sTop = 0.16, sBot = 0.93, slotH = (sBot - sTop) / n;
+                members.forEach((m, i) => { const sy = sTop + i * slotH; let ml = []; if (!_artOnly) try { const s = buildSpecStrings(m); if (s && s.lines) ml = s.lines.filter(l => ['Application', 'Frame Size', 'Frame Code', 'Matboard', 'Overall Dimensions'].indexOf(l.label) >= 0).map(l => l.label + '  ' + (l.value || '')); } catch (e) {} inner += txt(0.05, sy, 0.30, '<b>' + _esc(m.id || '') + '</b><br>' + ml.slice(0, 4).map(_esc).join('<br>'), fs(0.019), 400, SANS); });
+            } else if (tpl.row) {
+                const cols = Math.max(1, Math.min(n, 4));
+                const leftX = 0.06, gap = 0.02, slotW = (0.9 - gap * (cols - 1)) / cols;
+                const topY = 0.16, artH = 0.46;
+                members.slice(0, cols).forEach((m, i) => {
+                    const cx = leftX + i * (slotW + gap);
+                    inner += box(cx, topY, slotW, artH, _esc(letters[i] || ''), 'data-bake="artwork" data-member-idx="' + i + '"');
+                    let ml = []; if (!_artOnly) try { const s = buildSpecStrings(m); if (s && s.lines) ml = s.lines.filter(l => ['Application', 'Frame Size', 'Frame Code', 'Overall Dimensions'].indexOf(l.label) >= 0).map(l => l.label + '  ' + (l.value || '')); } catch (e) {}
+                    inner += txt(cx, topY + artH + 0.04, slotW, '<b>' + _esc(m.id || '') + '</b><br>' + ml.map(_esc).join('<br>'), fs(0.02), 400, SANS);
+                });
+            } else {
+                const topY = 0.16, slotH = 0.8 / n;
+                members.forEach((m, i) => {
+                    const sy = topY + i * slotH;
+                    inner += txt(0.06, sy, 0.04, _esc(letters[i] || (i + 1) + ''), fs(0.04), 800, DRUK);
+                    let ml = []; if (!_artOnly) try { const s = buildSpecStrings(m); if (s && s.lines) ml = s.lines.filter(l => ['Application', 'Frame Size', 'Frame Code', 'Overall Dimensions'].indexOf(l.label) >= 0).map(l => l.label + '  ' + (l.value || '')); } catch (e) {}
+                    inner += txt(0.11, sy, 0.34, '<b>' + _esc(m.id || '') + '</b><br>' + ml.map(_esc).join('<br>'), fs(0.022), 400, SANS);
+                    inner += box(0.54, sy + slotH * 0.06, 0.42, slotH * 0.82, _esc(letters[i] || ''), 'data-bake="artwork" data-member-idx="' + i + '"');
+                });
+            }
+        } else {
+            if (tpl.title) { const tf = tpl.title.field || 'application'; const tt = (tf === 'id' ? (r.id || '') : tf === 'product' ? (r.product || '') : (function () { try { return (buildSpecStrings(r).application || r.product || ''); } catch (e) { return ''; } })()); inner += txt(tpl.title.x, tpl.title.y - 0.03, 0.5, _esc(tt.toString().toUpperCase()), fs(0.045), 800, DRUK); }
+            if (tpl.artwork) { inner += box(tpl.artwork.x, tpl.artwork.y, tpl.artwork.w, tpl.artwork.h, 'artwork', 'data-bake="artwork"'); if (tpl.code) { const cf = tpl.code.field || 'id'; const ct = (cf === 'imageCode' ? (r.imageCode || r.artworkFile || '') : (r.id || '')); const cx = tpl.code.align === 'center' ? (tpl.artwork.x + tpl.artwork.w / 2 - 0.1) : (tpl.code.align === 'right' ? (tpl.artwork.x + tpl.artwork.w - 0.2) : tpl.artwork.x); const _cs = _specCodeStyle(); const _cfam = _cs.font === 'serif' ? "'Messina',Georgia,serif" : _cs.font === 'sans' ? 'Arial,Helvetica,sans-serif' : DRUK; inner += txt(cx, tpl.artwork.y + tpl.artwork.h + 0.01, 0.24, '<span style="color:' + _cs.color + '">' + _esc(ct.toString()) + '</span>', fs(_cs.size / 540), 700, _cfam); } }
+            if (tpl.spec) inner += txt(tpl.spec.x, tpl.spec.y - 0.02, tpl.spec.w, lines.slice(0, 12).map(_esc).join('<br>'), fs(0.026), 400, SANS);
+            if (tpl.elevation) inner += box(tpl.elevation.x, tpl.elevation.y, tpl.elevation.w, tpl.elevation.h, 'elevation', 'data-bake="elevation"');
+        }
+        return wrap(inner);
+    }
+    return wrap('<div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#999; font-size:' + fs(0.05) + 'px;">' + _esc(desc.title) + '</div>');
+}
+let _dsActiveTab = 'project';
+function _specCodeStyle() { const s = editorialContent.specCodeStyle || {}; return { font: s.font || 'display', size: s.size || 16, color: s.color || '#141414' }; }
+function _titleStyle() { const s = editorialContent.titleStyle || {}; return { font: s.font || 'display', size: s.size || 22, color: s.color || '#141414' }; }
+function _isWireframe() { return !!editorialContent.wireframe; }
+function _specArtOnly(ovKey) { return !!(ovKey && editorialContent.specArtOnly && editorialContent.specArtOnly[ovKey]); }
+const STATUS_DEFS = { concept: { label: 'Concept', color: '#8a8f98' }, review: { label: 'In Review', color: '#c08a2e' }, approved: { label: 'Approved', color: '#1a7f37' }, production: { label: 'Production', color: '#3457d5' } };
+const STATUS_ORDER = ['concept', 'review', 'approved', 'production'];
+function _pieceStatus(r) { const s = r && r.status; return STATUS_DEFS[s] ? s : 'concept'; }
+function _statusColor(s) { return (STATUS_DEFS[s] || STATUS_DEFS.concept).color; }
+function _statusLabel(s) { return (STATUS_DEFS[s] || STATUS_DEFS.concept).label; }
+function _statusCounts() { const c = { concept: 0, review: 0, approved: 0, production: 0 }; (typeof dashProjectData !== 'undefined' ? dashProjectData : []).forEach(r => { if (r && (r.id || r.imageCode)) c[_pieceStatus(r)]++; }); return c; }
+function _scaleOpts() { const o = (editorialContent && editorialContent.scaleOpts) || {}; return { codes: (o.codes === 'legend' || o.codes === 'none' || o.codes === 'frames') ? o.codes : 'frames', elevThumb: !!o.elevThumb }; }
+function _elevBreakers() { return !!(editorialContent && editorialContent.elevBreakers); }
+function _breakerNoPlan() { return !!(editorialContent && editorialContent.breakerNoPlan); }
+function _breakerMeasure() { return !!(editorialContent && editorialContent.breakerMeasure); }
+// Combined group code for an elevation breaker, e.g. base 'ART-2.1' + members
+// A/B/C/D -> 'ART-2.1ABCD'.
+function _breakerCodeFor(u) {
+    const base = (u && u.key) || '';
+    const letters = ((u && u.members) || []).map(m => { const id = ((m && m.id) || '') + ''; const s = (base && id.indexOf(base) === 0) ? id.slice(base.length).replace(/^[-_\s]*/, '') : id; return s || ''; }).join('');
+    return letters ? (base + letters) : base;
+}
+function _manualGroups() { return (editorialContent.manualGroups || (editorialContent.manualGroups = [])); }
+function _manualGroupOf(id) { if (!id) return null; const gs = _manualGroups(); for (const g of gs) { if (g && g.members && g.members.indexOf(id) >= 0) return g; } return null; }
+function _buildSpecUnits(rs, isGroup) {
+    const order = [], map = {};
+    (rs || []).forEach(r => {
+        const mg = _manualGroupOf(r.id || '');
+        const k = mg ? ('mg:' + mg.id) : (isGroup ? _artGroupKey(r.id || '') : (r.id || ''));
+        if (!map[k]) { map[k] = { rep: r, members: [], key: k, _manual: !!mg, layout: mg ? (mg.layout || 'setRow') : null, _mgOrder: mg ? mg.members : null }; order.push(k); }
+        map[k].members.push(r);
+    });
+    return order.map(k => { const u = map[k]; if (u._mgOrder) { u.members.sort((a, b) => u._mgOrder.indexOf(a.id) - u._mgOrder.indexOf(b.id)); u.rep = u.members[0] || u.rep; } return u; });
+}
+function _approvalOf(ovKey) { return (ovKey && editorialContent.approvalStatus && editorialContent.approvalStatus[ovKey]) || ''; }
+function _pageApproved(ovKey) { return _approvalOf(ovKey) === 'approved'; }
+function _dsCurrentSpecKey() { const d = _dsPages[_dsIndex]; return (d && d.kind === 'spec') ? (d._ovKey || (d.row && d.row.id) || '') : ''; }
+function _dsSetApproval(ovKey, status) {
+    if (!ovKey) return;
+    const m = editorialContent.approvalStatus || (editorialContent.approvalStatus = {});
+    if (status) m[ovKey] = status; else delete m[ovKey];
+    if (typeof pushHistory === 'function') pushHistory();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    _dsSyncApprovedBtn();
+    if (_dsActiveTab === 'pages') { _dsRenderRail(); _dsRenderTools(); _dsRenderCenter(); }
+}
+function _dsSyncApprovedBtn() {
+    const b = document.getElementById('dsApprovedBtn'); if (!b) return;
+    const onSpec = (_dsActiveTab === 'pages') && !!_dsCurrentSpecKey();
+    const st = onSpec ? _approvalOf(_dsCurrentSpecKey()) : '';
+    b.disabled = !onSpec;
+    b.style.opacity = onSpec ? '1' : '0.4';
+    b.style.cursor = onSpec ? 'pointer' : 'not-allowed';
+    b.title = onSpec ? 'Click to cycle: none \u2192 pending \u2192 approved' : 'Approval applies to spec pages only \u2014 select a spec page';
+    const map = { '': { bg: 'var(--bg-input)', fg: 'var(--text-main)', bd: 'var(--border-color)', t: 'APPROVAL' }, pending: { bg: '#c0392b', fg: '#fff', bd: '#c0392b', t: 'PENDING \u25CB' }, approved: { bg: '#1a7f37', fg: '#fff', bd: '#1a7f37', t: 'APPROVED \u2713' } };
+    const m = map[st] || map[''];
+    b.style.background = m.bg; b.style.color = m.fg; b.style.borderColor = m.bd; b.textContent = m.t;
+}
+function _dsToggleApproved() {
+    const k = _dsCurrentSpecKey();
+    if (!k) { showInfoModal('Spec pages only', 'Approval status applies to individual spec pages. Select a spec page first.'); return; }
+    const cur = _approvalOf(k);
+    const next = cur === '' ? 'pending' : cur === 'pending' ? 'approved' : '';
+    _dsSetApproval(k, next);
+}
+// Presentation-type presets: flip the include toggles + spec layout for each
+// stage of a deck's life. Presets, not locks — tweak freely afterward.
+const PRES_PRESETS = {
+    concept: { label: 'Concept', inc: { cover: 1, understanding: 1, narrative: 1, strategy: 1, slogan: 1, contacts: 1, timeline: 1, frameRec: 0, floorplanKey: 0, spec: 0 }, tpl: null, wf: false, note: 'Beauty pages, story, moodboards & concept art — no specs.' },
+    wireframe: { label: 'Wireframe', inc: { cover: 1, understanding: 1, narrative: 1, strategy: 0, slogan: 1, contacts: 1, floorplanKey: 1, spec: 1, frameRec: 0, timeline: 0 }, tpl: 'frameRight', wf: true, note: 'Elevations & plan views with empty frame/canvas placements (no artwork yet). Specs optional per page.' },
+    artdev: { label: 'Art Development', inc: { cover: 1, understanding: 1, narrative: 1, strategy: 0, slogan: 1, contacts: 1, floorplanKey: 1, spec: 1, frameRec: 0, timeline: 0 }, tpl: 'frameRight', wf: false, note: 'Artwork populated in mockups, with specs figured alongside.' },
+    final: { label: 'Final Spec', inc: { cover: 1, understanding: 0, narrative: 0, strategy: 0, slogan: 1, contacts: 1, floorplanKey: 1, spec: 1, frameRec: 1, timeline: 0 }, tpl: 'classic', wf: false, note: 'Approval package: full specs, image codes, final selections.' },
+    install: { label: 'Install Guide', inc: { cover: 1, understanding: 0, narrative: 0, strategy: 0, slogan: 0, contacts: 1, floorplanKey: 1, spec: 1, frameRec: 0, timeline: 0 }, tpl: 'installGuide', wf: false, note: 'Dimensioned wall elevations (CL / EQ / AFF) + plan views.' }
+};
+function _dsApplyPresentationType(type) {
+    const p = PRES_PRESETS[type]; if (!p) return;
+    Object.keys(p.inc).forEach(k => { const cb = document.getElementById('specInc_' + k); if (cb) cb.checked = !!p.inc[k]; });
+    if (p.tpl) editorialContent.specTemplate = p.tpl;
+    editorialContent.wireframe = !!p.wf;
+    editorialContent.presentationType = type;
+    if (typeof pushHistory === 'function') pushHistory();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    _dsClearBuiltAll();
+    _dsRenderPresetBar();
+    _dsRefresh();
+}
+function _dsRenderPresetBar() {
+    const bar = document.getElementById('dsPresetBar'); if (!bar) return;
+    const cur = editorialContent.presentationType || '';
+    bar.innerHTML = '';
+    const lbl = document.createElement('div');
+    lbl.textContent = 'PRESENTATION TYPE'; lbl.style.cssText = 'font-size:0.62rem; font-weight:700; letter-spacing:0.4px; color:var(--text-muted); margin-bottom:6px;';
+    bar.appendChild(lbl);
+    const row = document.createElement('div'); row.style.cssText = 'display:flex; gap:6px; flex-wrap:wrap;';
+    Object.keys(PRES_PRESETS).forEach(k => {
+        const b = document.createElement('button');
+        b.textContent = PRES_PRESETS[k].label;
+        b.style.cssText = _tplTabCss(cur === k);
+        b.onclick = () => _dsApplyPresentationType(k);
+        row.appendChild(b);
+    });
+    bar.appendChild(row);
+    const note = document.createElement('p');
+    note.style.cssText = 'font-size:0.62rem; color:var(--text-muted); margin:6px 0 0; line-height:1.4;';
+    note.textContent = cur && PRES_PRESETS[cur] ? PRES_PRESETS[cur].note : 'Pick a type to preset the sections & spec layout. You can still fine-tune everything below.';
+    bar.appendChild(note);
+}
+function openDeckStudio(tab) {
+    const m = document.getElementById('deckStudioModal'); if (!m) return;
+    // Reparent the Project settings panel into the Project tab (once).
+    const proj = document.getElementById('dsTabProject');
+    const panel = document.getElementById('specPdfPanel');
+    if (proj && panel && panel.parentElement !== proj) {
+        panel.style.width = '100%'; panel.style.maxWidth = '600px'; panel.style.maxHeight = 'none';
+        panel.style.boxShadow = 'none'; panel.style.border = 'none'; panel.style.padding = '4px 8px';
+        proj.appendChild(panel);
+    }
+    // Inject the presentation-type bar at the top of the Project tab (once).
+    if (proj && !document.getElementById('dsPresetBar')) {
+        const bar = document.createElement('div');
+        bar.id = 'dsPresetBar';
+        bar.style.cssText = 'max-width:600px; margin:0 8px 14px; padding:10px 12px; border:1px solid var(--border-color); border-radius:8px; background:var(--bg-input);';
+        proj.insertBefore(bar, proj.firstChild);
+    }
+    _dsRenderPresetBar();
+    if (typeof _specPdfPrefill === 'function') _specPdfPrefill();
+    const sp = document.getElementById('specPdfModal'); if (sp) sp.style.display = 'none';
+    m.style.display = 'flex';
+    _dsSyncApprovedBtn();
+    _dsTab(tab || 'project');
+}
+function _dsTab(which) {
+    _dsActiveTab = which;
+    const p = document.getElementById('dsTabProject'), g = document.getElementById('dsTabPages');
+    if (p) p.style.display = (which === 'project') ? 'flex' : 'none';
+    if (g) g.style.display = (which === 'pages') ? 'flex' : 'none';
+    const bp = document.getElementById('dsTabBtnProject'), bg = document.getElementById('dsTabBtnPages');
+    const on = 'background:#6a6aff; color:#fff;', off = 'background:var(--bg-input); color:var(--text-main);';
+    if (bp) bp.style.cssText = 'height:28px; padding:0 14px; font-size:0.74rem; border:1px solid var(--border-color); border-radius:5px; cursor:pointer; ' + (which === 'project' ? on : off);
+    if (bg) bg.style.cssText = 'height:28px; padding:0 14px; font-size:0.74rem; border:1px solid var(--border-color); border-radius:5px; cursor:pointer; ' + (which === 'pages' ? on : off);
+    if (which === 'pages') {
+        _dsBuildError = '';
+        try { _dsPages = _deckPageList() || []; }
+        catch (e) { _dsPages = []; _dsBuildError = (e && e.message) ? e.message : String(e); console.error('Deck page list build failed:', e); }
+        if (_dsIndex >= _dsPages.length) _dsIndex = 0;
+        try { _dsSyncToolbar(); } catch (e) { console.error(e); }
+        try { _dsSyncApprovedBtn(); } catch (e) {}
+        try { _dsRenderRail(); } catch (e) { console.error(e); }
+        try { _dsRenderTools(); } catch (e) { console.error(e); }
+        requestAnimationFrame(_dsRenderCenter);
+    }
+}
+let _dsBuildError = '';
+function closeDeckStudio() { const m = document.getElementById('deckStudioModal'); if (m) m.style.display = 'none'; }
+function _dsRefresh() { _dsPages = _deckPageList(); if (_dsIndex >= _dsPages.length) _dsIndex = Math.max(0, _dsPages.length - 1); _dsRenderRail(); _dsRenderCenter(); _dsRenderTools(); }
+function _tocLabelFor(desc) {
+    if (!desc) return null;
+    if (desc.kind === 'fixed') { if (desc.fixed === 'cover' || desc.fixed === 'slogan') return null; return desc.title || desc.fixed; }
+    if (desc.kind === 'card') return desc.title || desc.type;
+    if (desc.kind === 'floorplan') return desc.title || 'Floorplan';
+    if (desc.kind === 'layout') { const t = desc.type; if (t === 'toc') return 'Contents'; if (t === 'artindex') return 'Artwork Index'; return (desc.page && desc.page.title) || _mbDefaultTitle(t) || (t === 'breaker' ? 'Section' : 'Page'); }
+    if (desc.kind === 'spec') return '__SPEC__';
+    return null;
+}
+function _deckTocList(descs) {
+    const out = []; let specSeen = false;
+    (descs || []).forEach((d, i) => {
+        const lab = _tocLabelFor(d); if (!lab) return;
+        if (lab === '__SPEC__') { if (specSeen) return; specSeen = true; out.push({ idx: i, key: _deckPageKey(d), label: 'Artwork Specifications' }); return; }
+        out.push({ idx: i, key: _deckPageKey(d), label: lab });
+    });
+    return out;
+}
+function _artIndexList() {
+    return (typeof dashProjectData !== 'undefined' ? dashProjectData : []).filter(r => r && (r.id || r.imageCode)).map(r => ({ id: (r.id || '') + '', code: (r.imageCode || r.artworkFile || '') + '', location: (r.location || r.category || '') + '', status: _pieceStatus(r) }));
+}
+function _dsPageNumForPiece(id) {
+    for (let i = 0; i < _dsPages.length; i++) {
+        const d = _dsPages[i];
+        if (d.kind !== 'spec') continue;
+        if (d._install && d.elev && d.elev.frames) { if (d.elev.frames.some(f => f && f.id === id)) return i + 1; }
+        else if ((d.members || [d.row]).some(m => m && m.id === id)) return i + 1;
+    }
+    return null;
+}
+function _dsSelectPage(i) { _dsIndex = i; _dsRenderRail(); _dsRenderCenter(); _dsRenderTools(); _dsSyncApprovedBtn(); }
+let _dsRailFilter = '';
+function _dsCreateInsert(type, afterKey) {
+    _mbMigratePages();
+    const variants = LAYOUT_TEMPLATES[type];
+    const els = (variants && variants[0] && variants[0].els) ? variants[0].els() : [];
+    const pg = { id: 'pg' + Math.random().toString(36).slice(2), type: type, title: _mbDefaultTitle(type), elements: JSON.parse(JSON.stringify(els)), afterKey: afterKey || '__start__' };
+    editorialContent.layoutPages.push(pg);
+    if (typeof pushHistory === 'function') pushHistory();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    _dsRefresh();
+    const k = 'layout:' + pg.id;
+    const ni = _dsPages.findIndex(d => _deckPageKey(d) === k);
+    if (ni >= 0) _dsSelectPage(ni);
+}
+function _dsOpenInsertMenu(anchorBtn, afterKey) {
+    const old = document.getElementById('dsInsMenu'); if (old) { old.remove(); return; }
+    const menu = document.createElement('div'); menu.id = 'dsInsMenu';
+    menu.style.cssText = 'position:fixed; z-index:100030; background:var(--bg-panel,#1d1d20); border:1px solid var(--border-color); border-radius:6px; padding:4px; box-shadow:0 8px 24px rgba(0,0,0,0.35); min-width:152px;';
+    const r = anchorBtn.getBoundingClientRect();
+    menu.style.left = Math.min(r.left, window.innerWidth - 168) + 'px';
+    menu.style.top = Math.min(r.bottom + 4, window.innerHeight - 230) + 'px';
+    const hdr = document.createElement('div'); hdr.textContent = 'Insert a page'; hdr.style.cssText = 'font-size:0.62rem; color:var(--text-muted); padding:4px 8px 6px;'; menu.appendChild(hdr);
+    [['breaker', 'Breaker'], ['divider', 'Divider'], ['moodboard', 'Moodboard'], ['bio', 'Artist bio'], ['plan', 'Plan view'], ['custom', 'Custom'], ['toc', 'Contents (auto)'], ['artindex', 'Artwork index (auto)']].forEach(pair => {
+        const b = document.createElement('button'); b.textContent = pair[1];
+        b.style.cssText = 'display:block; width:100%; text-align:left; font-size:0.72rem; padding:6px 10px; border:none; background:none; color:var(--text-main); cursor:pointer; border-radius:4px;';
+        b.onmouseenter = () => b.style.background = 'var(--bg-input)'; b.onmouseleave = () => b.style.background = 'none';
+        b.onclick = () => { menu.remove(); _dsCreateInsert(pair[0], afterKey); };
+        menu.appendChild(b);
+    });
+    document.body.appendChild(menu);
+    setTimeout(() => { const close = (ev) => { if (!menu.contains(ev.target) && ev.target !== anchorBtn) { menu.remove(); document.removeEventListener('mousedown', close); } }; document.addEventListener('mousedown', close); }, 0);
+}
+function _dsInsertStrip(afterKey, tw) {
+    const strip = document.createElement('div');
+    strip.setAttribute('data-insstrip', '1');
+    strip.style.cssText = 'position:relative; height:16px; margin:-4px 0 6px; display:flex; align-items:center; justify-content:center; width:' + tw + 'px;';
+    const line = document.createElement('div'); line.style.cssText = 'position:absolute; left:6px; right:6px; top:50%; height:1px; background:var(--border-color); opacity:0.6;';
+    const btn = document.createElement('button'); btn.textContent = '+'; btn.title = 'Insert a page here';
+    btn.style.cssText = 'position:relative; z-index:1; width:22px; height:16px; line-height:13px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-input); color:var(--text-muted); cursor:pointer; font-size:0.78rem; padding:0;';
+    btn.onclick = (e) => { e.stopPropagation(); _dsOpenInsertMenu(btn, afterKey); };
+    strip.appendChild(line); strip.appendChild(btn);
+    return strip;
+}
+function _dsMoveInserted(pageObj, dir) {
+    const k = 'layout:' + pageObj.id;
+    const j = _dsPages.findIndex(d => _deckPageKey(d) === k);
+    if (j < 0) return;
+    if (dir === 'up') {
+        if (j <= 0) { pageObj.afterKey = '__start__'; }
+        else { const tgt = _dsPages[j - 2]; pageObj.afterKey = (j - 2 < 0) ? '__start__' : (_deckPageKey(tgt) || '__start__'); }
+    } else {
+        if (j >= _dsPages.length - 1) return;
+        const nk = _deckPageKey(_dsPages[j + 1]); if (!nk) return; pageObj.afterKey = nk;
+    }
+    delete pageObj.place;
+    if (typeof pushHistory === 'function') pushHistory();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    _dsRefresh();
+    const ni = _dsPages.findIndex(d => _deckPageKey(d) === k); if (ni >= 0) _dsSelectPage(ni);
+}
+function _dsDeleteInserted(pageObj) {
+    editorialContent.layoutPages = (editorialContent.layoutPages || []).filter(p => p !== pageObj);
+    if (typeof pushHistory === 'function') pushHistory();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    _dsRefresh();
+}
+function _dsRenderRail() {
+    const rail = document.getElementById('dsRail'); if (!rail) return;
+    rail.innerHTML = '';
+    if (_dsBuildError) { rail.innerHTML = '<p style="color:#c0392b; font-size:0.72rem; line-height:1.5;">Couldn\u2019t build the page list:<br><b>' + _esc(_dsBuildError) + '</b><br><br>Tell Claude this message.</p>'; return; }
+    if (!_dsPages.length) { rail.innerHTML = '<p style="color:var(--text-muted); font-size:0.74rem;">No pages selected. Turn sections on in the Project tab.</p>'; return; }
+
+    // Sticky filter bar — jump to any page by item code or section name. Lives
+    // inside the rail but pinned, and persists its value across re-renders via
+    // _dsRailFilter (typing only re-filters, never rebuilds, so focus is kept).
+    const railBg = getComputedStyle(rail).backgroundColor;
+    const bar = document.createElement('div');
+    bar.style.cssText = 'position:sticky; top:0; z-index:5; padding:0 0 8px; margin-bottom:2px; background:' + ((railBg && railBg !== 'rgba(0, 0, 0, 0)') ? railBg : 'var(--bg-input)') + ';';
+    const inp = document.createElement('input');
+    inp.type = 'text'; inp.placeholder = 'Filter pages by code or name\u2026'; inp.value = _dsRailFilter;
+    inp.style.cssText = 'width:100%; box-sizing:border-box; font-size:0.72rem; padding:5px 8px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px;';
+    inp.oninput = () => { _dsRailFilter = inp.value; _dsApplyRailFilter(); };
+    bar.appendChild(inp);
+    const count = document.createElement('div');
+    count.id = 'dsRailCount';
+    count.style.cssText = 'font-size:0.6rem; color:var(--text-muted); margin-top:4px;';
+    bar.appendChild(count);
+    rail.appendChild(bar);
+
+    const tw = 168, th = Math.round(tw * 540 / 936);
+    rail.appendChild(_dsInsertStrip('__start__', tw));
+    _dsPages.forEach((desc, i) => {
+        const matchText = ((i + 1) + ' ' + (desc.title || '') + ' ' + (desc.type || '') + ' ' + ((desc.members || []).map(m => (m && m.id) || '').join(' '))).toLowerCase();
+        const cell = document.createElement('div');
+        cell.setAttribute('data-railcell', '1');
+        cell.setAttribute('data-railtext', matchText);
+        cell.style.cssText = 'margin-bottom:4px; cursor:pointer;';
+        cell.onclick = () => _dsSelectPage(i);
+        const thumb = document.createElement('div');
+        thumb.style.cssText = 'position:relative; width:' + tw + 'px; height:' + th + 'px; background:#fff; border-radius:4px; overflow:hidden; border:2px solid ' + (i === _dsIndex ? '#6a6aff' : 'var(--border-color)') + ';';
+        try { thumb.innerHTML = _deckMockHTML(desc, tw, th); }
+        catch (e) { thumb.innerHTML = '<div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#bbb; font-size:10px;">' + _esc(desc.title || desc.type || 'Page') + '</div>'; }
+        const lab = document.createElement('div');
+        lab.style.cssText = 'display:flex; align-items:center; gap:4px; font-size:0.64rem; color:' + (i === _dsIndex ? '#6a6aff' : 'var(--text-muted)') + '; margin-top:3px;';
+        if (desc.kind === 'spec' && !desc._install) {
+            const pcs = ((desc.members && desc.members.length) ? desc.members : [desc.row]).filter(Boolean);
+            const sts = pcs.map(_pieceStatus);
+            const uniform = sts.length && sts.every(s => s === sts[0]);
+            const dot = document.createElement('span');
+            dot.title = uniform ? _statusLabel(sts[0]) : 'Mixed status';
+            dot.style.cssText = 'flex:0 0 auto; width:8px; height:8px; border-radius:50%; background:' + (uniform ? _statusColor(sts[0]) : 'transparent') + '; border:1px solid ' + (uniform ? _statusColor(sts[0]) : 'var(--text-muted)') + ';';
+            lab.appendChild(dot);
+        }
+        const txt = document.createElement('span');
+        txt.style.cssText = 'flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;';
+        txt.textContent = (i + 1) + '. ' + (desc.title || desc.type);
+        lab.appendChild(txt);
+        const isInserted = (desc.kind === 'layout' && desc.page && desc.page.afterKey);
+        if (isInserted) {
+            const ctlBtn = (sym, title, on) => { const b = document.createElement('button'); b.textContent = sym; b.title = title; b.style.cssText = 'width:18px; height:18px; line-height:1; padding:0; border:1px solid var(--border-color); background:var(--bg-input); color:var(--text-muted); border-radius:3px; cursor:pointer; font-size:0.66rem;'; b.onclick = (e) => { e.stopPropagation(); on(); }; return b; };
+            lab.appendChild(ctlBtn('\u25b2', 'Move up', () => _dsMoveInserted(desc.page, 'up')));
+            lab.appendChild(ctlBtn('\u25bc', 'Move down', () => _dsMoveInserted(desc.page, 'down')));
+            lab.appendChild(ctlBtn('\u2715', 'Delete page', () => _dsDeleteInserted(desc.page)));
+        }
+        cell.appendChild(thumb); cell.appendChild(lab); rail.appendChild(cell);
+        const ak = _deckPageKey(desc);
+        if (ak) rail.appendChild(_dsInsertStrip(ak, tw));
+    });
+    const noMatch = document.createElement('p');
+    noMatch.id = 'dsRailNoMatch';
+    noMatch.style.cssText = 'display:none; color:var(--text-muted); font-size:0.7rem; padding:6px 2px;';
+    noMatch.textContent = 'No pages match that filter.';
+    rail.appendChild(noMatch);
+    // Diagnostic: pieces exist but no spec page made it into the list — almost
+    // always the Spec Pages toggle is off (Project tab).
+    const _hasSpec = _dsPages.some(p => p.kind === 'spec');
+    const _hasRows = (dashProjectData || []).some(r => r && (r.id || r.artworkUrl));
+    if (_hasRows && !_hasSpec) {
+        const hint = document.createElement('p');
+        hint.style.cssText = 'color:#c08a2e; font-size:0.68rem; line-height:1.5; margin-top:8px; border-top:1px solid var(--border-color); padding-top:8px;';
+        hint.innerHTML = 'No spec pages showing. On the <b>Project</b> tab, make sure <b>Spec Pages</b> is ticked.';
+        rail.appendChild(hint);
+    }
+    _dsApplyRailFilter();
+}
+// Show/hide rail cells against the current filter without rebuilding the rail,
+// so the filter input keeps focus while typing. Updates the count readout.
+function _dsApplyRailFilter() {
+    const rail = document.getElementById('dsRail'); if (!rail) return;
+    const q = (_dsRailFilter || '').trim().toLowerCase();
+    const cells = rail.querySelectorAll('[data-railcell]');
+    let shown = 0;
+    cells.forEach(c => { const ok = !q || (c.getAttribute('data-railtext') || '').indexOf(q) >= 0; c.style.display = ok ? '' : 'none'; if (ok) shown++; });
+    rail.querySelectorAll('[data-insstrip]').forEach(s => { s.style.display = q ? 'none' : ''; });
+    const count = document.getElementById('dsRailCount');
+    if (count) count.textContent = q ? (shown + ' of ' + cells.length + ' pages') : (cells.length + (cells.length === 1 ? ' page' : ' pages'));
+    const nm = document.getElementById('dsRailNoMatch');
+    if (nm) nm.style.display = (q && shown === 0) ? 'block' : 'none';
+}
+let _dsSelKey = null, _dsSelIdx = -1;
+function _deckPageKey(desc) {
+    if (!desc) return null;
+    if (desc.kind === 'layout') return (desc.page && desc.page.id) ? ('layout:' + desc.page.id) : null;
+    if (desc.kind === 'fixed') return 'fixed:' + desc.fixed;
+    if (desc.kind === 'card') return 'card:' + desc.type;
+    if (desc.kind === 'spec') return desc._install ? (desc._groupKey != null ? ('spec:elevgrp:' + desc._groupKey) : ('spec:elev:' + desc._elevIdx)) : desc._manual ? ('spec:' + desc._ovKey) : ('spec:' + desc.title);
+    if (desc.kind === 'floorplan') return 'floorplan:' + desc.level;
+    return null;
+}
+function _dsAnnFam(font) { return font === 'display' ? "'Druk','Arial Narrow',Arial,sans-serif" : font === 'serif' ? "'Messina',Georgia,serif" : 'Arial,Helvetica,sans-serif'; }
+function _dsAnnList(key) { if (!editorialContent.annotations) editorialContent.annotations = {}; if (!editorialContent.annotations[key]) editorialContent.annotations[key] = []; return editorialContent.annotations[key]; }
+function _dsCurrentAnnot() { if (_dsSelKey == null || _dsSelIdx < 0) return null; const l = (editorialContent.annotations || {})[_dsSelKey]; return (l && l[_dsSelIdx]) ? l[_dsSelIdx] : null; }
+function _dsRenderAnnots(page, desc, w, hh) {
+    const key = _deckPageKey(desc); if (!key) return;
+    const list = (editorialContent.annotations && editorialContent.annotations[key]) || [];
+    list.forEach((a, i) => {
+        const sel = (key === _dsSelKey && i === _dsSelIdx);
+        if (a.type === 'mockup') {
+            const entry = _mockupGet(a.pieceId);
+            const aspect = (entry && entry.aspect) || a.aspect || 1.2;
+            const bw = (a.w || 0.3) * w, bh = bw * aspect;
+            const box = document.createElement('div');
+            box.style.cssText = 'position:absolute; left:' + ((a.x || 0) * w) + 'px; top:' + ((a.y || 0) * hh) + 'px; width:' + bw + 'px; height:' + bh + 'px; outline:' + (sel ? '2px solid #6a6aff' : '1px dashed rgba(106,106,255,0.45)') + '; cursor:move; box-sizing:border-box;';
+            if (entry && entry.url) {
+                const img = document.createElement('img'); img.src = entry.url; img.draggable = false;
+                img.style.cssText = 'width:100%; height:100%; object-fit:contain; display:block; pointer-events:none;';
+                box.appendChild(img);
+            } else {
+                box.style.background = '#f2f2f4';
+                box.innerHTML = '<div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#999; font-size:11px; text-align:center; padding:6px;">' + _esc(a.pieceId || 'piece') + '<br>rendering\u2026</div>';
+                if (a.pieceId) _mockupEnsure(a.pieceId).then(() => _dsRenderCenter());
+            }
+            if (a.showCode) {
+                const prow = _pieceById(a.pieceId) || {};
+                const code = (prow.imageCode || prow.artworkFile || a.pieceId || '') + '';
+                if (code) { const lab = document.createElement('div'); lab.textContent = code; lab.style.cssText = 'position:absolute; left:0; right:0; bottom:-15px; text-align:right; font-size:' + Math.max(7, 0.016 * hh) + 'px; color:#444; pointer-events:none; font-family:' + _dsAnnFam('display') + ';'; box.appendChild(lab); }
+            }
+            box.onmousedown = (e) => {
+                e.preventDefault();
+                _dsSelKey = key; _dsSelIdx = i; _dsSyncToolbar(); box.style.outline = '2px solid #6a6aff';
+                const sx = e.clientX, sy = e.clientY, ox = a.x || 0, oy = a.y || 0;
+                const mv = (ev) => { a.x = Math.max(0, Math.min(0.99, ox + (ev.clientX - sx) / w)); a.y = Math.max(0, Math.min(0.99, oy + (ev.clientY - sy) / hh)); box.style.left = (a.x * w) + 'px'; box.style.top = (a.y * hh) + 'px'; };
+                const up = () => { document.removeEventListener('mousemove', mv); document.removeEventListener('mouseup', up); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderRail(); };
+                document.addEventListener('mousemove', mv); document.addEventListener('mouseup', up);
+            };
+            box.ondblclick = (e) => { e.stopPropagation(); _dsSelKey = key; _dsSelIdx = i; _dsPickMockupPiece(a); };
+            if (sel) {
+                const handle = document.createElement('div');
+                handle.style.cssText = 'position:absolute; right:-6px; bottom:-6px; width:12px; height:12px; background:#6a6aff; border:2px solid #fff; border-radius:2px; cursor:nwse-resize;';
+                handle.onmousedown = (e) => {
+                    e.preventDefault(); e.stopPropagation();
+                    const sx = e.clientX, ow = a.w || 0.3;
+                    const mv = (ev) => { let nw = ow + (ev.clientX - sx) / w; nw = Math.max(0.05, Math.min(1, nw)); a.w = nw; const nbw = nw * w; box.style.width = nbw + 'px'; box.style.height = (nbw * aspect) + 'px'; };
+                    const up = () => { document.removeEventListener('mousemove', mv); document.removeEventListener('mouseup', up); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderRail(); };
+                    document.addEventListener('mousemove', mv); document.addEventListener('mouseup', up);
+                };
+                box.appendChild(handle);
+            }
+            page.appendChild(box);
+            return;
+        }
+        if (a.type === 'image') {
+            const bw = (a.w || 0.25) * w, bh = bw * (a.aspect || 0.75);
+            const box = document.createElement('div');
+            box.style.cssText = 'position:absolute; left:' + ((a.x || 0) * w) + 'px; top:' + ((a.y || 0) * hh) + 'px; width:' + bw + 'px; height:' + bh + 'px; outline:' + (sel ? '2px solid #6a6aff' : '1px dashed rgba(106,106,255,0.45)') + '; cursor:move; box-sizing:border-box; background:#fff;';
+            const img = document.createElement('img');
+            img.src = a.dataUrl || ''; img.draggable = false;
+            img.style.cssText = 'width:100%; height:100%; object-fit:contain; display:block; pointer-events:none;';
+            box.appendChild(img);
+            box.onmousedown = (e) => {
+                e.preventDefault();
+                _dsSelKey = key; _dsSelIdx = i; _dsSyncToolbar(); box.style.outline = '2px solid #6a6aff';
+                const sx = e.clientX, sy = e.clientY, ox = a.x || 0, oy = a.y || 0;
+                const mv = (ev) => { a.x = Math.max(0, Math.min(0.99, ox + (ev.clientX - sx) / w)); a.y = Math.max(0, Math.min(0.99, oy + (ev.clientY - sy) / hh)); box.style.left = (a.x * w) + 'px'; box.style.top = (a.y * hh) + 'px'; };
+                const up = () => { document.removeEventListener('mousemove', mv); document.removeEventListener('mouseup', up); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderRail(); };
+                document.addEventListener('mousemove', mv); document.addEventListener('mouseup', up);
+            };
+            const handle = document.createElement('div');
+            handle.style.cssText = 'position:absolute; right:-6px; bottom:-6px; width:12px; height:12px; background:#6a6aff; border:2px solid #fff; border-radius:2px; cursor:nwse-resize;' + (sel ? '' : ' display:none;');
+            handle.onmousedown = (e) => {
+                e.preventDefault(); e.stopPropagation();
+                _dsSelKey = key; _dsSelIdx = i; _dsSyncToolbar();
+                const sx = e.clientX, ow = a.w || 0.25;
+                const mv = (ev) => { let nw = ow + (ev.clientX - sx) / w; nw = Math.max(0.04, Math.min(1, nw)); a.w = nw; const nbw = nw * w; box.style.width = nbw + 'px'; box.style.height = (nbw * (a.aspect || 0.75)) + 'px'; };
+                const up = () => { document.removeEventListener('mousemove', mv); document.removeEventListener('mouseup', up); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderRail(); };
+                document.addEventListener('mousemove', mv); document.addEventListener('mouseup', up);
+            };
+            box.appendChild(handle);
+            page.appendChild(box);
+            return;
+        }
+        if (a.type === 'arrow' || a.type === 'elbow') {
+            const NS = 'http://www.w3.org/2000/svg';
+            const mk = (tag, attrs) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); return e; };
+            const svg = document.createElementNS(NS, 'svg');
+            svg.setAttribute('width', w); svg.setAttribute('height', hh);
+            svg.style.cssText = 'position:absolute; left:0; top:0; pointer-events:none; overflow:visible;';
+            const poly = mk('polyline', { fill: 'none', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' });
+            const headP = mk('polygon', {});
+            const hit = mk('polyline', { fill: 'none', stroke: 'transparent' });
+            hit.style.cssText = 'pointer-events:stroke; cursor:move;';
+            const hEnds = [mk('circle', { r: 6, fill: '#6a6aff', stroke: '#fff', 'stroke-width': 2 }), mk('circle', { r: 6, fill: '#6a6aff', stroke: '#fff', 'stroke-width': 2 })];
+            const redraw = () => {
+                const X1 = (a.x1 || 0) * w, Y1 = (a.y1 || 0) * hh, X2 = (a.x2 || 0) * w, Y2 = (a.y2 || 0) * hh;
+                const sw = Math.max(1, (a.weight || 2) * (w / 936)), col = a.color || '#c0392b';
+                const pts = (a.type === 'elbow') ? [[X1, Y1], [X2, Y1], [X2, Y2]] : [[X1, Y1], [X2, Y2]];
+                const ptStr = pts.map(p => p.join(',')).join(' ');
+                const end = pts[pts.length - 1], prev = pts[pts.length - 2];
+                const dx = end[0] - prev[0], dy = end[1] - prev[1], len = Math.max(1, Math.hypot(dx, dy));
+                const ux = dx / len, uy = dy / len, hsz = Math.max(6, sw * 3.4);
+                const bx = end[0] - ux * hsz, by = end[1] - uy * hsz, nx = -uy, ny = ux;
+                poly.setAttribute('points', ptStr); poly.setAttribute('stroke', col); poly.setAttribute('stroke-width', sw);
+                headP.setAttribute('points', [end[0] + ',' + end[1], (bx + nx * hsz * 0.55) + ',' + (by + ny * hsz * 0.55), (bx - nx * hsz * 0.55) + ',' + (by - ny * hsz * 0.55)].join(' ')); headP.setAttribute('fill', col);
+                hit.setAttribute('points', ptStr); hit.setAttribute('stroke-width', Math.max(14, sw + 12));
+                hEnds[0].setAttribute('cx', X1); hEnds[0].setAttribute('cy', Y1);
+                hEnds[1].setAttribute('cx', X2); hEnds[1].setAttribute('cy', Y2);
+            };
+            redraw();
+            svg.appendChild(poly); svg.appendChild(headP); svg.appendChild(hit);
+            hit.onmousedown = (e) => {
+                e.preventDefault();
+                _dsSelKey = key; _dsSelIdx = i; _dsSyncToolbar();
+                const sx = e.clientX, sy = e.clientY, ox1 = a.x1, oy1 = a.y1, ox2 = a.x2, oy2 = a.y2;
+                const mv = (ev) => { const ddx = (ev.clientX - sx) / w, ddy = (ev.clientY - sy) / hh; a.x1 = ox1 + ddx; a.y1 = oy1 + ddy; a.x2 = ox2 + ddx; a.y2 = oy2 + ddy; redraw(); };
+                const up = () => { document.removeEventListener('mousemove', mv); document.removeEventListener('mouseup', up); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderRail(); if (!sel) _dsRenderCenter(); };
+                document.addEventListener('mousemove', mv); document.addEventListener('mouseup', up);
+            };
+            if (sel) {
+                [['x1', 'y1', 0], ['x2', 'y2', 1]].forEach(ep => {
+                    const c = hEnds[ep[2]];
+                    c.style.cssText = 'pointer-events:all; cursor:crosshair;';
+                    c.onmousedown = (e) => {
+                        e.preventDefault(); e.stopPropagation();
+                        const mv = (ev) => { const rect = svg.getBoundingClientRect(); a[ep[0]] = Math.max(0, Math.min(1, (ev.clientX - rect.left) / w)); a[ep[1]] = Math.max(0, Math.min(1, (ev.clientY - rect.top) / hh)); redraw(); };
+                        const up = () => { document.removeEventListener('mousemove', mv); document.removeEventListener('mouseup', up); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderRail(); };
+                        document.addEventListener('mousemove', mv); document.addEventListener('mouseup', up);
+                    };
+                    svg.appendChild(c);
+                });
+            }
+            page.appendChild(svg);
+            return;
+        }
+        const el = document.createElement('div');
+        el.textContent = a.text || '';
+        el.spellcheck = false;
+        el.style.cssText = 'position:absolute; left:' + ((a.x || 0) * w) + 'px; top:' + ((a.y || 0) * hh) + 'px; width:' + ((a.w || 0.3) * w) + 'px; font-family:' + _dsAnnFam(a.font) + '; font-size:' + Math.max(7, (a.size || 0.03) * hh) + 'px; line-height:1.2; color:' + (a.color || '#222222') + '; font-weight:' + (a.bold ? 700 : 400) + '; font-style:' + (a.italic ? 'italic' : 'normal') + '; text-align:' + (a.align || 'left') + '; outline:' + (sel ? '2px solid #6a6aff' : '1px dashed rgba(106,106,255,0.45)') + '; cursor:move; padding:1px 2px; box-sizing:border-box; min-height:1em; white-space:pre-wrap; word-break:break-word;';
+        el.onmousedown = (e) => {
+            if (el.isContentEditable) return;
+            e.preventDefault();
+            _dsSelKey = key; _dsSelIdx = i; _dsSyncToolbar(); el.style.outline = '2px solid #6a6aff';
+            const sx = e.clientX, sy = e.clientY, ox = a.x || 0, oy = a.y || 0;
+            const mv = (ev) => { a.x = Math.max(0, Math.min(0.985, ox + (ev.clientX - sx) / w)); a.y = Math.max(0, Math.min(0.985, oy + (ev.clientY - sy) / hh)); el.style.left = (a.x * w) + 'px'; el.style.top = (a.y * hh) + 'px'; };
+            const up = () => { document.removeEventListener('mousemove', mv); document.removeEventListener('mouseup', up); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderRail(); };
+            document.addEventListener('mousemove', mv); document.addEventListener('mouseup', up);
+        };
+        el.ondblclick = (e) => { e.stopPropagation(); _dsSelKey = key; _dsSelIdx = i; _dsSyncToolbar(); el.contentEditable = 'true'; el.style.cursor = 'text'; el.style.outline = '2px solid #6a6aff'; el.focus(); };
+        el.onblur = () => { a.text = el.textContent; el.contentEditable = 'false'; el.style.cursor = 'move'; if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderRail(); };
+        if (sel) {
+            const th = document.createElement('div');
+            th.contentEditable = 'false';
+            th.style.cssText = 'position:absolute; right:-6px; bottom:-6px; width:12px; height:12px; background:#6a6aff; border:2px solid #fff; border-radius:2px; cursor:nwse-resize;';
+            th.onmousedown = (e) => {
+                e.preventDefault(); e.stopPropagation();
+                _dsSelKey = key; _dsSelIdx = i; _dsSyncToolbar();
+                const sx = e.clientX, ow = (a.w || 0.3), os = (a.size || 0.03);
+                const mv = (ev) => { let nw = ow + (ev.clientX - sx) / w; nw = Math.max(0.05, Math.min(1, nw)); const ratio = nw / ow; a.w = nw; a.size = Math.max(0.012, Math.min(0.22, os * ratio)); el.style.width = (nw * w) + 'px'; el.style.fontSize = Math.max(7, a.size * hh) + 'px'; };
+                const up = () => { document.removeEventListener('mousemove', mv); document.removeEventListener('mouseup', up); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsSyncToolbar(); _dsRenderRail(); };
+                document.addEventListener('mousemove', mv); document.addEventListener('mouseup', up);
+            };
+            el.appendChild(th);
+        }
+        page.appendChild(el);
+    });
+}
+function _dsSelectAnnot(key, idx) { _dsSelKey = key; _dsSelIdx = idx; _dsSyncToolbar(); _dsRenderCenter(); }
+function _dsSyncToolbar() {
+    const a = _dsCurrentAnnot();
+    const selected = !!a;
+    const isText = !!(a && a.type !== 'image' && a.type !== 'arrow' && a.type !== 'elbow' && a.type !== 'mockup');
+    const isArrow = !!(a && (a.type === 'arrow' || a.type === 'elbow'));
+    const isMock = !!(a && a.type === 'mockup');
+    const grp = document.getElementById('dsSelGroup');
+    if (grp) { grp.style.opacity = selected ? '1' : '0.4'; grp.style.pointerEvents = selected ? 'auto' : 'none'; }
+    const hint = document.getElementById('dsSelHint');
+    if (hint) hint.textContent = !selected ? 'Select a box to style it \u00b7 double-click to edit \u00b7 drag to move'
+        : isText ? 'Text box \u2014 double-click to type, drag corner to scale'
+        : isArrow ? 'Arrow \u2014 drag it to move, drag an end to re-aim'
+        : isMock ? 'Mockup \u2014 drag to move, corner to resize, double-click to swap artwork'
+        : 'Image \u2014 drag to move, corner to resize';
+    const setEnabled = (id, on) => { const e = document.getElementById(id); if (e) { e.style.opacity = on ? '1' : '0.35'; e.style.pointerEvents = on ? 'auto' : 'none'; } };
+    setEnabled('dsAnnBold', isText); setEnabled('dsAnnItalic', isText); setEnabled('dsAnnAlignBtn', isText);
+    setEnabled('dsAnnColor', isText || isArrow);
+    const col = document.getElementById('dsAnnColor'); if (col) col.value = (isText || isArrow) ? (a.color || (isArrow ? '#c0392b' : '#222222')) : '#222222';
+    const sz = document.getElementById('dsAnnSizeLbl'); if (sz) sz.textContent = isText ? Math.round((a.size || 0.03) * 540) : '\u2014';
+    const alb = document.getElementById('dsAnnAlignBtn'); if (alb) alb.textContent = isText ? ((a.align || 'left')[0].toUpperCase()) : 'L';
+    const b = document.getElementById('dsAnnBold'); if (b) { b.style.background = (isText && a.bold) ? '#6a6aff' : 'var(--bg-input)'; b.style.color = (isText && a.bold) ? '#fff' : 'var(--text-main)'; }
+    const it = document.getElementById('dsAnnItalic'); if (it) { it.style.background = (isText && a.italic) ? '#6a6aff' : 'var(--bg-input)'; it.style.color = (isText && a.italic) ? '#fff' : 'var(--text-main)'; }
+}
+function _dsAddImageBox() {
+    if (_dsActiveTab !== 'pages') return;
+    const desc = _dsPages[_dsIndex]; const key = _deckPageKey(desc);
+    if (!key) { showInfoModal('Not available here', 'This page type doesn\u2019t support overlay images.'); return; }
+    const fi = document.getElementById('dsAnnImageFile'); if (fi) fi.click();
+}
+function _dsImageFilePicked(input) {
+    const file = input && input.files && input.files[0];
+    if (file) _dsHandleImageFile(file);
+    if (input) input.value = '';
+}
+function _dsHandleImageFile(file) {
+    const desc = _dsPages[_dsIndex]; const key = _deckPageKey(desc); if (!key) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+        const im = new Image();
+        im.onload = () => {
+            // Downscale to keep project JSON small (max 1100px long edge). Keep PNG
+            // for transparency (logos), otherwise JPEG for size.
+            const maxEdge = 1100; let dw = im.naturalWidth || 1, dh = im.naturalHeight || 1;
+            const scale = Math.min(1, maxEdge / Math.max(dw, dh)); dw = Math.max(1, Math.round(dw * scale)); dh = Math.max(1, Math.round(dh * scale));
+            const cnv = document.createElement('canvas'); cnv.width = dw; cnv.height = dh;
+            const cx = cnv.getContext('2d'); cx.drawImage(im, 0, 0, dw, dh);
+            const isPng = /png/i.test(file.type);
+            let durl; try { durl = isPng ? cnv.toDataURL('image/png') : cnv.toDataURL('image/jpeg', 0.82); } catch (e) { durl = reader.result; }
+            const aspect = (im.naturalHeight || 1) / (im.naturalWidth || 1);
+            const list = _dsAnnList(key);
+            list.push({ type: 'image', dataUrl: durl, x: 0.12, y: 0.14, w: 0.28, aspect: aspect });
+            if (typeof pushHistory === 'function') pushHistory();
+            if (typeof scheduleAutosave === 'function') scheduleAutosave();
+            _dsSelectAnnot(key, list.length - 1);
+            _dsRenderRail();
+        };
+        im.onerror = () => showInfoModal('Couldn\u2019t load image', 'That file could not be read as an image.');
+        im.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+}
+function _dsAddArrow(kind) {
+    if (_dsActiveTab !== 'pages') return;
+    const desc = _dsPages[_dsIndex]; const key = _deckPageKey(desc);
+    if (!key) { showInfoModal('Not available here', 'This page type doesn\u2019t support arrows.'); return; }
+    const list = _dsAnnList(key);
+    list.push({ type: (kind === 'elbow' ? 'elbow' : 'arrow'), x1: 0.32, y1: 0.5, x2: 0.6, y2: 0.4, color: '#c0392b', weight: 2 });
+    if (typeof pushHistory === 'function') pushHistory();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    _dsSelectAnnot(key, list.length - 1);
+    _dsRenderRail();
+}
+function _dsAddTextBox() {
+    if (_dsActiveTab !== 'pages') return;
+    const desc = _dsPages[_dsIndex]; const key = _deckPageKey(desc);
+    if (!key) { showInfoModal('Not available here', 'This page type doesn\u2019t support overlay text boxes.'); return; }
+    const ps = editorialContent.paragraphStyle || {};
+    const list = _dsAnnList(key);
+    list.push({ x: 0.1, y: 0.12, w: 0.34, text: 'New text', font: ps.font || 'sans', size: (ps.size || 16) / 540, color: ps.color || '#222222', bold: false, italic: false, align: 'left' });
+    if (typeof pushHistory === 'function') pushHistory();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    _dsSelectAnnot(key, list.length - 1);
+    _dsRenderRail();
+}
+function _paragraphStyle() { const s = editorialContent.paragraphStyle || {}; return { font: s.font || 'sans', size: s.size || 16, color: s.color || '#222222' }; }
+// Gear popup: deck-wide default styles for paragraph (new text boxes) and the
+// image-code caption under mockups. Anchored under the gear button.
+// Shared popup builder for the toolbar's type/settings menus. Anchors under the
+// given button, toggles off if already open, closes on outside click.
+function _dsPopup(id, anchorId, build) {
+    const existing = document.getElementById(id);
+    if (existing) { existing.remove(); return; }
+    ['dsTypeMenu', 'dsSettingsMenu'].forEach(x => { const e = document.getElementById(x); if (e) e.remove(); });
+    const menu = document.createElement('div');
+    menu.id = id;
+    menu.style.cssText = 'position:fixed; z-index:100020; width:248px; background:var(--bg-panel,#1d1d20); border:1px solid var(--border-color); border-radius:8px; box-shadow:0 10px 34px rgba(0,0,0,0.45); padding:12px;';
+    build(menu);
+    const host = document.getElementById('deckStudioModal') || document.body;
+    host.appendChild(menu);
+    const a = document.getElementById(anchorId);
+    const r = a ? a.getBoundingClientRect() : { left: 20, bottom: 80 };
+    menu.style.top = (r.bottom + 6) + 'px';
+    let left = r.left; if (left + 248 > window.innerWidth - 8) left = window.innerWidth - 256;
+    menu.style.left = Math.max(8, left) + 'px';
+    setTimeout(() => {
+        const off = (e) => { if (!menu.contains(e.target) && !(a && a.contains(e.target))) { menu.remove(); document.removeEventListener('mousedown', off); } };
+        document.addEventListener('mousedown', off);
+    }, 0);
+}
+function _dsTypeSection(title, getStyle, apply) {
+    const fonts = [['display', 'Druk'], ['serif', 'Messina'], ['sans', 'Sans']];
+    const st = getStyle();
+    const wrap = document.createElement('div'); wrap.style.cssText = 'margin-bottom:12px;';
+    const h = document.createElement('div'); h.textContent = title; h.style.cssText = 'font-size:0.64rem; font-weight:700; color:var(--text-main); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.3px;'; wrap.appendChild(h);
+    const row = document.createElement('div'); row.style.cssText = 'display:flex; gap:6px; align-items:center;';
+    const fsel = document.createElement('select');
+    fsel.style.cssText = 'flex:1; min-width:70px; font-size:0.68rem; padding:5px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px;';
+    fonts.forEach(o => { const op = document.createElement('option'); op.value = o[0]; op.textContent = o[1]; if (st.font === o[0]) op.selected = true; fsel.appendChild(op); });
+    fsel.onchange = () => apply('font', fsel.value);
+    const sin = document.createElement('input'); sin.type = 'number'; sin.min = '6'; sin.max = '60'; sin.value = st.size;
+    sin.style.cssText = 'width:50px; font-size:0.68rem; padding:5px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px;';
+    sin.onchange = () => { let v = parseFloat(sin.value); if (isNaN(v)) v = 16; v = Math.max(6, Math.min(60, v)); apply('size', v); };
+    const cin = document.createElement('input'); cin.type = 'color'; cin.value = st.color || '#222222';
+    cin.style.cssText = 'width:34px; height:30px; padding:0; border:1px solid var(--border-color); border-radius:4px; background:var(--bg-input); cursor:pointer;';
+    cin.oninput = () => apply('color', cin.value);
+    row.appendChild(fsel); row.appendChild(sin); row.appendChild(cin); wrap.appendChild(row);
+    return wrap;
+}
+// Type menu (Aa): every text style in the deck in one place.
+function _dsOpenTypeMenu(ev) {
+    if (ev && ev.stopPropagation) ev.stopPropagation();
+    _dsPopup('dsTypeMenu', 'dsTypeBtn', (menu) => {
+        const save = (extra) => { if (typeof pushHistory === 'function') pushHistory(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); if (extra) extra(); _dsRenderRail(); _dsRenderCenter(); };
+        menu.appendChild(_dsTypeSection('Titles', _titleStyle, (k, v) => { editorialContent.titleStyle = Object.assign({}, _titleStyle(), { [k]: v }); save(); }));
+        menu.appendChild(_dsTypeSection('Paragraphs (new text)', _paragraphStyle, (k, v) => { editorialContent.paragraphStyle = Object.assign({}, _paragraphStyle(), { [k]: v }); if (typeof scheduleAutosave === 'function') scheduleAutosave(); }));
+        menu.appendChild(_dsTypeSection('Captions / image code', _specCodeStyle, (k, v) => { editorialContent.specCodeStyle = Object.assign({}, _specCodeStyle(), { [k]: v }); save(); }));
+        const note = document.createElement('p'); note.style.cssText = 'font-size:0.6rem; color:var(--text-muted); margin:0; line-height:1.45;';
+        note.textContent = 'Sets the deck-wide defaults. Paragraph style applies to new text boxes you add.';
+        menu.appendChild(note);
+    });
+}
+// Settings menu (gear): handy page-level actions.
+let _dsShowGuides = false;
+function _dsOpenSettingsMenu(ev) {
+    if (ev && ev.stopPropagation) ev.stopPropagation();
+    _dsPopup('dsSettingsMenu', 'dsStyleGear', (menu) => {
+        const item = (label, sub, onClick) => {
+            const b = document.createElement('button');
+            b.style.cssText = 'display:block; width:100%; text-align:left; background:transparent; border:none; border-radius:5px; padding:8px 8px; cursor:pointer; color:var(--text-main);';
+            b.onmouseenter = () => b.style.background = 'var(--bg-input)'; b.onmouseleave = () => b.style.background = 'transparent';
+            b.innerHTML = '<div style="font-size:0.74rem; font-weight:600;">' + label + '</div>' + (sub ? '<div style="font-size:0.6rem; color:var(--text-muted); margin-top:1px;">' + sub + '</div>' : '');
+            b.onclick = () => { onClick(); };
+            return b;
+        };
+        menu.appendChild(item(_dsShowGuides ? 'Hide alignment guides \u2713' : 'Show alignment guides', 'Page margins + center lines (preview only)', () => { _dsShowGuides = !_dsShowGuides; _dsOpenSettingsMenu(); _dsRenderCenter(); }));
+        const desc = _dsPages[_dsIndex]; const key = desc ? _deckPageKey(desc) : '';
+        const annCount = (key && editorialContent.annotations && editorialContent.annotations[key]) ? editorialContent.annotations[key].length : 0;
+        menu.appendChild(item('Clear text & images on this page' + (annCount ? ' (' + annCount + ')' : ''), 'Removes overlays you added to this page', () => {
+            if (!key || !annCount) { const m = document.getElementById('dsSettingsMenu'); if (m) m.remove(); return; }
+            if (editorialContent.annotations) editorialContent.annotations[key] = [];
+            _dsSelKey = null; _dsSelIdx = -1;
+            if (typeof pushHistory === 'function') pushHistory(); if (typeof scheduleAutosave === 'function') scheduleAutosave();
+            const m = document.getElementById('dsSettingsMenu'); if (m) m.remove();
+            _dsSyncToolbar(); _dsRenderCenter(); _dsRenderRail();
+        }));
+        menu.appendChild(item('Fit page to window', 'Re-center and fit the preview', () => { const m = document.getElementById('dsSettingsMenu'); if (m) m.remove(); _dsRenderCenter(); }));
+        if (desc && desc.kind === 'spec' && _dsBuilt[key]) {
+            menu.appendChild(item('Revert to live preview', 'Drop the built render for this page', () => { const m = document.getElementById('dsSettingsMenu'); if (m) m.remove(); _dsClearBuilt(key); }));
+        }
+    });
+}
+function _dsAnnCycleAlign() { const a = _dsCurrentAnnot(); if (!a || a.type === 'image') return; const order = ['left', 'center', 'right']; const i = order.indexOf(a.align || 'left'); a.align = order[(i + 1) % 3]; if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsSyncToolbar(); _dsRenderCenter(); _dsRenderRail(); }
+function _dsAnnSet(prop, val) { const a = _dsCurrentAnnot(); if (!a) return; a[prop] = val; if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsSyncToolbar(); _dsRenderCenter(); _dsRenderRail(); }
+function _dsAnnBump(d) { const a = _dsCurrentAnnot(); if (!a) return; a.size = Math.max(0.012, Math.min(0.2, (a.size || 0.03) + d * 0.004)); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsSyncToolbar(); _dsRenderCenter(); _dsRenderRail(); }
+function _dsAnnToggle(prop) { const a = _dsCurrentAnnot(); if (!a) return; a[prop] = !a[prop]; if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsSyncToolbar(); _dsRenderCenter(); _dsRenderRail(); }
+function _dsDeleteAnnot() { if (_dsSelKey == null || _dsSelIdx < 0) return; const l = (editorialContent.annotations || {})[_dsSelKey]; if (l) l.splice(_dsSelIdx, 1); _dsSelKey = null; _dsSelIdx = -1; if (typeof pushHistory === 'function') pushHistory(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsSyncToolbar(); _dsRenderCenter(); _dsRenderRail(); }
+// Bake the real framed mockup / elevation for the studio center preview, so a
+// spec page shows actual art instead of placeholder boxes. Async + token-guarded
+// so switching pages mid-bake doesn't paint stale images.
+let _dsBakeToken = 0;
+const _mockupCache = {};
+function _pieceById(id) { return (typeof dashProjectData !== 'undefined' ? dashProjectData : []).find(r => r && r.id === id) || null; }
+function _mockupCacheKey(id) { return (id || '') + '|' + (_isWireframe() ? 'wf' : 'art'); }
+function _mockupGet(id) { return _mockupCache[_mockupCacheKey(id)] || null; }
+async function _bakeMockup(row) {
+    if (!row) return null;
+    const dInches = _frameDataInInches(Object.assign({}, row, { extW: row.extW, extH: row.extH }), dashUnit);
+    let artworkImg = null; if (row.artworkUrl) { try { artworkImg = await _loadImg(row.artworkUrl); } catch (e) {} }
+    const swatch = (row.fType === 'image' && row.swatchDataUrl) ? await _loadImg(row.swatchDataUrl) : null;
+    const out = renderFrameToCanvas(dInches, swatch, { wireframe: _isWireframe(), dpi: 110, pad: 0, artworkImg, artCrop: { zoom: row.artZoom, panX: row.artPanX, panY: row.artPanY } });
+    const cnv = out.canvas; const aspect = cnv.height / Math.max(1, cnv.width);
+    let url; try { const flat = document.createElement('canvas'); flat.width = cnv.width; flat.height = cnv.height; const fx = flat.getContext('2d'); fx.fillStyle = '#fff'; fx.fillRect(0, 0, flat.width, flat.height); fx.drawImage(cnv, 0, 0); url = flat.toDataURL('image/jpeg', 0.85); } catch (e) { url = cnv.toDataURL('image/jpeg', 0.85); }
+    return { url: url, aspect: aspect };
+}
+async function _mockupEnsure(id) {
+    const k = _mockupCacheKey(id);
+    if (_mockupCache[k] && _mockupCache[k].url) return _mockupCache[k];
+    if (_mockupCache[k] && _mockupCache[k]._pending) return _mockupCache[k]._pending;
+    const row = _pieceById(id); if (!row) return null;
+    const p = _bakeMockup(row).then(res => { if (res) _mockupCache[k] = res; return res; }).catch(() => null);
+    _mockupCache[k] = { _pending: p };
+    return p;
+}
+async function _bakeFrameDataUrl(r) {
+    const dInches = _frameDataInInches(Object.assign({}, r, { extW: r.extW, extH: r.extH }), dashUnit);
+    let artworkImg = null; if (r.artworkUrl) { try { artworkImg = await _loadImg(r.artworkUrl); } catch (e) {} }
+    const swatch = (r.fType === 'image' && r.swatchDataUrl) ? await _loadImg(r.swatchDataUrl) : null;
+    const out = renderFrameToCanvas(dInches, swatch, { wireframe: _isWireframe(), dpi: 110, pad: 0, artworkImg, artCrop: { zoom: r.artZoom, panX: r.artPanX, panY: r.artPanY } });
+    const cnv = out.canvas;
+    try { const flat = document.createElement('canvas'); flat.width = cnv.width; flat.height = cnv.height; const fx = flat.getContext('2d'); fx.fillStyle = '#fff'; fx.fillRect(0, 0, flat.width, flat.height); fx.drawImage(cnv, 0, 0); return flat.toDataURL('image/jpeg', 0.85); }
+    catch (e) { return cnv.toDataURL('image/jpeg', 0.85); }
+}
+async function _bakeElevationDataUrl(rowOrElev) {
+    let elev = null, featuredId = null;
+    if (rowOrElev && rowOrElev.frames) { elev = rowOrElev; featuredId = null; }
+    else { const r = rowOrElev || {}; for (const e of elevations) { if (e.frames && e.frames.some(fr => fr.id === r.id)) { elev = e; break; } } featuredId = r.id || null; }
+    if (!elev) return null;
+    const er = await renderElevationToCanvas(elev, featuredId, { wireframe: _isWireframe(), dpi: 30 });
+    if (!er || !er.canvas) return null;
+    try { const flat = document.createElement('canvas'); flat.width = er.canvas.width; flat.height = er.canvas.height; const ex = flat.getContext('2d'); ex.fillStyle = '#fff'; ex.fillRect(0, 0, flat.width, flat.height); ex.drawImage(er.canvas, 0, 0); return flat.toDataURL('image/jpeg', 0.82); }
+    catch (e) { return er.canvas.toDataURL('image/jpeg', 0.82); }
+}
+async function _dsBakeSpecImages(page, desc, token) {
+    if (!page || desc.kind !== 'spec') return;
+    const boxes = page.querySelectorAll('[data-bake]');
+    for (const box of boxes) {
+        if (token !== _dsBakeToken) return;
+        const kind = box.getAttribute('data-bake');
+        let row = desc.row;
+        const mi = box.getAttribute('data-member-idx');
+        if (mi != null && desc.members && desc.members[+mi]) row = desc.members[+mi];
+        if (!row) continue;
+        try {
+            const url = (kind === 'elevation') ? await _bakeElevationDataUrl(desc._install && desc.elev ? desc.elev : row) : await _bakeFrameDataUrl(row);
+            if (url && token === _dsBakeToken && box.isConnected) {
+                box.style.background = '#fff';
+                box.style.color = 'transparent';
+                box.innerHTML = '<img src="' + url + '" style="max-width:100%; max-height:100%; width:auto; height:auto; display:block; margin:auto;">';
+            } else if (!url && kind === 'elevation' && box.isConnected) {
+                box.style.display = 'none';   // no elevation for this piece — drop the placeholder
+            }
+        } catch (e) {}
+    }
+}
+function _dsAddGuides(page, w, hh) {
+    if (!_dsShowGuides) return;
+    const mx = Math.round(w * 40 / 936), my = Math.round(hh * 40 / 540);
+    const g = document.createElement('div');
+    g.style.cssText = 'position:absolute; left:' + mx + 'px; top:' + my + 'px; right:' + mx + 'px; bottom:' + my + 'px; border:1px dashed rgba(106,106,255,0.5); pointer-events:none;';
+    const vx = document.createElement('div'); vx.style.cssText = 'position:absolute; left:50%; top:0; bottom:0; width:1px; background:rgba(106,106,255,0.25); pointer-events:none;';
+    const hz = document.createElement('div'); hz.style.cssText = 'position:absolute; top:50%; left:0; right:0; height:1px; background:rgba(106,106,255,0.25); pointer-events:none;';
+    page.appendChild(g); page.appendChild(vx); page.appendChild(hz);
+}
+function _dsAddStamp(page, w, hh, desc) {
+    if (!desc || desc.kind !== 'spec') return;
+    const st = _approvalOf(desc._ovKey || (desc.row && desc.row.id) || '');
+    if (!st) return;
+    const s = document.createElement('div');
+    const approved = st === 'approved';
+    s.textContent = approved ? 'APPROVED' : 'PENDING APPROVAL';
+    const col = approved ? '#1a7f37' : '#c0392b';
+    s.style.cssText = 'position:absolute; top:' + Math.round(hh * 0.085) + 'px; right:' + Math.round(w * 0.04) + "px; font-family:'Druk','Arial Narrow',Arial,sans-serif; font-weight:700; font-size:" + Math.max(7, Math.round(hh * 0.026)) + 'px; letter-spacing:0.04em; color:' + col + '; border:1.5px solid ' + col + '; background:#fff; padding:2px 7px; border-radius:3px;';
+    page.appendChild(s);
+}
+// ── Accurate "Build" preview ──────────────────────────────────────────────
+// A recording shim that implements the slice of the jsPDF API the spec
+// renderers use, capturing an ordered display list. We then preload images and
+// replay onto a canvas — so the preview is drawn by the SAME renderers as the
+// PDF and can't drift from the export.
+function CanvasPdfRec(PW, PH) {
+    this.PW = PW; this.PH = PH; this.ops = []; this.imgs = {};
+    this._fn = 'helvetica'; this._fs = 'normal'; this._sz = 12;
+    this._tc = '#000'; this._fc = '#000'; this._dc = '#000';
+    this._lw = 1; this._dash = []; this._cap = 'butt'; this._join = 'miter';
+    this._mc = document.createElement('canvas').getContext('2d');
+}
+CanvasPdfRec.prototype._fam = function (n) { return /Druk/i.test(n) ? 'Druk' : /Messina/i.test(n) ? 'Messina' : 'Arial,Helvetica,sans-serif'; };
+CanvasPdfRec.prototype._cssFont = function () { const bold = (this._fs.indexOf('bold') >= 0) || /Druk/i.test(this._fn); const ital = this._fs.indexOf('italic') >= 0; return (ital ? 'italic ' : '') + (bold ? '700' : '400') + ' ' + this._sz + 'px ' + this._fam(this._fn); };
+CanvasPdfRec.prototype.setFont = function (n, s) { this._fn = n || 'helvetica'; this._fs = s || 'normal'; };
+CanvasPdfRec.prototype.setFontSize = function (p) { this._sz = p; };
+CanvasPdfRec.prototype.setTextColor = function (r, g, b) { this._tc = 'rgb(' + [r, g, b].join(',') + ')'; };
+CanvasPdfRec.prototype.setFillColor = function (r, g, b) { this._fc = 'rgb(' + [r, g, b].join(',') + ')'; };
+CanvasPdfRec.prototype.setDrawColor = function (r, g, b) { this._dc = 'rgb(' + [r, g, b].join(',') + ')'; };
+CanvasPdfRec.prototype.setLineWidth = function (w) { this._lw = w; };
+CanvasPdfRec.prototype.setLineDashPattern = function (a) { this._dash = a || []; };
+CanvasPdfRec.prototype.setLineCap = function (c) { this._cap = (c === 1 || c === 'round') ? 'round' : (c === 2 || c === 'square') ? 'square' : 'butt'; };
+CanvasPdfRec.prototype.setLineJoin = function (j) { this._join = (j === 1 || j === 'round') ? 'round' : (j === 2 || j === 'bevel') ? 'bevel' : 'miter'; };
+CanvasPdfRec.prototype.addPage = function () {}; CanvasPdfRec.prototype.setPage = function () {};
+CanvasPdfRec.prototype.getTextWidth = function (s) { this._mc.font = this._cssFont(); return this._mc.measureText((s || '') + '').width; };
+CanvasPdfRec.prototype.splitTextToSize = function (s, w) { this._mc.font = this._cssFont(); const words = ((s || '') + '').split(/\s+/); const out = []; let cur = ''; for (const wd of words) { const t = cur ? cur + ' ' + wd : wd; if (this._mc.measureText(t).width > w && cur) { out.push(cur); cur = wd; } else cur = t; } if (cur) out.push(cur); return out.length ? out : ['']; };
+CanvasPdfRec.prototype._snap = function () { return { font: this._cssFont(), tc: this._tc, fc: this._fc, dc: this._dc, lw: this._lw, dash: this._dash.slice(), cap: this._cap, join: this._join, sz: this._sz }; };
+CanvasPdfRec.prototype.text = function (str, x, y, opts) { this.ops.push({ t: 'text', str: str, x: x, y: y, opts: opts || {}, st: this._snap() }); };
+CanvasPdfRec.prototype.line = function (x1, y1, x2, y2) { this.ops.push({ t: 'line', a: [x1, y1, x2, y2], st: this._snap() }); };
+CanvasPdfRec.prototype.rect = function (x, y, w, h, style) { this.ops.push({ t: 'rect', a: [x, y, w, h], style: style, st: this._snap() }); };
+CanvasPdfRec.prototype.roundedRect = function (x, y, w, h, rx, ry, style) { this.ops.push({ t: 'rrect', a: [x, y, w, h, rx, ry], style: style, st: this._snap() }); };
+CanvasPdfRec.prototype.circle = function (x, y, r, style) { this.ops.push({ t: 'circle', a: [x, y, r], style: style, st: this._snap() }); };
+CanvasPdfRec.prototype.triangle = function (x1, y1, x2, y2, x3, y3, style) { this.ops.push({ t: 'tri', a: [x1, y1, x2, y2, x3, y3], style: style, st: this._snap() }); };
+CanvasPdfRec.prototype.addImage = function (src, fmt, x, y, w, h) { this.imgs[src] = true; this.ops.push({ t: 'img', src: src, a: [x, y, w, h] }); };
+CanvasPdfRec.prototype.render = async function (scale, onProgress) {
+    const s = scale || 2, cv = document.createElement('canvas');
+    cv.width = Math.round(this.PW * s); cv.height = Math.round(this.PH * s);
+    const x = cv.getContext('2d'); x.scale(s, s); x.fillStyle = '#fff'; x.fillRect(0, 0, this.PW, this.PH);
+    const srcs = Object.keys(this.imgs), loaded = {};
+    for (let i = 0; i < srcs.length; i++) { try { loaded[srcs[i]] = await _loadImg(srcs[i]); } catch (e) {} if (onProgress) onProgress(45 + Math.round(45 * (i + 1) / Math.max(1, srcs.length))); }
+    const fillStroke = (style, fc, dc) => { const f = /F/.test(style || ''); const st = !style || /S|D/.test(style || ''); if (f) { x.fillStyle = fc; x.fill(); } if (st) { x.strokeStyle = dc; x.stroke(); } };
+    for (const op of this.ops) {
+        const st = op.st || {};
+        x.setLineDash(st.dash || []); x.lineWidth = st.lw || 1; x.lineCap = st.cap || 'butt'; x.lineJoin = st.join || 'miter';
+        if (op.t === 'text') {
+            x.font = st.font; x.fillStyle = st.tc; x.textBaseline = 'alphabetic';
+            x.textAlign = op.opts.align === 'center' ? 'center' : op.opts.align === 'right' ? 'right' : 'left';
+            let lines = Array.isArray(op.str) ? op.str : (op.opts.maxWidth ? this.splitTextToSize(op.str, op.opts.maxWidth) : [op.str]);
+            const lh = (st.sz || 12) * 1.15;
+            lines.forEach((ln, i) => x.fillText((ln || '') + '', op.x, op.y + i * lh));
+        } else if (op.t === 'line') { x.strokeStyle = st.dc; x.beginPath(); x.moveTo(op.a[0], op.a[1]); x.lineTo(op.a[2], op.a[3]); x.stroke(); }
+        else if (op.t === 'rect') { x.beginPath(); x.rect(op.a[0], op.a[1], op.a[2], op.a[3]); fillStroke(op.style, st.fc, st.dc); }
+        else if (op.t === 'rrect') { const [bx, by, bw, bh, rx] = op.a; const rr = Math.min(rx, bw / 2, bh / 2); x.beginPath(); x.moveTo(bx + rr, by); x.arcTo(bx + bw, by, bx + bw, by + bh, rr); x.arcTo(bx + bw, by + bh, bx, by + bh, rr); x.arcTo(bx, by + bh, bx, by, rr); x.arcTo(bx, by, bx + bw, by, rr); x.closePath(); fillStroke(op.style, st.fc, st.dc); }
+        else if (op.t === 'circle') { x.beginPath(); x.arc(op.a[0], op.a[1], op.a[2], 0, Math.PI * 2); fillStroke(op.style, st.fc, st.dc); }
+        else if (op.t === 'tri') { x.beginPath(); x.moveTo(op.a[0], op.a[1]); x.lineTo(op.a[2], op.a[3]); x.lineTo(op.a[4], op.a[5]); x.closePath(); fillStroke(op.style, st.fc, st.dc); }
+        else if (op.t === 'img') { const im = loaded[op.src]; if (im) { try { x.drawImage(im, op.a[0], op.a[1], op.a[2], op.a[3]); } catch (e) {} } }
+    }
+    x.setLineDash([]);
+    if (onProgress) onProgress(100);
+    return cv;
+};
+let _dsBuilt = {};
+async function renderSpecPageCanvas(desc, onProgress) {
+    const PW = 936, PH = 540, M = 40, r = desc.row; if (!r) return null;
+    const tpl = desc._specTpl || _specTplResolve(desc._ovKey || (r.id || ''));
+    const T = SPEC_TEMPLATES[tpl] || {};
+    if (T.freeform) return null;
+    const rec = new CanvasPdfRec(PW, PH);
+    if (onProgress) onProgress(12);
+    if (desc._install) {
+        await _drawInstallGuidePage(rec, {}, 1, {}, desc.elev, { PW: PW, PH: PH, M: M });
+    } else if (desc.members && desc.members.length > 1 && T.group) {
+        await _drawSpecSetPage(rec, {}, 1, {}, { rep: r, members: desc.members, key: desc._ovKey || r.id }, tpl, { PW: PW, PH: PH, M: M });
+    } else if (tpl === 'installGuide') {
+        await _drawInstallGuidePage(rec, {}, 1, {}, r, { PW: PW, PH: PH, M: M });
+    } else if (tpl !== 'classic' && !T.legacy && !T.custom && !T.group) {
+        await _drawSpecPageTemplate(rec, {}, 1, {}, r, tpl, { PW: PW, PH: PH, M: M });
+    } else {
+        return null;   // classic & unsupported → keep the live preview
+    }
+    if (onProgress) onProgress(40);
+    return await rec.render(2, onProgress);
+}
+async function _dsBuildPage(silent) {
+    const desc = _dsPages[_dsIndex];
+    if (!desc || desc.kind !== 'spec') { if (!silent) showInfoModal('Build preview', 'Select a spec page, then Preview to render an exact preview of how it will export.'); return; }
+    const _bt = desc._specTpl || _specTplResolve(desc._ovKey || (desc.row && desc.row.id) || '');
+    if (SPEC_TEMPLATES[_bt] && SPEC_TEMPLATES[_bt].freeform) { if (!silent) showInfoModal('Custom layout', 'Custom pages already show an exact live preview \u2014 what you place is what exports.'); return; }
+    const key = _deckPageKey(desc);
+    const c = document.getElementById('dsCenter');
+    let ov = null;
+    if (!silent) {
+        ov = document.createElement('div');
+        ov.style.cssText = 'position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(15,15,18,0.55); z-index:50; color:#fff; font-size:0.78rem; gap:10px;';
+        ov.innerHTML = '<div>Building accurate page…</div><div style="width:210px; height:8px; background:rgba(255,255,255,0.18); border-radius:4px; overflow:hidden;"><div id="dsBuildBar" style="height:100%; width:0%; background:#6a6aff;"></div></div><div id="dsBuildPct" style="font-variant-numeric:tabular-nums;">0%</div>';
+        if (c) { c.style.position = 'relative'; c.appendChild(ov); }
+    }
+    const setPct = (p) => { if (silent) return; const b = document.getElementById('dsBuildBar'); const t = document.getElementById('dsBuildPct'); if (b) b.style.width = Math.max(0, Math.min(100, p)) + '%'; if (t) t.textContent = Math.round(Math.max(0, Math.min(100, p))) + '%'; };
+    setPct(5);
+    let ok = false;
+    try {
+        const cv = await renderSpecPageCanvas(desc, setPct);
+        if (cv) { _dsBuilt[key] = cv.toDataURL('image/jpeg', 0.92); ok = true; }
+    } catch (e) { console.error('build failed', e); }
+    if (ov && ov.parentElement) ov.parentElement.removeChild(ov);
+    if (!ok && !silent) showInfoModal('Live preview', 'Accurate build currently covers Frame right/left, Centered hero, Set and Install guide. Classic still uses the live preview, which already bakes in real artwork.');
+    _dsPreviewQueued = false;
+    _dsRenderCenter();
+    _dsSyncBuildBtn();
+}
+function _dsClearBuilt(key, queue) { if (key && _dsBuilt[key]) { const desc = _dsPages[_dsIndex]; const isCur = desc && _deckPageKey(desc) === key; delete _dsBuilt[key]; _dsRenderCenter(); _dsSyncBuildBtn(); if (queue && isCur) _dsQueuePreview(); } }
+function _dsManualSection(desc) {
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'margin-top:12px; padding-top:10px; border-top:1px dashed var(--border-color);';
+    const gs = _manualGroups();
+    const curId = (desc.row && desc.row.id) || '';
+    const group = desc._manual ? gs.find(g => ('mg:' + g.id) === desc._ovKey) : _manualGroupOf(curId);
+    const commit = () => { if (typeof pushHistory === 'function') pushHistory(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsClearBuiltAll(); _dsRefresh(); };
+
+    const title = document.createElement('div');
+    title.style.cssText = 'font-size:0.72rem; font-weight:700; color:var(--text-main); margin-bottom:6px;';
+    title.textContent = group ? 'Combined onto one page' : 'Combine onto one page';
+    wrap.appendChild(title);
+
+    if (group) {
+        const chips = document.createElement('div'); chips.style.cssText = 'display:flex; flex-wrap:wrap; gap:4px; margin-bottom:8px;';
+        group.members.forEach(mid => {
+            const chip = document.createElement('span');
+            chip.style.cssText = 'display:inline-flex; align-items:center; gap:5px; font-size:0.62rem; background:var(--bg-input); border:1px solid var(--border-color); border-radius:11px; padding:2px 4px 2px 8px;';
+            chip.appendChild(document.createTextNode(mid));
+            const x = document.createElement('button'); x.textContent = '×'; x.style.cssText = 'border:none; background:none; cursor:pointer; color:var(--text-muted); font-size:0.85rem; line-height:1; padding:0 2px;';
+            x.onclick = () => { group.members = group.members.filter(m => m !== mid); if (group.members.length < 2) editorialContent.manualGroups = gs.filter(g => g !== group); commit(); };
+            chip.appendChild(x); chips.appendChild(chip);
+        });
+        wrap.appendChild(chips);
+        const lr = document.createElement('div'); lr.style.cssText = 'display:flex; gap:6px; margin-bottom:8px;';
+        const mkL = (label, val) => { const b = document.createElement('button'); const active = (group.layout || 'setRow') === val; b.textContent = label; b.style.cssText = 'flex:1; font-size:0.62rem; padding:5px 3px; border-radius:4px; cursor:pointer; border:1px solid ' + (active ? '#6a6aff' : 'var(--border-color)') + '; background:' + (active ? '#6a6aff' : 'transparent') + '; color:' + (active ? '#fff' : 'var(--text-main)') + ';'; if (!active) b.onclick = () => { group.layout = val; commit(); }; return b; };
+        lr.appendChild(mkL('Side by side', 'setRow')); lr.appendChild(mkL('Stacked', 'setRight'));
+        wrap.appendChild(lr);
+    }
+
+    const avail = (typeof dashProjectData !== 'undefined' ? dashProjectData : []).map(x => x && x.id).filter(id => id && !_manualGroupOf(id) && id !== curId);
+    const row = document.createElement('div'); row.style.cssText = 'display:flex; gap:6px;';
+    const sel = document.createElement('select');
+    sel.style.cssText = 'flex:1; font-size:0.64rem; padding:5px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px;';
+    const ph = document.createElement('option'); ph.value = ''; ph.textContent = avail.length ? (group ? 'Add another piece…' : 'Pair with a piece…') : 'No other pieces available'; sel.appendChild(ph);
+    avail.forEach(id => { const o = document.createElement('option'); o.value = id; o.textContent = id; sel.appendChild(o); });
+    const add = document.createElement('button'); add.textContent = 'Add'; add.disabled = !avail.length;
+    add.style.cssText = 'font-size:0.64rem; font-weight:700; padding:5px 14px; border-radius:4px; cursor:pointer; border:1px solid #6a6aff; background:#6a6aff; color:#fff;' + (avail.length ? '' : ' opacity:0.4; cursor:default;');
+    add.onclick = () => { const id = sel.value; if (!id) return; if (group) group.members.push(id); else gs.push({ id: 'mg_' + Date.now().toString(36), members: [curId, id], layout: 'setRow' }); commit(); };
+    row.appendChild(sel); row.appendChild(add); wrap.appendChild(row);
+
+    if (group) {
+        const ung = document.createElement('button'); ung.textContent = 'Ungroup';
+        ung.style.cssText = 'width:100%; margin-top:8px; font-size:0.62rem; padding:6px; border-radius:4px; cursor:pointer; border:1px solid var(--border-color); background:transparent; color:var(--text-muted);';
+        ung.onclick = () => { editorialContent.manualGroups = gs.filter(g => g !== group); commit(); };
+        wrap.appendChild(ung);
+    } else {
+        const hint = document.createElement('p');
+        hint.style.cssText = 'font-size:0.6rem; color:var(--text-muted); margin:6px 0 0; line-height:1.4;';
+        hint.textContent = 'Pick another piece to place it on this page as a diptych/triptych — regardless of how they\u2019re coded.';
+        wrap.appendChild(hint);
+    }
+    return wrap;
+}
+function _dsAddMockup(pieceId) {
+    const desc = _dsPages[_dsIndex]; if (!desc) return;
+    const key = _deckPageKey(desc); if (!key) return;
+    const m = editorialContent.annotations || (editorialContent.annotations = {});
+    const list = m[key] || (m[key] = []);
+    const nMock = list.filter(a => a.type === 'mockup').length;
+    list.push({ type: 'mockup', pieceId: pieceId, x: Math.min(0.7, 0.1 + nMock * 0.05), y: 0.2, w: 0.3, showCode: true });
+    if (typeof pushHistory === 'function') pushHistory(); if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    if (pieceId) _mockupEnsure(pieceId).then(() => { _dsRenderCenter(); _dsRenderRail(); });
+    _dsRenderCenter(); _dsRenderRail(); _dsRenderTools();
+}
+function _dsSeedCustom(desc) {
+    const key = _deckPageKey(desc); if (!key) return;
+    const m = editorialContent.annotations || (editorialContent.annotations = {});
+    const list = m[key] || (m[key] = []);
+    if (list.some(a => a.type === 'mockup')) return;
+    const ids = ((desc.members && desc.members.length) ? desc.members.map(x => x && x.id) : [desc.row && desc.row.id]).filter(Boolean);
+    const n = Math.max(1, ids.length);
+    ids.forEach((id, i) => { list.push({ type: 'mockup', pieceId: id, x: 0.06 + i * (0.9 / n), y: 0.2, w: Math.min(0.42, 0.84 / n), showCode: true }); if (id) _mockupEnsure(id); });
+}
+function _dsStatusSection(desc) {
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'margin-top:12px; padding-top:10px; border-top:1px dashed var(--border-color);';
+    const title = document.createElement('div'); title.style.cssText = 'font-size:0.72rem; font-weight:700; color:var(--text-main); margin-bottom:6px;'; title.textContent = 'Artwork status'; wrap.appendChild(title);
+    const pieces = (desc.members && desc.members.length) ? desc.members.filter(Boolean) : (desc.row ? [desc.row] : []);
+    if (!pieces.length) { const n = document.createElement('div'); n.style.cssText = 'font-size:0.62rem; color:var(--text-muted);'; n.textContent = 'No piece on this page.'; wrap.appendChild(n); return wrap; }
+    const same = pieces.every(p => _pieceStatus(p) === _pieceStatus(pieces[0]));
+    const cur = same ? _pieceStatus(pieces[0]) : null;
+    const grid = document.createElement('div'); grid.style.cssText = 'display:grid; grid-template-columns:1fr 1fr; gap:6px;';
+    STATUS_ORDER.forEach(s => {
+        const d = STATUS_DEFS[s], active = (cur === s);
+        const b = document.createElement('button'); b.textContent = d.label;
+        b.style.cssText = 'font-size:0.64rem; font-weight:700; padding:7px 6px; border-radius:5px; cursor:pointer; border:1px solid ' + d.color + '; background:' + (active ? d.color : 'transparent') + '; color:' + (active ? '#fff' : d.color) + ';';
+        b.onclick = () => { pieces.forEach(p => { if (p) p.status = s; }); if (typeof pushHistory === 'function') pushHistory(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderRail(); _dsRenderTools(); };
+        grid.appendChild(b);
+    });
+    wrap.appendChild(grid);
+    if (!same) { const m = document.createElement('div'); m.style.cssText = 'font-size:0.6rem; color:var(--text-muted); margin-top:6px;'; m.textContent = 'Pieces on this page have mixed statuses — choose one to set them all.'; wrap.appendChild(m); }
+    return wrap;
+}
+function _dsCustomSection(desc) {
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'margin-top:12px; padding-top:10px; border-top:1px dashed var(--border-color);';
+    const title = document.createElement('div'); title.style.cssText = 'font-size:0.72rem; font-weight:700; color:var(--text-main); margin-bottom:6px;'; title.textContent = 'Custom layout'; wrap.appendChild(title);
+    const hint = document.createElement('p'); hint.style.cssText = 'font-size:0.62rem; color:var(--text-muted); margin:0 0 8px; line-height:1.5;'; hint.textContent = 'Drag mockups anywhere, resize from the corner, double-click one to swap its artwork. Use the toolbar for text, images and arrows.'; wrap.appendChild(hint);
+    const row = document.createElement('div'); row.style.cssText = 'display:flex; gap:6px;';
+    const sel = document.createElement('select'); sel.style.cssText = 'flex:1; font-size:0.64rem; padding:5px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px;';
+    const ph = document.createElement('option'); ph.value = ''; ph.textContent = 'Add a mockup\u2026'; sel.appendChild(ph);
+    (typeof dashProjectData !== 'undefined' ? dashProjectData : []).forEach(r => { if (!r || !r.id) return; const o = document.createElement('option'); o.value = r.id; o.textContent = r.id; sel.appendChild(o); });
+    const add = document.createElement('button'); add.textContent = 'Add'; add.style.cssText = 'font-size:0.64rem; font-weight:700; padding:5px 14px; border-radius:4px; cursor:pointer; border:1px solid #6a6aff; background:#6a6aff; color:#fff;';
+    add.onclick = () => { if (sel.value) _dsAddMockup(sel.value); };
+    row.appendChild(sel); row.appendChild(add); wrap.appendChild(row);
+    return wrap;
+}
+function _dsPickMockupPiece(a) {
+    const old = document.getElementById('dsMockPick'); if (old) old.remove();
+    const ov = document.createElement('div'); ov.id = 'dsMockPick';
+    ov.style.cssText = 'position:fixed; inset:0; z-index:100030; background:rgba(0,0,0,0.45); display:flex; align-items:center; justify-content:center;';
+    const card = document.createElement('div');
+    card.style.cssText = 'background:var(--bg-panel,#1d1d20); border:1px solid var(--border-color); border-radius:8px; padding:16px; width:280px; max-width:90vw;';
+    card.innerHTML = '<div style="font-size:0.8rem; font-weight:700; color:var(--text-main); margin-bottom:10px;">Choose artwork</div>';
+    const sel = document.createElement('select');
+    sel.style.cssText = 'width:100%; padding:7px; font-size:0.72rem; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:5px; margin-bottom:12px;';
+    (typeof dashProjectData !== 'undefined' ? dashProjectData : []).forEach(r => { if (!r || !r.id) return; const o = document.createElement('option'); o.value = r.id; o.textContent = r.id; if (r.id === a.pieceId) o.selected = true; sel.appendChild(o); });
+    card.appendChild(sel);
+    const row = document.createElement('div'); row.style.cssText = 'display:flex; gap:8px; justify-content:flex-end;';
+    const cancel = document.createElement('button'); cancel.textContent = 'Cancel'; cancel.style.cssText = 'font-size:0.7rem; padding:6px 12px; border-radius:5px; cursor:pointer; border:1px solid var(--border-color); background:transparent; color:var(--text-main);'; cancel.onclick = () => ov.remove();
+    const ok = document.createElement('button'); ok.textContent = 'Use'; ok.style.cssText = 'font-size:0.7rem; font-weight:700; padding:6px 14px; border-radius:5px; cursor:pointer; border:1px solid #6a6aff; background:#6a6aff; color:#fff;';
+    ok.onclick = () => { a.pieceId = sel.value; a.aspect = null; if (typeof scheduleAutosave === 'function') scheduleAutosave(); if (a.pieceId) _mockupEnsure(a.pieceId).then(() => _dsRenderCenter()); _dsRenderCenter(); ov.remove(); };
+    row.appendChild(cancel); row.appendChild(ok); card.appendChild(row);
+    ov.appendChild(card); ov.onclick = (e) => { if (e.target === ov) ov.remove(); };
+    (document.getElementById('deckStudioModal') || document.body).appendChild(ov);
+}
+function _dsClearBuiltAll() { const desc = _dsPages[_dsIndex]; const wasBuilt = desc && desc.kind === 'spec' && !!_dsBuilt[_deckPageKey(desc)]; _dsBuilt = {}; if (wasBuilt) _dsQueuePreview(); }
+let _dsPreviewTimer = null, _dsPreviewQueued = false;
+function _dsQueuePreview() {
+    const desc = _dsPages[_dsIndex];
+    if (!desc || desc.kind !== 'spec') return;
+    const bt = desc._specTpl || _specTplResolve(desc._ovKey || (desc.row && desc.row.id) || '');
+    if (SPEC_TEMPLATES[bt] && SPEC_TEMPLATES[bt].freeform) return;   // custom pages are already live
+    _dsPreviewQueued = true; _dsSyncBuildBtn();
+    if (_dsPreviewTimer) clearTimeout(_dsPreviewTimer);
+    _dsPreviewTimer = setTimeout(() => { _dsPreviewTimer = null; _dsBuildPage(true); }, 700);
+}
+function _dsSyncBuildBtn() {
+    const b = document.getElementById('dsBuildBtn'); if (!b) return;
+    const desc = _dsPages[_dsIndex]; const isSpec = !!(desc && desc.kind === 'spec');
+    const built = isSpec && _dsBuilt[_deckPageKey(desc)];
+    b.style.opacity = isSpec ? '1' : '0.4'; b.style.pointerEvents = isSpec ? 'auto' : 'none';
+    if (_dsPreviewQueued && isSpec) { b.textContent = 'Updating…'; b.style.background = '#c08a2e'; b.style.color = '#fff'; }
+    else { b.textContent = built ? 'Refresh' : 'Preview'; b.style.background = built ? '#1a7f37' : 'var(--bg-input)'; b.style.color = built ? '#fff' : 'var(--text-main)'; }
+}
+function _dsRenderCenter() {
+    const c = document.getElementById('dsCenter'); if (!c) return;
+    c.innerHTML = '';
+    _dsBakeToken++;
+    const desc = _dsPages[_dsIndex]; if (!desc) return;
+    if (_dsSelKey && _dsSelKey !== _deckPageKey(desc)) { _dsSelKey = null; _dsSelIdx = -1; _dsSyncToolbar(); }
+    let availW = c.clientWidth - 48; if (!availW || availW < 200) availW = 760;
+    let availH = c.clientHeight - 48; if (!availH || availH < 120) availH = 460;
+    let w = availW, hh = w * 540 / 936;
+    if (hh > availH) { hh = availH; w = hh * 936 / 540; }
+    if (desc.kind === 'floorplan') { _dsRenderCenterFloorplan(desc, c, Math.round(w), Math.round(hh)); return; }
+    const page = document.createElement('div');
+    page.style.cssText = 'position:relative; width:' + Math.round(w) + 'px; height:' + Math.round(hh) + 'px; background:#fff; box-shadow:0 8px 30px rgba(0,0,0,0.35); border-radius:2px; overflow:hidden;';
+    const _pk = _deckPageKey(desc);
+    const _builtSrc = (desc.kind === 'spec') ? _dsBuilt[_pk] : null;
+    if (_builtSrc) {
+        page.innerHTML = '<img src="' + _builtSrc + '" style="position:absolute; inset:0; width:100%; height:100%;">';
+        _dsAddStamp(page, Math.round(w), Math.round(hh), desc);
+        _dsAddGuides(page, Math.round(w), Math.round(hh));
+        _dsRenderAnnots(page, desc, Math.round(w), Math.round(hh));
+        c.appendChild(page);
+        _dsSyncBuildBtn();
+        return;
+    }
+    page.innerHTML = '';
+    try { page.innerHTML = _deckMockHTML(desc, Math.round(w), Math.round(hh)); }
+    catch (e) { page.innerHTML = '<div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#bbb;">' + _esc(desc.title || desc.type || 'Page') + '</div>'; }
+    _dsAddStamp(page, Math.round(w), Math.round(hh), desc);
+    _dsAddGuides(page, Math.round(w), Math.round(hh));
+    _dsRenderAnnots(page, desc, Math.round(w), Math.round(hh));
+    c.appendChild(page);
+    if (desc.kind === 'spec') { const tok = _dsBakeToken; _dsBakeSpecImages(page, desc, tok); }
+    _dsSyncBuildBtn();
+}
+// — Interactive floorplan in the studio center (click to place, drag, dbl-click remove) —
+let _dsFpDragKey = null, _dsFpDragPin = null;
+function _dsRenderCenterFloorplan(desc, c, w, hh) {
+    const lv = floorplanLevels[desc.level] || {};
+    const page = document.createElement('div');
+    page.style.cssText = 'position:relative; width:' + w + 'px; height:' + hh + 'px; background:#fff; box-shadow:0 8px 30px rgba(0,0,0,0.35); border-radius:2px; overflow:hidden;';
+    const pad = Math.round(w * 0.06);
+    const title = document.createElement('div');
+    title.style.cssText = 'position:absolute; left:' + pad + 'px; top:' + Math.round(pad * 0.4) + 'px; font-weight:800; color:#111; font-size:' + Math.max(10, Math.round(hh * 0.05)) + 'px;';
+    title.textContent = 'FLOORPLAN \u2014 ' + (lv.name || ('Level ' + (desc.level + 1))).toUpperCase();
+    page.appendChild(title);
+    const planTop = Math.round(hh * 0.14);
+    const area = document.createElement('div');
+    area.style.cssText = 'position:absolute; left:0; right:0; top:' + planTop + 'px; bottom:' + pad + 'px; display:flex; align-items:center; justify-content:center;';
+    if (!lv.imageData) {
+        area.innerHTML = '<div style="color:#bbb; font-size:13px;">No plan image for this level — open the full markup tool to upload one.</div>';
+        page.appendChild(area); _dsAddStamp(page, w, hh, desc); _dsRenderAnnots(page, desc, w, hh); c.appendChild(page); return;
+    }
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'position:relative; display:inline-block; line-height:0;';
+    const img = document.createElement('img');
+    img.id = 'dsFpPlanImg'; img.src = lv.imageData; img.draggable = false;
+    img.style.cssText = 'display:block; max-width:' + (w - pad * 2) + 'px; max-height:' + (hh - planTop - pad) + 'px; user-select:none; -webkit-user-drag:none; cursor:' + (_fpArmedId ? 'crosshair' : 'default') + ';';
+    img.onclick = _dsFpPlace;
+    wrap.appendChild(img);
+    _fpGroups().forEach(g => { if ((g.level || 0) !== desc.level) return; if (g.planX == null || g.planY == null) return; wrap.appendChild(_dsMakePin(g)); });
+    area.appendChild(wrap); page.appendChild(area); _dsAddStamp(page, w, hh, desc); _dsRenderAnnots(page, desc, w, hh); c.appendChild(page);
+}
+function _dsMakePin(g) {
+    const pin = document.createElement('div');
+    pin.style.cssText = 'position:absolute; left:' + (g.planX * 100) + '%; top:' + (g.planY * 100) + '%; transform:translate(-50%,-50%); min-width:22px; height:22px; padding:0 5px; border-radius:11px; background:' + categoryColor(g.category) + '; color:#fff; border:2px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,0.4); display:flex; align-items:center; justify-content:center; font-size:0.62rem; font-weight:700; cursor:grab; user-select:none;';
+    pin.textContent = g.num;
+    pin.title = g.ids.filter(Boolean).join(', ') + ' — drag to move, double-click to remove';
+    pin.onmousedown = (e) => _dsFpPinDown(e, g.key);
+    pin.ondblclick = (e) => { e.stopPropagation(); _dsFpRemove(g.key); };
+    return pin;
+}
+function _dsFpNorm(e) {
+    const img = document.getElementById('dsFpPlanImg'); if (!img) return null;
+    const r = img.getBoundingClientRect(); if (!r.width || !r.height) return null;
+    return { x: Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)), y: Math.max(0, Math.min(1, (e.clientY - r.top) / r.height)) };
+}
+function _dsFpPlace(e) {
+    if (!_fpArmedId) return;
+    const n = _dsFpNorm(e); if (!n) return;
+    const g = _fpFindGroup(_fpArmedId); if (!g) return;
+    const lvl = (_dsPages[_dsIndex] && _dsPages[_dsIndex].level) || 0;
+    g.rows.forEach(r => { r.planX = n.x; r.planY = n.y; r.level = lvl; });
+    _fpArmedId = null;
+    if (typeof pushHistory === 'function') pushHistory();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    _dsRefresh();
+}
+function _dsFpPinDown(e, key) {
+    e.preventDefault(); e.stopPropagation();
+    _dsFpDragKey = key; _dsFpDragPin = e.currentTarget;
+    document.addEventListener('mousemove', _dsFpDragMove);
+    document.addEventListener('mouseup', _dsFpDragUp);
+}
+function _dsFpDragMove(e) {
+    if (!_dsFpDragKey) return;
+    const n = _dsFpNorm(e); if (!n) return;
+    const g = _fpFindGroup(_dsFpDragKey); if (!g) return;
+    g.rows.forEach(r => { r.planX = n.x; r.planY = n.y; });
+    if (_dsFpDragPin) { _dsFpDragPin.style.left = (n.x * 100) + '%'; _dsFpDragPin.style.top = (n.y * 100) + '%'; }
+}
+function _dsFpDragUp() {
+    document.removeEventListener('mousemove', _dsFpDragMove);
+    document.removeEventListener('mouseup', _dsFpDragUp);
+    if (_dsFpDragKey) { if (typeof pushHistory === 'function') pushHistory(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); }
+    _dsFpDragKey = null; _dsFpDragPin = null;
+    _dsRefresh();
+}
+function _dsFpRemove(key) {
+    const g = _fpFindGroup(key); if (!g) return;
+    g.rows.forEach(r => { r.planX = null; r.planY = null; });
+    if (typeof pushHistory === 'function') pushHistory();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    _dsRefresh();
+}
+function _dsFpArm(key) { _fpArmedId = (_fpArmedId === key) ? null : key; _dsRenderTools(); _dsRenderCenter(); }
+function _dsFpSetCategory(key, cat) {
+    const g = _fpFindGroup(key); if (!g) return;
+    g.rows.forEach(r => { r.category = cat || ''; });
+    if (typeof pushHistory === 'function') pushHistory();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    _dsRefresh();
+}
+function _dsTemplateCategory(desc) {
+    if (!desc) return null;
+    if (desc.kind === 'fixed') return LAYOUT_TEMPLATES[desc.fixed] ? desc.fixed : null;
+    if (desc.kind === 'layout') return LAYOUT_TEMPLATES[desc.type] ? desc.type : null;
+    return null;
+}
+function _dsApplyTemplate(els, type) {
+    const desc = _dsPages[_dsIndex];
+    if (!desc || !desc.page) return;
+    desc.page.elements = JSON.parse(JSON.stringify(els || []));
+    if (desc.kind === 'layout' && type) desc.page.type = type;
+    if (typeof pushHistory === 'function') pushHistory();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    _dsRefresh();
+}
+function _dsRenderTools() {
+    const t = document.getElementById('dsTools'); if (!t) return;
+    const desc = _dsPages[_dsIndex];
+    t.innerHTML = '';
+    if (!desc) { t.innerHTML = '<p style="color:var(--text-muted); font-size:0.74rem;">Select a page.</p>'; return; }
+    const head = document.createElement('div');
+    head.innerHTML = '<div style="font-size:0.9rem; font-weight:700; color:var(--text-strong);">' + _esc(desc.title || desc.type) + '</div><div style="font-size:0.68rem; color:var(--text-muted); margin-bottom:14px; text-transform:uppercase; letter-spacing:0.03em;">' + _esc(desc.type) + '</div>';
+    t.appendChild(head);
+
+    if (desc.kind === 'floorplan') {
+        const hint = document.createElement('p');
+        hint.style.cssText = 'font-size:0.68rem; color:' + (_fpArmedId ? '#6a6aff' : 'var(--text-muted)') + '; margin-bottom:10px; line-height:1.5;';
+        hint.textContent = _fpArmedId ? ('Click the plan to drop ' + _fpArmedId + '.') : 'Click a group, then click the plan to drop its pin. Drag pins to move; double-click to remove.';
+        t.appendChild(hint);
+        const groups = _fpGroups();
+        if (!groups.length) { const e = document.createElement('p'); e.style.cssText = 'font-size:0.7rem; color:var(--text-muted);'; e.textContent = 'No artwork groups yet. Add pieces in the Frame Dashboard.'; t.appendChild(e); }
+        groups.forEach(g => {
+            const placed = (g.planX != null && g.planY != null);
+            const armed = (_fpArmedId === g.key);
+            const onThis = (g.level || 0) === desc.level;
+            const row = document.createElement('div');
+            row.style.cssText = 'display:flex; align-items:center; gap:7px; padding:6px; border-radius:5px; cursor:pointer; margin-bottom:3px; ' + (armed ? 'background:rgba(106,106,255,0.18); outline:1px solid #6a6aff;' : 'background:transparent;');
+            const num = document.createElement('span');
+            num.textContent = g.num;
+            num.style.cssText = 'flex:0 0 auto; min-width:20px; height:20px; padding:0 4px; border-radius:10px; display:inline-flex; align-items:center; justify-content:center; font-size:0.58rem; font-weight:700; color:#fff; background:' + categoryColor(g.category) + ';';
+            const lab = document.createElement('div');
+            lab.style.cssText = 'flex:1; min-width:0; overflow:hidden;';
+            const codes = g.ids.filter(Boolean).join(', ');
+            const status = placed ? (onThis ? 'placed here' : 'on ' + ((floorplanLevels[g.level || 0] || {}).name || ('Level ' + ((g.level || 0) + 1)))) : 'not placed';
+            lab.innerHTML = '<div style="font-size:0.72rem; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + _esc(codes || g.key) + '</div><div style="font-size:0.6rem; color:' + (placed ? 'var(--text-muted)' : '#c08a2e') + ';">' + _esc(status) + '</div>';
+            const sel = document.createElement('select');
+            sel.style.cssText = 'flex:0 0 auto; font-size:0.6rem; padding:2px 3px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px;';
+            ART_CATEGORIES.forEach(cc => { const o = document.createElement('option'); o.value = cc.key; o.textContent = cc.label; if ((g.category || '') === cc.key) o.selected = true; sel.appendChild(o); });
+            sel.onclick = (e) => e.stopPropagation();
+            sel.onchange = (e) => _dsFpSetCategory(g.key, e.target.value);
+            row.appendChild(num); row.appendChild(lab); row.appendChild(sel);
+            row.onclick = () => _dsFpArm(g.key);
+            t.appendChild(row);
+        });
+        const b = document.createElement('button'); b.textContent = 'Open full markup tool'; b.className = 'action-btn btn-secondary'; b.style.cssText = 'width:100%; height:32px; margin-top:10px; font-size:0.74rem;';
+        b.onclick = () => { if (typeof _fpLevel !== 'undefined') _fpLevel = desc.level; closeDeckStudio(); openFloorplanMarkup(); };
+        t.appendChild(b);
+        return;
+    }
+
+    const cat = _dsTemplateCategory(desc);
+    if (desc.kind === 'spec') {
+        const globalTpl = editorialContent.specTemplate || 'classic';
+        const isGroupGlobal = !!(SPEC_TEMPLATES[globalTpl] && SPEC_TEMPLATES[globalTpl].group);
+        const overrides = editorialContent.specTemplateOverrides || (editorialContent.specTemplateOverrides = {});
+        const ovKey = desc._ovKey || (desc.row && desc.row.id) || '';
+        const hasOverride = !!overrides[ovKey];
+        const resolved = desc._specTpl || _specTplResolve(ovKey);
+        const cw = 244, chh = Math.round(cw * 540 / 936);
+
+        // Per-page approval status (spec pages only): none / pending / approved.
+        const apprWrap = document.createElement('div');
+        apprWrap.style.cssText = 'margin-bottom:12px; padding:8px; border:1px solid var(--border-color); border-radius:5px;';
+        const apprTitle = document.createElement('div');
+        apprTitle.textContent = 'Approval status'; apprTitle.style.cssText = 'font-size:0.66rem; font-weight:700; color:var(--text-main); margin-bottom:6px;';
+        apprWrap.appendChild(apprTitle);
+        const apprRow = document.createElement('div');
+        apprRow.style.cssText = 'display:flex; gap:6px;';
+        const curSt = _approvalOf(ovKey);
+        const stBtn = (label, val, onColor) => {
+            const active = (curSt === val) || (val === '' && !curSt);
+            const b = document.createElement('button');
+            b.textContent = label;
+            b.style.cssText = 'flex:1; font-size:0.64rem; font-weight:700; padding:6px 4px; border-radius:4px; cursor:pointer; white-space:nowrap; border:1px solid ' + (active ? onColor : 'var(--border-color)') + '; background:' + (active ? onColor : 'transparent') + '; color:' + (active ? '#fff' : 'var(--text-main)') + ';';
+            b.onclick = () => _dsSetApproval(ovKey, val);
+            return b;
+        };
+        apprRow.appendChild(stBtn('None', '', '#6a6aff'));
+        apprRow.appendChild(stBtn('Pending', 'pending', '#c0392b'));
+        apprRow.appendChild(stBtn('Approved', 'approved', '#1a7f37'));
+        apprWrap.appendChild(apprRow);
+        // Sticky top: approval + layout controls stay locked while templates scroll.
+        const _toolsBg = getComputedStyle(t).backgroundColor;
+        const head = document.createElement('div');
+        head.style.cssText = 'position:sticky; top:0; z-index:3; background:' + ((_toolsBg && _toolsBg !== 'rgba(0, 0, 0, 0)') ? _toolsBg : 'var(--bg-panel,#1d1d20)') + '; padding-bottom:10px; margin-bottom:8px; border-bottom:1px solid var(--border-color);';
+        head.appendChild(apprWrap);
+
+        const lbl = document.createElement('div');
+        lbl.textContent = 'Presentation layout'; lbl.style.cssText = 'font-size:0.72rem; font-weight:700; color:var(--text-main); margin-bottom:8px;';
+        head.appendChild(lbl);
+
+        // Deck mode: per piece, grouped sets (A/B/C), or install guide (per elevation).
+        const isInstallGlobal = (globalTpl === 'installGuide');
+        const modeRow = document.createElement('div');
+        modeRow.style.cssText = 'display:flex; gap:6px; margin-bottom:10px;';
+        const switchMode = (tpl) => { editorialContent.specTemplate = tpl; if (typeof pushHistory === 'function') pushHistory(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsClearBuiltAll(); _dsRefresh(); };
+        const mkMode = (label, active, on) => { const b = document.createElement('button'); b.textContent = label; b.style.cssText = 'flex:1; font-size:0.62rem; padding:6px 3px; border-radius:4px; cursor:pointer; border:1px solid ' + (active ? '#6a6aff' : 'var(--border-color)') + '; background:' + (active ? '#6a6aff' : 'transparent') + '; color:' + (active ? '#fff' : 'var(--text-main)') + ';'; if (!active) b.onclick = on; return b; };
+        modeRow.appendChild(mkMode('Per piece', !isGroupGlobal && !isInstallGlobal, () => switchMode('classic')));
+        modeRow.appendChild(mkMode('Group A/B/C', isGroupGlobal, () => switchMode('setRight')));
+        modeRow.appendChild(mkMode('Install guide', isInstallGlobal, () => switchMode('installGuide')));
+        head.appendChild(modeRow);
+
+        if (isInstallGlobal) {
+            const inote = document.createElement('div');
+            inote.style.cssText = 'padding:10px; border:1px solid var(--border-color); border-radius:6px; background:var(--bg-input);';
+            inote.innerHTML = '<div style="font-size:0.7rem; font-weight:700; color:var(--text-main); margin-bottom:4px;">Install guide</div>'
+                + '<div style="font-size:0.64rem; color:var(--text-muted); line-height:1.5;">One page per elevation (the walls from the Elevations tab) with hang height + plan view. Switch to “Per piece” for spec-template pages.</div>';
+            head.appendChild(inote);
+            t.appendChild(head);
+            return;
+        }
+
+        // Per-page spec visibility: full specs vs artwork-only mockup.
+        const visWrap = document.createElement('div');
+        visWrap.style.cssText = 'display:flex; gap:6px; margin-bottom:10px;';
+        const aoOn = _specArtOnly(ovKey);
+        const mkVis = (label, active, on) => { const b = document.createElement('button'); b.textContent = label; b.style.cssText = 'flex:1; font-size:0.64rem; font-weight:700; padding:6px 4px; border-radius:4px; cursor:pointer; border:1px solid ' + (active ? '#6a6aff' : 'var(--border-color)') + '; background:' + (active ? '#6a6aff' : 'transparent') + '; color:' + (active ? '#fff' : 'var(--text-main)') + ';'; b.onclick = on; return b; };
+        const setAO = (v) => { const m = editorialContent.specArtOnly || (editorialContent.specArtOnly = {}); if (v) m[ovKey] = true; else delete m[ovKey]; if (typeof pushHistory === 'function') pushHistory(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsClearBuilt(_deckPageKey(desc), true); _dsRefresh(); };
+        visWrap.appendChild(mkVis('Show specs', !aoOn, () => setAO(false)));
+        visWrap.appendChild(mkVis('Artwork only', aoOn, () => setAO(true)));
+        head.appendChild(visWrap);
+
+        if (desc._manual) {
+            t.appendChild(head);
+            t.appendChild(_dsManualSection(desc));
+        } else if (isGroupGlobal) {
+            const note = document.createElement('p');
+            note.style.cssText = 'font-size:0.66rem; color:var(--text-muted); margin:0 0 4px; line-height:1.5;';
+            note.textContent = 'Set pieces (A / B / C…) are grouped onto one page. Pick how they sit:';
+            head.appendChild(note);
+            t.appendChild(head);
+
+            const cardsWrap = document.createElement('div');
+            ['setRight', 'setRow', 'setScale'].forEach(key => {
+                const onCur = (key === globalTpl);
+                const cell = document.createElement('div');
+                cell.style.cssText = 'cursor:pointer; border:2px solid ' + (onCur ? '#6a6aff' : 'var(--border-color)') + '; border-radius:5px; overflow:hidden; background:#fff; margin-bottom:8px;';
+                cell.onclick = () => { editorialContent.specTemplate = key; if (typeof pushHistory === 'function') pushHistory(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsClearBuiltAll(); _dsRefresh(); };
+                const thumb = document.createElement('div');
+                thumb.style.cssText = 'position:relative; width:100%; height:' + chh + 'px; background:#fff;';
+                try { thumb.innerHTML = _deckMockHTML({ kind: 'spec', row: desc.row, members: desc.members, title: desc.title, _previewTpl: key }, cw, chh); } catch (e) { thumb.innerHTML = ''; }
+                const nm = document.createElement('div');
+                nm.textContent = (SPEC_TEMPLATES[key].label || key) + (onCur ? '  ✓' : '');
+                nm.style.cssText = 'font-size:0.64rem; color:' + (onCur ? '#6a6aff' : 'var(--text-main)') + '; padding:4px 6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; border-top:1px solid var(--border-color);';
+                cell.appendChild(thumb); cell.appendChild(nm); cardsWrap.appendChild(cell);
+            });
+            t.appendChild(cardsWrap);
+            if (globalTpl === 'setScale') {
+                const so = _scaleOpts();
+                const setSO = (patch) => { editorialContent.scaleOpts = Object.assign({}, _scaleOpts(), patch); if (typeof pushHistory === 'function') pushHistory(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsClearBuiltAll(); _dsRefresh(); };
+                const wrap = document.createElement('div'); wrap.style.cssText = 'margin-top:4px; padding-top:10px; border-top:1px dashed var(--border-color);';
+                const lab = document.createElement('div'); lab.textContent = 'Image codes'; lab.style.cssText = 'font-size:0.68rem; font-weight:700; color:var(--text-main); margin-bottom:6px;'; wrap.appendChild(lab);
+                const cr = document.createElement('div'); cr.style.cssText = 'display:flex; gap:6px; margin-bottom:10px;';
+                [['none', 'None'], ['frames', 'On frames'], ['legend', 'Legend']].forEach(pair => { const active = so.codes === pair[0]; const b = document.createElement('button'); b.textContent = pair[1]; b.style.cssText = 'flex:1; font-size:0.62rem; font-weight:700; padding:6px 3px; border-radius:4px; cursor:pointer; border:1px solid ' + (active ? '#6a6aff' : 'var(--border-color)') + '; background:' + (active ? '#6a6aff' : 'transparent') + '; color:' + (active ? '#fff' : 'var(--text-main)') + ';'; if (!active) b.onclick = () => setSO({ codes: pair[0] }); cr.appendChild(b); });
+                wrap.appendChild(cr);
+                const tr = document.createElement('label'); tr.style.cssText = 'display:flex; align-items:center; gap:8px; font-size:0.66rem; color:var(--text-main); cursor:pointer;';
+                const cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = !!so.elevThumb; cb.onchange = () => setSO({ elevThumb: cb.checked });
+                tr.appendChild(cb); tr.appendChild(document.createTextNode('Elevation thumbnail (bottom-right)')); wrap.appendChild(tr);
+                const note = document.createElement('div'); note.style.cssText = 'font-size:0.6rem; color:var(--text-muted); margin-top:8px; line-height:1.5;'; note.textContent = 'All spec details (including mat sizes and overall dimensions) are listed on the left; the text shrinks to fit a full salon hang on one page.';
+                wrap.appendChild(note);
+                head.appendChild(wrap);
+            }
+        } else {
+            const btnRow = document.createElement('div');
+            btnRow.style.cssText = 'display:flex; gap:6px; margin-bottom:6px;';
+            const mkBtn = (label, primary, on) => { const b = document.createElement('button'); b.textContent = label; b.style.cssText = 'flex:1; font-size:0.66rem; font-weight:600; padding:7px 4px; border-radius:4px; cursor:pointer; border:1px solid ' + (primary ? '#6a6aff' : 'var(--border-color)') + '; background:' + (primary ? '#6a6aff' : 'transparent') + '; color:' + (primary ? '#fff' : 'var(--text-main)') + ';'; b.onclick = on; return b; };
+            btnRow.appendChild(mkBtn('Apply to all pages', true, () => { editorialContent.specTemplate = resolved; editorialContent.specTemplateOverrides = {}; if (typeof pushHistory === 'function') pushHistory(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRefresh(); }));
+            if (hasOverride) btnRow.appendChild(mkBtn('Reset this page', false, () => { delete overrides[ovKey]; if (typeof pushHistory === 'function') pushHistory(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRefresh(); }));
+            head.appendChild(btnRow);
+            const sub = document.createElement('p');
+            sub.style.cssText = 'font-size:0.62rem; color:var(--text-muted); margin:0; line-height:1.4;';
+            sub.innerHTML = hasOverride ? 'This page overrides the deck default. Pick a template below to change it.' : 'Pick a template below to change just this page, or apply to all.';
+            head.appendChild(sub);
+            // — Elevation breaker toggle (deck-wide; applies to every wall group) —
+            const brWrap = document.createElement('label');
+            brWrap.style.cssText = 'display:flex; align-items:flex-start; gap:8px; font-size:0.66rem; color:var(--text-main); cursor:pointer; margin-top:8px; padding-top:8px; border-top:1px dashed var(--border-color);';
+            const brCb = document.createElement('input'); brCb.type = 'checkbox'; brCb.checked = _elevBreakers(); brCb.style.cssText = 'margin-top:2px; flex:0 0 auto;';
+            brCb.onchange = () => { editorialContent.elevBreakers = brCb.checked; if (typeof pushHistory === 'function') pushHistory(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsClearBuiltAll(); _dsRefresh(); };
+            const brTxt = document.createElement('div'); brTxt.innerHTML = '<b>Add elevation breaker page</b><br><span style="color:var(--text-muted);">Before each wall group, insert a full-page elevation titled with the group code (e.g. ART-2.1ABCD), then these individual spec pages.</span>';
+            brWrap.appendChild(brCb); brWrap.appendChild(brTxt);
+            head.appendChild(brWrap);
+            const npWrap = document.createElement('label');
+            npWrap.style.cssText = 'display:flex; align-items:center; gap:8px; font-size:0.64rem; color:var(--text-main); cursor:pointer; margin:6px 0 0 22px;' + (_elevBreakers() ? '' : 'opacity:0.45; pointer-events:none;');
+            const npCb = document.createElement('input'); npCb.type = 'checkbox'; npCb.checked = _breakerNoPlan(); npCb.disabled = !_elevBreakers(); npCb.style.cssText = 'flex:0 0 auto;';
+            npCb.onchange = () => { editorialContent.breakerNoPlan = npCb.checked; if (typeof pushHistory === 'function') pushHistory(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsClearBuiltAll(); _dsRefresh(); };
+            npWrap.appendChild(npCb); npWrap.appendChild(document.createTextNode('Elevation only (hide plan view, fill the page)'));
+            head.appendChild(npWrap);
+            const msWrap = document.createElement('label');
+            msWrap.style.cssText = 'display:flex; align-items:center; gap:8px; font-size:0.64rem; color:var(--text-main); cursor:pointer; margin:6px 0 0 22px;' + (_elevBreakers() ? '' : 'opacity:0.45; pointer-events:none;');
+            const msCb = document.createElement('input'); msCb.type = 'checkbox'; msCb.checked = _breakerMeasure(); msCb.disabled = !_elevBreakers(); msCb.style.cssText = 'flex:0 0 auto;';
+            msCb.onchange = () => { editorialContent.breakerMeasure = msCb.checked; if (typeof pushHistory === 'function') pushHistory(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsClearBuiltAll(); _dsRefresh(); };
+            msWrap.appendChild(msCb); msWrap.appendChild(document.createTextNode('Show layout guides (uses the elevation\u2019s exact measurement guides)'));
+            head.appendChild(msWrap);
+            t.appendChild(head);
+
+            const cardsWrap = document.createElement('div');
+            Object.keys(SPEC_TEMPLATES).filter(k => !SPEC_TEMPLATES[k].group && k !== 'installGuide').forEach(key => {
+                const onCur = (key === resolved);
+                const cell = document.createElement('div');
+                cell.style.cssText = 'cursor:pointer; border:2px solid ' + (onCur ? '#6a6aff' : 'var(--border-color)') + '; border-radius:5px; overflow:hidden; background:#fff; margin-bottom:8px;';
+                cell.onclick = () => { if (key === globalTpl) delete overrides[ovKey]; else overrides[ovKey] = key; if (key === 'custom') _dsSeedCustom(desc); if (typeof pushHistory === 'function') pushHistory(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRefresh(); };
+                const thumb = document.createElement('div');
+                thumb.style.cssText = 'position:relative; width:100%; height:' + chh + 'px; background:#fff;';
+                try { thumb.innerHTML = _deckMockHTML({ kind: 'spec', row: desc.row, members: desc.members, _previewTpl: key }, cw, chh); } catch (e) { thumb.innerHTML = ''; }
+                const nm = document.createElement('div');
+                const tag = onCur ? (hasOverride ? '  ✓ this page' : '  ✓ default') : (key === globalTpl ? '  · default' : '');
+                nm.textContent = (SPEC_TEMPLATES[key].label || key) + tag; nm.style.cssText = 'font-size:0.64rem; color:' + (onCur ? '#6a6aff' : 'var(--text-main)') + '; padding:4px 6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; border-top:1px solid var(--border-color);';
+                cell.appendChild(thumb); cell.appendChild(nm); cardsWrap.appendChild(cell);
+            });
+            t.appendChild(cardsWrap);
+            t.appendChild(resolved === 'custom' ? _dsCustomSection(desc) : _dsManualSection(desc));
+        }
+
+        t.appendChild(_dsStatusSection(desc));
+        return;
+    }
+    if (cat) {
+        const lbl = document.createElement('div');
+        lbl.textContent = 'Templates — click to apply'; lbl.style.cssText = 'font-size:0.72rem; font-weight:700; color:var(--text-main); margin-bottom:8px;';
+        t.appendChild(lbl);
+        const grid = document.createElement('div');
+        grid.style.cssText = 'display:flex; flex-direction:column; gap:8px; margin-bottom:14px;';
+        const cards = [];
+        (LAYOUT_TEMPLATES[cat] || []).forEach(b => { try { cards.push({ name: b.name, els: b.els() }); } catch (e) {} });
+        (editorialContent.templates || []).forEach(tp => { if ((tp.type || 'moodboard') === cat) cards.push({ name: tp.name || 'Saved', els: tp.elements || [] }); });
+        if (typeof studioDefaults !== 'undefined') (studioDefaults.templates || []).forEach(tp => { if ((tp.type || 'moodboard') === cat) cards.push({ name: (tp.name || 'Studio') + ' · studio', els: tp.elements || [] }); });
+        const cw = 244, chh = Math.round(cw * 540 / 936);
+        cards.forEach(card => {
+            const cell = document.createElement('div');
+            cell.style.cssText = 'cursor:pointer; border:1px solid var(--border-color); border-radius:5px; overflow:hidden; background:#fff;';
+            cell.title = 'Apply: ' + card.name;
+            cell.onmouseenter = () => { cell.style.borderColor = '#6a6aff'; };
+            cell.onmouseleave = () => { cell.style.borderColor = 'var(--border-color)'; };
+            cell.onclick = () => _dsApplyTemplate(card.els, cat);
+            const thumb = document.createElement('div');
+            thumb.style.cssText = 'position:relative; width:100%; height:' + chh + 'px; background:#fff;';
+            thumb.innerHTML = _mbThumbInner({ elements: card.els }, cw, chh);
+            const nm = document.createElement('div');
+            nm.textContent = card.name; nm.style.cssText = 'font-size:0.64rem; color:var(--text-main); padding:4px 6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; border-top:1px solid var(--border-color);';
+            cell.appendChild(thumb); cell.appendChild(nm); grid.appendChild(cell);
+        });
+        if (!cards.length) { const e = document.createElement('p'); e.style.cssText = 'font-size:0.68rem; color:var(--text-muted);'; e.textContent = 'No templates for this page type yet.'; grid.appendChild(e); }
+        t.appendChild(grid);
+    }
+
+    const addBtn = (label, fn, secondary) => { const b = document.createElement('button'); b.textContent = label; b.className = secondary ? 'action-btn btn-secondary' : 'action-btn'; b.style.cssText = 'width:100%; height:34px; margin-bottom:8px; font-size:0.76rem;'; b.onclick = fn; t.appendChild(b); };
+    if (desc.kind === 'layout' && (desc.type === 'toc' || desc.type === 'artindex')) {
+        const note = document.createElement('div');
+        note.style.cssText = 'padding:10px; border:1px solid var(--border-color); border-radius:6px; background:var(--bg-input); margin-bottom:8px;';
+        note.innerHTML = '<div style="font-size:0.7rem; font-weight:700; color:var(--text-main); margin-bottom:4px;">Auto-generated</div>'
+            + '<div style="font-size:0.64rem; color:var(--text-muted); line-height:1.5;">This ' + (desc.type === 'toc' ? 'contents page lists every section with its page number' : 'index lists every artwork with the page it appears on') + '. It updates automatically as the deck changes — page numbers are finalised on export.</div>';
+        t.appendChild(note);
+    }
+    else if (desc.kind === 'layout') addBtn('Open in layout editor', () => { const idx = (editorialContent.layoutPages || []).indexOf(desc.page); if (idx >= 0) _mbPageIndex = idx; closeDeckStudio(); openMoodboardModal(); }, !!cat);
+    else if (desc.kind === 'fixed') addBtn('Open in layout editor', () => { closeDeckStudio(); openFixedPageEditor(desc.fixed); }, !!cat);
+    else if (desc.kind === 'floorplan') addBtn('Place numbers / mark up', () => { if (typeof _fpLevel !== 'undefined') _fpLevel = desc.level; closeDeckStudio(); openFloorplanMarkup(); });
+    else if (desc.type === 'contacts') addBtn('Edit contacts', () => { openContactsEditor(); });
+    else if (desc.type === 'timeline') {
+        const lab = document.createElement('div'); lab.textContent = 'Phases (one per line: Phase | Timeframe)'; lab.style.cssText = 'font-size:0.7rem; color:var(--text-muted); margin-bottom:6px;';
+        const ta = document.createElement('textarea'); ta.rows = 8;
+        ta.style.cssText = 'width:100%; box-sizing:border-box; font-size:0.74rem; line-height:1.4; padding:6px 8px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px; resize:vertical; font-family:monospace;';
+        ta.value = editorialContent.timeline || '';
+        ta.oninput = () => { editorialContent.timeline = ta.value; const hid = document.getElementById('specPdfTimeline'); if (hid) hid.value = ta.value; if (typeof scheduleAutosave === 'function') scheduleAutosave(); };
+        ta.onblur = () => { _dsRenderRail(); _dsRenderCenter(); };
+        t.appendChild(lab); t.appendChild(ta);
+    }
+
+    const note = document.createElement('p');
+    note.style.cssText = 'font-size:0.66rem; color:var(--text-muted); margin-top:6px; line-height:1.5;';
+    note.textContent = cat
+        ? 'Applying a template replaces this page\u2019s layout (images are filled in the editor). Use the editor for fine adjustments.'
+        : (desc.type === 'timeline'
+            ? 'Phases render on the Process / Timeline page. Edits here save with the project.'
+            : (desc.kind === 'floorplan'
+                ? 'Drag pins on the preview, or open the full markup tool.'
+                : 'Edits to this page save with the project.'));
+    t.appendChild(note);
+}
+function _dsSave() {
+    if (typeof pushHistory === 'function') pushHistory();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    const b = document.getElementById('dsSaveBtn'); if (b) { const o = b.textContent; b.textContent = 'Saved \u2713'; setTimeout(() => { b.textContent = o; }, 1200); }
+    _dsRefresh();
+}
+window.addEventListener('resize', () => { const m = document.getElementById('deckStudioModal'); if (m && m.style.display && m.style.display !== 'none' && _dsActiveTab === 'pages') _dsRenderCenter(); });
+
+// ── Presentation PDF setup modal ──────────────────────────────────────────
+// The "Spec PDF" button opens this instead of exporting immediately. It
+// collects the elements FRAME can't auto-derive (project code / version /
+// location for the footer) and a per-section include checklist. Sections not
+// yet built emit labeled placeholder pages so the full deck skeleton is
+// visible. Last-used values are remembered on window._specPdfMeta.
+function _specPdfPrefill() {
+    const data = (typeof dashProjectData !== 'undefined' && dashProjectData) ? dashProjectData : [];
+    const withArt = data.filter(r => r && r.artworkUrl).length;
+    const sum = document.getElementById('specPdfSummary');
+    if (sum) sum.textContent = `${data.length} item${data.length === 1 ? '' : 's'} · ${withArt} with artwork`;
+    const meta = window._specPdfMeta || {};
+    const set = (id, v) => { const el = document.getElementById(id); if (el && (el.value === '' || v)) el.value = v || el.value; };
+    set('specPdfCode', meta.code || '');
+    const verEl = document.getElementById('specPdfVersion');
+    if (verEl && !verEl.value) verEl.value = meta.version || 'V1';
+    set('specPdfLocation', meta.location || '');
+    const fpStatus = document.getElementById('specPdfFloorplanStatus');
+    if (fpStatus) fpStatus.textContent = floorplanImageName || 'No file chosen';
+    const naEl = document.getElementById('specPdfNarrative');
+    if (naEl) naEl.value = editorialContent.narrative || '';
+    const coEl = document.getElementById('specPdfContacts');
+    if (coEl) coEl.value = editorialContent.contacts || '';
+    const unEl = document.getElementById('specPdfUnderstanding');
+    if (unEl) unEl.value = editorialContent.understanding || '';
+    const tlEl = document.getElementById('specPdfTimeline');
+    if (tlEl) tlEl.value = editorialContent.timeline || '';
+    const st = editorialContent.strategy || {};
+    const sp = document.getElementById('specPdfStrategyPrimary'); if (sp) sp.value = st.primary || '';
+    const ss = document.getElementById('specPdfStrategySecondary'); if (ss) ss.value = st.secondary || '';
+    const stt = document.getElementById('specPdfStrategyTertiary'); if (stt) stt.value = st.tertiary || '';
+    const mbCount = document.getElementById('specPdfMoodboardCount');
+    if (mbCount) { _mbMigratePages(); const n = (editorialContent.layoutPages || []).length; mbCount.textContent = n + ' page' + (n === 1 ? '' : 's'); }
+}
+function openSpecPdfModal() { openDeckStudio('project'); }
+
+function applySpecPdfModal() {
+    const g = (id) => { const el = document.getElementById(id); return el ? (el.value || '').trim() : ''; };
+    const ck = (id) => { const el = document.getElementById(id); return !!(el && el.checked); };
+    const meta = { code: g('specPdfCode'), version: g('specPdfVersion'), location: g('specPdfLocation') };
+    window._specPdfMeta = meta;   // remember for next time
+    editorialContent.narrative = g('specPdfNarrative');
+    editorialContent.contacts = g('specPdfContacts');
+    editorialContent.understanding = g('specPdfUnderstanding');
+    editorialContent.timeline = g('specPdfTimeline');
+    editorialContent.strategy = {
+        primary: g('specPdfStrategyPrimary'),
+        secondary: g('specPdfStrategySecondary'),
+        tertiary: g('specPdfStrategyTertiary'),
+    };
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    const preset = g('specPdfPreset');
+    const include = {
+        cover: ck('specInc_cover'),
+        timeline: ck('specInc_timeline'),
+        understanding: ck('specInc_understanding'),
+        narrative: ck('specInc_narrative'),
+        strategy: ck('specInc_strategy'),
+        moodboard: ck('specInc_moodboard'),
+        frameRec: ck('specInc_frameRec'),
+        floorplanKey: ck('specInc_floorplanKey'),
+        spec: ck('specInc_spec'),
+        slogan: ck('specInc_slogan'),
+        contacts: ck('specInc_contacts'),
+    };
+    const m = document.getElementById('specPdfModal');
+    if (m) m.style.display = 'none';
+    exportSpecPagePDF({ all: true, meta, include, preset, preview: true });
+}
+
+// Read a floorplan image from the modal's file picker into a data URL used by
+// the Floorplan Key page. Session-scoped for now (window._specPdfFloorplan);
+// persisting it into the project save format is a follow-up.
+function loadSpecPdfFloorplan(event, fromMarkup) {
+    const file = event && event.target && event.target.files && event.target.files[0];
+    const status = document.getElementById('specPdfFloorplanStatus');
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+        const lv = _fpActive();
+        lv.imageData = reader.result; lv.imageName = file.name;
+        floorplanImageData = lv.imageData; floorplanImageName = lv.imageName;   // legacy mirror
+        if (status) status.textContent = file.name;
+        if (typeof scheduleAutosave === 'function') scheduleAutosave();
+        const mk = document.getElementById('fpMarkupModal');
+        if (fromMarkup || (mk && mk.style.display !== 'none')) renderFloorplanMarkup();
+    };
+    reader.onerror = () => { if (status) status.textContent = 'Could not read file'; };
+    reader.readAsDataURL(file);
+    if (event.target) event.target.value = '';   // allow re-picking the same file
+}
+
+// ── Mark Up Floorplan tool ────────────────────────────────────────────────
+// Interactive modal: shows the plan image with a tray of item codes. Click an
+// item, then click the plan to drop its numbered pin; drag a pin to move it;
+// double-click to remove. A per-item category select drives the pin color.
+// Coords are stored normalized (0–1) on the row (planX/planY), so they survive
+// scaling and persist with save/load. Numbers match the Floorplan Key list.
+let _fpArmedId = null;
+let _fpDragId = null;
+let _fpDragPin = null;
+
+function _esc(s) { return (s + '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+
+function openFloorplanMarkup() {
+    const m = document.getElementById('fpMarkupModal');
+    if (!m) return;
+    _fpArmedId = null;
+    renderFloorplanMarkup();
+    m.style.display = 'flex';
+}
+
+function closeFloorplanMarkup() {
+    const m = document.getElementById('fpMarkupModal');
+    if (m) m.style.display = 'none';
+    _fpArmedId = null;
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    if (typeof renderDashTable === 'function') renderDashTable();
+}
+
+function renderFloorplanMarkup() {
+    const area = document.getElementById('fpPlanArea');
+    const tray = document.getElementById('fpTray');
+    if (!area || !tray) return;
+    const items = (typeof dashProjectData !== 'undefined' && dashProjectData) ? dashProjectData : [];
+
+    _fpMigrate();
+    _fpRenderLevelBar();
+    const groups = _fpGroups();
+    const active = _fpActive();
+    // — Plan area —
+    area.innerHTML = '';
+    if (!active.imageData) {
+        const b = document.createElement('button');
+        b.className = 'action-btn btn-secondary';
+        b.style.cssText = 'width:auto; height:32px; padding:0 14px; font-size:0.8rem;';
+        b.textContent = 'Choose plan image for ' + (active.name || 'this level') + '…';
+        b.onclick = () => document.getElementById('fpMarkupFile').click();
+        area.appendChild(b);
+    } else {
+        const wrap = document.createElement('div');
+        wrap.style.cssText = 'position:relative; display:inline-block; line-height:0;';
+        const img = document.createElement('img');
+        img.id = 'fpPlanImg';
+        img.src = active.imageData;
+        img.draggable = false;
+        img.style.cssText = 'display:block; max-width:100%; max-height:70vh; user-select:none; -webkit-user-drag:none; cursor:' + (_fpArmedId ? 'crosshair' : 'default') + ';';
+        img.onclick = _fpPlaceFromEvent;
+        wrap.appendChild(img);
+        groups.forEach((g) => {
+            if ((g.level || 0) !== _fpLevel) return;
+            if (g.planX == null || g.planY == null) return;
+            wrap.appendChild(_fpMakePin(g));
+        });
+        area.appendChild(wrap);
+    }
+
+    // — Tray (one entry per placement group) —
+    tray.innerHTML = '';
+    groups.forEach((g) => {
+        const placed = (g.planX != null && g.planY != null);
+        const armed = (_fpArmedId === g.key);
+        const rowEl = document.createElement('div');
+        rowEl.style.cssText = 'display:flex; align-items:center; gap:8px; padding:6px; border-radius:5px; cursor:pointer; margin-bottom:3px; ' +
+            (armed ? 'background:rgba(106,106,255,0.18); outline:1px solid #6a6aff;' : 'background:transparent;');
+        const num = document.createElement('span');
+        num.textContent = g.num;
+        num.style.cssText = 'flex:0 0 auto; min-width:20px; height:20px; padding:0 4px; border-radius:10px; display:inline-flex; align-items:center; justify-content:center; font-size:0.6rem; font-weight:700; color:#fff; background:' + categoryColor(g.category) + ';';
+        const codes = g.ids.filter(Boolean).join(', ');
+        const lbl = document.createElement('div');
+        lbl.style.cssText = 'flex:1; min-width:0; overflow:hidden;';
+        lbl.innerHTML = '<div style="font-size:0.74rem; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + _esc(codes || g.key) +
+            '</div><div style="font-size:0.62rem; color:' + (placed ? 'var(--text-muted)' : '#c08a2e') + '; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' +
+            (placed ? _esc(((g.level || 0) !== _fpLevel ? '[' + ((floorplanLevels[g.level || 0] || {}).name || ('Level ' + ((g.level || 0) + 1))) + '] ' : '') + (g.location || '')) : 'click, then click the plan') + '</div>';
+        const sel = document.createElement('select');
+        sel.style.cssText = 'flex:0 0 auto; font-size:0.62rem; padding:2px 4px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px;';
+        ART_CATEGORIES.forEach(c => {
+            const o = document.createElement('option'); o.value = c.key; o.textContent = c.label;
+            if ((g.category || '') === c.key) o.selected = true;
+            sel.appendChild(o);
+        });
+        sel.onclick = (e) => e.stopPropagation();
+        sel.onchange = (e) => _fpSetCategory(g.key, e.target.value);
+        rowEl.appendChild(num); rowEl.appendChild(lbl); rowEl.appendChild(sel);
+        rowEl.onclick = () => _fpArmItem(g.key);
+        tray.appendChild(rowEl);
+    });
+
+    const hint = document.getElementById('fpMarkupHint');
+    if (hint) hint.textContent = _fpArmedId
+        ? 'Now click the plan to drop ' + _fpArmedId + ' — or pick another group.'
+        : 'Click a group, then click the plan to drop its pin. Set-pieces (-A/-B/…) share one pin. Drag to move; double-click to remove.';
+}
+
+function _fpMakePin(g) {
+    const pin = document.createElement('div');
+    pin.style.cssText = 'position:absolute; left:' + (g.planX * 100) + '%; top:' + (g.planY * 100) + '%; transform:translate(-50%,-50%); min-width:22px; height:22px; padding:0 5px; border-radius:11px; background:' + categoryColor(g.category) + '; color:#fff; border:2px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,0.4); display:flex; align-items:center; justify-content:center; font-size:0.58rem; font-weight:700; cursor:grab; user-select:none;';
+    pin.textContent = g.num;
+    pin.title = g.ids.filter(Boolean).join(', ') + (g.location ? ' \u2014 ' + g.location : '');
+    pin.onmousedown = (e) => _fpPinMouseDown(e, g.key);
+    pin.ondblclick = (e) => { e.stopPropagation(); _fpRemovePin(g.key); };
+    return pin;
+}
+
+function _fpFindRow(id) { return (dashProjectData || []).find(r => r && r.id === id); }
+
+function _fpArmItem(key) { _fpArmedId = (_fpArmedId === key) ? null : key; renderFloorplanMarkup(); }
+
+function _fpSetCategory(key, cat) {
+    const g = _fpFindGroup(key);
+    if (!g) return;
+    g.rows.forEach(r => { r.category = cat || ''; });
+    if (typeof pushHistory === 'function') pushHistory();
+    renderFloorplanMarkup();
+}
+
+function _fpRemovePin(key) {
+    const g = _fpFindGroup(key);
+    if (!g) return;
+    g.rows.forEach(r => { r.planX = null; r.planY = null; });
+    if (typeof pushHistory === 'function') pushHistory();
+    renderFloorplanMarkup();
+}
+
+function _fpNormFromEvent(e) {
+    const img = document.getElementById('fpPlanImg');
+    if (!img) return null;
+    const r = img.getBoundingClientRect();
+    if (!r.width || !r.height) return null;
+    let x = (e.clientX - r.left) / r.width;
+    let y = (e.clientY - r.top) / r.height;
+    return { x: Math.max(0, Math.min(1, x)), y: Math.max(0, Math.min(1, y)) };
+}
+
+function _fpPlaceFromEvent(e) {
+    if (!_fpArmedId) return;
+    const n = _fpNormFromEvent(e);
+    if (!n) return;
+    const g = _fpFindGroup(_fpArmedId);
+    if (!g) return;
+    g.rows.forEach(r => { r.planX = n.x; r.planY = n.y; r.level = _fpLevel; });   // whole group lands together
+    _fpArmedId = null;
+    if (typeof pushHistory === 'function') pushHistory();
+    renderFloorplanMarkup();
+}
+// ── Floor-plan level management ────────────────────────────────────────────
+function _fpRenderLevelBar() {
+    const bar = document.getElementById('fpLevelBar');
+    if (!bar) return;
+    _fpMigrate();
+    bar.innerHTML = '';
+    floorplanLevels.forEach((lv, i) => {
+        const b = document.createElement('button');
+        b.textContent = lv.name || ('Level ' + (i + 1));
+        b.title = 'Switch to ' + (lv.name || ('Level ' + (i + 1)));
+        b.onclick = () => _fpSwitchLevel(i);
+        b.style.cssText = 'height:26px; padding:0 10px; font-size:0.72rem; border:1px solid var(--border-color); border-radius:4px; cursor:pointer; white-space:nowrap; ' + (i === _fpLevel ? 'background:#6a6aff; color:#fff; border-color:#6a6aff;' : 'background:var(--bg-input); color:var(--text-main);');
+        bar.appendChild(b);
+    });
+    const add = document.createElement('button');
+    add.textContent = '+ Level'; add.title = 'Add a floor level';
+    add.onclick = _fpAddLevel;
+    add.style.cssText = 'height:26px; padding:0 10px; font-size:0.72rem; border:1px solid var(--border-color); border-radius:4px; cursor:pointer; background:var(--bg-input); color:var(--text-main);';
+    bar.appendChild(add);
+    const ren = document.createElement('button');
+    ren.textContent = 'Rename'; ren.title = 'Rename this level';
+    ren.onclick = _fpRenameLevel;
+    ren.style.cssText = add.style.cssText;
+    bar.appendChild(ren);
+    if (floorplanLevels.length > 1) {
+        const del = document.createElement('button');
+        del.textContent = 'Delete level'; del.title = 'Delete this level';
+        del.onclick = _fpDeleteLevel;
+        del.style.cssText = add.style.cssText;
+        bar.appendChild(del);
+    }
+}
+function _fpSwitchLevel(i) { _fpMigrate(); if (i < 0 || i >= floorplanLevels.length) return; _fpLevel = i; _fpArmedId = null; const a = _fpActive(); floorplanImageData = a.imageData; floorplanImageName = a.imageName; renderFloorplanMarkup(); }
+function _fpAddLevel() { _fpMigrate(); floorplanLevels.push({ name: 'Level ' + (floorplanLevels.length + 1), imageData: '', imageName: '' }); _fpLevel = floorplanLevels.length - 1; if (typeof scheduleAutosave === 'function') scheduleAutosave(); renderFloorplanMarkup(); }
+function _fpRenameLevel() {
+    _fpMigrate();
+    const lv = floorplanLevels[_fpLevel];
+    const nm = (window.prompt('Level name:', lv.name || ('Level ' + (_fpLevel + 1))) || '').trim();
+    if (!nm) return;
+    lv.name = nm; if (typeof scheduleAutosave === 'function') scheduleAutosave(); renderFloorplanMarkup();
+}
+function _fpDeleteLevel() {
+    _fpMigrate();
+    if (floorplanLevels.length <= 1) return;
+    const removed = _fpLevel;
+    if (!window.confirm('Delete "' + (floorplanLevels[removed].name || ('Level ' + (removed + 1))) + '"? Pins on it will be cleared.')) return;
+    // clear pins for rows on the removed level; shift higher levels down
+    (dashProjectData || []).forEach(r => {
+        if (!r) return;
+        const rl = r.level || 0;
+        if (rl === removed) { r.planX = null; r.planY = null; r.level = 0; }
+        else if (rl > removed) r.level = rl - 1;
+    });
+    floorplanLevels.splice(removed, 1);
+    if (_fpLevel >= floorplanLevels.length) _fpLevel = floorplanLevels.length - 1;
+    const a = _fpActive(); floorplanImageData = a.imageData; floorplanImageName = a.imageName;
+    if (typeof pushHistory === 'function') pushHistory();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    renderFloorplanMarkup();
+}
+
+function _fpPinMouseDown(e, id) {
+    e.preventDefault(); e.stopPropagation();
+    _fpDragId = id;
+    _fpDragPin = e.currentTarget;
+    if (_fpDragPin) _fpDragPin.style.cursor = 'grabbing';
+    document.addEventListener('mousemove', _fpDragMove);
+    document.addEventListener('mouseup', _fpDragUp);
+}
+function _fpDragMove(e) {
+    if (!_fpDragId) return;
+    const n = _fpNormFromEvent(e);
+    if (!n) return;
+    const g = _fpFindGroup(_fpDragId);
+    if (!g) return;
+    g.rows.forEach(r => { r.planX = n.x; r.planY = n.y; });
+    if (_fpDragPin) { _fpDragPin.style.left = (n.x * 100) + '%'; _fpDragPin.style.top = (n.y * 100) + '%'; }
+}
+function _fpDragUp() {
+    document.removeEventListener('mousemove', _fpDragMove);
+    document.removeEventListener('mouseup', _fpDragUp);
+    if (_fpDragId && typeof pushHistory === 'function') pushHistory();
+    _fpDragId = null; _fpDragPin = null;
+    renderFloorplanMarkup();
+}
+
+// ── In-app PDF preview ────────────────────────────────────────────────────
+function showSpecPdfPreview(doc, fname) {
+    window._lastSpecDoc = doc;
+    window._lastSpecName = fname || 'FRAME_Presentation.pdf';
+    const modal = document.getElementById('specPdfPreviewModal');
+    const frame = document.getElementById('specPdfPreviewFrame');
+    if (!modal || !frame) { try { doc.save(window._lastSpecName); } catch (e) {} return; }
+    try { frame.src = doc.output('bloburl'); } catch (e) {}
+    modal.style.display = 'flex';
+}
+function closeSpecPdfPreview() {
+    const modal = document.getElementById('specPdfPreviewModal');
+    if (modal) modal.style.display = 'none';
+    const frame = document.getElementById('specPdfPreviewFrame');
+    if (frame) frame.src = 'about:blank';
+}
+function downloadSpecPdfPreview() {
+    if (window._lastSpecDoc) { try { window._lastSpecDoc.save(window._lastSpecName || 'FRAME_Presentation.pdf'); } catch (e) {} }
+}
+
+// ── Moodboard image manager ───────────────────────────────────────────────
+// _mbEls() is an array of { img: dataURL, caption }. Images
+// are downscaled on import (keeps save/autosave small) and persist with the
+// project. Rendered as a captioned grid in the deck.
+function _downscaleImageFile(file, maxDim, quality, cb) {
+    const reader = new FileReader();
+    reader.onload = () => {
+        const img = new Image();
+        img.onload = () => {
+            let w = img.naturalWidth, h = img.naturalHeight;
+            const scale = Math.min(1, maxDim / Math.max(w, h || 1));
+            w = Math.max(1, Math.round(w * scale)); h = Math.max(1, Math.round(h * scale));
+            try {
+                const c = document.createElement('canvas'); c.width = w; c.height = h;
+                c.getContext('2d').drawImage(img, 0, 0, w, h);
+                cb(c.toDataURL('image/jpeg', quality || 0.82), file.name, w, h);
+            } catch (e) { cb(reader.result, file.name, w, h); }
+        };
+        img.onerror = () => cb(null, file.name);
+        img.src = reader.result;
+    };
+    reader.onerror = () => cb(null, file.name);
+    reader.readAsDataURL(file);
+}
+
+// Each tile: { img, caption, aspect, x, y, w, z } — x/y/w normalized to the
+// page, z = stacking order. Editor is a page-aspect canvas (WYSIWYG-ish).
+let _mbSelected = -1;
+let _mbDrag = null;   // { mode, i, startX, startY, ox, oy, ow, r, el }
+
+function _elType(t) { return (t && t.type) ? t.type : 'image'; }
+function _normalizeMoodboard() {
+    const els = _mbEls() || [];
+    let maxZ = 0;
+    els.forEach(t => { if (typeof t.z === 'number') maxZ = Math.max(maxZ, t.z); });
+    els.forEach(t => {
+        const ty = _elType(t); t.type = ty;
+        if (typeof t.z !== 'number') t.z = ++maxZ;
+        if (ty === 'image') {
+            if (typeof t.aspect !== 'number' || !isFinite(t.aspect) || t.aspect <= 0) t.aspect = 1.33;
+            if (typeof t.w !== 'number') t.w = 0.28;
+            if (typeof t.x !== 'number') t.x = 0.1;
+            if (typeof t.y !== 'number') t.y = 0.15;
+            if (typeof t.h !== 'number') t.h = t.w * (936 / 540) / (t.aspect || 1.33);   // default box matches image aspect (no crop)
+            if (typeof t.zoom !== 'number') t.zoom = 1;
+            if (typeof t.panX !== 'number') t.panX = 0;
+            if (typeof t.panY !== 'number') t.panY = 0;
+            if (typeof t.capSize !== 'number') t.capSize = 0.02;
+            if (typeof t.capSide !== 'string') t.capSide = 'bottom';
+        } else if (ty === 'text') {
+            if (typeof t.w !== 'number') t.w = 0.4;
+            if (typeof t.size !== 'number') t.size = 0.045;
+            if (typeof t.x !== 'number') t.x = 0.12;
+            if (typeof t.y !== 'number') t.y = 0.14;
+            if (typeof t.text !== 'string') t.text = 'Text';
+            if (typeof t.color !== 'string') t.color = '#222222';
+            if (typeof t.font !== 'string') t.font = 'serif';
+        } else if (ty === 'arrow') {
+            if (typeof t.x1 !== 'number') t.x1 = 0.4;
+            if (typeof t.y1 !== 'number') t.y1 = 0.4;
+            if (typeof t.x2 !== 'number') t.x2 = 0.6;
+            if (typeof t.y2 !== 'number') t.y2 = 0.48;
+            if (typeof t.color !== 'string') t.color = '#9aa0a6';
+            if (typeof t.weight !== 'number') t.weight = 1.2;
+        } else if (ty === 'elbow') {
+            if (!Array.isArray(t.pts) || t.pts.length < 2) t.pts = [{ x: 0.4, y: 0.4 }, { x: 0.6, y: 0.4 }, { x: 0.6, y: 0.5 }];
+            if (typeof t.color !== 'string') t.color = '#9aa0a6';
+            if (typeof t.weight !== 'number') t.weight = 1.2;
+        }
+    });
+}
+function _mbBackfillAspects(cb) {
+    const els = _mbEls() || [];
+    let pending = 0;
+    els.forEach(t => {
+        if (_elType(t) !== 'image') return;
+        if (typeof t.aspect === 'number' && t.aspect > 0 && t._aspectReal) return;
+        pending++;
+        const im = new Image();
+        im.onload = () => { t.aspect = (im.naturalWidth / im.naturalHeight) || 1.33; t._aspectReal = true; if (--pending === 0 && cb) cb(); };
+        im.onerror = () => { t._aspectReal = true; if (--pending === 0 && cb) cb(); };
+        im.src = t.img;
+    });
+    if (pending === 0 && cb) cb();
+}
+
+function _mbOnResize() { const m = document.getElementById('moodboardModal'); if (m && m.style.display !== 'none') renderMoodboardCanvas(); }
+function openMoodboardModal() {
+    const m = document.getElementById('moodboardModal');
+    if (!m) return;
+    _mbEditTarget = null;
+    _mbSelected = -1;
+    _normalizeMoodboard();
+    _mbApplyModeUI();
+    m.style.display = 'flex';
+    window.addEventListener('resize', _mbOnResize);
+    document.addEventListener('keydown', _mbKeyDelete);
+    _mbBackfillAspects(renderMoodboardCanvas);
+    renderMoodboardCanvas();
+}
+// Open the freeform editor on a fixed deck page (currently the Cover). Reuses
+// the entire canvas; the layout-pages rail/controls are hidden.
+function openFixedPageEditor(key) {
+    _mbMigratePages();
+    let page, label;
+    if (key === 'cover') {
+        if (!editorialContent.coverPage || !Array.isArray(editorialContent.coverPage.elements)) editorialContent.coverPage = { elements: [] };
+        page = editorialContent.coverPage; label = 'Cover';
+        if (!page.elements.length) {
+            const el = document.getElementById('g_projName');
+            const nm = ((el && el.value) || 'PROJECT NAME').toUpperCase();
+            page.elements = [_tImg(0, 0, 1, 1, 1), _tTxt(nm, .08, .66, .84, .085, 5, 'display', '#ffffff'), _tTxt('Art Program', .08, .8, .84, .04, 6, 'serif', '#ffffff')];
+        }
+        page.type = 'breaker';   // full-bleed treatment in editor + PDF
+    } else if (key === 'narrative') {
+        if (!editorialContent.narrativePage || !Array.isArray(editorialContent.narrativePage.elements)) editorialContent.narrativePage = { elements: [] };
+        page = editorialContent.narrativePage; label = 'Art Narrative';
+        if (!page.elements.length) {
+            const body = (editorialContent.narrative || 'Add the art narrative here — the story behind the collection, the themes, and how the work connects to the space.');
+            page.elements = [_tTxt('ART NARRATIVE', .06, .12, .5, .06, 6, 'display', '#1a1a1a'), _tTxt(body, .06, .26, .52, .03, 5, 'serif', '#222222'), _tImg(.62, .14, .32, .62, 1)];
+        }
+        page.type = 'narrative';
+    } else if (key === 'slogan') {
+        if (!editorialContent.sloganPage || !Array.isArray(editorialContent.sloganPage.elements)) editorialContent.sloganPage = { elements: [] };
+        page = editorialContent.sloganPage; label = 'Good Art. Good People.';
+        if (!page.elements.length) {
+            page.elements = [_tTxt('GOOD ART.', .08, .34, .84, .14, 5, 'display', '#1a1a1a'), _tTxt('GOOD PEOPLE.', .08, .54, .84, .14, 6, 'display', '#1a1a1a')];
+        }
+        page.type = 'breaker';   // clean full-page statement, no footer
+    } else if (key === 'understanding') {
+        if (!editorialContent.understandingPage || !Array.isArray(editorialContent.understandingPage.elements)) editorialContent.understandingPage = { elements: [] };
+        page = editorialContent.understandingPage; label = 'Project Understanding';
+        if (!page.elements.length) {
+            const body = (editorialContent.understanding || 'Add the project understanding here — goals, audience, site context, and what success looks like.');
+            page.elements = [_tTxt('PROJECT UNDERSTANDING', .06, .12, .6, .06, 6, 'display', '#1a1a1a'), _tTxt(body, .06, .26, .52, .03, 5, 'serif', '#222222'), _tImg(.62, .14, .32, .62, 1)];
+        }
+        page.type = 'narrative';
+    } else if (key === 'strategy') {
+        if (!editorialContent.strategyPage || !Array.isArray(editorialContent.strategyPage.elements)) editorialContent.strategyPage = { elements: [] };
+        page = editorialContent.strategyPage; label = 'Art Collection Strategy';
+        if (!page.elements.length) {
+            const s = editorialContent.strategy || {};
+            page.elements = [
+                _tTxt('ART COLLECTION STRATEGY', .06, .1, .88, .055, 6, 'display', '#1a1a1a'),
+                _tTxt(s.primary || 'Primary strategy copy.', .06, .26, .28, .026, 5, 'serif', '#222222'),
+                _tTxt(s.secondary || 'Secondary strategy copy.', .37, .26, .28, .026, 5, 'serif', '#222222'),
+                _tTxt(s.tertiary || 'Tertiary strategy copy.', .68, .26, .28, .026, 5, 'serif', '#222222')
+            ];
+        }
+        page.type = 'narrative';
+    } else { return; }
+    _mbEditTarget = { key: key, label: label, page: page };
+    const m = document.getElementById('moodboardModal'); if (!m) return;
+    const sp = document.getElementById('specPdfModal'); if (sp) sp.style.display = 'none';
+    _mbSelected = -1;
+    _normalizeMoodboard();
+    _mbApplyModeUI();
+    m.style.display = 'flex';
+    window.addEventListener('resize', _mbOnResize);
+    document.addEventListener('keydown', _mbKeyDelete);
+    _mbBackfillAspects(renderMoodboardCanvas);
+    renderMoodboardCanvas();
+}
+function _mbApplyModeUI() {
+    const fixed = !!_mbEditTarget;
+    const ctl = document.getElementById('mbPageControls'); if (ctl) ctl.style.display = fixed ? 'none' : 'flex';
+    const rail = document.getElementById('moodboardPages'); if (rail) rail.style.display = fixed ? 'none' : 'flex';
+    const lab = document.getElementById('mbModeLabel'); if (lab) lab.textContent = fixed ? ('Editing: ' + (_mbEditTarget.label || 'Page')) : '';
+}
+
+// ── Contacts editor: structured add/remove for the Thank You page. Reads and
+// writes editorialContent.contacts (the "Name | Role | Email | Phone" string),
+// so the deck renderer and persistence are unchanged. ──────────────────────
+let _contactsDraft = [];
+function _contactsParse(str) {
+    return (str || '').split('\n').map(l => l.trim()).filter(Boolean).map(l => { const p = l.split(/\s*[|,]\s*/); return { name: p[0] || '', role: p[1] || '', email: p[2] || '', phone: p[3] || '' }; });
+}
+function _contactsSerialize(arr) {
+    return (arr || []).filter(c => (c.name || c.role || c.email || c.phone)).map(c => [c.name || '', c.role || '', c.email || '', c.phone || ''].join(' | ')).join('\n');
+}
+function _contactsCommit() {
+    const str = _contactsSerialize(_contactsDraft);
+    editorialContent.contacts = str;
+    const ta = document.getElementById('specPdfContacts'); if (ta) ta.value = str;
+    if (typeof markDirty === 'function') markDirty();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+}
+function _contactsRender() {
+    const wrap = document.getElementById('contactsRows'); if (!wrap) return;
+    wrap.innerHTML = '';
+    _contactsDraft.forEach((c, i) => {
+        const row = document.createElement('div');
+        row.style.cssText = 'display:flex; gap:6px; align-items:center; margin-bottom:6px;';
+        const mk = (ph, field, w) => { const inp = document.createElement('input'); inp.type = 'text'; inp.value = c[field] || ''; inp.placeholder = ph; inp.oninput = () => { _contactsDraft[i][field] = inp.value; _contactsCommit(); }; inp.style.cssText = 'flex:' + w + '; min-width:0; height:30px; font-size:0.74rem; padding:0 8px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px;'; return inp; };
+        row.appendChild(mk('Name', 'name', '2'));
+        row.appendChild(mk('Role', 'role', '2'));
+        row.appendChild(mk('Email', 'email', '3'));
+        row.appendChild(mk('Phone', 'phone', '2'));
+        const del = document.createElement('button'); del.textContent = '✕'; del.title = 'Remove contact'; del.className = 'action-btn btn-secondary'; del.style.cssText = 'width:30px; height:30px; padding:0; font-size:0.75rem; flex:0 0 auto;'; del.onclick = () => removeContact(i);
+        row.appendChild(del);
+        wrap.appendChild(row);
+    });
+}
+function openContactsEditor() {
+    const ta = document.getElementById('specPdfContacts');
+    let cur = ta ? ta.value : (editorialContent.contacts || '');
+    if (!cur && typeof studioDefaults !== 'undefined' && studioDefaults.contacts) cur = studioDefaults.contacts;
+    _contactsDraft = _contactsParse(cur);
+    if (!_contactsDraft.length) _contactsDraft = [{ name: '', role: '', email: '', phone: '' }];
+    _contactsRender();
+    const m = document.getElementById('contactsModal'); if (m) m.style.display = 'flex';
+}
+function closeContactsEditor() { const m = document.getElementById('contactsModal'); if (m) m.style.display = 'none'; }
+function addContact() { _contactsDraft.push({ name: '', role: '', email: '', phone: '' }); _contactsRender(); _contactsCommit(); }
+function removeContact(i) { _contactsDraft.splice(i, 1); if (!_contactsDraft.length) _contactsDraft = [{ name: '', role: '', email: '', phone: '' }]; _contactsRender(); _contactsCommit(); }
+
+// ── Add project artwork to a layout page (spec-showcase) ────────────────────
+// Bakes a framed-artwork mockup (reusing renderFrameToCanvas, artwork baked in)
+// into an image element, plus a spec text block (buildSpecStrings), so framed
+// pieces can be arranged salon-style with all the normal canvas tools.
+function _mbArtPickerOpen() {
+    const list = document.getElementById('artPickerList'); if (!list) return;
+    const rows = (typeof dashProjectData !== 'undefined' && dashProjectData) ? dashProjectData : [];
+    list.innerHTML = '';
+    if (!rows.length) { list.innerHTML = '<p style="color:var(--text-muted); font-size:0.8rem; margin:6px 2px;">No artworks in the project yet. Add frames in the Frame Dashboard first.</p>'; }
+    rows.forEach((r, i) => {
+        const row = document.createElement('div');
+        row.style.cssText = 'display:flex; align-items:center; justify-content:space-between; gap:8px; padding:6px 4px; border-bottom:1px solid var(--border-color);';
+        const label = document.createElement('div');
+        label.style.cssText = 'font-size:0.76rem; color:var(--text-main); min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;';
+        label.textContent = (r.id || ('Item ' + (i + 1))) + (r.product ? ' · ' + r.product : '') + (r.fCode ? ' · ' + r.fCode : '');
+        const b = document.createElement('button');
+        b.textContent = 'Add'; b.className = 'action-btn'; b.style.cssText = 'width:auto; height:26px; padding:0 12px; font-size:0.7rem; flex:0 0 auto;';
+        b.onclick = () => _mbAddArtwork(i);
+        row.appendChild(label); row.appendChild(b); list.appendChild(row);
+    });
+    const m = document.getElementById('artPickerModal'); if (m) m.style.display = 'flex';
+}
+function _mbCloseArtPicker() { const m = document.getElementById('artPickerModal'); if (m) m.style.display = 'none'; }
+function _artSpecText(r, compact) {
+    let title = (r.id || '') + '';
+    let lines = [];
+    try {
+        const specs = buildSpecStrings(r);
+        const arr = (specs && specs.lines) ? specs.lines.slice() : [];
+        if (compact) {
+            const keep = {};
+            arr.forEach(l => { if (l.label === 'Application') keep.type = l.value; if (l.label === 'Matboard') keep.mat = l.value; });
+            const u = (typeof dashUnit !== 'undefined') ? dashUnit : 'in';
+            const fmtN = (v) => { const n = parseFloat(v); return isNaN(n) ? null : parseFloat(n.toFixed(3)).toString(); };
+            const ow = fmtN(r.extW), oh = fmtN(r.extH);
+            const ul = u === 'in' ? '"' : (' ' + u);
+            const out = [];
+            if (keep.type) out.push('Art Type  ' + keep.type);
+            if (keep.mat) out.push('Matboard  ' + keep.mat);
+            if (ow && oh) out.push('Overall  ' + ow + ul + ' W × ' + oh + ul + ' H');
+            lines = out;
+        } else {
+            lines = arr.map(l => l.label + '  ' + (l.value || ''));
+        }
+    } catch (e) {}
+    return title + (lines.length ? '\n' + lines.join('\n') : '');
+}
+async function _mbBakeArtworkIntoPage(r, compact) {
+    if (!r) return false;
+    let dataUrl = null, aspect = 1.33;
+    try {
+        const dInches = _frameDataInInches(Object.assign({}, r, { extW: r.extW, extH: r.extH }), dashUnit);
+        let artworkImg = null;
+        if (r.artworkUrl) { try { artworkImg = await _loadImg(r.artworkUrl); } catch (e) {} }
+        const swatch = (r.fType === 'image' && r.swatchDataUrl) ? await _loadImg(r.swatchDataUrl) : null;
+        const out = renderFrameToCanvas(dInches, swatch, { wireframe: _isWireframe(), dpi: 96, pad: 0, artworkImg, artCrop: { zoom: r.artZoom, panX: r.artPanX, panY: r.artPanY } });
+        const canvas = out.canvas;
+        const flat = document.createElement('canvas'); flat.width = canvas.width; flat.height = canvas.height;
+        const fx = flat.getContext('2d'); fx.fillStyle = '#ffffff'; fx.fillRect(0, 0, flat.width, flat.height); fx.drawImage(canvas, 0, 0);
+        dataUrl = flat.toDataURL('image/jpeg', 0.85);
+        aspect = canvas.width / canvas.height || 1.33;
+    } catch (e) { return false; }
+    const els = _mbEls();
+    const n = els.length;
+    const ox = 0.07 + (n % 3) * 0.30;
+    const oy = 0.14 + (Math.floor(n / 3) % 2) * 0.06;
+    const w = 0.26;
+    const h = w * (936 / 540) / (aspect || 1.33);
+    const z = els.reduce((m, e) => Math.max(m, e.z || 0), 0) + 1;
+    els.push({ type: 'image', img: dataUrl, caption: '', aspect: aspect, x: ox, y: oy, w: w, h: h, zoom: 1, panX: 0, panY: 0, capSize: 0.02, capSide: 'bottom', z: z });
+    els.push({ type: 'text', text: _artSpecText(r, compact), x: ox, y: Math.min(0.9, oy + h + 0.015), w: w, size: 0.017, color: '#333333', font: 'sans', z: z + 1 });
+    return true;
+}
+function _artCompactOn() { const c = document.getElementById('artCompactSpec'); return !!(c && c.checked); }
+async function _mbAddArtwork(i) {
+    const r = (dashProjectData || [])[i];
+    const ok = await _mbBakeArtworkIntoPage(r, _artCompactOn());
+    if (!ok) { if (typeof showInfoModal === 'function') showInfoModal('Could not render', 'That artwork could not be rendered into a mockup.'); return; }
+    if (typeof pushHistory === 'function') pushHistory();
+    renderMoodboardCanvas();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    _mbCloseArtPicker();
+}
+async function _mbAddAllArtwork() {
+    const rows = (dashProjectData || []);
+    if (!rows.length) return;
+    const compact = _artCompactOn();
+    let any = false;
+    for (const r of rows) { const ok = await _mbBakeArtworkIntoPage(r, compact); if (ok) any = true; }
+    if (any) { if (typeof pushHistory === 'function') pushHistory(); renderMoodboardCanvas(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); }
+    _mbCloseArtPicker();
+}
+function _mbKeyDelete(e) {
+    if (_mbPlacing) return;
+    if (e.key !== 'Delete' && e.key !== 'Backspace') return;
+    const a = document.activeElement;
+    if (a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.tagName === 'SELECT' || a.isContentEditable)) return;
+    if (_mbSelected < 0) return;
+    e.preventDefault();
+    _mbDelete();
+}
+function closeMoodboardModal() {
+    const m = document.getElementById('moodboardModal');
+    if (m) m.style.display = 'none';
+    _mbEditTarget = null;
+    _mbSelected = -1;
+    if (_mbPlacing) { _mbPlacing = false; _mbDraft = null; document.removeEventListener('keydown', _mbPlaceKey); }
+    window.removeEventListener('resize', _mbOnResize);
+    document.removeEventListener('keydown', _mbKeyDelete);
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    const cnt = document.getElementById('specPdfMoodboardCount');
+    if (cnt) { const n = (editorialContent.layoutPages || []).length; cnt.textContent = n + ' page' + (n === 1 ? '' : 's'); }
+}
+
+// One arrow segment as a rotated element with a wide transparent hit band so
+// thin lines are easy to grab. Returns the wrapper (caller wires idx/handlers).
+function _mbSegEl(Ax, Ay, Bx, By, color, wt, withHead, sel) {
+    const len = Math.hypot(Bx - Ax, By - Ay), ang = Math.atan2(By - Ay, Bx - Ax) * 180 / Math.PI;
+    const hit = Math.max(wt, 13);
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'position:absolute; left:' + Ax + 'px; top:' + (Ay - hit / 2) + 'px; width:' + len + 'px; height:' + hit + 'px; transform-origin:0 50%; transform:rotate(' + ang + 'deg); cursor:grab;';
+    const line = document.createElement('div');
+    line.style.cssText = 'position:absolute; left:0; top:' + (hit / 2 - wt / 2) + 'px; width:100%; height:' + wt + 'px; background:' + color + ';' + (sel ? ' box-shadow:0 0 0 1px #6a6aff;' : '');
+    wrap.appendChild(line);
+    if (withHead) {
+        const hH = 3 + wt * 1.2, hL = 6 + wt * 2.2;
+        const head = document.createElement('div');
+        head.style.cssText = 'position:absolute; right:-1px; top:' + (hit / 2 - hH) + 'px; width:0; height:0; border-left:' + hL + 'px solid ' + color + '; border-top:' + hH + 'px solid transparent; border-bottom:' + hH + 'px solid transparent;';
+        wrap.appendChild(head);
+    }
+    return wrap;
+}
+function _mbDot(px, py, onDown, color) {
+    const hnd = document.createElement('div');
+    hnd.style.cssText = 'position:absolute; left:' + (px - 6) + 'px; top:' + (py - 6) + 'px; width:12px; height:12px; background:' + (color || '#6a6aff') + '; border:2px solid #fff; border-radius:50%; cursor:move; z-index:20;';
+    if (onDown) hnd.onmousedown = onDown;
+    return hnd;
+}
+
+// Cover-fit an image of `aspect` into a box, scaled by zoom and panned. pan is
+// -1..1 (fraction of the overflow). Returns draw size + top-left offset.
+function _coverRect(boxW, boxH, aspect, zoom, panX, panY) {
+    let dW0, dH0;
+    if (aspect > boxW / boxH) { dH0 = boxH; dW0 = boxH * aspect; }
+    else { dW0 = boxW; dH0 = boxW / aspect; }
+    const dW = dW0 * (zoom || 1), dH = dH0 * (zoom || 1);
+    const slackX = dW - boxW, slackY = dH - boxH;
+    const offX = -slackX / 2 + (panX || 0) * slackX / 2;
+    const offY = -slackY / 2 + (panY || 0) * slackY / 2;
+    return { dW: dW, dH: dH, offX: offX, offY: offY, slackX: slackX, slackY: slackY };
+}
+
+// Render an image cropped/zoomed/panned to a box into an offscreen canvas (for
+// the PDF, which can't clip addImage directly).
+function _cropToCanvas(img, boxWpt, boxHpt, aspect, zoom, panX, panY) {
+    const R = 2;
+    const cw = Math.max(1, Math.round(boxWpt * R)), ch = Math.max(1, Math.round(boxHpt * R));
+    const c = document.createElement('canvas'); c.width = cw; c.height = ch;
+    const ctx = c.getContext('2d');
+    const cv = _coverRect(cw, ch, aspect, zoom, panX, panY);
+    ctx.drawImage(img, cv.offX, cv.offY, cv.dW, cv.dH);
+    return c;
+}
+
+function renderMoodboardCanvas() {
+    const canvas = document.getElementById('moodboardCanvas');
+    if (!canvas) return;
+    _normalizeMoodboard();
+    const els = _mbEls() || [];
+    const cr = canvas.getBoundingClientRect();
+    canvas.innerHTML = '';
+    if (_mbPlacing) {
+        canvas.style.cursor = 'crosshair';
+        canvas.onmousedown = null;
+        canvas.onclick = _mbPlaceClick;
+        canvas.ondblclick = (e) => { e.preventDefault(); _mbFinishElbow(); };
+    } else {
+        canvas.style.cursor = '';
+        canvas.onclick = null; canvas.ondblclick = null;
+        canvas.onmousedown = (e) => { if (e.target === canvas) { _mbSelected = -1; renderMoodboardCanvas(); } };
+    }
+    const order = els.map((t, i) => i).sort((a, b) => (els[a].z || 0) - (els[b].z || 0));
+    order.forEach(i => {
+        const t = els[i]; const sel = (i === _mbSelected); const ty = _elType(t);
+        if (ty === 'arrow') {
+            const Ax = t.x1 * cr.width, Ay = t.y1 * cr.height, Bx = t.x2 * cr.width, By = t.y2 * cr.height;
+            const wt = Math.max(0.5, t.weight || 1.2), col = t.color || '#9aa0a6';
+            const wrap = _mbSegEl(Ax, Ay, Bx, By, col, wt, true, sel);
+            wrap.dataset.idx = i; wrap.onmousedown = (e) => _mbTileDown(e, i);
+            canvas.appendChild(wrap);
+            if (sel) {
+                canvas.appendChild(_mbDot(Ax, Ay, (e) => _mbArrowHandleDown(e, i, 'A')));
+                canvas.appendChild(_mbDot(Bx, By, (e) => _mbArrowHandleDown(e, i, 'B')));
+            }
+            return;
+        }
+        if (ty === 'elbow') {
+            const pts = t.pts || []; const wt = Math.max(0.5, t.weight || 1.2), col = t.color || '#9aa0a6';
+            for (let k = 0; k < pts.length - 1; k++) {
+                const Ax = pts[k].x * cr.width, Ay = pts[k].y * cr.height, Bx = pts[k + 1].x * cr.width, By = pts[k + 1].y * cr.height;
+                const wrap = _mbSegEl(Ax, Ay, Bx, By, col, wt, k === pts.length - 2, sel);
+                wrap.dataset.idx = i; wrap.onmousedown = (e) => _mbTileDown(e, i);
+                canvas.appendChild(wrap);
+            }
+            if (sel) pts.forEach((p, k) => canvas.appendChild(_mbDot(p.x * cr.width, p.y * cr.height, (e) => _mbElbowAnchorDown(e, i, k))));
+            return;
+        }
+        const box = document.createElement('div'); box.dataset.idx = i;
+        if (ty === 'text') {
+            const fs = Math.max(8, (t.size || 0.045) * cr.height);
+            box.style.cssText = 'position:absolute; left:' + (t.x * 100) + '%; top:' + (t.y * 100) + '%; width:' + (t.w * 100) + '%; font-size:' + fs + 'px; line-height:1.15; color:' + (t.color || '#222') + '; cursor:grab; font-family:' + _mbFontCss(t.font) + '; white-space:pre-wrap; overflow-wrap:break-word; outline:none;' + (sel ? ' outline:1px dashed #6a6aff; outline-offset:2px;' : '');
+            box.textContent = t.text || 'Text';
+            box.title = 'Double-click to edit text';
+            box.ondblclick = (e) => { e.stopPropagation(); _mbBeginTextEdit(box, i); };
+        } else {
+            box.style.cssText = 'position:absolute; left:' + (t.x * 100) + '%; top:' + (t.y * 100) + '%; width:' + (t.w * 100) + '%; height:' + ((t.h || (t.w * (936 / 540) / (t.aspect || 1.33))) * 100) + '%; overflow:hidden; cursor:grab; box-shadow:0 1px 6px rgba(0,0,0,0.35);' + (sel ? ' outline:2px solid #6a6aff; outline-offset:1px;' : '');
+            const boxW = t.w * cr.width, boxH = (t.h || 0.2) * cr.height;
+            box.ondragover = (e) => { e.preventDefault(); box.style.outline = '2px dashed #6a6aff'; };
+            box.ondragleave = () => { box.style.outline = sel ? '2px solid #6a6aff' : ''; };
+            box.ondrop = (e) => _mbDropImage(e, i);
+            if (t.img) {
+                const cv = _coverRect(boxW, boxH, t.aspect || 1.33, t.zoom || 1, t.panX || 0, t.panY || 0);
+                const img = document.createElement('img');
+                img.src = t.img; img.draggable = false;
+                img.style.cssText = 'position:absolute; left:' + cv.offX + 'px; top:' + cv.offY + 'px; width:' + cv.dW + 'px; height:' + cv.dH + 'px; max-width:none; display:block; pointer-events:none; user-select:none;';
+                box.appendChild(img);
+            } else {
+                box.style.background = '#efefef';
+                const hint = document.createElement('div');
+                hint.style.cssText = 'position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:2px; color:#999; font-size:0.72rem; border:1px dashed #bbb; cursor:pointer; text-align:center; padding:4px;';
+                hint.innerHTML = '<span style="font-size:1.2rem; line-height:1;">+</span><span>Add image</span>';
+                hint.title = 'Click to choose, or drag an image here';
+                hint.onclick = (e) => { e.stopPropagation(); _mbFillImage(i); };
+                box.appendChild(hint);
+            }
+            if (t.caption) {
+                const cap = document.createElement('div');
+                cap.textContent = t.caption;
+                const cfs = Math.max(7, (t.capSize || 0.02) * cr.height);
+                const side = t.capSide || 'bottom';
+                let pos = 'left:0; top:100%; width:100%; margin-top:3px; text-align:left;';
+                if (side === 'top') pos = 'left:0; bottom:100%; width:100%; margin-bottom:3px; text-align:left;';
+                else if (side === 'left') pos = 'right:100%; top:0; width:100%; margin-right:5px; text-align:right;';
+                else if (side === 'right') pos = 'left:100%; top:0; width:100%; margin-left:5px; text-align:left;';
+                cap.style.cssText = 'position:absolute; ' + pos + ' font-size:' + cfs + 'px; line-height:1.2; color:#555; white-space:normal; overflow-wrap:break-word; pointer-events:none; font-family:Georgia, serif; overflow:visible;';
+                box.appendChild(cap);
+            }
+            if (sel && t.img) {   // center handle pans the image inside its crop box
+                const ph = document.createElement('div');
+                ph.title = 'Drag to pan image inside the frame';
+                ph.style.cssText = 'position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:26px; height:26px; border-radius:50%; background:rgba(106,106,255,0.85); border:2px solid #fff; cursor:move; z-index:21; display:flex; align-items:center; justify-content:center; color:#fff; font-size:13px;';
+                ph.textContent = '\u2725';
+                ph.onmousedown = (e) => _mbImgPanDown(e, i);
+                box.appendChild(ph);
+            }
+        }
+        if (sel) {
+            const h = document.createElement('div');
+            h.style.cssText = 'position:absolute; right:-7px; bottom:-7px; width:14px; height:14px; background:#6a6aff; border:2px solid #fff; border-radius:3px; cursor:nwse-resize; z-index:20;';
+            h.onmousedown = (e) => _mbResizeDown(e, i);
+            box.appendChild(h);
+        }
+        box.onmousedown = (e) => _mbTileDown(e, i);
+        canvas.appendChild(box);
+    });
+    if (!els.length && !_mbPlacing) {
+        const p = document.createElement('p');
+        p.style.cssText = 'color:#888; font-size:0.85rem; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); margin:0; text-align:center;';
+        p.textContent = 'Empty layout — add images, text notes, or arrows.';
+        canvas.appendChild(p);
+    }
+    if (_mbPlacing && _mbDraft) {
+        const pts = _mbDraft.pts, col = _mbDraft.color || '#6a6aff';
+        for (let k = 0; k < pts.length - 1; k++) {
+            canvas.appendChild(_mbSegEl(pts[k].x * cr.width, pts[k].y * cr.height, pts[k + 1].x * cr.width, pts[k + 1].y * cr.height, col, Math.max(0.5, _mbDraft.weight || 1.2), k === pts.length - 2, false));
+        }
+        pts.forEach(p => { const d = _mbDot(p.x * cr.width, p.y * cr.height, null, col); d.style.cursor = 'crosshair'; canvas.appendChild(d); });
+        const banner = document.createElement('div');
+        banner.style.cssText = 'position:absolute; left:50%; top:8px; transform:translateX(-50%); background:rgba(20,20,20,0.85); color:#fff; font-size:0.72rem; padding:5px 12px; border-radius:5px; pointer-events:none; white-space:nowrap;';
+        banner.textContent = 'Click to add points · double-click or Enter to finish · Esc to cancel';
+        canvas.appendChild(banner);
+    }
+    _mbDrawGuides(canvas);
+    _mbUpdateToolbar();
+    _mbRenderPageStrip();
+}
+
+// Map a font role to a CSS stack for the editor preview (PDF uses the real
+// embedded faces). display ≈ Druk (condensed bold sans), serif ≈ Messina.
+function _mbFontCss(font) {
+    if (font === 'display') return '"Arial Narrow", "Helvetica Neue Condensed", Impact, sans-serif';
+    if (font === 'sans') return 'Helvetica, Arial, sans-serif';
+    return 'Georgia, "Times New Roman", serif';
+}
+// Faded, non-interactive guides showing where the title, footer, and page
+// margins print — so elements don't get buried under deck chrome.
+function _mbDrawGuides(canvas) {
+    const mk = (css, text) => { const d = document.createElement('div'); d.style.cssText = 'position:absolute; pointer-events:none; ' + css; if (text) d.textContent = text; canvas.appendChild(d); };
+    const pg = (typeof _mbPage === 'function') ? _mbPage() : null;
+    if (pg && pg.type === 'breaker') {
+        // full-bleed treatment: image runs to the edge, no title/footer printed
+        mk('left:0; top:0; right:0; bottom:0; border:1px dashed rgba(106,106,255,0.35);');
+        mk('left:50%; top:6px; transform:translateX(-50%); font:700 9px Arial,sans-serif; letter-spacing:1px; color:rgba(106,106,255,0.5); background:rgba(255,255,255,0.6); padding:1px 6px; border-radius:3px;', 'FULL BLEED · NO FOOTER');
+        return;
+    }
+    // page margin frame (≈40pt on a 936×540 page)
+    mk('left:4.3%; top:7.4%; right:4.3%; bottom:7.4%; border:1px dashed rgba(0,0,0,0.16);');
+    // real page title (faded), where the PDF prints it (top-left)
+    const title = pg && pg.title ? pg.title : '';
+    if (title) mk('left:4.3%; top:3.0%; font:700 17px "Arial Narrow",Arial,sans-serif; letter-spacing:0.5px; color:rgba(0,0,0,0.22); text-transform:uppercase;', title);
+    // footer band + the real footer line built from the current project meta
+    mk('left:4.3%; right:4.3%; bottom:2.6%; border-top:1px solid rgba(0,0,0,0.12);');
+    const g = (id) => { const el = document.getElementById(id); return el ? (el.value || '').trim() : ''; };
+    const name = (g('g_projName') || 'PROJECT NAME').toUpperCase();
+    const loc = g('specPdfLocation').toUpperCase();
+    const code = g('specPdfCode'), ver = g('specPdfVersion');
+    let line = name;
+    if (loc) line += ' \u2013 ' + loc;
+    if (code) line += '   |   ' + code + (ver ? '.' + ver : '');
+    line += '    Copyright \u00A9 ' + new Date().getFullYear() + ' Farmboy Fine Arts Inc.';
+    mk('left:6.0%; right:14%; bottom:1.1%; font:9px Georgia,serif; color:rgba(0,0,0,0.24); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;', line);
+    mk('right:4.3%; bottom:1.3%; font:700 8px Arial,sans-serif; letter-spacing:0.5px; color:rgba(0,0,0,0.20);', 'FARMBOY');
+}
+
+function _mbUpdateToolbar() {
+    const el = (_mbSelected >= 0) ? (_mbEls() || [])[_mbSelected] : null;
+    const ty = el ? _elType(el) : null;
+    const inp = document.getElementById('mbCaption');
+    if (inp) {
+        if (ty === 'image') { inp.disabled = false; inp.placeholder = 'Caption for the selected image'; }
+        else if (ty === 'text') { inp.disabled = false; inp.placeholder = 'Text for the selected note'; }
+        else { inp.disabled = true; inp.placeholder = 'Select an element'; }
+        if (document.activeElement !== inp) inp.value = el ? (ty === 'text' ? (el.text || '') : (el.caption || '')) : '';
+    }
+    const tctl = document.getElementById('mbTextCtl'); if (tctl) tctl.style.display = (ty === 'text') ? 'flex' : 'none';
+    const actl = document.getElementById('mbArrowCtl'); if (actl) actl.style.display = (ty === 'arrow' || ty === 'elbow') ? 'flex' : 'none';
+    const ictl = document.getElementById('mbImgCtl'); if (ictl) ictl.style.display = (ty === 'image') ? 'flex' : 'none';
+    if (ty === 'text') {
+        const f = document.getElementById('mbFont'); if (f) f.value = el.font || 'serif';
+        const sv = document.getElementById('mbSizeVal'); if (sv) sv.textContent = Math.round((el.size || 0.045) * 1000);
+        const c = document.getElementById('mbTextColor'); if (c) c.value = el.color || '#222222';
+    } else if (ty === 'arrow' || ty === 'elbow') {
+        const c = document.getElementById('mbArrowColor'); if (c) c.value = el.color || '#9aa0a6';
+        const wv = document.getElementById('mbWtVal'); if (wv) wv.textContent = (el.weight || 1.2).toFixed(1);
+    } else if (ty === 'image') {
+        const cv = document.getElementById('mbCapSizeVal'); if (cv) cv.textContent = Math.round((el.capSize || 0.02) * 1000);
+        const ss = document.getElementById('mbCapSide'); if (ss) ss.value = el.capSide || 'bottom';
+        const zs = document.getElementById('mbZoom'); if (zs) zs.value = el.zoom || 1;
+    }
+    ['mbFront', 'mbBack', 'mbDelete'].forEach(id => { const b = document.getElementById(id); if (b) b.disabled = !el; });
+}
+function _mbSetZoom(v) { const el = _mbSelEl(); if (el) { el.zoom = Math.max(1, Math.min(4, parseFloat(v) || 1)); renderMoodboardCanvas(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); } }
+function _mbNudgeCapSize(d) { const el = _mbSelEl(); if (el) { el.capSize = Math.max(0.01, Math.min(0.08, (el.capSize || 0.02) + d)); renderMoodboardCanvas(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); } }
+function _mbSetCapSide(v) { const el = _mbSelEl(); if (el) { el.capSide = v; renderMoodboardCanvas(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); } }
+function _mbApplyToAll(kind) {
+    const el = _mbSelEl(); if (!el) return;
+    const s = _deckStyles(); const arr = _mbEls() || [];
+    if (kind === 'arrow') {
+        s.arrowColor = el.color; s.arrowWeight = el.weight;
+        arr.forEach(o => { const ty = _elType(o); if (ty === 'arrow' || ty === 'elbow') { o.color = el.color; o.weight = el.weight; } });
+    } else if (kind === 'text') {
+        s.textFont = el.font; s.textSize = el.size; s.textColor = el.color;
+        arr.forEach(o => { if (_elType(o) === 'text') { o.font = el.font; o.size = el.size; o.color = el.color; } });
+    }
+    if (typeof pushHistory === 'function') pushHistory();
+    renderMoodboardCanvas();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+}
+
+// ── Default styles panel: single source of truth for new elements + a
+// one-click reapply so the whole layout stays consistent. ──────────────────
+function openDeckStyles() { const m = document.getElementById('deckStylesModal'); if (!m) return; _dsPopulate(); m.style.display = 'flex'; }
+function closeDeckStyles() { const m = document.getElementById('deckStylesModal'); if (m) m.style.display = 'none'; if (typeof scheduleAutosave === 'function') scheduleAutosave(); }
+function _dsPopulate() {
+    const s = _deckStyles();
+    const set = (id, v) => { const e = document.getElementById(id); if (e) e.value = v; };
+    const txt = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+    set('dsArrowColor', s.arrowColor || '#9aa0a6'); txt('dsArrowWtVal', (s.arrowWeight || 1.2).toFixed(1));
+    set('dsTextFont', s.textFont || 'serif'); txt('dsTextSizeVal', Math.round((s.textSize || 0.045) * 1000)); set('dsTextColor', s.textColor || '#222222');
+    txt('dsCapSizeVal', Math.round((s.capSize || 0.02) * 1000)); set('dsCapSide', s.capSide || 'bottom');
+}
+function _dsSet(key, v) { _deckStyles()[key] = v; if (typeof scheduleAutosave === 'function') scheduleAutosave(); }
+function _dsNudge(key, d, min, max) { const s = _deckStyles(); s[key] = Math.max(min, Math.min(max, (s[key] || 0) + d)); _dsPopulate(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); }
+function _mbReapplyStyles() {
+    const s = _deckStyles(); const arr = _mbEls() || [];
+    arr.forEach(o => {
+        const ty = _elType(o);
+        if (ty === 'arrow' || ty === 'elbow') { o.color = s.arrowColor; o.weight = s.arrowWeight; }
+        else if (ty === 'text') { o.font = s.textFont; o.size = s.textSize; o.color = s.textColor; }
+        else if (ty === 'image') { o.capSize = s.capSize; o.capSide = s.capSide; }
+    });
+    if (typeof pushHistory === 'function') pushHistory();
+    renderMoodboardCanvas();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+}
+function _mbSelEl() { return (_mbSelected >= 0) ? _mbEls()[_mbSelected] : null; }
+function _mbSetFont(v) { const el = _mbSelEl(); if (el) { el.font = v; renderMoodboardCanvas(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); } }
+function _mbNudgeSize(d) { const el = _mbSelEl(); if (el) { el.size = Math.max(0.02, Math.min(0.22, (el.size || 0.045) + d)); renderMoodboardCanvas(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); } }
+function _mbSetTextColor(v) { const el = _mbSelEl(); if (el) { el.color = v; renderMoodboardCanvas(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); } }
+function _mbSetArrowColor(v) { const el = _mbSelEl(); if (el) { el.color = v; renderMoodboardCanvas(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); } }
+function _mbNudgeWeight(d) { const el = _mbSelEl(); if (el) { el.weight = Math.max(0.5, Math.min(6, (el.weight || 1.2) + d)); renderMoodboardCanvas(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); } }
+
+// Inline text editing: double-click a text box to type directly in it.
+let _mbTextEditing = false;
+function _mbBeginTextEdit(box, i) {
+    if (_mbTextEditing) return;
+    _mbTextEditing = true;
+    box.contentEditable = 'true';
+    box.style.cursor = 'text';
+    box.focus();
+    try { const r = document.createRange(); r.selectNodeContents(box); r.collapse(false); const s = window.getSelection(); s.removeAllRanges(); s.addRange(r); } catch (e) {}
+    box.oninput = () => { const t = _mbEls()[i]; if (t) t.text = box.innerText; };
+    box.onblur = () => {
+        _mbTextEditing = false;
+        box.contentEditable = 'false';
+        const t = _mbEls()[i]; if (t) t.text = box.innerText.replace(/\n$/, '');
+        if (typeof pushHistory === 'function') pushHistory();
+        renderMoodboardCanvas();
+        if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    };
+}
+
+// Paragraph styles: pick a named style to set a text box's font/size/color.
+const PARA_STYLES = {
+    heading: { label: 'Heading', font: 'display', size: 0.07, color: '#1a1a1a' },
+    subhead: { label: 'Subhead', font: 'display', size: 0.045, color: '#444444' },
+    body: { label: 'Body', font: 'serif', size: 0.03, color: '#222222' },
+    caption: { label: 'Caption', font: 'serif', size: 0.022, color: '#777777' },
+    quote: { label: 'Quote', font: 'serif', size: 0.052, color: '#222222' }
+};
+function _mbApplyParaStyle(name) {
+    const sel = document.getElementById('mbParaStyle'); if (sel) sel.value = '';
+    const el = _mbSelEl(); const s = PARA_STYLES[name];
+    if (!el || _elType(el) !== 'text' || !s) return;
+    el.font = s.font; el.size = s.size; el.color = s.color;
+    if (typeof pushHistory === 'function') pushHistory();
+    renderMoodboardCanvas();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+}
+
+let _mbLastTextDown = null;
+function _mbTileDown(e, i) {
+    if (_mbTextEditing) return;   // let clicks place the cursor while editing text
+    e.preventDefault();
+    const t0 = _mbEls()[i];
+    const now = Date.now();
+    if (t0 && _elType(t0) === 'text' && _mbLastTextDown && _mbLastTextDown.i === i && (now - _mbLastTextDown.t) < 400) {
+        _mbLastTextDown = null;
+        _mbSelected = i;
+        _mbBeginTextEdit(e.currentTarget, i);
+        return;
+    }
+    _mbLastTextDown = (t0 && _elType(t0) === 'text') ? { i: i, t: now } : null;
+    _mbSelected = i;
+    const canvas = document.getElementById('moodboardCanvas');
+    const r = canvas ? canvas.getBoundingClientRect() : null;
+    if (!r) return;
+    const t = _mbEls()[i];
+    _mbDrag = { mode: 'move', i, startX: e.clientX, startY: e.clientY, r, ox: t.x, oy: t.y, ox1: t.x1, oy1: t.y1, ox2: t.x2, oy2: t.y2, opts: Array.isArray(t.pts) ? t.pts.map(p => ({ x: p.x, y: p.y })) : null };
+    document.addEventListener('mousemove', _mbMove);
+    document.addEventListener('mouseup', _mbUp);
+    renderMoodboardCanvas();
+}
+function _mbResizeDown(e, i) {
+    e.preventDefault(); e.stopPropagation();
+    const canvas = document.getElementById('moodboardCanvas');
+    const r = canvas ? canvas.getBoundingClientRect() : null;
+    if (!r) return;
+    const t = _mbEls()[i];
+    _mbDrag = { mode: 'resize', i, startX: e.clientX, startY: e.clientY, r, ow: t.w, oh: t.h, os: t.size };
+    document.addEventListener('mousemove', _mbMove);
+    document.addEventListener('mouseup', _mbUp);
+}
+function _mbImgPanDown(e, i) {
+    e.preventDefault(); e.stopPropagation();
+    const canvas = document.getElementById('moodboardCanvas');
+    const r = canvas ? canvas.getBoundingClientRect() : null;
+    if (!r) return;
+    const t = _mbEls()[i];
+    _mbDrag = { mode: 'imgPan', i, startX: e.clientX, startY: e.clientY, r, opanX: t.panX || 0, opanY: t.panY || 0 };
+    document.addEventListener('mousemove', _mbMove);
+    document.addEventListener('mouseup', _mbUp);
+}
+function _mbArrowHandleDown(e, i, which) {
+    e.preventDefault(); e.stopPropagation();
+    const canvas = document.getElementById('moodboardCanvas');
+    const r = canvas ? canvas.getBoundingClientRect() : null;
+    if (!r) return;
+    const t = _mbEls()[i];
+    _mbDrag = { mode: 'arrow' + which, i, startX: e.clientX, startY: e.clientY, r, ox1: t.x1, oy1: t.y1, ox2: t.x2, oy2: t.y2 };
+    document.addEventListener('mousemove', _mbMove);
+    document.addEventListener('mouseup', _mbUp);
+}
+function _mbElbowAnchorDown(e, i, k) {
+    e.preventDefault(); e.stopPropagation();
+    const canvas = document.getElementById('moodboardCanvas');
+    const r = canvas ? canvas.getBoundingClientRect() : null;
+    if (!r) return;
+    const t = _mbEls()[i];
+    _mbSelected = i;
+    _mbDrag = { mode: 'elbowAnchor', i, k, startX: e.clientX, startY: e.clientY, r, opx: t.pts[k].x, opy: t.pts[k].y };
+    document.addEventListener('mousemove', _mbMove);
+    document.addEventListener('mouseup', _mbUp);
+}
+function _mbMove(e) {
+    if (!_mbDrag) return;
+    const t = _mbEls()[_mbDrag.i]; if (!t) return;
+    const r = _mbDrag.r; const ty = _elType(t);
+    const dx = (e.clientX - _mbDrag.startX) / r.width, dy = (e.clientY - _mbDrag.startY) / r.height;
+    if (_mbDrag.mode === 'move') {
+        let mdx = dx, mdy = dy;
+        if (e.shiftKey) { if (Math.abs(dx * r.width) >= Math.abs(dy * r.height)) mdy = 0; else mdx = 0; }
+        if (ty === 'arrow') {
+            t.x1 = _mbDrag.ox1 + mdx; t.y1 = _mbDrag.oy1 + mdy; t.x2 = _mbDrag.ox2 + mdx; t.y2 = _mbDrag.oy2 + mdy;
+        } else if (ty === 'elbow' && _mbDrag.opts) {
+            t.pts.forEach((p, k) => { p.x = _mbDrag.opts[k].x + mdx; p.y = _mbDrag.opts[k].y + mdy; });
+        } else {
+            t.x = Math.max(-0.1, Math.min(1.05, _mbDrag.ox + mdx));
+            t.y = Math.max(-0.1, Math.min(1.05, _mbDrag.oy + mdy));
+        }
+    } else if (_mbDrag.mode === 'elbowAnchor') {
+        let nx = _mbDrag.opx + dx, ny = _mbDrag.opy + dy;
+        if (e.shiftKey) {   // axis-lock to the previous anchor for clean right angles
+            const prev = t.pts[_mbDrag.k - 1] || t.pts[_mbDrag.k + 1];
+            if (prev) { if (Math.abs((nx - prev.x) * r.width) >= Math.abs((ny - prev.y) * r.height)) ny = prev.y; else nx = prev.x; }
+        }
+        t.pts[_mbDrag.k].x = nx; t.pts[_mbDrag.k].y = ny;
+    } else if (_mbDrag.mode === 'resize') {
+        t.w = Math.max(0.06, Math.min(1.2, (_mbDrag.ow || 0.28) + dx));   // box / image width
+        if (ty === 'image') t.h = Math.max(0.04, Math.min(1.2, (_mbDrag.oh || 0.2) + dy));   // box height (crop frame)
+    } else if (_mbDrag.mode === 'imgPan') {
+        const boxW = t.w * r.width, boxH = (t.h || 0.2) * r.height;
+        const cv = _coverRect(boxW, boxH, t.aspect || 1.33, t.zoom || 1, 0, 0);
+        const dpx = e.clientX - _mbDrag.startX, dpy = e.clientY - _mbDrag.startY;
+        const px = cv.slackX > 1 ? _mbDrag.opanX + dpx / (cv.slackX / 2) : 0;
+        const py = cv.slackY > 1 ? _mbDrag.opanY + dpy / (cv.slackY / 2) : 0;
+        t.panX = Math.max(-1, Math.min(1, px));
+        t.panY = Math.max(-1, Math.min(1, py));
+    } else if (_mbDrag.mode === 'arrowA' || _mbDrag.mode === 'arrowB') {
+        const movingA = (_mbDrag.mode === 'arrowA');
+        const fx = movingA ? _mbDrag.ox2 : _mbDrag.ox1;
+        const fy = movingA ? _mbDrag.oy2 : _mbDrag.oy1;
+        let nx = (movingA ? _mbDrag.ox1 : _mbDrag.ox2) + dx;
+        let ny = (movingA ? _mbDrag.oy1 : _mbDrag.oy2) + dy;
+        if (e.shiftKey) {   // snap to nearest 45° in screen space
+            const vpx = (nx - fx) * r.width, vpy = (ny - fy) * r.height;
+            const len = Math.hypot(vpx, vpy);
+            const snap = Math.round(Math.atan2(vpy, vpx) / (Math.PI / 4)) * (Math.PI / 4);
+            nx = fx + (Math.cos(snap) * len) / r.width;
+            ny = fy + (Math.sin(snap) * len) / r.height;
+        }
+        if (movingA) { t.x1 = nx; t.y1 = ny; } else { t.x2 = nx; t.y2 = ny; }
+    }
+    renderMoodboardCanvas();
+}
+function _mbUp() {
+    document.removeEventListener('mousemove', _mbMove);
+    document.removeEventListener('mouseup', _mbUp);
+    _mbDrag = null;
+    if (typeof pushHistory === 'function') pushHistory();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    renderMoodboardCanvas();
+}
+
+function _mbCommit() {
+    if (typeof pushHistory === 'function') pushHistory();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    renderMoodboardCanvas();
+}
+function _mbToFront() { const t = _mbEls()[_mbSelected]; if (!t) return; let mx = 0; _mbEls().forEach(o => mx = Math.max(mx, o.z || 0)); t.z = mx + 1; _mbCommit(); }
+function _mbToBack() { const t = _mbEls()[_mbSelected]; if (!t) return; let mn = 0; _mbEls().forEach(o => mn = Math.min(mn, o.z || 0)); t.z = mn - 1; _mbCommit(); }
+function _mbDelete() { if (_mbSelected < 0) return; _mbEls().splice(_mbSelected, 1); _mbSelected = -1; _mbCommit(); }
+function _mbInput(v) {
+    const el = (_mbSelected >= 0) ? _mbEls()[_mbSelected] : null;
+    if (!el) return;
+    const ty = _elType(el);
+    if (ty === 'image') { el.caption = v; renderMoodboardCanvas(); }
+    else if (ty === 'text') { el.text = v; renderMoodboardCanvas(); }
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+}
+function addMoodboardText() {
+    const s = _deckStyles();
+    const arr = _mbEls(); let mz = 0; arr.forEach(o => mz = Math.max(mz, o.z || 0));
+    arr.push({ type: 'text', text: 'New note', x: 0.12, y: 0.14, w: 0.4, size: s.textSize || 0.05, color: s.textColor || '#222222', font: s.textFont || 'serif', z: mz + 1 });
+    _mbSelected = arr.length - 1;
+    _mbCommit();
+}
+function addMoodboardArrow() {
+    const s = _deckStyles();
+    const arr = _mbEls(); let mz = 0; arr.forEach(o => mz = Math.max(mz, o.z || 0));
+    arr.push({ type: 'arrow', x1: 0.4, y1: 0.42, x2: 0.6, y2: 0.5, color: s.arrowColor || '#9aa0a6', weight: s.arrowWeight || 1.2, z: mz + 1 });
+    _mbSelected = arr.length - 1;
+    _mbCommit();
+}
+// Elbow (multi-segment) arrow: click points on the canvas; segments snap to
+// right angles; finish with double-click / Enter, cancel with Esc.
+let _mbPlacing = false;
+let _mbDraft = null;
+function addMoodboardElbow() {
+    const s = _deckStyles();
+    _mbPlacing = true;
+    _mbDraft = { type: 'elbow', pts: [], color: s.arrowColor || '#9aa0a6', weight: s.arrowWeight || 1.2 };
+    _mbSelected = -1;
+    document.addEventListener('keydown', _mbPlaceKey);
+    renderMoodboardCanvas();
+}
+function _mbPlaceKey(e) {
+    if (!_mbPlacing) return;
+    if (e.key === 'Enter') { e.preventDefault(); _mbFinishElbow(); }
+    else if (e.key === 'Escape') { e.preventDefault(); _mbCancelElbow(); }
+}
+function _mbPlaceClick(e) {
+    if (!_mbPlacing || !_mbDraft) return;
+    const canvas = document.getElementById('moodboardCanvas');
+    const r = canvas.getBoundingClientRect();
+    let nx = (e.clientX - r.left) / r.width, ny = (e.clientY - r.top) / r.height;
+    const pts = _mbDraft.pts;
+    if (pts.length) {  // snap each new point to a right angle off the previous
+        const p = pts[pts.length - 1];
+        if (Math.abs((nx - p.x) * r.width) >= Math.abs((ny - p.y) * r.height)) ny = p.y; else nx = p.x;
+        if (Math.abs(nx - p.x) < 0.004 && Math.abs(ny - p.y) < 0.004) return;  // ignore near-duplicate (e.g. 2nd click of a double-click)
+    }
+    pts.push({ x: nx, y: ny });
+    renderMoodboardCanvas();
+}
+function _mbFinishElbow() {
+    document.removeEventListener('keydown', _mbPlaceKey);
+    const d = _mbDraft; _mbPlacing = false; _mbDraft = null;
+    if (d && d.pts.length >= 2) {
+        const arr = _mbEls(); let mz = 0; arr.forEach(o => mz = Math.max(mz, o.z || 0));
+        d.z = mz + 1; arr.push(d); _mbSelected = arr.length - 1;
+        _mbCommit();
+    } else { renderMoodboardCanvas(); }
+}
+function _mbCancelElbow() {
+    document.removeEventListener('keydown', _mbPlaceKey);
+    _mbPlacing = false; _mbDraft = null;
+    renderMoodboardCanvas();
+}
+
+function addMoodboardImages(event) {
+    const files = (event && event.target) ? Array.from(event.target.files || []) : [];
+    if (!files.length) return;
+    let pending = files.length;
+    files.forEach(f => _downscaleImageFile(f, 1000, 0.82, (url, name, w, h) => {
+        if (url) {
+            const arr = _mbEls();
+            const s = _deckStyles();
+            const idx = arr.length;
+            const col = idx % 3, row = Math.floor(idx / 3);
+            let mz = 0; arr.forEach(o => mz = Math.max(mz, o.z || 0));
+            arr.push({ type: 'image', img: url, caption: '', aspect: (w && h) ? (w / h) : 1.33, _aspectReal: true, x: 0.06 + col * 0.31, y: 0.12 + (row % 2) * 0.34, w: 0.28, capSize: s.capSize || 0.02, capSide: s.capSide || 'bottom', z: mz + 1 });
+        }
+        if (--pending === 0) { renderMoodboardCanvas(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); }
+    }));
+    if (event.target) event.target.value = '';
+}
+
+// ── Copy editor popup ─────────────────────────────────────────────────────
+// Focused editor for prose fields. Each has a soft word limit tuned to how
+// much fits that page's text column, with a live count that warns before copy
+// would run off the page. Writes back to the field and persists immediately.
+const COPY_LIMITS = {
+    specPdfUnderstanding: 300,
+    specPdfNarrative: 300,
+    specPdfStrategyPrimary: 110,
+    specPdfStrategySecondary: 110,
+    specPdfStrategyTertiary: 110,
+};
+function _copyWordCount(s) { s = (s || '').trim(); return s ? s.split(/\s+/).length : 0; }
+function _syncCopyField(id, v) {
+    if (id === 'specPdfUnderstanding') editorialContent.understanding = v;
+    else if (id === 'specPdfNarrative') editorialContent.narrative = v;
+    else if (id === 'specPdfStrategyPrimary' || id === 'specPdfStrategySecondary' || id === 'specPdfStrategyTertiary') {
+        editorialContent.strategy = editorialContent.strategy || { primary: '', secondary: '', tertiary: '' };
+        const key = id === 'specPdfStrategyPrimary' ? 'primary' : (id === 'specPdfStrategySecondary' ? 'secondary' : 'tertiary');
+        editorialContent.strategy[key] = v;
+    }
+}
+function openCopyEditor(targetId, title) {
+    const modal = document.getElementById('copyEditModal');
+    if (!modal) return;
+    const src = document.getElementById(targetId);
+    window._copyEditTarget = targetId;
+    const tEl = document.getElementById('copyEditTitle');
+    if (tEl) tEl.textContent = title || 'Edit copy';
+    const area = document.getElementById('copyEditArea');
+    if (area) area.value = src ? src.value : '';
+    updateCopyCount();
+    modal.style.display = 'flex';
+    if (area) setTimeout(() => area.focus(), 30);
+}
+function updateCopyCount() {
+    const area = document.getElementById('copyEditArea');
+    const el = document.getElementById('copyEditCount');
+    if (!area || !el) return;
+    const limit = COPY_LIMITS[window._copyEditTarget] || 300;
+    const w = _copyWordCount(area.value);
+    let color = 'var(--text-muted)', note = '';
+    if (w > limit) { color = '#c0392b'; note = ' \u2014 over by ' + (w - limit) + ', may run off the page'; }
+    else if (w > limit * 0.85) { color = '#b8860b'; note = ' \u2014 approaching limit'; }
+    el.style.color = color;
+    el.textContent = w + ' / ' + limit + ' words' + note;
+}
+function saveCopyEditor() {
+    const area = document.getElementById('copyEditArea');
+    const id = window._copyEditTarget;
+    const src = document.getElementById(id);
+    if (src && area) { src.value = area.value; _syncCopyField(id, area.value); if (typeof scheduleAutosave === 'function') scheduleAutosave(); }
+    closeCopyEditor();
+}
+function closeCopyEditor() { const m = document.getElementById('copyEditModal'); if (m) m.style.display = 'none'; }
+
+// Set page: one page for a whole set-piece group. Members are laid out as
+// stacked rows — framed mockup on the right, letter + code + compact spec on the
+// left — each labelled A, B, C…
+async function _drawSpecSetPage(doc, logos, pageNum, meta, unit, tplKey, ctx) {
+    try { doc.setLineDashPattern([], 0); } catch (e) {}
+    const PW = ctx.PW, PH = ctx.PH;
+    const _isScale = !!(SPEC_TEMPLATES[tplKey] && SPEC_TEMPLATES[tplKey].scale);
+    const members = (unit.members || []).slice(0, _isScale ? 12 : 6);
+    const n = Math.max(1, members.length);
+    const letters = ['A', 'B', 'C', 'D', 'E', 'F'];
+    // — Title (group code) —
+    doc.setFont(_font('display'), 'bold');
+    doc.setFontSize(20);
+    doc.setTextColor(20, 20, 20);
+    doc.text((unit.key || unit.rep.id || '').toString().toUpperCase(), PW * 0.06, PH * 0.12);
+
+    // — Side-by-side (diptych / triptych / quad): members in columns —
+    if (SPEC_TEMPLATES[tplKey] && SPEC_TEMPLATES[tplKey].row) {
+        const cols = Math.max(1, Math.min(members.length, 4));
+        const leftX = PW * 0.06, rightX = PW * 0.96, totalW = rightX - leftX, gap = 14;
+        const slotW = (totalW - gap * (cols - 1)) / cols;
+        const topY = PH * 0.18, botY = PH * 0.9, artH = (botY - topY) * 0.62;
+        const artOnly = _specArtOnly(unit.key);
+        for (let i = 0; i < members.length && i < cols; i++) {
+            const r = members[i];
+            const letter = letters[i] || String(i + 1);
+            const cx = leftX + i * (slotW + gap);
+            try {
+                const dInches = _frameDataInInches(Object.assign({}, r, { extW: r.extW, extH: r.extH }), dashUnit);
+                let artworkImg = null; if (r.artworkUrl) { try { artworkImg = await _loadImg(r.artworkUrl); } catch (e) {} }
+                const swatch = (r.fType === 'image' && r.swatchDataUrl) ? await _loadImg(r.swatchDataUrl) : null;
+                const out = renderFrameToCanvas(dInches, swatch, { wireframe: _isWireframe(), dpi: 96, pad: 0, artworkImg, artCrop: { zoom: r.artZoom, panX: r.artPanX, panY: r.artPanY } });
+                const cnv = out.canvas;
+                let url; try { const flat = document.createElement('canvas'); flat.width = cnv.width; flat.height = cnv.height; const fx = flat.getContext('2d'); fx.fillStyle = '#fff'; fx.fillRect(0, 0, flat.width, flat.height); fx.drawImage(cnv, 0, 0); url = flat.toDataURL('image/jpeg', 0.85); } catch (e) { url = cnv.toDataURL('image/jpeg', 0.85); }
+                const fit = Math.min(slotW / cnv.width, artH / cnv.height);
+                const aw = cnv.width * fit, ah = cnv.height * fit;
+                const ax = cx + (slotW - aw) / 2, ay = topY + (artH - ah);
+                try { doc.addImage(url, 'JPEG', ax, ay, aw, ah); } catch (e) {}
+                const ic = (r.imageCode || r.artworkFile || '') + '';
+                if (ic) { const cs = _specCodeStyle(); const crgb = _annHexToRgb(cs.color); doc.setFont(_font(cs.font), cs.font === 'serif' ? 'normal' : 'bold'); doc.setFontSize(Math.min(cs.size, 8.5)); doc.setTextColor(crgb.r, crgb.g, crgb.b); doc.text(ic, ax + aw, ay + ah + 9, { align: 'right' }); }
+            } catch (e) {}
+            let by = topY + artH + 22;
+            doc.setFont(_font('display'), 'bold'); doc.setFontSize(11); doc.setTextColor(20, 20, 20);
+            doc.text((r.id || '').toString(), cx, by); by += 14;
+            if (!artOnly) {
+                let specs = null; try { specs = buildSpecStrings(r); } catch (e) {}
+                const wanted = ['Application', 'Frame Size', 'Frame Code', 'Matboard', 'Image Size', 'Overall Dimensions'];
+                const lines = specs && specs.lines ? specs.lines.filter(l => wanted.indexOf(l.label) >= 0) : [];
+                doc.setFontSize(7.5);
+                lines.forEach(ln => {
+                    if (by > botY) return;
+                    doc.setFont('helvetica', 'bold'); doc.setTextColor(40, 40, 40); doc.text(ln.label, cx, by);
+                    const lw = doc.getTextWidth(ln.label);
+                    doc.setFont('helvetica', 'normal'); const vs = (ln.value || '') + ''; const vw = doc.getTextWidth(vs); const vx = cx + slotW - vw; doc.text(vs, vx, by);
+                    const ds = cx + lw + 4, de = vx - 4;
+                    if (de > ds) { doc.setLineDashPattern([0.5, 1.5], 0); doc.setDrawColor(170, 170, 170); doc.setLineWidth(0.4); doc.line(ds, by - 2, de, by - 2); doc.setLineDashPattern([], 0); }
+                    by += 11;
+                });
+            }
+        }
+        return;
+    }
+
+    // — To scale (as hung): frames on the right at their elevation positions —
+    if (_isScale) {
+        const artOnly = _specArtOnly(unit.key);
+        const opts = _scaleOpts();
+        // Pick the single elevation that holds the most of these members, then
+        // read every frame's position FROM that one wall — otherwise a piece
+        // that also appears on an earlier elevation grabs the wrong coordinates
+        // and shifts out of place (while the thumbnail, which uses one wall,
+        // still looks right).
+        let groupElev = null, _bestCount = 0;
+        (typeof elevations !== 'undefined' ? elevations : []).forEach(e => {
+            if (!e || !e.frames) return;
+            let c = 0; members.forEach(r => { if (e.frames.some(fr => fr && fr.id === r.id)) c++; });
+            if (c > _bestCount) { _bestCount = c; groupElev = e; }
+        });
+        const geo = members.map(r => {
+            if (groupElev && groupElev.frames) { const m = groupElev.frames.find(fr => fr && fr.id === r.id); if (m) return { x: parseFloat(m.x) || 0, y: parseFloat(m.y) || 0, w: parseFloat(m.w) || 0, h: parseFloat(m.h) || 0 }; }
+            return null;
+        });
+        const bottomBand = (opts.elevThumb && groupElev) || opts.codes === 'legend';
+        const regX = PW * 0.40, regY = PH * 0.15, regW = PW * 0.56, regH = bottomBand ? PH * 0.60 : PH * 0.77;
+        const placed = [];
+        const haveGeo = geo.length && geo.every(g => g && g.w > 0 && g.h > 0);
+        if (haveGeo) {
+            let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+            geo.forEach(g => { minX = Math.min(minX, g.x); minY = Math.min(minY, g.y); maxX = Math.max(maxX, g.x + g.w); maxY = Math.max(maxY, g.y + g.h); });
+            const bbW = Math.max(0.01, maxX - minX), bbH = Math.max(0.01, maxY - minY);
+            const sc = Math.min(regW / bbW, regH / bbH);
+            const offX = regX + (regW - bbW * sc) / 2, offY = regY + (regH - bbH * sc) / 2;
+            // elevation y is measured bottom-up (larger y = higher on the wall),
+            // so flip it into top-down page space or the stack comes out upside down.
+            members.forEach((r, i) => { const g = geo[i]; placed.push({ r: r, letter: letters[i] || ('' + (i + 1)), bx: offX + (g.x - minX) * sc, by: offY + (maxY - (g.y + g.h)) * sc, bw: g.w * sc, bh: g.h * sc }); });
+        } else {
+            const dims = members.map(r => ({ w: Math.max(1, parseFloat(r.extW) || 10), h: Math.max(1, parseFloat(r.extH) || 10) }));
+            const gap = 0.5;
+            const totalW = dims.reduce((a, d) => a + d.w, 0) + gap * (dims.length - 1);
+            const maxH = dims.reduce((a, d) => Math.max(a, d.h), 0);
+            const sc = Math.min(regW / totalW, regH / maxH);
+            let x = regX + (regW - totalW * sc) / 2; const baseY = regY + regH;
+            members.forEach((r, i) => { const d = dims[i]; const bw = d.w * sc, bh = d.h * sc; placed.push({ r: r, letter: letters[i] || ('' + (i + 1)), bx: x, by: baseY - bh, bw: bw, bh: bh }); x += bw + gap * sc; });
+        }
+        const cs = _specCodeStyle(); const crgb = _annHexToRgb(cs.color);
+        for (const p of placed) {
+            try {
+                const r = p.r;
+                const dInches = _frameDataInInches(Object.assign({}, r, { extW: r.extW, extH: r.extH }), dashUnit);
+                let artworkImg = null; if (r.artworkUrl) { try { artworkImg = await _loadImg(r.artworkUrl); } catch (e) {} }
+                const swatch = (r.fType === 'image' && r.swatchDataUrl) ? await _loadImg(r.swatchDataUrl) : null;
+                const out = renderFrameToCanvas(dInches, swatch, { wireframe: _isWireframe(), dpi: 96, pad: 0, artworkImg, artCrop: { zoom: r.artZoom, panX: r.artPanX, panY: r.artPanY } });
+                const cnv = out.canvas;
+                let url; try { const flat = document.createElement('canvas'); flat.width = cnv.width; flat.height = cnv.height; const fx = flat.getContext('2d'); fx.fillStyle = '#fff'; fx.fillRect(0, 0, flat.width, flat.height); fx.drawImage(cnv, 0, 0); url = flat.toDataURL('image/jpeg', 0.85); } catch (e) { url = cnv.toDataURL('image/jpeg', 0.85); }
+                const fit = Math.min(p.bw / cnv.width, p.bh / cnv.height);
+                const aw = cnv.width * fit, ah = cnv.height * fit;
+                const ax = p.bx + (p.bw - aw) / 2, ay = p.by + (p.bh - ah) / 2;
+                try { doc.addImage(url, 'JPEG', ax, ay, aw, ah); } catch (e) {}
+                doc.setFont(_font('display'), 'bold'); doc.setFontSize(10); doc.setTextColor(20, 20, 20);
+                doc.text(p.letter, ax, ay - 2);   // top-left, ~2px clear of the frame
+                if (opts.codes === 'frames' && aw > 30) {       // small code just below the bottom-right, outside the frame
+                    const ic = (r.imageCode || r.artworkFile || '') + '';
+                    if (ic) { doc.setFont(_font(cs.font), cs.font === 'serif' ? 'normal' : 'bold'); doc.setFontSize(6.5); doc.setTextColor(crgb.r, crgb.g, crgb.b); doc.text(ic, ax + aw, ay + ah + 7, { align: 'right' }); }
+                }
+            } catch (e) {}
+        }
+        // Bottom band: image-code legend (left) and/or elevation thumbnail (right).
+        if (bottomBand) {
+            const bandY = regY + regH + 12, bandBot = PH * 0.95;
+            let legendRight = regX + regW;
+            if (opts.elevThumb && groupElev) {
+                try {
+                    const er = await renderElevationToCanvas(groupElev, null, { wireframe: _isWireframe(), dpi: 24 });
+                    if (er && er.canvas) {
+                        const flat = document.createElement('canvas'); flat.width = er.canvas.width; flat.height = er.canvas.height; const fc = flat.getContext('2d'); fc.fillStyle = '#fff'; fc.fillRect(0, 0, flat.width, flat.height); fc.drawImage(er.canvas, 0, 0);
+                        const boxW = PW * 0.17, boxH = (bandBot - bandY) - 12;   // leave room for the caption below
+                        const fit = Math.min(boxW / flat.width, boxH / flat.height);
+                        const tw = flat.width * fit, th = flat.height * fit;
+                        const tx = regX + regW - tw, ty = bandY + (boxH - th);
+                        doc.addImage(flat.toDataURL('image/jpeg', 0.85), 'JPEG', tx, ty, tw, th);
+                        // crisp vector wall outline + baseboard (the rendered lines vanish at thumbnail scale).
+                        // Use the render's returned hIn (already in inches, unit-independent) so this can't drift with units.
+                        try {
+                            const totalHin = (er.hIn && er.hIn > 0) ? er.hIn : 102;   // = wallHin + 6 (padIn)
+                            const wallHin = totalHin - 6;
+                            let bbIn = 4; try { const u2i = (typeof unitFactor === 'function') ? unitFactor((typeof elevUnit !== 'undefined' ? elevUnit : 'in'), 'in') : 1; const b = getBaseboardHeight(); if (!isNaN(b)) bbIn = parseFloat(b) * u2i; } catch (e) {}
+                            const wlf = (er.wallLeftFrac != null ? er.wallLeftFrac : 0), wrf = (er.wallRightFrac != null ? er.wallRightFrac : 1);
+                            const wTopF = 6 / totalHin;
+                            const wx = tx + wlf * tw, wW = (wrf - wlf) * tw, wyTop = ty + wTopF * th, wH = (1 - wTopF) * th;
+                            doc.setLineDashPattern([], 0);   // ensure solid (some viewers honor a leaked dash)
+                            doc.setDrawColor(80, 80, 80); doc.setLineWidth(1.0);
+                            doc.rect(wx, wyTop, wW, wH, 'S');
+                            if (bbIn > 0 && bbIn < wallHin) { const byy = ty + (1 - bbIn / totalHin) * th; doc.setLineWidth(0.8); doc.line(wx, byy, wx + wW, byy); }
+                        } catch (e) {}
+                        doc.setFont(_font('serif'), 'italic'); doc.setFontSize(7); doc.setTextColor(150, 150, 150); doc.text('Elevation', tx, ty + th + 8);
+                        legendRight = tx - 14;
+                    }
+                } catch (e) {}
+            }
+            if (opts.codes === 'legend') {
+                doc.setFont(_font('display'), 'bold'); doc.setFontSize(8); doc.setTextColor(20, 20, 20);
+                doc.text('IMAGE CODES', regX, bandY);
+                const rowH = 10, maxRows = Math.max(1, Math.floor((bandBot - (bandY + 12)) / rowH));
+                const colsN = Math.max(1, Math.ceil(placed.length / maxRows));   // one column unless it overflows the band
+                const colW = Math.min(155, (legendRight - regX) / colsN);
+                doc.setFontSize(7.5);
+                placed.forEach((p, i) => {
+                    const col = Math.floor(i / maxRows), rowi = i % maxRows;
+                    const ex = regX + col * colW, ey = bandY + 12 + rowi * rowH;
+                    if (ey > bandBot) return;
+                    doc.setFont(_font('display'), 'bold'); doc.setTextColor(20, 20, 20); doc.text(p.letter, ex, ey);
+                    doc.setFont(_font(cs.font), 'normal'); doc.setTextColor(crgb.r, crgb.g, crgb.b);
+                    doc.text((p.r.imageCode || p.r.artworkFile || '') + '', ex + 12, ey);
+                });
+            }
+        }
+        // Specs on the LEFT — every line, font shrunk to fit them all on one page.
+        const lX = PW * 0.045, lW = PW * 0.315, sTop = PH * 0.15, sBot = PH * 0.95;
+        const specBlocks = members.map(r => { let s = null; try { s = buildSpecStrings(r); } catch (e) {} return (s && s.lines) ? s.lines : []; });
+        let totalUnits = 0; members.forEach((r, i) => { totalUnits += 1 + (artOnly ? 0 : specBlocks[i].length) + 0.5; });
+        const availH = sBot - sTop;
+        let lineH = availH / Math.max(1, totalUnits);
+        const fs = Math.max(5.2, Math.min(8.5, lineH / 1.38));
+        lineH = Math.max(fs * 1.32, Math.min(lineH, fs * 1.6));
+        let y = sTop + fs;
+        members.forEach((r, i) => {
+            if (y > sBot) return;
+            // No standalone letter — the item code already ends in its letter.
+            doc.setFont('helvetica', 'bold'); doc.setFontSize(fs + 1.5); doc.setTextColor(30, 30, 30);
+            doc.text((r.id || '').toString(), lX, y);
+            y += lineH;
+            if (!artOnly) {
+                doc.setFontSize(fs);
+                specBlocks[i].forEach(ln => {
+                    if (y > sBot) return;
+                    doc.setFont('helvetica', 'bold'); doc.setTextColor(40, 40, 40); doc.text(ln.label, lX, y);
+                    const lw = doc.getTextWidth(ln.label);
+                    doc.setFont('helvetica', 'normal'); const vs = (ln.value || '') + ''; const vw = doc.getTextWidth(vs); const vx = lX + lW - vw; doc.text(vs, vx, y);
+                    const ds = lX + lw + 4, de = vx - 4;
+                    if (de > ds) { doc.setLineDashPattern([0.5, 1.5], 0); doc.setDrawColor(180, 180, 180); doc.setLineWidth(0.35); doc.line(ds, y - 2, de, y - 2); doc.setLineDashPattern([], 0); }
+                    y += lineH;
+                });
+            }
+            y += lineH * 0.5;
+        });
+        return;
+    }
+
+    const topY = PH * 0.17, botY = PH * 0.9;
+    const slotH = (botY - topY) / n;
+    const lX = PW * 0.06, lW = PW * 0.4;
+    const rX = PW * 0.54, rW = PW * 0.42;
+
+    for (let i = 0; i < members.length; i++) {
+        const r = members[i];
+        const letter = letters[i] || String(i + 1);
+        const sy = topY + i * slotH;
+
+        // letter chip
+        doc.setFont(_font('display'), 'bold'); doc.setFontSize(15); doc.setTextColor(20, 20, 20);
+        doc.text(letter, lX, sy + 12);
+
+        // member code beside the letter
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(9); doc.setTextColor(60, 60, 60);
+        doc.text((r.id || '').toString(), lX + 18, sy + 11);
+
+        // compact spec lines
+        let specs = null; try { specs = buildSpecStrings(r); } catch (e) {}
+        const wanted = ['Application', 'Frame Size', 'Frame Code', 'Matboard', 'Image Size', 'Overall Dimensions'];
+        const lines = (specs && specs.lines && !_specArtOnly(unit.key)) ? specs.lines.filter(l => wanted.indexOf(l.label) >= 0) : [];
+        let ly = sy + 26;
+        doc.setFontSize(7.5);
+        lines.forEach(ln => {
+            if (ly > sy + slotH - 6) return;
+            doc.setFont('helvetica', 'bold'); doc.setTextColor(40, 40, 40); doc.text(ln.label, lX + 18, ly);
+            const lw = doc.getTextWidth(ln.label);
+            doc.setFont('helvetica', 'normal'); const vs = (ln.value || '') + ''; const vw = doc.getTextWidth(vs); const vx = lX + lW - vw; doc.text(vs, vx, ly);
+            const ds = lX + 18 + lw + 4, de = vx - 4;
+            if (de > ds) { doc.setLineDashPattern([0.5, 1.5], 0); doc.setDrawColor(170, 170, 170); doc.setLineWidth(0.4); doc.line(ds, ly - 2, de, ly - 2); doc.setLineDashPattern([], 0); }
+            ly += 11;
+        });
+
+        // framed artwork on the right
+        try {
+            const dInches = _frameDataInInches(Object.assign({}, r, { extW: r.extW, extH: r.extH }), dashUnit);
+            let artworkImg = null; if (r.artworkUrl) { try { artworkImg = await _loadImg(r.artworkUrl); } catch (e) {} }
+            const swatch = (r.fType === 'image' && r.swatchDataUrl) ? await _loadImg(r.swatchDataUrl) : null;
+            const out = renderFrameToCanvas(dInches, swatch, { wireframe: _isWireframe(), dpi: 96, pad: 0, artworkImg, artCrop: { zoom: r.artZoom, panX: r.artPanX, panY: r.artPanY } });
+            const cnv = out.canvas;
+            let url; try { const flat = document.createElement('canvas'); flat.width = cnv.width; flat.height = cnv.height; const fx = flat.getContext('2d'); fx.fillStyle = '#ffffff'; fx.fillRect(0, 0, flat.width, flat.height); fx.drawImage(cnv, 0, 0); url = flat.toDataURL('image/jpeg', 0.85); } catch (e) { url = cnv.toDataURL('image/jpeg', 0.85); }
+            const boxH = slotH * 0.84, boxW = rW;
+            const fit = Math.min(boxW / cnv.width, boxH / cnv.height);
+            const aw = cnv.width * fit, ah = cnv.height * fit;
+            const ax = rX + (boxW - aw) / 2, ay = sy + (slotH - ah) / 2;
+            try { doc.addImage(url, 'JPEG', ax, ay, aw, ah); } catch (e) {}
+            // image code under the artwork (bottom-right) — the letter is already
+            // shown on the left, and at the end of the item code, so no frame letter.
+            const ic = (r.imageCode || r.artworkFile || '') + '';
+            if (ic) { const cs = _specCodeStyle(); const crgb = _annHexToRgb(cs.color); doc.setFont(_font(cs.font), cs.font === 'serif' ? 'normal' : 'bold'); doc.setFontSize(Math.min(cs.size, 9)); doc.setTextColor(crgb.r, crgb.g, crgb.b); doc.text(ic, ax + aw, ay + ah + 9, { align: 'right' }); }
+        } catch (e) {}
+    }
+}
+// Capture an elevation WITH its layout guides exactly as the SVG export renders
+// them — vector text + dimension lines (crisp at any size) and frames embedded
+// as raster textures. We rasterize the SVG at high resolution and keep it as a
+// lossless PNG, so there's none of the screenshot pixelation / JPEG smearing the
+// PNG-screenshot path produced. Returns { dataUrl, w, h } or null.
+async function _captureElevWithGuides(elevIdx) {
+    if (elevIdx == null || elevIdx < 0 || typeof elevations === 'undefined' || !elevations[elevIdx]) return null;
+    if (typeof exportElevSVG !== 'function' || typeof switchView !== 'function') return null;
+    const origView = currentView, origIndex = currentElevIndex;
+    let res = null;
+    try {
+        switchView('elevation', elevIdx);
+        await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+        res = await exportElevSVG({ returnBlob: true });
+    } catch (e) { res = null; }
+    try { if (origView === 'elevation' && elevations[origIndex] != null) switchView('elevation', origIndex); else switchView('dashboard'); } catch (e) {}
+    if (!res || !res.blob) return null;
+    try {
+        const url = URL.createObjectURL(res.blob);
+        const img = await _loadImg(url);
+        const natW = img.naturalWidth || img.width || 1200, natH = img.naturalHeight || img.height || 800;
+        const targetW = 2400;                                  // high-res raster of the vector SVG
+        const scale = Math.max(0.5, Math.min(3.5, targetW / natW));
+        const cw = Math.max(1, Math.round(natW * scale)), ch = Math.max(1, Math.round(natH * scale));
+        const cnv = document.createElement('canvas'); cnv.width = cw; cnv.height = ch;
+        const cx = cnv.getContext('2d'); cx.fillStyle = '#fff'; cx.fillRect(0, 0, cw, ch); cx.drawImage(img, 0, 0, cw, ch);
+        URL.revokeObjectURL(url);
+        // High-res JPEG: at this resolution compression is invisible, but the file
+        // is ~10x smaller than PNG — several lossless PNGs overflow jsPDF's output
+        // string ("Invalid string length") on a big deck.
+        return { dataUrl: cnv.toDataURL('image/jpeg', 0.9), w: cw, h: ch };
+    } catch (e) { return null; }
+}
+
+// Template-driven single-spec page (non-classic arrangements). Reuses the same
+// primitives as the classic renderer: baked frame mockup, dotted-leader spec
+// block, and the wall elevation. Coords come from SPEC_TEMPLATES (page fractions).
+async function _drawInstallGuidePage(doc, logos, pageNum, meta, arg, ctx) {
+    try { doc.setLineDashPattern([], 0); } catch (e) {}
+    const PW = ctx.PW, PH = ctx.PH, M = ctx.M;
+    const isElev = !!(arg && arg.frames);                 // elevation vs single piece row
+    const elev = isElev ? arg : (typeof elevations !== 'undefined' ? elevations : []).find(e => e && e.frames && e.frames.some(fr => fr.id === arg.id));
+    const featuredId = isElev ? null : (arg && arg.id);   // null → all frames full opacity
+    const activeFrames = elev ? elev.frames.filter(f => f && f.active !== false) : [];
+    const lookupRow = (id) => (typeof dashProjectData !== 'undefined' ? dashProjectData : []).find(rr => rr && rr.id === id) || {};
+    const planRow = isElev ? lookupRow(activeFrames[0] && activeFrames[0].id) : arg;
+
+    // Title block (top-left): wall/zone name, ARTWORK DETAILS, item code.
+    const ts = _titleStyle(); const trgb = _annHexToRgb(ts.color);
+    doc.setFont(_font(ts.font), ts.font === 'serif' ? 'normal' : 'bold');
+    doc.setFontSize(Math.max(ts.size, 22)); doc.setTextColor(trgb.r, trgb.g, trgb.b);
+    const zone = (isElev ? (elev && elev.name) : (arg.location || (elev && elev.name) || arg.category || arg.id) || '').toString().toUpperCase();
+    doc.text(zone, M, M + 16);
+    doc.setFont(_font('display'), 'bold'); doc.setFontSize(11); doc.setTextColor(25, 25, 25);
+    doc.text('ARTWORK DETAILS', M, M + 32);
+    const codeId = isElev ? (activeFrames.length === 1 ? (activeFrames[0].id || '') : '') : (arg.id || '');
+    if (codeId) { const _cs = _specCodeStyle(); const _crgb = _annHexToRgb(_cs.color); doc.setFont(_font(_cs.font), _cs.font === 'serif' ? 'normal' : 'bold'); doc.setFontSize(Math.min(_cs.size, 13)); doc.setTextColor(_crgb.r, _crgb.g, _crgb.b); doc.text(codeId, M, M + 50); }
+
+    try {
+        const toIn = (v) => parseFloat(v) * unitFactor((typeof elevUnit !== 'undefined' ? elevUnit : 'in'), 'in');
+        let elevLeft = PW * 0.42;
+        // Breaker with measurements: drop in the elevation exactly as the PNG
+        // export renders it — with every layout guide the user has enabled.
+        if (arg && arg._measure && arg._idx != null) {
+            const cap = await _captureElevWithGuides(arg._idx);
+            if (cap && cap.dataUrl) {
+                const aspect = cap.w / cap.h;
+                const maxW = PW - M * 2, maxH = PH - M * 2 - 56;
+                let ew = maxW, eh = ew / aspect; if (eh > maxH) { eh = maxH; ew = eh * aspect; }
+                const ex = (PW - ew) / 2, ey = M + 56 + (maxH - eh) / 2;
+                doc.addImage(cap.dataUrl, 'JPEG', ex, ey, ew, eh);
+                return;
+            }
+            // capture failed → fall through to the standard render below
+        }
+        const er = elev ? await renderElevationToCanvas(elev, featuredId, { wireframe: _isWireframe(), dpi: 46 }) : null;
+        if (er && er.canvas) {
+            const flat = document.createElement('canvas'); flat.width = er.canvas.width; flat.height = er.canvas.height;
+            const fc = flat.getContext('2d'); fc.fillStyle = '#fff'; fc.fillRect(0, 0, flat.width, flat.height); fc.drawImage(er.canvas, 0, 0);
+            const aspect = er.wIn / er.hIn;
+            const noPlan = !!(arg && arg._noPlan);
+            const maxW = noPlan ? (PW - M * 2) : PW * 0.56, maxH = noPlan ? (PH - M * 2 - 56) : (PH - M * 2 - 16);
+            let ew = maxW, eh = ew / aspect; if (eh > maxH) { eh = maxH; ew = eh * aspect; }
+            const ex = noPlan ? ((PW - ew) / 2) : (PW - M - ew - 28), ey = noPlan ? (M + 56 + (maxH - eh) / 2) : (M + 6 + (maxH - eh) / 2);
+            elevLeft = ex;
+            doc.addImage(flat.toDataURL('image/jpeg', 0.9), 'JPEG', ex, ey, ew, eh);
+
+            const wallHin = toIn(elev.wallH) || 96, padIn = 6;
+            const PXf = (fr) => ex + fr * ew, PYf = (fr) => ey + fr * eh;
+            // Crisp vector wall outline + baseboard + floor (the raster lines are
+            // too thin at this size). totalHin/fracs come from the render.
+            try {
+                const totalHin = (er.hIn && er.hIn > 0) ? er.hIn : (wallHin + padIn);
+                const wTopF = padIn / totalHin;
+                const wlf = (er.wallLeftFrac != null ? er.wallLeftFrac : 0), wrf = (er.wallRightFrac != null ? er.wallRightFrac : 1);
+                const wx = PXf(wlf), wW = (wrf - wlf) * ew, wyTop = PYf(wTopF), wH = (1 - wTopF) * eh;
+                doc.setLineDashPattern([], 0);   // ensure solid (some viewers honor a leaked dash)
+                doc.setDrawColor(70, 70, 70); doc.setLineWidth(1.1);
+                doc.rect(wx, wyTop, wW, wH, 'S');                             // wall + floor (bottom edge)
+                let bbIn = 4; try { const b = getBaseboardHeight(); if (!isNaN(b)) bbIn = parseFloat(b) * unitFactor((typeof elevUnit !== 'undefined' ? elevUnit : 'in'), 'in'); } catch (e) {}
+                if (bbIn > 0 && bbIn < wallHin) { const byy = PYf(1 - bbIn / totalHin); doc.setLineWidth(0.9); doc.line(wx, byy, wx + wW, byy); }
+            } catch (e) {}
+            const dimFrame = isElev ? (activeFrames.length === 1 ? activeFrames[0] : null) : (elev.frames.find(fr => fr.id === arg.id) || elev.frames[0]);
+            const hangFrame = dimFrame || activeFrames[0];
+            const showMeasure = (arg && '_measure' in arg) ? !!arg._measure : true;   // install mode keeps dims; breaker is opt-in
+            if (showMeasure && (typeof dimVisibility === 'undefined' || dimVisibility.wallDims !== false)) {
+                // Overall wall dimensions (synced to the elevation layout's wall-dim toggle).
+                const totalHin = (er.hIn && er.hIn > 0) ? er.hIn : (wallHin + padIn);
+                const wlf = (er.wallLeftFrac != null ? er.wallLeftFrac : 0), wrf = (er.wallRightFrac != null ? er.wallRightFrac : 1);
+                const wallWin = toIn(elev.wallW) || 0;
+                doc.setDrawColor(110, 110, 110); doc.setTextColor(110, 110, 110); doc.setLineWidth(0.5); doc.setLineDashPattern([], 0);
+                const topY = PYf(padIn / totalHin) - 10;
+                doc.line(PXf(wlf), topY, PXf(wrf), topY);
+                doc.setFont(_font('serif'), 'normal'); doc.setFontSize(8);
+                if (wallWin) doc.text(Math.round(wallWin * 2.54) + 'cm / ' + Math.round(wallWin) + '"', (PXf(wlf) + PXf(wrf)) / 2, topY - 2, { align: 'center' });
+                const rX = PXf(wrf) + 8;
+                doc.line(rX, PYf(padIn / totalHin), rX, PYf(1));
+                doc.text(Math.round(wallHin * 2.54) + 'cm / ' + Math.round(wallHin) + '"', rX + 2, (PYf(padIn / totalHin) + PYf(1)) / 2, { angle: 90 });
+            }
+            doc.setDrawColor(200, 40, 40); doc.setTextColor(200, 40, 40); doc.setLineWidth(0.7);
+            if (showMeasure && hangFrame) {
+                const cyFrac = (padIn + wallHin - (toIn(hangFrame.y) + toIn(hangFrame.h) / 2)) / er.hIn;
+                const floorFrac = (padIn + wallHin) / er.hIn;
+                const centerAFF = toIn(hangFrame.y) + toIn(hangFrame.h) / 2;
+                const affX = PXf(er.wallRightFrac) + 12;
+                doc.setLineDashPattern([3, 2], 0);
+                doc.line(affX, PYf(cyFrac), affX, PYf(floorFrac));                                  // AFF
+                if (dimFrame) {                                                                     // single frame: full CL/EQ
+                    const cxFrac = er.wallLeftFrac + (toIn(dimFrame.x) + toIn(dimFrame.w) / 2) / er.wIn;
+                    const fLeftFrac = er.wallLeftFrac + toIn(dimFrame.x) / er.wIn;
+                    const fRightFrac = er.wallLeftFrac + (toIn(dimFrame.x) + toIn(dimFrame.w)) / er.wIn;
+                    doc.line(PXf(cxFrac), ey - 4, PXf(cxFrac), ey + eh + 4);
+                    doc.line(PXf(er.wallLeftFrac), PYf(cyFrac), PXf(fLeftFrac), PYf(cyFrac));
+                    doc.line(PXf(fRightFrac), PYf(cyFrac), PXf(er.wallRightFrac), PYf(cyFrac));
+                    doc.setLineDashPattern([], 0);
+                    doc.setFont(_font('serif'), 'normal'); doc.setFontSize(9);
+                    doc.text('CL', PXf(cxFrac) + 2, ey + 2);
+                    doc.text('EQ', PXf((er.wallLeftFrac + fLeftFrac) / 2), PYf(cyFrac) - 3, { align: 'center' });
+                    doc.text('EQ', PXf((fRightFrac + er.wallRightFrac) / 2), PYf(cyFrac) - 3, { align: 'center' });
+                } else {
+                    doc.setLineDashPattern([], 0);
+                }
+                doc.setFont(_font('serif'), 'normal'); doc.setFontSize(9.5);
+                doc.text(Math.round(centerAFF * 2.54) + 'cm/' + Math.round(centerAFF) + '" AFF', affX + 4, (PYf(cyFrac) + PYf(floorFrac)) / 2);
+            }
+        } else {
+            doc.setFont(_font('serif'), 'italic'); doc.setFontSize(10); doc.setTextColor(150, 150, 150);
+            doc.text(isElev ? 'This elevation has no active artwork.' : 'Place this piece on a wall elevation to generate the dimensioned install view.', PW * 0.42, PH * 0.5, { maxWidth: PW * 0.5 });
+        }
+
+        // Plan thumbnail (bottom-left), kept clear of the elevation; pins for every piece on the wall.
+        const lv = (typeof floorplanLevels !== 'undefined' ? floorplanLevels : [])[(planRow.level || 0)];
+        if (lv && lv.imageData && !(arg && arg._noPlan)) {
+            const pim = await _loadImg(lv.imageData);
+            const pmaxW = Math.max(80, Math.min(PW * 0.28, elevLeft - M - 18)), pmaxH = PH * 0.30, pasp = (pim.naturalWidth || 1) / (pim.naturalHeight || 1);
+            let pw = pmaxW, ph = pw / pasp; if (ph > pmaxH) { ph = pmaxH; pw = ph * pasp; }
+            const px0 = M, py0 = PH - M - ph;
+            doc.addImage(lv.imageData, 'JPEG', px0, py0, pw, ph);
+            const pins = isElev ? activeFrames.map(f => lookupRow(f.id)) : [arg];
+            doc.setFillColor(200, 40, 40);
+            pins.forEach(rr => { if (rr && rr.planX != null && rr.planY != null) doc.circle(px0 + rr.planX * pw, py0 + rr.planY * ph, 3, 'F'); });
+            doc.setFont(_font('serif'), 'italic'); doc.setFontSize(8); doc.setTextColor(150, 150, 150);
+            doc.text('Floorplan', px0, py0 - 4);
+        }
+    } catch (e) { try { doc.setLineDashPattern([], 0); } catch (_) {} }
+}
+async function _drawSpecPageTemplate(doc, logos, pageNum, meta, r, tplKey, ctx) {
+    const PW = ctx.PW, PH = ctx.PH;
+    const tpl = SPEC_TEMPLATES[tplKey] || SPEC_TEMPLATES.frameRight;
+    const px = (f) => f * PW, py = (f) => f * PH;
+    const specs = buildSpecStrings(r);
+
+    // — Title —
+    if (tpl.title) {
+        const tf = tpl.title.field || 'application';
+        const titleText = (tf === 'id' ? (r.id || '') : tf === 'product' ? (r.product || '') : (specs.application || r.product || r.id || 'SPECIFICATION')).toString().toUpperCase();
+        const ts = _titleStyle(); const trgb = _annHexToRgb(ts.color);
+        doc.setFont(_font(ts.font), ts.font === 'serif' ? 'normal' : 'bold');
+        doc.setFontSize(ts.size);
+        doc.setTextColor(trgb.r, trgb.g, trgb.b);
+        doc.text(titleText, px(tpl.title.x), py(tpl.title.y), tpl.title.align ? { align: tpl.title.align } : undefined);
+    }
+
+    // — Artwork (baked frame mockup) + code beneath —
+    if (tpl.artwork) {
+        const dInches = _frameDataInInches(Object.assign({}, r, { extW: r.extW, extH: r.extH }), dashUnit);
+        let artworkImg = null;
+        if (r.artworkUrl) { try { artworkImg = await _loadImg(r.artworkUrl); } catch (e) {} }
+        const swatch = (r.fType === 'image' && r.swatchDataUrl) ? await _loadImg(r.swatchDataUrl) : null;
+        const out = renderFrameToCanvas(dInches, swatch, { wireframe: _isWireframe(), dpi: 96, pad: 0, artworkImg, artCrop: { zoom: r.artZoom, panX: r.artPanX, panY: r.artPanY } });
+        const cnv = out.canvas;
+        let url;
+        try { const flat = document.createElement('canvas'); flat.width = cnv.width; flat.height = cnv.height; const fx = flat.getContext('2d'); fx.fillStyle = '#ffffff'; fx.fillRect(0, 0, flat.width, flat.height); fx.drawImage(cnv, 0, 0); url = flat.toDataURL('image/jpeg', 0.85); }
+        catch (e) { url = cnv.toDataURL('image/jpeg', 0.85); }
+        const boxX = px(tpl.artwork.x), boxY = py(tpl.artwork.y), boxW = px(tpl.artwork.w), boxH = py(tpl.artwork.h);
+        const fit = Math.min(boxW / cnv.width, boxH / cnv.height);
+        const aw = cnv.width * fit, ah = cnv.height * fit;
+        const ax = tpl.artwork.align === 'right' ? (boxX + boxW - aw) : (tpl.artwork.align === 'center' ? (boxX + (boxW - aw) / 2) : boxX);
+        try { doc.addImage(url, 'JPEG', ax, boxY, aw, ah); } catch (e) {}
+        if (tpl.code) {
+            const cf = tpl.code.field || 'id';
+            const codeText = (cf === 'imageCode' ? (r.imageCode || r.artworkFile || '') : (r.id || '')).toString();
+            if (codeText) {
+                const cs = _specCodeStyle(); const crgb = _annHexToRgb(cs.color);
+                doc.setFont(_font(cs.font), cs.font === 'serif' ? 'normal' : 'bold');
+                doc.setFontSize(cs.size);
+                doc.setTextColor(crgb.r, crgb.g, crgb.b);
+                const cAlign = tpl.code.align || 'left';
+                const codeX = cAlign === 'right' ? (ax + aw) : (cAlign === 'center' ? (ax + aw / 2) : ax);
+                doc.text(codeText, codeX, boxY + ah + (tpl.code.gap || 16), cAlign !== 'left' ? { align: cAlign } : undefined);
+            }
+        }
+    }
+
+    // — Spec block (dotted leaders) —
+    if (tpl.spec && !_specArtOnly(r.id)) {
+        const sx = px(tpl.spec.x), sw = px(tpl.spec.w);
+        let sy = py(tpl.spec.y);
+        doc.setFontSize(8.5);
+        specs.lines.forEach(ln => {
+            doc.setFont('helvetica', 'bold'); doc.setTextColor(20, 20, 20); doc.text(ln.label, sx, sy);
+            const lw = doc.getTextWidth(ln.label);
+            doc.setFont('helvetica', 'normal'); const vs = (ln.value || '') + ''; const vw = doc.getTextWidth(vs); const vx = sx + sw - vw; doc.text(vs, vx, sy);
+            const ds = sx + lw + 4, de = vx - 4;
+            if (de > ds) { doc.setLineDashPattern([0.5, 1.5], 0); doc.setDrawColor(160, 160, 160); doc.setLineWidth(0.5); doc.line(ds, sy - 2, de, sy - 2); doc.setLineDashPattern([], 0); }
+            sy += 13;
+        });
+    }
+
+    // — Elevation (wall thumbnail) —
+    if (tpl.elevation) {
+        let elev = null;
+        for (const e of elevations) { if (e.frames && e.frames.some(fr => fr.id === r.id)) { elev = e; break; } }
+        if (elev) {
+            const er = await renderElevationToCanvas(elev, r.id, { wireframe: _isWireframe(), dpi: 28 });
+            if (er && er.canvas) {
+                let url;
+                try { const flat = document.createElement('canvas'); flat.width = er.canvas.width; flat.height = er.canvas.height; const ex = flat.getContext('2d'); ex.fillStyle = '#ffffff'; ex.fillRect(0, 0, flat.width, flat.height); ex.drawImage(er.canvas, 0, 0); url = flat.toDataURL('image/jpeg', 0.82); }
+                catch (e) { url = er.canvas.toDataURL('image/jpeg', 0.82); }
+                const boxX = px(tpl.elevation.x), boxY = py(tpl.elevation.y), boxW = px(tpl.elevation.w), boxH = py(tpl.elevation.h);
+                const fit = Math.min(boxW / er.canvas.width, boxH / er.canvas.height);
+                const ew = er.canvas.width * fit, eh = er.canvas.height * fit;
+                try { doc.addImage(url, 'JPEG', boxX, boxY, ew, eh); } catch (e) {}
+                // Crisp vector wall + baseboard + floor on top: the baked raster
+                // lines are a ~2px hairline in a 5000px canvas, so they vanish when
+                // Acrobat downsamples the small image (Chrome antialiases them in).
+                try {
+                    const _toIn = (v) => parseFloat(v) * unitFactor((typeof elevUnit !== 'undefined' ? elevUnit : 'in'), 'in');
+                    const totalHin = (er.hIn && er.hIn > 0) ? er.hIn : 1;
+                    const wallHin = _toIn(elev.wallH) || 96;
+                    const wTopF = 6 / totalHin;
+                    const wlf = (er.wallLeftFrac != null ? er.wallLeftFrac : 0), wrf = (er.wallRightFrac != null ? er.wallRightFrac : 1);
+                    const wx = boxX + wlf * ew, wW = (wrf - wlf) * ew, wyTop = boxY + wTopF * eh, wH = (1 - wTopF) * eh;
+                    doc.setLineDashPattern([], 0); doc.setDrawColor(70, 70, 70); doc.setLineWidth(0.8);
+                    doc.rect(wx, wyTop, wW, wH, 'S');
+                    let bbIn = 4; try { const b = getBaseboardHeight(); if (!isNaN(b)) bbIn = parseFloat(b) * unitFactor((typeof elevUnit !== 'undefined' ? elevUnit : 'in'), 'in'); } catch (e) {}
+                    if (bbIn > 0 && bbIn < wallHin) { const byy = boxY + (1 - bbIn / totalHin) * eh; doc.setLineWidth(0.6); doc.line(wx, byy, wx + wW, byy); }
+                } catch (e) {}
+                const capX = boxX + (er.wallLeftFrac || 0) * ew;   // align caption to the wall line, not the image edge
+                doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5); doc.setTextColor(120, 120, 120); doc.text((elev.name || 'Elevation') + '', capX, boxY + eh + 9);
+            }
+        }
+    }
+}
+
+// Free-floating overlay text boxes drawn on top of a page in the PDF. Matches
+// the studio's editable overlay layer. `key` selects this page's annotations.
+function _annHexToRgb(hex) {
+    hex = (hex || '#222222').replace('#', '');
+    if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+    const n = parseInt(hex, 16);
+    return isNaN(n) ? { r: 34, g: 34, b: 34 } : { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+}
+function _drawAnnotations(doc, key, PW, PH) {
+    const list = (editorialContent.annotations && editorialContent.annotations[key]) || [];
+    if (!list.length) return;
+    list.forEach(a => {
+        if (a.type === 'mockup') {
+            const entry = _mockupGet(a.pieceId); if (!entry || !entry.url) return;
+            const pw = (a.w || 0.3) * PW, ph = pw * (entry.aspect || a.aspect || 1.2);
+            const x = (a.x || 0) * PW, y = (a.y || 0) * PH;
+            try { doc.addImage(entry.url, 'JPEG', x, y, pw, ph); } catch (e) {}
+            if (a.showCode) { const prow = _pieceById(a.pieceId) || {}; const code = (prow.imageCode || prow.artworkFile || a.pieceId || '') + ''; if (code) { const cs = _specCodeStyle(); const crgb = _annHexToRgb(cs.color); doc.setFont(_font(cs.font), cs.font === 'serif' ? 'normal' : 'bold'); doc.setFontSize(Math.min(cs.size, 10)); doc.setTextColor(crgb.r, crgb.g, crgb.b); try { doc.text(code, x + pw, y + ph + 11, { align: 'right' }); } catch (e) {} } }
+            return;
+        }
+        if (a.type === 'arrow' || a.type === 'elbow') {
+            const X1 = (a.x1 || 0) * PW, Y1 = (a.y1 || 0) * PH, X2 = (a.x2 || 0) * PW, Y2 = (a.y2 || 0) * PH;
+            const rgb = _annHexToRgb(a.color || '#c0392b');
+            const wt = a.weight || 2;
+            doc.setDrawColor(rgb.r, rgb.g, rgb.b); doc.setLineWidth(wt); doc.setLineCap('round'); doc.setLineJoin('round');
+            let px2 = X1, py2 = Y1;
+            if (a.type === 'elbow') { doc.line(X1, Y1, X2, Y1); doc.line(X2, Y1, X2, Y2); px2 = X2; py2 = Y1; }
+            else { doc.line(X1, Y1, X2, Y2); px2 = X1; py2 = Y1; }
+            const dx = X2 - px2, dy = Y2 - py2, len = Math.max(0.5, Math.hypot(dx, dy));
+            const ux = dx / len, uy = dy / len, hsz = Math.max(6, wt * 3.4);
+            const bx = X2 - ux * hsz, by = Y2 - uy * hsz, nx = -uy, ny = ux;
+            doc.setFillColor(rgb.r, rgb.g, rgb.b);
+            try { doc.triangle(X2, Y2, bx + nx * hsz * 0.55, by + ny * hsz * 0.55, bx - nx * hsz * 0.55, by - ny * hsz * 0.55, 'F'); } catch (e) {}
+            return;
+        }
+        if (a.type === 'image') {
+            if (!a.dataUrl) return;
+            const x = (a.x || 0) * PW, y = (a.y || 0) * PH, pw = (a.w || 0.25) * PW, ph = (a.w || 0.25) * PW * (a.aspect || 0.75);
+            const fmt = (('' + a.dataUrl).indexOf('image/png') >= 0) ? 'PNG' : 'JPEG';
+            try { doc.addImage(a.dataUrl, fmt, x, y, pw, ph); } catch (e) {}
+            return;
+        }
+        const text = (a.text || '') + ''; if (!text.trim()) return;
+        const x = (a.x || 0) * PW, y = (a.y || 0) * PH, w = (a.w || 0.3) * PW;
+        const size = Math.max(6, (a.size || 0.03) * PH);
+        const fam = _font(a.font || 'sans');
+        const style = (a.bold && a.italic) ? 'bolditalic' : a.bold ? 'bold' : a.italic ? 'italic' : 'normal';
+        try { doc.setFont(fam, style); } catch (e) { doc.setFont(fam, a.bold ? 'bold' : 'normal'); }
+        doc.setFontSize(size);
+        const c = _annHexToRgb(a.color); doc.setTextColor(c.r, c.g, c.b);
+        const lines = doc.splitTextToSize(text, w);
+        const align = a.align || 'left';
+        let tx = x; if (align === 'center') tx = x + w / 2; else if (align === 'right') tx = x + w;
+        try { doc.text(lines, tx, y + size, { align: align }); } catch (e) { doc.text(lines, x, y + size); }
+    });
+}
+// "APPROVED" stamp, top-right corner. Used to mark a deck as client-approved
+// while other placements are still in revision.
+function _drawApprovalStamp(doc, PW, PH, M, status) {
+    const approved = status === 'approved';
+    const txt = approved ? 'APPROVED' : 'PENDING APPROVAL';
+    const rgb = approved ? [26, 127, 55] : [192, 57, 43];
+    doc.setFont(_font('display'), 'bold');
+    doc.setFontSize(approved ? 13 : 11);
+    const tw = doc.getTextWidth(txt);
+    const padX = 9, padY = 6, bh = 22;
+    const bw = tw + padX * 2;
+    const x = PW - M - bw;          // right-aligned, same edge as the back-link
+    const y = M + 12;               // sits just under the "\u2190 Floorplan" link line
+    doc.setDrawColor(rgb[0], rgb[1], rgb[2]); doc.setLineWidth(1.6);
+    doc.setFillColor(255, 255, 255);
+    doc.roundedRect(x, y, bw, bh, 3, 3, 'FD');
+    doc.setTextColor(rgb[0], rgb[1], rgb[2]);
+    doc.text(txt, x + padX, y + bh - padY);
+}
+async function _buildSpecPagePDF(opts) {    const { jsPDF } = window.jspdf;
+    const wantSpec = opts.include ? !!opts.include.spec : true;
+    // Which rows: current selection, or all rows if opts.all.
+    let rows = [];
+    if (opts.all) {
+        rows = dashProjectData.filter(r => r && (r.id || r.artworkUrl));
+        if (wantSpec && !rows.length) { showInfoModal('No pieces', 'There are no pieces in the project yet. Add frames in the Frame Dashboard, then try again.'); return; }
+    } else {
+        rows = [dashProjectData[dashSelectedRowIndex]].filter(Boolean);
+        if (wantSpec && !rows.length) { showInfoModal('Nothing to export', 'Select a frame row first.'); return; }
+    }
+
+    // Page format: widescreen to match the studio's reference decks (~1.73:1),
+    // not US-Letter. One constant drives both the first page and every addPage;
+    // all draw code reads PW/PH from the page so layouts reflow automatically.
+    const PAGE_FORMAT = [936, 540];   // pt — 936/540 ≈ 1.733, the reference aspect
+    const doc = new jsPDF({ orientation: 'landscape', unit: 'pt', format: PAGE_FORMAT });
+    await _registerPdfFonts(doc);   // embed brand TTFs (Druk/Messina); Helvetica fallback
+    const PW = doc.internal.pageSize.getWidth();
+    const PH = doc.internal.pageSize.getHeight();
+    const M = 40;                  // page margin
+    const COL_X = M;               // left column (artwork + spec) start
+    const ART_MAX_W = PW * 0.40;   // artwork max width
+    const ART_MAX_H = PH * 0.42;   // artwork max height
+
+    const logos = await _getPdfLogos();
+    const meta = opts.meta || null;
+    // Which sections to include. Defaults preserve legacy behavior: a bare
+    // exportSpecPagePDF({all:true}) still produces cover + spec pages.
+    const inc = opts.include || { cover: !!opts.all, spec: true };
+
+    // Rough page estimate so the progress bar advances meaningfully.
+    let _pdfEst = 0;
+    if (inc.cover) _pdfEst++; if (inc.understanding) _pdfEst++; if (inc.narrative) _pdfEst++;
+    if (inc.strategy) _pdfEst++; if (inc.timeline) _pdfEst++; if (inc.frameRec) _pdfEst++;
+    _pdfEst += (editorialContent.layoutPages || []).length;
+    if (inc.spec) _pdfEst += rows.length;
+    if (inc.floorplanKey) { _fpMigrate(); _pdfEst += (floorplanLevels || []).length; }
+    if (inc.slogan) _pdfEst++; if (inc.contacts) _pdfEst++;
+    _pdfEst = Math.max(1, _pdfEst);
+    _pdfShowOverlay(); _pdfProgress(0.04, 'Building presentation…'); await _pdfYield();
+
+    let pageNum = 0;               // 1-based footer counter
+    let fpKeyPageNum = 0;          // page of the floorplan key (for back-links)
+    const _pageKeys = {};          // pageNum -> annotation key
+    const _autoPages = [];         // reserved TOC / artwork-index pages, drawn in a post-pass
+    const newPage = (key) => {
+        if (pageNum > 0) doc.addPage(PAGE_FORMAT, 'landscape');
+        pageNum += 1;
+        if (key) _pageKeys[pageNum] = key;
+        _pdfProgress(Math.min(0.97, pageNum / _pdfEst), 'Building page ' + pageNum + ' of ~' + _pdfEst + '…');
+        return pageNum;
+    };
+    // Emit the layout pages anchored to a given point in the deck. Default
+    // anchor 'afterStrategy' = the classic layout block. NOTE: we never anchor
+    // between the Floorplan Key and Spec pages — their page numbers must stay
+    // adjacent for the key's clickable links to resolve.
+    const emitLayout = async (anchor) => {
+        if (!inc.moodboard) return;
+        _mbMigratePages();
+        const pages = (editorialContent.layoutPages || []).filter(p => !p.afterKey && (p.place || 'afterStrategy') === anchor);
+        for (const page of pages) {
+            const src = page.elements || [];
+            if (!src.length) continue;
+            const tiles = src.map(t => Object.assign({}, t, { _img: null }));
+            for (let ti = 0; ti < src.length; ti++) {
+                if ((src[ti].type || 'image') === 'image' && src[ti].img) { try { tiles[ti]._img = await _loadImg(src[ti].img); } catch (e) {} }
+            }
+            newPage('layout:' + page.id);
+            _drawMoodboardPage(doc, logos, pageNum, meta, tiles, page.title, page.type);
+        }
+    };
+    // Inserted pages anchored after a specific page key (page management).
+    const _layoutAfter = (key) => (editorialContent.layoutPages || []).filter(p => p.afterKey === key);
+    const _afterKeyCount = (key) => { let n = 0; _layoutAfter(key).forEach(p => { n += 1 + _afterKeyCount('layout:' + p.id); }); return n; };
+    const drawLayoutPage = async (page) => {
+        if (page.type === 'toc' || page.type === 'artindex') { newPage('layout:' + page.id); _autoPages.push({ pageNum: pageNum, type: page.type }); return; }
+        const src = page.elements || [];
+        const tiles = src.map(t => Object.assign({}, t, { _img: null }));
+        for (let ti = 0; ti < src.length; ti++) { if ((src[ti].type || 'image') === 'image' && src[ti].img) { try { tiles[ti]._img = await _loadImg(src[ti].img); } catch (e) {} } }
+        newPage('layout:' + page.id);
+        _drawMoodboardPage(doc, logos, pageNum, meta, tiles, page.title, page.type);
+    };
+    const emitAfterKey = async (key) => { if (!key) return; for (const p of _layoutAfter(key)) { await drawLayoutPage(p); await emitAfterKey('layout:' + p.id); } };
+
+    await emitAfterKey('__start__');
+    // — Cover —
+    if (inc.cover) {
+        newPage('fixed:cover');
+        const cov = editorialContent.coverPage;
+        if (cov && Array.isArray(cov.elements) && cov.elements.length) {
+            const src = cov.elements;
+            const tiles = src.map(t => Object.assign({}, t, { _img: null }));
+            for (let ti = 0; ti < src.length; ti++) {
+                if ((src[ti].type || 'image') === 'image' && src[ti].img) { try { tiles[ti]._img = await _loadImg(src[ti].img); } catch (e) {} }
+            }
+            _drawMoodboardPage(doc, logos, pageNum, meta, tiles, '', 'breaker');
+        } else {
+            _drawCoverPage(doc, logos);
+        }
+    }
+    await emitAfterKey('fixed:cover');
+    await emitLayout('afterCover');
+    // — Process & Timeline (real) —
+    if (inc.timeline) { newPage('card:timeline'); _drawTimelinePage(doc, logos, pageNum, meta, editorialContent.timeline); }
+    await emitAfterKey('card:timeline');
+    await emitLayout('afterTimeline');
+    // — Project Understanding (real): custom freeform page if built, else prose —
+    if (inc.understanding) {
+        newPage('fixed:understanding');
+        const un = editorialContent.understandingPage;
+        if (un && Array.isArray(un.elements) && un.elements.length) {
+            const src = un.elements;
+            const tiles = src.map(t => Object.assign({}, t, { _img: null }));
+            for (let ti = 0; ti < src.length; ti++) {
+                if ((src[ti].type || 'image') === 'image' && src[ti].img) { try { tiles[ti]._img = await _loadImg(src[ti].img); } catch (e) {} }
+            }
+            _drawMoodboardPage(doc, logos, pageNum, meta, tiles, '', 'narrative');
+        } else {
+            _drawProsePage(doc, logos, pageNum, meta, 'PROJECT UNDERSTANDING', editorialContent.understanding, 'Add project understanding copy in the Presentation PDF dialog.');
+        }
+    }
+    await emitAfterKey('fixed:understanding');
+    await emitLayout('afterUnderstanding');
+    // — Art Narrative (real): custom freeform page if built, else prose —
+    if (inc.narrative) {
+        newPage('fixed:narrative');
+        const nv = editorialContent.narrativePage;
+        if (nv && Array.isArray(nv.elements) && nv.elements.length) {
+            const src = nv.elements;
+            const tiles = src.map(t => Object.assign({}, t, { _img: null }));
+            for (let ti = 0; ti < src.length; ti++) {
+                if ((src[ti].type || 'image') === 'image' && src[ti].img) { try { tiles[ti]._img = await _loadImg(src[ti].img); } catch (e) {} }
+            }
+            _drawMoodboardPage(doc, logos, pageNum, meta, tiles, '', 'narrative');
+        } else {
+            _drawProsePage(doc, logos, pageNum, meta, 'ART NARRATIVE', editorialContent.narrative, 'Add narrative copy in the Presentation PDF dialog.');
+        }
+    }
+    await emitAfterKey('fixed:narrative');
+    await emitLayout('afterNarrative');
+    // — Art Collection Strategy (real): custom freeform page if built, else tiers —
+    if (inc.strategy) {
+        newPage('fixed:strategy');
+        const st = editorialContent.strategyPage;
+        if (st && Array.isArray(st.elements) && st.elements.length) {
+            const src = st.elements;
+            const tiles = src.map(t => Object.assign({}, t, { _img: null }));
+            for (let ti = 0; ti < src.length; ti++) {
+                if ((src[ti].type || 'image') === 'image' && src[ti].img) { try { tiles[ti]._img = await _loadImg(src[ti].img); } catch (e) {} }
+            }
+            _drawMoodboardPage(doc, logos, pageNum, meta, tiles, '', 'narrative');
+        } else {
+            _drawStrategyPage(doc, logos, pageNum, meta, editorialContent.strategy);
+        }
+    }
+    // — Layout pages (default anchor): freeform image / text / arrow pages —
+    await emitAfterKey('fixed:strategy');
+    await emitLayout('afterStrategy');
+    // — Frame Recommendations (real): summary of frames specified across rows —
+    if (inc.frameRec) {
+        const projFrames = await _collectProjectFrames();
+        const perPage = 6;   // 3 columns × 2 rows, fits the widescreen page
+        if (!projFrames.length) { newPage('card:frameRec'); _drawFrameRecPage(doc, logos, pageNum, meta, []); }
+        else { for (let fi = 0; fi < projFrames.length; fi += perPage) { newPage('card:frameRec'); _drawFrameRecPage(doc, logos, pageNum, meta, projFrames.slice(fi, fi + perPage)); } }
+    }
+    await emitAfterKey('card:frameRec');
+    await emitLayout('beforeFloorplan');
+    // — Build the emission plan: interleave each level's floorplan key with that
+    //   level's spec pages (Level 1 plan → Level 1 specs → Level 2 plan → …),
+    //   breaker-style. Page numbers are precomputed so every key→spec forward
+    //   link and spec→key back-link resolves exactly. —
+    const _fpLevelKeyPage = {};
+    _fpMigrate();
+    const _doKeys = !!inc.floorplanKey;
+    const _specRows = inc.spec ? rows.slice() : [];
+    const _specTplKey = (editorialContent.specTemplate || 'classic');
+    const _specIsGroup = !!(SPEC_TEMPLATES[_specTplKey] && SPEC_TEMPLATES[_specTplKey].group);
+    const _isInstall = (_specTplKey === 'installGuide');
+    const _useBreakers = _elevBreakers() && !_specIsGroup && !_isInstall;
+    // A "unit" is one spec page. Normally one piece per page; for a set template
+    // (group:true) a whole set-piece group (ART.005-A/-B/-C…) shares one page.
+    // With breakers on we also group, so each wall-group gets an elevation page.
+    const _unitsFromRows = (rs) => _buildSpecUnits(rs, _specIsGroup || _useBreakers);
+    const _units = _unitsFromRows(_specRows);
+    const _installUnits = () => (elevations || []).map((e, ei) => ({ elev: e, idx: ei })).filter(o => o.elev && o.elev.frames && o.elev.frames.some(f => f && f.active !== false));
+    // Breaker: a group becomes [full-page wall elevation] + [individual specs in the per-piece template].
+    const _stepsFor = (u, li) => {
+        if (_useBreakers && !u._manual) {
+            const out = []; const members = u.members || [];
+            let ge = null, gi = -1, best = 0;
+            (elevations || []).forEach((e, ei) => { if (!e || !e.frames) return; let c = 0; members.forEach(m => { if (e.frames.some(fr => fr && fr.id === m.id)) c++; }); if (c > best) { best = c; ge = e; gi = ei; } });
+            if (ge) out.push({ type: 'install', elev: Object.assign({}, ge, { name: _breakerCodeFor(u), _noPlan: _breakerNoPlan(), _measure: _breakerMeasure(), _idx: gi }), idx: gi, _groupKey: u.key, li: li });
+            members.forEach(m => out.push({ type: 'spec', unit: { rep: m, members: [m], key: m.id }, _forceTpl: _specTplResolve(m.id || ''), li: li }));
+            return out;
+        }
+        return [{ type: 'spec', unit: u, li: li }];
+    };
+    const plan = [];
+    if (_isInstall) {
+        // Install guide: one page per elevation (full wall), no per-piece repeats.
+        if (_doKeys) {
+            const _lvlOf = (x) => { const n = parseInt(x, 10); return isNaN(n) ? 0 : n; };
+            const emitLevels = [];
+            floorplanLevels.forEach((lv, li) => { const used = (li === 0) || !!lv.imageData || (dashProjectData || []).some(it => _lvlOf(it.level) === li); if (used) emitLevels.push(li); });
+            if (!emitLevels.length) emitLevels.push(0);
+            emitLevels.forEach(li => plan.push({ type: 'key', li: li }));
+        }
+        if (inc.spec) _installUnits().forEach(o => plan.push({ type: 'install', elev: o.elev, idx: o.idx }));
+    } else if (_doKeys) {
+        const _lvlOf = (x) => { const n = parseInt(x, 10); return isNaN(n) ? 0 : n; };
+        const emitLevels = [];
+        floorplanLevels.forEach((lv, li) => {
+            const used = (li === 0) || !!lv.imageData || _units.some(u => _lvlOf(u.rep.level) === li) || (dashProjectData || []).some(it => _lvlOf(it.level) === li);
+            if (used) emitLevels.push(li);
+        });
+        if (!emitLevels.length) emitLevels.push(0);
+        const covered = {};
+        emitLevels.forEach(li => {
+            covered[li] = true;
+            plan.push({ type: 'key', li: li });
+            _units.filter(u => _lvlOf(u.rep.level) === li).forEach(u => _stepsFor(u, li).forEach(s => plan.push(s)));
+        });
+        _units.forEach(u => { const li = _lvlOf(u.rep.level); if (!covered[li]) _stepsFor(u, li).forEach(s => plan.push(s)); });
+    } else {
+        _units.forEach(u => _stepsFor(u, (u.rep.level || 0)).forEach(s => plan.push(s)));
+    }
+    // Every step (key or spec) consumes one page; map every member id to its page.
+    const idToPage = {};
+    {
+        let _p = pageNum;
+        for (const step of plan) {
+            _p++;
+            const _sk = step.type === 'key' ? ('floorplan:' + step.li) : step.type === 'install' ? (step._groupKey != null ? ('spec:elevgrp:' + step._groupKey) : ('spec:elev:' + step.idx)) : ('spec:' + (step.unit && step.unit.key));
+            if (step.type === 'spec' && step.unit) step.unit.members.forEach(m => { if (m && m.id) idToPage[m.id] = _p; });
+            else if (step.type === 'install' && step.elev && step.elev.frames) step.elev.frames.forEach(f => { if (f && f.id) idToPage[f.id] = _p; });
+            _p += _afterKeyCount(_sk);
+        }
+    }
+
+    // — Emit the plan: floorplan keys and spec pages, interleaved per level —
+    for (const step of plan) {
+        const stepKey = step.type === 'key' ? ('floorplan:' + step.li) : step.type === 'install' ? (step._groupKey != null ? ('spec:elevgrp:' + step._groupKey) : ('spec:elev:' + step.idx)) : ('spec:' + (step.unit && step.unit.key));
+        newPage(stepKey);
+        if (step.type === 'key') {
+            _fpLevelKeyPage[step.li] = pageNum;
+            const lv = floorplanLevels[step.li] || {};
+            const levelGroups = _fpGroups().filter(g => (g.level || 0) === step.li);
+            const entries = levelGroups.map(g => {
+                let linkPage = null;
+                for (const id of g.ids) { if (idToPage[id]) { linkPage = idToPage[id]; break; } }
+                const codesLabel = (g.ids.length > 1)
+                    ? (g.key + ' (' + g.ids.map(id => { const s = id.indexOf(g.key) === 0 ? id.slice(g.key.length).replace(/^[-_\s]*/, '') : id; return s || id; }).join('/') + ')')
+                    : (g.ids[0] || g.key);
+                return { num: g.num, codes: codesLabel, location: g.location, category: g.category, planX: g.planX, planY: g.planY, linkPage: linkPage };
+            });
+            let planImg = null;
+            if (lv.imageData) { try { planImg = await _loadImg(lv.imageData); } catch (e) {} }
+            _drawFloorplanKeyPage(doc, logos, pageNum, meta, entries, planImg, lv.name || ('Level ' + (step.li + 1)));
+            if (!fpKeyPageNum) fpKeyPageNum = pageNum;
+            await emitAfterKey(stepKey);
+            continue;
+        }
+        if (step.type === 'install') {
+            await _drawInstallGuidePage(doc, logos, pageNum, meta, step.elev, { PW: PW, PH: PH, M: M });
+            await emitAfterKey(stepKey);
+            continue;
+        }
+        const r = step.unit.rep;
+        const _specTpl = step._forceTpl || (step.unit._manual ? (step.unit.layout || 'setRow') : _specTplResolve(step.unit.key || (r.id || '')));
+        if (!step._forceTpl && (_specIsGroup || step.unit._manual)) {
+            await _drawSpecSetPage(doc, logos, pageNum, meta, step.unit, _specTpl, { PW: PW, PH: PH, M: M });
+        } else if (SPEC_TEMPLATES[_specTpl] && SPEC_TEMPLATES[_specTpl].freeform) {
+            // Custom free layout: the page is a blank canvas; mockups/text/images/
+            // arrows are all annotations, painted by the annotation post-pass.
+        } else if (_specTpl === 'installGuide') {
+            await _drawInstallGuidePage(doc, logos, pageNum, meta, r, { PW: PW, PH: PH, M: M });
+        } else if (_specTpl !== 'classic' && SPEC_TEMPLATES[_specTpl] && !SPEC_TEMPLATES[_specTpl].legacy) {
+            await _drawSpecPageTemplate(doc, logos, pageNum, meta, r, _specTpl, { PW: PW, PH: PH, M: M });
+        } else {
+
+        // — Item code (top-left, large) — uses the deck title style —
+        const _ts = _titleStyle(); const _trgb = _annHexToRgb(_ts.color);
+        doc.setFont(_font(_ts.font), _ts.font === 'serif' ? 'normal' : 'bold');
+        doc.setFontSize(Math.max(_ts.size, 20));
+        doc.setTextColor(_trgb.r, _trgb.g, _trgb.b);
+        doc.text((r.id || '').toString(), M, M + 14);
+
+        // — Framed artwork render (reuse the per-frame canvas, artwork baked in) —
+        // (No separate frame swatch chip — the framed mockup below already shows
+        //  the moulding, so a swatch strip would be redundant.)
+        let cursorY = M + 30;
+        const dInches = _frameDataInInches(Object.assign({}, r, { extW: r.extW, extH: r.extH }), dashUnit);
+        let artworkImg = null;
+        if (r.artworkUrl) { try { artworkImg = await _loadImg(r.artworkUrl); } catch (e) {} }
+        const { canvas } = renderFrameToCanvas(dInches, (r.fType === 'image' ? await _loadImg(r.swatchDataUrl) : null), { wireframe: _isWireframe(),
+            dpi: 96, pad: 0, artworkImg,
+            artCrop: { zoom: r.artZoom, panX: r.artPanX, panY: r.artPanY },
+        });
+        // Fit the rendered frame into the art box, preserving aspect.
+        const cw = canvas.width, ch = canvas.height;
+        const fit = Math.min(ART_MAX_W / cw, ART_MAX_H / ch);
+        const aw = cw * fit, ah = ch * fit;
+        const artX = COL_X, artY = cursorY;
+
+        // Image code under the framed mockup (bottom-right), per studio convention.
+        const _icClassic = (r.imageCode || r.artworkFile || '') + '';
+        // (drawn after the frame image below, once artY/ah are placed)
+        // Flatten onto white (JPEG has no alpha → transparent areas would go
+        // black). Keeps the PDF light while avoiding black artifacts.
+        let frameDataUrl;
+        try {
+            const flat = document.createElement('canvas');
+            flat.width = canvas.width; flat.height = canvas.height;
+            const fx = flat.getContext('2d');
+            fx.fillStyle = '#ffffff'; fx.fillRect(0, 0, flat.width, flat.height);
+            fx.drawImage(canvas, 0, 0);
+            frameDataUrl = flat.toDataURL('image/jpeg', 0.85);
+        } catch (e) { frameDataUrl = canvas.toDataURL('image/jpeg', 0.85); }
+        try { doc.addImage(frameDataUrl, 'JPEG', artX, artY, aw, ah); } catch (e) {}
+        if (_icClassic) {
+            const cs = _specCodeStyle(); const crgb = _annHexToRgb(cs.color);
+            doc.setFont(_font(cs.font), cs.font === 'serif' ? 'normal' : 'bold');
+            doc.setFontSize(cs.size);
+            doc.setTextColor(crgb.r, crgb.g, crgb.b);
+            doc.text(_icClassic, artX + aw, artY + ah + 12, { align: 'right' });
+        }
+
+        // — Spec block (dotted-leader rows) beneath the artwork —
+        const specs = buildSpecStrings(r);
+        const blockTop = artY + ah + (_icClassic ? 30 : 22);
+        const rowH = 13;
+        const blockW = Math.max(aw, 300);
+        doc.setFontSize(8.5);
+        let sy = blockTop;
+        if (!_specArtOnly(r.id)) specs.lines.forEach(ln => {
+            // label (bold, left)
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(20, 20, 20);
+            doc.text(ln.label, COL_X, sy);
+            const labelW = doc.getTextWidth(ln.label);
+            // value (right)
+            doc.setFont('helvetica', 'normal');
+            const valStr = (ln.value || '') + '';
+            const valW = doc.getTextWidth(valStr);
+            const valX = COL_X + blockW - valW;
+            doc.text(valStr, valX, sy);
+            // dotted leader between label and value
+            const dotStart = COL_X + labelW + 4;
+            const dotEnd = valX - 4;
+            if (dotEnd > dotStart) {
+                doc.setLineDashPattern([0.5, 1.5], 0);
+                doc.setDrawColor(160, 160, 160);
+                doc.setLineWidth(0.5);
+                doc.line(dotStart, sy - 2, dotEnd, sy - 2);
+                doc.setLineDashPattern([], 0);
+            }
+            sy += rowH;
+        });
+
+        // — Elevation context (lower-right, prominent): the wall this piece
+        //   lives on, beauty view, with THIS piece full-color and the rest faded. —
+        let elevForPiece = null;
+        for (const e of elevations) {
+            if (e.frames && e.frames.some(fr => fr.id === r.id)) { elevForPiece = e; break; }
+        }
+        if (elevForPiece) {
+            const elevRender = await renderElevationToCanvas(elevForPiece, r.id, { wireframe: _isWireframe(), dpi: 28 });
+            if (elevRender && elevRender.canvas) {
+                // Flatten onto white for JPEG.
+                let elevUrl;
+                try {
+                    const flat = document.createElement('canvas');
+                    flat.width = elevRender.canvas.width; flat.height = elevRender.canvas.height;
+                    const ex = flat.getContext('2d');
+                    ex.fillStyle = '#ffffff'; ex.fillRect(0, 0, flat.width, flat.height);
+                    ex.drawImage(elevRender.canvas, 0, 0);
+                    elevUrl = flat.toDataURL('image/jpeg', 0.82);
+                } catch (e) { elevUrl = elevRender.canvas.toDataURL('image/jpeg', 0.82); }
+                // Prominent box in the right ~half, lower area.
+                const boxW = PW * 0.46;
+                const boxMaxH = PH * 0.42;
+                const ecw = elevRender.canvas.width, ech = elevRender.canvas.height;
+                const efit = Math.min(boxW / ecw, boxMaxH / ech);
+                const ew = ecw * efit, eh = ech * efit;
+                const ex0 = PW - M - ew;
+                const ey0 = PH - M - 14 - eh;   // leave room above footer
+                try { doc.addImage(elevUrl, 'JPEG', ex0, ey0, ew, eh); } catch (e) {}
+                // Crisp vector wall + baseboard + floor (raster hairline drops in Acrobat).
+                try {
+                    const _toIn = (v) => parseFloat(v) * unitFactor((typeof elevUnit !== 'undefined' ? elevUnit : 'in'), 'in');
+                    const totalHin = (elevRender.hIn && elevRender.hIn > 0) ? elevRender.hIn : 1;
+                    const wallHin = _toIn(elevForPiece.wallH) || 96;
+                    const wTopF = 6 / totalHin;
+                    const wlf = (elevRender.wallLeftFrac != null ? elevRender.wallLeftFrac : 0), wrf = (elevRender.wallRightFrac != null ? elevRender.wallRightFrac : 1);
+                    const wx = ex0 + wlf * ew, wW = (wrf - wlf) * ew, wyTop = ey0 + wTopF * eh, wH = (1 - wTopF) * eh;
+                    doc.setLineDashPattern([], 0); doc.setDrawColor(70, 70, 70); doc.setLineWidth(0.8);
+                    doc.rect(wx, wyTop, wW, wH, 'S');
+                    let bbIn = 4; try { const b = getBaseboardHeight(); if (!isNaN(b)) bbIn = parseFloat(b) * unitFactor((typeof elevUnit !== 'undefined' ? elevUnit : 'in'), 'in'); } catch (e) {}
+                    if (bbIn > 0 && bbIn < wallHin) { const byy = ey0 + (1 - bbIn / totalHin) * eh; doc.setLineWidth(0.6); doc.line(wx, byy, wx + wW, byy); }
+                } catch (e) {}
+                // Caption under the elevation: the wall name.
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(7.5);
+                doc.setTextColor(120, 120, 120);
+                doc.text((elevForPiece.name || 'Elevation') + '', ex0, ey0 + eh + 9);
+            }
+        }
+
+        }
+
+        // — Back-link to the floorplan key for THIS item's level —
+        const backPage = _fpLevelKeyPage[(r.level || 0)] || fpKeyPageNum;
+        if (backPage) {
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(8);
+            doc.setTextColor(90, 90, 90);
+            const blText = '\u2190 Floorplan';
+            doc.text(blText, PW - M, M + 4, { align: 'right' });
+            const blW = doc.getTextWidth(blText);
+            doc.link(PW - M - blW, M - 4, blW + 2, 12, { pageNumber: backPage });
+            doc.setTextColor(20, 20, 20);
+        }
+
+        // — Footer (page number + project line) on every spec page —
+        _drawPdfFooter(doc, logos, pageNum, meta);
+        await emitAfterKey(stepKey);
+    }
+    await emitLayout('afterSpec');
+
+    await emitLayout('beforeContacts');
+    // — Good Art. Good People. (real) —
+    if (inc.slogan) {
+        newPage('fixed:slogan');
+        const sg = editorialContent.sloganPage;
+        if (sg && Array.isArray(sg.elements) && sg.elements.length) {
+            const src = sg.elements;
+            const tiles = src.map(t => Object.assign({}, t, { _img: null }));
+            for (let ti = 0; ti < src.length; ti++) {
+                if ((src[ti].type || 'image') === 'image' && src[ti].img) { try { tiles[ti]._img = await _loadImg(src[ti].img); } catch (e) {} }
+            }
+            _drawMoodboardPage(doc, logos, pageNum, meta, tiles, '', 'breaker');
+        } else {
+            _drawSloganPage(doc, logos, pageNum, meta);
+        }
+        await emitAfterKey('fixed:slogan');
+    }
+    // — Thank You / contacts (real) —
+    if (inc.contacts) { newPage('card:contacts'); _drawThankYouPage(doc, logos, pageNum, meta, editorialContent.contacts || (typeof studioDefaults !== 'undefined' ? studioDefaults.contacts : '')); await emitAfterKey('card:contacts'); }
+
+    if (pageNum === 0) { showInfoModal('Nothing selected', 'No pages were included. Pick at least one section.'); return; }
+    // — Overlay text boxes per page —
+    if (_autoPages.length) {
+        const keyToPage = {}; for (let p = 1; p <= pageNum; p++) { if (_pageKeys[p]) keyToPage[_pageKeys[p]] = p; }
+        const tocEntries = _deckTocList(_deckPageList()).map(e => ({ label: e.label, page: keyToPage[e.key] || null })).filter(e => e.page);
+        const idxEntries = _artIndexList().map(e => ({ id: e.id, code: e.code, location: e.location, status: e.status, page: idToPage[e.id] || null }))
+            .sort((a, b) => (a.page || 1e9) - (b.page || 1e9) || (a.id < b.id ? -1 : 1));
+        for (const ap of _autoPages) {
+            try { doc.setPage(ap.pageNum); if (ap.type === 'toc') _drawTOCPage(doc, logos, ap.pageNum, meta, tocEntries); else _drawArtIndexPage(doc, logos, ap.pageNum, meta, idxEntries); } catch (e) {}
+        }
+        try { doc.setPage(pageNum); } catch (e) {}
+    }
+    {
+        const _emitted = {}; for (let p = 1; p <= pageNum; p++) { if (_pageKeys[p]) _emitted[_pageKeys[p]] = 1; }
+        for (const pg of (editorialContent.layoutPages || [])) { if (pg.afterKey && pg.afterKey !== '__start__' && !_emitted[pg.afterKey]) { await drawLayoutPage(pg); await emitAfterKey('layout:' + pg.id); } }
+    }
+    for (let p = 1; p <= pageNum; p++) { const _k = _pageKeys[p]; if (!_k) continue; const _al = (editorialContent.annotations && editorialContent.annotations[_k]) || []; for (const _a of _al) { if (_a && _a.type === 'mockup' && _a.pieceId) { try { await _mockupEnsure(_a.pieceId); } catch (e) {} } } }
+    for (let p = 1; p <= pageNum; p++) { if (_pageKeys[p]) { try { doc.setPage(p); _drawAnnotations(doc, _pageKeys[p], PW, PH); } catch (e) {} } }
+    // — Approval status: spec pages the client has approved (green) or that are
+    //   pending approval (red), shown under the floorplan back-link —
+    const _stat = editorialContent.approvalStatus || {};
+    for (let p = 1; p <= pageNum; p++) {
+        const k = _pageKeys[p] || '';
+        if (k.indexOf('spec:') === 0) { const s = _stat[k.slice(5)]; if (s) { try { doc.setPage(p); _drawApprovalStamp(doc, PW, PH, M, s); } catch (e) {} } }
+    }
+    const single = !opts.all && rows[0];
+    const fname = single ? `${(rows[0].id || 'spec').toString().replace(/[\\/:*?"<>|]/g, '_')}_spec.pdf` : 'FRAME_Presentation.pdf';
+    _pdfProgress(1, 'Finishing…'); _pdfHideOverlay();
+    if (opts.preview) { showSpecPdfPreview(doc, fname); }
+    else { doc.save(fname); }
+}
+
+async function exportDashNativePNG() {
     const d = dashProjectData[dashSelectedRowIndex];
     // Always render in inches so cm-mode and in-mode exports look identical.
     const dInches = _frameDataInInches(d, dashUnit);
-    // Pad reserves transparent space for the drop shadow to render into.
-    // When shadows are off, designers don't want the empty margin — it
-    // makes alignment in InDesign harder (the frame edge ≠ the bounding
-    // box edge). So pad:0 when shadows are off; pad:40 when on.
     const exportPad = dashOuterShadowsOn ? 40 : 0;
-    const { canvas } = renderFrameToCanvas(dInches, dashActiveImageObj, { dpi: 72, pad: exportPad });
+    // Fill the opening with the uploaded artwork when present + shown.
+    let artworkImg = null;
+    if (d.artworkUrl && (typeof _showArtwork === 'undefined' || _showArtwork)) {
+        try { artworkImg = await _loadImg(d.artworkUrl); } catch (e) { artworkImg = null; }
+    }
+    const { canvas } = renderFrameToCanvas(dInches, dashActiveImageObj, { dpi: 72, pad: exportPad, artworkImg, artCrop: { zoom: d.artZoom, panX: d.artPanX, panY: d.artPanY } });
     const a = document.createElement('a');
     a.download = buildPngFilename(d);
     a.href = canvas.toDataURL("image/png");
@@ -5425,7 +11890,7 @@ function suggestedCanvasWrapFromRabbet(r) {
 //     matboard:    <legacy>,   // kept for old InDesign scripts that expect it
 //     lines:       [           // new rich format — array of label/value pairs
 //       { label: "Application",  value: "Framed Art" },
-//       { label: "Frame Size",   value: "1.25\"W × 1.625\"D, Rabbet 0.625\"D" },
+//       { label: "Frame Size",   value: "1.25\"W × 1.625\"D, Rabbet 0.625\"" },
 //       ...
 //     ]
 //   }
@@ -5495,7 +11960,7 @@ function buildSpecStrings(r) {
         if (fwStr) parts.push(`${fwStr}${sufTight}W`);
         if (fhStr) parts.push(`${fhStr}${sufTight}D`);
         let primary = parts.join(' × ');
-        if (rabStr) primary = primary ? `${primary}, Rabbet ${rabStr}${sufTight}D` : `Rabbet ${rabStr}${sufTight}D`;
+        if (rabStr) primary = primary ? `${primary}, Rabbet ${rabStr}${sufTight}` : `Rabbet ${rabStr}${sufTight}`;
         frameSize = primary;
     }
 
@@ -5808,6 +12273,39 @@ function buildSpecStrings(r) {
         if (!isDefaultBacker) matboard += ` on ${backerName} Backer`;
     }
 
+    // — Image Size + Overall Dimensions (to match the InDesign AutoFrameSpecs
+    //   output). Image Size = the printed image (FRAME's "Print" size: opening
+    //   + bleed, or canvas + wrap); Overall = the outer framed size (extW×extH).
+    //   Same math as the dashboard's Open/Print calc cells, in the current unit. —
+    {
+        const _isC = (r.product === "Framed Canvas (Floater)");
+        const _isFL = (r.product === "Frameless Canvas (Wrapped)");
+        const _useFM = !_isC && !_isFL && (r.useFloatMount === true);
+        const _sbPM = _useFM ? (parseFloat(r.sbPaperMargin) || 0) : 0;
+        const _sbPB = _useFM ? (parseFloat(r.sbPaperBorder) || 0) : 0;
+        const _inset = _isC ? (parseFloat(r.floaterInset) || 0.75) : 0;
+        const _act = (r.m1A !== false && !_isC && !_isFL && !_useFM);
+        const _mT = _act ? (parseFloat(r.m1T) || 0) : 0;
+        const _mB = _act ? (parseFloat(r.m1B) || 0) : 0;
+        const _mL = _act ? (parseFloat(r.m1L) || 0) : 0;
+        const _mR = _act ? (parseFloat(r.m1R) || 0) : 0;
+        const _m2v = (r.m2A && !_isC && !_isFL && !_useFM) ? (parseFloat(r.m2) || 0) : 0;
+        const _fW2 = parseFloat(r.fW) || 0;
+        const _eW = parseFloat(r.extW) || 0, _eH = parseFloat(r.extH) || 0;
+        let _oW, _oH;
+        if (_isC) { _oW = _eW - _inset * 2; _oH = _eH - _inset * 2; }
+        else if (_isFL) { _oW = _eW; _oH = _eH; }
+        else if (_useFM) { _oW = _eW - (_fW2 * 2) - _sbPM * 2 - _sbPB * 2; _oH = _eH - (_fW2 * 2) - _sbPM * 2 - _sbPB * 2; }
+        else { _oW = _eW - (_fW2 * 2) - _mL - _mR - (_m2v * 2); _oH = _eH - (_fW2 * 2) - _mT - _mB - (_m2v * 2); }
+        let _iW, _iH;
+        if (_isC) { _iW = _oW; _iH = _oH; }
+        else if (_isFL) { const _wrap = parseFloat(r.canvasWrap) || 0; _iW = _oW + _wrap * 2; _iH = _oH + _wrap * 2; }
+        else { const _bl = parseFloat(r.bleed) || 0; _iW = _oW + _bl * 2; _iH = _oH + _bl * 2; }
+        const _dim = (w, h) => `${fmt(Math.max(0, w))}${sufTight}W × ${fmt(Math.max(0, h))}${sufTight}H`;
+        if (_iW > 0 && _iH > 0) lines.push({ label: 'Image Size', value: _dim(_iW, _iH) });
+        if (_eW > 0 && _eH > 0) lines.push({ label: 'Overall Dimensions', value: _dim(_eW, _eH) });
+    }
+
     return { application, matboard, lines };
 }
 
@@ -5881,7 +12379,7 @@ function buildDashCSVString() {
         `Frame Code-Color,Frame (Width)${u},Frame (Height)${u},` +
         `Security Hardware,Backing Board,Mount,Notes,Production Notes,` +
         // — End visible columns. Below this point: InDesign helpers + backend data. —
-        `Artist,Artwork Title,Art Type,Rabbet Depth${u},` +
+        `Artist,Artwork Title,Art Type,Artwork Filename,Rabbet Depth${u},` +
         `Application,Matboard Description,Spec Lines,` +
         `FM Backer Name,FM Backer Hex,FM Paper Name,FM Paper Hex,FM Paper Edge,FM Paper Margin${u},Frame Code,Frame Color Name,Frame Color Hex,` +
         `Image_Filename,` +
@@ -5991,6 +12489,7 @@ function buildDashCSVString() {
             r.artist || '',
             r.artworkTitle || '',
             r.artType || '',
+            r.artworkFile || '',
             iFL ? '' : numOrBlank(r.rabbetDepth),
             specs.application,
             specs.matboard,
@@ -6206,6 +12705,12 @@ function renderDashTable() {
         `;
         tbody.appendChild(tr);
     });
+    // Re-apply selection highlighting — the innerHTML rebuild above drops the
+    // .selected / .multi-selected classes, so without this a table refresh
+    // (e.g. after editing any field) visually clears a shift/ctrl selection
+    // even though the selection set is still intact. This is what made
+    // shift-select appear to "stop highlighting" after editing.
+    applyDashSelectionStyling();
 }
 
 // ──────────────────────────────────────────────────────────────────────────
@@ -7164,7 +13669,7 @@ const HELP_REFERENCE_DATA = [
             },
             {
                 title: 'Export for Production',
-                body: 'When the project is final, export the CSV (toolbar in dashboard) and the PNG frame swatches (single via the download icon per row, or <strong>Batch PNGs</strong> for everything in one ZIP). The CSV feeds the AutoFrameSpecs.jsx InDesign script to generate spec sheets.'
+                body: 'When the project is final, export the CSV (toolbar in dashboard) and the PNG frame swatches (single via the download icon per row, or <strong>Batch PNGs</strong> for everything in one ZIP). Export elevations individually or use <strong>ALL PNG / ALL SVG</strong> to bundle every wall into one ZIP. The CSV feeds the AutoFrameSpecs.jsx InDesign script to generate spec sheets.'
             }
         ]
     },
@@ -7254,7 +13759,7 @@ const HELP_REFERENCE_DATA = [
             },
             {
                 title: 'Layout Guides',
-                body: 'Seven toggle icons control overlays: <strong>Labels</strong> (A, B, C…), <strong>Frame OD</strong> (outer dimensions), <strong>Spacing</strong> (dim callouts), <strong>Person</strong> (6ft scale figure), <strong>Guides</strong> (center + hang height lines), <strong>Grid</strong>, <strong>Centers</strong> (frame crosshairs).'
+                body: 'Toggle icons control on-canvas overlays: <strong>Labels</strong> (A, B, C…), <strong>Frame OD</strong> (outer dimensions), <strong>Spacing</strong> (dim callouts), <strong>Person</strong> (6ft scale figure), <strong>Guides</strong> (center + hang height lines), <strong>Grid</strong>, <strong>Centers</strong> (frame crosshairs), <strong>Custom Lines</strong> (your drawn measure lines), and the <strong>Unit Suffix</strong> toggle.'
             },
             {
                 title: 'Zoom + Fit',
@@ -7263,6 +13768,30 @@ const HELP_REFERENCE_DATA = [
             {
                 title: 'Export Elevation as PNG',
                 body: 'The download icon in the Wall Dimensions row exports the current elevation including all visible guides as a single PNG. Hide guides you don\'t want baked in before exporting.'
+            },
+            {
+                title: 'Measure Line Tool (M)',
+                body: 'Press <span class="help-kbd">M</span> or click the measure-line button to draw your own dimension lines. Click two points to place a line — endpoints snap to frame corners, frame mid-edges, and wall edges (a blue dot shows the snap target). Drag a placed line away from a frame and a dashed leader bridges the gap only once it clears the frame edge. Select a line and use the arrow handles to slide it, the number to reposition the value, or <span class="help-kbd">Delete</span> to remove it. Toggle line visibility under Layout Guides.'
+            },
+            {
+                title: 'Adjustable Dimension Lines',
+                body: 'Every measurement type — spacing, edge-gap, hang-height, group-box, and drawn measure lines — behaves the same way. Click a line to select it, then drag its 4-way arrows to move the line, drag the number to slide it along the line, and use the × to hide it (where applicable). Dashed leaders only appear when a line is pulled clear of a frame, and never run along floor, ceiling, wall, or frame edges.'
+            },
+            {
+                title: 'Baseboard',
+                body: 'Set a baseboard height in <strong>Settings</strong> (shares the row with Units and Hang Height). It draws a horizontal line at that height across the wall, at the wall lineweight, and exports to SVG/PNG. Set it to 0 to turn it off. Default is 4".'
+            },
+            {
+                title: 'Unit Suffix & Legend',
+                body: 'The <strong>Unit Suffix</strong> toggle in Layout Guides controls how units appear. On: every number shows its unit (3", 6.3 cm, 64 mm). Off: numbers are bare and a single <strong>ALL DIMENSIONS IN INCHES / CENTIMETERS / MILLIMETERS</strong> legend is shown instead (and exported) — useful when per-number suffixes take up too much space.'
+            },
+            {
+                title: 'Export All Elevations (Bulk ZIP)',
+                body: 'The <strong>ALL PNG</strong> and <strong>ALL SVG</strong> buttons render every elevation in the project and bundle them into a single ZIP, one file per elevation named exactly like its tab. A progress bar shows during the run (with Cancel), and you\'re returned to the elevation you were working on when it finishes.'
+            },
+            {
+                title: 'Managing Elevation Tabs',
+                body: 'Each wall is a tab at the top. <strong>Drag tabs</strong> to reorder them. With many elevations the tab strip scrolls horizontally — use the scrollbar or hover and scroll your mouse wheel. The <strong>Frame Dashboard</strong> tab stays pinned on the left. Use <strong>+ Add Wall</strong> to create a new elevation and the × on a tab to delete one.'
             }
         ]
     },
@@ -7273,7 +13802,11 @@ const HELP_REFERENCE_DATA = [
         entries: [
             {
                 title: 'Hang Height',
-                body: 'The vertical center line where the average viewer\'s eyes land. Studio standard is <strong>57"</strong> (144.78 cm / 1447.8 mm). The Guides overlay draws a horizontal line at this height for reference.'
+                body: 'The vertical center line where the average viewer\'s eyes land. Studio standard is <strong>57"</strong> (144.78 cm / 1447.8 mm). The Guides overlay draws a horizontal line at this height for reference. Shares the top row of Settings with Units and Baseboard.'
+            },
+            {
+                title: 'Baseboard',
+                body: 'Draws a horizontal line at the set height from the floor, at the wall lineweight, on the elevation and in SVG/PNG exports. Default <strong>4"</strong>; set to 0 to turn it off. Converts automatically when you switch units.'
             },
             {
                 title: 'Dimension Font Size',
@@ -7316,7 +13849,11 @@ const HELP_REFERENCE_DATA = [
             },
             {
                 title: 'Delete',
-                body: '<span class="help-kbd">Delete</span> removes selected frames from the wall (not from the dashboard).'
+                body: '<span class="help-kbd">Delete</span> removes selected frames from the wall (not from the dashboard). With a measure line selected, it removes that line.'
+            },
+            {
+                title: 'Measure Line Tool',
+                body: '<span class="help-kbd">M</span> toggles the measure-line tool. With a line selected, the arrow keys move it (<span class="help-kbd">Shift</span> for a bigger step) and <span class="help-kbd">Esc</span> exits the tool or clears the selected line.'
             },
             {
                 title: 'Undo / Redo',
@@ -7348,6 +13885,18 @@ const HELP_REFERENCE_DATA = [
             {
                 title: 'Batch PNGs (ZIP Export)',
                 body: 'The <strong>Batch PNGs</strong> button bundles every frame plus the project CSV into a single ZIP. Unzip into a folder, place all PNGs in your InDesign doc, then run AutoFrameSpecs.jsx pointed at the CSV in the same folder — the script auto-matches each image to its data.'
+            },
+            {
+                title: 'Bulk Elevation Export',
+                body: 'In the elevation view, <strong>ALL PNG</strong> / <strong>ALL SVG</strong> export every wall into one ZIP, each file named after its elevation tab. SVG opens crisp in Illustrator/InDesign; PNG is a flat raster.'
+            },
+            {
+                title: 'Floater Frame Width in Specs',
+                body: 'For floater frames, the spec\'s Frame Size width reports the visible canvas <strong>face width</strong> (the swatch\'s <code>_f</code> value), not the full moulding profile. The Float Reveal defaults to 0.25" and renders in whatever unit you run the script in.'
+            },
+            {
+                title: 'Consistent Units in Output',
+                body: 'Every dimension in the generated spec — Frame Size, Rabbet, mats, paper, Float Reveal, Stretcher — renders in the single unit you pick when running the script, regardless of the unit the CSV was exported in. No mixed in/cm/mm output.'
             }
         ]
     },
@@ -7391,7 +13940,7 @@ const HELP_REFERENCE_DATA = [
             },
             {
                 title: 'What\'s New',
-                body: 'Edit this section in <code>HELP_REFERENCE_DATA</code> (in <code>app.js</code>) to list changes per release. Suggested format: most recent changes at the top, dated.<br><br>Example:<br><strong>v1.0</strong> — Initial production release. MM/CM/IN unit support, Mat 1 + Mat 2 + Faux Mat + Float Mount, batch ZIP PNG export, InDesign AutoFrameSpecs integration with raw-inch CSV columns.'
+                body: '<strong>v1.1</strong> — Measure-line (M) tool with frame/wall snapping; unified, draggable dimension lines (spacing, edge-gap, hang-height, group-box, custom) with smart dashed leaders that only appear once a line clears a frame; adjustable baseboard; unit-suffix legend; flush-to-floor vertical dims. Bulk elevation export (ALL PNG / ALL SVG to one ZIP); draggable + scrolling elevation tabs with a pinned dashboard tab; export filenames preserved exactly as named. InDesign AutoFrameSpecs: floater face-width in Frame Size, consistent units across all spec lines (incl. Float Reveal + Stretcher), Rabbet without trailing "D", natural-case text, no frame stroke or breaker line, and adjustable below-image gap/width.<br><br><em>Maintainers: edit this list in <code>HELP_REFERENCE_DATA</code> in <code>app.js</code>.</em>'
             },
             {
                 title: 'Reporting Issues',
@@ -7645,6 +14194,11 @@ async function batchDownloadAllFramesAsZip() {
     document.getElementById('batchZipPercentLabel').textContent = '0%';
     document.getElementById('batchZipCountLabel').textContent = `0 / ${dashProjectData.length}`;
     document.getElementById('batchZipCurrentFile').textContent = '';
+    // The modal is shared with the bulk elevation export — re-assert the
+    // frame-pack wording in case the other feature ran last.
+    (function(){ const t=document.getElementById('batchZipTitle'); if(t) t.textContent='Building Frame Pack';
+        const d=document.getElementById('batchZipDesc'); if(d) d.textContent='Generating PNG files and bundling with the project CSV into a single ZIP.';
+        const dt=document.getElementById('batchZipDoneTitle'); if(dt) dt.textContent='Frame Pack Ready'; })();
     modal.style.display = 'flex';
 
     const zip = new JSZip();
@@ -7780,6 +14334,142 @@ function cancelBatchZip() {
     _batchZipCancelled = true;
     // Update modal to show cancellation is in progress
     document.getElementById('batchZipCurrentFile').textContent = 'Cancelling…';
+}
+
+// ──────────────────────────────────────────────────────────────────────────
+// BULK ELEVATION EXPORT (ZIP)
+// ──────────────────────────────────────────────────────────────────────────
+// Renders EVERY elevation to SVG or PNG and bundles them into one ZIP.
+// Reuses the batch ZIP modal (progress bar + cancel) and the single-export
+// renderers via their returnBlob mode, so bulk output is pixel/byte-identical
+// to individual exports. The user's current elevation is restored at the end.
+// Per-elevation failures are recorded and reported without aborting the run.
+async function bulkExportElevations(format) {
+    const isSvg = (format === 'svg');
+    if (!elevations.length) {
+        return showInfoModal('Nothing to Export', 'There are no elevations in the project yet.');
+    }
+    if (typeof JSZip === 'undefined') {
+        return showInfoModal('Library Not Loaded', 'JSZip failed to load. Refresh the page and try again.');
+    }
+
+    // Remember where the user was so we can put them back afterwards.
+    const origView = currentView;
+    const origIndex = currentElevIndex;
+
+    _batchZipCancelled = false;
+    const setTxt = (id, t) => { const el = document.getElementById(id); if (el) el.textContent = t; };
+    const modal = document.getElementById('batchZipModal');
+    document.getElementById('batchZipRunning').style.display = 'block';
+    document.getElementById('batchZipDone').style.display = 'none';
+    document.getElementById('batchZipError').style.display = 'none';
+    document.getElementById('batchZipProgressBar').style.width = '0%';
+    setTxt('batchZipPercentLabel', '0%');
+    setTxt('batchZipCountLabel', `0 / ${elevations.length}`);
+    setTxt('batchZipCurrentFile', '');
+    setTxt('batchZipTitle', isSvg ? 'Exporting All Elevations (SVG)' : 'Exporting All Elevations (PNG)');
+    setTxt('batchZipDesc', 'Rendering each elevation and bundling everything into a single ZIP.');
+    modal.style.display = 'flex';
+
+    const zip = new JSZip();
+    const total = elevations.length;
+    let successCount = 0;
+    let failureCount = 0;
+    const failures = [];
+    const usedNames = {};
+    const restoreUserView = () => {
+        if (origView === 'elevation' && elevations[origIndex]) switchView('elevation', origIndex);
+        else if (origView === 'dashboard') switchView('dashboard');
+    };
+
+    try {
+        for (let i = 0; i < total; i++) {
+            if (_batchZipCancelled) {
+                modal.style.display = 'none';
+                restoreUserView();
+                return;
+            }
+
+            // Load this elevation into the live view (the renderers read the
+            // live DOM) and let layout settle before capturing.
+            switchView('elevation', i);
+            await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+            const elevName = (elevations[i] && elevations[i].name) || `Elevation_${i + 1}`;
+            setTxt('batchZipCurrentFile', `Rendering ${elevName}…`);
+            setTxt('batchZipCountLabel', `${i} / ${total}`);
+            const pct = Math.round((i / total) * 100);
+            document.getElementById('batchZipProgressBar').style.width = pct + '%';
+            setTxt('batchZipPercentLabel', pct + '%');
+            await new Promise(r => setTimeout(r, 0));  // let the modal paint
+
+            try {
+                const res = isSvg
+                    ? await exportElevSVG({ returnBlob: true })
+                    : await exportElevPNG({ returnBlob: true });
+                if (!res || !res.blob) throw new Error('renderer returned no data');
+                // Collision-safe filenames (two elevations could share a name)
+                const ext = isSvg ? '.svg' : '.png';
+                const base = res.filename.replace(new RegExp(ext.replace('.', '\\.') + '$', 'i'), '');
+                let fileName = base + ext;
+                if (usedNames[fileName]) {
+                    let n = 2;
+                    while (usedNames[`${base}-${n}${ext}`]) n++;
+                    fileName = `${base}-${n}${ext}`;
+                }
+                usedNames[fileName] = true;
+                zip.file(fileName, res.blob);
+                successCount++;
+            } catch (elevErr) {
+                failureCount++;
+                failures.push(`${elevName}: ${elevErr.message || elevErr}`);
+            }
+        }
+
+        // Put the user back on their elevation before the (possibly slow)
+        // ZIP generation so the workspace looks normal again immediately.
+        restoreUserView();
+
+        if (_batchZipCancelled) { modal.style.display = 'none'; return; }
+        if (successCount === 0) {
+            document.getElementById('batchZipRunning').style.display = 'none';
+            document.getElementById('batchZipError').style.display = 'block';
+            setTxt('batchZipErrorMsg', `No elevations could be rendered. ${failures.join(' · ')}`);
+            return;
+        }
+
+        setTxt('batchZipCurrentFile', 'Building ZIP…');
+        const zipBlob = await zip.generateAsync(
+            { type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } },
+            (meta) => {
+                document.getElementById('batchZipProgressBar').style.width = meta.percent.toFixed(0) + '%';
+                setTxt('batchZipPercentLabel', meta.percent.toFixed(0) + '%');
+            }
+        );
+
+        const projEl = document.getElementById('g_projName');
+        const projSlug = slugifyForFilename(projEl ? projEl.value : '');
+        const zipName = `${projSlug}-Elevations-${isSvg ? 'SVG' : 'PNG'}.zip`;
+        const url = URL.createObjectURL(zipBlob);
+        const a = document.createElement('a');
+        a.download = zipName;
+        a.href = url;
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 2000);
+
+        document.getElementById('batchZipRunning').style.display = 'none';
+        document.getElementById('batchZipDone').style.display = 'block';
+        setTxt('batchZipDoneTitle', 'Elevations Exported');
+        let doneMsg = `${successCount} elevation${successCount === 1 ? '' : 's'} exported to ${zipName}.`;
+        if (failureCount > 0) doneMsg += ` ${failureCount} failed: ${failures.join(' · ')}`;
+        setTxt('batchZipDoneMsg', doneMsg);
+    } catch (err) {
+        console.error('Bulk elevation export failed:', err);
+        restoreUserView();
+        document.getElementById('batchZipRunning').style.display = 'none';
+        document.getElementById('batchZipError').style.display = 'block';
+        setTxt('batchZipErrorMsg', `An unexpected error stopped the export: ${err.message || err}`);
+    }
 }
 
 // Download the InDesign script (AutoFrameSpecs.jsx). Fetched from the deployed
@@ -8021,6 +14711,7 @@ function snapFrameToWallCenter(idx, e) {
 }
 
 function drawElevAll() {
+    if (typeof wireElevArtworkDrop === 'function') wireElevArtworkDrop();
     // Prefer the precise stored wall dims over the input field (which displays
     // a 2-decimal rounded value). Reading the rounded field while frames use
     // precise values caused the wall to drift relative to the frames on unit
@@ -8250,7 +14941,7 @@ function drawElevAll() {
             paper.className = 'sb-paper-visual';
             const paperPx = sbPaperMarginVal * elevScale;
             const isTorn = (f.sbPaperEdge || 'clean') === 'torn';
-            paper.style.cssText = `position:absolute; top:${frameInsetPx + paperPx}px; left:${frameInsetPx + paperPx}px; width:${(f.w - effFw*2 - sbPaperMarginVal*2) * elevScale}px; height:${(f.h - effFw*2 - sbPaperMarginVal*2) * elevScale}px; background:${paperColor}; box-shadow: ${2 * elevScale}px ${4 * elevScale}px ${12 * elevScale}px rgba(0,0,0,0.45); ${isTorn ? `border: 1px dashed rgba(0,0,0,0.4);` : ''} pointer-events:none; z-index:3;`;
+            paper.style.cssText = `position:absolute; box-sizing:border-box; top:${frameInsetPx + paperPx}px; left:${frameInsetPx + paperPx}px; width:${(f.w - effFw*2 - sbPaperMarginVal*2) * elevScale}px; height:${(f.h - effFw*2 - sbPaperMarginVal*2) * elevScale}px; background:${paperColor}; box-shadow: ${2 * elevScale}px ${4 * elevScale}px ${12 * elevScale}px rgba(0,0,0,0.45); ${isTorn ? `border: 1px dashed rgba(0,0,0,0.4);` : ''} pointer-events:none; z-index:3;`;
             el.appendChild(paper);
         }
 
@@ -8277,10 +14968,22 @@ function drawElevAll() {
             artH = f.h - effFw*2 - effM1T - effM1B - m2Val*2;
             artTopOffset = (f.fType === 'color') ? ((effM1T + m2Val) * elevScale) : ((effFw + effM1T + m2Val) * elevScale);
             artLeftOffset = (f.fType === 'color') ? ((effM1L + m2Val) * elevScale) : ((effFw + effM1L + m2Val) * elevScale);
+            // Faux mat: the visible artwork sits inside the white faux border, so
+            // inset the opening by that border on each side (band shows around art).
+            if (f.useFauxMat === true) {
+                const fb = parseFloat(f.sbPaperBorder) || 0;
+                artW -= fb*2; artH -= fb*2;
+                artTopOffset += fb * elevScale; artLeftOffset += fb * elevScale;
+            }
         }
         const art = document.createElement('div'); art.className = 'art-visual';
         
         art.style.cssText = `top:${artTopOffset}px; left:${artLeftOffset}px; width:${artW*elevScale}px; height:${artH*elevScale}px; z-index:4;`;
+        // Uploaded artwork: when present, fill the opening with the image
+        // (cover-fit) rather than the grey placeholder. _showArtwork is a global
+        // view toggle so the "beauty" presentation shows art and the technical
+        // drawing can hide it.
+        const hasArtwork = f.artworkUrl && (typeof _showArtwork === 'undefined' || _showArtwork);
         if (isFloater) {
             // Floater: subtle dashed outline + inner shadow (image opening recessed into the canvas).
             art.style.boxShadow = `inset 0 0 ${10 * elevScale}px rgba(0,0,0,0.35)`;
@@ -8289,12 +14992,42 @@ function drawElevAll() {
             // Frameless canvas & float mount: dashed outline only — NO inner shadow.
             // Frameless has no surrounding material; float mount per spec must not cast shadow on paper.
             art.style.border = '1px dashed rgba(0,0,0,0.25)';
+            // Opaque fill: a print/canvas isn't see-through, so the white paper
+            // beneath must not bleed through (that translucent-over-white bleed
+            // read as a spurious white border in the elevation). Only a real
+            // paper margin / white border should show white.
+            art.style.background = 'rgb(120,120,120)';
         } else {
             art.style.boxShadow = `inset 0 ${2 * elevScale}px ${8 * elevScale}px rgba(0,0,0,0.2)`;
         }
+        if (hasArtwork) {
+            // Render as a real <img> child (not a CSS background): html2canvas —
+            // used by the PNG export — reliably rasterizes <img> but drops CSS
+            // background-image data URLs. Positioned via the shared crop helper
+            // so pan/zoom matches the dashboard preview + exports.
+            art.style.overflow = 'hidden';
+            art.style.boxShadow = 'none';
+            const ow = artW * elevScale, oh = artH * elevScale;
+            const ar = (f.artworkW && f.artworkH) ? (f.artworkW / f.artworkH) : 0;
+            const rect = computeArtDrawRect(ow, oh, ar, f.artZoom, f.artPanX, f.artPanY);
+            const aimg = document.createElement('img');
+            aimg.className = 'art-img';
+            aimg.src = f.artworkUrl;
+            aimg.draggable = false;
+            aimg.style.cssText = `position:absolute; left:${rect.dx}px; top:${rect.dy}px; width:${rect.dw}px; height:${rect.dh}px; display:block; pointer-events:none;`;
+            if (!f.artworkW || !f.artworkH) {
+                aimg.addEventListener('load', () => {
+                    const nw = aimg.naturalWidth, nh = aimg.naturalHeight;
+                    if (nw && nh && (!f.artworkW || !f.artworkH)) { f.artworkW = nw; f.artworkH = nh; drawElevAll(); }
+                });
+            }
+            art.appendChild(aimg);
+        }
         
         const unitSuffix = unitInfo(elevUnit).suffix;
-        art.innerText = (artW > 0) ? `${artW.toFixed(1)}${unitSuffix}\nx\n${artH.toFixed(1)}${unitSuffix}` : "";
+        if (!hasArtwork) {
+            art.innerText = (artW > 0) ? `${artW.toFixed(1)}${unitSuffix}\nx\n${artH.toFixed(1)}${unitSuffix}` : "";
+        }
         el.appendChild(art);
         
         const labelTag = document.createElement('div'); labelTag.className = 'frame-id-tag';
@@ -8317,6 +15050,19 @@ function drawElevAll() {
         centerLayer.appendChild(crossH); centerLayer.appendChild(crossV);
         
         makeElevDraggable(el, idx); frameLayer.appendChild(el);
+
+        // Image-code caption beneath the frame, right-aligned to the frame's
+        // right edge. Opt-in via the Image Code layout-guide toggle. Rendered as
+        // a frameLayer sibling so it isn't hidden by the PNG export's per-frame
+        // overlay swap (text is captured fine by html2canvas; SVG adds its own).
+        if (dimVisibility.imageCode && f.imageCode) {
+            const cap = document.createElement('div');
+            cap.className = 'frame-imgcode-caption';
+            cap.textContent = f.imageCode;
+            const capGap = 5; // px below the frame
+            cap.style.cssText = `position:absolute; left:${(f.x)*elevScale}px; bottom:${(f.y*elevScale) - capGap}px; width:${f.w*elevScale}px; transform:translateY(100%); text-align:right; font-size:${imageCodeStyle.size}px; font-family:${imageCodeStyle.font}; font-weight:${imageCodeStyle.weight}; line-height:1.1; color:${imageCodeStyle.color}; pointer-events:none; white-space:nowrap; overflow:visible;`;
+            frameLayer.appendChild(cap);
+        }
     });
 
     makeElevDraggable(pWrap, 'person');
@@ -10377,7 +17123,7 @@ async function _getPersonSvgDataUrl() {
     }
 }
 
-async function exportElevPNG() {
+async function exportElevPNG(opts) {
     const ws = document.querySelector('#view-elevation .workspace');
     const wrap = document.getElementById('export-wrap');
     const wall = document.getElementById('wall');
@@ -10533,6 +17279,14 @@ async function exportElevPNG() {
             (f.fType === 'image' && f.swatchDataUrl) ? _loadImg(f.swatchDataUrl) : Promise.resolve(null)
         );
         const loadedImages = await Promise.all(imagePromises);
+        // Pre-load artwork images too (only when the Artwork toggle is on), so we
+        // can bake them into each frame's overlay canvas — the overlay is what
+        // html2canvas screenshots, and the live art-visual is hidden during export.
+        const showArt = (typeof _showArtwork === 'undefined' || _showArtwork);
+        const artPromises = visibleFrames.map(f =>
+            (showArt && f.artworkUrl) ? _loadImg(f.artworkUrl) : Promise.resolve(null)
+        );
+        const loadedArt = await Promise.all(artPromises);
 
         // For each visible frame: render a high-res canvas using the same routine
         // as the Frame Dashboard PNG export, then drop it on top of the frame's
@@ -10545,6 +17299,7 @@ async function exportElevPNG() {
             const f = visibleFrames[frameIdx];
             if (!f) return;
             const swatchImg = loadedImages[frameIdx];
+            const artworkImg = loadedArt[frameIdx];
             frameIdx++;
 
             // Elevation frames store dimensions as f.w / f.h (set from d.extW / d.extH at import time).
@@ -10569,6 +17324,8 @@ async function exportElevPNG() {
                 pad: elevPad,
                 showArtLabel: false,
                 unit: 'in',  // we converted, so renderer is now in inches
+                artworkImg: artworkImg,  // bake uploaded artwork into the opening
+                artCrop: { zoom: f.artZoom, panX: f.artPanX, panY: f.artPanY },
             });
 
             // Sanity check the canvas before we try to drawImage from it
@@ -10643,12 +17400,23 @@ async function exportElevPNG() {
                 });
             },
         });
+        const pngName = `${elevations[currentElevIndex].name.replace(/[\\/:*?"<>|]/g, '_')}.png`;
+        // Bulk-export mode: hand the blob back instead of downloading.
+        // The finally block still restores theme/zoom/person/etc.
+        if (opts && opts.returnBlob) {
+            const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
+            if (!blob) throw new Error('canvas.toBlob returned null');
+            return { blob: blob, filename: pngName };
+        }
         const a = document.createElement('a');
-        a.download = `${elevations[currentElevIndex].name.replace(/[^a-z0-9]/gi, '_')}.png`;
+        a.download = pngName;
         a.href = canvas.toDataURL("image/png");
         a.click();
     } catch (err) {
         console.error(err);
+        // Bulk mode: let the ZIP loop record the failure (one alert per
+        // elevation would be hostile). Single export keeps the alert.
+        if (opts && opts.returnBlob) throw err;
         alert("Image Export Failed: " + (err && err.message ? err.message : "Unknown error") +
               "\n\nIf you opened this file directly (file://...), browser security blocks local file access. Please serve the folder via a local web server (e.g. VS Code Live Server) and try again.");
     } finally {
@@ -10869,7 +17637,35 @@ function _measureSvgText(text, fontSize, fontWeight, fontFamily) {
     return _svgMeasureCtx.measureText(text).width;
 }
 
-async function exportElevSVG() {
+// Layer a frame's uploaded artwork into the exported SVG, clipped to the
+// frame's art opening (the live .art-visual rect), cover-fit. No-op when the
+// Artwork toggle is off or the frame has no image. Each call adds a unique
+// clipPath so multiple frames don't collide.
+let _svgArtClipCounter = 0;
+function _maybeAddArtworkToSvg(f, frameEl, backLayer, rectToSvg) {
+    try {
+        if (typeof _showArtwork !== 'undefined' && !_showArtwork) return;
+        if (!f || !f.artworkUrl || !frameEl) return;
+        const artEl = frameEl.querySelector('.art-visual');
+        if (!artEl) return;
+        const r = rectToSvg(artEl);
+        if (!r || r.w <= 0 || r.h <= 0) return;
+        const id = 'artclip' + (_svgArtClipCounter++);
+        // Position the image via the shared crop helper so pan/zoom matches every
+        // other render path. The image rect is in opening-local coords; offset by
+        // the opening's SVG position. Clipped to the opening.
+        const ar = (f.artworkW && f.artworkH) ? (f.artworkW / f.artworkH) : 0;
+        const g = computeArtDrawRect(r.w, r.h, ar, f.artZoom, f.artPanX, f.artPanY);
+        const ix = (r.x + g.dx).toFixed(1), iy = (r.y + g.dy).toFixed(1);
+        const iw = g.dw.toFixed(1), ih = g.dh.toFixed(1);
+        backLayer.push(
+            `<clipPath id="${id}"><rect x="${r.x.toFixed(1)}" y="${r.y.toFixed(1)}" width="${r.w.toFixed(1)}" height="${r.h.toFixed(1)}"/></clipPath>` +
+            `<image clip-path="url(#${id})" x="${ix}" y="${iy}" width="${iw}" height="${ih}" xlink:href="${f.artworkUrl}" preserveAspectRatio="none"/>`
+        );
+    } catch (e) { /* skip artwork on error */ }
+}
+
+async function exportElevSVG(opts) {
     const wall = document.getElementById('wall');
     if (!wall) return;
 
@@ -10987,6 +17783,21 @@ async function exportElevSVG() {
                 const ly = (lr.y + lfs * 0.85).toFixed(1);
                 frontLayer.push(`<text x="${lx}" y="${ly}" font-family="Arial, Helvetica, sans-serif" font-size="${lfs.toFixed(1)}" font-weight="${lfw}" fill="${lcolor}">${legEl.textContent.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</text>`);
             }
+            // Image-code captions beneath frames (right-aligned). Read the live
+            // caption elements so they match the screen + the Image Code toggle.
+            document.querySelectorAll('#frame-layer .frame-imgcode-caption').forEach(capEl => {
+                if (!capEl.textContent) return;
+                const cr = rectToSvg(capEl);
+                const ccs = getComputedStyle(capEl);
+                const cfs = parseFloat(ccs.fontSize) || 10;
+                const ccolor = ccs.color || '#222';
+                const cfw = ccs.fontWeight || '400';
+                const cff = ccs.fontFamily || 'Arial, Helvetica, sans-serif';
+                // right-aligned: anchor at the caption box's right edge
+                const cxr = (cr.x + cr.w).toFixed(1);
+                const cyr = (cr.y + cfs * 0.85).toFixed(1);
+                frontLayer.push(`<text x="${cxr}" y="${cyr}" text-anchor="end" font-family="${cff.replace(/"/g,'')}" font-size="${cfs.toFixed(1)}" font-weight="${cfw}" fill="${ccolor}">${capEl.textContent.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</text>`);
+            });
         }
 
         // ── FRAMES (back layer): embed as <image> ──
@@ -11009,6 +17820,7 @@ async function exportElevSVG() {
                     }
                     const frameParts = buildFrameSVG(f, pos, elevUnit, railColor);
                     frameParts.forEach(s => backLayer.push(s));
+                    _maybeAddArtworkToSvg(f, el, backLayer, rectToSvg);
                     continue;
                 }
 
@@ -11022,6 +17834,10 @@ async function exportElevSVG() {
                 if (!canvas.width || !canvas.height) throw new Error('zero-size canvas');
                 const dataUrl = canvas.toDataURL('image/png');
                 backLayer.push(`<image x="${pos.x.toFixed(1)}" y="${pos.y.toFixed(1)}" width="${pos.w.toFixed(1)}" height="${pos.h.toFixed(1)}" xlink:href="${dataUrl}" preserveAspectRatio="none"/>`);
+                // Uploaded artwork: layer into the opening (cover-fit, clipped) so
+                // the exported SVG matches the on-screen "beauty" view. Honors the
+                // Artwork layout-guide toggle via _showArtwork.
+                _maybeAddArtworkToSvg(f, el, backLayer, rectToSvg);
             } catch (err) {
                 backLayer.push(`<rect x="${pos.x.toFixed(1)}" y="${pos.y.toFixed(1)}" width="${pos.w.toFixed(1)}" height="${pos.h.toFixed(1)}" fill="${f.fColor || '#222'}"/>`);
             }
@@ -11199,10 +18015,14 @@ async function exportElevSVG() {
         const svgStr = parts.join('\n');
 
         const blob = new Blob([svgStr], { type: 'image/svg+xml' });
+        const elevName = (elevations[currentElevIndex] && elevations[currentElevIndex].name) || `Elevation_${currentElevIndex + 1}`;
+        const fname = elevName.replace(/[\\/:*?"<>|]/g, '_') + '.svg';
+        // Bulk-export mode: hand the blob back to the caller (ZIP loop)
+        // instead of downloading. The finally block still restores theme/zoom.
+        if (opts && opts.returnBlob) return { blob: blob, filename: fname };
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
-        const elevName = (elevations[currentElevIndex] && elevations[currentElevIndex].name) || `Elevation_${currentElevIndex + 1}`;
-        a.download = elevName.replace(/[\\/:*?"<>|]/g, '_') + '.svg';
+        a.download = fname;
         a.href = url;
         a.click();
         setTimeout(() => URL.revokeObjectURL(url), 1000);
