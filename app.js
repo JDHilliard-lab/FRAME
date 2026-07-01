@@ -6,7 +6,9 @@
 // Update APP_VERSION on each release. Set APP_BUILD to 'dev' in the dev
 // repo fork — the version pill turns orange to make it visually obvious
 // you're on the development build, not the production one users see.
-const APP_VERSION = '2.5';
+const APP_VERSION = '6.2';
+const IDML_STYLE_SEED = [{"id":"sty_cover_title","name":"Cover Title","group":"Cover","font":"display","size":0.1111,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"upper","track":0.01},{"id":"sty_cover_title_centered","name":"Cover Title (Centered)","group":"Cover","font":"display","size":0.1111,"bold":true,"italic":false,"color":"#ffffff","align":"center","caps":"upper","track":0.01},{"id":"sty_cover_location","name":"Cover Location","group":"Cover","font":"serif","size":0.0222,"bold":false,"italic":false,"color":"#ffffff","align":"right","caps":"none","track":0.0},{"id":"sty_cover_project_code","name":"Cover Project Code","group":"Cover","font":"serif","size":0.0222,"bold":false,"italic":false,"color":"#ffffff","align":"right","caps":"none","track":0.0},{"id":"sty_toc_section_title","name":"TOC Section Title","group":"Table of Contents","font":"serif","size":0.0241,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.0},{"id":"sty_toc_entry","name":"TOC Entry","group":"Table of Contents","font":"serif","size":0.0185,"bold":false,"italic":false,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_section_heading","name":"Section Heading","group":"Header","font":"display","size":0.0556,"bold":true,"italic":false,"color":"#000000","align":"left","caps":"upper","track":0.01},{"id":"sty_header_one_xl","name":"Header One (XL)","group":"Header","font":"display","size":0.0444,"bold":true,"italic":false,"color":"#000000","align":"left","caps":"upper","track":0.01},{"id":"sty_paragraph_heading_right","name":"Paragraph Heading (Right)","group":"Header","font":"display","size":0.0333,"bold":true,"italic":false,"color":"#1a1a1a","align":"right","caps":"upper","track":0.01},{"id":"sty_body_copy_standard","name":"Body Copy (Standard)","group":"Body Copy","font":"serif","size":0.0148,"bold":false,"italic":false,"color":"#222222","align":"justify","caps":"none","track":0.0},{"id":"sty_body_copy_large_+_bold","name":"Body Copy (Large + Bold)","group":"Body Copy","font":"serif","size":0.0185,"bold":true,"italic":false,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_body_copy_primary","name":"Body Copy (Primary)","group":"Body Copy","font":"serif","size":0.0148,"bold":false,"italic":false,"color":"#222222","align":"justify","caps":"none","track":0.0},{"id":"sty_body_description","name":"Body Description","group":"Body Text","font":"serif","size":0.0167,"bold":false,"italic":false,"color":"#333333","align":"left","caps":"none","track":0.0},{"id":"sty_body_subheading","name":"Body Subheading","group":"Body Text","font":"serif","size":0.0204,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.0},{"id":"sty_spec_copy","name":"Spec Copy","group":"Spec Page","font":"serif","size":0.0148,"bold":false,"italic":false,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_spec_subject","name":"Spec Subject","group":"Spec Page","font":"serif","size":0.0148,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.01},{"id":"sty_spec_notes","name":"Spec Notes","group":"Spec Page","font":"serif","size":0.013,"bold":false,"italic":true,"color":"#939597","align":"left","caps":"none","track":0.005},{"id":"sty_spec_static_caption","name":"Spec Static Caption","group":"Spec Page","font":"serif","size":0.013,"bold":false,"italic":true,"color":"#999999","align":"left","caps":"none","track":0.0},{"id":"sty_image_code","name":"Image Code","group":"Captions","font":"serif","size":0.012,"bold":false,"italic":true,"color":"#7f7f7f","align":"right","caps":"none","track":0.01},{"id":"sty_caption_image_code","name":"Caption Image Code","group":"Captions","font":"serif","size":0.0111,"bold":false,"italic":false,"color":"#bfbfbf","align":"left","caps":"none","track":0.0},{"id":"sty_artist_name","name":"Artist Name","group":"Captions","font":"serif","size":0.0139,"bold":true,"italic":false,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_artwork_title","name":"Artwork Title","group":"Captions","font":"serif","size":0.013,"bold":false,"italic":true,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_thank_you_\u2014_name","name":"Thank You \u2014 Name","group":"Thank You","font":"display","size":0.0417,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"upper","track":0.0},{"id":"sty_thank_you_\u2014_role","name":"Thank You \u2014 Role","group":"Thank You","font":"serif","size":0.0148,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"none","track":0.0},{"id":"sty_thank_you_\u2014_contact","name":"Thank You \u2014 Contact","group":"Thank You","font":"serif","size":0.013,"bold":false,"italic":false,"color":"#ffffff","align":"left","caps":"none","track":0.0},{"id":"sty_subhead","name":"Subhead","group":"Subheadings","font":"display","size":0.0204,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"upper","track":0.035},{"id":"sty_section_subheading_left","name":"Section Subheading (Left)","group":"Subheadings","font":"display","size":0.0333,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"upper","track":0.01},{"id":"sty_section_subheading_right","name":"Section Subheading (Right)","group":"Subheadings","font":"display","size":0.0333,"bold":true,"italic":false,"color":"#1a1a1a","align":"right","caps":"upper","track":0.01},{"id":"sty_section_subheading_serif","name":"Section Subheading (Serif)","group":"Subheadings","font":"serif","size":0.0139,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.0},{"id":"sty_subheading_white,_center","name":"Subheading (White, Center)","group":"Subheadings","font":"serif","size":0.013,"bold":false,"italic":false,"color":"#ffffff","align":"center","caps":"none","track":0.0},{"id":"sty_quote_\u2014_druk","name":"Quote \u2014 Druk","group":"Quotes","font":"display","size":0.0694,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.025},{"id":"sty_quote_\u2014_druk_alt","name":"Quote \u2014 Druk (Alt)","group":"Quotes","font":"display","size":0.0444,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.0},{"id":"sty_quote_\u2014_serif","name":"Quote \u2014 Serif","group":"Quotes","font":"serif","size":0.0417,"bold":false,"italic":false,"color":"#ffffff","align":"left","caps":"none","track":0.0},{"id":"sty_quote_\u2014_serif_white,_cap","name":"Quote \u2014 Serif (White, Caps)","group":"Quotes","font":"display","size":0.0333,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"upper","track":0.01},{"id":"sty_display_keyword","name":"Display Keyword","group":"Keywords","font":"display","size":0.1111,"bold":true,"italic":false,"color":"#000000","align":"left","caps":"upper","track":0.01},{"id":"sty_keywords_full_page","name":"Keywords (Full Page)","group":"Keywords","font":"display","size":0.0556,"bold":true,"italic":false,"color":"#ffffff","align":"justify-all","caps":"none","track":0.02},{"id":"sty_brand_keyword","name":"Brand Keyword","group":"Keywords","font":"display","size":0.1852,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"upper","track":0.01},{"id":"sty_moodboard_keyword","name":"Moodboard Keyword","group":"Keywords","font":"display","size":0.0833,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"upper","track":0.0}];
+const IDML_MASTER_TEMPLATES = [{"name":"Farmboy \u00b7 Cover Page","type":"cover","elements":[{"type":"image","x":0,"y":0,"w":1,"h":1,"img":"","aspect":1.78,"fit":"cover"},{"type":"text","x":0.095,"y":0.25,"w":0.5,"text":"CLIENT NAME","font":"display","size":0.026,"color":"#ffffff","align":"left","caps":"upper","bold":true,"italic":false,"track":0.02},{"type":"text","x":0.093,"y":0.295,"w":0.66,"text":"COVER PAGE HEADING","font":"display","size":0.085,"color":"#ffffff","align":"left","caps":"upper","bold":true,"italic":false,"track":0},{"type":"text","x":0.093,"y":0.43,"w":0.6,"text":"SUBHEADING","font":"display","size":0.072,"color":"#ffffff","align":"left","caps":"upper","bold":true,"italic":false,"track":0,"outline":true}]},{"name":"Farmboy \u00b7 GOOD ART. GOOD PEOPLE.","type":"slogan","elements":[{"type":"text","x":0.1,"y":0.34,"w":0.8,"text":"GOOD ART.","font":"display","size":0.13,"color":"#1a1a1a","align":"left","caps":"upper","bold":true,"italic":false,"track":0},{"type":"text","x":0.1,"y":0.5,"w":0.8,"text":"GOOD PEOPLE.","font":"display","size":0.13,"color":"#1a1a1a","align":"left","caps":"upper","bold":true,"italic":false,"track":0}]},{"name":"Farmboy \u00b7 Tagline","type":"divider","elements":[{"type":"text","x":0.08,"y":0.42,"w":0.84,"text":"TAGLINE","font":"display","size":0.15,"color":"#1a1a1a","align":"center","caps":"upper","bold":true,"italic":false,"track":0}]},{"name":"Farmboy \u00b7 Divider (Standard)","type":"divider","elements":[{"type":"text","x":0.06,"y":0.4,"w":0.88,"text":"SECTION HEADING","font":"display","size":0.085,"color":"#1a1a1a","align":"left","caps":"upper","bold":true,"italic":false,"track":0.01},{"type":"text","x":0.06,"y":0.53,"w":0.7,"text":"Subheading","font":"serif","size":0.028,"color":"#555555","align":"left","caps":"none","bold":false,"italic":false,"track":0}]},{"name":"Farmboy \u00b7 Divider (Center)","type":"divider","elements":[{"type":"text","x":0.08,"y":0.4,"w":0.84,"text":"SECTION HEADING","font":"display","size":0.085,"color":"#1a1a1a","align":"center","caps":"upper","bold":true,"italic":false,"track":0.01},{"type":"text","x":0.08,"y":0.53,"w":0.84,"text":"Subheading","font":"serif","size":0.028,"color":"#555555","align":"center","caps":"none","bold":false,"italic":false,"track":0}]},{"name":"Farmboy \u00b7 Narrative (Statement)","type":"narrative","elements":[{"type":"text","x":0.06,"y":0.12,"w":0.6,"text":"ART NARRATIVE","font":"display","size":0.058,"color":"#1a1a1a","align":"left","caps":"upper","bold":true,"italic":false,"track":0.01},{"type":"text","x":0.06,"y":0.26,"w":0.56,"text":"Add the narrative copy here \u2014 the story behind the collection, its themes, and how the work connects to the space.","font":"serif","size":0.028,"color":"#222222","align":"justify","caps":"none","bold":false,"italic":false,"track":0}]},{"name":"Farmboy \u00b7 Narrative \u2014 Image","type":"narrative","elements":[{"type":"text","x":0.06,"y":0.12,"w":0.42,"text":"PROJECT UNDERSTANDING","font":"display","size":0.05,"color":"#1a1a1a","align":"left","caps":"upper","bold":true,"italic":false,"track":0.01},{"type":"text","x":0.06,"y":0.26,"w":0.4,"text":"Add the supporting copy here. Keep it to a tight paragraph that sits beside the image.","font":"serif","size":0.026,"color":"#222222","align":"justify","caps":"none","bold":false,"italic":false,"track":0},{"type":"image","x":0.55,"y":0.12,"w":0.39,"h":0.76,"img":"","aspect":0.8,"fit":"cover"}]},{"name":"Farmboy \u00b7 Narrative (Keywords)","type":"keyword","elements":[{"type":"text","x":0.06,"y":0.4,"w":0.88,"text":"KEYWORD","font":"display","size":0.13,"color":"#1a1a1a","align":"center","caps":"upper","bold":true,"italic":false,"track":0.01}]},{"name":"Farmboy \u00b7 Moodboard (Standard)","type":"moodboard","elements":[{"type":"text","x":0.06,"y":0.06,"w":0.6,"text":"MOODBOARD","font":"display","size":0.05,"color":"#1a1a1a","align":"left","caps":"upper","bold":true,"italic":false,"track":0.01},{"type":"image","x":0.06,"y":0.18,"w":0.44,"h":0.66,"img":"","aspect":0.75,"fit":"cover"},{"type":"image","x":0.52,"y":0.18,"w":0.42,"h":0.31,"img":"","aspect":1.4,"fit":"cover"},{"type":"image","x":0.52,"y":0.53,"w":0.42,"h":0.31,"img":"","aspect":1.4,"fit":"cover"}]},{"name":"Farmboy \u00b7 Moodboard (Captions)","type":"moodboard","elements":[{"type":"image","x":0.06,"y":0.14,"w":0.27,"h":0.5,"img":"","aspect":0.9,"fit":"cover"},{"type":"text","x":0.06,"y":0.66,"w":0.27,"text":"Caption text","font":"serif","size":0.022,"color":"#666666","align":"left","caps":"none","bold":false,"italic":true,"track":0},{"type":"image","x":0.37,"y":0.14,"w":0.27,"h":0.5,"img":"","aspect":0.9,"fit":"cover"},{"type":"text","x":0.37,"y":0.66,"w":0.27,"text":"Caption text","font":"serif","size":0.022,"color":"#666666","align":"left","caps":"none","bold":false,"italic":true,"track":0},{"type":"image","x":0.68,"y":0.14,"w":0.27,"h":0.5,"img":"","aspect":0.9,"fit":"cover"},{"type":"text","x":0.68,"y":0.66,"w":0.27,"text":"Caption text","font":"serif","size":0.022,"color":"#666666","align":"left","caps":"none","bold":false,"italic":true,"track":0}]},{"name":"Farmboy \u00b7 Contents (Half)","type":"toc","elements":[{"type":"text","x":0.06,"y":0.1,"w":0.6,"text":"CONTENTS","font":"display","size":0.07,"color":"#1a1a1a","align":"left","caps":"upper","bold":true,"italic":false,"track":0.01},{"type":"text","x":0.06,"y":0.3,"w":0.6,"text":"01   Introduction","font":"serif","size":0.03,"color":"#222222","align":"left","caps":"none","bold":false,"italic":false,"track":0},{"type":"text","x":0.06,"y":0.4,"w":0.6,"text":"02   The Collection","font":"serif","size":0.03,"color":"#222222","align":"left","caps":"none","bold":false,"italic":false,"track":0},{"type":"text","x":0.06,"y":0.5,"w":0.6,"text":"03   Installation","font":"serif","size":0.03,"color":"#222222","align":"left","caps":"none","bold":false,"italic":false,"track":0},{"type":"text","x":0.06,"y":0.6,"w":0.6,"text":"04   Specifications","font":"serif","size":0.03,"color":"#222222","align":"left","caps":"none","bold":false,"italic":false,"track":0}]},{"name":"Farmboy \u00b7 Thank You","type":"bio","elements":[{"type":"text","x":0.06,"y":0.34,"w":0.88,"text":"THANK YOU","font":"display","size":0.12,"color":"#1a1a1a","align":"left","caps":"upper","bold":true,"italic":false,"track":0.01},{"type":"text","x":0.06,"y":0.52,"w":0.7,"text":"Name \u00b7 Role","font":"serif","size":0.032,"color":"#333333","align":"left","caps":"none","bold":false,"italic":false,"track":0},{"type":"text","x":0.06,"y":0.59,"w":0.7,"text":"email@farmboy.com \u00b7 000 000 0000","font":"serif","size":0.024,"color":"#666666","align":"left","caps":"none","bold":false,"italic":false,"track":0}]}];
 const APP_BUILD = 'dev';  // 'prod' (green dot) or 'dev' (orange dot)
 
 let currentView = 'dashboard';
@@ -219,6 +221,7 @@ function unitFactor(from, to) {
     return unitInfo(to).factor / unitInfo(from).factor;
 }
 let elevations = [{ name: "Elevation 1", frames: [], wallW: 185, wallH: 108, personPos: { x: -60 } }];
+let _elevMarquee = null;   // marquee drag state for selecting frames on the wall
 let currentElevIndex = 0;
 let elevFrames = elevations[0].frames;
 // When true, uploaded artwork images fill frame openings in the elevation.
@@ -403,6 +406,8 @@ function _mbMigratePages() {
 // layout-pages flow. Everything reads through _mbEls()/_mbPage(), so this is
 // the only hinge needed to reuse the whole canvas for fixed pages.
 let _mbEditTarget = null;
+let _mbActiveCanvasId = 'moodboardCanvas';   // 'moodboardCanvas' (modal) or 'dsLayoutCanvas' (deck center)
+function _mbCanvas() { return document.getElementById(_mbActiveCanvasId) || document.getElementById('moodboardCanvas'); }
 function _mbPage() { if (_mbEditTarget) return _mbEditTarget.page; _mbMigratePages(); return editorialContent.layoutPages[_mbPageIndex]; }
 function _mbEls() { return _mbPage().elements; }
 function _mbAutosave() { if (typeof scheduleAutosave === 'function') scheduleAutosave(); }
@@ -6978,23 +6983,61 @@ async function _registerPdfFonts(doc) {
 // Resolve a role to a registered family, else Helvetica.
 function _font(role) {
     const fam = role === 'display' ? 'Druk' : (role === 'serif' ? 'Messina' : null);
-    return (fam && _pdfFontFams[fam]) ? fam : 'helvetica';
+    if (fam && _pdfFontFams[fam]) return fam;
+    return role === 'serif' ? 'times' : 'helvetica';
 }
 
 // Footer drawn on every page: page number + project line (left), Farmboy
 // wordmark (right). Logos optional. `pageNum` is 1-based. `meta` (optional)
 // holds { code, version, location } from the Presentation PDF modal; when
 // present, the rich studio footer line is drawn, otherwise just the number.
+let _curFooter = { text: 'dark', hideCopyright: false, hideLogo: false };
+// Deck default + per-page overrides, keyed by deck page key.
+function _resolveFooter(desc) {
+    const def = (editorialContent && editorialContent.footer) || {};
+    const base = { text: def.text || 'dark', hideCopyright: !!def.hideCopyright, hideLogo: !!def.hideLogo };
+    const key = (typeof desc === 'string') ? desc : (desc ? _deckPageKey(desc) : null);
+    const ov = (key && editorialContent.pageFooters) ? editorialContent.pageFooters[key] : null;
+    if (ov) {
+        if (ov.text && ov.text !== 'auto') base.text = ov.text;
+        if (typeof ov.hideCopyright === 'boolean') base.hideCopyright = ov.hideCopyright;
+        if (typeof ov.hideLogo === 'boolean') base.hideLogo = ov.hideLogo;
+    }
+    return base;
+}
+// Recolor a (dark) wordmark to solid white for use on dark pages. Best-effort;
+// falls back to the original image on any failure.
+const _whiteLogoCache = {};
+function _whiteLogo(dataUrl) {
+    if (!dataUrl) return dataUrl;
+    if (_whiteLogoCache[dataUrl]) return _whiteLogoCache[dataUrl];
+    try {
+        const img = new Image(); img.src = dataUrl;
+        const cnv = document.createElement('canvas'); const w = img.naturalWidth || img.width || 400, h = img.naturalHeight || img.height || 60;
+        cnv.width = w; cnv.height = h; const cx = cnv.getContext('2d');
+        cx.drawImage(img, 0, 0, w, h);
+        const id = cx.getImageData(0, 0, w, h); const d = id.data;
+        for (let i = 0; i < d.length; i += 4) {
+            const lum = (d[i] * 0.299 + d[i + 1] * 0.587 + d[i + 2] * 0.114);
+            // treat dark ink as the mark; make it white, keep its alpha; drop light bg
+            if (d[i + 3] > 10 && lum < 160) { d[i] = 255; d[i + 1] = 255; d[i + 2] = 255; }
+            else { d[i + 3] = 0; }
+        }
+        cx.putImageData(id, 0, 0);
+        const out = cnv.toDataURL('image/png'); _whiteLogoCache[dataUrl] = out; return out;
+    } catch (e) { return dataUrl; }
+}
 function _drawPdfFooter(doc, logos, pageNum, meta) {
     const PW = doc.internal.pageSize.getWidth();
     const PH = doc.internal.pageSize.getHeight();
     const M = 40;
+    const F = _curFooter || { text: 'dark' };
+    const light = F.text === 'light';
+    const tc = light ? 255 : 120;
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(8);
-    doc.setTextColor(120, 120, 120);
+    doc.setTextColor(tc, tc, tc);
     doc.text(String(pageNum), M, PH - 20);
-    // Rich project line, e.g.:
-    //   "PROJECT NAME – LOCATION  |  CODE.VERSION   Copyright © YEAR Farmboy …"
     if (meta) {
         const g = (id) => { const el = document.getElementById(id); return el ? (el.value || '').trim() : ''; };
         const name = (g('g_projName') || 'Art Program').toUpperCase();
@@ -7005,17 +7048,19 @@ function _drawPdfFooter(doc, logos, pageNum, meta) {
         let line = name;
         if (loc) line += ' \u2013 ' + loc;
         if (code) line += '   |   ' + code + (ver ? '.' + ver : '');
-        line += '    Copyright \u00A9 ' + year + ' Farmboy Fine Arts Inc. | All rights reserved';
+        if (!F.hideCopyright) line += '    Copyright \u00A9 ' + year + ' Farmboy Fine Arts Inc. | All rights reserved';
         doc.setFont(_font('serif'), 'normal');
         doc.setFontSize(5.8);
+        doc.setTextColor(tc, tc, tc);
         doc.text(line, M + 14, PH - 20);
     }
-    // Right side: Farmboy wordmark only (matches the studio's own pages).
     const rx = PW - M;
-    if (logos && logos.farmboy) {
+    if (logos && logos.farmboy && !F.hideLogo) {
         const ar = logos.farmboyAR || 8;
         const h = 11, w = h * ar;
-        try { doc.addImage(logos.farmboy, 'JPEG', rx - w, PH - 27, w, h); } catch (e) {}
+        const src = light ? _whiteLogo(logos.farmboy) : logos.farmboy;
+        const fmt = (light || ('' + src).indexOf('image/png') >= 0) ? 'PNG' : 'JPEG';
+        try { doc.addImage(src, fmt, rx - w, PH - 27, w, h); } catch (e) { try { doc.addImage(logos.farmboy, 'JPEG', rx - w, PH - 27, w, h); } catch (e2) {} }
     }
 }
 
@@ -7473,10 +7518,22 @@ function _drawMoodboardPage(doc, logos, pageNum, meta, tiles, pageTitle, pageTyp
             return;
         }
         if (ty === 'text') {
-            const fs = Math.max(6, Math.min(60, (t.size || 0.045) * PH));
+            const fs = Math.max(6, (t.size || 0.045) * PH);
             const c = _hex(t.color || '#222222');
-            doc.setFont(_fontRole(t.font), 'normal'); doc.setFontSize(fs); doc.setTextColor(c[0], c[1], c[2]);
-            doc.text(doc.splitTextToSize(t.text || '', (t.w || 0.4) * PW), (t.x || 0) * PW, (t.y || 0) * PH, { baseline: 'top' });
+            const heavy = t.weight ? t.weight >= 600 : t.bold;
+            const style = (heavy && t.italic) ? 'bolditalic' : heavy ? 'bold' : t.italic ? 'italic' : 'normal';
+            try { doc.setFont(_fontRole(t.font), style); } catch (e) { try { doc.setFont(_fontRole(t.font), 'normal'); } catch (e2) {} }
+            doc.setFontSize(fs); doc.setTextColor(c[0], c[1], c[2]);
+            const al = _pdfAlign(t.align); const boxX = (t.x || 0) * PW, boxW = (t.w || 0.4) * PW;
+            let tx = boxX; if (al === 'center') tx = boxX + boxW / 2; else if (al === 'right') tx = boxX + boxW;
+            let str = t.text || ''; if (t.caps === 'upper') str = str.toUpperCase();
+            if (t.track) { try { doc.setCharSpace(t.track * fs); } catch (e) {} }
+            const lines = doc.splitTextToSize(str, boxW);
+            const topts = { baseline: 'top', align: al, maxWidth: boxW };
+            if (t.outline) { try { doc.setDrawColor(c[0], c[1], c[2]); doc.setLineWidth(Math.max(0.3, fs * 0.022)); topts.renderingMode = 'stroke'; } catch (e) {} }
+            try { doc.text(lines, tx, (t.y || 0) * PH, topts); }
+            catch (e) { doc.text(lines, boxX, (t.y || 0) * PH, { baseline: 'top' }); }
+            if (t.track) { try { doc.setCharSpace(0); } catch (e) {} }
             doc.setTextColor(20, 20, 20);
             return;
         }
@@ -7488,8 +7545,9 @@ function _drawMoodboardPage(doc, logos, pageNum, meta, tiles, pageTitle, pageTyp
         const h = (typeof t.h === 'number' ? t.h : (t.w * (936 / 540) / (t.aspect || 1.33))) * PH;
         if (im && (im.naturalWidth || im.width)) {
             try {
-                const cropped = _cropToCanvas(im, w, h, aspImg, t.zoom || 1, t.panX || 0, t.panY || 0);
-                doc.addImage(cropped, 'JPEG', x, y, w, h);
+                if (t.shadow) { try { const sh = _softShadowDataUrl(w, h, false); if (sh) doc.addImage(sh.url, 'PNG', x - sh.padPt + 2, y - sh.padPt + 4, w + sh.padPt * 2, h + sh.padPt * 2); } catch (e) {} }
+                const cropped = _cropToCanvas(im, w, h, aspImg, t.zoom || 1, t.panX || 0, t.panY || 0, t.fit || 'cover');
+                doc.addImage(cropped, (t.fit === 'contain' ? 'PNG' : 'JPEG'), x, y, w, h);
             } catch (e) { try { doc.addImage(im, 'JPEG', x, y, w, h); } catch (e2) {} }
         } else {
             doc.setDrawColor(220, 220, 220); doc.setLineWidth(0.5); doc.rect(x, y, w, h, 'S');
@@ -7713,6 +7771,7 @@ function _specTplResolve(unitKey) {
     if (ov && SPEC_TEMPLATES[ov] && !SPEC_TEMPLATES[ov].group) return ov;
     return g;
 }
+function _fixedHidden(f) { return !!(editorialContent.hiddenFixed && editorialContent.hiddenFixed[f]); }
 function _deckPageList() {
     _mbMigratePages(); _fpMigrate();
     const inc = _dsInclude();
@@ -7801,7 +7860,8 @@ function _deckPageList() {
         while (j < pages.length && pages[j].kind === 'layout' && pages[j].page && pages[j].page.afterKey === p.afterKey) j++;
         pages.splice(j, 0, d);
     });
-    return pages;
+    const hid = editorialContent.hiddenFixed || {};
+    return pages.filter(p => !(p.kind === 'fixed' && hid[p.fixed]));
 }
 function _deckMockHTML(desc, w, h) {
     const pg = (desc.kind === 'layout' || desc.kind === 'fixed') ? desc.page : null;
@@ -8037,9 +8097,9 @@ function _dsRenderPresetBar() {
     const cur = editorialContent.presentationType || '';
     bar.innerHTML = '';
     const lbl = document.createElement('div');
-    lbl.textContent = 'PRESENTATION TYPE'; lbl.style.cssText = 'font-size:0.62rem; font-weight:700; letter-spacing:0.4px; color:var(--text-muted); margin-bottom:6px;';
+    lbl.textContent = 'PRESENTATION TYPE'; lbl.style.cssText = 'font-size:0.62rem; font-weight:700; letter-spacing:0.4px; color:var(--text-muted); margin-bottom:6px; text-align:center;';
     bar.appendChild(lbl);
-    const row = document.createElement('div'); row.style.cssText = 'display:flex; gap:6px; flex-wrap:wrap;';
+    const row = document.createElement('div'); row.style.cssText = 'display:flex; gap:6px; flex-wrap:wrap; justify-content:center;';
     Object.keys(PRES_PRESETS).forEach(k => {
         const b = document.createElement('button');
         b.textContent = PRES_PRESETS[k].label;
@@ -8049,7 +8109,7 @@ function _dsRenderPresetBar() {
     });
     bar.appendChild(row);
     const note = document.createElement('p');
-    note.style.cssText = 'font-size:0.62rem; color:var(--text-muted); margin:6px 0 0; line-height:1.4;';
+    note.style.cssText = 'font-size:0.62rem; color:var(--text-muted); margin:6px 0 0; line-height:1.4; text-align:center;';
     note.textContent = cur && PRES_PRESETS[cur] ? PRES_PRESETS[cur].note : 'Pick a type to preset the sections & spec layout. You can still fine-tune everything below.';
     bar.appendChild(note);
 }
@@ -8079,13 +8139,20 @@ function openDeckStudio(tab) {
 }
 function _dsTab(which) {
     _dsActiveTab = which;
-    const p = document.getElementById('dsTabProject'), g = document.getElementById('dsTabPages');
+    const p = document.getElementById('dsTabProject'), g = document.getElementById('dsTabPages'), tt = document.getElementById('dsTabTemplates'), ss = document.getElementById('dsTabStyles');
     if (p) p.style.display = (which === 'project') ? 'flex' : 'none';
     if (g) g.style.display = (which === 'pages') ? 'flex' : 'none';
-    const bp = document.getElementById('dsTabBtnProject'), bg = document.getElementById('dsTabBtnPages');
+    if (tt) tt.style.display = (which === 'templates') ? 'block' : 'none';
+    if (ss) ss.style.display = (which === 'styles') ? 'block' : 'none';
+    const bp = document.getElementById('dsTabBtnProject'), bg = document.getElementById('dsTabBtnPages'), bt = document.getElementById('dsTabBtnTemplates'), bs = document.getElementById('dsTabBtnStyles');
     const on = 'background:#6a6aff; color:#fff;', off = 'background:var(--bg-input); color:var(--text-main);';
-    if (bp) bp.style.cssText = 'height:28px; padding:0 14px; font-size:0.74rem; border:1px solid var(--border-color); border-radius:5px; cursor:pointer; ' + (which === 'project' ? on : off);
-    if (bg) bg.style.cssText = 'height:28px; padding:0 14px; font-size:0.74rem; border:1px solid var(--border-color); border-radius:5px; cursor:pointer; ' + (which === 'pages' ? on : off);
+    const css = (active) => 'height:28px; padding:0 14px; font-size:0.74rem; border:1px solid var(--border-color); border-radius:5px; cursor:pointer; ' + (active ? on : off);
+    if (bp) bp.style.cssText = css(which === 'project');
+    if (bg) bg.style.cssText = css(which === 'pages');
+    if (bt) bt.style.cssText = css(which === 'templates');
+    if (bs) bs.style.cssText = css(which === 'styles');
+    if (which === 'templates') { try { _dsRenderTemplatesTab(); } catch (e) { console.error(e); } return; }
+    if (which === 'styles') { try { _dsRenderStylesTab(); } catch (e) { console.error(e); } return; }
     if (which === 'pages') {
         _dsBuildError = '';
         try { _dsPages = _deckPageList() || []; }
@@ -8099,8 +8166,23 @@ function _dsTab(which) {
     }
 }
 let _dsBuildError = '';
-function closeDeckStudio() { const m = document.getElementById('deckStudioModal'); if (m) m.style.display = 'none'; }
+let _dsTplSel = null;   // layout template highlighted but not yet applied
+function closeDeckStudio() { const m = document.getElementById('deckStudioModal'); if (m) m.style.display = 'none'; _mbActiveCanvasId = 'moodboardCanvas'; _mbEditTarget = null; }
 function _dsRefresh() { _dsPages = _deckPageList(); if (_dsIndex >= _dsPages.length) _dsIndex = Math.max(0, _dsPages.length - 1); _dsRenderRail(); _dsRenderCenter(); _dsRenderTools(); }
+function _dsRemoveFixed(fixed) {
+    editorialContent.hiddenFixed = editorialContent.hiddenFixed || {};
+    editorialContent.hiddenFixed[fixed] = true;
+    if (typeof pushHistory === 'function') pushHistory();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    if (_dsIndex > 0) _dsIndex -= 1;
+    _dsRefresh();
+}
+function _dsRestoreFixed(fixed) {
+    if (editorialContent.hiddenFixed) delete editorialContent.hiddenFixed[fixed];
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    _dsRefresh();
+}
+const _FIXED_LABELS = { cover: 'Cover', understanding: 'Project Understanding', narrative: 'Art Narrative', strategy: 'Art Collection Strategy', slogan: 'Good Art. Good People.', contacts: 'Contacts' };
 function _tocLabelFor(desc) {
     if (!desc) return null;
     if (desc.kind === 'fixed') { if (desc.fixed === 'cover' || desc.fixed === 'slogan') return null; return desc.title || desc.fixed; }
@@ -8131,7 +8213,52 @@ function _dsPageNumForPiece(id) {
     }
     return null;
 }
-function _dsSelectPage(i) { _dsIndex = i; _dsRenderRail(); _dsRenderCenter(); _dsRenderTools(); _dsSyncApprovedBtn(); }
+function _dsDuplicateLayoutPage(desc) {
+    if (!desc || desc.kind !== 'layout' || !desc.page) return;
+    const pages = editorialContent.layoutPages || [];
+    const idx = pages.indexOf(desc.page);
+    if (idx < 0) return;
+    const src = desc.page;
+    const clone = { id: 'pg' + Math.random().toString(36).slice(2), type: src.type, title: src.title, elements: JSON.parse(JSON.stringify(src.elements || [])) };
+    pages.splice(idx + 1, 0, clone);
+    if (typeof pushHistory === 'function') pushHistory();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    try { _dsPages = _deckPageList() || []; } catch (e) {}
+    const ni = _dsPages.findIndex(d => d.kind === 'layout' && d.page === clone);
+    if (ni >= 0) _dsIndex = ni;
+    _dsTplSel = null;
+    _dsRenderRail(); _dsRenderCenter(); _dsRenderTools();
+}
+function _dsSelectPage(i) { if (typeof _mbDeselectAll === 'function') _mbDeselectAll(); _dsIndex = i; _dsTplSel = null; _dsRenderRail(); _dsRenderCenter(); _dsRenderTools(); _dsSyncApprovedBtn(); }
+function _dsDeleteLayoutPage(desc) {
+    if (!desc || desc.kind !== 'layout' || !desc.page) return;
+    const pages = editorialContent.layoutPages || [];
+    const idx = pages.indexOf(desc.page); if (idx < 0) return;
+    pages.splice(idx, 1);
+    if (typeof pushHistory === 'function') pushHistory();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    if (_dsIndex > 0) _dsIndex -= 1;
+    _dsRefresh();
+}
+function _dsRemovePageQuick(desc) {
+    if (!desc) return;
+    if (desc.kind === 'layout') { if (confirm('Remove this page from the deck?')) _dsDeleteLayoutPage(desc); }
+    else if (desc.kind === 'fixed' && _FIXED_LABELS[desc.fixed]) { if (confirm('Remove the built-in ' + _FIXED_LABELS[desc.fixed] + ' page? You can restore it from the Pages tools.')) _dsRemoveFixed(desc.fixed); }
+}
+function _dsDuplicatePageQuick(desc) {
+    if (!desc) return;
+    if (desc.kind === 'layout') { _dsDuplicateLayoutPage(desc); return; }
+    if (desc.kind === 'fixed' && desc.page && Array.isArray(desc.page.elements)) {
+        const clone = { id: 'pg' + Math.random().toString(36).slice(2), type: desc.page.type || 'moodboard', title: (_FIXED_LABELS[desc.fixed] || 'Page') + ' copy', elements: JSON.parse(JSON.stringify(desc.page.elements || [])), afterKey: _deckPageKey(desc) };
+        editorialContent.layoutPages = editorialContent.layoutPages || [];
+        editorialContent.layoutPages.push(clone);
+        if (typeof pushHistory === 'function') pushHistory();
+        if (typeof scheduleAutosave === 'function') scheduleAutosave();
+        try { _dsPages = _deckPageList() || []; } catch (e) {}
+        const ni = _dsPages.findIndex(d => d.kind === 'layout' && d.page === clone); if (ni >= 0) _dsIndex = ni;
+        _dsRenderRail(); _dsRenderCenter(); _dsRenderTools();
+    }
+}
 let _dsRailFilter = '';
 function _dsCreateInsert(type, afterKey) {
     _mbMigratePages();
@@ -8145,6 +8272,308 @@ function _dsCreateInsert(type, afterKey) {
     const k = 'layout:' + pg.id;
     const ni = _dsPages.findIndex(d => _deckPageKey(d) === k);
     if (ni >= 0) _dsSelectPage(ni);
+}
+// ── Template Library (Templates tab) ───────────────────────────────────────
+const DECK_TPL_CATS = [
+    { key: 'cover', label: 'Cover' },
+    { key: 'narrative', label: 'Narrative' },
+    { key: 'slogan', label: 'Good Art' },
+    { key: 'moodboard', label: 'Moodboard' },
+    { key: 'breaker', label: 'Breaker' },
+    { key: 'keyword', label: 'Keyword' },
+    { key: 'inspo', label: 'Inspo' }
+];
+function _dsAllCats() {
+    const base = DECK_TPL_CATS.slice();
+    (editorialContent.templateCategories || []).forEach(c => { if (c && c.key && !base.some(b => b.key === c.key)) base.push({ key: c.key, label: c.label || c.key }); });
+    return base;
+}
+function _dsCatLabel(key) { const c = _dsAllCats().find(x => x.key === key); return c ? c.label : (key || 'Moodboard'); }
+function _dsCurrentEditablePage() {
+    const desc = _dsPages[_dsIndex]; if (!desc) return null;
+    if (desc.kind === 'layout' && desc.page) return { page: desc.page, type: desc.page.type || 'moodboard' };
+    if (desc.kind === 'fixed') { try { const r = _fixedPageFor(desc.fixed); if (r && r.page) return { page: r.page, type: r.page.type || desc.fixed }; } catch (e) {} }
+    return null;
+}
+function _dsSaveCurrentAsTemplate() {
+    const ep = _dsCurrentEditablePage();
+    if (!ep) { showInfoModal('Not a layout page', 'Open a moodboard, cover, narrative or other layout page in Pages, then save it as a template.'); return; }
+    const name = (window.prompt('Name this template:', ep.page.title || (_dsCatLabel(ep.type) + ' template')) || '').trim();
+    if (!name) return;
+    const els = JSON.parse(JSON.stringify(ep.page.elements || [])).map(e => { if ((e.type || 'image') === 'image') e.img = ''; return e; }); // structural — strip embedded image data
+    editorialContent.templates = editorialContent.templates || [];
+    editorialContent.templates.push({ name: name, type: ep.type || 'moodboard', elements: els });
+    if (typeof pushHistory === 'function') pushHistory();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    _dsTab('templates');
+}
+function _dsAddCategory() {
+    const label = (window.prompt('New template category name:', '') || '').trim();
+    if (!label) return;
+    const key = 'cat_' + label.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '') + '_' + Math.random().toString(36).slice(2, 6);
+    editorialContent.templateCategories = editorialContent.templateCategories || [];
+    editorialContent.templateCategories.push({ key: key, label: label });
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    _dsRenderTemplatesTab();
+}
+function _dsDeleteCategory(key) {
+    if (!confirm('Delete this category? Templates inside it will move to Moodboard.')) return;
+    (editorialContent.templates || []).forEach(t => { if (t.type === key) t.type = 'moodboard'; });
+    editorialContent.templateCategories = (editorialContent.templateCategories || []).filter(c => c.key !== key);
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    _dsRenderTemplatesTab();
+}
+function _dsTemplateToDeck(idx) {
+    const t = (editorialContent.templates || [])[idx]; if (!t) return;
+    _mbMigratePages();
+    const desc = _dsPages[_dsIndex];
+    const afterKey = desc ? (_deckPageKey(desc) || '__start__') : '__start__';
+    const pg = { id: 'pg' + Math.random().toString(36).slice(2), type: t.type || 'moodboard', title: t.name || _mbDefaultTitle(t.type), elements: JSON.parse(JSON.stringify(t.elements || [])), afterKey: afterKey };
+    editorialContent.layoutPages = editorialContent.layoutPages || [];
+    editorialContent.layoutPages.push(pg);
+    if (typeof pushHistory === 'function') pushHistory();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    _dsTab('pages');
+    const k = 'layout:' + pg.id; const ni = _dsPages.findIndex(d => _deckPageKey(d) === k); if (ni >= 0) _dsSelectPage(ni);
+}
+function _dsDeleteUserTemplate(idx) {
+    if (!Array.isArray(editorialContent.templates)) return;
+    if (!confirm('Delete this template?')) return;
+    editorialContent.templates.splice(idx, 1);
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    _dsRenderTemplatesTab();
+}
+function _dsRenameUserTemplate(idx) {
+    const t = (editorialContent.templates || [])[idx]; if (!t) return;
+    const nm = (window.prompt('Rename template:', t.name || '') || '').trim(); if (!nm) return;
+    t.name = nm; if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderTemplatesTab();
+}
+function _dsRecategorize(idx, type) {
+    const t = (editorialContent.templates || [])[idx]; if (!t) return;
+    t.type = type; if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderTemplatesTab();
+}
+function _dsMasterToDeck(idx) {
+    const t = (typeof IDML_MASTER_TEMPLATES !== 'undefined') ? IDML_MASTER_TEMPLATES[idx] : null; if (!t) return;
+    _mbMigratePages();
+    const desc = _dsPages[_dsIndex];
+    const afterKey = desc ? (_deckPageKey(desc) || '__start__') : '__start__';
+    const pg = { id: 'pg' + Math.random().toString(36).slice(2), type: t.type || 'moodboard', title: (t.name || '').replace('Farmboy \u00b7 ', ''), elements: JSON.parse(JSON.stringify(t.elements || [])), afterKey: afterKey };
+    editorialContent.layoutPages = editorialContent.layoutPages || [];
+    editorialContent.layoutPages.push(pg);
+    if (typeof pushHistory === 'function') pushHistory();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    _dsTab('pages');
+    const k = 'layout:' + pg.id; const ni = _dsPages.findIndex(d => _deckPageKey(d) === k); if (ni >= 0) _dsSelectPage(ni);
+}
+function _dsRenderTemplatesTab() {
+    const host = document.getElementById('dsTabTemplates'); if (!host) return;
+    host.innerHTML = '';
+    const wrap = document.createElement('div'); wrap.style.cssText = 'max-width:1100px; margin:0 auto; width:100%;';
+    const head = document.createElement('div'); head.style.cssText = 'display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:16px;';
+    const title = document.createElement('div'); title.innerHTML = '<div style="font-size:1rem; font-weight:800; color:var(--text-main);">Template Library</div><div style="font-size:0.68rem; color:var(--text-muted);">Save layouts you like, organise them by category, and drop them into any deck.</div>'; title.style.cssText = 'flex:1; min-width:200px;';
+    head.appendChild(title);
+    const mkBtn = (label, fn, primary) => { const b = document.createElement('button'); b.textContent = label; b.className = primary ? 'action-btn' : 'action-btn btn-secondary'; b.style.cssText = 'width:auto; height:32px; padding:0 14px; font-size:0.72rem; font-weight:700;'; b.onclick = fn; return b; };
+    head.appendChild(mkBtn('+ Save current page', _dsSaveCurrentAsTemplate, true));
+    head.appendChild(mkBtn('+ New category', _dsAddCategory));
+    wrap.appendChild(head);
+    // ── From the uploaded InDesign master pages ──
+    if (typeof IDML_MASTER_TEMPLATES !== 'undefined' && IDML_MASTER_TEMPLATES.length) {
+        const cardW0 = 200, cardH0 = Math.round(cardW0 * 540 / 936);
+        const sec = document.createElement('div'); sec.style.cssText = 'margin-bottom:24px; padding:12px; border:1px solid var(--border-color); border-radius:8px; background:var(--bg-input);';
+        const ch = document.createElement('div'); ch.innerHTML = '<div style="font-size:0.82rem; font-weight:800; color:var(--text-main);">From your InDesign template</div><div style="font-size:0.64rem; color:var(--text-muted); margin-bottom:8px;">Page profiles built from your Farmboy master pages. Add one, then fill the image frames and edit the text.</div>';
+        sec.appendChild(ch);
+        const grid = document.createElement('div'); grid.style.cssText = 'display:flex; flex-wrap:wrap; gap:12px;';
+        IDML_MASTER_TEMPLATES.forEach((t, i) => {
+            const cell = document.createElement('div'); cell.style.cssText = 'width:' + cardW0 + 'px; border:1px solid var(--border-color); border-radius:6px; overflow:hidden; background:#fff;';
+            const th = document.createElement('div'); th.style.cssText = 'position:relative; width:100%; height:' + cardH0 + 'px; background:#fff;';
+            th.innerHTML = _mbThumbInner({ elements: t.elements }, cardW0, cardH0); cell.appendChild(th);
+            const nm = document.createElement('div'); nm.textContent = t.name.replace('Farmboy · ', ''); nm.style.cssText = 'font-size:0.66rem; color:var(--text-main); padding:5px 7px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; border-top:1px solid var(--border-color);'; cell.appendChild(nm);
+            const ctr = document.createElement('div'); ctr.style.cssText = 'display:flex; gap:4px; padding:6px 7px; border-top:1px solid var(--border-color);';
+            const add = document.createElement('button'); add.textContent = 'Add to deck'; add.className = 'action-btn'; add.style.cssText = 'width:auto; height:24px; padding:0 8px; font-size:0.6rem; font-weight:700;'; add.onclick = () => _dsMasterToDeck(i); ctr.appendChild(add);
+            const sv = document.createElement('button'); sv.textContent = 'Save as template'; sv.className = 'action-btn btn-secondary'; sv.style.cssText = 'width:auto; height:24px; padding:0 7px; font-size:0.58rem;'; sv.onclick = () => { editorialContent.templates = editorialContent.templates || []; const map = { cover: 'cover', narrative: 'narrative', moodboard: 'moodboard', keyword: 'keyword', divider: 'breaker', breaker: 'breaker', slogan: 'slogan', bio: 'cover', toc: 'cover' }; editorialContent.templates.push({ name: t.name.replace('Farmboy · ', ''), type: map[t.type] || 'moodboard', elements: JSON.parse(JSON.stringify(t.elements || [])) }); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderTemplatesTab(); }; ctr.appendChild(sv);
+            cell.appendChild(ctr); grid.appendChild(cell);
+        });
+        sec.appendChild(grid); wrap.appendChild(sec);
+    }
+    const cats = _dsAllCats();
+    const cardW = 200, cardH = Math.round(cardW * 540 / 936);
+    cats.forEach(cat => {
+        const userTpls = [];
+        (editorialContent.templates || []).forEach((t, i) => { if ((t.type || 'moodboard') === cat.key) userTpls.push({ t: t, idx: i }); });
+        const builtins = [];
+        (LAYOUT_TEMPLATES[cat.key] || []).forEach(b => { try { builtins.push({ name: b.name, els: b.els() }); } catch (e) {} });
+        if (typeof studioDefaults !== 'undefined') (studioDefaults.templates || []).forEach(tp => { if ((tp.type || 'moodboard') === cat.key) builtins.push({ name: (tp.name || 'Studio') + ' \u00b7 studio', els: tp.elements || [] }); });
+        if (!userTpls.length && !builtins.length && !DECK_TPL_CATS.some(d => d.key === cat.key)) {
+            // empty custom category — still show header so it can be used/deleted
+        }
+        const sec = document.createElement('div'); sec.style.cssText = 'margin-bottom:22px;';
+        const ch = document.createElement('div'); ch.style.cssText = 'display:flex; align-items:center; gap:8px; margin-bottom:8px; border-bottom:1px solid var(--border-color); padding-bottom:5px;';
+        const cl = document.createElement('div'); cl.textContent = cat.label; cl.style.cssText = 'font-size:0.8rem; font-weight:800; color:var(--text-main);';
+        ch.appendChild(cl);
+        const cnt = document.createElement('span'); cnt.textContent = userTpls.length + ' saved'; cnt.style.cssText = 'font-size:0.62rem; color:var(--text-muted);'; ch.appendChild(cnt);
+        if (!DECK_TPL_CATS.some(d => d.key === cat.key)) { const del = document.createElement('button'); del.textContent = 'Delete category'; del.className = 'action-btn btn-secondary'; del.style.cssText = 'width:auto; height:24px; padding:0 8px; font-size:0.6rem; margin-left:auto;'; del.onclick = () => _dsDeleteCategory(cat.key); ch.appendChild(del); }
+        sec.appendChild(ch);
+        const grid = document.createElement('div'); grid.style.cssText = 'display:flex; flex-wrap:wrap; gap:12px;';
+        const addCard = (name, els, controls) => {
+            const cell = document.createElement('div'); cell.style.cssText = 'width:' + cardW + 'px; border:1px solid var(--border-color); border-radius:6px; overflow:hidden; background:#fff;';
+            const th = document.createElement('div'); th.style.cssText = 'position:relative; width:100%; height:' + cardH + 'px; background:#fff;';
+            th.innerHTML = _mbThumbInner({ elements: els }, cardW, cardH); cell.appendChild(th);
+            const nm = document.createElement('div'); nm.textContent = name; nm.style.cssText = 'font-size:0.66rem; color:var(--text-main); padding:5px 7px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; border-top:1px solid var(--border-color);'; cell.appendChild(nm);
+            if (controls) cell.appendChild(controls);
+            grid.appendChild(cell);
+        };
+        userTpls.forEach(({ t, idx }) => {
+            const ctr = document.createElement('div'); ctr.style.cssText = 'display:flex; flex-wrap:wrap; gap:4px; padding:6px 7px; border-top:1px solid var(--border-color); align-items:center;';
+            const add = document.createElement('button'); add.textContent = 'Add to deck'; add.className = 'action-btn'; add.style.cssText = 'width:auto; height:24px; padding:0 8px; font-size:0.6rem; font-weight:700;'; add.onclick = () => _dsTemplateToDeck(idx); ctr.appendChild(add);
+            const ren = document.createElement('button'); ren.textContent = 'Rename'; ren.className = 'action-btn btn-secondary'; ren.style.cssText = 'width:auto; height:24px; padding:0 7px; font-size:0.58rem;'; ren.onclick = () => _dsRenameUserTemplate(idx); ctr.appendChild(ren);
+            const del = document.createElement('button'); del.textContent = 'Delete'; del.className = 'action-btn btn-secondary'; del.style.cssText = 'width:auto; height:24px; padding:0 7px; font-size:0.58rem;'; del.onclick = () => _dsDeleteUserTemplate(idx); ctr.appendChild(del);
+            const sel = document.createElement('select'); sel.style.cssText = 'flex:1 0 100%; height:24px; font-size:0.58rem; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px; margin-top:2px;';
+            _dsAllCats().forEach(c => { const o = document.createElement('option'); o.value = c.key; o.textContent = 'Category: ' + c.label; if (c.key === (t.type || 'moodboard')) o.selected = true; sel.appendChild(o); });
+            sel.onchange = () => _dsRecategorize(idx, sel.value); ctr.appendChild(sel);
+            addCard(t.name || 'Untitled', t.elements || [], ctr);
+        });
+        builtins.forEach(b => {
+            const ctr = document.createElement('div'); ctr.style.cssText = 'display:flex; gap:4px; padding:6px 7px; border-top:1px solid var(--border-color);';
+            const add = document.createElement('button'); add.textContent = 'Add to deck'; add.className = 'action-btn btn-secondary'; add.style.cssText = 'width:auto; height:24px; padding:0 8px; font-size:0.6rem;';
+            add.onclick = () => { editorialContent.templates = editorialContent.templates || []; editorialContent.templates.push({ name: b.name, type: cat.key, elements: JSON.parse(JSON.stringify(b.els || [])) }); _dsTemplateToDeck(editorialContent.templates.length - 1); editorialContent.templates.pop(); };
+            ctr.appendChild(add);
+            const tag = document.createElement('span'); tag.textContent = 'starter'; tag.style.cssText = 'font-size:0.56rem; color:var(--text-muted); align-self:center; margin-left:auto;'; ctr.appendChild(tag);
+            addCard(b.name || 'Starter', b.els || [], ctr);
+        });
+        if (!userTpls.length && !builtins.length) { const e = document.createElement('div'); e.style.cssText = 'font-size:0.66rem; color:var(--text-muted); padding:4px 0;'; e.textContent = 'No templates here yet. Open a page in Pages and use “Save current page”, or pick this category when saving.'; sec.appendChild(e); }
+        sec.appendChild(grid);
+        wrap.appendChild(sec);
+    });
+    host.appendChild(wrap);
+}
+// ── Text Styles (character/paragraph styles, seeded from the IDML template) ──
+function _dsTextStyles() {
+    if (!Array.isArray(editorialContent.textStyles) || !editorialContent.textStyles.length) {
+        editorialContent.textStyles = JSON.parse(JSON.stringify(IDML_STYLE_SEED));
+    }
+    return editorialContent.textStyles;
+}
+function _dsStyleGroups() {
+    const seen = []; _dsTextStyles().forEach(s => { if (s.group && seen.indexOf(s.group) < 0) seen.push(s.group); });
+    return seen;
+}
+function _dsStyleTarget() {
+    if (_dsCurrentEditablePage() && typeof _mbSelEl === 'function' && typeof _mbSelected !== 'undefined' && _mbSelected >= 0) { const el = _mbSelEl(); if (el && _elType(el) === 'text') return { kind: 'mb', el: el }; }
+    const a = _dsCurrentAnnot(); if (a && a.type !== 'image' && a.type !== 'arrow' && a.type !== 'elbow' && a.type !== 'mockup' && a.type !== 'shape') return { kind: 'ann', el: a };
+    return null;
+}
+function _dsApplyStyle(id, silent) {
+    const st = _dsTextStyles().find(s => s.id === id); if (!st) return false;
+    const t = _dsStyleTarget();
+    if (!t) { if (!silent) showInfoModal('Select a text box', 'Click a text element on the page first, then apply a style to it.'); return false; }
+    const el = t.el;
+    el.font = st.font; el.size = st.size; el.bold = !!st.bold; el.italic = !!st.italic;
+    el.weight = st.weight || (st.bold ? 700 : 400);
+    el.color = st.color; el.align = st.align; el.caps = st.caps || 'none'; el.track = st.track || 0; el.outline = !!st.outline;
+    el.styleId = id;
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    if (t.kind === 'mb') { try { renderMoodboardCanvas(); } catch (e) {} }
+    _dsRenderCenter(); _dsRenderRail(); _dsSyncToolbar();
+    return true;
+}
+// Editing a style updates every text box that carries that styleId — across all
+// layout pages, fixed pages, and annotations — so styles behave globally.
+function _dsReapplyStyleEverywhere(id) {
+    const st = _dsTextStyles().find(s => s.id === id); if (!st) return;
+    const apply = (el) => { if (el && el.styleId === id) { el.font = st.font; el.size = st.size; el.bold = !!st.bold; el.italic = !!st.italic; el.weight = st.weight || (st.bold ? 700 : 400); el.color = st.color; el.align = st.align; el.caps = st.caps || 'none'; el.track = st.track || 0; el.outline = !!st.outline; } };
+    (editorialContent.layoutPages || []).forEach(p => (p.elements || []).forEach(apply));
+    ['coverPage', 'narrativePage', 'sloganPage', 'understandingPage', 'strategyPage'].forEach(k => { const p = editorialContent[k]; if (p && p.elements) p.elements.forEach(apply); });
+    const ann = editorialContent.annotations || {}; Object.keys(ann).forEach(k => (ann[k] || []).forEach(apply));
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+}
+let _dsShuffleState = null;
+function _dsShuffleGroup(group) {
+    const list = _dsTextStyles().filter(s => s.group === group); if (!list.length) return;
+    const t = _dsStyleTarget(); if (!t) { showInfoModal('Select a text box', 'Click a text element on the page, then shuffle a group to try each look on it.'); return; }
+    if (!_dsShuffleState || _dsShuffleState.group !== group) _dsShuffleState = { group: group, i: 0 };
+    else _dsShuffleState.i = (_dsShuffleState.i + 1) % list.length;
+    const st = list[_dsShuffleState.i];
+    _dsApplyStyle(st.id, true);
+    _dsRenderStylesTab();
+    const lbl = document.getElementById('dsShuffleLbl' + group.replace(/\W/g, '')); if (lbl) lbl.textContent = st.name;
+}
+function _dsSaveSelectionAsStyle() {
+    const t = _dsStyleTarget(); if (!t) { showInfoModal('Select a text box', 'Select a styled text element first, then save its look as a new style.'); return; }
+    const el = t.el; const name = (window.prompt('Name this style:', 'My Style') || '').trim(); if (!name) return;
+    const groups = _dsStyleGroups();
+    const group = (window.prompt('Group (e.g. ' + groups.slice(0, 4).join(', ') + '…):', el.styleId ? (_dsTextStyles().find(s => s.id === el.styleId) || {}).group || 'Body Copy' : 'Body Copy') || 'Body Copy').trim();
+    _dsTextStyles().push({ id: 'sty_' + Math.random().toString(36).slice(2, 9), name: name, group: group, font: el.font || 'serif', size: el.size || 0.03, bold: !!el.bold, italic: !!el.italic, color: el.color || '#222222', align: el.align || 'left', caps: el.caps || 'none', track: el.track || 0, outline: !!el.outline });
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    _dsRenderStylesTab();
+}
+function _dsDeleteStyle(id) { if (!confirm('Delete this style? (Text already using it keeps its look.)')) return; editorialContent.textStyles = _dsTextStyles().filter(s => s.id !== id); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderStylesTab(); }
+function _dsDuplicateStyle(id) { const s = _dsTextStyles().find(x => x.id === id); if (!s) return; const c = JSON.parse(JSON.stringify(s)); c.id = 'sty_' + Math.random().toString(36).slice(2, 9); c.name = s.name + ' copy'; _dsTextStyles().push(c); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderStylesTab(); }
+function _dsStyleEdit(id, prop, val) { const s = _dsTextStyles().find(x => x.id === id); if (!s) return; if (prop === 'size') val = parseFloat(val) / 1080; else if (prop === 'track') val = parseFloat(val) / 1000; else if (prop === 'bold' || prop === 'italic') val = !!val; s[prop] = val; if (prop === 'bold') s.weight = val ? 700 : 400; _dsReapplyStyleEverywhere(id); try { renderMoodboardCanvas(); } catch (e) {} _dsRenderCenter(); _dsRenderRail(); _dsRenderStylesTab(); }
+function _dsStylePreviewCss(s) {
+    let css = 'font-family:' + _mbFontCss(s.font) + '; font-size:20px; line-height:1.1; color:' + (s.color === '#ffffff' ? '#fff' : s.color) + ';' + (s.bold ? 'font-weight:700;' : '') + (s.italic ? 'font-style:italic;' : '') + (s.caps === 'upper' ? 'text-transform:uppercase;' : '') + (s.track ? 'letter-spacing:' + s.track + 'em;' : '') + _alignCss(s.align);
+    if (s.weight) css += 'font-weight:' + s.weight + ';';
+    if (s.outline) { const oc = (s.color === '#ffffff') ? '#fff' : s.color; css += '-webkit-text-stroke:1px ' + oc + '; color:transparent; -webkit-text-fill-color:transparent;'; }
+    return css;
+}
+function _dsRenderStylesTab() {
+    const host = document.getElementById('dsTabStyles'); if (!host) return;
+    host.innerHTML = '';
+    const wrap = document.createElement('div'); wrap.style.cssText = 'max-width:1100px; margin:0 auto; width:100%;';
+    const head = document.createElement('div'); head.style.cssText = 'display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:14px;';
+    const ttl = document.createElement('div'); ttl.style.cssText = 'flex:1; min-width:220px;';
+    ttl.innerHTML = '<div style="font-size:1rem; font-weight:800; color:var(--text-main);">Text Styles</div><div style="font-size:0.68rem; color:var(--text-muted);">Seeded from your InDesign template. Select a text box on a page, then Apply or Shuffle to try looks.</div>';
+    head.appendChild(ttl);
+    const sb = document.createElement('button'); sb.textContent = '+ Save selection as style'; sb.className = 'action-btn'; sb.style.cssText = 'width:auto; height:32px; padding:0 14px; font-size:0.72rem; font-weight:700;'; sb.onclick = _dsSaveSelectionAsStyle; head.appendChild(sb);
+    wrap.appendChild(head);
+    const tgt = _dsStyleTarget();
+    const note = document.createElement('div'); note.style.cssText = 'font-size:0.68rem; margin-bottom:14px; padding:7px 10px; border-radius:6px; ' + (tgt ? 'background:rgba(26,127,55,0.12); color:#1a7f37;' : 'background:var(--bg-input); color:var(--text-muted);');
+    note.textContent = tgt ? 'A text box is selected — Apply/Shuffle will style it live.' : 'No text box selected. Pick one on a page (Pages tab) to apply styles to it.';
+    wrap.appendChild(note);
+    _dsStyleGroups().forEach(group => {
+        const styles = _dsTextStyles().filter(s => s.group === group);
+        const sec = document.createElement('div'); sec.style.cssText = 'margin-bottom:20px;';
+        const ch = document.createElement('div'); ch.style.cssText = 'display:flex; align-items:center; gap:8px; margin-bottom:8px; border-bottom:1px solid var(--border-color); padding-bottom:5px;';
+        const cl = document.createElement('div'); cl.textContent = group; cl.style.cssText = 'font-size:0.8rem; font-weight:800; color:var(--text-main);'; ch.appendChild(cl);
+        const shuf = document.createElement('button'); shuf.textContent = '⇄ Shuffle on selection'; shuf.className = 'action-btn btn-secondary'; shuf.style.cssText = 'width:auto; height:24px; padding:0 9px; font-size:0.6rem; margin-left:auto;'; shuf.onclick = () => _dsShuffleGroup(group); ch.appendChild(shuf);
+        const slbl = document.createElement('span'); slbl.id = 'dsShuffleLbl' + group.replace(/\W/g, ''); slbl.style.cssText = 'font-size:0.6rem; color:var(--text-muted); min-width:60px;'; ch.appendChild(slbl);
+        sec.appendChild(ch);
+        const grid = document.createElement('div'); grid.style.cssText = 'display:grid; grid-template-columns:repeat(4,1fr); gap:8px;';
+        styles.forEach(s => {
+            const card = document.createElement('div'); card.style.cssText = 'border:1px solid var(--border-color); border-radius:6px; overflow:hidden; background:' + (s.color === '#ffffff' ? '#3a3a40' : '#fff') + ';';
+            const prev = document.createElement('div'); prev.textContent = s.name; prev.title = s.name; prev.style.cssText = 'padding:9px 8px 3px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; ' + _dsStylePreviewCss(s);
+            // clamp preview size so big display styles don't blow out the card
+            prev.style.fontSize = Math.max(12, Math.min(22, s.size * 1080 * 0.5)) + 'px'; card.appendChild(prev);
+            const meta = document.createElement('div'); meta.textContent = Math.round(s.size * 1080) + 'pt · ' + (s.font === 'display' ? 'Oswald' : s.font === 'serif' ? 'Times' : 'Helv') + ' ' + (s.weight || (s.bold ? 700 : 400)) + (s.italic ? ' ·I' : '') + (s.caps === 'upper' ? ' ·AA' : ''); meta.style.cssText = 'font-size:0.56rem; color:' + (s.color === '#ffffff' ? '#bbb' : 'var(--text-muted)') + '; padding:0 8px 5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;'; card.appendChild(meta);
+            const ctr = document.createElement('div'); ctr.style.cssText = 'display:flex; gap:3px; padding:5px 6px; border-top:1px solid var(--border-color); align-items:center;';
+            const ap = document.createElement('button'); ap.textContent = 'Apply'; ap.className = 'action-btn'; ap.style.cssText = 'flex:1; height:24px; padding:0; font-size:0.58rem; font-weight:700;'; ap.onclick = () => _dsApplyStyle(s.id); ctr.appendChild(ap);
+            const ed = document.createElement('button'); ed.textContent = '✎'; ed.title = 'Edit'; ed.className = 'action-btn btn-secondary'; ed.style.cssText = 'width:24px; height:24px; padding:0; font-size:0.66rem;'; ed.onclick = () => _dsStyleEditPanel(s.id, card); ctr.appendChild(ed);
+            const du = document.createElement('button'); du.textContent = '⧉'; du.title = 'Duplicate'; du.className = 'action-btn btn-secondary'; du.style.cssText = 'width:24px; height:24px; padding:0; font-size:0.66rem;'; du.onclick = () => _dsDuplicateStyle(s.id); ctr.appendChild(du);
+            const dl = document.createElement('button'); dl.textContent = '🗑'; dl.title = 'Delete'; dl.className = 'action-btn btn-secondary'; dl.style.cssText = 'width:24px; height:24px; padding:0; font-size:0.62rem;'; dl.onclick = () => _dsDeleteStyle(s.id); ctr.appendChild(dl);
+            card.appendChild(ctr); grid.appendChild(card);
+        });
+        sec.appendChild(grid);
+        wrap.appendChild(sec);
+    });
+    host.appendChild(wrap);
+}
+function _dsStyleEditPanel(id, afterRow) {
+    const s = _dsTextStyles().find(x => x.id === id); if (!s) return;
+    const ex = document.getElementById('dsStyleEditP'); if (ex) ex.remove();
+    const p = document.createElement('div'); p.id = 'dsStyleEditP'; p.style.cssText = 'display:flex; flex-wrap:wrap; gap:8px; align-items:center; padding:9px; border:1px solid #6a6aff; border-radius:6px; margin:-2px 0 8px; background:var(--bg-input);';
+    const mk = (label, node) => { const w = document.createElement('label'); w.style.cssText = 'display:inline-flex; align-items:center; gap:4px; font-size:0.62rem; color:var(--text-muted);'; w.appendChild(document.createTextNode(label)); w.appendChild(node); return w; };
+    const name = document.createElement('input'); name.value = s.name; name.style.cssText = 'height:24px; font-size:0.66rem; width:120px;'; name.onchange = () => _dsStyleEdit(id, 'name', name.value);
+    const fontSel = document.createElement('select'); [['display', 'Druk'], ['serif', 'Messina'], ['sans', 'Helvetica']].forEach(f => { const o = document.createElement('option'); o.value = f[0]; o.textContent = f[1]; if (s.font === f[0]) o.selected = true; fontSel.appendChild(o); }); fontSel.onchange = () => _dsStyleEdit(id, 'font', fontSel.value);
+    const size = document.createElement('input'); size.type = 'number'; size.value = Math.round(s.size * 1080); size.style.cssText = 'width:54px; height:24px; font-size:0.66rem;'; size.onchange = () => _dsStyleEdit(id, 'size', size.value);
+    const track = document.createElement('input'); track.type = 'number'; track.value = Math.round((s.track || 0) * 1000); track.style.cssText = 'width:54px; height:24px; font-size:0.66rem;'; track.onchange = () => _dsStyleEdit(id, 'track', track.value);
+    const color = document.createElement('input'); color.type = 'color'; color.value = s.color || '#222222'; color.style.cssText = 'width:30px; height:24px;'; color.onchange = () => _dsStyleEdit(id, 'color', color.value);
+    const weight = document.createElement('select'); [['300', 'Light'], ['400', 'Regular'], ['500', 'Medium'], ['600', 'SemiBold'], ['700', 'Bold']].forEach(wv => { const o = document.createElement('option'); o.value = wv[0]; o.textContent = wv[1]; if (String(s.weight || (s.bold ? 700 : 400)) === wv[0]) o.selected = true; weight.appendChild(o); }); weight.style.cssText = 'height:24px; font-size:0.66rem;'; weight.onchange = () => { const w = parseInt(weight.value, 10); const st = _dsTextStyles().find(x => x.id === id); if (st) { st.weight = w; st.bold = w >= 600; _dsReapplyStyleEverywhere(id); try { renderMoodboardCanvas(); } catch (e) {} _dsRenderCenter(); _dsRenderRail(); _dsRenderStylesTab(); } };
+    const ital = document.createElement('input'); ital.type = 'checkbox'; ital.checked = !!s.italic; ital.onchange = () => _dsStyleEdit(id, 'italic', ital.checked);
+    const caps = document.createElement('input'); caps.type = 'checkbox'; caps.checked = s.caps === 'upper'; caps.onchange = () => _dsStyleEdit(id, 'caps', caps.checked ? 'upper' : 'none');
+    const outl = document.createElement('input'); outl.type = 'checkbox'; outl.checked = !!s.outline; outl.onchange = () => _dsStyleEdit(id, 'outline', outl.checked);
+    const align = document.createElement('select'); [['left', 'Left'], ['center', 'Center'], ['right', 'Right'], ['justify', 'Justify (last L)'], ['justify-center', 'Justify (last C)'], ['justify-all', 'Justify all']].forEach(a => { const o = document.createElement('option'); o.value = a[0]; o.textContent = a[1]; if ((s.align || 'left') === a[0]) o.selected = true; align.appendChild(o); }); align.onchange = () => _dsStyleEdit(id, 'align', align.value);
+    const grp = document.createElement('input'); grp.value = s.group || ''; grp.style.cssText = 'height:24px; font-size:0.66rem; width:120px;'; grp.onchange = () => _dsStyleEdit(id, 'group', grp.value);
+    p.appendChild(mk('Name', name)); p.appendChild(mk('Group', grp)); p.appendChild(mk('Font', fontSel)); p.appendChild(mk('Weight', weight)); p.appendChild(mk('Size(pt)', size)); p.appendChild(mk('Track', track)); p.appendChild(mk('Colour', color)); p.appendChild(mk('Italic', ital)); p.appendChild(mk('Caps', caps)); p.appendChild(mk('Outline', outl)); p.appendChild(mk('Align', align));
+    afterRow.parentNode.insertBefore(p, afterRow.nextSibling);
 }
 function _dsOpenInsertMenu(anchorBtn, afterKey) {
     const old = document.getElementById('dsInsMenu'); if (old) { old.remove(); return; }
@@ -8228,12 +8657,25 @@ function _dsRenderRail() {
         const cell = document.createElement('div');
         cell.setAttribute('data-railcell', '1');
         cell.setAttribute('data-railtext', matchText);
-        cell.style.cssText = 'margin-bottom:4px; cursor:pointer;';
+        cell.style.cssText = 'position:relative; margin-bottom:4px; cursor:pointer;';
         cell.onclick = () => _dsSelectPage(i);
         const thumb = document.createElement('div');
         thumb.style.cssText = 'position:relative; width:' + tw + 'px; height:' + th + 'px; background:#fff; border-radius:4px; overflow:hidden; border:2px solid ' + (i === _dsIndex ? '#6a6aff' : 'var(--border-color)') + ';';
         try { thumb.innerHTML = _deckMockHTML(desc, tw, th); }
         catch (e) { thumb.innerHTML = '<div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#bbb; font-size:10px;">' + _esc(desc.title || desc.type || 'Page') + '</div>'; }
+        // Quick actions: small sleek X (remove) at outer top-right, + (duplicate) at outer bottom-right.
+        const _removable = (desc.kind === 'layout') || (desc.kind === 'fixed' && _FIXED_LABELS[desc.fixed]);
+        const _dupable = (desc.kind === 'layout') || (desc.kind === 'fixed' && desc.page && Array.isArray(desc.page.elements) && desc.page.elements.length);
+        const _qaBtn = (sym, topCss, title, fn) => {
+            const b = document.createElement('button'); b.textContent = sym; b.title = title;
+            b.style.cssText = 'position:absolute; right:2px; ' + topCss + ' width:15px; height:15px; border:none; background:transparent; color:#cfd3da; font-size:' + (sym === '+' ? '16px' : '12px') + '; font-weight:600; line-height:1; padding:0; cursor:pointer; z-index:7; display:flex; align-items:center; justify-content:center; text-shadow:0 1px 2px rgba(0,0,0,0.6); transition:color .12s;';
+            b.onmouseenter = () => { b.style.color = '#6a6aff'; };
+            b.onmouseleave = () => { b.style.color = '#cfd3da'; };
+            b.onclick = (e) => { e.stopPropagation(); fn(); };
+            return b;
+        };
+        if (_removable) cell.appendChild(_qaBtn('\u2715', 'top:2px;', 'Remove this page', () => _dsRemovePageQuick(desc)));
+        if (_dupable) cell.appendChild(_qaBtn('+', 'top:' + (th - 17) + 'px;', 'Duplicate this page', () => _dsDuplicatePageQuick(desc)));
         const lab = document.createElement('div');
         lab.style.cssText = 'display:flex; align-items:center; gap:4px; font-size:0.64rem; color:' + (i === _dsIndex ? '#6a6aff' : 'var(--text-muted)') + '; margin-top:3px;';
         if (desc.kind === 'spec' && !desc._install) {
@@ -8301,14 +8743,14 @@ function _deckPageKey(desc) {
     if (desc.kind === 'floorplan') return 'floorplan:' + desc.level;
     return null;
 }
-function _dsAnnFam(font) { return font === 'display' ? "'Druk','Arial Narrow',Arial,sans-serif" : font === 'serif' ? "'Messina',Georgia,serif" : 'Arial,Helvetica,sans-serif'; }
+function _dsAnnFam(font) { return font === 'display' ? "'Oswald','Arial Narrow',Arial,sans-serif" : font === 'serif' ? "'Times New Roman',Times,Georgia,serif" : 'Arial,Helvetica,sans-serif'; }
 function _dsAnnList(key) { if (!editorialContent.annotations) editorialContent.annotations = {}; if (!editorialContent.annotations[key]) editorialContent.annotations[key] = []; return editorialContent.annotations[key]; }
 function _dsCurrentAnnot() { if (_dsSelKey == null || _dsSelIdx < 0) return null; const l = (editorialContent.annotations || {})[_dsSelKey]; return (l && l[_dsSelIdx]) ? l[_dsSelIdx] : null; }
 function _dsRenderAnnots(page, desc, w, hh) {
     const key = _deckPageKey(desc); if (!key) return;
     const list = (editorialContent.annotations && editorialContent.annotations[key]) || [];
     list.forEach((a, i) => {
-        const sel = (key === _dsSelKey && i === _dsSelIdx);
+        const sel = (key === _dsSelKey && i === _dsSelIdx) || (_mbSelAnn && _mbSelAnn.indexOf(i) >= 0);
         if (a.type === 'mockup') {
             const entry = _mockupGet(a.pieceId);
             const aspect = (entry && entry.aspect) || a.aspect || 1.2;
@@ -8331,7 +8773,7 @@ function _dsRenderAnnots(page, desc, w, hh) {
             }
             box.onmousedown = (e) => {
                 e.preventDefault();
-                _dsSelKey = key; _dsSelIdx = i; _dsSyncToolbar(); box.style.outline = '2px solid #6a6aff';
+                _dsSelKey = key; _dsSelIdx = i; _dsClearMbSel(); _dsSyncToolbar(); box.style.outline = '2px solid #6a6aff';
                 const sx = e.clientX, sy = e.clientY, ox = a.x || 0, oy = a.y || 0;
                 const mv = (ev) => { a.x = Math.max(0, Math.min(0.99, ox + (ev.clientX - sx) / w)); a.y = Math.max(0, Math.min(0.99, oy + (ev.clientY - sy) / hh)); box.style.left = (a.x * w) + 'px'; box.style.top = (a.y * hh) + 'px'; };
                 const up = () => { document.removeEventListener('mousemove', mv); document.removeEventListener('mouseup', up); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderRail(); };
@@ -8356,14 +8798,14 @@ function _dsRenderAnnots(page, desc, w, hh) {
         if (a.type === 'image') {
             const bw = (a.w || 0.25) * w, bh = bw * (a.aspect || 0.75);
             const box = document.createElement('div');
-            box.style.cssText = 'position:absolute; left:' + ((a.x || 0) * w) + 'px; top:' + ((a.y || 0) * hh) + 'px; width:' + bw + 'px; height:' + bh + 'px; outline:' + (sel ? '2px solid #6a6aff' : '1px dashed rgba(106,106,255,0.45)') + '; cursor:move; box-sizing:border-box; background:#fff;';
+            box.style.cssText = 'position:absolute; left:' + ((a.x || 0) * w) + 'px; top:' + ((a.y || 0) * hh) + 'px; width:' + bw + 'px; height:' + bh + 'px; outline:' + (sel ? '2px solid #6a6aff' : '1px dashed rgba(106,106,255,0.45)') + '; cursor:move; box-sizing:border-box; background:#fff;' + (a.shadow ? ' box-shadow:' + (0.004 * w) + 'px ' + (0.005 * w) + 'px ' + (0.026 * w) + 'px rgba(0,0,0,0.28);' : '');
             const img = document.createElement('img');
             img.src = a.dataUrl || ''; img.draggable = false;
             img.style.cssText = 'width:100%; height:100%; object-fit:contain; display:block; pointer-events:none;';
             box.appendChild(img);
             box.onmousedown = (e) => {
                 e.preventDefault();
-                _dsSelKey = key; _dsSelIdx = i; _dsSyncToolbar(); box.style.outline = '2px solid #6a6aff';
+                _dsSelKey = key; _dsSelIdx = i; _dsClearMbSel(); _dsSyncToolbar(); box.style.outline = '2px solid #6a6aff';
                 const sx = e.clientX, sy = e.clientY, ox = a.x || 0, oy = a.y || 0;
                 const mv = (ev) => { a.x = Math.max(0, Math.min(0.99, ox + (ev.clientX - sx) / w)); a.y = Math.max(0, Math.min(0.99, oy + (ev.clientY - sy) / hh)); box.style.left = (a.x * w) + 'px'; box.style.top = (a.y * hh) + 'px'; };
                 const up = () => { document.removeEventListener('mousemove', mv); document.removeEventListener('mouseup', up); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderRail(); };
@@ -8373,13 +8815,49 @@ function _dsRenderAnnots(page, desc, w, hh) {
             handle.style.cssText = 'position:absolute; right:-6px; bottom:-6px; width:12px; height:12px; background:#6a6aff; border:2px solid #fff; border-radius:2px; cursor:nwse-resize;' + (sel ? '' : ' display:none;');
             handle.onmousedown = (e) => {
                 e.preventDefault(); e.stopPropagation();
-                _dsSelKey = key; _dsSelIdx = i; _dsSyncToolbar();
+                _dsSelKey = key; _dsSelIdx = i; _dsClearMbSel(); _dsSyncToolbar();
                 const sx = e.clientX, ow = a.w || 0.25;
                 const mv = (ev) => { let nw = ow + (ev.clientX - sx) / w; nw = Math.max(0.04, Math.min(1, nw)); a.w = nw; const nbw = nw * w; box.style.width = nbw + 'px'; box.style.height = (nbw * (a.aspect || 0.75)) + 'px'; };
                 const up = () => { document.removeEventListener('mousemove', mv); document.removeEventListener('mouseup', up); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderRail(); };
                 document.addEventListener('mousemove', mv); document.addEventListener('mouseup', up);
             };
             box.appendChild(handle);
+            page.appendChild(box);
+            return;
+        }
+        if (a.type === 'shape') {
+            const bw = (a.w || 0.25) * w, bh = (a.h || 0.18) * hh;
+            const box = document.createElement('div');
+            const radius = a.shape === 'ellipse' ? '50%' : '3px';
+            box.style.cssText = 'position:absolute; left:' + ((a.x || 0) * w) + 'px; top:' + ((a.y || 0) * hh) + 'px; width:' + bw + 'px; height:' + bh + 'px; box-sizing:border-box; cursor:move; overflow:hidden; border-radius:' + radius + '; background:' + (a.dataUrl ? '#ececec' : (a.fill || '#d8d8de')) + '; outline:' + (sel ? '2px solid #6a6aff' : '1px dashed rgba(106,106,255,0.45)') + '; outline-offset:1px;' + (a.shadow ? ' box-shadow:' + (0.004 * w) + 'px ' + (0.005 * w) + 'px ' + (0.026 * w) + 'px rgba(0,0,0,0.28);' : '');
+            if (a.dataUrl) {
+                const cr = _imgRect(a.fit || 'cover', bw, bh, a.aspect || 1.33, a.zoom || 1, a.panX || 0, a.panY || 0);
+                const img = document.createElement('img'); img.src = a.dataUrl; img.draggable = false;
+                img.style.cssText = 'position:absolute; left:' + cr.offX + 'px; top:' + cr.offY + 'px; width:' + cr.dW + 'px; height:' + cr.dH + 'px; max-width:none; display:block; pointer-events:none; user-select:none;';
+                box.appendChild(img);
+            }
+            box.ondragover = (e) => { e.preventDefault(); box.style.outline = '2px dashed #6a6aff'; };
+            box.ondragleave = () => { box.style.outline = sel ? '2px solid #6a6aff' : '1px dashed rgba(106,106,255,0.45)'; };
+            box.ondrop = (e) => _dsShapeDropImage(e, key, i);
+            box.onmousedown = (e) => {
+                e.preventDefault();
+                _dsSelKey = key; _dsSelIdx = i; _dsClearMbSel(); _dsSyncToolbar(); box.style.outline = '2px solid #6a6aff';
+                const sx = e.clientX, sy = e.clientY, ox = a.x || 0, oy = a.y || 0;
+                const mv = (ev) => { a.x = Math.max(0, Math.min(0.99, ox + (ev.clientX - sx) / w)); a.y = Math.max(0, Math.min(0.99, oy + (ev.clientY - sy) / hh)); box.style.left = (a.x * w) + 'px'; box.style.top = (a.y * hh) + 'px'; };
+                const up = () => { document.removeEventListener('mousemove', mv); document.removeEventListener('mouseup', up); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderRail(); };
+                document.addEventListener('mousemove', mv); document.addEventListener('mouseup', up);
+            };
+            if (a.dataUrl) box.onwheel = (e) => { e.preventDefault(); a.zoom = Math.max(1, Math.min(5, (a.zoom || 1) + (e.deltaY < 0 ? 0.12 : -0.12))); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderCenter(); };
+            if (sel) {
+                if (a.dataUrl) {
+                    const ph = document.createElement('div');
+                    ph.title = 'Drag to pan the image · scroll to zoom'; ph.textContent = '\u2725';
+                    ph.style.cssText = 'position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:24px; height:24px; border-radius:50%; background:rgba(106,106,255,0.85); border:2px solid #fff; cursor:move; display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px; z-index:23;';
+                    ph.onmousedown = (e) => _dsShapePanDown(e, key, i, bw, bh);
+                    box.appendChild(ph);
+                }
+                _dsAnnHandles(box, a, w, hh);
+            }
             page.appendChild(box);
             return;
         }
@@ -8401,10 +8879,10 @@ function _dsRenderAnnots(page, desc, w, hh) {
                 const ptStr = pts.map(p => p.join(',')).join(' ');
                 const end = pts[pts.length - 1], prev = pts[pts.length - 2];
                 const dx = end[0] - prev[0], dy = end[1] - prev[1], len = Math.max(1, Math.hypot(dx, dy));
-                const ux = dx / len, uy = dy / len, hsz = Math.max(6, sw * 3.4);
+                const ux = dx / len, uy = dy / len, hsz = Math.max(5, sw * 4.6);
                 const bx = end[0] - ux * hsz, by = end[1] - uy * hsz, nx = -uy, ny = ux;
                 poly.setAttribute('points', ptStr); poly.setAttribute('stroke', col); poly.setAttribute('stroke-width', sw);
-                headP.setAttribute('points', [end[0] + ',' + end[1], (bx + nx * hsz * 0.55) + ',' + (by + ny * hsz * 0.55), (bx - nx * hsz * 0.55) + ',' + (by - ny * hsz * 0.55)].join(' ')); headP.setAttribute('fill', col);
+                headP.setAttribute('points', [end[0] + ',' + end[1], (bx + nx * hsz * 0.34) + ',' + (by + ny * hsz * 0.34), (bx - nx * hsz * 0.34) + ',' + (by - ny * hsz * 0.34)].join(' ')); headP.setAttribute('fill', col);
                 hit.setAttribute('points', ptStr); hit.setAttribute('stroke-width', Math.max(14, sw + 12));
                 hEnds[0].setAttribute('cx', X1); hEnds[0].setAttribute('cy', Y1);
                 hEnds[1].setAttribute('cx', X2); hEnds[1].setAttribute('cy', Y2);
@@ -8413,7 +8891,7 @@ function _dsRenderAnnots(page, desc, w, hh) {
             svg.appendChild(poly); svg.appendChild(headP); svg.appendChild(hit);
             hit.onmousedown = (e) => {
                 e.preventDefault();
-                _dsSelKey = key; _dsSelIdx = i; _dsSyncToolbar();
+                _dsSelKey = key; _dsSelIdx = i; _dsClearMbSel(); _dsSyncToolbar();
                 const sx = e.clientX, sy = e.clientY, ox1 = a.x1, oy1 = a.y1, ox2 = a.x2, oy2 = a.y2;
                 const mv = (ev) => { const ddx = (ev.clientX - sx) / w, ddy = (ev.clientY - sy) / hh; a.x1 = ox1 + ddx; a.y1 = oy1 + ddy; a.x2 = ox2 + ddx; a.y2 = oy2 + ddy; redraw(); };
                 const up = () => { document.removeEventListener('mousemove', mv); document.removeEventListener('mouseup', up); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderRail(); if (!sel) _dsRenderCenter(); };
@@ -8438,17 +8916,17 @@ function _dsRenderAnnots(page, desc, w, hh) {
         const el = document.createElement('div');
         el.textContent = a.text || '';
         el.spellcheck = false;
-        el.style.cssText = 'position:absolute; left:' + ((a.x || 0) * w) + 'px; top:' + ((a.y || 0) * hh) + 'px; width:' + ((a.w || 0.3) * w) + 'px; font-family:' + _dsAnnFam(a.font) + '; font-size:' + Math.max(7, (a.size || 0.03) * hh) + 'px; line-height:1.2; color:' + (a.color || '#222222') + '; font-weight:' + (a.bold ? 700 : 400) + '; font-style:' + (a.italic ? 'italic' : 'normal') + '; text-align:' + (a.align || 'left') + '; outline:' + (sel ? '2px solid #6a6aff' : '1px dashed rgba(106,106,255,0.45)') + '; cursor:move; padding:1px 2px; box-sizing:border-box; min-height:1em; white-space:pre-wrap; word-break:break-word;';
+        el.style.cssText = 'position:absolute; left:' + ((a.x || 0) * w) + 'px; top:' + ((a.y || 0) * hh) + 'px; width:' + ((a.w || 0.3) * w) + 'px; font-family:' + _dsAnnFam(a.font) + '; font-size:' + Math.max(7, (a.size || 0.03) * hh) + 'px; line-height:1.2; color:' + (a.color || '#222222') + '; ' + _textExtraCss(a) + ' outline:' + (sel ? '2px solid #6a6aff' : '1px dashed rgba(106,106,255,0.45)') + '; cursor:move; padding:1px 2px; box-sizing:border-box; min-height:1em; white-space:pre-wrap; word-break:break-word;';
         el.onmousedown = (e) => {
             if (el.isContentEditable) return;
             e.preventDefault();
-            _dsSelKey = key; _dsSelIdx = i; _dsSyncToolbar(); el.style.outline = '2px solid #6a6aff';
+            _dsSelKey = key; _dsSelIdx = i; _dsClearMbSel(); _dsSyncToolbar(); el.style.outline = '2px solid #6a6aff';
             const sx = e.clientX, sy = e.clientY, ox = a.x || 0, oy = a.y || 0;
             const mv = (ev) => { a.x = Math.max(0, Math.min(0.985, ox + (ev.clientX - sx) / w)); a.y = Math.max(0, Math.min(0.985, oy + (ev.clientY - sy) / hh)); el.style.left = (a.x * w) + 'px'; el.style.top = (a.y * hh) + 'px'; };
             const up = () => { document.removeEventListener('mousemove', mv); document.removeEventListener('mouseup', up); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderRail(); };
             document.addEventListener('mousemove', mv); document.addEventListener('mouseup', up);
         };
-        el.ondblclick = (e) => { e.stopPropagation(); _dsSelKey = key; _dsSelIdx = i; _dsSyncToolbar(); el.contentEditable = 'true'; el.style.cursor = 'text'; el.style.outline = '2px solid #6a6aff'; el.focus(); };
+        el.ondblclick = (e) => { e.stopPropagation(); _dsSelKey = key; _dsSelIdx = i; _dsClearMbSel(); _dsSyncToolbar(); el.contentEditable = 'true'; el.style.cursor = 'text'; el.style.outline = '2px solid #6a6aff'; el.focus(); };
         el.onblur = () => { a.text = el.textContent; el.contentEditable = 'false'; el.style.cursor = 'move'; if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderRail(); };
         if (sel) {
             const th = document.createElement('div');
@@ -8456,7 +8934,7 @@ function _dsRenderAnnots(page, desc, w, hh) {
             th.style.cssText = 'position:absolute; right:-6px; bottom:-6px; width:12px; height:12px; background:#6a6aff; border:2px solid #fff; border-radius:2px; cursor:nwse-resize;';
             th.onmousedown = (e) => {
                 e.preventDefault(); e.stopPropagation();
-                _dsSelKey = key; _dsSelIdx = i; _dsSyncToolbar();
+                _dsSelKey = key; _dsSelIdx = i; _dsClearMbSel(); _dsSyncToolbar();
                 const sx = e.clientX, ow = (a.w || 0.3), os = (a.size || 0.03);
                 const mv = (ev) => { let nw = ow + (ev.clientX - sx) / w; nw = Math.max(0.05, Math.min(1, nw)); const ratio = nw / ow; a.w = nw; a.size = Math.max(0.012, Math.min(0.22, os * ratio)); el.style.width = (nw * w) + 'px'; el.style.fontSize = Math.max(7, a.size * hh) + 'px'; };
                 const up = () => { document.removeEventListener('mousemove', mv); document.removeEventListener('mouseup', up); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsSyncToolbar(); _dsRenderRail(); };
@@ -8467,25 +8945,59 @@ function _dsRenderAnnots(page, desc, w, hh) {
         page.appendChild(el);
     });
 }
-function _dsSelectAnnot(key, idx) { _dsSelKey = key; _dsSelIdx = idx; _dsSyncToolbar(); _dsRenderCenter(); }
+function _dsSelectAnnot(key, idx) { if (typeof _mbSel !== 'undefined') { _mbSel = []; _mbSelAnn = []; _mbSelected = -1; } _dsSelKey = key; _dsSelIdx = idx; _dsSyncToolbar(); _dsRenderCenter(); }
 function _dsSyncToolbar() {
-    const a = _dsCurrentAnnot();
+    const editable = !!(typeof _dsCurrentEditablePage === 'function' && _dsCurrentEditablePage());
+    const art = document.getElementById('dsAddArtwork'); if (art) art.style.display = editable ? 'inline-flex' : 'none';
+    const gb = document.getElementById('dsMbGuides'); if (gb) gb.style.display = editable ? 'inline-flex' : 'none';
+    // Moodboard element selection takes precedence over annotations when on a layout/fixed page.
+    const mbEl = (editable && typeof _mbSelEl === 'function' && typeof _mbSelected !== 'undefined' && _mbSelected >= 0) ? _mbSelEl() : null;
+    const mbType = mbEl ? _elType(mbEl) : null;
+    const mbGrp = document.getElementById('dsMbGroup');
+    const _anyMulti = (((_mbSel && _mbSel.length) || 0) + ((_mbSelAnn && _mbSelAnn.length) || 0));
+    if (mbGrp) mbGrp.style.display = (mbEl || _anyMulti >= 1) ? 'inline-flex' : 'none';
+    if (mbEl) {
+        const isTxt = mbType === 'text';
+        const show = (id, on) => { const e = document.getElementById(id); if (e) e.style.display = on ? (id === 'dsMbSizeWrap' ? 'inline-flex' : 'inline-block') : 'none'; };
+        show('dsMbFont', isTxt); show('dsMbWeight', isTxt); show('dsMbSizeWrap', isTxt); show('dsMbColor', isTxt); show('dsMbOutline', isTxt); show('dsMbAlign', isTxt); show('dsMbFit', mbType === 'image'); show('dsMbShadow', mbType === 'image'); show('dsMbArrange', _anyMulti >= 1 || !!mbEl);
+        const msh = document.getElementById('dsMbShadow'); if (msh) msh.style.background = (mbType === 'image' && mbEl.shadow) ? '#6a6aff' : 'var(--bg-input)';
+        const mob = document.getElementById('dsMbOutline'); if (mob) { mob.style.background = (isTxt && mbEl.outline) ? '#6a6aff' : 'var(--bg-input)'; }
+        const f = document.getElementById('dsMbFont'); if (f && isTxt) f.value = mbEl.font || 'serif';
+        const wsel = document.getElementById('dsMbWeight'); if (wsel && isTxt) wsel.value = String(mbEl.weight || (mbEl.bold ? 700 : 400));
+        const sl = document.getElementById('dsMbSizeLbl'); if (sl) sl.textContent = isTxt ? Math.round((mbEl.size || 0.045) * 1000) : '\u2014';
+        const c = document.getElementById('dsMbColor'); if (c && isTxt) c.value = mbEl.color || '#222222';
+    } else if (_anyMulti >= 1) {
+        ['dsMbFont', 'dsMbWeight', 'dsMbSizeWrap', 'dsMbColor', 'dsMbOutline', 'dsMbAlign', 'dsMbFit', 'dsMbShadow'].forEach(id => { const e = document.getElementById(id); if (e) e.style.display = 'none'; });
+        const ar = document.getElementById('dsMbArrange'); if (ar) ar.style.display = 'inline-block';
+    }
+    const a = mbEl ? null : _dsCurrentAnnot();
     const selected = !!a;
-    const isText = !!(a && a.type !== 'image' && a.type !== 'arrow' && a.type !== 'elbow' && a.type !== 'mockup');
+    const isText = !!(a && a.type !== 'image' && a.type !== 'arrow' && a.type !== 'elbow' && a.type !== 'mockup' && a.type !== 'shape');
     const isArrow = !!(a && (a.type === 'arrow' || a.type === 'elbow'));
     const isMock = !!(a && a.type === 'mockup');
+    const isShape = !!(a && a.type === 'shape');
+    const isImage = !!(a && a.type === 'image');
     const grp = document.getElementById('dsSelGroup');
-    if (grp) { grp.style.opacity = selected ? '1' : '0.4'; grp.style.pointerEvents = selected ? 'auto' : 'none'; }
+    if (grp) { grp.style.display = mbEl ? 'none' : 'inline-flex'; grp.style.opacity = selected ? '1' : '0.4'; grp.style.pointerEvents = selected ? 'auto' : 'none'; }
     const hint = document.getElementById('dsSelHint');
-    if (hint) hint.textContent = !selected ? 'Select a box to style it \u00b7 double-click to edit \u00b7 drag to move'
+    if (hint) hint.textContent = mbEl ? (mbType === 'text' ? 'Text \u2014 font, size & colour at left \u00b7 double-click to edit' : 'Element \u2014 drag to move, corner to resize, layer & delete at left')
+        : !selected ? 'Select a box to style it \u00b7 double-click to edit \u00b7 drag to move'
         : isText ? 'Text box \u2014 double-click to type, drag corner to scale'
         : isArrow ? 'Arrow \u2014 drag it to move, drag an end to re-aim'
         : isMock ? 'Mockup \u2014 drag to move, corner to resize, double-click to swap artwork'
+        : isShape ? 'Shape \u2014 colour or image fill, drop shadow, drag to move, corner to resize'
         : 'Image \u2014 drag to move, corner to resize';
     const setEnabled = (id, on) => { const e = document.getElementById(id); if (e) { e.style.opacity = on ? '1' : '0.35'; e.style.pointerEvents = on ? 'auto' : 'none'; } };
-    setEnabled('dsAnnBold', isText); setEnabled('dsAnnItalic', isText); setEnabled('dsAnnAlignBtn', isText);
-    setEnabled('dsAnnColor', isText || isArrow);
-    const col = document.getElementById('dsAnnColor'); if (col) col.value = (isText || isArrow) ? (a.color || (isArrow ? '#c0392b' : '#222222')) : '#222222';
+    setEnabled('dsAnnBold', isText); setEnabled('dsAnnItalic', isText); setEnabled('dsAnnAlignBtn', isText); setEnabled('dsAnnWeight', isText); setEnabled('dsAnnOutline', isText);
+    setEnabled('dsAnnFront', selected); setEnabled('dsAnnBack', selected);
+    const ao = document.getElementById('dsAnnOutline'); if (ao) ao.style.background = (isText && a.outline) ? '#6a6aff' : 'var(--bg-input)';
+    const wA = document.getElementById('dsAnnWeight'); if (wA && isText) wA.value = String(a.weight || (a.bold ? 700 : 400));
+    setEnabled('dsAnnColor', isText || isArrow || isShape);
+    setEnabled('dsAnnShadow', isImage || isShape);
+    setEnabled('dsAnnFillImg', isShape);
+    setEnabled('dsAnnFit', (isShape || isImage) && !!(a && a.dataUrl));
+    const col = document.getElementById('dsAnnColor'); if (col) col.value = isShape ? (a.fill || '#d8d8de') : ((isText || isArrow) ? (a.color || (isArrow ? '#c0392b' : '#222222')) : '#222222');
+    const shB = document.getElementById('dsAnnShadow'); if (shB) { const on = (isImage || isShape) && a.shadow; shB.style.background = on ? '#6a6aff' : 'var(--bg-input)'; shB.style.color = on ? '#fff' : 'var(--text-main)'; }
     const sz = document.getElementById('dsAnnSizeLbl'); if (sz) sz.textContent = isText ? Math.round((a.size || 0.03) * 540) : '\u2014';
     const alb = document.getElementById('dsAnnAlignBtn'); if (alb) alb.textContent = isText ? ((a.align || 'left')[0].toUpperCase()) : 'L';
     const b = document.getElementById('dsAnnBold'); if (b) { b.style.background = (isText && a.bold) ? '#6a6aff' : 'var(--bg-input)'; b.style.color = (isText && a.bold) ? '#fff' : 'var(--text-main)'; }
@@ -8504,6 +9016,7 @@ function _dsImageFilePicked(input) {
 }
 function _dsHandleImageFile(file) {
     const desc = _dsPages[_dsIndex]; const key = _deckPageKey(desc); if (!key) return;
+    const fillShape = _dsFillShapeMode; _dsFillShapeMode = false;
     const reader = new FileReader();
     reader.onload = () => {
         const im = new Image();
@@ -8517,6 +9030,11 @@ function _dsHandleImageFile(file) {
             const isPng = /png/i.test(file.type);
             let durl; try { durl = isPng ? cnv.toDataURL('image/png') : cnv.toDataURL('image/jpeg', 0.82); } catch (e) { durl = reader.result; }
             const aspect = (im.naturalHeight || 1) / (im.naturalWidth || 1);
+            if (fillShape) {
+                const a = _dsCurrentAnnot();
+                if (a && a.type === 'shape') { a.dataUrl = durl; a.aspect = (im.naturalWidth || 1) / (im.naturalHeight || 1); a.zoom = 1; a.panX = 0; a.panY = 0; if (typeof pushHistory === 'function') pushHistory(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderCenter(); _dsRenderRail(); _dsSyncToolbar(); }
+                return;
+            }
             const list = _dsAnnList(key);
             list.push({ type: 'image', dataUrl: durl, x: 0.12, y: 0.14, w: 0.28, aspect: aspect });
             if (typeof pushHistory === 'function') pushHistory();
@@ -8534,11 +9052,105 @@ function _dsAddArrow(kind) {
     const desc = _dsPages[_dsIndex]; const key = _deckPageKey(desc);
     if (!key) { showInfoModal('Not available here', 'This page type doesn\u2019t support arrows.'); return; }
     const list = _dsAnnList(key);
-    list.push({ type: (kind === 'elbow' ? 'elbow' : 'arrow'), x1: 0.32, y1: 0.5, x2: 0.6, y2: 0.4, color: '#c0392b', weight: 2 });
+    list.push({ type: (kind === 'elbow' ? 'elbow' : 'arrow'), x1: 0.32, y1: 0.5, x2: 0.6, y2: 0.4, color: '#c0392b', weight: 1.4 });
     if (typeof pushHistory === 'function') pushHistory();
     if (typeof scheduleAutosave === 'function') scheduleAutosave();
     _dsSelectAnnot(key, list.length - 1);
     _dsRenderRail();
+}
+function _dsAddShape(shape) {
+    if (_dsActiveTab !== 'pages') return;
+    const desc = _dsPages[_dsIndex]; const key = _deckPageKey(desc);
+    if (!key) { showInfoModal('Not available here', 'This page type doesn\u2019t support shapes.'); return; }
+    const list = _dsAnnList(key);
+    list.push({ type: 'shape', shape: (shape === 'ellipse' ? 'ellipse' : 'rect'), x: 0.18, y: 0.18, w: 0.26, h: 0.2, fill: '#d8d8de', dataUrl: null, aspect: 1.33, zoom: 1, panX: 0, panY: 0, shadow: false });
+    if (typeof pushHistory === 'function') pushHistory();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    _dsSelectAnnot(key, list.length - 1);
+    _dsRenderRail();
+}
+let _dsFillShapeMode = false;
+function _dsAddTextSmart() { if (_dsCurrentEditablePage()) { try { addMoodboardText(); } catch (e) {} } else { _dsAddTextBox(); } }
+function _dsAddImageSmart() { if (_dsCurrentEditablePage()) { const fi = document.getElementById('moodboardFile'); if (fi) fi.click(); } else { _dsAddImageBox(); } }
+function _dsAddArrowSmart(kind) { if (_dsCurrentEditablePage()) { try { if (kind === 'elbow') addMoodboardElbow(); else addMoodboardArrow(); } catch (e) {} } else { _dsAddArrow(kind); } }
+function _dsAddArtworkSmart() { if (_dsCurrentEditablePage() && typeof _mbArtPickerOpen === 'function') _mbArtPickerOpen(); }
+function _dsClearMbSel() { if (typeof _mbSelected !== 'undefined' && (_mbSelected >= 0 || (_mbSel && _mbSel.length)) && _mbActiveCanvasId === 'dsLayoutCanvas') { _mbDeselectAll(); try { renderMoodboardCanvas(); } catch (e) {} } }
+function _dsFillShapeWithImage() {
+    const a = _dsCurrentAnnot(); if (!a || a.type !== 'shape') return;
+    _dsFillShapeMode = true;
+    const fi = document.getElementById('dsAnnImageFile'); if (fi) fi.click();
+}
+function _dsAnnFit() { _dsOpenFitMenu(); }
+function _dsImageTarget() {
+    if (_dsCurrentEditablePage() && typeof _mbSelEl === 'function' && typeof _mbSelected !== 'undefined' && _mbSelected >= 0) { const el = _mbSelEl(); if (el && _elType(el) === 'image') return { kind: 'mb', el: el, anchor: 'dsMbFit' }; }
+    const a = _dsCurrentAnnot(); if (a && (a.type === 'shape' || a.type === 'image') && a.dataUrl) return { kind: 'ann', el: a, anchor: 'dsAnnFit' };
+    return null;
+}
+function _dsOpenFitMenu() {
+    const t = _dsImageTarget(); if (!t) return;
+    _dsCloseFitMenu();
+    const btn = document.getElementById(t.anchor);
+    const m = document.createElement('div'); m.id = 'dsFitMenu';
+    m.style.cssText = 'position:fixed; z-index:100000; background:var(--bg-panel); border:1px solid var(--border-color); border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,0.4); padding:5px; min-width:220px;';
+    const r = btn ? btn.getBoundingClientRect() : { left: 200, bottom: 80 };
+    m.style.left = Math.round(r.left) + 'px'; m.style.top = Math.round((r.bottom || 80) + 6) + 'px';
+    [['Fill frame proportionally', 'fill'], ['Fit content proportionally', 'contain'], ['Fit content to frame', 'stretch'], ['Fit frame to content', 'frame'], ['Center content', 'center']].forEach(p => {
+        const b = document.createElement('button'); b.textContent = p[0]; b.style.cssText = 'display:block; width:100%; text-align:left; background:transparent; border:none; border-radius:5px; padding:8px 10px; cursor:pointer; color:var(--text-main); font-size:0.74rem;';
+        b.onmouseenter = () => b.style.background = 'var(--bg-input)'; b.onmouseleave = () => b.style.background = 'transparent';
+        b.onclick = () => { _dsShapeFitOp(p[1]); _dsCloseFitMenu(); }; m.appendChild(b);
+    });
+    document.body.appendChild(m);
+    setTimeout(() => document.addEventListener('mousedown', _dsFitMenuOutside), 0);
+}
+function _dsFitMenuOutside(e) { const m = document.getElementById('dsFitMenu'); if (m && !m.contains(e.target)) _dsCloseFitMenu(); }
+function _dsCloseFitMenu() { const m = document.getElementById('dsFitMenu'); if (m) m.remove(); document.removeEventListener('mousedown', _dsFitMenuOutside); }
+function _dsShapeFitOp(op) {
+    const t = _dsImageTarget(); if (!t) return; const a = t.el;
+    if (op === 'fill') { a.fit = 'cover'; a.zoom = 1; a.panX = 0; a.panY = 0; }
+    else if (op === 'contain') { a.fit = 'contain'; a.zoom = 1; a.panX = 0; a.panY = 0; }
+    else if (op === 'stretch') { a.fit = 'stretch'; }
+    else if (op === 'center') { a.panX = 0; a.panY = 0; }
+    else if (op === 'frame') { const asp = a.aspect || 1.333; a.h = Math.max(0.03, Math.min(1, (a.w * 936 / asp) / 540)); if (a.fit === 'stretch') a.fit = 'cover'; }
+    if (typeof pushHistory === 'function') pushHistory();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    if (t.kind === 'mb') { try { renderMoodboardCanvas(); } catch (e) {} }
+    _dsRenderCenter(); _dsRenderRail();
+}
+function _dsShapeDropImage(e, key, idx) {
+    e.preventDefault(); e.stopPropagation();
+    const list = (editorialContent.annotations || {})[key]; const a = list && list[idx];
+    const file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    if (!a || !file || !/^image\//.test(file.type)) { _dsRenderCenter(); return; }
+    _dsReadImageToShape(file, a);
+}
+function _dsReadImageToShape(file, a) {
+    const reader = new FileReader();
+    reader.onload = () => {
+        const im = new Image();
+        im.onload = () => {
+            const maxEdge = 1400; let dw = im.naturalWidth || 1, dh = im.naturalHeight || 1; const sc = Math.min(1, maxEdge / Math.max(dw, dh)); dw = Math.max(1, Math.round(dw * sc)); dh = Math.max(1, Math.round(dh * sc));
+            const cnv = document.createElement('canvas'); cnv.width = dw; cnv.height = dh; cnv.getContext('2d').drawImage(im, 0, 0, dw, dh);
+            let durl; try { durl = /png/i.test(file.type) ? cnv.toDataURL('image/png') : cnv.toDataURL('image/jpeg', 0.85); } catch (e) { durl = reader.result; }
+            a.dataUrl = durl; a.aspect = (im.naturalWidth || 1) / (im.naturalHeight || 1); a.zoom = 1; a.panX = 0; a.panY = 0;
+            if (typeof pushHistory === 'function') pushHistory(); if (typeof scheduleAutosave === 'function') scheduleAutosave();
+            _dsRenderCenter(); _dsRenderRail(); _dsSyncToolbar();
+        };
+        im.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+}
+function _dsShapePanDown(e, key, idx, bw, bh) {
+    e.preventDefault(); e.stopPropagation();
+    const list = (editorialContent.annotations || {})[key]; const a = list && list[idx]; if (!a) return;
+    const cr = _coverRect(bw, bh, a.aspect || 1.33, a.zoom || 1, a.panX || 0, a.panY || 0);
+    const sx = e.clientX, sy = e.clientY, opx = a.panX || 0, opy = a.panY || 0;
+    const mv = (ev) => {
+        if (cr.slackX > 0) a.panX = Math.max(-1, Math.min(1, opx + (ev.clientX - sx) * 2 / cr.slackX));
+        if (cr.slackY > 0) a.panY = Math.max(-1, Math.min(1, opy + (ev.clientY - sy) * 2 / cr.slackY));
+        _dsRenderCenter();
+    };
+    const up = () => { document.removeEventListener('mousemove', mv); document.removeEventListener('mouseup', up); if (typeof scheduleAutosave === 'function') scheduleAutosave(); };
+    document.addEventListener('mousemove', mv); document.addEventListener('mouseup', up);
 }
 function _dsAddTextBox() {
     if (_dsActiveTab !== 'pages') return;
@@ -8639,8 +9251,57 @@ function _dsOpenSettingsMenu(ev) {
         }
     });
 }
-function _dsAnnCycleAlign() { const a = _dsCurrentAnnot(); if (!a || a.type === 'image') return; const order = ['left', 'center', 'right']; const i = order.indexOf(a.align || 'left'); a.align = order[(i + 1) % 3]; if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsSyncToolbar(); _dsRenderCenter(); _dsRenderRail(); }
-function _dsAnnSet(prop, val) { const a = _dsCurrentAnnot(); if (!a) return; a[prop] = val; if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsSyncToolbar(); _dsRenderCenter(); _dsRenderRail(); }
+function _dsAnnCycleAlign() { _dsOpenAlignMenu(); }
+function _dsAlignTarget() {
+    if (_dsCurrentEditablePage() && typeof _mbSelEl === 'function' && typeof _mbSelected !== 'undefined' && _mbSelected >= 0) { const el = _mbSelEl(); if (el && _elType(el) === 'text') return { kind: 'mb', el: el }; }
+    const a = _dsCurrentAnnot(); if (a && a.type !== 'image' && a.type !== 'arrow' && a.type !== 'elbow' && a.type !== 'mockup' && a.type !== 'shape') return { kind: 'ann', el: a };
+    return null;
+}
+function _dsAlignApply(val) { const t = _dsAlignTarget(); if (!t) return; t.el.align = val; if (typeof scheduleAutosave === 'function') scheduleAutosave(); if (t.kind === 'mb') { try { renderMoodboardCanvas(); } catch (e) {} } _dsRenderCenter(); _dsRenderRail(); _dsSyncToolbar(); }
+function _dsOpenAlignMenu() {
+    const t = _dsAlignTarget(); if (!t) return; _dsCloseAlignMenu();
+    const btn = document.getElementById(t.kind === 'mb' ? 'dsMbAlign' : 'dsAnnAlignBtn');
+    const m = document.createElement('div'); m.id = 'dsAlignMenu';
+    m.style.cssText = 'position:fixed; z-index:100000; background:var(--bg-panel); border:1px solid var(--border-color); border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,0.4); padding:5px; min-width:240px;';
+    const r = btn ? btn.getBoundingClientRect() : { left: 200, bottom: 80 };
+    m.style.left = Math.round(r.left) + 'px'; m.style.top = Math.round((r.bottom || 80) + 6) + 'px';
+    [['Align left', 'left'], ['Align center', 'center'], ['Align right', 'right'], ['Justify · last line left', 'justify'], ['Justify · last line center', 'justify-center'], ['Justify all lines', 'justify-all']].forEach(p => {
+        const b = document.createElement('button'); b.textContent = p[0];
+        const onSel = (t.el.align || 'left') === p[1];
+        b.style.cssText = 'display:block; width:100%; text-align:left; background:' + (onSel ? 'var(--bg-input)' : 'transparent') + '; border:none; border-radius:5px; padding:8px 10px; cursor:pointer; color:var(--text-main); font-size:0.74rem;';
+        b.onmouseenter = () => b.style.background = 'var(--bg-input)'; b.onmouseleave = () => b.style.background = (onSel ? 'var(--bg-input)' : 'transparent');
+        b.onclick = () => { _dsAlignApply(p[1]); _dsCloseAlignMenu(); }; m.appendChild(b);
+    });
+    document.body.appendChild(m); setTimeout(() => document.addEventListener('mousedown', _dsAlignMenuOutside), 0);
+}
+function _dsAlignMenuOutside(e) { const m = document.getElementById('dsAlignMenu'); if (m && !m.contains(e.target)) _dsCloseAlignMenu(); }
+function _dsCloseAlignMenu() { const m = document.getElementById('dsAlignMenu'); if (m) m.remove(); document.removeEventListener('mousedown', _dsAlignMenuOutside); }
+function _dsAnnSet(prop, val) { const a = _dsCurrentAnnot(); if (!a) return; if (a.type === 'shape' && prop === 'color') { a.fill = val; a.dataUrl = null; } else { a[prop] = val; } if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsSyncToolbar(); _dsRenderCenter(); _dsRenderRail(); }
+function _dsAnnSetWeight(v) { const a = _dsCurrentAnnot(); if (!a) return; a.weight = parseInt(v, 10) || 400; a.bold = a.weight >= 600; if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsSyncToolbar(); _dsRenderCenter(); _dsRenderRail(); }
+function _dsAnnHandles(box, a, w, hh) {
+    const dirs = ['nw', 'n', 'ne', 'e', 'se', 's', 'sw', 'w'];
+    const pos = { nw: 'left:-6px;top:-6px;cursor:nwse-resize;', n: 'left:calc(50% - 6px);top:-6px;cursor:ns-resize;', ne: 'right:-6px;top:-6px;cursor:nesw-resize;', e: 'right:-6px;top:calc(50% - 6px);cursor:ew-resize;', se: 'right:-6px;bottom:-6px;cursor:nwse-resize;', s: 'left:calc(50% - 6px);bottom:-6px;cursor:ns-resize;', sw: 'left:-6px;bottom:-6px;cursor:nesw-resize;', w: 'left:-6px;top:calc(50% - 6px);cursor:ew-resize;' };
+    dirs.forEach(d => {
+        const h = document.createElement('div');
+        h.style.cssText = 'position:absolute; width:12px; height:12px; background:#6a6aff; border:2px solid #fff; border-radius:2px; z-index:22; ' + pos[d];
+        h.onmousedown = (e) => {
+            e.preventDefault(); e.stopPropagation();
+            const sx = e.clientX, sy = e.clientY, ox = a.x || 0, oy = a.y || 0, ow = a.w || 0.25, oh = a.h || 0.18;
+            const mv = (ev) => {
+                const dx = (ev.clientX - sx) / w, dy = (ev.clientY - sy) / hh; let x = ox, y = oy, ww = ow, hgt = oh;
+                if (d.indexOf('e') >= 0) ww = ow + dx; if (d.indexOf('w') >= 0) { ww = ow - dx; x = ox + dx; }
+                if (d.indexOf('s') >= 0) hgt = oh + dy; if (d.indexOf('n') >= 0) { hgt = oh - dy; y = oy + dy; }
+                if (ev.shiftKey && d.length === 2 && ow && oh) { const k = Math.max(ww / ow, hgt / oh); ww = ow * k; hgt = oh * k; if (d.indexOf('w') >= 0) x = ox + (ow - ww); if (d.indexOf('n') >= 0) y = oy + (oh - hgt); }
+                a.w = Math.max(0.03, ww); a.h = Math.max(0.03, hgt); a.x = x; a.y = y; _dsRenderCenter();
+            };
+            const up = () => { document.removeEventListener('mousemove', mv); document.removeEventListener('mouseup', up); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderRail(); };
+            document.addEventListener('mousemove', mv); document.addEventListener('mouseup', up);
+        };
+        box.appendChild(h);
+    });
+}
+function _dsAnnToFront() { const a = _dsCurrentAnnot(); if (!a) return; const list = (editorialContent.annotations || {})[_dsSelKey]; if (!list) return; const i = _dsSelIdx; if (i < 0 || i >= list.length) return; list.splice(i, 1); list.push(a); _dsSelIdx = list.length - 1; if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderCenter(); _dsRenderRail(); }
+function _dsAnnToBack() { const a = _dsCurrentAnnot(); if (!a) return; const list = (editorialContent.annotations || {})[_dsSelKey]; if (!list) return; const i = _dsSelIdx; if (i < 0 || i >= list.length) return; list.splice(i, 1); list.unshift(a); _dsSelIdx = 0; if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderCenter(); _dsRenderRail(); }
 function _dsAnnBump(d) { const a = _dsCurrentAnnot(); if (!a) return; a.size = Math.max(0.012, Math.min(0.2, (a.size || 0.03) + d * 0.004)); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsSyncToolbar(); _dsRenderCenter(); _dsRenderRail(); }
 function _dsAnnToggle(prop) { const a = _dsCurrentAnnot(); if (!a) return; a[prop] = !a[prop]; if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsSyncToolbar(); _dsRenderCenter(); _dsRenderRail(); }
 function _dsDeleteAnnot() { if (_dsSelKey == null || _dsSelIdx < 0) return; const l = (editorialContent.annotations || {})[_dsSelKey]; if (l) l.splice(_dsSelIdx, 1); _dsSelKey = null; _dsSelIdx = -1; if (typeof pushHistory === 'function') pushHistory(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsSyncToolbar(); _dsRenderCenter(); _dsRenderRail(); }
@@ -8815,11 +9476,55 @@ async function renderSpecPageCanvas(desc, onProgress) {
     if (onProgress) onProgress(40);
     return await rec.render(2, onProgress);
 }
+async function renderDeckPageCanvas(desc, onProgress) {
+    if (!desc) return null;
+    if (desc.kind === 'spec') return await renderSpecPageCanvas(desc, onProgress);
+    const PW = 936, PH = 540;
+    const rec = new CanvasPdfRec(PW, PH);
+    const logos = {};
+    const mm = (typeof window !== 'undefined' && window._specPdfMeta) ? window._specPdfMeta : {};
+    const g = (id) => { const el = document.getElementById(id); return el ? (el.value || '').trim() : ''; };
+    const meta = { code: g('specPdfCode') || mm.code || '', version: g('specPdfVersion') || mm.version || '', location: g('specPdfLocation') || mm.location || '' };
+    try { _curFooter = _resolveFooter(_deckPageKey(desc)); } catch (e) { _curFooter = { text: 'dark' }; }
+    const loadTiles = async (els) => { const t = (els || []).map(x => Object.assign({}, x, { _img: null })); for (let i = 0; i < (els || []).length; i++) { if ((els[i].type || 'image') === 'image' && els[i].img) { try { t[i]._img = await _loadImg(els[i].img); } catch (e) {} } } return t; };
+    if (onProgress) onProgress(15);
+    try {
+        if (desc.kind === 'layout' && desc.page) {
+            const tiles = await loadTiles(desc.page.elements);
+            _drawMoodboardPage(rec, logos, 1, meta, tiles, desc.page.title || '', desc.page.type || 'moodboard');
+        } else if (desc.kind === 'fixed' && desc.page) {
+            const els = desc.page.elements || [];
+            if (els.length) { const tiles = await loadTiles(els); const ty = desc.fixed === 'cover' ? 'breaker' : (desc.fixed === 'slogan' ? 'slogan' : 'narrative'); _drawMoodboardPage(rec, logos, 1, meta, tiles, '', ty); }
+            else if (desc.fixed === 'cover') _drawCoverPage(rec, logos);
+            else if (desc.fixed === 'slogan') _drawSloganPage(rec, logos, 1, meta);
+            else return null;
+        } else if (desc.kind === 'card') {
+            if (desc.type === 'timeline') _drawTimelinePage(rec, logos, 1, meta, editorialContent.timeline);
+            else if (desc.type === 'frameRec') { const frames = (typeof _collectProjectFrames === 'function') ? await _collectProjectFrames() : []; _drawFrameRecPage(rec, logos, 1, meta, (frames || []).slice(0, 6)); }
+            else return null;
+        } else return null;
+    } catch (e) { console.error('preview build failed', e); return null; }
+    if (onProgress) onProgress(45);
+    return await rec.render(2, onProgress);
+}
+function _dsShowPreviewModal(url, title) {
+    let m = document.getElementById('_dsPreviewModal'); if (m) m.remove();
+    m = document.createElement('div'); m.id = '_dsPreviewModal';
+    m.style.cssText = 'position:fixed; inset:0; z-index:100002; background:rgba(10,10,12,0.88); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:28px; gap:14px;';
+    const cap = document.createElement('div'); cap.textContent = (title || 'Page') + ' \u2014 exact export preview'; cap.style.cssText = 'color:#fff; font-size:0.8rem;';
+    const img = document.createElement('img'); img.src = url; img.style.cssText = 'max-width:92vw; max-height:78vh; box-shadow:0 12px 48px rgba(0,0,0,0.6); border-radius:4px; background:#fff;';
+    const close = document.createElement('button'); close.textContent = 'Close'; close.className = 'action-btn'; close.style.cssText = 'padding:8px 20px;'; close.onclick = () => m.remove();
+    m.appendChild(cap); m.appendChild(img); m.appendChild(close);
+    m.onclick = (e) => { if (e.target === m) m.remove(); };
+    document.body.appendChild(m);
+}
 async function _dsBuildPage(silent) {
     const desc = _dsPages[_dsIndex];
-    if (!desc || desc.kind !== 'spec') { if (!silent) showInfoModal('Build preview', 'Select a spec page, then Preview to render an exact preview of how it will export.'); return; }
-    const _bt = desc._specTpl || _specTplResolve(desc._ovKey || (desc.row && desc.row.id) || '');
-    if (SPEC_TEMPLATES[_bt] && SPEC_TEMPLATES[_bt].freeform) { if (!silent) showInfoModal('Custom layout', 'Custom pages already show an exact live preview \u2014 what you place is what exports.'); return; }
+    if (!desc) return;
+    if (desc.kind === 'spec') {
+        const _bt = desc._specTpl || _specTplResolve(desc._ovKey || (desc.row && desc.row.id) || '');
+        if (SPEC_TEMPLATES[_bt] && SPEC_TEMPLATES[_bt].freeform) { if (!silent) showInfoModal('Custom layout', 'Custom pages already show an exact live preview \u2014 what you place is what exports.'); return; }
+    }
     const key = _deckPageKey(desc);
     const c = document.getElementById('dsCenter');
     let ov = null;
@@ -8831,13 +9536,18 @@ async function _dsBuildPage(silent) {
     }
     const setPct = (p) => { if (silent) return; const b = document.getElementById('dsBuildBar'); const t = document.getElementById('dsBuildPct'); if (b) b.style.width = Math.max(0, Math.min(100, p)) + '%'; if (t) t.textContent = Math.round(Math.max(0, Math.min(100, p))) + '%'; };
     setPct(5);
-    let ok = false;
+    let ok = false, url = null;
     try {
-        const cv = await renderSpecPageCanvas(desc, setPct);
-        if (cv) { _dsBuilt[key] = cv.toDataURL('image/jpeg', 0.92); ok = true; }
+        const cv = await renderDeckPageCanvas(desc, setPct);
+        if (cv) { url = cv.toDataURL('image/jpeg', 0.92); ok = true; }
     } catch (e) { console.error('build failed', e); }
     if (ov && ov.parentElement) ov.parentElement.removeChild(ov);
-    if (!ok && !silent) showInfoModal('Live preview', 'Accurate build currently covers Frame right/left, Centered hero, Set and Install guide. Classic still uses the live preview, which already bakes in real artwork.');
+    if (ok) {
+        if (desc.kind === 'spec') { _dsBuilt[_deckPageKey(desc)] = url; }
+        else if (!silent) { _dsShowPreviewModal(url, desc.title || desc.type); }
+    } else if (!silent) {
+        showInfoModal('Live preview', 'This page already shows a live preview in the editor, or its exact build isn\u2019t available for this page type yet.');
+    }
     _dsPreviewQueued = false;
     _dsRenderCenter();
     _dsSyncBuildBtn();
@@ -8984,22 +9694,50 @@ function _dsQueuePreview() {
 function _dsSyncBuildBtn() {
     const b = document.getElementById('dsBuildBtn'); if (!b) return;
     const desc = _dsPages[_dsIndex]; const isSpec = !!(desc && desc.kind === 'spec');
+    const previewable = !!(desc && (desc.kind === 'spec' || desc.kind === 'layout' || desc.kind === 'fixed' || desc.kind === 'card'));
     const built = isSpec && _dsBuilt[_deckPageKey(desc)];
-    b.style.opacity = isSpec ? '1' : '0.4'; b.style.pointerEvents = isSpec ? 'auto' : 'none';
-    if (_dsPreviewQueued && isSpec) { b.textContent = 'Updating…'; b.style.background = '#c08a2e'; b.style.color = '#fff'; }
-    else { b.textContent = built ? 'Refresh' : 'Preview'; b.style.background = built ? '#1a7f37' : 'var(--bg-input)'; b.style.color = built ? '#fff' : 'var(--text-main)'; }
+    b.style.opacity = previewable ? '1' : '0.4'; b.style.pointerEvents = previewable ? 'auto' : 'none';
+    if (_dsPreviewQueued && isSpec) { b.style.background = '#c08a2e'; b.style.color = '#fff'; b.title = 'Updating preview…'; }
+    else { b.style.background = built ? '#1a7f37' : 'var(--bg-input)'; b.style.color = built ? '#fff' : 'var(--text-main)'; b.title = built ? 'Refresh the exact export preview' : 'Preview — render an exact preview of how this page exports'; }
 }
 function _dsRenderCenter() {
     const c = document.getElementById('dsCenter'); if (!c) return;
     c.innerHTML = '';
     _dsBakeToken++;
     const desc = _dsPages[_dsIndex]; if (!desc) return;
+    _mbActiveCanvasId = 'moodboardCanvas'; _mbEditTarget = null;   // default; layout pages override below
     if (_dsSelKey && _dsSelKey !== _deckPageKey(desc)) { _dsSelKey = null; _dsSelIdx = -1; _dsSyncToolbar(); }
     let availW = c.clientWidth - 48; if (!availW || availW < 200) availW = 760;
     let availH = c.clientHeight - 48; if (!availH || availH < 120) availH = 460;
     let w = availW, hh = w * 540 / 936;
     if (hh > availH) { hh = availH; w = hh * 936 / 540; }
     if (desc.kind === 'floorplan') { _dsRenderCenterFloorplan(desc, c, Math.round(w), Math.round(hh)); return; }
+    let _editPage = null, _editLabel = null, _editKey;
+    if (desc.kind === 'layout' && desc.page) { _editPage = desc.page; _editKey = (typeof LAYOUT_TEMPLATES !== 'undefined' && LAYOUT_TEMPLATES[desc.page.type]) ? desc.page.type : undefined; _editLabel = desc.page.title || desc.page.type; }
+    else if (desc.kind === 'fixed') { try { const r = _fixedPageFor(desc.fixed); if (r && r.page) { _editPage = r.page; _editKey = r.key; _editLabel = r.label; } } catch (e) {} }
+    if (_editPage) {
+        // Fully editable layout canvas right here in the center (same engine as the
+        // layout editor): double-click titles/paragraphs to edit, drag to move,
+        // corner to resize, drop images, etc. No more bouncing to a separate window.
+        _mbEditTarget = { page: _editPage, key: _editKey, label: _editLabel };
+        _mbActiveCanvasId = 'dsLayoutCanvas'; _mbSelected = -1; _mbTextEditing = false;
+        const page = document.createElement('div');
+        page.style.cssText = 'position:relative; width:' + Math.round(w) + 'px; height:' + Math.round(hh) + 'px; background:#fff; box-shadow:0 8px 30px rgba(0,0,0,0.35); border-radius:2px; overflow:hidden;';
+        const cv = document.createElement('div'); cv.id = 'dsLayoutCanvas'; cv.style.cssText = 'position:absolute; inset:0; background:#fff;';
+        page.appendChild(cv);
+        c.appendChild(page);
+        try { renderMoodboardCanvas(); } catch (e) {}
+        cv.addEventListener('dblclick', (e) => {
+            const t = e.target.closest && e.target.closest('[data-idx]'); if (!t) return;
+            const idx = parseInt(t.dataset.idx, 10); if (isNaN(idx)) return;
+            const el = (_mbEls() || [])[idx]; if (el && _elType(el) === 'text') { e.preventDefault(); e.stopPropagation(); _mbTextEditing = false; _mbSelected = idx; _mbBeginTextEdit(t, idx); }
+        });
+        _dsAddStamp(page, Math.round(w), Math.round(hh), desc);
+        _dsAddGuides(page, Math.round(w), Math.round(hh));
+        _dsRenderAnnots(page, desc, Math.round(w), Math.round(hh));
+        _dsSyncBuildBtn();
+        return;
+    }
     const page = document.createElement('div');
     page.style.cssText = 'position:relative; width:' + Math.round(w) + 'px; height:' + Math.round(hh) + 'px; background:#fff; box-shadow:0 8px 30px rgba(0,0,0,0.35); border-radius:2px; overflow:hidden;';
     const _pk = _deckPageKey(desc);
@@ -9125,6 +9863,92 @@ function _dsApplyTemplate(els, type) {
     if (typeof pushHistory === 'function') pushHistory();
     if (typeof scheduleAutosave === 'function') scheduleAutosave();
     _dsRefresh();
+}
+function _dsLayoutStyleControls(t) {
+    const wrap = document.createElement('div'); wrap.style.cssText = 'border:1px solid var(--border-color); border-radius:6px; padding:10px; margin-bottom:10px; background:var(--bg-input);';
+    const lbl = document.createElement('div'); lbl.textContent = 'Edit this page'; lbl.style.cssText = 'font-size:0.7rem; font-weight:700; color:var(--text-main); margin-bottom:8px;'; wrap.appendChild(lbl);
+    const addRow = document.createElement('div'); addRow.style.cssText = 'display:flex; flex-wrap:wrap; gap:5px; margin-bottom:8px;';
+    const ab = (label, fn) => { const b = document.createElement('button'); b.textContent = label; b.className = 'action-btn btn-secondary'; b.style.cssText = 'width:auto; height:28px; padding:0 9px; font-size:0.64rem;'; b.onclick = fn; addRow.appendChild(b); };
+    ab('+ Text', () => { addMoodboardText(); });
+    ab('+ Image', () => { const fi = document.getElementById('moodboardFile'); if (fi) fi.click(); });
+    ab('+ Artwork', () => { if (typeof _mbArtPickerOpen === 'function') _mbArtPickerOpen(); });
+    ab('Arrow', () => { addMoodboardArrow(); });
+    ab('Elbow', () => { addMoodboardElbow(); });
+    wrap.appendChild(addRow);
+    const sel = document.createElement('div');
+    const tc = document.createElement('div'); tc.id = 'dsLayTextCtl'; tc.style.cssText = 'display:none; flex-wrap:wrap; gap:6px; align-items:center; margin-bottom:8px;';
+    const font = document.createElement('select'); font.id = 'dsLayFont'; font.style.cssText = 'flex:1 1 100%; height:28px; font-size:0.66rem; background:var(--bg-panel); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px;';
+    [['display', 'Druk (display)'], ['serif', 'Messina (serif)'], ['sans', 'Helvetica (sans)']].forEach(p => { const o = document.createElement('option'); o.value = p[0]; o.textContent = p[1]; font.appendChild(o); });
+    font.onchange = () => _mbSetFont(font.value); tc.appendChild(font);
+    const sizeWrap = document.createElement('div'); sizeWrap.style.cssText = 'display:flex; align-items:center; gap:4px;';
+    const am = document.createElement('button'); am.textContent = 'A\u2212'; am.className = 'action-btn btn-secondary'; am.style.cssText = 'width:30px; height:28px; padding:0; font-size:0.7rem;'; am.onclick = () => _mbNudgeSize(-0.005);
+    const sv = document.createElement('span'); sv.id = 'dsLaySizeVal'; sv.style.cssText = 'font-size:0.66rem; color:var(--text-muted); min-width:26px; text-align:center;';
+    const ap = document.createElement('button'); ap.textContent = 'A+'; ap.className = 'action-btn btn-secondary'; ap.style.cssText = 'width:30px; height:28px; padding:0; font-size:0.7rem;'; ap.onclick = () => _mbNudgeSize(0.005);
+    sizeWrap.appendChild(am); sizeWrap.appendChild(sv); sizeWrap.appendChild(ap); tc.appendChild(sizeWrap);
+    const col = document.createElement('input'); col.type = 'color'; col.id = 'dsLayColor'; col.style.cssText = 'width:30px; height:28px; border:1px solid var(--border-color); border-radius:4px; background:var(--bg-panel); cursor:pointer; padding:1px;'; col.onchange = () => _mbSetTextColor(col.value); tc.appendChild(col);
+    sel.appendChild(tc);
+    const lr = document.createElement('div'); lr.id = 'dsLayActions'; lr.style.cssText = 'display:none; flex-wrap:wrap; gap:5px;';
+    const fr = document.createElement('button'); fr.textContent = 'Front'; fr.className = 'action-btn btn-secondary'; fr.style.cssText = 'width:auto; height:28px; padding:0 9px; font-size:0.64rem;'; fr.onclick = () => _mbToFront();
+    const bk = document.createElement('button'); bk.textContent = 'Back'; bk.className = 'action-btn btn-secondary'; bk.style.cssText = 'width:auto; height:28px; padding:0 9px; font-size:0.64rem;'; bk.onclick = () => _mbToBack();
+    const dl = document.createElement('button'); dl.textContent = 'Delete'; dl.className = 'action-btn btn-secondary'; dl.style.cssText = 'width:auto; height:28px; padding:0 9px; font-size:0.64rem;'; dl.onclick = () => { _mbDelete(); };
+    lr.appendChild(fr); lr.appendChild(bk); lr.appendChild(dl); sel.appendChild(lr);
+    const hint = document.createElement('div'); hint.id = 'dsLayHint'; hint.style.cssText = 'font-size:0.62rem; color:var(--text-muted); margin-top:4px;'; hint.textContent = 'Click an element to style it \u00b7 double-click text to edit.';
+    sel.appendChild(hint);
+    wrap.appendChild(sel);
+    t.appendChild(wrap);
+    _dsUpdateLayoutStyleBar();
+}
+function _dsUpdateLayoutStyleBar() {
+    const el = (typeof _mbSelEl === 'function') ? _mbSelEl() : null;
+    const ty = el ? _elType(el) : null;
+    const tc = document.getElementById('dsLayTextCtl'), lr = document.getElementById('dsLayActions'), hint = document.getElementById('dsLayHint');
+    if (!tc && !lr) return;
+    if (lr) lr.style.display = el ? 'flex' : 'none';
+    if (tc) tc.style.display = (ty === 'text') ? 'flex' : 'none';
+    if (hint) hint.style.display = el ? 'none' : 'block';
+    if (ty === 'text') {
+        const f = document.getElementById('dsLayFont'); if (f) f.value = el.font || 'serif';
+        const sv = document.getElementById('dsLaySizeVal'); if (sv) sv.textContent = Math.round((el.size || 0.045) * 1000);
+        const c = document.getElementById('dsLayColor'); if (c) c.value = el.color || '#222222';
+    }
+}
+function _dsPageChromeControls(t, desc) {
+    if (!desc) return;
+    const key = _deckPageKey(desc); if (!key) return;
+    const wrap = document.createElement('div'); wrap.style.cssText = 'border:1px solid var(--border-color); border-radius:6px; padding:10px; margin-bottom:10px; background:var(--bg-input);';
+    // Rename (layout pages)
+    if (desc.kind === 'layout' && desc.page) {
+        const lab = document.createElement('div'); lab.textContent = 'Page name'; lab.style.cssText = 'font-size:0.62rem; color:var(--text-muted); margin-bottom:3px;'; wrap.appendChild(lab);
+        const inp = document.createElement('input'); inp.type = 'text'; inp.value = desc.page.title || ''; inp.placeholder = 'Page name';
+        inp.style.cssText = 'width:100%; height:28px; font-size:0.72rem; margin-bottom:10px; box-sizing:border-box; padding:0 7px; background:var(--bg-panel); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px;';
+        inp.onchange = () => { desc.page.title = inp.value; if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderRail(); };
+        wrap.appendChild(inp);
+    }
+    // Footer / rights for this page
+    editorialContent.pageFooters = editorialContent.pageFooters || {};
+    const cur = editorialContent.pageFooters[key] || {};
+    const set = (k, v) => { editorialContent.pageFooters[key] = Object.assign({}, editorialContent.pageFooters[key] || {}, { [k]: v }); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderTools(); };
+    const ftl = document.createElement('div'); ftl.textContent = 'Footer (this page)'; ftl.style.cssText = 'font-size:0.62rem; color:var(--text-muted); margin-bottom:5px;'; wrap.appendChild(ftl);
+    const seg = document.createElement('div'); seg.style.cssText = 'display:flex; gap:4px; margin-bottom:8px;';
+    [['auto', 'Auto'], ['dark', 'Dark text'], ['light', 'Light text']].forEach(o => {
+        const on = (cur.text || 'auto') === o[0];
+        const b = document.createElement('button'); b.textContent = o[1]; b.className = 'action-btn btn-secondary';
+        b.style.cssText = 'flex:1; height:26px; padding:0; font-size:0.58rem; ' + (on ? 'background:#6a6aff; color:#fff;' : '');
+        b.title = o[0] === 'light' ? 'White footer + logo (use on dark / full-bleed image pages)' : o[0] === 'dark' ? 'Dark footer + logo (use on light pages)' : 'Follow the deck default';
+        b.onclick = () => set('text', o[0]); seg.appendChild(b);
+    });
+    wrap.appendChild(seg);
+    const chk = (label, k) => {
+        const row = document.createElement('label'); row.style.cssText = 'display:flex; align-items:center; gap:6px; font-size:0.66rem; color:var(--text-main); margin-bottom:5px; cursor:pointer;';
+        const c = document.createElement('input'); c.type = 'checkbox'; c.checked = !!cur[k]; c.onchange = () => set(k, c.checked);
+        row.appendChild(c); row.appendChild(document.createTextNode(label)); wrap.appendChild(row);
+    };
+    chk('Hide copyright line', 'hideCopyright');
+    chk('Hide Farmboy logo', 'hideLogo');
+    const deckBtn = document.createElement('button'); deckBtn.textContent = 'Apply footer to whole deck'; deckBtn.className = 'action-btn btn-secondary'; deckBtn.style.cssText = 'width:100%; height:26px; font-size:0.58rem; margin-top:4px;';
+    deckBtn.onclick = () => { const f = _resolveFooter(key); editorialContent.footer = { text: f.text, hideCopyright: f.hideCopyright, hideLogo: f.hideLogo }; if (typeof scheduleAutosave === 'function') scheduleAutosave(); showInfoModal && showInfoModal('Footer applied', 'These footer settings are now the deck default. Per-page overrides still win where set.'); };
+    wrap.appendChild(deckBtn);
+    t.appendChild(wrap);
 }
 function _dsRenderTools() {
     const t = document.getElementById('dsTools'); if (!t) return;
@@ -9339,34 +10163,51 @@ function _dsRenderTools() {
     }
     if (cat) {
         const lbl = document.createElement('div');
-        lbl.textContent = 'Templates — click to apply'; lbl.style.cssText = 'font-size:0.72rem; font-weight:700; color:var(--text-main); margin-bottom:8px;';
+        lbl.textContent = 'Templates — pick one, then Apply'; lbl.style.cssText = 'font-size:0.72rem; font-weight:700; color:var(--text-main); margin-bottom:8px;';
         t.appendChild(lbl);
         const grid = document.createElement('div');
-        grid.style.cssText = 'display:flex; flex-direction:column; gap:8px; margin-bottom:14px;';
+        grid.style.cssText = 'display:flex; flex-direction:column; gap:8px; margin-bottom:10px;';
         const cards = [];
         (LAYOUT_TEMPLATES[cat] || []).forEach(b => { try { cards.push({ name: b.name, els: b.els() }); } catch (e) {} });
         (editorialContent.templates || []).forEach(tp => { if ((tp.type || 'moodboard') === cat) cards.push({ name: tp.name || 'Saved', els: tp.elements || [] }); });
         if (typeof studioDefaults !== 'undefined') (studioDefaults.templates || []).forEach(tp => { if ((tp.type || 'moodboard') === cat) cards.push({ name: (tp.name || 'Studio') + ' · studio', els: tp.elements || [] }); });
         const cw = 244, chh = Math.round(cw * 540 / 936);
-        cards.forEach(card => {
+        cards.forEach((card, ci) => {
+            const selected = !!(_dsTplSel && _dsTplSel.cat === cat && _dsTplSel.ci === ci);
             const cell = document.createElement('div');
-            cell.style.cssText = 'cursor:pointer; border:1px solid var(--border-color); border-radius:5px; overflow:hidden; background:#fff;';
-            cell.title = 'Apply: ' + card.name;
-            cell.onmouseenter = () => { cell.style.borderColor = '#6a6aff'; };
-            cell.onmouseleave = () => { cell.style.borderColor = 'var(--border-color)'; };
-            cell.onclick = () => _dsApplyTemplate(card.els, cat);
+            cell.style.cssText = 'cursor:pointer; border:2px solid ' + (selected ? '#6a6aff' : 'var(--border-color)') + '; border-radius:5px; overflow:hidden; background:#fff;';
+            cell.title = 'Select: ' + card.name;
+            cell.onmouseenter = () => { if (!selected) cell.style.borderColor = '#9a9aff'; };
+            cell.onmouseleave = () => { if (!selected) cell.style.borderColor = 'var(--border-color)'; };
+            cell.onclick = () => { _dsTplSel = { cat: cat, ci: ci, els: card.els, name: card.name }; _dsRenderTools(); };
             const thumb = document.createElement('div');
             thumb.style.cssText = 'position:relative; width:100%; height:' + chh + 'px; background:#fff;';
             thumb.innerHTML = _mbThumbInner({ elements: card.els }, cw, chh);
             const nm = document.createElement('div');
-            nm.textContent = card.name; nm.style.cssText = 'font-size:0.64rem; color:var(--text-main); padding:4px 6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; border-top:1px solid var(--border-color);';
+            nm.textContent = card.name + (selected ? '  \u2713' : ''); nm.style.cssText = 'font-size:0.64rem; color:' + (selected ? '#6a6aff' : 'var(--text-main)') + '; padding:4px 6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; border-top:1px solid var(--border-color);';
             cell.appendChild(thumb); cell.appendChild(nm); grid.appendChild(cell);
         });
         if (!cards.length) { const e = document.createElement('p'); e.style.cssText = 'font-size:0.68rem; color:var(--text-muted);'; e.textContent = 'No templates for this page type yet.'; grid.appendChild(e); }
         t.appendChild(grid);
+        const applyBtn = document.createElement('button');
+        const armed = !!(_dsTplSel && _dsTplSel.cat === cat);
+        applyBtn.textContent = armed ? ('Apply \u201C' + _dsTplSel.name + '\u201D to this page') : 'Apply selected template';
+        applyBtn.className = armed ? 'action-btn' : 'action-btn btn-secondary';
+        applyBtn.disabled = !armed;
+        applyBtn.style.cssText = 'width:100%; height:34px; margin-bottom:14px; font-size:0.74rem; font-weight:700;' + (armed ? '' : ' opacity:0.5; cursor:default;');
+        applyBtn.onclick = () => { if (!_dsTplSel) return; const els = _dsTplSel.els; _dsTplSel = null; _dsApplyTemplate(els, cat); };
+        t.appendChild(applyBtn);
     }
 
     const addBtn = (label, fn, secondary) => { const b = document.createElement('button'); b.textContent = label; b.className = secondary ? 'action-btn btn-secondary' : 'action-btn'; b.style.cssText = 'width:100%; height:34px; margin-bottom:8px; font-size:0.76rem;'; b.onclick = fn; t.appendChild(b); };
+    try { _dsPageChromeControls(t, desc); } catch (e) {}
+    const _hidF = editorialContent.hiddenFixed || {}; const _hiddenKeys = Object.keys(_hidF).filter(k => _hidF[k]);
+    if (_hiddenKeys.length) {
+        const box = document.createElement('div'); box.style.cssText = 'border:1px dashed var(--border-color); border-radius:6px; padding:8px; margin-bottom:10px;';
+        const l = document.createElement('div'); l.textContent = 'Removed pages'; l.style.cssText = 'font-size:0.62rem; color:var(--text-muted); margin-bottom:5px;'; box.appendChild(l);
+        _hiddenKeys.forEach(k => { const b = document.createElement('button'); b.textContent = '\u21ba Restore ' + (_FIXED_LABELS[k] || k); b.className = 'action-btn btn-secondary'; b.style.cssText = 'width:100%; height:26px; font-size:0.6rem; margin-bottom:4px;'; b.onclick = () => _dsRestoreFixed(k); box.appendChild(b); });
+        t.appendChild(box);
+    }
     if (desc.kind === 'layout' && (desc.type === 'toc' || desc.type === 'artindex')) {
         const note = document.createElement('div');
         note.style.cssText = 'padding:10px; border:1px solid var(--border-color); border-radius:6px; background:var(--bg-input); margin-bottom:8px;';
@@ -9374,8 +10215,8 @@ function _dsRenderTools() {
             + '<div style="font-size:0.64rem; color:var(--text-muted); line-height:1.5;">This ' + (desc.type === 'toc' ? 'contents page lists every section with its page number' : 'index lists every artwork with the page it appears on') + '. It updates automatically as the deck changes — page numbers are finalised on export.</div>';
         t.appendChild(note);
     }
-    else if (desc.kind === 'layout') addBtn('Open in layout editor', () => { const idx = (editorialContent.layoutPages || []).indexOf(desc.page); if (idx >= 0) _mbPageIndex = idx; closeDeckStudio(); openMoodboardModal(); }, !!cat);
-    else if (desc.kind === 'fixed') addBtn('Open in layout editor', () => { closeDeckStudio(); openFixedPageEditor(desc.fixed); }, !!cat);
+    else if (desc.kind === 'layout') { addBtn('Save this page as template', () => _dsSaveCurrentAsTemplate(), true); addBtn('Duplicate this page', () => _dsDuplicateLayoutPage(desc), true); }
+    else if (desc.kind === 'fixed') { addBtn('Save this page as template', () => _dsSaveCurrentAsTemplate(), true); if (_FIXED_LABELS[desc.fixed]) addBtn('Remove this page from deck', () => { if (confirm('Remove the built-in ' + _FIXED_LABELS[desc.fixed] + ' page from this deck? You can restore it from the Pages tools.')) _dsRemoveFixed(desc.fixed); }, true); }
     else if (desc.kind === 'floorplan') addBtn('Place numbers / mark up', () => { if (typeof _fpLevel !== 'undefined') _fpLevel = desc.level; closeDeckStudio(); openFloorplanMarkup(); });
     else if (desc.type === 'contacts') addBtn('Edit contacts', () => { openContactsEditor(); });
     else if (desc.type === 'timeline') {
@@ -9786,6 +10627,64 @@ function _downscaleImageFile(file, maxDim, quality, cb) {
 // Each tile: { img, caption, aspect, x, y, w, z } — x/y/w normalized to the
 // page, z = stacking order. Editor is a page-aspect canvas (WYSIWYG-ish).
 let _mbSelected = -1;
+let _mbSel = [];            // multi-selection: moodboard element indices
+let _mbSelAnn = [];         // multi-selection: annotation indices on the current page
+let _mbMarquee = null;      // marquee drag state
+function _mbDeselectAll() { _mbSel = []; _mbSelAnn = []; _mbSelected = -1; }
+function _mbSelectOnly(i) { _mbSel = (i >= 0 ? [i] : []); _mbSelAnn = []; _mbSelected = i; }
+function _mbToggleInSel(i) { const k = _mbSel.indexOf(i); if (k >= 0) { _mbSel.splice(k, 1); _mbSelected = _mbSel.length ? _mbSel[_mbSel.length - 1] : -1; } else { _mbSel.push(i); _mbSelected = i; } }
+function _mbCurAnnList() { if (_mbActiveCanvasId !== 'dsLayoutCanvas') return null; try { const d = _dsPages[_dsIndex]; const key = d ? _deckPageKey(d) : null; if (!key) return null; const list = (editorialContent.annotations || {})[key]; return list ? { key, list } : { key, list: [] }; } catch (e) { return null; } }
+function _mbElBox(t) {
+    const ty = _elType(t);
+    if (ty === 'arrow') return { x: Math.min(t.x1, t.x2), y: Math.min(t.y1, t.y2), w: Math.abs(t.x2 - t.x1), h: Math.abs(t.y2 - t.y1) };
+    if (ty === 'elbow') { const xs = (t.pts || []).map(p => p.x), ys = (t.pts || []).map(p => p.y); const mnx = Math.min.apply(null, xs), mny = Math.min.apply(null, ys); return { x: mnx, y: mny, w: Math.max.apply(null, xs) - mnx, h: Math.max.apply(null, ys) - mny }; }
+    const h = (typeof t.h === 'number') ? t.h : (ty === 'text' ? (t.size || 0.05) * 1.3 : (t.w * (936 / 540) / (t.aspect || 1.33)));
+    return { x: t.x || 0, y: t.y || 0, w: t.w || 0.2, h: h || 0.1 };
+}
+function _mbAnnBox(a) {
+    if (a.type === 'arrow') return { x: Math.min(a.x1, a.x2), y: Math.min(a.y1, a.y2), w: Math.abs(a.x2 - a.x1), h: Math.abs(a.y2 - a.y1) };
+    if (a.type === 'elbow') { const xs = (a.pts || []).map(p => p.x), ys = (a.pts || []).map(p => p.y); const mnx = Math.min.apply(null, xs), mny = Math.min.apply(null, ys); return { x: mnx, y: mny, w: Math.max.apply(null, xs) - mnx, h: Math.max.apply(null, ys) - mny }; }
+    if (a.type === 'mockup') return { x: a.x || 0, y: a.y || 0, w: a.w || 0.3, h: (a.w || 0.3) * (a.aspect || 1.2) };
+    if (a.type === 'text') return { x: a.x || 0, y: a.y || 0, w: a.w || 0.3, h: (a.size || 0.03) * 1.3 };
+    return { x: a.x || 0, y: a.y || 0, w: a.w || 0.25, h: a.h || 0.18 };
+}
+function _mbSetBoxPos(el, nx, ny, b) { const ty = _elType(el); const dx = nx - b.x, dy = ny - b.y; if (ty === 'arrow') { el.x1 += dx; el.y1 += dy; el.x2 += dx; el.y2 += dy; } else if (ty === 'elbow') { (el.pts || []).forEach(p => { p.x += dx; p.y += dy; }); } else { el.x = nx; el.y = ny; } }
+function _mbSetAnnPos(a, nx, ny, b) { const dx = nx - b.x, dy = ny - b.y; if (a.type === 'arrow') { a.x1 += dx; a.y1 += dy; a.x2 += dx; a.y2 += dy; } else if (a.type === 'elbow') { (a.pts || []).forEach(p => { p.x += dx; p.y += dy; }); } else { a.x = nx; a.y = ny; } }
+// Unified selection across both layers — moodboard elements and annotations.
+function _mbSelItems() {
+    const items = []; const els = _mbEls() || [];
+    (_mbSel || []).forEach(k => { if (k >= 0 && k < els.length) items.push({ kind: 'mb', ref: els[k], box: _mbElBox(els[k]) }); });
+    const ann = _mbCurAnnList();
+    if (ann) (_mbSelAnn || []).forEach(k => { if (k >= 0 && k < ann.list.length) items.push({ kind: 'ann', ref: ann.list[k], box: _mbAnnBox(ann.list[k]) }); });
+    return items;
+}
+function _mbSetItemPos(it, nx, ny) { if (it.kind === 'mb') _mbSetBoxPos(it.ref, nx, ny, it.box); else _mbSetAnnPos(it.ref, nx, ny, it.box); }
+function _mbCommitAll() { if (typeof pushHistory === 'function') pushHistory(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); try { renderMoodboardCanvas(); } catch (e) {} try { _dsRenderCenter(); } catch (e) {} }
+function _mbAlign(how, rel) {
+    const items = _mbSelItems(); if (!items.length) return;
+    let minX, minY, maxX, maxY;
+    if (rel === 'page') { minX = 0; minY = 0; maxX = 1; maxY = 1; }
+    else { minX = Math.min.apply(null, items.map(o => o.box.x)); minY = Math.min.apply(null, items.map(o => o.box.y)); maxX = Math.max.apply(null, items.map(o => o.box.x + o.box.w)); maxY = Math.max.apply(null, items.map(o => o.box.y + o.box.h)); }
+    items.forEach(it => { const b = it.box; let nx = b.x, ny = b.y; if (how === 'left') nx = minX; else if (how === 'right') nx = maxX - b.w; else if (how === 'hcenter') nx = (minX + maxX) / 2 - b.w / 2; if (how === 'top') ny = minY; else if (how === 'bottom') ny = maxY - b.h; else if (how === 'vcenter') ny = (minY + maxY) / 2 - b.h / 2; _mbSetItemPos(it, nx, ny); });
+    _mbCommitAll();
+}
+function _mbDistribute(axis) {
+    const items = _mbSelItems(); if (items.length < 3) return;
+    if (axis === 'h') {
+        items.sort((a, b) => a.box.x - b.box.x);
+        const left = items[0].box.x, right = items[items.length - 1].box.x + items[items.length - 1].box.w;
+        const totalW = items.reduce((s, o) => s + o.box.w, 0);
+        const gap = (right - left - totalW) / (items.length - 1);
+        let cur = left; items.forEach(o => { _mbSetItemPos(o, cur, o.box.y); cur += o.box.w + gap; });
+    } else {
+        items.sort((a, b) => a.box.y - b.box.y);
+        const top = items[0].box.y, bot = items[items.length - 1].box.y + items[items.length - 1].box.h;
+        const totalH = items.reduce((s, o) => s + o.box.h, 0);
+        const gap = (bot - top - totalH) / (items.length - 1);
+        let cur = top; items.forEach(o => { _mbSetItemPos(o, o.box.x, cur); cur += o.box.h + gap; });
+    }
+    _mbCommitAll();
+}
 let _mbDrag = null;   // { mode, i, startX, startY, ox, oy, ow, r, el }
 
 function _elType(t) { return (t && t.type) ? t.type : 'image'; }
@@ -9848,6 +10747,7 @@ function _mbOnResize() { const m = document.getElementById('moodboardModal'); if
 function openMoodboardModal() {
     const m = document.getElementById('moodboardModal');
     if (!m) return;
+    _mbActiveCanvasId = 'moodboardCanvas';
     _mbEditTarget = null;
     _mbSelected = -1;
     _normalizeMoodboard();
@@ -9860,7 +10760,7 @@ function openMoodboardModal() {
 }
 // Open the freeform editor on a fixed deck page (currently the Cover). Reuses
 // the entire canvas; the layout-pages rail/controls are hidden.
-function openFixedPageEditor(key) {
+function _fixedPageFor(key) {
     _mbMigratePages();
     let page, label;
     if (key === 'cover') {
@@ -9871,7 +10771,7 @@ function openFixedPageEditor(key) {
             const nm = ((el && el.value) || 'PROJECT NAME').toUpperCase();
             page.elements = [_tImg(0, 0, 1, 1, 1), _tTxt(nm, .08, .66, .84, .085, 5, 'display', '#ffffff'), _tTxt('Art Program', .08, .8, .84, .04, 6, 'serif', '#ffffff')];
         }
-        page.type = 'breaker';   // full-bleed treatment in editor + PDF
+        page.type = 'breaker';
     } else if (key === 'narrative') {
         if (!editorialContent.narrativePage || !Array.isArray(editorialContent.narrativePage.elements)) editorialContent.narrativePage = { elements: [] };
         page = editorialContent.narrativePage; label = 'Art Narrative';
@@ -9886,7 +10786,7 @@ function openFixedPageEditor(key) {
         if (!page.elements.length) {
             page.elements = [_tTxt('GOOD ART.', .08, .34, .84, .14, 5, 'display', '#1a1a1a'), _tTxt('GOOD PEOPLE.', .08, .54, .84, .14, 6, 'display', '#1a1a1a')];
         }
-        page.type = 'breaker';   // clean full-page statement, no footer
+        page.type = 'breaker';
     } else if (key === 'understanding') {
         if (!editorialContent.understandingPage || !Array.isArray(editorialContent.understandingPage.elements)) editorialContent.understandingPage = { elements: [] };
         page = editorialContent.understandingPage; label = 'Project Understanding';
@@ -9908,8 +10808,14 @@ function openFixedPageEditor(key) {
             ];
         }
         page.type = 'narrative';
-    } else { return; }
+    } else { return null; }
+    return { page: page, label: label, key: key };
+}
+function openFixedPageEditor(key) {
+    const r = _fixedPageFor(key); if (!r) return;
+    const page = r.page, label = r.label;
     _mbEditTarget = { key: key, label: label, page: page };
+    _mbActiveCanvasId = 'moodboardCanvas';
     const m = document.getElementById('moodboardModal'); if (!m) return;
     const sp = document.getElementById('specPdfModal'); if (sp) sp.style.display = 'none';
     _mbSelected = -1;
@@ -10125,26 +11031,182 @@ function _coverRect(boxW, boxH, aspect, zoom, panX, panY) {
     const offY = -slackY / 2 + (panY || 0) * slackY / 2;
     return { dW: dW, dH: dH, offX: offX, offY: offY, slackX: slackX, slackY: slackY };
 }
+// Resolve an image rect for a given fit mode (InDesign-style).
+//  'cover'   = fill frame proportionally (crops overflow)   [default]
+//  'contain' = fit content proportionally (whole image, gaps)
+//  'stretch' = fit content to frame (distorts to fill)
+function _imgRect(mode, boxW, boxH, aspect, zoom, panX, panY) {
+    aspect = aspect || 1.333;
+    if (mode === 'stretch') return { dW: boxW, dH: boxH, offX: 0, offY: 0, slackX: 0, slackY: 0 };
+    if (mode === 'contain') {
+        let dW0, dH0;
+        if (aspect > boxW / boxH) { dW0 = boxW; dH0 = boxW / aspect; }
+        else { dH0 = boxH; dW0 = boxH * aspect; }
+        const dW = dW0 * (zoom || 1), dH = dH0 * (zoom || 1);
+        const slackX = dW - boxW, slackY = dH - boxH;
+        const offX = -slackX / 2 + (panX || 0) * Math.abs(slackX) / 2;
+        const offY = -slackY / 2 + (panY || 0) * Math.abs(slackY) / 2;
+        return { dW: dW, dH: dH, offX: offX, offY: offY, slackX: slackX, slackY: slackY };
+    }
+    return _coverRect(boxW, boxH, aspect, zoom, panX, panY);
+}
 
 // Render an image cropped/zoomed/panned to a box into an offscreen canvas (for
 // the PDF, which can't clip addImage directly).
-function _cropToCanvas(img, boxWpt, boxHpt, aspect, zoom, panX, panY) {
+function _cropToCanvas(img, boxWpt, boxHpt, aspect, zoom, panX, panY, fit) {
     const R = 2;
     const cw = Math.max(1, Math.round(boxWpt * R)), ch = Math.max(1, Math.round(boxHpt * R));
     const c = document.createElement('canvas'); c.width = cw; c.height = ch;
     const ctx = c.getContext('2d');
-    const cv = _coverRect(cw, ch, aspect, zoom, panX, panY);
+    const cv = _imgRect(fit || 'cover', cw, ch, aspect, zoom, panX, panY);
     ctx.drawImage(img, cv.offX, cv.offY, cv.dW, cv.dH);
     return c;
 }
 
+// ── Layout guides & snapping ───────────────────────────────────────────────
+// Guide sets are reusable, named collections of column/margin/row guides plus
+// freeform lines — like templates for layout scaffolding. Seeded from the
+// Farmboy InDesign template (1920×1080: 12 cols, 18pt gutter, T54/B108/L45/R45).
+const GUIDE_SEED = [
+    { id: 'g_idml12', name: 'Farmboy \u00b7 12-Column', builtin: true, margin: { t: 0.05, b: 0.10, l: 0.0234, r: 0.0234 }, cols: 12, gutter: 0.009375, rows: 0, rowGutter: 0, vlines: [], hlines: [] },
+    { id: 'g_idml6', name: 'Farmboy \u00b7 6-Column', builtin: true, margin: { t: 0.05, b: 0.10, l: 0.0234, r: 0.0234 }, cols: 6, gutter: 0.009375, rows: 0, rowGutter: 0, vlines: [], hlines: [] },
+    { id: 'g_margins', name: 'Margins only', builtin: true, margin: { t: 0.05, b: 0.10, l: 0.0234, r: 0.0234 }, cols: 1, gutter: 0, rows: 0, rowGutter: 0, vlines: [], hlines: [] },
+    { id: 'g_thirds', name: 'Rule of Thirds', builtin: true, margin: null, cols: 0, gutter: 0, rows: 0, rowGutter: 0, vlines: [0.3333, 0.6667], hlines: [0.3333, 0.6667] },
+    { id: 'g_center', name: 'Center', builtin: true, margin: null, cols: 0, gutter: 0, rows: 0, rowGutter: 0, vlines: [0.5], hlines: [0.5] }
+];
+function _guideSets() { if (!editorialContent.guideSets || !editorialContent.guideSets.length) editorialContent.guideSets = JSON.parse(JSON.stringify(GUIDE_SEED)); return editorialContent.guideSets; }
+function _guideSetById(id) { return _guideSets().find(s => s.id === id) || null; }
+function _guideLines(set) {
+    const vs = [], hs = []; if (!set) return { vs, hs };
+    if (set.margin) { vs.push(set.margin.l, 1 - set.margin.r); hs.push(set.margin.t, 1 - set.margin.b); }
+    const cl = set.margin ? set.margin.l : 0, cr = set.margin ? 1 - set.margin.r : 1, cw = cr - cl;
+    if (set.cols && set.cols > 1) { const g = set.gutter || 0; const colW = (cw - (set.cols - 1) * g) / set.cols; for (let i = 0; i < set.cols; i++) { const L = cl + i * (colW + g); vs.push(L); vs.push(L + colW); } }
+    const ct = set.margin ? set.margin.t : 0, cb = set.margin ? 1 - set.margin.b : 1, ch = cb - ct;
+    if (set.rows && set.rows > 1) { const g = set.rowGutter || 0; const rH = (ch - (set.rows - 1) * g) / set.rows; for (let i = 0; i < set.rows; i++) { const T = ct + i * (rH + g); hs.push(T); hs.push(T + rH); } }
+    (set.vlines || []).forEach(v => vs.push(v)); (set.hlines || []).forEach(h => hs.push(h));
+    const uniq = (a) => a.filter((v, i) => a.indexOf(v) === i);
+    return { vs: uniq(vs), hs: uniq(hs) };
+}
+function _guidePref() { if (!editorialContent.guidePref) editorialContent.guidePref = { setId: 'g_idml12', show: false, snap: true }; return editorialContent.guidePref; }
+function _pageGuideKey() { try { const d = _dsPages[_dsIndex]; return d ? _deckPageKey(d) : null; } catch (e) { return null; } }
+function _pageGuide() {
+    const def = _guidePref(); const key = _pageGuideKey();
+    const ov = (key && editorialContent.pageGuides) ? editorialContent.pageGuides[key] : null;
+    const setId = (ov && ov.setId !== undefined) ? ov.setId : def.setId;
+    return { setId: setId, show: (ov && typeof ov.show === 'boolean') ? ov.show : def.show, snap: (ov && typeof ov.snap === 'boolean') ? ov.snap : def.snap, set: _guideSetById(setId) };
+}
+function _setPageGuide(patch) { const key = _pageGuideKey(); if (!key) return; editorialContent.pageGuides = editorialContent.pageGuides || {}; editorialContent.pageGuides[key] = Object.assign({}, editorialContent.pageGuides[key] || {}, patch); if (typeof scheduleAutosave === 'function') scheduleAutosave(); }
+function _mbDrawGuides(canvas, cr) {
+    if (!(canvas && canvas.id === 'dsLayoutCanvas')) return;
+    const G = _pageGuide(); if (!G.show || !G.set) return;
+    const ln = _guideLines(G.set);
+    const mk = (css) => { const d = document.createElement('div'); d.className = '_mbGuideLine'; d.style.cssText = 'position:absolute; z-index:2; pointer-events:none; ' + css; canvas.appendChild(d); };
+    ln.vs.forEach(v => mk('left:' + (v * 100) + '%; top:0; bottom:0; width:1px; background:rgba(0,176,204,0.75); box-shadow:0 0 0 0.5px rgba(0,176,204,0.25);'));
+    ln.hs.forEach(h => mk('top:' + (h * 100) + '%; left:0; right:0; height:1px; background:rgba(0,176,204,0.75); box-shadow:0 0 0 0.5px rgba(0,176,204,0.25);'));
+}
+// Snap a box (fractions) against the current page's guide lines + page edges/center.
+function _mbSnapBox(box, r) {
+    const G = _pageGuide(); if (!G.snap || !G.set) return { dx: 0, dy: 0 };
+    const ln = _guideLines(G.set);
+    const vs = ln.vs.concat([0, 0.5, 1]); const hs = ln.hs.concat([0, 0.5, 1]);
+    const thrX = 7 / (r.width || 900), thrY = 7 / (r.height || 520);
+    const anchorsX = [box.x, box.x + box.w / 2, box.x + box.w];
+    const anchorsY = [box.y, box.y + box.h / 2, box.y + box.h];
+    let bestDX = 0, bdX = thrX; anchorsX.forEach(a => vs.forEach(v => { const d = v - a; if (Math.abs(d) < bdX) { bdX = Math.abs(d); bestDX = d; } }));
+    let bestDY = 0, bdY = thrY; anchorsY.forEach(a => hs.forEach(v => { const d = v - a; if (Math.abs(d) < bdY) { bdY = Math.abs(d); bestDY = d; } }));
+    return { dx: bestDX, dy: bestDY };
+}
+function _mbCloseGuidesMenu() { const m = document.getElementById('_mbGuidesMenu'); if (m) m.remove(); document.removeEventListener('mousedown', _mbGuidesOutside, true); }
+function _mbGuidesOutside(e) { const m = document.getElementById('_mbGuidesMenu'); const b = document.getElementById('dsMbGuides'); if (m && !m.contains(e.target) && e.target !== b) _mbCloseGuidesMenu(); }
+function _mbOpenGuidesMenu() {
+    _mbCloseGuidesMenu(); const btn = document.getElementById('dsMbGuides'); if (!btn) return;
+    const G = _pageGuide();
+    const m = document.createElement('div'); m.id = '_mbGuidesMenu';
+    m.style.cssText = 'position:fixed; z-index:100001; background:var(--bg-panel,#2a2a30); color:var(--text-main,#eee); border:1px solid var(--border-color,#444); border-radius:8px; padding:10px; box-shadow:0 8px 28px rgba(0,0,0,0.5); width:240px; font-size:0.72rem;';
+    const row = (label, checked, fn) => { const l = document.createElement('label'); l.style.cssText = 'display:flex; align-items:center; gap:7px; padding:4px 2px; cursor:pointer;'; const c = document.createElement('input'); c.type = 'checkbox'; c.checked = checked; c.onchange = () => { fn(c.checked); }; l.appendChild(c); l.appendChild(document.createTextNode(label)); return l; };
+    m.appendChild(row('Show guides on this page', G.show, (v) => { _setPageGuide({ show: v }); try { _dsRenderCenter(); } catch (e) { renderMoodboardCanvas(); } }));
+    m.appendChild(row('Snap to guides', G.snap, (v) => { _setPageGuide({ snap: v }); }));
+    const lab = document.createElement('div'); lab.textContent = 'Guide set for this page'; lab.style.cssText = 'font-size:0.6rem; color:var(--text-muted,#999); margin:8px 0 4px;'; m.appendChild(lab);
+    const sel = document.createElement('select'); sel.style.cssText = 'width:100%; height:28px; font-size:0.72rem;';
+    _guideSets().forEach(s => { const o = document.createElement('option'); o.value = s.id; o.textContent = s.name; if (s.id === G.setId) o.selected = true; sel.appendChild(o); });
+    sel.onchange = () => { _setPageGuide({ setId: sel.value, show: true }); _mbCloseGuidesMenu(); try { _dsRenderCenter(); } catch (e) { renderMoodboardCanvas(); } };
+    m.appendChild(sel);
+    const deckBtn = document.createElement('button'); deckBtn.textContent = 'Apply to whole deck'; deckBtn.className = 'action-btn btn-secondary'; deckBtn.style.cssText = 'width:100%; height:26px; font-size:0.62rem; margin-top:8px;';
+    deckBtn.onclick = () => { const g = _guidePref(); g.setId = G.setId; g.show = G.show; g.snap = G.snap; if (typeof scheduleAutosave === 'function') scheduleAutosave(); };
+    m.appendChild(deckBtn);
+    const mgr = document.createElement('button'); mgr.textContent = 'Manage guide sets\u2026'; mgr.className = 'action-btn'; mgr.style.cssText = 'width:100%; height:28px; font-size:0.66rem; margin-top:6px;';
+    mgr.onclick = () => { _mbCloseGuidesMenu(); _mbOpenGuideManager(); };
+    m.appendChild(mgr);
+    document.body.appendChild(m);
+    const rb = btn.getBoundingClientRect(); let left = rb.left; if (left + 240 > window.innerWidth - 8) left = window.innerWidth - 248; m.style.left = Math.max(8, left) + 'px'; m.style.top = (rb.bottom + 6) + 'px';
+    setTimeout(() => document.addEventListener('mousedown', _mbGuidesOutside, true), 0);
+}
+function _mbOpenGuideManager() {
+    let m = document.getElementById('_mbGuideMgr'); if (m) m.remove();
+    m = document.createElement('div'); m.id = '_mbGuideMgr';
+    m.style.cssText = 'position:fixed; inset:0; z-index:100003; background:rgba(10,10,12,0.82); display:flex; align-items:center; justify-content:center; padding:24px;';
+    const panel = document.createElement('div'); panel.style.cssText = 'background:var(--bg-panel,#26262c); color:var(--text-main,#eee); border-radius:10px; width:min(560px,94vw); max-height:88vh; overflow:auto; padding:18px; box-shadow:0 16px 50px rgba(0,0,0,0.6);';
+    const h = document.createElement('div'); h.textContent = 'Guide sets'; h.style.cssText = 'font-size:1rem; font-weight:700; margin-bottom:4px;'; panel.appendChild(h);
+    const sub = document.createElement('div'); sub.textContent = 'Reusable layout scaffolds. Pick one per page from the Guides menu.'; sub.style.cssText = 'font-size:0.7rem; color:var(--text-muted,#999); margin-bottom:12px;'; panel.appendChild(sub);
+    const numF = (v) => { const n = parseFloat(v); return isNaN(n) ? 0 : n; };
+    const editor = (set) => {
+        const box = document.createElement('div'); box.style.cssText = 'border:1px solid var(--border-color,#444); border-radius:8px; padding:12px; margin-bottom:10px;';
+        const field = (label, val, w) => { const wrap = document.createElement('label'); wrap.style.cssText = 'display:inline-flex; flex-direction:column; gap:2px; font-size:0.6rem; color:var(--text-muted,#999); margin:0 8px 6px 0;'; const inp = document.createElement('input'); inp.value = val; inp.style.cssText = 'width:' + (w || 54) + 'px; height:24px; font-size:0.72rem; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:4px; padding:0 5px;'; wrap.appendChild(document.createTextNode(label)); wrap.appendChild(inp); box.appendChild(wrap); return inp; };
+        const nameI = field('Name', set.name, 200);
+        const hasM = !!set.margin;
+        const mt = field('Top %', hasM ? (set.margin.t * 100).toFixed(1) : '');
+        const mb = field('Bottom %', hasM ? (set.margin.b * 100).toFixed(1) : '');
+        const ml = field('Left %', hasM ? (set.margin.l * 100).toFixed(1) : '');
+        const mr = field('Right %', hasM ? (set.margin.r * 100).toFixed(1) : '');
+        const colsI = field('Columns', set.cols || 0);
+        const gutI = field('Gutter %', ((set.gutter || 0) * 100).toFixed(2));
+        const rowsI = field('Rows', set.rows || 0);
+        const rgI = field('Row gut %', ((set.rowGutter || 0) * 100).toFixed(2));
+        const vI = field('Vertical lines % (comma)', (set.vlines || []).map(v => (v * 100).toFixed(1)).join(', '), 200);
+        const hI = field('Horizontal lines % (comma)', (set.hlines || []).map(v => (v * 100).toFixed(1)).join(', '), 200);
+        const save = document.createElement('button'); save.textContent = 'Save'; save.className = 'action-btn'; save.style.cssText = 'height:28px; padding:0 16px; font-size:0.7rem; margin-top:4px;';
+        save.onclick = () => {
+            set.name = nameI.value || set.name;
+            const anyM = [mt, mb, ml, mr].some(x => x.value.trim() !== '');
+            set.margin = anyM ? { t: numF(mt.value) / 100, b: numF(mb.value) / 100, l: numF(ml.value) / 100, r: numF(mr.value) / 100 } : null;
+            set.cols = Math.max(0, Math.round(numF(colsI.value))); set.gutter = numF(gutI.value) / 100;
+            set.rows = Math.max(0, Math.round(numF(rowsI.value))); set.rowGutter = numF(rgI.value) / 100;
+            const parse = (s) => s.split(',').map(x => numF(x) / 100).filter(x => x > 0 && x < 1);
+            set.vlines = parse(vI.value); set.hlines = parse(hI.value);
+            if (typeof scheduleAutosave === 'function') scheduleAutosave();
+            renderMoodboardCanvas(); _mbOpenGuideManager();
+        };
+        box.appendChild(document.createElement('br')); box.appendChild(save);
+        return box;
+    };
+    _guideSets().forEach(set => {
+        const head = document.createElement('div'); head.style.cssText = 'display:flex; align-items:center; gap:8px; margin:10px 0 4px;';
+        const nm = document.createElement('div'); nm.textContent = set.name; nm.style.cssText = 'flex:1; font-weight:600; font-size:0.78rem;'; head.appendChild(nm);
+        const dup = document.createElement('button'); dup.textContent = 'Duplicate'; dup.className = 'action-btn btn-secondary'; dup.style.cssText = 'height:24px; font-size:0.6rem; padding:0 8px;'; dup.onclick = () => { const c = JSON.parse(JSON.stringify(set)); c.id = 'g_' + Math.random().toString(36).slice(2, 8); c.name = set.name + ' copy'; c.builtin = false; _guideSets().push(c); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _mbOpenGuideManager(); }; head.appendChild(dup);
+        if (!set.builtin) { const del = document.createElement('button'); del.textContent = 'Delete'; del.className = 'action-btn btn-secondary'; del.style.cssText = 'height:24px; font-size:0.6rem; padding:0 8px; color:#c0392b;'; del.onclick = () => { const i = _guideSets().indexOf(set); if (i >= 0) { _guideSets().splice(i, 1); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _mbOpenGuideManager(); } }; head.appendChild(del); }
+        panel.appendChild(head);
+        if (!set.builtin) panel.appendChild(editor(set));
+        else { const note = document.createElement('div'); note.textContent = 'Built-in \u2014 duplicate to customise.'; note.style.cssText = 'font-size:0.62rem; color:var(--text-muted,#888); margin-bottom:6px;'; panel.appendChild(note); }
+    });
+    const add = document.createElement('button'); add.textContent = '+ New guide set'; add.className = 'action-btn'; add.style.cssText = 'height:30px; font-size:0.72rem; padding:0 14px; margin-top:8px;';
+    add.onclick = () => { _guideSets().push({ id: 'g_' + Math.random().toString(36).slice(2, 8), name: 'Custom guides', builtin: false, margin: { t: 0.05, b: 0.05, l: 0.05, r: 0.05 }, cols: 0, gutter: 0, rows: 0, rowGutter: 0, vlines: [], hlines: [] }); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _mbOpenGuideManager(); };
+    panel.appendChild(add);
+    const close = document.createElement('button'); close.textContent = 'Done'; close.className = 'action-btn btn-secondary'; close.style.cssText = 'height:30px; font-size:0.72rem; padding:0 18px; margin:8px 0 0 8px;'; close.onclick = () => m.remove();
+    panel.appendChild(close);
+    m.appendChild(panel); m.onclick = (e) => { if (e.target === m) m.remove(); };
+    document.body.appendChild(m);
+}
 function renderMoodboardCanvas() {
-    const canvas = document.getElementById('moodboardCanvas');
+    const canvas = _mbCanvas();
     if (!canvas) return;
     _normalizeMoodboard();
     const els = _mbEls() || [];
+    _mbSel = (_mbSel || []).filter(k => k >= 0 && k < els.length);
+    if (_mbSelected >= 0 && _mbSel.indexOf(_mbSelected) < 0) _mbSel = [_mbSelected];
+    if (_mbSelected < 0 && _mbSel.length <= 1) _mbSel = [];
     const cr = canvas.getBoundingClientRect();
     canvas.innerHTML = '';
+    try { _mbDrawGuides(canvas, cr); } catch (e) {}
     if (_mbPlacing) {
         canvas.style.cursor = 'crosshair';
         canvas.onmousedown = null;
@@ -10153,11 +11215,11 @@ function renderMoodboardCanvas() {
     } else {
         canvas.style.cursor = '';
         canvas.onclick = null; canvas.ondblclick = null;
-        canvas.onmousedown = (e) => { if (e.target === canvas) { _mbSelected = -1; renderMoodboardCanvas(); } };
+        canvas.onmousedown = (e) => { if (e.target === canvas) _mbMarqueeStart(e); };
     }
     const order = els.map((t, i) => i).sort((a, b) => (els[a].z || 0) - (els[b].z || 0));
     order.forEach(i => {
-        const t = els[i]; const sel = (i === _mbSelected); const ty = _elType(t);
+        const t = els[i]; const sel = (i === _mbSelected) || _mbSel.indexOf(i) >= 0; const single = sel && _mbSel.length <= 1; const ty = _elType(t);
         if (ty === 'arrow') {
             const Ax = t.x1 * cr.width, Ay = t.y1 * cr.height, Bx = t.x2 * cr.width, By = t.y2 * cr.height;
             const wt = Math.max(0.5, t.weight || 1.2), col = t.color || '#9aa0a6';
@@ -10184,18 +11246,18 @@ function renderMoodboardCanvas() {
         const box = document.createElement('div'); box.dataset.idx = i;
         if (ty === 'text') {
             const fs = Math.max(8, (t.size || 0.045) * cr.height);
-            box.style.cssText = 'position:absolute; left:' + (t.x * 100) + '%; top:' + (t.y * 100) + '%; width:' + (t.w * 100) + '%; font-size:' + fs + 'px; line-height:1.15; color:' + (t.color || '#222') + '; cursor:grab; font-family:' + _mbFontCss(t.font) + '; white-space:pre-wrap; overflow-wrap:break-word; outline:none;' + (sel ? ' outline:1px dashed #6a6aff; outline-offset:2px;' : '');
+            box.style.cssText = 'position:absolute; left:' + (t.x * 100) + '%; top:' + (t.y * 100) + '%; width:' + (t.w * 100) + '%; font-size:' + fs + 'px; line-height:1.15; color:' + (t.color || '#222') + '; cursor:grab; font-family:' + _mbFontCss(t.font) + '; white-space:pre-wrap; overflow-wrap:break-word; outline:none;' + _textExtraCss(t) + (sel ? ' outline:1px dashed #6a6aff; outline-offset:2px;' : '');
             box.textContent = t.text || 'Text';
             box.title = 'Double-click to edit text';
             box.ondblclick = (e) => { e.stopPropagation(); _mbBeginTextEdit(box, i); };
         } else {
-            box.style.cssText = 'position:absolute; left:' + (t.x * 100) + '%; top:' + (t.y * 100) + '%; width:' + (t.w * 100) + '%; height:' + ((t.h || (t.w * (936 / 540) / (t.aspect || 1.33))) * 100) + '%; overflow:hidden; cursor:grab; box-shadow:0 1px 6px rgba(0,0,0,0.35);' + (sel ? ' outline:2px solid #6a6aff; outline-offset:1px;' : '');
+            box.style.cssText = 'position:absolute; left:' + (t.x * 100) + '%; top:' + (t.y * 100) + '%; width:' + (t.w * 100) + '%; height:' + ((t.h || (t.w * (936 / 540) / (t.aspect || 1.33))) * 100) + '%; overflow:hidden; cursor:grab; box-shadow:' + (t.shadow ? '0 9px 24px rgba(0,0,0,0.42)' : '0 1px 6px rgba(0,0,0,0.18)') + ';' + (sel ? ' outline:2px solid #6a6aff; outline-offset:1px;' : '');
             const boxW = t.w * cr.width, boxH = (t.h || 0.2) * cr.height;
             box.ondragover = (e) => { e.preventDefault(); box.style.outline = '2px dashed #6a6aff'; };
             box.ondragleave = () => { box.style.outline = sel ? '2px solid #6a6aff' : ''; };
             box.ondrop = (e) => _mbDropImage(e, i);
             if (t.img) {
-                const cv = _coverRect(boxW, boxH, t.aspect || 1.33, t.zoom || 1, t.panX || 0, t.panY || 0);
+                const cv = _imgRect(t.fit || 'cover', boxW, boxH, t.aspect || 1.33, t.zoom || 1, t.panX || 0, t.panY || 0);
                 const img = document.createElement('img');
                 img.src = t.img; img.draggable = false;
                 img.style.cssText = 'position:absolute; left:' + cv.offX + 'px; top:' + cv.offY + 'px; width:' + cv.dW + 'px; height:' + cv.dH + 'px; max-width:none; display:block; pointer-events:none; user-select:none;';
@@ -10230,16 +11292,15 @@ function renderMoodboardCanvas() {
                 box.appendChild(ph);
             }
         }
-        if (sel) {
-            const h = document.createElement('div');
-            h.style.cssText = 'position:absolute; right:-7px; bottom:-7px; width:14px; height:14px; background:#6a6aff; border:2px solid #fff; border-radius:3px; cursor:nwse-resize; z-index:20;';
-            h.onmousedown = (e) => _mbResizeDown(e, i);
-            box.appendChild(h);
+        if (single) {
+            _mbHandles(box, i, ty);
         }
         box.onmousedown = (e) => _mbTileDown(e, i);
         canvas.appendChild(box);
     });
-    if (!els.length && !_mbPlacing) {
+    let _hasAnnots = false;
+    try { if (_mbActiveCanvasId === 'dsLayoutCanvas') { const d = _dsPages[_dsIndex]; const k = d ? _deckPageKey(d) : null; const ann = (k && editorialContent.annotations) ? editorialContent.annotations[k] : null; _hasAnnots = !!(ann && ann.length); } } catch (e) {}
+    if (!els.length && !_mbPlacing && !_hasAnnots) {
         const p = document.createElement('p');
         p.style.cssText = 'color:#888; font-size:0.85rem; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); margin:0; text-align:center;';
         p.textContent = 'Empty layout — add images, text notes, or arrows.';
@@ -10259,15 +11320,40 @@ function renderMoodboardCanvas() {
     _mbDrawGuides(canvas);
     _mbUpdateToolbar();
     _mbRenderPageStrip();
+    if (_mbActiveCanvasId === 'dsLayoutCanvas') { if (typeof _mbSelected !== 'undefined' && _mbSelected >= 0) { _dsSelKey = null; _dsSelIdx = -1; } try { _dsSyncToolbar(); } catch (e) {} }
 }
 
 // Map a font role to a CSS stack for the editor preview (PDF uses the real
 // embedded faces). display ≈ Druk (condensed bold sans), serif ≈ Messina.
 function _mbFontCss(font) {
-    if (font === 'display') return '"Arial Narrow", "Helvetica Neue Condensed", Impact, sans-serif';
+    if (font === 'display') return "'Oswald','Arial Narrow','Helvetica Neue Condensed',sans-serif";
     if (font === 'sans') return 'Helvetica, Arial, sans-serif';
-    return 'Georgia, "Times New Roman", serif';
+    return "'Times New Roman', Times, Georgia, serif";
 }
+// Justification (incl. last-line variants) → CSS.
+function _alignCss(align) {
+    switch (align) {
+        case 'center': return 'text-align:center;';
+        case 'right': return 'text-align:right;';
+        case 'justify': return 'text-align:justify; text-align-last:left;';
+        case 'justify-center': return 'text-align:justify; text-align-last:center;';
+        case 'justify-all': return 'text-align:justify; text-align-last:justify;';
+        default: return 'text-align:left;';
+    }
+}
+// Weight / italic / caps / tracking shared by every text box.
+function _textExtraCss(t) {
+    let s = _alignCss(t.align || 'left');
+    const wt = t.weight || (t.bold ? 700 : null);
+    if (wt) s += 'font-weight:' + wt + ';';
+    if (t.italic) s += 'font-style:italic;';
+    if (t.caps === 'upper') s += 'text-transform:uppercase;';
+    if (t.track) s += 'letter-spacing:' + t.track + 'em;';
+    if (t.outline) { const oc = t.color || '#ffffff'; const ow = t.outlineW || 1.4; s += '-webkit-text-stroke:' + ow + 'px ' + oc + '; text-stroke:' + ow + 'px ' + oc + '; color:transparent; -webkit-text-fill-color:transparent;'; }
+    return s;
+}
+// Map our six alignment modes to what jsPDF understands.
+function _pdfAlign(align) { return (align === 'center' || align === 'justify-center') ? 'center' : align === 'right' ? 'right' : (align === 'justify' || align === 'justify-all') ? 'justify' : 'left'; }
 // Faded, non-interactive guides showing where the title, footer, and page
 // margins print — so elements don't get buried under deck chrome.
 function _mbDrawGuides(canvas) {
@@ -10371,7 +11457,51 @@ function _mbReapplyStyles() {
 }
 function _mbSelEl() { return (_mbSelected >= 0) ? _mbEls()[_mbSelected] : null; }
 function _mbSetFont(v) { const el = _mbSelEl(); if (el) { el.font = v; renderMoodboardCanvas(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); } }
-function _mbNudgeSize(d) { const el = _mbSelEl(); if (el) { el.size = Math.max(0.02, Math.min(0.22, (el.size || 0.045) + d)); renderMoodboardCanvas(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); } }
+function _mbSetWeight(v) { const el = _mbSelEl(); if (el) { el.weight = parseInt(v, 10) || 400; el.bold = el.weight >= 600; renderMoodboardCanvas(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); } }
+function _mbToggleOutline() { const el = _mbSelEl(); if (el) { el.outline = !el.outline; renderMoodboardCanvas(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsSyncToolbar(); } }
+function _mbToggleShadow() { const el = _mbSelEl(); if (el) { el.shadow = !el.shadow; renderMoodboardCanvas(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsSyncToolbar(); } }
+function _mbCloseAlignMenu() { const m = document.getElementById('_mbAlignMenu'); if (m) m.remove(); document.removeEventListener('mousedown', _mbAlignMenuOutside, true); }
+function _mbAlignMenuOutside(e) { const m = document.getElementById('_mbAlignMenu'); const btn = document.getElementById('dsMbArrange'); if (m && !m.contains(e.target) && e.target !== btn) _mbCloseAlignMenu(); }
+function _mbOpenAlignMenu() {
+    _mbCloseAlignMenu();
+    const btn = document.getElementById('dsMbArrange'); if (!btn) return;
+    const n = ((_mbSel || []).length) + ((_mbSelAnn || []).length);
+    const menu = document.createElement('div'); menu.id = '_mbAlignMenu';
+    menu.style.cssText = 'position:fixed; z-index:100001; background:var(--bg-panel,#2a2a30); border:1px solid var(--border-color,#444); border-radius:8px; padding:10px; box-shadow:0 8px 28px rgba(0,0,0,0.5); width:230px; font-size:0.7rem; color:var(--text-main,#eee);';
+    const mkRow = (label) => { const d = document.createElement('div'); d.textContent = label; d.style.cssText = 'font-size:0.6rem; color:var(--text-muted,#999); margin:6px 0 4px;'; return d; };
+    const mkBtns = (defs) => { const row = document.createElement('div'); row.style.cssText = 'display:flex; gap:4px;'; defs.forEach(df => { const b = document.createElement('button'); b.innerHTML = df.icon; b.title = df.title; b.className = 'action-btn btn-secondary'; b.style.cssText = 'flex:1; height:30px; padding:0; display:flex; align-items:center; justify-content:center;'; b.onclick = () => { df.fn(); }; row.appendChild(b); }); return row; };
+    const I = (paths) => '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">' + paths + '</svg>';
+    const rel = (n >= 2) ? 'sel' : 'page';
+    menu.appendChild(mkRow(n >= 2 ? 'Align (within selection)' : 'Align to page'));
+    menu.appendChild(mkBtns([
+        { icon: I('<line x1="4" y1="4" x2="4" y2="20"/><rect x="4" y="7" width="9" height="4"/><rect x="4" y="14" width="13" height="4"/>'), title: 'Left', fn: () => _mbAlign('left', rel) },
+        { icon: I('<line x1="12" y1="4" x2="12" y2="20"/><rect x="6" y="7" width="12" height="4"/><rect x="8" y="14" width="8" height="4"/>'), title: 'Center', fn: () => _mbAlign('hcenter', rel) },
+        { icon: I('<line x1="20" y1="4" x2="20" y2="20"/><rect x="11" y="7" width="9" height="4"/><rect x="7" y="14" width="13" height="4"/>'), title: 'Right', fn: () => _mbAlign('right', rel) },
+        { icon: I('<line x1="4" y1="4" x2="20" y2="4"/><rect x="7" y="4" width="4" height="9"/><rect x="14" y="4" width="4" height="13"/>'), title: 'Top', fn: () => _mbAlign('top', rel) },
+        { icon: I('<line x1="4" y1="12" x2="20" y2="12"/><rect x="7" y="6" width="4" height="12"/><rect x="14" y="8" width="4" height="8"/>'), title: 'Middle', fn: () => _mbAlign('vcenter', rel) },
+        { icon: I('<line x1="4" y1="20" x2="20" y2="20"/><rect x="7" y="11" width="4" height="9"/><rect x="14" y="7" width="4" height="13"/>'), title: 'Bottom', fn: () => _mbAlign('bottom', rel) }
+    ]));
+    if (n >= 2) { menu.appendChild(mkRow('Align to page')); menu.appendChild(mkBtns([
+        { icon: I('<line x1="4" y1="4" x2="4" y2="20"/><rect x="4" y="9" width="11" height="6"/>'), title: 'Page left', fn: () => _mbAlign('left', 'page') },
+        { icon: I('<line x1="12" y1="4" x2="12" y2="20"/><rect x="6" y="9" width="12" height="6"/>'), title: 'Page center', fn: () => _mbAlign('hcenter', 'page') },
+        { icon: I('<line x1="20" y1="4" x2="20" y2="20"/><rect x="9" y="9" width="11" height="6"/>'), title: 'Page right', fn: () => _mbAlign('right', 'page') },
+        { icon: I('<line x1="4" y1="4" x2="20" y2="4"/><rect x="9" y="4" width="6" height="11"/>'), title: 'Page top', fn: () => _mbAlign('top', 'page') },
+        { icon: I('<line x1="4" y1="12" x2="20" y2="12"/><rect x="9" y="6" width="6" height="12"/>'), title: 'Page middle', fn: () => _mbAlign('vcenter', 'page') },
+        { icon: I('<line x1="4" y1="20" x2="20" y2="20"/><rect x="9" y="9" width="6" height="11"/>'), title: 'Page bottom', fn: () => _mbAlign('bottom', 'page') }
+    ])); }
+    if (n >= 3) { menu.appendChild(mkRow('Distribute evenly')); menu.appendChild(mkBtns([
+        { icon: I('<rect x="3" y="8" width="3" height="8"/><rect x="10.5" y="8" width="3" height="8"/><rect x="18" y="8" width="3" height="8"/>'), title: 'Horizontally', fn: () => _mbDistribute('h') },
+        { icon: I('<rect x="8" y="3" width="8" height="3"/><rect x="8" y="10.5" width="8" height="3"/><rect x="8" y="18" width="8" height="3"/>'), title: 'Vertically', fn: () => _mbDistribute('v') }
+    ])); }
+    const hint = document.createElement('div'); hint.style.cssText = 'font-size:0.56rem; color:var(--text-muted,#888); margin-top:8px; line-height:1.4;'; hint.textContent = n < 2 ? 'Tip: shift-click or drag a box to select several (images, text, and shapes), then align them to each other.' : (n + ' selected');
+    menu.appendChild(hint);
+    document.body.appendChild(menu);
+    const rb = btn.getBoundingClientRect(); let left = rb.left, top = rb.bottom + 6;
+    if (left + 230 > window.innerWidth - 8) left = window.innerWidth - 238;
+    menu.style.left = Math.max(8, left) + 'px'; menu.style.top = top + 'px';
+    setTimeout(() => document.addEventListener('mousedown', _mbAlignMenuOutside, true), 0);
+}
+function _mbNudgeSize(d) { const el = _mbSelEl(); if (el) { const f = d > 0 ? 1.08 : 1 / 1.08; el.size = Math.max(0.012, Math.min(0.42, (el.size || 0.045) * f)); renderMoodboardCanvas(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); } }
 function _mbSetTextColor(v) { const el = _mbSelEl(); if (el) { el.color = v; renderMoodboardCanvas(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); } }
 function _mbSetArrowColor(v) { const el = _mbSelEl(); if (el) { el.color = v; renderMoodboardCanvas(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); } }
 function _mbNudgeWeight(d) { const el = _mbSelEl(); if (el) { el.weight = Math.max(0.5, Math.min(6, (el.weight || 1.2) + d)); renderMoodboardCanvas(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); } }
@@ -10422,34 +11552,63 @@ function _mbTileDown(e, i) {
     const now = Date.now();
     if (t0 && _elType(t0) === 'text' && _mbLastTextDown && _mbLastTextDown.i === i && (now - _mbLastTextDown.t) < 400) {
         _mbLastTextDown = null;
-        _mbSelected = i;
+        _mbSelectOnly(i);
         _mbBeginTextEdit(e.currentTarget, i);
         return;
     }
     _mbLastTextDown = (t0 && _elType(t0) === 'text') ? { i: i, t: now } : null;
-    _mbSelected = i;
-    const canvas = document.getElementById('moodboardCanvas');
+    if (e.shiftKey) { _mbToggleInSel(i); renderMoodboardCanvas(); try { _dsSyncToolbar(); } catch (er) {} return; }
+    if (_mbSel.length > 1 && _mbSel.indexOf(i) >= 0) { _mbSelected = i; } else { _mbSelectOnly(i); }
+    const canvas = _mbCanvas();
     const r = canvas ? canvas.getBoundingClientRect() : null;
     if (!r) return;
     const t = _mbEls()[i];
-    _mbDrag = { mode: 'move', i, startX: e.clientX, startY: e.clientY, r, ox: t.x, oy: t.y, ox1: t.x1, oy1: t.y1, ox2: t.x2, oy2: t.y2, opts: Array.isArray(t.pts) ? t.pts.map(p => ({ x: p.x, y: p.y })) : null };
+    const _total = _mbSel.length + ((_mbSelAnn && _mbSelAnn.length) || 0);
+    const _annL = _mbCurAnnList();
+    const group = (_total > 1) ? _mbSel.map(k => { const el = _mbEls()[k]; return { el, ox: el.x, oy: el.y, ox1: el.x1, oy1: el.y1, ox2: el.x2, oy2: el.y2, opts: Array.isArray(el.pts) ? el.pts.map(p => ({ x: p.x, y: p.y })) : null }; }) : null;
+    const groupAnn = (_total > 1 && _mbSelAnn && _mbSelAnn.length && _annL) ? _mbSelAnn.map(k => { const a = _annL.list[k]; return { a, ox: a.x, oy: a.y, ox1: a.x1, oy1: a.y1, ox2: a.x2, oy2: a.y2, opts: Array.isArray(a.pts) ? a.pts.map(p => ({ x: p.x, y: p.y })) : null }; }) : null;
+    _mbDrag = { mode: 'move', i, startX: e.clientX, startY: e.clientY, r, ox: t.x, oy: t.y, ox1: t.x1, oy1: t.y1, ox2: t.x2, oy2: t.y2, opts: Array.isArray(t.pts) ? t.pts.map(p => ({ x: p.x, y: p.y })) : null, group, groupAnn };
     document.addEventListener('mousemove', _mbMove);
     document.addEventListener('mouseup', _mbUp);
     renderMoodboardCanvas();
 }
 function _mbResizeDown(e, i) {
     e.preventDefault(); e.stopPropagation();
-    const canvas = document.getElementById('moodboardCanvas');
+    const canvas = _mbCanvas();
     const r = canvas ? canvas.getBoundingClientRect() : null;
     if (!r) return;
     const t = _mbEls()[i];
-    _mbDrag = { mode: 'resize', i, startX: e.clientX, startY: e.clientY, r, ow: t.w, oh: t.h, os: t.size };
+    _mbDrag = { mode: 'resize', i, dir: 'se', startX: e.clientX, startY: e.clientY, r, ox: t.x, oy: t.y, ow: t.w, oh: t.h, os: t.size };
     document.addEventListener('mousemove', _mbMove);
     document.addEventListener('mouseup', _mbUp);
 }
+function _mbHandleDown(e, i, dir) {
+    e.preventDefault(); e.stopPropagation();
+    const canvas = _mbCanvas(); const r = canvas ? canvas.getBoundingClientRect() : null; if (!r) return;
+    const t = _mbEls()[i];
+    _mbDrag = { mode: 'resize', i, dir: dir, startX: e.clientX, startY: e.clientY, r, ox: t.x, oy: t.y, ow: t.w, oh: t.h, os: t.size };
+    document.addEventListener('mousemove', _mbMove); document.addEventListener('mouseup', _mbUp);
+}
+// Eight resize handles (corners + edges) around a selected element. Text only
+// gets the left/right width handles; images/shapes get all eight.
+function _mbHandles(box, i, ty) {
+    const dirs = (ty === 'text') ? ['w', 'e'] : ['nw', 'n', 'ne', 'e', 'se', 's', 'sw', 'w'];
+    const pos = {
+        nw: 'left:-6px;top:-6px;cursor:nwse-resize;', n: 'left:calc(50% - 6px);top:-6px;cursor:ns-resize;',
+        ne: 'right:-6px;top:-6px;cursor:nesw-resize;', e: 'right:-6px;top:calc(50% - 6px);cursor:ew-resize;',
+        se: 'right:-6px;bottom:-6px;cursor:nwse-resize;', s: 'left:calc(50% - 6px);bottom:-6px;cursor:ns-resize;',
+        sw: 'left:-6px;bottom:-6px;cursor:nesw-resize;', w: 'left:-6px;top:calc(50% - 6px);cursor:ew-resize;'
+    };
+    dirs.forEach(d => {
+        const h = document.createElement('div');
+        h.style.cssText = 'position:absolute; width:12px; height:12px; background:#6a6aff; border:2px solid #fff; border-radius:2px; z-index:22; ' + pos[d];
+        h.onmousedown = (e) => _mbHandleDown(e, i, d);
+        box.appendChild(h);
+    });
+}
 function _mbImgPanDown(e, i) {
     e.preventDefault(); e.stopPropagation();
-    const canvas = document.getElementById('moodboardCanvas');
+    const canvas = _mbCanvas();
     const r = canvas ? canvas.getBoundingClientRect() : null;
     if (!r) return;
     const t = _mbEls()[i];
@@ -10459,7 +11618,7 @@ function _mbImgPanDown(e, i) {
 }
 function _mbArrowHandleDown(e, i, which) {
     e.preventDefault(); e.stopPropagation();
-    const canvas = document.getElementById('moodboardCanvas');
+    const canvas = _mbCanvas();
     const r = canvas ? canvas.getBoundingClientRect() : null;
     if (!r) return;
     const t = _mbEls()[i];
@@ -10469,7 +11628,7 @@ function _mbArrowHandleDown(e, i, which) {
 }
 function _mbElbowAnchorDown(e, i, k) {
     e.preventDefault(); e.stopPropagation();
-    const canvas = document.getElementById('moodboardCanvas');
+    const canvas = _mbCanvas();
     const r = canvas ? canvas.getBoundingClientRect() : null;
     if (!r) return;
     const t = _mbEls()[i];
@@ -10477,6 +11636,36 @@ function _mbElbowAnchorDown(e, i, k) {
     _mbDrag = { mode: 'elbowAnchor', i, k, startX: e.clientX, startY: e.clientY, r, opx: t.pts[k].x, opy: t.pts[k].y };
     document.addEventListener('mousemove', _mbMove);
     document.addEventListener('mouseup', _mbUp);
+}
+function _mbMarqueeStart(e) {
+    const canvas = _mbCanvas(); const r = canvas ? canvas.getBoundingClientRect() : null; if (!r) return;
+    _mbMarquee = { r, x0: e.clientX, y0: e.clientY, moved: false, additive: e.shiftKey };
+    const box = document.createElement('div'); box.id = '_mbMarqueeBox';
+    box.style.cssText = 'position:absolute; border:1px solid #6a6aff; background:rgba(106,106,255,0.12); z-index:30; pointer-events:none; left:' + (e.clientX - r.left) + 'px; top:' + (e.clientY - r.top) + 'px; width:0; height:0;';
+    canvas.appendChild(box); _mbMarquee.box = box;
+    document.addEventListener('mousemove', _mbMarqueeMove); document.addEventListener('mouseup', _mbMarqueeUp);
+}
+function _mbMarqueeMove(e) {
+    if (!_mbMarquee) return; const m = _mbMarquee, r = m.r;
+    const x = Math.min(e.clientX, m.x0) - r.left, y = Math.min(e.clientY, m.y0) - r.top, w = Math.abs(e.clientX - m.x0), h = Math.abs(e.clientY - m.y0);
+    if (w > 3 || h > 3) m.moved = true;
+    if (m.box) { m.box.style.left = x + 'px'; m.box.style.top = y + 'px'; m.box.style.width = w + 'px'; m.box.style.height = h + 'px'; }
+}
+function _mbMarqueeUp(e) {
+    document.removeEventListener('mousemove', _mbMarqueeMove); document.removeEventListener('mouseup', _mbMarqueeUp);
+    const m = _mbMarquee; _mbMarquee = null; if (!m) return; const r = m.r;
+    if (!m.moved) { _mbDeselectAll(); renderMoodboardCanvas(); try { _dsSyncToolbar(); } catch (e2) {} return; }
+    const fx = (Math.min(e.clientX, m.x0) - r.left) / r.width, fy = (Math.min(e.clientY, m.y0) - r.top) / r.height, fw = Math.abs(e.clientX - m.x0) / r.width, fh = Math.abs(e.clientY - m.y0) / r.height;
+    const hits = (boxOf, n) => { const out = []; for (let i = 0; i < n; i++) { const b = boxOf(i); if (b.x < fx + fw && b.x + b.w > fx && b.y < fy + fh && b.y + b.h > fy) out.push(i); } return out; };
+    const els = _mbEls() || [];
+    const hit = hits(i => _mbElBox(els[i]), els.length);
+    const ann = _mbCurAnnList();
+    const hitA = ann ? hits(i => _mbAnnBox(ann.list[i]), ann.list.length) : [];
+    if (m.additive) { hit.forEach(i => { if (_mbSel.indexOf(i) < 0) _mbSel.push(i); }); hitA.forEach(i => { if (_mbSelAnn.indexOf(i) < 0) _mbSelAnn.push(i); }); }
+    else { _mbSel = hit; _mbSelAnn = hitA; }
+    _mbSelected = _mbSel.length ? _mbSel[_mbSel.length - 1] : -1;
+    if (_mbSelAnn.length) { _dsSelKey = null; _dsSelIdx = -1; }
+    renderMoodboardCanvas(); try { _dsRenderCenter(); } catch (e3) {} try { _dsSyncToolbar(); } catch (e2) {}
 }
 function _mbMove(e) {
     if (!_mbDrag) return;
@@ -10486,13 +11675,17 @@ function _mbMove(e) {
     if (_mbDrag.mode === 'move') {
         let mdx = dx, mdy = dy;
         if (e.shiftKey) { if (Math.abs(dx * r.width) >= Math.abs(dy * r.height)) mdy = 0; else mdx = 0; }
-        if (ty === 'arrow') {
+        if (_mbDrag.group || _mbDrag.groupAnn) {
+            if (_mbDrag.group) _mbDrag.group.forEach(g => { const el = g.el; const ety = _elType(el); if (ety === 'arrow') { el.x1 = g.ox1 + mdx; el.y1 = g.oy1 + mdy; el.x2 = g.ox2 + mdx; el.y2 = g.oy2 + mdy; } else if (ety === 'elbow' && g.opts) { el.pts.forEach((p, k) => { p.x = g.opts[k].x + mdx; p.y = g.opts[k].y + mdy; }); } else { el.x = g.ox + mdx; el.y = g.oy + mdy; } });
+            if (_mbDrag.groupAnn) _mbDrag.groupAnn.forEach(g => { const a = g.a; if (a.type === 'arrow') { a.x1 = g.ox1 + mdx; a.y1 = g.oy1 + mdy; a.x2 = g.ox2 + mdx; a.y2 = g.oy2 + mdy; } else if (a.type === 'elbow' && g.opts) { a.pts.forEach((p, k) => { p.x = g.opts[k].x + mdx; p.y = g.opts[k].y + mdy; }); } else { a.x = g.ox + mdx; a.y = g.oy + mdy; } });
+        } else if (ty === 'arrow') {
             t.x1 = _mbDrag.ox1 + mdx; t.y1 = _mbDrag.oy1 + mdy; t.x2 = _mbDrag.ox2 + mdx; t.y2 = _mbDrag.oy2 + mdy;
         } else if (ty === 'elbow' && _mbDrag.opts) {
             t.pts.forEach((p, k) => { p.x = _mbDrag.opts[k].x + mdx; p.y = _mbDrag.opts[k].y + mdy; });
         } else {
             t.x = Math.max(-0.1, Math.min(1.05, _mbDrag.ox + mdx));
             t.y = Math.max(-0.1, Math.min(1.05, _mbDrag.oy + mdy));
+            if (!_mbDrag.group && !_mbDrag.groupAnn && !e.altKey) { try { const sn = _mbSnapBox(_mbElBox(t), r); t.x += sn.dx; t.y += sn.dy; } catch (er) {} }
         }
     } else if (_mbDrag.mode === 'elbowAnchor') {
         let nx = _mbDrag.opx + dx, ny = _mbDrag.opy + dy;
@@ -10502,8 +11695,19 @@ function _mbMove(e) {
         }
         t.pts[_mbDrag.k].x = nx; t.pts[_mbDrag.k].y = ny;
     } else if (_mbDrag.mode === 'resize') {
-        t.w = Math.max(0.06, Math.min(1.2, (_mbDrag.ow || 0.28) + dx));   // box / image width
-        if (ty === 'image') t.h = Math.max(0.04, Math.min(1.2, (_mbDrag.oh || 0.2) + dy));   // box height (crop frame)
+        const dir = _mbDrag.dir || 'se';
+        if (ty === 'text') {
+            if (dir.indexOf('e') >= 0) t.w = Math.max(0.04, (_mbDrag.ow || 0.3) + dx);
+            if (dir.indexOf('w') >= 0) { t.w = Math.max(0.04, (_mbDrag.ow || 0.3) - dx); t.x = _mbDrag.ox + dx; }
+        } else {
+            let x = _mbDrag.ox, y = _mbDrag.oy, w = (_mbDrag.ow || 0.28), h = (_mbDrag.oh || 0.2);
+            if (dir.indexOf('e') >= 0) w = (_mbDrag.ow || 0.28) + dx;
+            if (dir.indexOf('w') >= 0) { w = (_mbDrag.ow || 0.28) - dx; x = _mbDrag.ox + dx; }
+            if (dir.indexOf('s') >= 0) h = (_mbDrag.oh || 0.2) + dy;
+            if (dir.indexOf('n') >= 0) { h = (_mbDrag.oh || 0.2) - dy; y = _mbDrag.oy + dy; }
+            if (e.shiftKey && _mbDrag.ow && _mbDrag.oh && dir.length === 2) { const k = Math.max(w / _mbDrag.ow, h / _mbDrag.oh); w = _mbDrag.ow * k; h = _mbDrag.oh * k; if (dir.indexOf('w') >= 0) x = _mbDrag.ox + (_mbDrag.ow - w); if (dir.indexOf('n') >= 0) y = _mbDrag.oy + (_mbDrag.oh - h); }
+            t.w = Math.max(0.03, w); t.h = Math.max(0.03, h); t.x = x; t.y = y;
+        }
     } else if (_mbDrag.mode === 'imgPan') {
         const boxW = t.w * r.width, boxH = (t.h || 0.2) * r.height;
         const cv = _coverRect(boxW, boxH, t.aspect || 1.33, t.zoom || 1, 0, 0);
@@ -10532,10 +11736,12 @@ function _mbMove(e) {
 function _mbUp() {
     document.removeEventListener('mousemove', _mbMove);
     document.removeEventListener('mouseup', _mbUp);
+    const movedAnn = !!(_mbDrag && _mbDrag.groupAnn);
     _mbDrag = null;
     if (typeof pushHistory === 'function') pushHistory();
     if (typeof scheduleAutosave === 'function') scheduleAutosave();
     renderMoodboardCanvas();
+    if (movedAnn) { try { _dsRenderCenter(); } catch (e) {} }
 }
 
 function _mbCommit() {
@@ -10545,7 +11751,7 @@ function _mbCommit() {
 }
 function _mbToFront() { const t = _mbEls()[_mbSelected]; if (!t) return; let mx = 0; _mbEls().forEach(o => mx = Math.max(mx, o.z || 0)); t.z = mx + 1; _mbCommit(); }
 function _mbToBack() { const t = _mbEls()[_mbSelected]; if (!t) return; let mn = 0; _mbEls().forEach(o => mn = Math.min(mn, o.z || 0)); t.z = mn - 1; _mbCommit(); }
-function _mbDelete() { if (_mbSelected < 0) return; _mbEls().splice(_mbSelected, 1); _mbSelected = -1; _mbCommit(); }
+function _mbDelete() { const sel = (_mbSel && _mbSel.length) ? _mbSel.slice() : (_mbSelected >= 0 ? [_mbSelected] : []); if (!sel.length) return; sel.sort((a, b) => b - a).forEach(k => _mbEls().splice(k, 1)); _mbDeselectAll(); _mbCommit(); }
 function _mbInput(v) {
     const el = (_mbSelected >= 0) ? _mbEls()[_mbSelected] : null;
     if (!el) return;
@@ -10587,7 +11793,7 @@ function _mbPlaceKey(e) {
 }
 function _mbPlaceClick(e) {
     if (!_mbPlacing || !_mbDraft) return;
-    const canvas = document.getElementById('moodboardCanvas');
+    const canvas = _mbCanvas();
     const r = canvas.getBoundingClientRect();
     let nx = (e.clientX - r.left) / r.width, ny = (e.clientY - r.top) / r.height;
     const pts = _mbDraft.pts;
@@ -10967,19 +12173,28 @@ async function _captureElevWithGuides(elevIdx) {
     try { if (origView === 'elevation' && elevations[origIndex] != null) switchView('elevation', origIndex); else switchView('dashboard'); } catch (e) {}
     if (!res || !res.blob) return null;
     try {
-        const url = URL.createObjectURL(res.blob);
+        // The SVG declares width/height at the content's natural pixel size. If we
+        // just scale it up on the canvas, the browser rasterizes at that small size
+        // and upscales the bitmap -> jagged vector text/character/lines (Acrobat
+        // shows it; browsers hide it by smoothing). Instead, enlarge the SVG's own
+        // width/height (viewBox unchanged) so the vector is RENDERED at high res.
+        let svgText = await res.blob.text();
+        const wM = svgText.match(/<svg[^>]*\swidth="([\d.]+)"/i), hM = svgText.match(/<svg[^>]*\sheight="([\d.]+)"/i);
+        const natW = wM ? parseFloat(wM[1]) : 1200, natH = hM ? parseFloat(hM[1]) : 800;
+        const targetW = 3200;                                  // high-res vector render
+        const scale = Math.max(1, Math.min(4, targetW / natW));
+        const bigW = Math.round(natW * scale), bigH = Math.round(natH * scale);
+        svgText = svgText.replace(/(<svg[^>]*\swidth=")[\d.]+(")/i, '$1' + bigW + '$2').replace(/(<svg[^>]*\sheight=")[\d.]+(")/i, '$1' + bigH + '$2');
+        const bigBlob = new Blob([svgText], { type: 'image/svg+xml' });
+        const url = URL.createObjectURL(bigBlob);
         const img = await _loadImg(url);
-        const natW = img.naturalWidth || img.width || 1200, natH = img.naturalHeight || img.height || 800;
-        const targetW = 2400;                                  // high-res raster of the vector SVG
-        const scale = Math.max(0.5, Math.min(3.5, targetW / natW));
-        const cw = Math.max(1, Math.round(natW * scale)), ch = Math.max(1, Math.round(natH * scale));
+        const cw = img.naturalWidth || bigW, ch = img.naturalHeight || bigH;
         const cnv = document.createElement('canvas'); cnv.width = cw; cnv.height = ch;
         const cx = cnv.getContext('2d'); cx.fillStyle = '#fff'; cx.fillRect(0, 0, cw, ch); cx.drawImage(img, 0, 0, cw, ch);
         URL.revokeObjectURL(url);
-        // High-res JPEG: at this resolution compression is invisible, but the file
-        // is ~10x smaller than PNG — several lossless PNGs overflow jsPDF's output
-        // string ("Invalid string length") on a big deck.
-        return { dataUrl: cnv.toDataURL('image/jpeg', 0.9), w: cw, h: ch };
+        // High-res JPEG: invisible compression at this resolution, ~10x smaller
+        // than PNG (lossless PNGs overflow jsPDF's output string on a big deck).
+        return { dataUrl: cnv.toDataURL('image/jpeg', 0.92), w: cw, h: ch };
     } catch (e) { return null; }
 }
 
@@ -11222,10 +12437,71 @@ function _annHexToRgb(hex) {
     const n = parseInt(hex, 16);
     return isNaN(n) ? { r: 34, g: 34, b: 34 } : { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
 }
+const _shapeImgCache = {};
+function _shapeImgKey(a, wPt, hPt) { return (a.shape || 'rect') + '|' + (a.fit || 'cover') + '|' + Math.round(wPt) + 'x' + Math.round(hPt) + '|z' + (a.zoom || 1) + '|p' + (a.panX || 0) + ',' + (a.panY || 0) + '|' + (a.dataUrl ? a.dataUrl.length + a.dataUrl.slice(-24) : ''); }
+async function _ensureShapeImage(a, wPt, hPt) {
+    if (!a || !a.dataUrl) return null;
+    const key = _shapeImgKey(a, wPt, hPt);
+    if (_shapeImgCache[key]) return _shapeImgCache[key];
+    try {
+        const img = await _loadImg(a.dataUrl);
+        const px = 2.5, W = Math.max(8, Math.round(wPt * px)), H = Math.max(8, Math.round(hPt * px));
+        const cnv = document.createElement('canvas'); cnv.width = W; cnv.height = H;
+        const cx = cnv.getContext('2d');
+        cx.save();
+        if (a.shape === 'ellipse') { cx.beginPath(); cx.ellipse(W / 2, H / 2, W / 2, H / 2, 0, 0, Math.PI * 2); cx.clip(); }
+        const aspect = a.aspect || ((img.naturalWidth || 1) / (img.naturalHeight || 1));
+        const cr = _imgRect(a.fit || 'cover', W, H, aspect, a.zoom || 1, a.panX || 0, a.panY || 0);
+        cx.drawImage(img, cr.offX, cr.offY, cr.dW, cr.dH); cx.restore();
+        const out = cnv.toDataURL('image/png'); _shapeImgCache[key] = out; return out;
+    } catch (e) { return null; }
+}
+// Soft, lightly-blurred drop shadow baked into a transparent PNG (no native PDF
+// blur). Cached by size+shape. Padding leaves room for the blur to spread.
+const _shadowCache = {};
+function _softShadowDataUrl(wPt, hPt, ell) {
+    const blurPt = Math.max(2.2, 0.018 * Math.max(wPt, hPt));
+    const key = Math.round(wPt) + 'x' + Math.round(hPt) + (ell ? 'e' : 'r');
+    if (_shadowCache[key]) return _shadowCache[key];
+    try {
+        const px = 2, pad = Math.ceil(blurPt * px) + 6;
+        const sw = Math.round(wPt * px), sh = Math.round(hPt * px);
+        const W = sw + pad * 2, H = sh + pad * 2;
+        const cnv = document.createElement('canvas'); cnv.width = W; cnv.height = H;
+        const cx = cnv.getContext('2d');
+        try { cx.filter = 'blur(' + (blurPt * px) + 'px)'; } catch (e) {}
+        cx.fillStyle = 'rgba(0,0,0,0.5)';
+        if (ell) { cx.beginPath(); cx.ellipse(W / 2, H / 2, sw / 2, sh / 2, 0, 0, Math.PI * 2); cx.fill(); }
+        else { const r = 3 * px; cx.beginPath(); cx.moveTo(pad + r, pad); cx.arcTo(pad + sw, pad, pad + sw, pad + sh, r); cx.arcTo(pad + sw, pad + sh, pad, pad + sh, r); cx.arcTo(pad, pad + sh, pad, pad, r); cx.arcTo(pad, pad, pad + sw, pad, r); cx.closePath(); cx.fill(); }
+        const out = { url: cnv.toDataURL('image/png'), padPt: pad / px };
+        _shadowCache[key] = out; return out;
+    } catch (e) { return null; }
+}
 function _drawAnnotations(doc, key, PW, PH) {
     const list = (editorialContent.annotations && editorialContent.annotations[key]) || [];
     if (!list.length) return;
     list.forEach(a => {
+        const _annShadow = (xx, yy, ww, hh2, ell) => {
+            if (!a.shadow) return;
+            const off = 0.003 * PW;
+            const sh = _softShadowDataUrl(ww, hh2, ell);
+            if (sh && sh.url) { try { doc.addImage(sh.url, 'PNG', xx - sh.padPt + off, yy - sh.padPt + off, ww + sh.padPt * 2, hh2 + sh.padPt * 2); } catch (e) {} }
+        };
+        if (a.type === 'shape') {
+            const x = (a.x || 0) * PW, y = (a.y || 0) * PH, pw = (a.w || 0.25) * PW, ph = (a.h || 0.18) * PH;
+            const ell = a.shape === 'ellipse';
+            _annShadow(x, y, pw, ph, ell);
+            if (a.dataUrl) {
+                const mu = _shapeImgCache[_shapeImgKey(a, pw, ph)];
+                if (mu) { try { doc.addImage(mu, 'PNG', x, y, pw, ph); } catch (e) {} return; }
+                const fmt = (('' + a.dataUrl).indexOf('image/png') >= 0) ? 'PNG' : 'JPEG';
+                try { doc.addImage(a.dataUrl, fmt, x, y, pw, ph); } catch (e) {}
+            } else {
+                const c = _annHexToRgb(a.fill || '#d8d8de'); doc.setFillColor(c.r, c.g, c.b);
+                try { if (ell && doc.ellipse) doc.ellipse(x + pw / 2, y + ph / 2, pw / 2, ph / 2, 'F'); else if (doc.roundedRect) doc.roundedRect(x, y, pw, ph, 3, 3, 'F'); else doc.rect(x, y, pw, ph, 'F'); } catch (e) {}
+            }
+            return;
+        }
         if (a.type === 'mockup') {
             const entry = _mockupGet(a.pieceId); if (!entry || !entry.url) return;
             const pw = (a.w || 0.3) * PW, ph = pw * (entry.aspect || a.aspect || 1.2);
@@ -11243,31 +12519,38 @@ function _drawAnnotations(doc, key, PW, PH) {
             if (a.type === 'elbow') { doc.line(X1, Y1, X2, Y1); doc.line(X2, Y1, X2, Y2); px2 = X2; py2 = Y1; }
             else { doc.line(X1, Y1, X2, Y2); px2 = X1; py2 = Y1; }
             const dx = X2 - px2, dy = Y2 - py2, len = Math.max(0.5, Math.hypot(dx, dy));
-            const ux = dx / len, uy = dy / len, hsz = Math.max(6, wt * 3.4);
+            const ux = dx / len, uy = dy / len, hsz = Math.max(5, wt * 4.6);
             const bx = X2 - ux * hsz, by = Y2 - uy * hsz, nx = -uy, ny = ux;
             doc.setFillColor(rgb.r, rgb.g, rgb.b);
-            try { doc.triangle(X2, Y2, bx + nx * hsz * 0.55, by + ny * hsz * 0.55, bx - nx * hsz * 0.55, by - ny * hsz * 0.55, 'F'); } catch (e) {}
+            try { doc.triangle(X2, Y2, bx + nx * hsz * 0.34, by + ny * hsz * 0.34, bx - nx * hsz * 0.34, by - ny * hsz * 0.34, 'F'); } catch (e) {}
             return;
         }
         if (a.type === 'image') {
             if (!a.dataUrl) return;
             const x = (a.x || 0) * PW, y = (a.y || 0) * PH, pw = (a.w || 0.25) * PW, ph = (a.w || 0.25) * PW * (a.aspect || 0.75);
+            _annShadow(x, y, pw, ph, false);
             const fmt = (('' + a.dataUrl).indexOf('image/png') >= 0) ? 'PNG' : 'JPEG';
             try { doc.addImage(a.dataUrl, fmt, x, y, pw, ph); } catch (e) {}
             return;
         }
-        const text = (a.text || '') + ''; if (!text.trim()) return;
+        let text = (a.text || '') + ''; if (!text.trim()) return;
         const x = (a.x || 0) * PW, y = (a.y || 0) * PH, w = (a.w || 0.3) * PW;
         const size = Math.max(6, (a.size || 0.03) * PH);
         const fam = _font(a.font || 'sans');
-        const style = (a.bold && a.italic) ? 'bolditalic' : a.bold ? 'bold' : a.italic ? 'italic' : 'normal';
+        const heavy = a.weight ? a.weight >= 600 : a.bold;
+        const style = (heavy && a.italic) ? 'bolditalic' : heavy ? 'bold' : a.italic ? 'italic' : 'normal';
         try { doc.setFont(fam, style); } catch (e) { doc.setFont(fam, a.bold ? 'bold' : 'normal'); }
         doc.setFontSize(size);
         const c = _annHexToRgb(a.color); doc.setTextColor(c.r, c.g, c.b);
+        if (a.caps === 'upper') text = text.toUpperCase();
+        const align = _pdfAlign(a.align);
+        if (a.track) { try { doc.setCharSpace(a.track * size); } catch (e) {} }
         const lines = doc.splitTextToSize(text, w);
-        const align = a.align || 'left';
         let tx = x; if (align === 'center') tx = x + w / 2; else if (align === 'right') tx = x + w;
-        try { doc.text(lines, tx, y + size, { align: align }); } catch (e) { doc.text(lines, x, y + size); }
+        const aopts = { align: align, maxWidth: w };
+        if (a.outline) { try { doc.setDrawColor(c.r, c.g, c.b); doc.setLineWidth(Math.max(0.3, size * 0.022)); aopts.renderingMode = 'stroke'; } catch (e) {} }
+        try { doc.text(lines, tx, y + size, aopts); } catch (e) { doc.text(lines, x, y + size); }
+        if (a.track) { try { doc.setCharSpace(0); } catch (e) {} }
     });
 }
 // "APPROVED" stamp, top-right corner. Used to mark a deck as client-approved
@@ -11339,6 +12622,7 @@ async function _buildSpecPagePDF(opts) {    const { jsPDF } = window.jspdf;
         if (pageNum > 0) doc.addPage(PAGE_FORMAT, 'landscape');
         pageNum += 1;
         if (key) _pageKeys[pageNum] = key;
+        try { _curFooter = _resolveFooter(key || null); } catch (e) { _curFooter = { text: 'dark' }; }
         _pdfProgress(Math.min(0.97, pageNum / _pdfEst), 'Building page ' + pageNum + ' of ~' + _pdfEst + '…');
         return pageNum;
     };
@@ -11376,7 +12660,7 @@ async function _buildSpecPagePDF(opts) {    const { jsPDF } = window.jspdf;
 
     await emitAfterKey('__start__');
     // — Cover —
-    if (inc.cover) {
+    if (inc.cover && !_fixedHidden('cover')) {
         newPage('fixed:cover');
         const cov = editorialContent.coverPage;
         if (cov && Array.isArray(cov.elements) && cov.elements.length) {
@@ -11397,7 +12681,7 @@ async function _buildSpecPagePDF(opts) {    const { jsPDF } = window.jspdf;
     await emitAfterKey('card:timeline');
     await emitLayout('afterTimeline');
     // — Project Understanding (real): custom freeform page if built, else prose —
-    if (inc.understanding) {
+    if (inc.understanding && !_fixedHidden('understanding')) {
         newPage('fixed:understanding');
         const un = editorialContent.understandingPage;
         if (un && Array.isArray(un.elements) && un.elements.length) {
@@ -11414,7 +12698,7 @@ async function _buildSpecPagePDF(opts) {    const { jsPDF } = window.jspdf;
     await emitAfterKey('fixed:understanding');
     await emitLayout('afterUnderstanding');
     // — Art Narrative (real): custom freeform page if built, else prose —
-    if (inc.narrative) {
+    if (inc.narrative && !_fixedHidden('narrative')) {
         newPage('fixed:narrative');
         const nv = editorialContent.narrativePage;
         if (nv && Array.isArray(nv.elements) && nv.elements.length) {
@@ -11431,7 +12715,7 @@ async function _buildSpecPagePDF(opts) {    const { jsPDF } = window.jspdf;
     await emitAfterKey('fixed:narrative');
     await emitLayout('afterNarrative');
     // — Art Collection Strategy (real): custom freeform page if built, else tiers —
-    if (inc.strategy) {
+    if (inc.strategy && !_fixedHidden('strategy')) {
         newPage('fixed:strategy');
         const st = editorialContent.strategyPage;
         if (st && Array.isArray(st.elements) && st.elements.length) {
@@ -11721,7 +13005,7 @@ async function _buildSpecPagePDF(opts) {    const { jsPDF } = window.jspdf;
 
     await emitLayout('beforeContacts');
     // — Good Art. Good People. (real) —
-    if (inc.slogan) {
+    if (inc.slogan && !_fixedHidden('slogan')) {
         newPage('fixed:slogan');
         const sg = editorialContent.sloganPage;
         if (sg && Array.isArray(sg.elements) && sg.elements.length) {
@@ -11737,7 +13021,7 @@ async function _buildSpecPagePDF(opts) {    const { jsPDF } = window.jspdf;
         await emitAfterKey('fixed:slogan');
     }
     // — Thank You / contacts (real) —
-    if (inc.contacts) { newPage('card:contacts'); _drawThankYouPage(doc, logos, pageNum, meta, editorialContent.contacts || (typeof studioDefaults !== 'undefined' ? studioDefaults.contacts : '')); await emitAfterKey('card:contacts'); }
+    if (inc.contacts && !_fixedHidden('contacts')) { newPage('card:contacts'); _drawThankYouPage(doc, logos, pageNum, meta, editorialContent.contacts || (typeof studioDefaults !== 'undefined' ? studioDefaults.contacts : '')); await emitAfterKey('card:contacts'); }
 
     if (pageNum === 0) { showInfoModal('Nothing selected', 'No pages were included. Pick at least one section.'); return; }
     // — Overlay text boxes per page —
@@ -11753,9 +13037,9 @@ async function _buildSpecPagePDF(opts) {    const { jsPDF } = window.jspdf;
     }
     {
         const _emitted = {}; for (let p = 1; p <= pageNum; p++) { if (_pageKeys[p]) _emitted[_pageKeys[p]] = 1; }
-        for (const pg of (editorialContent.layoutPages || [])) { if (pg.afterKey && pg.afterKey !== '__start__' && !_emitted[pg.afterKey]) { await drawLayoutPage(pg); await emitAfterKey('layout:' + pg.id); } }
+        for (const pg of (editorialContent.layoutPages || [])) { if (!_emitted['layout:' + pg.id]) { await drawLayoutPage(pg); await emitAfterKey('layout:' + pg.id); } }
     }
-    for (let p = 1; p <= pageNum; p++) { const _k = _pageKeys[p]; if (!_k) continue; const _al = (editorialContent.annotations && editorialContent.annotations[_k]) || []; for (const _a of _al) { if (_a && _a.type === 'mockup' && _a.pieceId) { try { await _mockupEnsure(_a.pieceId); } catch (e) {} } } }
+    for (let p = 1; p <= pageNum; p++) { const _k = _pageKeys[p]; if (!_k) continue; const _al = (editorialContent.annotations && editorialContent.annotations[_k]) || []; for (const _a of _al) { if (_a && _a.type === 'mockup' && _a.pieceId) { try { await _mockupEnsure(_a.pieceId); } catch (e) {} } if (_a && _a.type === 'shape' && _a.dataUrl) { try { await _ensureShapeImage(_a, (_a.w || 0.25) * PW, (_a.h || 0.18) * PH); } catch (e) {} } } }
     for (let p = 1; p <= pageNum; p++) { if (_pageKeys[p]) { try { doc.setPage(p); _drawAnnotations(doc, _pageKeys[p], PW, PH); } catch (e) {} } }
     // — Approval status: spec pages the client has approved (green) or that are
     //   pending approval (red), shown under the floorplan back-link —
@@ -14541,11 +15825,32 @@ function updateBaseboard() { drawElevAll(); }
 // dialog opens so the user's last choice is remembered until they change it.
 let alignAxis = 'h';
 
+function _alignCenterPanel() {
+    const sb = document.querySelector('.elev-sidebar');
+    const panel = document.getElementById('alignPanel');
+    if (!panel) return;
+    if (sb) { const r = sb.getBoundingClientRect(); panel.style.left = (r.left + r.width / 2) + 'px'; panel.style.top = (r.top + r.height / 2) + 'px'; }
+    else { panel.style.left = '50%'; panel.style.top = '50%'; }
+    panel.style.transform = 'translate(-50%,-50%)';
+}
 function openAlignmentDialog() {
-    // Refresh the unit label to match current elevation unit
     const unitLabel = document.getElementById('alignGapUnit');
     if (unitLabel) unitLabel.textContent = elevUnit;
-    document.getElementById('alignModal').style.display = 'flex';
+    const salonUnit = document.getElementById('salonAreaUnit');
+    if (salonUnit) salonUnit.textContent = elevUnit;
+    document.getElementById('alignModal').style.display = 'block';
+    // Blur + lock ONLY the frame-panel column so the elevation stays sharp and
+    // interactive (live preview), while the frame tools require closing first.
+    const sb = document.querySelector('.elev-sidebar');
+    if (sb) { sb.style.filter = 'blur(3px) brightness(0.72)'; sb.style.pointerEvents = 'none'; sb.style.userSelect = 'none'; sb.style.transition = 'filter 0.15s ease'; }
+    _alignCenterPanel();
+    window.addEventListener('resize', _alignCenterPanel);
+}
+function closeAlignmentDialog() {
+    document.getElementById('alignModal').style.display = 'none';
+    const sb = document.querySelector('.elev-sidebar');
+    if (sb) { sb.style.filter = ''; sb.style.pointerEvents = ''; sb.style.userSelect = ''; }
+    window.removeEventListener('resize', _alignCenterPanel);
 }
 
 function setAlignAxis(axis) {
@@ -14561,45 +15866,104 @@ function setAlignAxis(axis) {
 // VERTICAL: same logic but bottom-to-top by y, building upward.
 // Frames are NOT centered or moved as a group — we preserve the leftmost
 // (or bottommost) frame's position and pack the rest against it.
-function applyAutoSpace() {
-    const activeFrames = elevFrames.filter(f => f.active);
-    if (activeFrames.length < 2) {
-        showInfoModal('Need More Frames', 'Auto-spacing requires at least 2 visible frames in this elevation.');
+// Frames that bulk align/space/salon operations act on: the current selection
+// if any frames are selected, otherwise all visible frames.
+function _alignTargets() {
+    const sel = elevFrames.filter(f => f.selected && f.active);
+    return sel.length >= 1 ? sel : elevFrames.filter(f => f.active);
+}
+function applyAutoSpace(opts) {
+    const live = !!(opts && opts.live);
+    const targets = _alignTargets();
+    if (targets.length < 2) {
+        if (!live) showInfoModal('Need More Frames', 'Auto-spacing needs at least 2 frames. Marquee-select the frames to space (or deselect all to use every visible frame).');
         return;
     }
     const gap = parseFloat(document.getElementById('alignGapValue').value) || 0;
-    if (gap < 0) {
-        showInfoModal('Invalid Gap', 'Gap must be 0 or greater.');
-        return;
-    }
+    if (gap < 0) { if (!live) showInfoModal('Invalid Gap', 'Gap must be 0 or greater.'); return; }
 
     if (alignAxis === 'h') {
-        // Sort by x ascending, then pack left-to-right with the gap between each
-        const sorted = [...activeFrames].sort((a, b) => a.x - b.x);
-        let cursor = sorted[0].x; // anchor: leftmost frame stays put
-        sorted.forEach((f, i) => {
-            if (i === 0) {
-                cursor = f.x + f.w; // first frame's right edge is the next cursor
-            } else {
-                f.x = cursor + gap;
-                cursor = f.x + f.w;
-            }
-        });
+        const sorted = [...targets].sort((a, b) => a.x - b.x);
+        let cursor = sorted[0].x;
+        sorted.forEach((f, i) => { if (i === 0) { cursor = f.x + f.w; } else { f.x = cursor + gap; cursor = f.x + f.w; } });
     } else {
-        // Vertical: sort by y ascending, pack bottom-to-top
-        const sorted = [...activeFrames].sort((a, b) => a.y - b.y);
+        const sorted = [...targets].sort((a, b) => a.y - b.y);
         let cursor = sorted[0].y;
-        sorted.forEach((f, i) => {
-            if (i === 0) {
-                cursor = f.y + f.h;
-            } else {
-                f.y = cursor + gap;
-                cursor = f.y + f.h;
-            }
-        });
+        sorted.forEach((f, i) => { if (i === 0) { cursor = f.y + f.h; } else { f.y = cursor + gap; cursor = f.y + f.h; } });
     }
     drawElevAll();
     initElevControls();
+    if (!live) pushHistory();
+}
+let _salonShape = 'auto';
+function setSalonShape(s) {
+    _salonShape = s;
+    ['salonAuto', 'salonLand', 'salonPort'].forEach(id => { const b = document.getElementById(id); if (b) b.classList.remove('active'); });
+    const map = { auto: 'salonAuto', landscape: 'salonLand', portrait: 'salonPort' };
+    const b = document.getElementById(map[s]); if (b) b.classList.add('active');
+}
+// Salon hang: shuffle the targeted frames into a balanced, evenly-gapped cluster.
+// Layout shape biases the cluster's width:height. An explicit spread area (W×H)
+// overrides the shape. By default the cluster is centered on the hang-height
+// line so it never drifts down toward the floor. Re-run to re-roll.
+function salonArrange() {
+    const targets = _alignTargets();
+    if (targets.length < 2) { showInfoModal('Need More Frames', 'Salon arrange needs at least 2 frames. Marquee-select the frames to arrange.'); return; }
+    const gap = parseFloat(document.getElementById('alignGapValue').value) || 4;
+    const areaW = parseFloat((document.getElementById('salonAreaW') || {}).value) || 0;
+    const areaH = parseFloat((document.getElementById('salonAreaH') || {}).value) || 0;
+    const centerHang = !!(document.getElementById('salonCenterHang') || {}).checked;
+
+    let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+    targets.forEach(f => { minX = Math.min(minX, f.x); maxX = Math.max(maxX, f.x + f.w); minY = Math.min(minY, f.y); maxY = Math.max(maxY, f.y + f.h); });
+    const cx = (minX + maxX) / 2;
+
+    const arr = targets.slice();
+    for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = arr[i]; arr[i] = arr[j]; arr[j] = t; }
+
+    // Total padded area of the frames — used to derive a target width from the
+    // chosen shape when no explicit spread area is given.
+    const area = arr.reduce((s, f) => s + (f.w + gap) * (f.h + gap), 0);
+    const widest = Math.max.apply(null, arr.map(f => f.w));
+    let targetRowW;
+    if (areaW > 0) targetRowW = areaW;
+    else if (areaH > 0) targetRowW = area / areaH;
+    else {
+        const aspect = _salonShape === 'landscape' ? 1.7 : _salonShape === 'portrait' ? 0.55 : 1.0;
+        targetRowW = Math.sqrt(area * aspect);
+    }
+    targetRowW = Math.max(targetRowW, widest); // always fit at least the widest frame
+
+    // Greedy row packing under the target width.
+    const rows = []; let row = [], rw = 0;
+    arr.forEach(f => { const add = (row.length ? gap : 0) + f.w; if (row.length && rw + add > targetRowW) { rows.push(row); row = [f]; rw = f.w; } else { row.push(f); rw += add; } });
+    if (row.length) rows.push(row);
+
+    const rowHeights = rows.map(r => Math.max.apply(null, r.map(f => f.h)));
+    const clusterH = rowHeights.reduce((a, b) => a + b, 0) + gap * (rows.length - 1);
+
+    // Vertical anchor: center the cluster on the hang line (default) so it hangs
+    // at eye level rather than sinking toward the floor.
+    let topY;
+    if (centerHang) { topY = getHangHeight() + clusterH / 2; }
+    else { topY = maxY; }
+
+    let y = topY;
+    rows.forEach((r, ri) => {
+        const rowW = r.reduce((s, f) => s + f.w, 0) + gap * (r.length - 1);
+        const rowH = rowHeights[ri];
+        let x = cx - rowW / 2;
+        r.forEach(f => { f.x = x; f.y = (y - rowH) + (rowH - f.h) / 2; x += f.w + gap; });
+        y = y - rowH - gap;
+    });
+
+    // Keep the cluster off the floor: if anything landed below y=0, lift the set.
+    let placedMinY = Infinity; arr.forEach(f => { placedMinY = Math.min(placedMinY, f.y); });
+    if (placedMinY < 0) arr.forEach(f => { f.y -= placedMinY; });
+
+    drawElevAll();
+    initElevControls();
+    if (document.getElementById('alignModal') && document.getElementById('alignModal').style.display === 'block') { const sb = document.querySelector('.elev-sidebar'); if (sb) { sb.style.filter = 'blur(3px) brightness(0.72)'; sb.style.pointerEvents = 'none'; } }
     pushHistory();
 }
 
@@ -14612,16 +15976,11 @@ function applyAutoSpace() {
 // or individual group toggles set), only the GROUPED frames get moved as a
 // unit. If nothing is grouped, all active frames move as one group.
 function centerGroupOnWall() {
-    const activeFrames = elevFrames.filter(f => f.active);
-    if (activeFrames.length === 0) {
-        showInfoModal('No Visible Frames', 'No active frames to center. Toggle on the frames you want to align.');
+    const movingFrames = _alignTargets();
+    if (movingFrames.length === 0) {
+        showInfoModal('No Frames', 'Select the frames to center, or deselect all to use every visible frame.');
         return;
     }
-    // Use grouped subset if any are grouped, otherwise all active
-    const anyGrouped = activeFrames.some(f => f.isGrouped);
-    const movingFrames = anyGrouped ? activeFrames.filter(f => f.isGrouped) : activeFrames;
-    if (movingFrames.length === 0) return;
-
     const wallW = parseFloat(document.getElementById('wallW').value) || 1;
     let minX = Infinity, maxX = -Infinity;
     movingFrames.forEach(f => {
@@ -14652,9 +16011,9 @@ function centerGroupOnWall() {
 //     for hanging a row of mismatched-size frames at the same gallery-
 //     standard center-of-art height.
 function alignToHangHeight() {
-    const activeFrames = elevFrames.filter(f => f.active);
+    const activeFrames = _alignTargets();
     if (activeFrames.length === 0) {
-        showInfoModal('No Visible Frames', 'No active frames to align. Toggle on the frames you want to align.');
+        showInfoModal('No Frames', 'Select the frames to align, or deselect all to use every visible frame.');
         return;
     }
     const hangY = getHangHeight();
@@ -15104,16 +16463,51 @@ function drawElevAll() {
         syncLayoutGuideButtonStates();
     }
 
-    // Wall-background click handler: clicking on the wall but NOT on a frame
-    // clears all selections. event.target === wall ensures we only clear when
-    // the click is on the wall itself, not on a child element (frames, hang
-    // line, person, etc). Idempotent — replaces any previous binding.
-    wall.onclick = function(e) {
-        if (e.target === wall && elevFrames.some(f => f.selected)) {
-            elevFrames.forEach(f => f.selected = false);
-            drawElevAll();
-        }
+    // Wall interaction: drag on empty wall = marquee-select frames; a plain
+    // click on empty wall clears the selection. Frame drags are unaffected
+    // because they start on the frame element (e.target !== wall).
+    wall.onmousedown = function(e) {
+        if (e.button !== 0) return;
+        if (typeof lineToolActive !== 'undefined' && lineToolActive) return; // measure tool owns clicks
+        if (e.target.closest && e.target.closest('.draggable, .frame-vis, #person-wrap, .custom-line, .arch-dim, .group-dim, .gd-box, button, input, select, textarea, a, [contenteditable]')) return;
+        _elevMarqueeStart(e);
     };
+}
+function _elevMarqueeStart(e) {
+    const wall = document.getElementById('wall'); if (!wall) return;
+    const r = wall.getBoundingClientRect();
+    _elevMarquee = { wall, r, x0: e.clientX, y0: e.clientY, moved: false, additive: e.shiftKey };
+    const box = document.createElement('div'); box.id = '_elevMarqueeBox';
+    box.style.cssText = 'position:absolute; border:1px solid #6a6aff; background:rgba(106,106,255,0.14); z-index:60; pointer-events:none; left:' + (e.clientX - r.left) + 'px; top:' + (e.clientY - r.top) + 'px; width:0; height:0;';
+    wall.appendChild(box); _elevMarquee.box = box;
+    document.addEventListener('mousemove', _elevMarqueeMove);
+    document.addEventListener('mouseup', _elevMarqueeUp);
+    e.preventDefault();
+}
+function _elevMarqueeMove(e) {
+    if (!_elevMarquee) return; const m = _elevMarquee, r = m.r;
+    const x = Math.min(e.clientX, m.x0) - r.left, y = Math.min(e.clientY, m.y0) - r.top, w = Math.abs(e.clientX - m.x0), h = Math.abs(e.clientY - m.y0);
+    if (w > 3 || h > 3) m.moved = true;
+    if (m.box) { m.box.style.left = x + 'px'; m.box.style.top = y + 'px'; m.box.style.width = w + 'px'; m.box.style.height = h + 'px'; }
+}
+function _elevMarqueeUp(e) {
+    document.removeEventListener('mousemove', _elevMarqueeMove);
+    document.removeEventListener('mouseup', _elevMarqueeUp);
+    const m = _elevMarquee; _elevMarquee = null; if (!m) return;
+    if (m.box && m.box.parentElement) m.box.parentElement.removeChild(m.box);
+    if (!m.moved) { if (elevFrames.some(f => f.selected)) { elevFrames.forEach(f => f.selected = false); drawElevAll(); } return; }
+    const sx = Math.min(e.clientX, m.x0), sy = Math.min(e.clientY, m.y0), ex = Math.max(e.clientX, m.x0), ey = Math.max(e.clientY, m.y0);
+    if (!m.additive) elevFrames.forEach(f => { f.selected = false; });
+    const fEls = m.wall.querySelectorAll('.frame-vis');
+    fEls.forEach(el => {
+        const fr = el.getBoundingClientRect();
+        if (fr.left < ex && fr.right > sx && fr.top < ey && fr.bottom > sy) {
+            const letter = el.dataset.frameLetter;
+            const f = elevFrames.find(ff => ff.letter === letter && ff.active);
+            if (f) f.selected = true;
+        }
+    });
+    drawElevAll();
 }
 
 // Render all group-dimension callouts for the current elevation into
@@ -15589,15 +16983,16 @@ function makeElevDraggable(el, idx) {
                 elevPersonPos.placed = true; // user moved it — lock position
             } else { 
                 let frame = elevFrames[idx]; let prevX = frame.x; let prevY = frame.y;
+                const selFrames = elevFrames.filter(f => f.selected && f.active);
+                const multiMove = frame.selected && selFrames.length > 1;
                 // Step 1: whole-unit snap (existing behavior)
                 let newX = Math.round((frame.x - dx)/snap)*snap;
                 let newY = Math.round((frame.y + dy)/snap)*snap;
                 // Step 2: snap-to-alignment with other frames + wall + hang line.
-                // Only engaged for SINGLE-FRAME drags. Grouped drags keep relative
-                // spacing within the group, so frame-to-frame snapping would
-                // produce surprising jumps as group members snap independently.
+                // Only for SINGLE-FRAME drags — grouped or multi-selected drags
+                // keep relative spacing, so per-frame snapping would jump them.
                 let activeGuides = [];
-                if (!frame.isGrouped && (typeof elevSnapEnabled === 'undefined' || elevSnapEnabled)) {
+                if (!frame.isGrouped && !multiMove && (typeof elevSnapEnabled === 'undefined' || elevSnapEnabled)) {
                     const snapResult = computeSnapForDrag(idx, newX, newY);
                     newX = snapResult.snappedX;
                     newY = snapResult.snappedY;
@@ -15606,6 +17001,7 @@ function makeElevDraggable(el, idx) {
                 frame.x = newX; frame.y = newY;
                 let actualDx = frame.x - prevX; let actualDy = frame.y - prevY;
                 if(frame.isGrouped) { elevFrames.forEach((f, i) => { if(i !== idx && f.active && f.isGrouped) { f.x += actualDx; f.y += actualDy; } }); }
+                else if(multiMove) { elevFrames.forEach((f, i) => { if(i !== idx && f.active && f.selected) { f.x += actualDx; f.y += actualDy; } }); }
                 // Render snap guides (or clear them if no snap is active)
                 renderSnapGuides(activeGuides);
             }
@@ -16384,6 +17780,47 @@ function startCustomLineDrag(e, id) {
     document.addEventListener('mouseup', onUp);
 }
 
+// Reflect the magnet button's on/off state: it's "on" whenever any spacing
+// dimension exists between frames.
+function _syncMagnetBtn() {
+    const btn = document.getElementById('autoSpacingToggle'); if (!btn) return;
+    const anyDims = elevFrames.some(f => f.active && Array.isArray(f.dimTo) && f.dimTo.length);
+    btn.classList.toggle('active', anyDims);
+}
+// Magnet quick-button: if any spacing dims exist, clear them all; otherwise
+// auto-dimension the gap between every pair of ADJACENT frames — each frame to
+// its nearest right neighbour (same row) and nearest neighbour above (same
+// column). Manual per-pair toggles in the frame panels still work.
+function toggleAllSpacing() {
+    const active = elevFrames.filter(f => f.active);
+    const anyDims = active.some(f => Array.isArray(f.dimTo) && f.dimTo.length);
+    if (anyDims) {
+        elevFrames.forEach(f => { f.dimTo = []; });
+    } else {
+        active.forEach(f => { if (!Array.isArray(f.dimTo)) f.dimTo = []; });
+        active.forEach(f => {
+            // nearest right neighbour that shares vertical overlap (same row)
+            let best = null, bestGap = Infinity;
+            active.forEach(g => {
+                if (g === f) return;
+                const vOverlap = Math.min(f.y + f.h, g.y + g.h) - Math.max(f.y, g.y);
+                if (vOverlap <= 0) return;
+                if (g.x >= f.x + f.w) { const gap = g.x - (f.x + f.w); if (gap < bestGap) { bestGap = gap; best = g; } }
+            });
+            if (best && !f.dimTo.includes(best.letter) && !(best.dimTo || []).includes(f.letter)) f.dimTo.push(best.letter);
+            // nearest neighbour above that shares horizontal overlap (same column)
+            let bestV = null, bestGapV = Infinity;
+            active.forEach(g => {
+                if (g === f) return;
+                const hOverlap = Math.min(f.x + f.w, g.x + g.w) - Math.max(f.x, g.x);
+                if (hOverlap <= 0) return;
+                if (g.y >= f.y + f.h) { const gap = g.y - (f.y + f.h); if (gap < bestGapV) { bestGapV = gap; bestV = g; } }
+            });
+            if (bestV && !f.dimTo.includes(bestV.letter) && !(bestV.dimTo || []).includes(f.letter)) f.dimTo.push(bestV.letter);
+        });
+    }
+    initElevControls(); drawElevAll(); pushHistory(); _syncMagnetBtn();
+}
 function drawElevTargetedSpacing() {
     const layer = document.getElementById('dim-layer'); layer.innerHTML = '';
     let drawnPairs = new Set();
@@ -16425,6 +17862,7 @@ function drawElevTargetedSpacing() {
             }
         });
     });
+    _syncMagnetBtn();
 }
 
 // Draw per-frame architectural distance dimensions. Each frame stores its own
