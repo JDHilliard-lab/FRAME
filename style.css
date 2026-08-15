@@ -35,10 +35,22 @@
      * sans-serif, medium weight, dashed. */
     --dim-color: #e00000;
     --dim-font-size: 13px;
-    --dim-font-family: Arial, Helvetica, sans-serif;
+    /* Boot value only — applyAnnotationStyleToCSSVars() overwrites this from
+       annotationStyle.font (a FRAME_FONT_LIBRARY token). Messina here so the
+       first paint matches the studio default instead of flashing Arial. */
+    --dim-font-family: 'Messina','Times New Roman',Times,Georgia,serif;
     --dim-font-weight: 600;
     --dim-weight: 2px;
     --dim-line-style: dashed;
+    /* Dash rhythm. applyAnnotationStyleToCSSVars overwrites all three from the
+     * setting; these are the values it would compute for the 3pt default.
+     * They exist because an UNRESOLVED var() inside a gradient invalidates the
+     * whole background-image — the stroke then has no dash AND no fallback
+     * appearance, it is simply invisible. Every var() below is written with an
+     * inline fallback for the same reason. */
+    --dim-dash-len: 6px;
+    --dim-dash-gap: 4px;
+    --dim-dash-period: 10px;
 
     /* Legacy alias — arch dims used --arch-line for their black color.
      * Repointed to the unified --dim-color so they follow the panel. */
@@ -80,35 +92,16 @@ input[type="number"] { -moz-appearance: textfield; }
 body:not(.light-theme) .logo-light { display: none !important; }
 body:not(.light-theme) .logo-dark { display: block !important; }
 
+/* The top nav holds exactly three fixed view tabs (Frame Dashboard, Elevation,
+ * Deck). The old .nav-tabs scrolling strip is gone: individual walls moved to
+ * the vertical .elev-wall-rail inside the elevation view, so nothing up here
+ * overflows or needs a horizontal scrollbar any more. Drag-reorder styles moved
+ * with them (.wall-tab), since these three tabs aren't draggable. */
 .nav-tabs-fixed { display: flex; height: 100%; align-items: center; flex-shrink: 0; }
-.nav-tabs { display: flex; height: 100%; align-items: center; overflow-x: auto; overflow-y: hidden; -ms-overflow-style: auto; scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; }
-.nav-tabs::-webkit-scrollbar { height: 5px; }
-.nav-tabs::-webkit-scrollbar-track { background: transparent; }
-.nav-tabs::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
-.nav-tabs::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 
 .nav-tab { display: flex; align-items: center; gap: 8px; background: transparent; border: none; color: var(--text-muted); font-size: 0.75rem; font-weight: bold; height: 100%; padding: 0 15px; cursor: pointer; transition: 0.2s; white-space: nowrap; border-bottom: 3px solid transparent; position: relative; }
 .nav-tab:hover { background: var(--bg-subpanel); color: var(--text-strong); }
 .nav-tab.active { background: var(--bg-main); color: var(--accent); border-bottom: 3px solid var(--accent); }
-
-/* Drag-to-reorder visual states for elevation tabs.
- * .dragging fades the tab being moved so the user sees what they grabbed.
- * .drop-before / .drop-after show a 3px colored bar on the appropriate edge
- *   of the target tab indicating where the dragged tab will land on release.
- * Uses the accent color to feel consistent with active-tab styling. */
-.nav-tab.dragging { opacity: 0.4; }
-.nav-tab.drop-before::before,
-.nav-tab.drop-after::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    background: var(--accent);
-    pointer-events: none;
-}
-.nav-tab.drop-before::before { left: -1px; }
-.nav-tab.drop-after::after { right: -1px; }
 
 /* ──────────────────────────────────────────────────────────────────────
  * DASHBOARD ROW DRAG-TO-REORDER
@@ -165,6 +158,31 @@ body:not(.light-theme) .logo-dark { display: block !important; }
 .view-container { display: none; width: 100%; height: 100%; }
 .view-container.active { display: flex; }
 
+/* OFF-SCREEN RENDER PORTAL for elevation captures.
+ *
+ * An elevation can only be measured where it is laid out: every renderer in there
+ * reads getBoundingClientRect, and a display:none view measures 0. So capturing one
+ * used to mean switching the whole app to the Elevations tab and back, per page —
+ * the strobe, plus a full Deck Studio teardown and rebuild on each return trip.
+ *
+ * This lays the view out for real while leaving the visible view alone: rendered
+ * (so it measures correctly) but parked far off screen. position:fixed is the load-
+ * bearing part — it takes the view OUT OF FLOW, so the deck beside it keeps the full
+ * width and does not reflow while we work. Deliberately NOT visibility:hidden or
+ * opacity:0, which would either suppress layout boxes or leak into the SVG export.
+ *
+ * Ordered after .active so that if both ever land on one element, portal wins.
+ * _elevPortalOpen sets width/height inline from .app-content's real box, so the
+ * fit-to-window scale is identical to the on-screen one and the drawing cannot come
+ * out at a different size than the Elevations tab shows. */
+.view-container.elev-portal {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: -25000px;
+    pointer-events: none;
+}
+
 label { display: block; font-size: 0.55rem; font-weight: bold; color: var(--text-muted); margin-bottom: 2px; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
 input[type="text"], input[type="number"], input[type="date"], select { width: 100%; padding: 4px 6px; border: 1px solid var(--border-color); border-radius: 4px; box-sizing: border-box; font-size: 0.75rem; height: 26px; background: var(--bg-input); color: var(--text-strong); transition: 0.2s;}
 input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); }
@@ -193,6 +211,43 @@ textarea { width: 100%; padding: 6px; border: 1px solid var(--border-color); bor
    outline. The outline makes the selected state unmistakable on glance — without
    it, the contrast against the toggle's own backplate was too subtle. */
 .unit-toggle button.active { background: var(--btn-secondary); color: var(--text-strong); box-shadow: 0 0 0 1px var(--accent) inset; }
+/* Line-weight ladder — a .unit-toggle carrying SIX segments instead of two or
+   three, so the labels have to give up their padding and bold to fit the same
+   width. Tabular figures keep '.25' and '1' the same width, which is what stops
+   the strip looking uneven. */
+.unit-toggle.wt-ladder button { padding: 0 2px; font-weight: 600; font-size: 0.6rem; font-variant-numeric: tabular-nums; }
+
+/* ========================================= */
+/* RANGE SLIDERS                             */
+/* ========================================= */
+/* One look everywhere: the Deck Studio gear popups, the Elevations Settings
+   panel, the elevation zoom bar, the frame-mockup zoom. Native range controls
+   render as a chunky 6-8px track with a large thumb, which ate vertical space in
+   the settings panels where several sit stacked. This is a 2px rule with a small
+   grab dot.
+   Both vendor prefixes are required: WebKit and Gecko expose different
+   pseudo-elements and NEITHER inherits the other's, so a rule written once
+   silently applies to one engine only. -webkit-appearance:none on the input is
+   what lets the track rule take effect at all. */
+input[type=range] {
+    -webkit-appearance: none; appearance: none;
+    background: transparent; height: 16px; margin: 0; padding: 0; cursor: pointer;
+}
+input[type=range]:focus { outline: none; }
+input[type=range]::-webkit-slider-runnable-track { height: 2px; border-radius: 1px; background: var(--border-color); }
+/* margin-top centres the dot on the 2px track: (2 - 11) / 2. */
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 11px; height: 11px; margin-top: -4.5px;
+    border: none; border-radius: 50%; background: var(--text-muted); transition: background 0.15s;
+}
+input[type=range]:hover::-webkit-slider-thumb, input[type=range]:active::-webkit-slider-thumb { background: var(--accent); }
+input[type=range]::-moz-range-track { height: 2px; border-radius: 1px; background: var(--border-color); }
+input[type=range]::-moz-range-thumb {
+    width: 11px; height: 11px;
+    border: none; border-radius: 50%; background: var(--text-muted); transition: background 0.15s;
+}
+input[type=range]:hover::-moz-range-thumb, input[type=range]:active::-moz-range-thumb { background: var(--accent); }
 
 .svg-icon { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
@@ -420,8 +475,61 @@ select.no-arrow::-ms-expand { display: none; }
 /* ========================================= */
 /* ELEVATION SPECIFIC CSS                    */
 /* ========================================= */
-.elev-sidebar { width: 440px; background: var(--bg-panel); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; z-index: 100; flex-shrink: 0; }
+/* 425px, down from 440. The 15px went to the wall rail (see .elev-wall-rail) —
+ * taken from here rather than from #export-wrap, whose padding is already at its
+ * floor. The frame list is what limits this: --elev-col-template's columns plus
+ * their gaps come to 348px, .elev-frame-list adds 40px of horizontal padding,
+ * and the letter column needs ~28px, so ~420px is the hard minimum. */
+.elev-sidebar { width: 425px; background: var(--bg-panel); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; z-index: 100; flex-shrink: 0; }
 .elev-sidebar-header { padding: 12px 20px; border-bottom: 1px solid var(--border-color); }
+
+/* WALL RAIL — the vertical list of walls down the right of the drawing, with
+ * + Add Wall pinned at the bottom. These used to be horizontal tabs in the top
+ * nav; a column scrolls to any number of walls instead of running out of width.
+ * Rows truncate and carry the full name in a title attribute, so the rail stays
+ * narrow and gives the drawing back as much room as possible.
+ *
+ * 165px, up from the 120px it shipped at. The fit-to-window scale is workspace
+ * width minus #export-wrap's padding, so every px the rail takes is a px off
+ * the drawing unless something gives it back. Three widths share ONE budget:
+ *
+ *     .elev-sidebar 425 + .elev-wall-rail 165 + #export-wrap padding-x 130
+ *     = 720 = the original 440 + 120 + 160
+ *
+ * Change any one alone and the fitted elevation resizes. The first 30px came
+ * out of the padding (80px a side -> 65); the padding is at its floor now
+ * because the outer wall dimensions sit 6in outside the wall (~74px at a
+ * typical fit scale), so the next 15px came out of the sidebar instead. */
+.elev-wall-rail { width: 165px; flex-shrink: 0; display: flex; flex-direction: column; min-height: 0; border-left: 1px solid var(--border-color); background: var(--bg-panel); }
+#nav-tabs-container { flex: 1; min-height: 0; display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden; padding: 6px 0; scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; }
+#nav-tabs-container::-webkit-scrollbar { width: 6px; }
+#nav-tabs-container::-webkit-scrollbar-track { background: transparent; }
+#nav-tabs-container::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+#nav-tabs-container::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+/* Active marker is a LEFT border. A bottom border (what .nav-tab uses) reads as
+ * a row separator once the tabs are stacked vertically. */
+.wall-tab { display: flex; align-items: center; gap: 6px; flex: 0 0 auto; height: 30px; padding: 0 8px 0 9px; font-size: 0.72rem; font-weight: bold; color: var(--text-muted); cursor: pointer; position: relative; border-left: 3px solid transparent; transition: 0.15s; }
+.wall-tab:hover { background: var(--bg-subpanel); color: var(--text-strong); }
+.wall-tab.active { background: var(--bg-main); color: var(--accent); border-left: 3px solid var(--accent); }
+.wall-tab-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Drag-to-reorder: .dragging fades the row you grabbed; .drop-before /
+ * .drop-after put an accent bar on the row's top or bottom edge to show where
+ * it will land. Rotated from the old horizontal version (left/right + width). */
+.wall-tab.dragging { opacity: 0.4; }
+.wall-tab.drop-before::before,
+.wall-tab.drop-after::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--accent);
+    pointer-events: none;
+}
+.wall-tab.drop-before::before { top: -1px; }
+.wall-tab.drop-after::after { bottom: -1px; }
+/* .nav-add-tab defaults to margin-left:10px for the old horizontal strip. */
+.elev-wall-rail .nav-add-tab { flex: 0 0 auto; margin: 8px; width: auto; }
 
 /* Input with an inline icon. The icon (and optional prefix label like "W:")
  * sits on the left inside the input's visual bounds; the input takes the
@@ -554,6 +662,23 @@ select.no-arrow::-ms-expand { display: none; }
     border-color: var(--accent);
 }
 
+/* WALL MODE — Art / EGD. A SELECTED-ONE-OF-TWO control, so the selected button is
+ * filled and the other is left plain: the pair only reads as a choice if one of them
+ * is visibly chosen.
+ * This needed its own rule because `.action-btn` has NO `.active` style anywhere in
+ * this file. The old single EGD toggle set the class and painted nothing, which is
+ * most of why the mode was invisible — the state was being tracked correctly the
+ * whole time and never shown. Setting a class is not the same as having a style.
+ * ART carries the accent as much as EGD does: the default has to look chosen, or a
+ * designer reads "neither is on" and never learns the switch is there. */
+.wall-mode-btn.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+}
+.wall-mode-btn.active .svg-icon { stroke: #fff; }
+.wall-mode-btn.active:hover { background: var(--accent); filter: brightness(1.08); }
+
 /* Emphasis container for Add & Arrange contents. Subtle background tint
  * inside the collapsible-section, since the section itself uses the
  * dashboard's section-title pattern (no built-in emphasis). */
@@ -581,6 +706,244 @@ select.no-arrow::-ms-expand { display: none; }
     text-align: center;
     line-height: 1.3;
 }
+/* Live status under the Print Output control. Warn colour when Split is picked but
+ * the wall has no window panels — that combination silently produces no schedule. */
+.po-hint { font-size: 0.6rem; line-height: 1.45; margin-top: 4px; color: var(--text-muted); }
+.po-hint-warn { color: #c98a2e; }
+
+/* Panel letter tag drawn in each glass pane. An opaque chip, because it sits over
+ * artwork; small and in the dimension ink so it reads as a drawing annotation rather
+ * than as a frame letter (which is a large grey glyph on the piece itself). */
+.glazing-tag {
+    font-size: 10px; font-weight: 700; line-height: 1;
+    padding: 2px 4px; background: #fff;
+    border: var(--dim-line-w, 1px) solid var(--dim-color, #444);
+    letter-spacing: 0.04em;
+}
+
+/* ── Wall context: the client elevation, and the blocks traced off it ───────
+ * The underlay is a TRACING GUIDE and never exports (see the three export sites
+ * noted on the model in app.js). pointer-events:none throughout, so it can never
+ * intercept a drag meant for the drawing sitting on top of it. */
+.elev-underlay-img { display: block; pointer-events: none; }
+
+/* A context block is LINE WORK on an OPAQUE WHITE body, with a hairline edge — never a
+ * colour and never a tint. White rather than transparent because a block is an object in
+ * the room and has to hide what is behind it: the baseboard passes behind a bed, and a
+ * wallcovering graphic is masked by the headboard that will really stand in front of it.
+ * White rather than a shade for the original reason the tint was dropped — anything with
+ * tone competes with the art the drawing exists to sell.
+ * Still no drop shadow: the block is a footprint on the drawing, not a card floating over
+ * it. The fill and edge are written inline from CONTEXT_FILL / CONTEXT_EDGE so the SVG
+ * exporter reads back exactly what was drawn; only type and the selected state live
+ * here. */
+.ctx-block { box-sizing: border-box; }
+.ctx-block:hover { border-color: rgba(60, 60, 60, 0.9); }
+/* Selection is the link between a block on the wall and its row in the sidebar, on a
+ * wall carrying eight of them. The same blue the marquee uses. */
+.ctx-selected { outline: 1px solid #6a6aff; outline-offset: -2px; }
+/* The annotation font, because a context label IS a drawing annotation — the same
+ * reasoning that put the glazing tag in the dimension ink. Shouted in DISPLAY only:
+ * the stored label keeps whatever case was typed, and the SVG export reads this
+ * computed transform back rather than assuming it. */
+.ctx-label {
+    font-family: var(--dim-font-family, Arial, Helvetica, sans-serif);
+    font-size: 10px; font-weight: 600; line-height: 1.15;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    white-space: nowrap; text-overflow: ellipsis;
+}
+
+/* The two sidebar panels reuse the .gz-* classes wholesale — same kind of control in
+ * the same narrow sidebar, and a second set of styles is how two panels that should
+ * look identical stop doing so. Only what differs is written here. */
+#contextControls, #contextControls *,
+#underlayControls, #underlayControls * { box-sizing: border-box; min-width: 0; }
+#contextControls .gz-in, #underlayControls .gz-in {
+    width: 100%; height: auto; background: var(--bg-panel);
+    border: 1px solid var(--border-color); color: var(--text-strong);
+    border-radius: 3px; padding: 2px 4px; font-size: 0.62rem;
+}
+#contextControls .gz-in::-webkit-outer-spin-button,
+#contextControls .gz-in::-webkit-inner-spin-button,
+#underlayControls .gz-in::-webkit-outer-spin-button,
+#underlayControls .gz-in::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+#contextControls input[type="number"].gz-in,
+#underlayControls input[type="number"].gz-in { -moz-appearance: textfield; appearance: textfield; }
+/* The block's NAME is its heading, so it takes the run-title slot rather than sitting
+ * in the field grid: "which block is this" is the first question the row answers. */
+#contextControls .ctx-name { flex: 1; font-size: 0.62rem; font-weight: 600; }
+.ctx-run-sel { border-color: #6a6aff; }
+/* The fade slider takes the whole row — the global input[type=range] rule styles the
+ * track and thumb, so there is nothing to add but the width. */
+#underlayControls input[type="range"] { width: 100%; margin: 2px 0 0; }
+/* An ARMED mode reads as pressed. Place and Calibrate are modes that change what a
+ * click on the wall does, so a button that looks identical on and off is how you end
+ * up drawing a block when you meant to measure one. */
+.gz-btn-on { background: var(--accent, #3b82f6); border-color: var(--accent, #3b82f6); color: #fff; }
+.gz-btn-on:hover { color: #fff; }
+.gz-btn[disabled] { opacity: 0.4; cursor: default; }
+.gz-btn[disabled]:hover { color: var(--text-muted); border-color: var(--border-color); }
+
+/* The shape palette. A grid rather than flex-wrap: fixed tracks keep six chips in tidy
+ * rows in a sidebar this narrow, instead of a ragged last row. */
+.ctx-palette { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-bottom: 6px; }
+.ctx-chip {
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    padding: 5px 2px; background: var(--bg-panel); border: 1px solid var(--border-color);
+    border-radius: 4px; color: var(--text-muted); font-size: 0.5rem; cursor: pointer;
+    letter-spacing: 0.03em; text-transform: uppercase; line-height: 1;
+}
+.ctx-chip:hover { color: var(--text-strong); border-color: var(--text-muted); }
+.ctx-chip-on { border-color: var(--accent, #3b82f6); color: var(--accent, #3b82f6); }
+/* The icon IS the shape, drawn the same way the block draws — a legend that can't
+ * disagree with the thing it stands for. */
+.ctx-chip-ico { width: 18px; height: 13px; border: 1px solid currentColor; box-sizing: border-box; }
+.ctx-ico-ellipse { border-radius: 50%; width: 14px; height: 14px; }
+.ctx-ico-shelf { height: 5px; border-top-width: 2px; }
+.ctx-ico-tv { background: currentColor; opacity: 0.45; }
+/* The per-block shape picker sits in the run head beside the name, so it stays narrow
+ * and the name keeps the space. */
+#contextControls .ctx-shape-pick { width: auto; flex: none; font-size: 0.55rem; padding: 2px 3px; }
+
+/* Client-elevation placement chrome. Authoring-only and on a layer that never
+ * exports, so these are pure editor affordances. */
+._ulPlaceBox, ._ulHandle { box-sizing: border-box; }
+
+/* Library categories. A scrolling strip, because five names do not fit across a 425px
+ * sidebar and wrapping them costs a whole row of height on every render. */
+.ctx-cats { display: flex; gap: 3px; overflow-x: auto; margin-bottom: 5px; padding-bottom: 2px; }
+.ctx-cats::-webkit-scrollbar { height: 4px; }
+.ctx-cats::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 2px; }
+.ctx-cat {
+    flex: none; background: transparent; border: 1px solid transparent; color: var(--text-muted);
+    border-radius: 3px; padding: 2px 6px; font-size: 0.55rem; cursor: pointer;
+    letter-spacing: 0.03em; text-transform: uppercase; white-space: nowrap;
+}
+.ctx-cat:hover { color: var(--text-strong); }
+.ctx-cat-on { color: var(--accent, #3b82f6); border-color: var(--accent, #3b82f6); }
+/* The palette scrolls too — Millwork and Furniture run to nine items each. Capped in
+ * vh so a tall screen shows the whole group without one. */
+.ctx-palette { max-height: 26vh; overflow-y: auto; }
+/* The block list does NOT scroll on its own — the PANE around it does (see
+ * .elev-tabpane). It used to be capped at 40vh with its own scrollbar, which put a
+ * scroll region inside a scroll region: you had to find the inner one, and past its cap
+ * the outer content still ran off the sidebar. One scroll region per panel. */
+.ctx-list { overflow-x: hidden; }
+.ctx-palette::-webkit-scrollbar { width: 6px; }
+.ctx-palette::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+/* Shape + surface sit on their own row under the name: three controls in the run head
+ * left the name field too narrow to read a label in. */
+.ctx-props { display: flex; gap: 4px; margin-bottom: 4px; }
+#contextControls .ctx-props .ctx-shape-pick { flex: 1; width: auto; }
+/* The style shuffle: prev / name / next. The arrows are fixed so the name takes the
+ * space — "which headboard is this" is the question the row answers. */
+.ctx-styles { align-items: stretch; }
+#contextControls .ctx-styles .gz-btn { flex: none; padding: 1px 7px; }
+#contextControls .ctx-style-pick { flex: 1; width: auto; font-size: 0.55rem; padding: 2px 3px; }
+/* Front-elevation line art filling a block. The <svg> stretches to the box; the strokes
+ * are held at a constant PIXEL weight by _ctxArtSvg dividing them by the draw scale, NOT
+ * by vector-effect — that attribute is not inherited, so setting it on the wrapping <g>
+ * did nothing and every stroke scaled with the viewBox (a 0.9 came out near 6px of solid
+ * black at a fitted zoom). overflow:visible so a stroke sitting exactly on the viewBox
+ * edge is not shaved in half. */
+.ctx-art { overflow: visible; }
+.ctx-art svg { display: block; width: 100%; height: 100%; overflow: visible; }
+/* The chip icon carries the SURFACE as well as the shape, so the palette shows what
+ * it will draw. Same three cues the block itself uses. */
+.ctx-ico-fill-wood { background-image: repeating-linear-gradient(to bottom, currentColor 0 1px, transparent 1px 4px); opacity: 0.75; }
+.ctx-ico-fill-glass { background-image: repeating-linear-gradient(135deg, currentColor 0 1px, transparent 1px 5px); opacity: 0.75; }
+
+/* ── Elevation sidebar tabs ────────────────────────────────────────────────
+ * Art / Context / Glass. Everything used to be stacked in one column, so wall context
+ * and window panels ate the room Add & Arrange and the frame list need — and those are
+ * the high-traffic ones. Panes are hidden with display, never detached, so
+ * initElevControls can keep rendering into all of them and every button stays
+ * findable by id. */
+/* THE PANE IS THE SCROLL REGION. .elev-sidebar is a flex COLUMN and .elev-frame-list
+ * used to be its only `flex: 1; overflow-y: auto` child — the one thing that scrolled.
+ * Wrapping the sections in panes broke that chain: the Context pane had no flex sizing,
+ * so it grew to its content and ran off the bottom of the sidebar with nothing to
+ * scroll. Reported as "the list can get bigger and bigger but it does not seem to be
+ * contained in the proper window".
+ * `min-height: 0` is the load-bearing half — a flex child will not shrink below its
+ * content without it, so `overflow-y: auto` alone would still have overflowed.
+ * The ART pane is `flex: none` on purpose: it holds the fixed Add & Arrange toolbar, and
+ * giving it flex:1 would squash the frame list that is meant to take the height. */
+.elev-tabpane { min-height: 0; }
+.elev-tabpane[data-elevtabpane="art"] { flex: none; }
+.elev-tabpane[data-elevtabpane="context"],
+.elev-tabpane[data-elevtabpane="glass"] {
+    flex: 1; min-height: 0; overflow-y: auto; padding-bottom: 12px;
+}
+.elev-tabpane::-webkit-scrollbar { width: 8px; }
+.elev-tabpane::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+.elev-tabs { display: flex; gap: 2px; margin-bottom: 6px; border-bottom: 1px solid var(--border-color); flex: none; }
+.elev-tab {
+    flex: 1; background: transparent; border: none; border-bottom: 2px solid transparent;
+    color: var(--text-muted); padding: 5px 4px; font-size: 0.62rem; cursor: pointer;
+    letter-spacing: 0.04em; text-transform: uppercase; font-weight: 600;
+}
+.elev-tab:hover { color: var(--text-strong); }
+.elev-tab-on { color: var(--accent, #3b82f6); border-bottom-color: var(--accent, #3b82f6); }
+
+/* ── Window panels (glazing) editor, #glazingControls ──────────────────────
+ * Sits in the Elevations sidebar, which is narrow, so the four run fields are a
+ * 2-up grid and the per-panel widths wrap. Panel inputs deliberately share .gz-in
+ * with the run fields — a panel width and a run width are the same kind of number
+ * and any visual difference reads as a different sort of control. */
+/* Everything here is width-constrained: the sidebar is narrow and the panel grid grows
+ * with the panel count, so `min-width: 0` and `box-sizing: border-box` are load-bearing
+ * rather than tidy. A number input carries a default intrinsic width (~170px on
+ * Chromium) that a percentage rule does NOT override — that is what pushed the panel
+ * count field out through the side of its container. */
+#glazingControls, #glazingControls * { box-sizing: border-box; min-width: 0; }
+.gz-hint { font-size: 0.6rem; color: var(--text-muted); line-height: 1.45; margin-bottom: 7px; }
+.gz-run { border: 1px solid var(--border-color); border-radius: 5px; padding: 6px 7px; margin-bottom: 6px; }
+.gz-run-head { display: flex; align-items: center; gap: 4px; margin-bottom: 5px; }
+.gz-run-name { flex: 1; font-size: 0.62rem; font-weight: 600; color: var(--text-strong); letter-spacing: 0.03em; }
+.gz-btn {
+    background: var(--bg-panel); border: 1px solid var(--border-color); color: var(--text-muted);
+    border-radius: 3px; padding: 1px 6px; font-size: 0.55rem; cursor: pointer; line-height: 1.5;
+    flex: none;
+}
+.gz-btn:hover { color: var(--text-strong); border-color: var(--text-muted); }
+.gz-btn-del { padding: 1px 5px; font-size: 0.68rem; }
+.gz-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 5px; }
+.gz-f, .gz-panel { display: flex; flex-direction: column; gap: 1px; }
+.gz-f > span, .gz-panel > span { font-size: 0.5rem; color: var(--text-muted); letter-spacing: 0.03em; text-transform: uppercase; }
+/* #glazingControls-prefixed, and that prefix is load-bearing, not tidiness: the global
+ * `input[type="number"]` rule near the top of this file sets width:100% and height:26px
+ * at specificity (0,1,1), which outranks a bare .gz-in-n (0,1,0). That is what made the
+ * panel-count field span the whole panel and push "N seams" out through the side. */
+#glazingControls .gz-in {
+    width: 100%; height: auto; background: var(--bg-panel);
+    border: 1px solid var(--border-color); color: var(--text-strong);
+    border-radius: 3px; padding: 2px 4px; font-size: 0.62rem;
+}
+/* The spinners eat ~16px, which is most of the room a 40px field has for its number. */
+#glazingControls .gz-in::-webkit-outer-spin-button,
+#glazingControls .gz-in::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+#glazingControls .gz-in { -moz-appearance: textfield; appearance: textfield; }
+.gz-sub { font-size: 0.5rem; color: var(--text-muted); margin-top: 3px; opacity: 0.85; }
+.gz-count { display: flex; align-items: center; gap: 5px; margin-top: 6px; flex-wrap: nowrap; }
+.gz-count > span:first-child { font-size: 0.5rem; color: var(--text-muted); letter-spacing: 0.03em; text-transform: uppercase; flex: none; }
+#glazingControls .gz-in-n { width: 40px; flex: none; }
+.gz-note { font-size: 0.53rem; color: var(--text-muted); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* A grid, not flex-wrap: fixed tracks keep 7 panels in tidy columns instead of a
+ * ragged last row, and the track width is what stops a long value widening the box. */
+.gz-panels { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-top: 5px; }
+.gz-panels .gz-panel > span { text-align: center; }
+#glazingControls .gz-panels .gz-in { padding: 2px 2px; font-size: 0.58rem; text-align: center; }
+.gz-add {
+    width: 100%; background: transparent; border: 1px dashed var(--border-color);
+    color: var(--text-muted); border-radius: 4px; padding: 4px; font-size: 0.6rem; cursor: pointer;
+}
+.gz-add:hover { color: var(--text-strong); border-color: var(--text-muted); }
+/* Only shown when something is actually hidden, so it reads as a state to clear
+ * rather than a permanent button. */
+.gz-restore { border-style: solid; color: #c98a2e; border-color: #c98a2e; margin-bottom: 5px; }
+.gz-restore:hover { color: #e0a049; border-color: #e0a049; }
+
 .elev-frame-list { flex: 1; overflow-y: auto; padding: 10px 20px; }
 
 /* Empty-state shown inside #frame-controls when an elevation has no frames.
@@ -786,7 +1149,17 @@ select.no-arrow::-ms-expand { display: none; }
     color: #f0883e;
 }
 .workspace { flex: 1; position: relative; overflow: auto; display: flex; background: var(--bg-main);}
-#export-wrap { padding: 80px; min-width: max-content; min-height: max-content; margin: auto; display: flex; justify-content: center; align-items: center; background: transparent; }
+/* Breathing room around the wall for the dimension callouts that hang outside
+ * it. Horizontal is 65px, not 80: the wall rail took 30px and this gives it
+ * back so the fitted drawing keeps its size (see .elev-wall-rail). drawElevAll
+ * MEASURES this padding rather than hardcoding it, so the two can't drift.
+ *
+ * Treat 65px as the floor. The outer wall dimensions are drawn 6in outside the
+ * wall, which is ~74px at a typical fit scale, and at fit the padded content is
+ * only ~9px narrower than the workspace either side — so they already sit right
+ * on the visible edge. Trim further and the wall-height dimension gets clipped
+ * off the left. Any more width the rail needs comes from .elev-sidebar. */
+#export-wrap { padding: 80px 65px; min-width: max-content; min-height: max-content; margin: auto; display: flex; justify-content: center; align-items: center; background: transparent; }
 
 /* Light grey wall default for crisp dimensional text contrast */
 #wall { background: #f0f2f5; border-bottom: 1px solid var(--wall-line, #333); border-left: 1px solid var(--wall-line, #333); border-right: 1px solid var(--wall-line, #333); border-top: 1px solid var(--wall-line, #333); position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
@@ -853,7 +1226,21 @@ body.dragging-frame .frame-vis:hover {
 /* All grid layers hidden by default */
 #label-layer, #od-layer, #dim-layer, #guide-layer, #grid-layer, #frame-center-layer { display: none; }
 .dim-layer, .grid-layer, .arch-dim-layer, .od-layer, .frame-center-layer, .label-layer { position: absolute; inset: 0; pointer-events: none; z-index: 30; }
-#frame-layer { position: absolute; inset: 0; z-index: 18; }
+/* CLICK-THROUGH, like every other full-wall layer above. This is an `inset: 0` div
+ * covering the entire wall, so with the default `pointer-events: auto` it swallowed
+ * every click meant for anything BENEATH it — which is what made context blocks
+ * impossible to select or drag ("I still can not select the blocks and move them
+ * around like I can with the frame mockups"). The frames themselves opt back in.
+ * Nothing else here needs events: the image-code captions and the EGD prompt are
+ * already pointer-events:none, and wireElevArtworkDrop listens on this layer but only
+ * ever acts on an e.target.closest('.frame-vis') — events still BUBBLE up from the
+ * frames, so a click-through layer does not break the drop target. */
+#frame-layer { position: absolute; inset: 0; z-index: 18; pointer-events: none; }
+.frame-vis { pointer-events: auto; }
+/* Same trap, one layer down: #context-layer is also inset:0 and sat over the
+ * client-elevation underlay. The blocks opt in; the layer does not. */
+#context-layer { pointer-events: none; }
+.ctx-block { pointer-events: auto; }
 /* Guide layer (wall-center + hang-height lines + floor-to-hang dim) sits
  * ABOVE frames (z-index 10) so these reference lines read over the artwork.
  * The dimension layers above sit even higher so dim callouts win over the
@@ -873,37 +1260,118 @@ body.dragging-frame .frame-vis:hover {
 .arch-dim { position: absolute; display: flex; align-items: center; justify-content: center; z-index: 40; }
 .arch-dim-h { height: 1px; flex-direction: row; }
 .arch-dim-v { width: 1px; flex-direction: column; }
-.dim-line-segment { flex: 1; height: var(--dim-weight); background: var(--arch-line); }
-.dim-line-segment-v { flex: 1; width: var(--dim-weight); background: var(--arch-line); }
+/* Dimension line strokes. --dim-line-w, not --dim-weight: under the
+ * architectural tick style the lines go light and the ticks stay heavy (set in
+ * applyAnnotationStyleToCSSVars). Under the plain style the two are equal, so
+ * this reads exactly as --dim-weight did. */
+.dim-line-segment { flex: 1; height: var(--dim-line-w, var(--dim-weight)); background: var(--arch-line); }
+.dim-line-segment-v { flex: 1; width: var(--dim-line-w, var(--dim-weight)); background: var(--arch-line); }
+
+/* ARCHITECTURAL TICK — the oblique stroke where a dimension line meets its
+ * extension line. A vertical border rotated 45deg draws bottom-left to
+ * top-right ( / ); translate(-50%,-50%) centres it ON the intersection so it
+ * straddles both lines rather than hanging off one side. Heavier than the lines
+ * it crosses, per the line-weight hierarchy. Never an arrowhead. */
+.dim-tick {
+    position: absolute;
+    width: 0;
+    height: var(--dim-tick-len, 9px);
+    border-left: var(--dim-tick-w, 1.5px) solid var(--dim-color);
+    transform: translate(-50%, -50%) rotate(45deg);
+    transform-origin: center;
+    pointer-events: none;
+}
+/* On a horizontal dimension the ends are left/right (set inline) and the line
+ * runs through the element's vertical middle; on a vertical dimension it's the
+ * other way round. */
+.dim-tick-h { top: 50%; }
+.dim-tick-v { left: 50%; }
 
 .arch-label-new { display: inline-flex; align-items: center; justify-content: center; line-height: 1; font-size: var(--dim-font-size); font-family: var(--dim-font-family); font-weight: var(--dim-font-weight); color: var(--dim-color); padding: 2px 6px; white-space: nowrap; background: #ffffff; border-radius: 3px; box-sizing: border-box; }
-
-.hang-guide { position: absolute; width: 100%; border-top: var(--dim-weight) dashed var(--dim-color); }
-.hang-label { 
-    position: absolute; 
-    right: 100%;            /* sit OUTSIDE the wall, left of its left edge */
+/* ROTATED vertical dimension text — 90 degrees counter-clockwise, reading
+ * bottom-to-top, running parallel to its line. This is the architectural standard
+ * for a vertical dimension, and it's also the only treatment that CANNOT crash into
+ * the wall: horizontal text in the narrow gutter left of the wall grew wider with
+ * every extra character ('108"(274.3cm)') until its chip reached across the wall
+ * line, and nudging it sideways only postpones that. Rotated, its horizontal
+ * footprint is the text HEIGHT — about 14px whatever the number says.
+ *
+ * Absolute, so the line runs through unbroken behind it (the two segments split the
+ * span evenly with the label out of flow). Only applied where there are no drag
+ * arrows on the label: the arrows are children of it and would rotate too, turning
+ * up/down into left/right. The outer wall dims have no arrows, which is why they get
+ * this and the spacing dims don't yet. */
+.arch-dim-v .arch-label-rot {
+    position: absolute;
     top: 50%;
-    /* Vertical orientation, reading bottom-to-top (conventional for a
-       left-side label), centered on the dashed hang line. */
-    writing-mode: vertical-rl;
-    transform: translateY(-50%) rotate(180deg);
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-90deg);
     transform-origin: center;
-    margin-right: 6px;      /* gap from the wall edge */
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
-    color: var(--dim-color); 
-    font-family: var(--dim-font-family);
-    font-size: var(--dim-font-size); 
-    font-weight: var(--dim-font-weight); 
-    background: rgba(255,255,255,0.85); 
-    padding: 6px 2px; 
-    border-radius: 3px; 
-    white-space: nowrap;
 }
-.center-guide { position: absolute; height: 100%; border-left: var(--dim-weight) dashed var(--dim-color); display: flex; justify-content: center; }
-.center-label { position: absolute; bottom: 100%; left: 0; transform: translate(-50%, -6px); display: inline-flex; align-items: center; line-height: 1; color: var(--dim-color); font-family: var(--dim-font-family); font-size: var(--dim-font-size); font-weight: var(--dim-font-weight); background: rgba(255,255,255,0.8); padding: 2px 6px; border-radius: 3px; white-space: nowrap; }
+
+/* The dashed hang line. No label rides on it — see drawElevGuides: the word
+ * HANG HEIGHT used to sit outside the wall on the left, where the wall-height
+ * dimension lives, and collided with it in mm/cm. The '60" AFF' callout carries
+ * the meaning now. (There was a .hang-label rule here, plus a writing-mode
+ * vertical-rl trick and an html2canvas workaround for it; all three are gone.) */
+/* DASHED ANNOTATION STROKES.
+ *
+ * Painted with a repeating gradient, not `border-style: dashed`. A CSS dashed
+ * border draws at the BROWSER's dash rhythm, roughly proportional to the border
+ * width, and there is no property that asks for a different one — so a light pen
+ * gave a dash so fine it read as a solid line, and no setting could change it.
+ * That was the reported bug, visible in Illustrator and the PDF alike.
+ *
+ * currentColor rather than var(--dim-color) directly, so the group dims (which are
+ * inline-styled in their own colour) get the right dash by setting `color` — and so
+ * the SVG exporter can read one computed property to find it.
+ *
+ * The exporter has no border and no background COLOUR to find on these, so every
+ * one of them must also carry data-svg-dash. See _mkDashLine / _elevPenWeight. */
+.dim-dash-h, .dim-dash-v { color: var(--dim-color); background-color: transparent; }
+/* max(1px, …) is a SCREEN-ONLY floor, and it is what makes these visible at all.
+ *
+ * A background box is painted where it lands: at a fractional offset — which every
+ * one of these has, since positions are inches x elevScale — a 1px box straddles
+ * two device pixels and is anti-aliased to roughly half strength in each. A BORDER
+ * is not: the browser snaps it to a whole device pixel, which is why these looked
+ * crisp before they became gradients and why some of a pair then appeared to be
+ * missing entirely while the others survived. Below 1px it is worse still.
+ *
+ * The exports are unaffected: they write the true point weight from the setting
+ * (_svgStrokePx), never this. So a light pen still PRINTS light, it just stops
+ * dissolving on screen. */
+.dim-dash-h {
+    height: max(1px, var(--dim-line-w, var(--dim-weight, 2px)));
+    background-image: repeating-linear-gradient(to right, currentColor 0 var(--dim-dash-len, 6px), transparent var(--dim-dash-len, 6px) var(--dim-dash-period, 10px));
+}
+.dim-dash-v {
+    width: max(1px, var(--dim-line-w, var(--dim-weight, 2px)));
+    background-image: repeating-linear-gradient(to bottom, currentColor 0 var(--dim-dash-len, 6px), transparent var(--dim-dash-len, 6px) var(--dim-dash-period, 10px));
+}
+/* The group-dim bounding rectangle: the same rhythm on all four edges. Four
+ * one-edge gradients rather than a border, for the reason above. background-size
+ * pins each to the pen weight so the stroke sits INSIDE the box, where a
+ * border-box border used to. */
+.dim-dash-box {
+    color: var(--dim-color);
+    background-color: transparent;
+    background-image:
+        repeating-linear-gradient(to right, currentColor 0 var(--dim-dash-len, 6px), transparent var(--dim-dash-len, 6px) var(--dim-dash-period, 10px)),
+        repeating-linear-gradient(to right, currentColor 0 var(--dim-dash-len, 6px), transparent var(--dim-dash-len, 6px) var(--dim-dash-period, 10px)),
+        repeating-linear-gradient(to bottom, currentColor 0 var(--dim-dash-len, 6px), transparent var(--dim-dash-len, 6px) var(--dim-dash-period, 10px)),
+        repeating-linear-gradient(to bottom, currentColor 0 var(--dim-dash-len, 6px), transparent var(--dim-dash-len, 6px) var(--dim-dash-period, 10px));
+    background-position: left top, left bottom, left top, right top;
+    background-size: 100% max(1px, var(--dim-line-w, 2px)), 100% max(1px, var(--dim-line-w, 2px)), max(1px, var(--dim-line-w, 2px)) 100%, max(1px, var(--dim-line-w, 2px)) 100%;
+    background-repeat: no-repeat;
+}
+.hang-guide { position: absolute; width: 100%; }
+.center-guide { position: absolute; height: 100%; display: flex; justify-content: center; }
+/* 'CL' sits just INSIDE the wall's top edge and BESIDE the dashed centre line.
+ * Not centred on the line and not above the wall: that is where the wall-width
+ * dimension number sits, and the two collided on long walls and in mm. margin-left
+ * (not a translate) keeps it clear of the line whatever the label's width. */
+.center-label { position: absolute; top: 5px; left: 0; margin-left: 6px; display: inline-flex; align-items: center; line-height: 1; color: var(--dim-color); font-family: var(--dim-font-family); font-size: var(--dim-font-size); font-weight: var(--dim-font-weight); background: rgba(255,255,255,0.8); padding: 2px 5px; border-radius: 3px; white-space: nowrap; }
 .crosshair-h { position: absolute; height: 1px; border-top: 1px dashed #aaa; }
 .crosshair-v { position: absolute; width: 1px; border-left: 1px dashed #aaa; }
 

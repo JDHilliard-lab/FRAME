@@ -1,0 +1,10 @@
+{
+  "_comment": "FRAME auto-scans the library/ tree for frames, so you do NOT need to list frames here. This file only points FRAME at the repo and holds optional per-frame overrides. Organize freely: library/<vendor>/<collection>/, optionally with corners/ and profiles/ subfolders. Corner files encode dimensions (CODE_FACE_dDEPTH_rRABBET.ext); profile files are the plain code (CODE.ext).",
+  "repo": "JDHilliard-lab/FRAME-dev",
+  "branch": "main",
+
+  "profileBase": "frames/profiles/",
+  "imageBase": "frames/corners/",
+
+  "frames": []
+}
