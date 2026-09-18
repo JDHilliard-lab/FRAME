@@ -1204,6 +1204,588 @@ const fs = require('fs');
       if (SPEC_QTY_LABELS.indexOf('Art Dimensions') < 0) throw new Error('the row lost its quantity handling');
     });
 
+    // ── Rail reordering (16.99) ─────────────────────────────────────────────
+    __check('only inserted layout pages move; everything else says why it cannot', () => {
+      // Fixed pages and cards sit at hardcoded points in _deckPageList; floorplans, plan
+      // details and spec pages come out of _deckPlanSlots in an order the data decides,
+      // and that generator is mirrored by the PDF exporter. A per-page override would
+      // fight it - the pairing that has drifted more than any other here.
+      if (!_dsPageMovable({ kind: 'layout', page: { id: 'p1' } })) throw new Error('an inserted page cannot be moved');
+      ['fixed', 'card', 'floorplan', 'planDetail', 'spec'].forEach(k => {
+        if (_dsPageMovable({ kind: k, page: { id: 'x' } })) throw new Error(k + ' pages became draggable');
+      });
+      // Every locked kind explains ITSELF and points at the control that decides it.
+      // "You cannot move this" without saying where the order lives is the state this
+      // replaced, where two thirds of a deck ignored the buttons beside it.
+      [['fixed', 'Include pages'], ['card', 'Include pages'],
+       ['floorplan', 'Floorplan order'], ['planDetail', 'Floorplan order'],
+       ['spec', 'Floorplan order']].forEach(pair => {
+        const note = _dsPageLockNote({ kind: pair[0] });
+        if (!note) throw new Error(pair[0] + ' pages give no reason');
+        if (note.indexOf(pair[1]) < 0) throw new Error(pair[0] + ' does not point at ' + pair[1] + ': ' + note);
+      });
+      if (_dsPageLockNote({ kind: 'layout', page: { id: 'p1' } })) throw new Error('a movable page claims to be locked');
+    });
+
+    __check('a move is computed from the RESULT, so drag and the number field agree', () => {
+      // Both go through _dsMovePageTo. Reading the anchor off the intended result rather
+      // than off an offset is what keeps "put this at 3" meaning the same thing whether
+      // the page is currently above or below 3.
+      const A = window.__appSrc;
+      const i = A.indexOf('function _dsMovePageTo');
+      const body = A.slice(i, A.indexOf('function _dsResetLayoutOrder'));
+      if (body.indexOf('list.splice(from, 1)') < 0 || body.indexOf('list.splice(to, 0, moved)') < 0) {
+        throw new Error('the move is not computed from the resulting order');
+      }
+      if (body.indexOf('delete desc.page.place') < 0) throw new Error('the template anchor survives a hand move and will fight it');
+      if (body.indexOf('_dsSyncLayoutPageOrder(list)') < 0) throw new Error('layoutPages is not reordered, so an anchor can fail to resolve');
+      // The rail's number field and the drop handlers must all call it.
+      if (A.indexOf('_dsMovePageTo(desc, v - 1)') < 0) throw new Error('the number field does not use the shared move');
+      // ONE drop path now (it was two near-identical copies, one per cell kind), so this
+      // asserts it exists rather than counting copies.
+      if (A.indexOf('_dsMovePageTo(src, idx)') < 0) throw new Error('the drop path does not use the shared move');
+    });
+
+    __check('layoutPages is re-sorted so an anchor always resolves', () => {
+      // The resolver walks layoutPages ONCE and places each page after the key it names.
+      // A page anchored to another layout page sitting later in the array cannot find its
+      // anchor and falls to the end of the deck - which is what dragging one inserted page
+      // directly after another would otherwise do.
+      const save = editorialContent.layoutPages;
+      const a = { id: 'pa' }, b = { id: 'pb' }, c = { id: 'pc' };
+      editorialContent.layoutPages = [c, a, b];
+      _dsSyncLayoutPageOrder([
+        { kind: 'layout', page: a }, { kind: 'fixed', fixed: 'cover' },
+        { kind: 'layout', page: b }, { kind: 'layout', page: c }
+      ]);
+      const ids = editorialContent.layoutPages.map(p => p.id).join(',');
+      if (ids !== 'pa,pb,pc') throw new Error('layoutPages did not follow the deck order: ' + ids);
+      editorialContent.layoutPages = save;
+    });
+
+    __check('the rail reorders with the SAME gesture and indicator as the elevation rail', () => {
+      // Two rails in one app that reorder by different gestures, with different drop
+      // indicators, is two things to learn instead of one.
+      const A = window.__appSrc, C = window.__css;
+      const i = A.indexOf('function _dsWireRailDrag');
+      const body = A.slice(i, A.indexOf('function _dsPageMovable'));
+      ['dragstart', 'dragover', 'drop', 'dragend'].forEach(ev => {
+        if (body.indexOf(ev) < 0) throw new Error('the rail does not handle ' + ev);
+      });
+      // CHANGED (17.06): the indicator is on the GAP, not on a cell edge. A gap is
+      // reachable as 'after page 8' or 'before page 9', so marking cells meant crossing one
+      // gap flipped between two indicators in slightly different places - it read as two
+      // slots to drop into when there is only ever one.
+      if (body.indexOf('_dsMarkGap(') < 0) throw new Error('the rail does not mark a gap');
+      if (C.indexOf('.ds-insstrip.drop-here::before') < 0) throw new Error('the gap has no drop style');
+      if (C.indexOf('[data-railcell].drop-before') >= 0) throw new Error('the dead cell-edge drop rules are back');
+      if (C.indexOf('[data-railcell].dragging') < 0) throw new Error('the dragged cell is not faded');
+      // A LOCKED page is not draggable but IS still a drop target: an inserted page has to
+      // be placeable between two spec pages, which is most of what it is for.
+      // Bounded at the branch-s own return: the movable path below it also sets
+      // draggable, so an unbounded slice reads that and reports the wrong thing.
+      // The drop pair is wired for EVERY cell before the movable check, then a locked one
+      // returns before it is made draggable. That ordering is the whole rule: a generated
+      // page accepts a drop and cannot be picked up.
+      const dropAt = body.indexOf("addEventListener('drop'");
+      const gate = body.indexOf('if (!_dsPageMovable(desc)) return;');
+      const drg = body.indexOf("setAttribute('draggable'");
+      if (dropAt < 0 || gate < 0 || drg < 0) throw new Error('the drag wiring lost a step');
+      if (!(dropAt < gate)) throw new Error('a locked page never gets a drop handler');
+      if (!(gate < drg)) throw new Error('a locked page is made draggable');
+      // And the readout, because the rail scrolls and a long drag leaves the page you
+      // grabbed off-screen.
+      if (A.indexOf('function _dsDragPill') < 0) throw new Error('there is no drag readout');
+      if (body.indexOf('_dsDragPill(') < 0) throw new Error('the readout never updates during a drag');
+    });
+
+    __check('the up/down arrows are gone and reset only appears when it can do something', () => {
+      const A = window.__appSrc;
+      if (A.indexOf('_dsMoveInserted') >= 0) throw new Error('the dead second mover is back');
+      if (A.indexOf('function _dsResetLayoutOrder') < 0) throw new Error('there is no way back to the default order');
+      const r = A.indexOf('Reset page order');
+      if (r < 0) throw new Error('the reset control is not in the rail');
+      if (A.slice(r - 800, r + 300).indexOf('handPlaced') < 0) throw new Error('reset shows even when nothing was moved');
+      // Reset touches ONLY hand-placed pages - a fixed or generated page was never moved,
+      // so there is nothing to put back.
+      const rb = A.indexOf('function _dsResetLayoutOrder');
+      if (A.slice(rb, rb + 900).indexOf('p.afterKey') < 0) throw new Error('reset does not key on hand-placed pages');
+    });
+
+    __check('EXACT BUG: a rail rebuild mid-drag must not move a different page', () => {
+      // The drag captured the page's INDEX at dragstart and resolved _dsPages[idx] at drop.
+      // Anything that rebuilds the rail during the gesture - an autosave sweep, a finishing
+      // thumbnail build, a completing elevation prime - calls _dsRefresh, which replaces
+      // _dsPages wholesale. The drop then moved whatever page had slid into that slot,
+      // silently and plausibly. Same rule context blocks already follow: anchor on a stable
+      // id, never an array index.
+      const saveP = _dsPages, saveK = _dsDragFromKey;
+      const p1 = { id: 'pgA' }, p2 = { id: 'pgB' }, p3 = { id: 'pgC' };
+      const d1 = { kind: 'layout', page: p1 }, d2 = { kind: 'layout', page: p2 }, d3 = { kind: 'layout', page: p3 };
+      _dsPages = [d1, d2, d3];
+      // Grab the middle page.
+      _dsDragFromKey = _deckPageKey(d2);
+      if (_dsDragFromNow() !== 1) throw new Error('the dragged page is not where it started');
+      if (_dsDragSrc() !== d2) throw new Error('the dragged page did not resolve');
+      // Now the rail rebuilds under the gesture and the order is different.
+      _dsPages = [d3, d1, d2];
+      if (_dsDragSrc() !== d2) throw new Error('a rebuild mid-drag re-pointed the drag at another page');
+      if (_dsDragFromNow() !== 2) throw new Error('the index did not follow the page: ' + _dsDragFromNow());
+      // And if the page is gone entirely, the answer is null rather than a wrong page.
+      _dsPages = [d3, d1];
+      if (_dsDragSrc() !== null) throw new Error('a deleted page still resolved to something');
+      _dsPages = saveP; _dsDragFromKey = saveK;
+    });
+
+    __check('the drag carries no index at all, and both cell kinds share one drop path', () => {
+      const A = window.__appSrc;
+      if (A.indexOf('_dsDragFromIdx') >= 0) throw new Error('the stale index global is back');
+      const i = A.indexOf('function _dsWireRailDrag');
+      const body = A.slice(i, A.indexOf('function _dsPageMovable'));
+      // ONE onOver / onDrop pair wired for movable and locked cells alike. There were two
+      // copies, and the stale-index fix would have had to land in both.
+      if ((body.split("addEventListener('drop'").length - 1) !== 1) {
+        throw new Error('there is more than one drop handler to keep in step');
+      }
+      if (body.indexOf('const onDrop =') < 0) throw new Error('the drop handler is not shared');
+      // dragstart stores the key, never the position.
+      const ds = body.slice(body.indexOf("addEventListener('dragstart'"));
+      if (ds.indexOf('_dsDragFromKey = myKey') < 0) throw new Error('dragstart does not capture the key');
+      if (/_dsDragFromKey\\s*=\\s*i\\b/.test(ds)) throw new Error('dragstart is capturing an index');
+      // The self-drop check compares keys too - an index comparison has the same staleness.
+      // The no-op check moved with the indicator: the two gaps either side of the dragged
+      // page leave it where it is, so they stay dark rather than promising a move.
+      const mg = A.slice(A.indexOf('function _dsMarkGap'), A.indexOf('function _dsGapToIndex'));
+      if (mg.indexOf('gapIdx === self || gapIdx === self + 1') < 0) throw new Error('the no-op gaps still light up');
+    });
+
+    // ── Layout guides from Deck Studio (17.02) ──────────────────────────────
+    __check('EXACT ASK: the scale character is switchable without leaving Deck Studio', () => {
+      // "I'm missing the character silhouette to show scale, I have to go back to elevation
+      // tab, turn on the character button and then back to deck studio and refresh." The
+      // state is one line of DOM on a view that is still in the document while Deck Studio
+      // is open, so the round trip was never necessary - there was just no control here.
+      const A = window.__appSrc;
+      if (A.indexOf('function _dsElevGuidesInto') < 0) throw new Error('there is no guide control in Deck Studio');
+      // It is offered on the page that SHOWS the guides - the install/breaker panel.
+      const ig = A.indexOf('function _dsInstallGuideControls');
+      if (A.slice(ig, ig + 1400).indexOf('_dsElevGuidesInto(body, desc)') < 0) {
+        throw new Error('the guide control is not on the install/breaker panel');
+      }
+      // The character is FIRST in the list, because it is the one that sends people back.
+      if (_DS_ELEV_GUIDES[0][0] !== 'person-wrap') throw new Error('the character is not the first guide offered');
+      // Every guide offered is a real layer the Elevations tab also drives, or the two
+      // panels would be controlling different things.
+      const known = _ELEV_GUIDE_LAYERS.map(p => p[0]);
+      _DS_ELEV_GUIDES.forEach(g => {
+        if (known.indexOf(g[0]) < 0) throw new Error(g[0] + ' is not a layer the Elevations tab knows about');
+      });
+    });
+
+    __check('the two panels read and write the SAME state, so they cannot disagree', () => {
+      // A second copy of "is the character on" is how one panel ends up showing off while
+      // the drawing has it on.
+      const person = document.getElementById('person-wrap');
+      if (!person) throw new Error('no person layer to test against');
+      // Reading follows toggleElevLayer exactly: an unset display is OFF, which is what
+      // every one of these layers ships as.
+      person.style.display = '';
+      if (_dsGuideIsOn('person-wrap')) throw new Error('an unset display read as ON, so the control starts out of step');
+      person.style.display = 'none';
+      if (_dsGuideIsOn('person-wrap')) throw new Error('display:none read as ON');
+      person.style.display = 'block';
+      if (!_dsGuideIsOn('person-wrap')) throw new Error('display:block read as OFF');
+      // Toggling from Deck Studio moves the layer AND the Elevations tab's own button.
+      const btn = document.getElementById('personToggle');
+      _dsToggleElevGuide('person-wrap');
+      if (_dsGuideIsOn('person-wrap')) throw new Error('the toggle did not turn it off');
+      if (btn && btn.classList.contains('active')) throw new Error('the Elevations button was left showing ON');
+      _dsToggleElevGuide('person-wrap');
+      if (!_dsGuideIsOn('person-wrap')) throw new Error('the toggle did not turn it back on');
+      if (btn && !btn.classList.contains('active')) throw new Error('the Elevations button was left showing OFF');
+    });
+
+    __check('the Deck Studio toggle must NOT call drawElevAll', () => {
+      // The elevation view is hidden behind Deck Studio, and a display:none view measures
+      // ZERO - which is the entire reason _elevPortalOpen exists. Redrawing from here would
+      // compute a fitted scale against nothing. The next capture redraws through the portal,
+      // so only the stored position has to be set.
+      const A = window.__appSrc;
+      const i = A.indexOf('function _dsToggleElevGuide');
+      const body = A.slice(i, A.indexOf('function _dsElevGuidesInto'));
+      if (body.indexOf('drawElevAll(') >= 0) throw new Error('it redraws a hidden view, which measures zero');
+      // But it MUST drop the caches, or the page keeps showing the capture taken without
+      // the guide on it - which is the "and refresh the page" half of the complaint.
+      if (body.indexOf('_elevGuidesChanged()') < 0) throw new Error('the cached captures are never dropped');
+      // And the character still gets its first-show nudge, or it lands off the wall edge.
+      if (body.indexOf('elevPersonPos.placed') < 0) throw new Error('the first-show position nudge was lost');
+    });
+
+    // ── The render modal, and the round trip (17.03) ────────────────────────
+    __check('EXACT BUG: an automatic refresh must not pop the render modal', () => {
+      // "anytime I turn on the layout guides in deck studio I get a rendering window
+      // prompt". _dsBuildPage takes a silent flag and honoured it for its own overlay,
+      // but never passed it on to _elevPrimeCaptures - so the prime modal appeared
+      // whenever the elevation cache had been dropped. The comment there said a cache hit
+      // "shows nothing", which was true only because the cache was usually warm; a
+      // deck-wide guide change drops it every time, so every toggle popped the modal.
+      const A = window.__appSrc;
+      const i = A.indexOf('async function _dsBuildPage');
+      const body = A.slice(i, i + 3000);
+      if (body.indexOf('_elevPrimeCaptures([_pei])') >= 0) throw new Error('silent is still not passed to the prime');
+      if (body.indexOf('_elevPrimeCaptures([_pei], { silent: !!silent })') < 0) {
+        throw new Error('the prime does not follow the build-s own silence');
+      }
+      // The prime itself has always honoured the flag - it was only never given it.
+      const p = A.indexOf('async function _elevPrimeCaptures');
+      if (A.slice(p, p + 2000).indexOf('if (!opts.silent) _elevPrimeShow') < 0) {
+        throw new Error('the prime no longer honours silent');
+      }
+      // The auto-refresh path is the silent one; the Preview button is not, and should
+      // still explain its trip.
+      if (A.indexOf('_dsBuildPage(true)') < 0) throw new Error('the auto preview is no longer silent');
+    });
+
+    __check('EXACT ASK: the jump to a wall remembers the page it came from', () => {
+      // "can I have a link to the elevation in deck studio and visa versa from [there]
+      // back to where it is in deck studio?"
+      const A = window.__appSrc;
+      if (A.indexOf('function _dsJumpToElevation') < 0) throw new Error('there is no way through to the wall');
+      if (A.indexOf('function _elevReturnToDeck') < 0) throw new Error('there is no way back');
+      const j = A.slice(A.indexOf('function _dsJumpToElevation'), A.indexOf('function _elevReturnToDeck'));
+      // The KEY, never _dsIndex: the deck rebuilds constantly, and an index would bring
+      // you back to whatever had since taken that slot. Same rule the page drag learned.
+      if (j.indexOf('_deckPageKey(desc)') < 0) throw new Error('the return point is not stored as a key');
+      if (/_elevReturnTo\s*=\s*\{[^}]*_dsIndex/.test(j)) throw new Error('the return point is stored as an index');
+      if (j.indexOf("switchView('elevation', idx)") < 0) throw new Error('the jump does not open the wall');
+      // The logic lives in _takeReturnTrip now: there are THREE trips (deck->wall,
+      // wall->dashboard, dashboard->wall) and they share one slot and one renderer,
+      // so _elevReturnToDeck is a one-line alias onto it. Same behaviour, read from
+      // where it actually is.
+      const r = A.slice(A.indexOf('function _takeReturnTrip'), A.indexOf('function _elevReturnToDeck'));
+      // Refresh BEFORE looking the key up: the deck may have been rebuilt while the wall
+      // was being edited, which is exactly what a guide toggle does.
+      if (r.indexOf('_dsRefresh()') < 0) throw new Error('the return does not rebuild the deck first');
+      if (r.indexOf('_dsRestoreSel(back.key') < 0) throw new Error('the return does not restore by key');
+      if (r.indexOf('_dsRefresh()') > r.indexOf('_dsRestoreSel(back.key')) {
+        throw new Error('it restores the selection before rebuilding, so the key may not be in the list yet');
+      }
+    });
+
+    __check('the back button is absent unless there is somewhere to go back to', () => {
+      // A permanently-parked "back" that does nothing most of the time is furniture.
+      const H = window.__indexHtml, A = window.__appSrc;
+      if (H.indexOf('id="elevReturnBar"') < 0) throw new Error('there is no return bar in the elevation sidebar');
+      if (H.indexOf('id="elevReturnBar" style="display:none;"') < 0) throw new Error('the return bar starts visible');
+      // Bounded FORWARD. _dsPageMovable sits earlier in the file, so using it as the end
+      // gave an empty slice that passed nothing and failed everything.
+      // Both bars are drawn by ONE renderer now, so read that. Bounded between
+      // landmarks rather than by a character count, which reads as deleted the
+      // moment the function grows.
+      const sb = A.indexOf('function _syncReturnBars');
+      const b = A.slice(sb, A.indexOf('function _elevSyncReturnBtn', sb));
+      if (b.indexOf("if (!on) { bar.style.display = 'none'") < 0) {
+        throw new Error('the bar does not hide itself when there is no return point');
+      }
+      // Reaching the deck by ANY route ends the trip, so a later visit to Elevations does
+      // not offer to return somewhere you already went.
+      const sv = A.slice(A.indexOf('function switchView'), A.indexOf('function _elevLoadWall'));
+      // Arriving anywhere that is not where the trip LANDED ends it. That used to be a
+      // bare '_elevReturnTo = null' in the deck branch, which was enough when the deck
+      // was the only place a trip could start. With three trips it has to be a rule.
+      if (sv.indexOf('_endTripIfWanderedTo(') < 0) throw new Error('navigating away never ends the trip');
+      if (sv.indexOf('_syncReturnBars()') < 0) throw new Error('entering a view never syncs the bar');
+    });
+
+    // ── Gear popups (17.04) ─────────────────────────────────────────────────
+    __check('EXACT BUG: no gear popup row can spill out of its own panel', () => {
+      // Reported on the ellipse popup: the stroke swatches, the divider and the -/+
+      // buttons ran off the right edge of the dark panel. The row is 14 swatches plus a
+      // colour input plus three controls, about 280px of content in a 216px box, with no
+      // flex-wrap on it.
+      // EVERY popup builder, not just the one it was seen on: the arrow popup had already
+      // been fixed and the shape and text ones had not, which is exactly how it survived.
+      // The shape popup no longer has an identical row helper to count: its sections
+      // are a label COLUMN plus a control body now, so there are two container helpers
+      // in it rather than one. What has to hold is unchanged - every container that
+      // RECEIVES CONTROLS wraps - so each builder is asked about its own helpers by
+      // name, and a builder that stops declaring them fails loudly here rather than
+      // quietly passing.
+      const A = window.__appSrc;
+      const NL = String.fromCharCode(10);
+      const bodyOfFn = (fn) => {
+        const at = A.indexOf(NL + 'function ' + fn + '(');
+        if (at < 0) throw new Error(fn + ' is gone');
+        let end = A.length;
+        [NL + 'function ', NL + 'const ', NL + 'let '].forEach(c => { const k = A.indexOf(c, at + 1); if (k >= 0 && k < end) end = k; });
+        return A.slice(at, end);
+      };
+      const WANT = {
+        _dsOpenArrowGearPopup: ['const row = ()'],
+        _dsOpenTextGearPopup: ['const row = ()'],
+        // sec() hands its controls to body; subRow() is the continuation line.
+        _dsOpenGearPopup: ['body.style.cssText', 'const subRow = ()']
+      };
+      Object.keys(WANT).forEach(fn => {
+        const b = bodyOfFn(fn);
+        WANT[fn].forEach(marker => {
+          const at = b.indexOf(marker);
+          if (at < 0) throw new Error(fn + ' no longer declares its control container (' + marker + ')');
+          // To the end of the LINE: every one of these helpers is a one-liner, and a
+          // slice to the next semicolon stops inside the cssText string itself.
+          const decl = b.slice(at, b.indexOf(NL, at));
+          if (decl.indexOf('display:flex') < 0) throw new Error(fn + ': ' + marker + ' is not a row');
+          if (decl.indexOf('flex-wrap:wrap') < 0) throw new Error(fn + ': ' + marker + ' does not wrap, so a long row runs off the panel');
+        });
+      });
+    });
+
+    __check('a gear popup is clamped to the viewport and scrolls, never runs off', () => {
+      // The arrow and shape popups placed themselves against a HARDCODED height guess
+      // (320 / 380) and set no max-height, so anything taller than the guess ran off the
+      // bottom with no way to reach what was under the fold. Wrapping the swatch rows made
+      // them taller, which is what turned that latent problem into a visible one.
+      const A = window.__appSrc;
+      // No popup may position against a magic height again.
+      ['window.innerHeight - 320', 'window.innerHeight - 380'].forEach(magic => {
+        if (A.indexOf(magic) >= 0) throw new Error('a popup still positions against ' + magic);
+      });
+      // All three size and place against the SAME number, so the clamp cannot disagree
+      // with the box it is clamping.
+      const n = A.split('popMaxH = Math.round(window.innerHeight * 0.86)').length - 1;
+      if (n !== 3) throw new Error('expected three popups clamped to the viewport, found ' + n);
+      const scroll = A.split("max-height:' + popMaxH + 'px; overflow-y:auto;").length - 1;
+      if (scroll !== 3) throw new Error('expected three popups to scroll, found ' + scroll);
+      // CHANGED (17.05): placement no longer clamps at OPEN time. The popup is empty
+      // then, so its real height is unknown, and clamping against the MAXIMUM put the
+      // ceiling at ~14% of the window - any popup dragged lower snapped back on the next
+      // refresh, which is every swatch click. Rough placement now, then _dsClampPopup
+      // measures. max-height and overflow-y still do their job.
+      const placed = A.split("+ 'px; top:' + Math.max(8, cy - 10) + 'px;").length - 1;
+      if (placed !== 3) throw new Error('expected three popups placed without a height guess, found ' + placed);
+    });
+
+    __check('EXACT BUG: a dragged popup stays put when you click a swatch', () => {
+      // "if I move the pop up window down, and then click one of the circle swatch colors
+      // it jumps back up to the top". Clicking a swatch refreshes the popup, which
+      // re-opens it at its current position - and the re-open clamped the top against the
+      // popup-s MAXIMUM height rather than its real one. At 86% of the window that put the
+      // ceiling around 118px on a 900px screen, so almost any drag snapped back.
+      const mk = (top, h) => {
+        const d = document.createElement('div');
+        d.style.position = 'fixed';
+        d.style.top = top + 'px';
+        d.style.left = '300px';
+        d.getBoundingClientRect = () => ({ top: top, left: 300, width: 236, height: h });
+        document.body.appendChild(d);
+        return d;
+      };
+      const H = window.innerHeight || 768;
+      // A popup that FITS where it was dragged is left exactly there.
+      const fits = mk(Math.round(H * 0.45), 200);
+      const was = fits.style.top;
+      _dsClampPopup(fits);
+      if (fits.style.top !== was) throw new Error('a popup that fits was moved from ' + was + ' to ' + fits.style.top);
+      // One that genuinely overhangs the bottom is pulled back by the overhang, no further.
+      const over = mk(H - 40, 200);
+      _dsClampPopup(over);
+      const t = parseFloat(over.style.top);
+      if (t !== Math.max(8, H - 200 - 8)) throw new Error('an overhanging popup landed at ' + t);
+      // And one taller than the window pins to the top margin rather than going negative.
+      const tall = mk(400, H + 200);
+      _dsClampPopup(tall);
+      if (parseFloat(tall.style.top) !== 8) throw new Error('an oversized popup did not pin to the margin');
+      [fits, over, tall].forEach(d => d.remove());
+    });
+
+    __check('popups are clamped by MEASUREMENT, never by a guessed height', () => {
+      const A = window.__appSrc;
+      if (A.indexOf('function _dsClampPopup') < 0) throw new Error('there is no shared clamp');
+      const c = A.slice(A.indexOf('function _dsClampPopup'), A.indexOf('function _frameSwatchesInto'));
+      if (c.indexOf('getBoundingClientRect') < 0) throw new Error('the clamp does not measure the popup');
+      // No popup may pre-clamp its top against a height it cannot know yet: at open time
+      // the popup is empty, so its real height is unknown.
+      if (A.indexOf('Math.min(window.innerHeight - popMaxH - 8') >= 0) {
+        throw new Error('a popup still clamps against its maximum height at open time');
+      }
+      // EVERY popup that measures itself clamps after append. The edge-gap popover
+      // deliberately does NOT: it is appended empty and positioned by its own CSS
+      // class, so measuring it would read zero and clamping would move it.
+      const CLAMPED = ['_dsOpenArrowGearPopup', '_dsOpenGearPopup', '_dsOpenTextGearPopup',
+                       '_dsOpenTitleTypePopup', '_dsOpenInkPopover'];
+      CLAMPED.forEach(fn => {
+        if (A.indexOf('function ' + fn) < 0) throw new Error(fn + ' is gone, so the count below is measuring something else');
+      });
+      const n = A.split('_dsClampPopup(pop);').length - 1;
+      if (n !== CLAMPED.length) throw new Error('expected ' + CLAMPED.length + ' clamped popups (' + CLAMPED.join(', ') + '), found ' + n + ' — a new popup that measures itself must clamp too');
+      const eg = A.indexOf('function openEdgeGapPopover');
+      if (A.slice(eg, eg + 900).indexOf('_dsClampPopup') >= 0) {
+        throw new Error('the edge-gap popover is being clamped, and it is positioned by CSS');
+      }
+    });
+
+    __check('the position control sits with remove and duplicate, on the thumbnail', () => {
+      // Those three are one family - remove, reposition, duplicate. Splitting them between
+      // the thumbnail edge and the caption row put the odd one out where the page TITLE
+      // needs the width.
+      const A = window.__appSrc;
+      const i = A.indexOf("num.className = 'ds-pagenum'");
+      if (i < 0) throw new Error('the position box is gone');
+      const body = A.slice(i - 900, i + 2000);
+      if (body.indexOf('cell.appendChild(num)') < 0) throw new Error('the position box is not on the thumbnail cell');
+      if (body.indexOf('lab.appendChild(num)') >= 0) throw new Error('the position box is still in the caption row');
+      if (body.indexOf('position:absolute') < 0 || body.indexOf('right:2px') < 0) {
+        throw new Error('it is not on the same edge as remove and duplicate');
+      }
+      // Same slot for the lock marker, so a locked page reads as the same column.
+      const L = A.indexOf('lock.title = _dsPageLockNote(desc)');
+      if (L < 0) throw new Error('the lock marker is gone');
+      if (A.slice(L, L + 500).indexOf('cell.appendChild(lock)') < 0) throw new Error('the lock marker is not in the same slot');
+      // Spinners off: they would double the width of a control that is typed into.
+      const C = window.__css;
+      if (C.indexOf('.ds-pagenum::-webkit-inner-spin-button') < 0) throw new Error('the number spinners are back');
+    });
+
+    __check('the insert gap is quiet until you reach for it, and still a drop gap', () => {
+      // A permanent 16px lane between every pair of cells was about a fifth of the rail's
+      // scroll on a 21-page deck, spent on a control used a handful of times.
+      const C = window.__css;
+      const i = C.indexOf('.ds-insstrip {');
+      if (i < 0) throw new Error('the insert strip has no style');
+      const rule = C.slice(i, i + 260);
+      const h = /height:\\s*(\\d+)px/.exec(rule);
+      if (!h) throw new Error('the strip has no height');
+      const px = parseInt(h[1], 10);
+      // CHANGED (17.06): it must be TALL ENOUGH TO HOLD ITS BUTTON. At 6px the 16px button
+      // overflowed 5px into the page above and below, which is what made it look offset and
+      // overlap the next page. And it is no longer hover-only: a control you have to be told
+      // to hover for is not discoverable, it is a secret.
+      // No regex: these checks live in a template literal, so every backslash doubles and
+      // a normal one silently stops matching. See the note at the top of this file.
+      const btnCss = C.slice(C.indexOf('.ds-insstrip > button'), C.indexOf('.ds-insstrip:hover'));
+      const numAfter = (txt, label) => {
+        const at = txt.indexOf(label);
+        if (at < 0) return NaN;
+        return parseInt(txt.slice(at + label.length).trim(), 10);
+      };
+      const bH = numAfter(btnCss, 'height:');
+      if (!bH) throw new Error('the insert button has no height');
+      if (bH > px) throw new Error('the button (' + bH + 'px) overflows its gap (' + px + 'px)');
+      if (px > 18) throw new Error('the gap is eating the rail again: ' + px + 'px');
+      const opAt = btnCss.indexOf('opacity:');
+      const op = (opAt < 0) ? 0 : parseFloat(btnCss.slice(opAt + 8).trim());
+      if (!(op > 0)) throw new Error('the + is invisible until hover again');
+      // ...but reachable by keyboard, or it is a control only a mouse can find.
+      if (C.indexOf('.ds-insstrip > button:focus-visible') < 0) throw new Error('the + is unreachable by keyboard');
+    });
+
+    // ── The gap, and before/after placement (17.06) ─────────────────────────
+    __check('EXACT BUG: one gap has ONE drop indicator, not two', () => {
+      // "when dragging a page and moving it seems to have two placements you can drop it
+      // into, I just want one." A gap is reachable as "after page 8" or "before page 9",
+      // and the indicator was drawn on the CELLS - so crossing one gap flipped between two
+      // marks in slightly different places and read as two slots.
+      const A = window.__appSrc;
+      // Nothing marks a cell edge any more.
+      if (A.indexOf("classList.add(e.clientY < (r.top + r.height / 2) ? 'drop-before' : 'drop-after')") >= 0) {
+        throw new Error('cells still draw their own drop edges');
+      }
+      const clear = A.slice(A.indexOf('function _dsClearDropMarks'), A.indexOf('function _dsMarkGap'));
+      if (clear.indexOf('.ds-insstrip.drop-here') < 0) throw new Error('the clear does not target gaps');
+      if (clear.indexOf('data-railcell') >= 0) throw new Error('the clear still targets cells');
+      // A cell hover resolves to a gap and marks THAT.
+      const w = A.slice(A.indexOf('function _dsWireRailDrag'), A.indexOf('function _dsPageMovable'));
+      if (w.indexOf('_dsMarkGap(') < 0) throw new Error('hovering a page does not mark a gap');
+      // Exactly one gap is lit at a time, because marking clears first.
+      const mg = A.slice(A.indexOf('function _dsMarkGap'), A.indexOf('function _dsGapToIndex'));
+      if (mg.indexOf('_dsClearDropMarks();') < 0) throw new Error('marking a gap does not clear the previous one');
+      // The two gaps either side of the dragged page are no-ops, so they stay dark rather
+      // than promising a move that will not happen.
+      if (mg.indexOf('gapIdx === self || gapIdx === self + 1') < 0) throw new Error('the no-op gaps still light up');
+    });
+
+    __check('EXACT ASK: the insert + is visible without being told to hover', () => {
+      // "right now you cannot see it and I will have to tell users to hover between pages
+      // to get the add new page." A control you have to be told to hover for is not
+      // discoverable, it is a secret.
+      const C = window.__css;
+      const btn = C.slice(C.indexOf('.ds-insstrip > button'), C.indexOf('.ds-insstrip:hover'));
+      const at = btn.indexOf('opacity:');
+      const op = (at < 0) ? 0 : parseFloat(btn.slice(at + 8).trim());
+      if (!(op > 0)) throw new Error('the + starts invisible');
+      // And it still gets louder under the cursor, so the affordance reads as reachable.
+      if (C.indexOf('.ds-insstrip:hover > button') < 0) throw new Error('the + does not respond to hover');
+    });
+
+    __check('EXACT BUG: the + fits its gap instead of overlapping the pages', () => {
+      // "the add page button seems a little offset and overlaps the next page." A 16px
+      // button in a 6px strip overflows 5px into the page above and below it.
+      const C = window.__css;
+      const num = (txt, label) => { const at = txt.indexOf(label); return at < 0 ? NaN : parseInt(txt.slice(at + label.length).trim(), 10); };
+      const strip = C.slice(C.indexOf('.ds-insstrip {'), C.indexOf('.ds-insstrip::before'));
+      const btn = C.slice(C.indexOf('.ds-insstrip > button'), C.indexOf('.ds-insstrip:hover'));
+      const sh = num(strip, 'height:'), bh = num(btn, 'height:');
+      if (!sh || !bh) throw new Error('gap or button has no height');
+      if (bh > sh) throw new Error('the button (' + bh + 'px) still overflows its gap (' + sh + 'px)');
+      // The gap owns the spacing between cells, so there is one number rather than two
+      // that drift apart.
+      const A = window.__appSrc;
+      if (A.indexOf("cell.style.cssText = 'position:relative; margin-bottom:4px; cursor:pointer;'") >= 0) {
+        throw new Error('the cell still adds its own margin on top of the gap');
+      }
+    });
+
+    __check('EXACT ASK: place a page before or after a given page number', () => {
+      // The number box on the thumbnail is an absolute position. This is the one you reach
+      // for when thinking about a NEIGHBOUR - and "before 7" and "after 7" are different
+      // places, which a single number cannot express.
+      const A = window.__appSrc;
+      if (A.indexOf('function _dsPlaceRelative') < 0) throw new Error('there is no before/after placement');
+      const f = A.slice(A.indexOf('function _dsPlaceRelative('), A.indexOf('function _dsPlaceRelativeInto'));
+      // It goes through the ONE move, so this and a drop land identically.
+      if (f.indexOf('_dsMovePageTo(') < 0) throw new Error('it does not use the shared move');
+      // before N and after N are different gaps.
+      if (f.indexOf("(where === 'before') ? (n - 1) : n") < 0) throw new Error('before and after resolve to the same gap');
+      // Same shift the drop applies, or the two disagree by one.
+      if (f.indexOf('if (from >= 0 && from < gap) gap--') < 0) throw new Error('it does not account for lifting the page out of the list');
+      // Out of range, or relative to itself, does nothing rather than something wrong.
+      if (f.indexOf('n > (_dsPages || []).length') < 0) throw new Error('an out-of-range page number is not rejected');
+      if (f.indexOf('target === desc') < 0) throw new Error('placing a page relative to itself is not rejected');
+      // Offered for movable pages only, ahead of the branches that return early.
+      // UPDATED 17.26: this used to read a 3600-CHARACTER window after the function
+      // name, so it broke the moment the header above grew — which is the trap CLAUDE.md
+      // names outright. Sliced between landmarks now, and it checks the ORDER it
+      // actually cares about: the control must come before the first branch that returns.
+      const rt = A.indexOf('function _dsRenderTools()');
+      const end = A.indexOf('function _dsSave()', rt);
+      if (end < 0) throw new Error('_dsSave does not follow _dsRenderTools');
+      const body = A.slice(rt, end);
+      const place = body.indexOf('_dsPlaceRelativeInto(t, desc)');
+      const firstBranch = body.indexOf("if (desc.kind === 'floorplan')");
+      if (place < 0) throw new Error('the control is not in the page panel at all');
+      if (firstBranch >= 0 && place > firstBranch) throw new Error('it renders after a branch that returns early, so some page kinds lose it');
+    });
+
+    __check('the rail header is a section, not something the pages show through', () => {
+      // It was near-transparent and only as wide as the rail's CONTENT box, so thumbnails
+      // scrolled past in the 12px gutters either side and showed through beside it.
+      const A = window.__appSrc, H = window.__indexHtml;
+      // From _dsRenderRail: _dsRenderTemplateRail builds its own header and sits earlier
+      // in the file, so a bare indexOf reads that one instead.
+      const railFn = A.indexOf('function _dsRenderRail()');
+      const i = A.indexOf("bar.style.cssText = 'position:sticky", railFn);
+      if (i < 0) throw new Error('the rail header is gone');
+      const css = A.slice(i, i + 700);
+      if (css.indexOf('railBg') >= 0) throw new Error('the header still inherits a possibly-transparent background');
+      if (css.indexOf('var(--bg-panel)') < 0) throw new Error('the header has no opaque fill');
+      if (css.indexOf('border-bottom') < 0) throw new Error('nothing separates the header from the deck');
+      // Negative margins pull it out over the rail's own padding so it spans edge to edge.
+      if (css.indexOf('margin:-12px -12px') < 0) throw new Error('the header does not span the rail width');
+      // And the rail itself needs a real background, or the sticky header sits on nothing.
+      const r = H.indexOf('id="dsRail"');
+      if (H.slice(r, r + 260).indexOf('background:') < 0) throw new Error('the rail has no background of its own');
+    });
+
     __check('_drawFloorplanKeyPage footer honors hideFooter', () => {
       editorialContent.pageFooters['floorplan:0'] = { hideFooter: true };
       _curFooter = _resolveFooter('floorplan:0');
