@@ -1,7 +1,14 @@
 /* ========================================= */
 /* THEME ENGINE & VARIABLES                  */
 /* ========================================= */
-:root { 
+:root {
+    /* THE APP SPEAKS IN THE STUDIO'S TYPE. --ui-font is the brand Sans (the same stack
+     * as FRAME_FONT_LIBRARY's 'sans' token) for everything you read; --ui-display is
+     * Druk, for the few things that NAME a place - the view tabs and section titles -
+     * the way the decks this tool makes use it for headings. Druk loads from
+     * index.html's @font-face, so it is the same file the PDF embeds. */
+    --ui-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --ui-display: 'Druk', 'Oswald', 'Arial Narrow', Arial, sans-serif; 
     /* DARK THEME (DEFAULT) */
     --accent: #3a86ff; 
     --accent-hover: #2170ed;
@@ -38,7 +45,7 @@
      * A shade DARKER than #wall (#f0f2f5), the way a pasteboard sits under a
      * sheet, so the wall still reads as the page and the ink outside it reads at
      * full contrast. */
-    --elev-ground: #e9ecf0;
+    --elev-ground: #e7e4de;
 
     /* -- Modal shell --
      * The scrim and the blur are ONE value each. They were hand-written into 22
@@ -61,6 +68,8 @@
     --z-modal-progress: 100004;
     --z-modal-alert: 100010;
     /* Above every modal layer: a toast is routinely raised from inside one. */
+    --z-tour: 100006;   /* guided tour: over the app and its progress boxes, under an alert
+                           so a failure raised while it runs is still read */
     --z-toast: 100020;
 
     /* -- The blues, which were four --
@@ -187,25 +196,37 @@
      * by its border alone.
      * --bg-input stays #ffffff deliberately. It has to be the lightest thing on
      * screen or a text field stops looking like somewhere you can type. */
-    --bg-main: #e9ecf0;
-    --bg-nav: #f2f4f7;
-    --bg-panel: #f8f9fb;
-    --bg-subpanel: #eef0f4;
+    --bg-main: #e4ded2;
+    --bg-nav: #f1ede5;
+    --bg-panel: #f7f4ee;
+    --bg-subpanel: #ebe6dc;
     --bg-input: #ffffff;
-    --border-color: #d1d5da;
+    --border-color: #d6cfc2;
     --text-strong: #111111;
     --text-main: #444444;
     --text-muted: #666666;
     
-    --btn-secondary: #e2e6ea;
-    --btn-hover: #d3d7db;
+    --btn-secondary: #e6e0d5;
+    --btn-hover: #d8d1c4;
     
-    --table-header: #f8f9fa;
-    --table-row-hover: #f0f7ff;
-    --table-row-selected: #e0efff;
+    --table-header: #f1ede5;
+    --table-row-hover: #efeae1;
+    --table-row-selected: #e3ddd1;
+
+    /* MONOCHROME, NOT BLUE. In light mode a control that is ON inverts: light grey
+     * at rest, a darker grey under the cursor, near-black with white type when
+     * chosen. --accent and --ui-active are the CHROME tokens (tabs, toggles,
+     * primary buttons, focus rings), so overriding them here is the whole switch.
+     * --selected is deliberately NOT overridden: it marks an object selected ON THE
+     * DRAWING or the page, which is black linework, and a black outline there would
+     * vanish into what it is outlining. Blue survives in light mode for that alone. */
+    --accent: #1d1b18;
+    --accent-hover: #3b3833;
+    --btn-primary: #1d1b18;
+    --ui-active: #1d1b18;
 }
 
-body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg-main); color: var(--text-main); margin: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column; transition: background 0.3s, color 0.3s; }
+body { font-family: var(--ui-font); background: var(--bg-main); color: var(--text-main); margin: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column; transition: background 0.3s, color 0.3s; }
 
 input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 input[type="number"] { -moz-appearance: textfield; }
@@ -365,7 +386,7 @@ textarea { width: 100%; padding: 6px; border: 1px solid var(--border-color); bor
     background: var(--border-color);
 }
 .btn-outline { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
-.btn-outline:hover { background: rgba(58, 134, 255, 0.1); }
+.btn-outline:hover { background: color-mix(in srgb, var(--accent) 10%, transparent); }
 .btn-secondary { background: var(--btn-secondary); color: var(--text-strong); border: 1px solid var(--border-color);}
 .btn-secondary:hover { background: var(--btn-hover); }
 .btn-danger { background: var(--btn-danger); }
@@ -397,6 +418,7 @@ textarea { width: 100%; padding: 6px; border: 1px solid var(--border-color); bor
    outline. The outline makes the selected state unmistakable on glance — without
    it, the contrast against the toggle's own backplate was too subtle. */
 .unit-toggle button.active { background: var(--btn-secondary); color: var(--text-strong); box-shadow: 0 0 0 1px var(--accent) inset; }
+.light-theme .unit-toggle button.active { background: var(--accent); color: #fff; box-shadow: none; }
 /* Line-weight ladder — a .unit-toggle carrying SIX segments instead of two or
    three, so the labels have to give up their padding and bold to fit the same
    width. Tabular figures keep '.25' and '1' the same width, which is what stops
@@ -493,38 +515,25 @@ tr.multi-selected {
  *   │                    drag handle                      │
  *   └────────────────────────────────────────────────────┘
  */
-body.dash-view-2 #view-dashboard .dash-right-pane .preview-wrapper {
-    position: fixed;
-    top: 156px;
-    right: 460px; /* anchored to the right, just left of the 440px form pane */
-    left: auto;
-    bottom: auto;
-    width: auto;
-    z-index: 50;
-    background: var(--bg-panel);
-    border: 1px solid var(--border-color);
-    border-radius: var(--r-8);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-    padding: 20px;
-    padding-left: 24px;  /* extra space on the left edge to make the drag handle reachable */
-    align-items: center;
-    justify-content: flex-start;  /* preview-container first, then toolbar below */
-    /* Drag handle hint: a subtle accent-colored vertical strip on the left
-     * edge. Becomes more visible on hover (via cursor change in JS, plus
-     * this static hint). */
-    border-left: 4px solid var(--accent);
+/* MODE 2: the preview is its own COLUMN between the table and the form (see
+ * _dashPreviewColumn), sized by JS to the frame's aspect at the size you dragged it to.
+ * Its LEFT edge is the drag handle; the accent strip says so. It used to be a fixed
+ * panel floating over the CSV, which covered the rows you were editing. */
+.dash-preview-col {
+    flex: none; display: flex; flex-direction: column; align-items: stretch;
+    background: var(--bg-panel); border-right: 1px solid var(--border-color);
+    overflow-y: auto; overflow-x: hidden; position: relative; z-index: 15;
 }
-body.dash-view-2 #view-dashboard .dash-right-pane .preview-wrapper .preview-container {
-    /* JS sets explicit width/height via inline style (see
-     * updateDashPreviewContainerSize). These rules override the Mode 1
-     * defaults (320px max-width, 1/1 aspect ratio) so JS can take control. */
-    max-width: none;
-    max-height: none;
-    width: 400px;  /* default before JS sets actual size */
-    height: 400px;
-    aspect-ratio: auto;
-    margin-bottom: 10px;
+.dash-preview-col .preview-wrapper {
+    position: relative; top: auto; padding: 18px 16px 14px 20px;
+    border-bottom: none; border-left: 4px solid var(--accent);
+    align-items: center; justify-content: flex-start; min-height: 100%; box-sizing: border-box;
 }
+.dash-preview-col .preview-wrapper .preview-container {
+    max-width: none; max-height: none; width: 400px; height: 400px; aspect-ratio: auto; margin-bottom: 10px;
+}
+.dash-preview-col .dash-toolbar { min-width: 260px; }
+#dashRightPane.bulk-mode ~ .dash-preview-col, body.dash-bulk .dash-preview-col { display: none; }
 
 /* When the toggle is active, give the button a tinted background so the
  * user can see at a glance which mode is active. */
@@ -552,7 +561,9 @@ body.dash-view-2 #view-dashboard .dash-right-pane .preview-wrapper .preview-cont
 .dash-toolbar > * { margin: 0; }
 .dash-toolbar .select-wrapper { flex: 1; min-width: 120px; }
 
-.grid-custom-meta { display: grid; grid-template-columns: 2fr 3fr 1fr 1.2fr; gap: 4px; margin-bottom: 3px; }
+/* Level is a list of plan NAMES since 18.13, so it takes width from Image Code and Qty
+   (an auto-calculated one- or two-digit number); at 1fr "Level 1" was cut to "Leve". */
+.grid-custom-meta { display: grid; grid-template-columns: 2fr 2.5fr 1.7fr 0.8fr; gap: 4px; margin-bottom: 3px; }
 .grid-custom-bleed { display: grid; grid-template-columns: 1fr 1fr 0.8fr 1.5fr; gap: 4px; margin-bottom: 3px; }
 .grid-row-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 3px; }
 .grid-row-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-bottom: 3px; }
@@ -625,9 +636,9 @@ body.dash-view-2 #view-dashboard .dash-right-pane .preview-wrapper .preview-cont
 .section-title.section-title-static { cursor: default; }
 .section-title.section-title-static:hover { color: var(--text-strong); }
 /* ── Artwork drag-and-drop targets ── */
-.art-drop-zone.art-drop-hover { border-color: var(--accent) !important; background: rgba(120,160,255,0.08); }
+.art-drop-zone.art-drop-hover { border-color: var(--accent) !important; background: color-mix(in srgb, var(--accent) 8%, transparent); }
 #dash-frame-visual.art-drop-hover { outline: 2px dashed var(--accent); outline-offset: 3px; }
-.frame-vis.art-drop-hover { outline: 2px solid var(--accent); outline-offset: 2px; cursor: copy; }
+.frame-vis.art-drop-hover { outline: 2px solid var(--selected); outline-offset: 2px; cursor: copy; }
 .frame-imgcode-caption { font-family: Arial, Helvetica, sans-serif; }
 #m_artworkDrop:hover { border-color: var(--text-muted); }
 /* ── Bulk Edit: the real dashboard form panel is moved into the modal ── */
@@ -687,7 +698,10 @@ select.no-arrow::-ms-expand { display: none; }
  * because the outer wall dimensions sit 6in outside the wall (~74px at a
  * typical fit scale), so the next 15px came out of the sidebar instead. */
 .elev-wall-rail { width: 165px; flex-shrink: 0; display: flex; flex-direction: column; min-height: 0; border-left: 1px solid var(--border-color); background: var(--bg-panel); }
-#nav-tabs-container { flex: 1; min-height: 0; display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden; padding: 6px 0; scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; }
+/* flex 0 1 auto, not flex 1: the list is as tall as its walls, so + Add Wall sits right
+ * under the last one instead of at the foot of the rail where it got lost. A long list
+ * still shrinks to the rail and scrolls, and the button stays in view below it. */
+#nav-tabs-container { flex: 0 1 auto; min-height: 0; display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden; padding: 6px 0; scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; }
 #nav-tabs-container::-webkit-scrollbar { width: 6px; }
 #nav-tabs-container::-webkit-scrollbar-track { background: transparent; }
 #nav-tabs-container::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: var(--r-4); }
@@ -1141,6 +1155,7 @@ select.no-arrow::-ms-expand { display: none; }
  * giving it flex:1 would squash the frame list that is meant to take the height. */
 .elev-tabpane { min-height: 0; }
 .elev-tabpane[data-elevtabpane="art"] { flex: none; }
+.elev-tabpane[data-elevtabpane="guides"],
 .elev-tabpane[data-elevtabpane="context"],
 .elev-tabpane[data-elevtabpane="glass"] {
     flex: 1; min-height: 0; overflow-y: auto; padding-bottom: 12px;
@@ -1168,6 +1183,8 @@ select.no-arrow::-ms-expand { display: none; }
     pointer-events: none;
     max-width: min(520px, 92vw);
 }
+/* Above the next-step bar, which shares the bottom-centre (18.55). */
+body:has(> #nextStep) .frame-toast-host { bottom: 64px; }
 .frame-toast {
     pointer-events: auto;
     display: flex; align-items: baseline; gap: 8px;
@@ -1243,7 +1260,12 @@ input[type="color"]:hover { filter: brightness(1.12); }
 .frame-tab.active:hover { background: var(--ui-active); filter: brightness(1.08); }
 /* The elevation sidebar is 425px wide and holds three of these, so they lose the
  * side padding and share the width instead of overflowing it. */
-.elev-tabs { margin-bottom: 6px; }
+/* Inset to the same 20px column as the sections above it. The strip used to run edge
+ * to edge of the sidebar while every button above it stopped 20px short, so the three
+ * tabs visibly overhung the panel's own content. */
+.elev-tabs { margin: 8px 20px 6px; }
+/* Guides tab (18.51): the same 20px column as the header it moved out of. */
+.elev-guides-pane { padding: 4px 20px 0; }
 .elev-tabs > .frame-tab { padding: 0 4px; font-size: var(--fs-65); }
 
 /* ── Window panels (glazing) editor, #glazingControls ──────────────────────
@@ -1576,9 +1598,11 @@ body.dragging-frame .frame-vis:hover {
 /* Dashboard Fallback Visuals */
 /* CRITICAL: border-color must default to the explicit mat color variable, NOT inherit from text/theme.
    Inline border-color set by JS always wins; this is just a safety net. */
-.mat-visual { border-style: solid; border-color: var(--m1-color, #ffffff); box-sizing: border-box; position: absolute; z-index: 2; box-shadow: inset 0 2px 6px rgba(0,0,0,0.3), 0 2px 5px rgba(0,0,0,0.15); pointer-events: none; background: transparent; }
-.mat2-visual { border-style: solid; border-color: var(--m2-color, #ffffff); box-sizing: border-box; position: absolute; z-index: 3; box-shadow: inset 0 2px 6px rgba(0,0,0,0.3), 0 2px 5px rgba(0,0,0,0.15); pointer-events: none; background: transparent; }
-.art-visual { background: var(--art-color); display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; font-weight: bold; position: absolute; z-index: 4; border: 1px solid #aaa; box-sizing: border-box; box-shadow: inset 0 2px 8px rgba(0,0,0,0.2); text-align: center; pointer-events: none; transition: background 0.1s, color 0.1s;}
+.mat-visual { border-style: solid; border-color: var(--m1-color, #ffffff); box-sizing: border-box; position: absolute; z-index: 2; box-shadow: inset 0 calc(2px * var(--fx-frame-g, 1)) calc(6px * var(--fx-frame-g, 1)) rgba(0,0,0,calc(0.3 * var(--fx-frame, 1))), 0 calc(2px * var(--fx-mat-g, 1)) calc(5px * var(--fx-mat-g, 1)) rgba(0,0,0,calc(0.15 * var(--fx-mat, 1))); pointer-events: none; background: transparent; }
+.mat2-visual { border-style: solid; border-color: var(--m2-color, #ffffff); box-sizing: border-box; position: absolute; z-index: 3; box-shadow: inset 0 calc(2px * var(--fx-mat-g, 1)) calc(6px * var(--fx-mat-g, 1)) rgba(0,0,0,calc(0.3 * var(--fx-mat, 1))), 0 calc(2px * var(--fx-mat-g, 1)) calc(5px * var(--fx-mat-g, 1)) rgba(0,0,0,calc(0.15 * var(--fx-mat, 1))); pointer-events: none; background: transparent; }
+.art-visual { background: var(--art-color); display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; font-weight: bold; position: absolute; z-index: 4; border: 1px solid #aaa; box-sizing: border-box; box-shadow: inset 0 calc(2px * var(--fx-art-g, 1)) calc(8px * var(--fx-art-g, 1)) rgba(0,0,0,calc(0.2 * var(--fx-art, 1))); text-align: center; pointer-events: none; transition: background 0.1s, color 0.1s;}
+/* 18.45: no mat, so the moulding casts the frame's shadow straight onto the art, then the opening's own. */
+.art-visual.fx-frame-cast { box-shadow: inset 0 calc(2px * var(--fx-frame-g, 1)) calc(6px * var(--fx-frame-g, 1)) rgba(0,0,0,calc(0.3 * var(--fx-frame, 1))), inset 0 calc(2px * var(--fx-art-g, 1)) calc(8px * var(--fx-art-g, 1)) rgba(0,0,0,calc(0.2 * var(--fx-art, 1))); }
 
 /* Clean ID Tags - No White Fuzz, pure transparency box.
  * Color + font now driven by the unified --dim-* variables. Relative size
@@ -1663,8 +1687,9 @@ body.dragging-frame .frame-vis:hover {
  * Absolute, so the line runs through unbroken behind it (the two segments split the
  * span evenly with the label out of flow). Only applied where there are no drag
  * arrows on the label: the arrows are children of it and would rotate too, turning
- * up/down into left/right. The outer wall dims have no arrows, which is why they get
- * this and the spacing dims don't yet. */
+ * up/down into left/right. buildDimControls({rotateLabel}) solved that with an
+ * unrotated stand-in box, and since 18.07 the spacing and custom-line dims rotate too,
+ * whenever the number fits its gap (_dimRotateFits). */
 .arch-dim-v .arch-label-rot {
     position: absolute;
     top: 50%;
@@ -2060,26 +2085,6 @@ button#matLinkBtn.active:hover { background: transparent !important; color: var(
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: var(--r-4); }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
-/* Unit legend — top-left corner of the elevation wall. Shown when the
- * interior dimension suffix is toggled off, so bare numbers are unambiguous. */
-.elev-unit-legend {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    z-index: 22;
-    color: var(--dim-color);
-    font-family: var(--dim-font-family);
-    font-size: calc(var(--dim-font-size) * 0.9);
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    background: rgba(255,255,255,0.9);
-    border: 1px solid var(--dim-color);
-    border-radius: var(--r-4);
-    padding: 3px 8px;
-    pointer-events: none;
-    white-space: nowrap;
-}
-
 /* Drag grip for manually repositioning dimension lines. Excluded from exports
  * via data-export-skip / data-html2canvas-ignore. */
 .dim-drag-grip { pointer-events: auto; }
@@ -2090,3 +2095,680 @@ button#matLinkBtn.active:hover { background: transparent !important; color: var(
 #lineToolBtn.active .svg-icon { stroke: #fff; }
 .custom-line { pointer-events: auto; cursor: move; }
 .custom-line .arch-label-new { pointer-events: auto; }
+
+/* CATALOGUE MOCKUPS IN THE WALL RAIL.
+   A mockup and its options are identical in a list of names, and the one thing a
+   designer needs before dragging a frame is which wall the others follow. A LEFT
+   STRIPE rather than a tinted row, because .wall-tab.active already owns the row's
+   background and two colours fighting over it is how the selected wall stops reading
+   as selected. Appended last on purpose: these have to outrank .wall-tab.active's
+   border, and source order is the only thing separating equal-weight selectors.
+   Amber is the house --warn; the option's own accent is --ui-active, "this is on". */
+.wall-tab.cat-mockup { border-left: 3px solid var(--warn); }
+.wall-tab.cat-option { border-left: 3px solid var(--ui-active); }
+.wall-tab-cat {
+    display: inline-block;
+    margin-left: 6px;
+    font-size: var(--fs-50);
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    color: var(--warn);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 90px;
+    vertical-align: middle;
+}
+/* The bracketed mockup name stays AMBER on a blue-striped row: the bracket is a
+   pointer at the mockup, so it takes the mockup's colour rather than the option's. */
+.wall-tab-cat.opt { color: var(--warn); font-weight: 600; }
+
+/* A CATALOGUE ROW SAYS WHAT IT IS, IN THE SAME COLOURS THE WALL RAIL USES.
+   Amber = a mockup slot: the arrangement drawing, which takes no artwork and is out of
+   the quantities, the CSV, the PNG pack and the spec pages. Blue = an art option: a real
+   item with its own code and image, but a CHOICE, so it does not bill.
+   A LEFT STRIPE on the first cell, never a row background: `tr.selected` owns the
+   background, and a tint fighting it is how the selected row stops reading as selected.
+   On the cell rather than the row because a box-shadow on a tr is unreliable under
+   border-collapse. */
+tr.dash-cat-slot > td:first-child { box-shadow: inset 3px 0 0 var(--warn); }
+tr.dash-cat-option > td:first-child { box-shadow: inset 3px 0 0 var(--ui-active); }
+
+/* A PLACEMENT IS A TREE AND THE RAIL NOW DRAWS IT. Three roles, three weights of the
+   same two colours: SOLID amber governs, HOLLOW amber follows it, blue is an image
+   option. Reported as "hard to stay focused knowing what is what" with four walls all
+   labelled MOCKUP.
+   The stripe is a BORDER on the row and the indent is padding, so neither fights
+   .wall-tab.active, which owns the background. */
+.wall-rail-place {
+    display: flex; align-items: baseline; gap: 8px;
+    padding: 9px 10px 4px 10px;
+    font-size: var(--fs-55);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    border-top: 1px solid var(--border);
+    margin-top: 4px;
+}
+.wall-rail-place:first-child { border-top: none; margin-top: 0; }
+.wall-rail-place-code { font-weight: 700; color: var(--text-main); letter-spacing: 0.8px; }
+.wall-rail-place-n { color: var(--text-muted); font-size: var(--fs-50); letter-spacing: 0.3px; }
+/* SOLID governs. */
+.wall-tab.cat-primary { border-left: 3px solid var(--warn); }
+/* HOLLOW follows: the same hue at a weight that reads as secondary without becoming a
+   third colour to learn. */
+.wall-tab.cat-layout { border-left: 3px solid color-mix(in srgb, var(--warn) 42%, transparent); }
+.wall-tab.cat-indent { padding-left: 16px; }
+.wall-tab.cat-indent2 { padding-left: 26px; }
+.wall-tab-cat.lay { color: color-mix(in srgb, var(--warn) 72%, var(--text-muted)); font-weight: 600; }
+/* The layout's NAME. Muted and beside the code, never folded into it: the code is the
+   identity and the name is only how you find the wall. */
+.wall-tab-lbl {
+    display: inline-block; margin-left: 7px;
+    font-size: var(--fs-55); color: var(--text-muted);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    max-width: 92px; vertical-align: middle;
+}
+
+/* A row being dragged to move its picture, and the row it will land on. The FRAMES do
+   not move: this reassigns artwork between them, so the cue is a moving-row cue and not
+   a reorder bar. */
+.compact-frame-item.art-dragging { opacity: 0.45; }
+.compact-frame-item.art-drop-target { outline: 2px solid var(--ui-active); outline-offset: -2px; }
+
+/* ── KEYBOARD FOCUS IS VISIBLE ───────────────────────────────────────────────
+   There was ONE :focus-visible rule in this file, on the page-insert strip, and
+   six rules turning the outline off. So a keyboard user tabbing through a panel
+   could not see where they were on any button, slider, checkbox or nav tab.
+   Text fields were already fine: `input:focus` paints the accent border, which
+   IS a focus indicator, and they are left exactly as they were.
+
+   :focus-visible, not :focus, so this appears for the keyboard and not for the
+   mouse - a ring on every clicked button would be noise nobody asked for. The
+   specificity is deliberately ordinary, so a component that draws its own
+   keyboard state (.ds-insstrip) keeps it. */
+button:focus-visible,
+[role="button"]:focus-visible,
+[role="tab"]:focus-visible,
+a[href]:focus-visible,
+summary:focus-visible,
+[tabindex]:not([tabindex="-1"]):focus-visible,
+input[type="checkbox"]:focus-visible,
+input[type="radio"]:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+/* A native checkbox does not paint `border-color`, so the `input:focus` rule
+   that serves text fields left a focused checkbox looking exactly like an
+   unfocused one. The rule above is (0,2,1) and wins over that (0,1,1) one. */
+
+/* A slider's focus goes on its THUMB, the part that moves. Written for both
+   engines, as every slider rule here is, because neither inherits the other's
+   pseudo-elements. */
+input[type=range]:focus-visible::-webkit-slider-thumb {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+input[type=range]:focus-visible::-moz-range-thumb {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+/* ── THE ORDER OF OPERATIONS ON THE VIEW TABS ────────────────────────────────
+   Numbered in the order the work goes, with a badge counting what is left:
+   pieces not on a wall on Elevation, pieces not pinned on Deck. Both are DERIVED
+   in app.js (_projectStepCounts), never stored. The number follows the tab's own
+   colour, so the active tab's reads in the accent like its label. The badge is
+   the warning amber, because it counts outstanding work, and it sits on the
+   corner ladder (--r-8 on a 16px box is fully round) rather than a new 99px
+   pill, which test_scale_ladders pins as the only one. */
+.nav-step {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 16px; height: 16px; box-sizing: border-box; flex: none;
+    border: 1px solid currentColor; border-radius: 50%;
+    font-size: var(--fs-55); line-height: 1; opacity: 0.7;
+}
+.nav-tab.active .nav-step { opacity: 1; }
+.nav-badge {
+    min-width: 16px; height: 16px; padding: 0 4px; box-sizing: border-box; flex: none;
+    border-radius: var(--r-8);
+    background: var(--warn); color: #ffffff;
+    font-size: var(--fs-55); line-height: 16px; text-align: center;
+}
+
+/* Help entries hold lists now (the five steps, the live checklist), which
+   cannot sit inside a <p>, so the body is a div carrying the old <p> look. */
+.help-ref-content .help-entry .help-entry-body {
+    margin: 0; font-size: var(--fs-70); line-height: 1.5; color: var(--text-main);
+}
+.help-ref-content .help-steps { margin: 4px 0 8px; padding-left: 20px; }
+.help-ref-content .help-steps li { margin-bottom: 6px; }
+.help-live-steps { list-style: none; margin: 0; padding: 0; }
+.help-live-steps li {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 8px 0; border-bottom: 1px solid var(--border-color);
+}
+.help-live-steps li:last-child { border-bottom: none; }
+.help-live-steps .hs-mark { width: 16px; flex: none; text-align: center; font-weight: 700; color: var(--text-muted); }
+.help-live-steps .hs-done .hs-mark { color: var(--accent); }
+.help-live-steps .hs-todo .hs-mark { color: var(--warn); }
+.help-live-steps .hs-text { flex: 1; min-width: 0; }
+.help-live-steps .hs-view { color: var(--text-muted); font-size: var(--fs-65); }
+.help-live-steps .hs-go { height: 24px; padding: 0 10px; font-size: var(--fs-65); flex: none; }
+
+
+/* ── Layout guide groups (Elevations sidebar) ──────────────────────────────
+ * Three foldable groups with a caption under every icon. The caption is what lets a
+ * designer find "Edge gap" without hovering sixteen buttons; the title keeps the full
+ * sentence. Captioned buttons opt back into a font size, since the base
+ * .layout-guide-btn is font-size:0 to keep icon-only buttons tight. */
+.lg-group { margin-bottom: 6px; }
+.lg-group > summary {
+    font-size: var(--fs-60); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+    color: var(--text-muted); cursor: pointer; padding: 3px 0; user-select: none; list-style-position: inside;
+}
+.lg-group > summary:hover { color: var(--text-strong); }
+.layout-guides-grid.lg-captioned { grid-template-columns: repeat(5, 1fr); gap: 5px; margin: 2px 0 4px; }
+.lg-captioned .layout-guide-btn { flex-direction: column; gap: 2px; height: 42px; font-size: var(--fs-50); }
+.lg-captioned .layout-guide-btn .svg-icon { width: 15px; height: 15px; }
+.lg-cap { font-size: var(--fs-50); line-height: 1.05; font-weight: 600; letter-spacing: 0.1px; white-space: nowrap; color: inherit; }
+.elev-mini-label {
+    display: flex; align-items: center; font-size: var(--fs-60); font-weight: 700;
+    letter-spacing: 0.5px; color: var(--text-muted);
+}
+
+/* ── The ? help dot ─────────────────────────────────────────────────────────
+ * ONE mark for "there is an explanation here", used by static markup (data-help holds
+ * the text) and by _dsHelpDot. Hover shows the title; a CLICK opens .help-pop, because
+ * a tooltip is unreachable on a touch screen and vanishes the moment the cursor
+ * twitches while you are reading three lines of it. */
+.help-dot {
+    display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto;
+    width: 14px; height: 14px; margin-left: 5px; border-radius: 50%; cursor: help;
+    border: 1px solid var(--border-color); background: var(--bg-input);
+    color: var(--text-muted); font-size: var(--fs-55); font-weight: 700; line-height: 1;
+    letter-spacing: 0; text-transform: none; user-select: none;
+}
+.help-dot:hover { color: var(--text-strong); border-color: var(--text-muted); }
+.help-pop {
+    position: fixed; z-index: var(--z-toast); max-width: 280px; padding: 8px 10px;
+    background: var(--bg-nav); color: var(--text-strong); border: 1px solid var(--border-color);
+    border-radius: var(--r-6); box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    font-size: var(--fs-70); line-height: 1.45; font-weight: 400; text-transform: none; letter-spacing: 0;
+}
+
+/* ── Small dropdown menu (Elevations export) ───────────────────────────── */
+.frame-menu {
+    position: fixed; z-index: var(--z-toast); min-width: 190px; padding: 4px;
+    background: var(--bg-nav); border: 1px solid var(--border-color); border-radius: var(--r-6);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+}
+.frame-menu-head { font-size: var(--fs-55); font-weight: 700; letter-spacing: 0.5px; color: var(--text-muted); padding: 6px 8px 2px; }
+.frame-menu button {
+    display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 10px;
+    padding: 6px 8px; border: none; background: transparent; color: var(--text-strong);
+    font-size: var(--fs-70); text-align: left; cursor: pointer; border-radius: var(--r-4); font-family: inherit;
+}
+.frame-menu button:hover, .frame-menu button:focus-visible { background: var(--btn-hover); }
+.frame-menu button small { color: var(--text-muted); font-size: var(--fs-60); }
+
+/* A lit EGD/WF button shows a small x: the button turns it OFF from here. */
+.wall-mode-btn .wm-off { display: none; margin-left: 2px; font-weight: 700; opacity: 0.85; }
+.wall-mode-btn.active .wm-off { display: inline; }
+#artWallBtn .wm-off { display: none !important; }
+
+
+/* ── Brand type in the chrome ───────────────────────────────────────────────
+ * Form controls do not inherit font-family by default, so without this every button
+ * and field stayed in the OS face while the text around it changed. */
+button, input, select, textarea { font-family: inherit; }
+.nav-tab {
+    font-family: var(--ui-display); font-weight: 700; font-size: var(--fs-95);
+    letter-spacing: 0.06em; text-transform: uppercase;
+}
+.section-title {
+    font-family: var(--ui-display); font-weight: 700; font-size: var(--fs-85);
+    letter-spacing: 0.07em;
+}
+.frame-modal h2, .frame-modal h3 { font-family: var(--ui-display); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+
+/* The table toolbar WRAPS rather than squeezing. With the preview column taking width,
+ * a button that shrinks breaks its own label onto two lines ("+ Add / Item"); a row
+ * that wraps keeps every label whole. */
+#view-dashboard .pane-header { flex-wrap: wrap; row-gap: 5px; }
+#view-dashboard .pane-header > div { flex-wrap: wrap; row-gap: 5px; }
+#view-dashboard .pane-header .action-btn { white-space: nowrap; flex: none; }
+
+/* PLACEMENT COLOUR on the dashboard: the grip cell of every row in one placement is
+ * painted the same (--plc, set per row by renderDashTable). The grip and not the row,
+ * because tr.selected owns the row background. A catalogue stripe (inset shadow on the
+ * same cell) still draws over it. */
+#rfiBody tr[data-placement] > td.drag-handle-cell {
+    background: color-mix(in srgb, var(--plc) 70%, transparent);
+    color: #fff;
+}
+/* An image used in another placement too: a small amber count. At the RIGHT end of the
+   Img Code field since 18.62: on the left it sat on the artwork thumbnail (18.61). */
+.dash-same-img {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%); z-index: 1;
+    font-size: var(--fs-55); font-weight: 700; line-height: 1; padding: 2px 4px;
+    border-radius: var(--r-4); background: var(--warn); color: #000; cursor: help;
+}
+.dash-same-img + .tbl-in { padding-right: 30px; }
+
+/* The floorplan category picker is a COLOUR CHIP: the closed select shows no text (one
+ * squashed letter under a chevron read as a typo), the open menu shows the names. */
+select.fp-cat-chip { color: transparent !important; text-shadow: none; }
+select.fp-cat-chip option { color: var(--text-strong); background: var(--bg-panel); }
+
+/* An image dragged over a frame on a spec page: the page says it will take it. */
+.ds-art-drop { outline: 3px dashed var(--selected); outline-offset: -3px; }
+
+/* ── Options: the chooser and the map ─────────────────────────────────────── */
+.cat-kind {
+    display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-align: left;
+    padding: 9px 12px; border: 1px solid var(--border-color); border-radius: var(--r-6);
+    background: var(--bg-input); color: var(--text-main); cursor: pointer; font-family: inherit;
+}
+.cat-kind strong { font-size: var(--fs-75); color: var(--text-strong); }
+.cat-kind span { font-size: var(--fs-65); color: var(--text-muted); line-height: 1.4; }
+.cat-kind:hover { border-color: var(--text-muted); }
+.cat-kind.active { border-color: var(--ui-active); box-shadow: inset 3px 0 0 var(--ui-active); }
+
+/* The map is a left-to-right tree: each branch is its node plus a column of children,
+ * joined by elbow lines drawn with borders, so it needs no SVG and reflows with the
+ * window. */
+.cat-tree { overflow-x: auto; padding-bottom: 6px; }
+.cat-branch { display: flex; align-items: flex-start; gap: 0; position: relative; }
+.cat-kids { display: flex; flex-direction: column; gap: 10px; padding-left: 28px; position: relative; margin-left: 0; }
+.cat-kids::before { content: ''; position: absolute; left: 0; top: 18px; bottom: 18px; border-left: 2px solid var(--border-color); }
+.cat-kids > .cat-branch::before { content: ''; position: absolute; left: -28px; top: 18px; width: 28px; border-top: 2px solid var(--border-color); }
+.cat-branch > .cat-node { flex: none; }
+.cat-branch > .cat-node + .cat-kids { margin-left: 0; }
+.cat-branch > .cat-node::after { content: ''; position: absolute; }
+.cat-node {
+    display: flex; flex-direction: column; align-items: flex-start; gap: 4px; min-width: 150px;
+    padding: 8px 10px; border: 1px solid var(--border-color); border-radius: var(--r-6);
+    background: var(--bg-input); color: var(--text-main); text-align: left; font-family: inherit; position: relative;
+}
+button.cat-node { cursor: pointer; }
+button.cat-node:hover { border-color: var(--ui-active); }
+.cat-node-root { background: var(--accent); border-color: var(--accent); color: #fff; }
+.cat-node-root .cat-node-title, .cat-node-root .cat-node-sub { color: #fff; }
+.cat-node-set { border-left: 4px solid var(--warn); }
+.cat-node-layout { border-left: 4px solid color-mix(in srgb, var(--warn) 55%, transparent); }
+.cat-node-option { border-left: 4px solid var(--ui-active); }
+.cat-node-title { font-family: var(--ui-display); font-size: var(--fs-85); letter-spacing: 0.05em; color: var(--text-strong); }
+.cat-node-sub { font-size: var(--fs-60); color: var(--text-muted); }
+.cat-node-sketch svg { display: block; background: #fff; border-radius: var(--r-2); padding: 4px; }
+.cat-node-empty { font-size: var(--fs-60); color: var(--text-muted); font-style: italic; }
+.cat-node-fill { font-size: var(--fs-60); color: var(--text-muted); }
+.cat-node-fill.short { color: var(--warn); font-weight: 700; }
+.frame-menu-sep { height: 1px; background: var(--border-color); margin: 4px 6px; }
+.frame-menu button.on { color: var(--ui-active); font-weight: 700; }
+.frame-menu button.danger { color: #e0524a; }
+.fp-line-btn .svg-icon, .fp-frames-btn .svg-icon { width: 12px; height: 12px; }
+.fp-caret { font-size: 8px; line-height: 1; opacity: 0.7; }
+.fp-set-n { font-size: var(--fs-55); font-weight: 700; }
+
+/* PLACEMENT COLOUR ACROSS THE WHOLE ROW (17.91). The grip alone was too small to read a
+ * placement at a glance; every cell now carries a light wash of the placement's colour,
+ * so the rows of one placement read as one band. The wash sits on the CELLS, so the
+ * selected and multi-selected rows paint a stronger wash plus their accent edge on top,
+ * and selection still reads as selection. Light enough that the cell text keeps its
+ * contrast in both themes. */
+#rfiBody tr[data-placement] > td { background-color: color-mix(in srgb, var(--plc) 16%, transparent); }
+#rfiBody tr[data-placement]:hover > td { background-color: color-mix(in srgb, var(--plc) 24%, transparent); }
+#rfiBody tr.selected[data-placement] > td,
+#rfiBody tr.multi-selected[data-placement] > td { background-color: color-mix(in srgb, var(--plc) 34%, var(--table-row-selected)); }
+#rfiBody tr[data-placement] > td.drag-handle-cell { background: color-mix(in srgb, var(--plc) 75%, transparent); }
+
+/* Where-to-start choices: two big cards. */
+.start-choice {
+    flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 6px;
+    padding: 16px; border: 1px solid var(--border-color); border-radius: var(--r-8);
+    background: var(--bg-input); color: var(--text-main); text-align: left; cursor: pointer; font-family: inherit;
+}
+.start-choice:hover, .start-choice:focus-visible { border-color: var(--ui-active); box-shadow: inset 0 0 0 1px var(--ui-active); }
+.start-choice .svg-icon { width: 26px; height: 26px; color: var(--ui-active); }
+.start-choice strong { font-family: var(--ui-display); font-size: var(--fs-105); letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-strong); }
+.start-choice span { font-size: var(--fs-70); color: var(--text-muted); line-height: 1.45; }
+
+/* Floorplan Items: drag a code to renumber it. The bar marks the gap it will land in. */
+.fp-drop-before { box-shadow: inset 0 2px 0 var(--ui-active) !important; }
+.fp-drop-after { box-shadow: inset 0 -2px 0 var(--ui-active) !important; }
+
+/* Deck Studio floorplan: a code in the key list opens its spec page (17.96). */
+.ds-fp-listlink:hover { background: color-mix(in srgb, var(--selected) 10%, transparent); outline: 1px solid color-mix(in srgb, var(--selected) 45%, transparent); }
+
+/* JUMP TO (Ctrl+K). Chrome, not paper: theme tokens throughout. The highlighted row
+   and the chip Enter will take use --ui-active, so in the light theme they go
+   monochrome like every other "this one is chosen" control. */
+.jump-card { width: min(620px, 94vw); max-height: 70vh; display: flex; flex-direction: column; background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--r-8); box-shadow: 0 18px 60px rgba(0,0,0,0.45); overflow: hidden; }
+.jump-top { display: flex; align-items: center; gap: 8px; padding: 10px; border-bottom: 1px solid var(--border-color); }
+.jump-top input { flex: 1 1 auto; min-width: 0; height: 34px; padding: 0 10px; font-size: var(--fs-85); background: var(--bg-input); color: var(--text-main); border: 1px solid var(--border-color); border-radius: var(--r-6); }
+.jump-esc { flex: 0 0 auto; height: 24px; padding: 0 8px; font-size: var(--fs-60); color: var(--text-muted); background: transparent; border: 1px solid var(--border-color); border-radius: var(--r-4); cursor: pointer; }
+.jump-list { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 4px 0; }
+.jump-group { padding: 8px 14px 3px; font-size: var(--fs-55); letter-spacing: 0.8px; text-transform: uppercase; color: var(--text-muted); }
+.jump-row { display: flex; align-items: center; gap: 6px; padding: 6px 14px; cursor: pointer; }
+.jump-row.active { background: color-mix(in srgb, var(--ui-active) 18%, transparent); }
+.jump-text { flex: 1 1 auto; min-width: 0; }
+.jump-title { font-size: var(--fs-80); color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.jump-sub { font-size: var(--fs-60); color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.jump-chip { flex: 0 0 auto; height: 22px; padding: 0 8px; font-size: var(--fs-60); color: var(--text-main); background: transparent; border: 1px solid var(--border-color); border-radius: var(--r-4); cursor: pointer; }
+.jump-chip:hover { border-color: var(--ui-active); }
+.jump-row.active .jump-chip.default { background: var(--ui-active); border-color: var(--ui-active); color: #fff; }
+.jump-none { padding: 18px 14px; font-size: var(--fs-70); color: var(--text-muted); }
+.jump-foot { padding: 7px 14px; font-size: var(--fs-55); color: var(--text-muted); border-top: 1px solid var(--border-color); }
+
+/* CATALOGUE OVERVIEW (18.06). A row per placement, a cell per image option. Amber is
+   the same --warn the Options map uses for "openings without a picture". */
+.cat-ov { width: min(1100px, 95vw); max-height: 88vh; display: flex; flex-direction: column; background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--r-8); padding: 18px; }
+.cat-ov-top { display: flex; align-items: center; gap: 12px; }
+.cat-ov-title { flex: 1 1 auto; font-family: var(--ui-display); font-size: var(--fs-120); letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-strong); }
+.cat-ov-filter { display: flex; align-items: center; gap: 6px; font-size: var(--fs-70); color: var(--text-main); cursor: pointer; }
+.cat-ov-sum { font-size: var(--fs-70); color: var(--text-muted); margin: 6px 0 12px; }
+.cat-ov-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+.cat-ov-row { display: flex; align-items: stretch; gap: 8px; }
+.cat-ov-head { flex: 0 0 110px; display: flex; flex-direction: column; justify-content: center; gap: 2px; padding: 6px 10px; text-align: left; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--r-6); cursor: pointer; color: var(--text-main); }
+.cat-ov-code { font-size: var(--fs-80); font-weight: 700; }
+.cat-ov-count { font-size: var(--fs-60); color: var(--text-muted); }
+.cat-ov-count.short { color: var(--warn); font-weight: 700; }
+.cat-ov-cells { flex: 1 1 auto; min-width: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.cat-ov-cell { width: 104px; padding: 6px 8px; text-align: left; background: transparent; border: 1px solid var(--border-color); border-radius: var(--r-6); cursor: pointer; color: var(--text-main); }
+.cat-ov-cell:hover { border-color: var(--ui-active); }
+.cat-ov-cell.short { border-color: var(--warn); }
+.cat-ov-cell.empty { border-style: dashed; color: var(--text-muted); }
+.cat-ov-ccode { font-size: var(--fs-70); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cat-ov-ctag { font-size: var(--fs-55); color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-height: 0.8em; }
+.cat-ov-cfill { font-size: var(--fs-60); color: var(--text-muted); }
+.cat-ov-cell.short .cat-ov-cfill { color: var(--warn); font-weight: 700; }
+.cat-ov-none { font-size: var(--fs-75); color: var(--text-muted); padding: 14px 4px; }
+
+/* PAGE TYPE IS NOT KERNED, ON SCREEN, BECAUSE THE PDF IS NOT (18.08). jsPDF has no
+   kerning, so every page prints unkerned; a browser kerns by default and set the same
+   heading 0.5-1.1% narrower (5% on AV / TA pairs), which is how a line that fit in the
+   editor wrapped in the PDF. These are the surfaces that show a picture of a page: the
+   deck centre and rail, the Project tab preview and the layout editor. The text tiles
+   themselves carry it inline as well, for thumbnails hosted anywhere else. */
+#dsCenter, #dsRail, #dsProjCoverPrev, #moodboardCanvas, #dsLayoutCanvas { font-kerning: none; }
+
+/* THE START SCREEN (18.10). Opaque, not a scrim: the busy app behind it is exactly
+   what a designer should not be looking at before choosing a project. */
+.frame-modal.start-screen { background: var(--bg-main); backdrop-filter: none; -webkit-backdrop-filter: none; align-items: center; justify-content: center; }
+.ss-wrap { display: flex; flex-direction: column; align-items: center; gap: 0; width: min(760px, 92vw); color: var(--text-main); }
+.ss-logo { width: min(340px, 70vw); height: auto; color: var(--text-strong); fill: currentColor; overflow: visible; }
+.ss-tag { margin-top: 14px; font-size: var(--fs-65); letter-spacing: 0.32em; text-transform: uppercase; color: var(--text-muted); opacity: 0; animation: ssFade 700ms ease 1050ms forwards; }
+.ss-body { width: 100%; margin-top: 44px; opacity: 0; transform: translateY(6px); animation: ssRise 600ms cubic-bezier(.2,.7,.2,1) 1250ms forwards; }
+.ss-cards { display: flex; gap: 14px; justify-content: center; }
+.ss-card { flex: 1 1 0; min-width: 0; max-width: 240px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 18px; text-align: left; cursor: pointer;
+    background: var(--bg-panel); color: var(--text-main); border: 1px solid var(--border-color); border-radius: var(--r-8); transition: border-color 120ms ease, transform 120ms ease; }
+.ss-card:hover, .ss-card:focus-visible { border-color: var(--ui-active); transform: translateY(-1px); }
+.ss-card strong { font-family: var(--ui-display); font-size: var(--fs-105); font-weight: 400; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-strong); }
+.ss-txt { font-size: var(--fs-70); line-height: 1.45; color: var(--text-muted); }
+.ss-ic .svg-icon { width: 20px; height: 20px; color: var(--ui-active); }
+.ss-continue { border-color: var(--ui-active); }
+.ss-note { margin-top: 12px; text-align: center; font-size: var(--fs-65); color: var(--text-muted); }
+.ss-ver { margin-top: 36px; font-size: var(--fs-55); color: var(--text-muted); opacity: 0; animation: ssFade 700ms ease 1500ms forwards; }
+.ss-form { width: min(400px, 92vw); margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+.ss-form label { display: flex; flex-direction: column; gap: 5px; font-size: var(--fs-65); text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); }
+.ss-form input[type=text] { height: 34px; padding: 0 10px; font-size: var(--fs-85); text-transform: none; letter-spacing: 0; }
+.ss-units-row { display: flex; align-items: center; gap: 12px; font-size: var(--fs-65); text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); }
+.ss-units { flex: 0 0 180px; }
+.ss-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 4px; }
+.ss-actions .action-btn { width: auto; height: 32px; padding: 0 18px; }
+
+/* THE LOGO COMES TOGETHER. The mark slides in from the left while the letters close
+   up from slightly spread, staggered, each fading in. Small distances and an
+   ease-out, so it settles rather than arrives. In SVG user units (the viewBox is
+   346 wide), so the move scales with the logo. */
+.ss-logo .fl-mark { opacity: 0; transform: translateX(-26px); animation: flMark 950ms cubic-bezier(.2,.7,.2,1) 120ms forwards; }
+.ss-logo .fl-l { opacity: 0; transform: translateX(calc(14px + var(--i) * 6px)); animation: flLetter 900ms cubic-bezier(.2,.7,.2,1) calc(260ms + var(--i) * 70ms) forwards; }
+@keyframes flMark { to { opacity: 1; transform: translateX(0); } }
+@keyframes flLetter { to { opacity: 1; transform: translateX(0); } }
+@keyframes ssFade { to { opacity: 1; } }
+@keyframes ssRise { to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) {
+    .ss-logo .fl-mark, .ss-logo .fl-l, .ss-tag, .ss-body, .ss-ver { animation: none; opacity: 1; transform: none; }
+}
+
+/* NEXT STEP (18.10): one line, the one thing this project needs next. Below every dialog
+   layer. BOTTOM-CENTRE since 18.55: bottom-left sat on the controls every view keeps
+   there (the deck rail, the dashboard rows, + Add Wall in Elevations), while the centre
+   bottom is open in all three (under the page, the preview, the wall). The toasts share
+   that spot, so while the bar is up they stack above it. */
+.next-step { position: fixed; left: 50%; transform: translateX(-50%); bottom: 14px; z-index: 9000; display: flex; align-items: center; gap: 8px; max-width: min(520px, 60vw);
+    padding: 6px 6px 6px 12px; background: var(--bg-panel); color: var(--text-main); border: 1px solid var(--border-color); border-radius: var(--r-8);
+    box-shadow: 0 6px 22px rgba(0,0,0,0.28); font-size: var(--fs-70); }
+.next-step .ns-n { flex: none; font-size: var(--fs-55); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ui-active); font-weight: 700; }
+.next-step .ns-text { flex: 1 1 auto; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.next-step button { flex: none; height: 24px; padding: 0 10px; font-size: var(--fs-65); cursor: pointer; border-radius: var(--r-4); border: 1px solid var(--border-color); background: transparent; color: var(--text-main); }
+.next-step .ns-go { background: var(--ui-active); border-color: var(--ui-active); color: #fff; }
+.next-step .ns-x { padding: 0 7px; border: none; color: var(--text-muted); font-size: var(--fs-85); }
+
+/* ASKING FOR A NAME (18.11): the styled replacement for window.prompt(). */
+.ask-card { width: min(380px, 92vw); display: flex; flex-direction: column; gap: 12px; padding: 20px; background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--r-8); box-shadow: 0 18px 60px rgba(0,0,0,0.45); }
+.ask-title { margin: 0; font-family: var(--ui-display); font-size: var(--fs-105); font-weight: 400; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-strong); }
+.ask-body { font-size: var(--fs-70); color: var(--text-muted); line-height: 1.45; }
+.ask-field { display: flex; flex-direction: column; gap: 5px; font-size: var(--fs-60); letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); }
+.ask-field input { height: 32px; padding: 0 10px; font-size: var(--fs-80); text-transform: none; letter-spacing: 0; }
+.ask-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 2px; }
+.ask-actions .action-btn { width: auto; height: 30px; padding: 0 16px; }
+/* + Add Wall / + Add Item (18.28): which placement? Existing codes first, a new one below. */
+.ask-placement .ask-card { width: min(420px, 92vw); }
+.ask-section { display: flex; flex-direction: column; gap: 8px; padding: 12px; border: 1px solid var(--border-color); border-radius: var(--r-6); background: var(--bg-subpanel); }
+.ask-section-title { font-size: var(--fs-65); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-strong); }
+.ask-field select { height: 32px; font-size: var(--fs-80); text-transform: none; letter-spacing: 0; }
+.ask-section > .action-btn { align-self: flex-start; width: auto; height: 30px; padding: 0 14px; }
+
+/* The empty floor plan slot in Deck Studio is its own upload control (18.11). Chrome on
+   paper, so it reads --selected like every other control drawn over the page. */
+.fp-upload-slot { height: 30px; padding: 0 16px; font-size: 12px; font-weight: 600; cursor: pointer; color: #fff; background: var(--selected); border: none; border-radius: var(--r-6); box-shadow: 0 2px 10px rgba(0,0,0,0.18); z-index: 5; }
+.fp-upload-slot:hover { filter: brightness(1.08); }
+
+/* BOOT COVER (18.17): the start screen's own background, painted before any script so
+   the dashboard never flashes ahead of the logo. Same layer as the start screen, which is
+   appended later and therefore sits on top; app.js removes the cover in the same tick.
+   The animation is a dead man's switch: if app.js never removes it, it hides itself. */
+.boot-cover { position: fixed; inset: 0; z-index: var(--z-modal-over); background: var(--bg-main); animation: bootCoverGiveUp 0s linear 6s forwards; }
+@keyframes bootCoverGiveUp { to { visibility: hidden; pointer-events: none; } }
+
+/* PDF BUILD FLIP-BOOK (18.18, artwork only since 18.19): the project's artwork, full bleed, turning one every
+   half second behind the "Generating presentation" card. The page on top turns AWAY,
+   hinged on its left edge like a book, revealing the next one already lying underneath,
+   so it reads as flipping through rather than as a slideshow cross-fade. Transform and
+   opacity only, so it stays smooth while the build keeps the main thread busy. Empty
+   (no artwork) means hidden, and the overlay looks as it always did. */
+.pdf-flip { position: absolute; inset: 0; overflow: hidden; perspective: 2200px; background: #111; z-index: 0; }
+.pdf-flip:empty { display: none; }
+.pdf-flip::after { content: ''; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+    background: radial-gradient(ellipse at center, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.62) 100%); }
+.pdf-flip-page { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;
+    transform-origin: left center; backface-visibility: hidden; will-change: transform; }
+.pdf-flip-page.turn { animation: pdfFlipTurn 430ms cubic-bezier(.45,.05,.55,.95) forwards; }
+@keyframes pdfFlipTurn {
+    0%   { transform: rotateY(0deg); filter: brightness(1); }
+    60%  { filter: brightness(0.75); }
+    100% { transform: rotateY(-100deg); filter: brightness(0.45); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .pdf-flip-page.turn { animation: none; opacity: 0; }
+}
+
+/* ── Deck Studio tool dock (18.20) ─────────────────────────────────────────
+   The creation tools (select, text, notes, lines, shapes, image) in one dock
+   that sits beside the page, Left or Right, or in the toolbar row, Top. The
+   position is a per-machine preference (_dsDockSide, localStorage), never
+   project data. The slots beside the page share the preview's own ground so
+   the dock reads as floating over it rather than as another panel. */
+.ds-dock-slot-left, .ds-dock-slot-right {
+    flex-shrink: 0; display: flex; align-items: flex-start;
+    padding: 14px 0; background: var(--bg-input);
+}
+.ds-dock-slot-left { padding-left: 10px; }
+.ds-dock-slot-right { padding-right: 10px; }
+.ds-dock-slot-top { display: inline-flex; align-items: center; }
+.ds-dock {
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    padding: 5px; background: var(--bg-panel);
+    border: 1px solid var(--border-color); border-radius: var(--r-10);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.16);
+}
+.ds-dock.horiz { flex-direction: row; padding: 0; gap: 3px; border: none; box-shadow: none; background: transparent; }
+.ds-dock-btn {
+    position: relative; width: 36px; height: 36px; padding: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: none; border-radius: var(--r-6); background: transparent;
+    color: var(--text-main); cursor: pointer;
+}
+.ds-dock.horiz .ds-dock-btn { width: 32px; height: 32px; }
+.ds-dock-btn:hover { background: var(--btn-hover); color: var(--text-strong); }
+.ds-dock-btn.active { background: var(--ui-active); color: #fff; }
+.ds-dock-btn.active:hover { background: var(--ui-active); filter: brightness(1.08); }
+.ds-dock-btn.open { background: var(--btn-hover); }
+/* A tool with a flyout carries a small corner triangle, the way Miro and
+   Figma mark the buttons that open a menu rather than act at once. */
+.ds-dock-btn.has-fly::after {
+    content: ''; position: absolute; right: 4px; bottom: 4px;
+    border-left: 4px solid transparent; border-bottom: 4px solid currentColor; opacity: 0.55;
+}
+.ds-dock-sep { width: 22px; height: 1px; margin: 4px 0; background: var(--border-color); }
+.ds-dock.horiz .ds-dock-sep { width: 1px; height: 20px; margin: 0 3px; }
+
+/* The flyout menus the dock opens: icon, label, shortcut, one row each. */
+.ds-fly-head { font-size: var(--fs-55); font-weight: 700; letter-spacing: 0.4px; color: var(--text-muted); margin: 8px 6px 4px; }
+.ds-fly-head:first-child { margin-top: 2px; }
+.ds-fly-row { display: flex; align-items: stretch; gap: 2px; }
+.ds-fly-item {
+    flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px;
+    padding: 6px 8px; border: none; border-radius: var(--r-6); background: transparent;
+    color: var(--text-main); font: inherit; font-size: var(--fs-75); text-align: left; cursor: pointer;
+}
+.ds-fly-item:hover { background: var(--btn-hover); color: var(--text-strong); }
+.ds-fly-item.on { background: var(--btn-hover); color: var(--text-strong); box-shadow: inset 2px 0 0 var(--ui-active); }
+.ds-fly-ico { flex: none; width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; }
+.ds-fly-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.3; }
+.ds-fly-hint { font-size: var(--fs-55); color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ds-fly-kbd { flex: none; font-size: var(--fs-65); color: var(--text-muted); min-width: 12px; text-align: right; }
+.ds-fly-del { flex: none; width: 22px; border: none; border-radius: var(--r-6); background: transparent; color: var(--text-muted); cursor: pointer; }
+.ds-fly-del:hover { background: var(--btn-hover); color: var(--text-strong); }
+.ds-fly-sep { height: 1px; background: var(--border-color); margin: 6px 4px; }
+/* A plan thumbnail on a spec / breaker / plan detail page is a button back to the
+   floorplan (18.25). On-page, so --selected, never a chrome token. */
+.ds-plan-backlink { cursor: pointer; z-index: 2; border-radius: var(--r-2); outline: 2px solid transparent; outline-offset: 1px; transition: outline-color 0.12s, background-color 0.12s; }
+.ds-plan-backlink:hover, .ds-plan-backlink:focus-visible { outline-color: var(--selected); background-color: rgba(33, 150, 243, 0.06); }
+.ds-plan-backlink-tag { position: absolute; left: 4px; top: 4px; padding: 2px 6px; border-radius: var(--r-4); background: var(--selected); color: #fff; font-size: var(--fs-65); font-weight: 600; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.12s; }
+.ds-plan-backlink:hover .ds-plan-backlink-tag, .ds-plan-backlink:focus-visible .ds-plan-backlink-tag { opacity: 1; }
+
+/* ── GUIDED TOUR (18.30) ────────────────────────────────────────────────
+   The spotlight is a box-shadow hole in the dimming, never a hole in the
+   blocker: the highlighted control is SHOWN, not pressed, so the tour cannot
+   edit the project it is walking through. */
+.frame-tour { position: fixed; inset: 0; z-index: var(--z-tour); pointer-events: none; }
+.frame-tour .tour-block { position: absolute; inset: 0; pointer-events: auto; background: transparent; }
+.frame-tour .tour-spot { position: absolute; pointer-events: none; border-radius: var(--r-6);
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.9), 0 0 0 200vmax rgba(10,10,14,0.62);
+    transition: left 260ms ease, top 260ms ease, width 260ms ease, height 260ms ease; }
+.frame-tour .tour-spot.tour-none { box-shadow: 0 0 0 200vmax rgba(10,10,14,0.62); }
+.frame-tour .tour-card { position: absolute; pointer-events: auto; width: 360px; max-width: calc(100vw - 24px);
+    background: var(--bg-panel); color: var(--text-main); border: 1px solid var(--border-color);
+    border-radius: var(--r-8); box-shadow: 0 18px 50px rgba(0,0,0,0.45); padding: 14px 16px 12px;
+    transition: left 260ms ease, top 260ms ease; }
+.frame-tour .tour-card.tour-nudge { animation: tourNudge 360ms ease; }
+@keyframes tourNudge { 0%,100% { transform: none; } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+.frame-tour .tour-top { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.frame-tour .tour-ch { font-size: var(--fs-55); letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; color: var(--ui-active); }
+.frame-tour .tour-count { flex: 1; font-size: var(--fs-60); color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.frame-tour .tour-x { border: none; background: transparent; color: var(--text-muted); font-size: var(--fs-105); line-height: 1; cursor: pointer; padding: 0 2px; }
+.frame-tour .tour-x:hover { color: var(--text-strong); }
+.frame-tour .tour-title { font-size: var(--fs-95); font-weight: 700; color: var(--text-strong); margin-bottom: 6px; }
+.frame-tour .tour-body { font-size: var(--fs-75); line-height: 1.5; }
+.frame-tour .tour-bar { height: 3px; border-radius: var(--r-2); background: var(--border-color); margin: 12px 0 10px; overflow: hidden; }
+.frame-tour .tour-fill { display: block; height: 100%; background: var(--ui-active); transition: width 260ms ease; }
+.frame-tour .tour-list { max-height: 220px; overflow-y: auto; margin-bottom: 10px; padding: 4px 0; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); }
+.frame-tour .tour-list[hidden] { display: none; }
+.frame-tour .tour-list-ch { font-size: var(--fs-55); letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin: 8px 0 2px; }
+.frame-tour .tour-list-step { display: block; width: 100%; text-align: left; border: none; background: transparent; color: var(--text-main);
+    font-size: var(--fs-65); padding: 3px 6px; border-radius: var(--r-4); cursor: pointer; }
+.frame-tour .tour-list-step.seen { color: var(--text-muted); }
+.frame-tour .tour-list-step:hover { background: var(--bg-subpanel); }
+.frame-tour .tour-list-step.active { background: var(--ui-active); color: #fff; }
+.frame-tour .tour-foot { display: flex; align-items: center; gap: 6px; }
+.frame-tour .tour-sp { flex: 1; }
+.frame-tour .tour-foot button { height: 28px; padding: 0 12px; font-size: var(--fs-70); border-radius: var(--r-4); cursor: pointer;
+    border: 1px solid var(--border-color); background: transparent; color: var(--text-main); }
+.frame-tour .tour-foot button:disabled { opacity: 0.4; cursor: default; }
+.frame-tour .tour-foot .tour-steps-btn.active { border-color: var(--ui-active); color: var(--ui-active); }
+.frame-tour .tour-foot .tour-next { background: var(--ui-active); border-color: var(--ui-active); color: #fff; font-weight: 700; }
+@media (prefers-reduced-motion: reduce) {
+    .frame-tour .tour-spot, .frame-tour .tour-card, .frame-tour .tour-fill { transition: none; }
+    .frame-tour .tour-card.tour-nudge { animation: none; }
+}
+.ss-tour { display: block; margin: 14px auto 0; border: none; background: transparent; color: var(--text-muted);
+    font-size: var(--fs-70); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.ss-tour:hover { color: var(--text-strong); }
+.next-step .ns-tour { border-color: var(--ui-active); color: var(--ui-active); }
+
+/* 18.36: header controls that only mean something in some views (data-views). A class,
+   not inline display, because those buttons set display:flex inline. */
+.hdr-off { display: none !important; }
+/* Save Project and its menu read as one split button. */
+.save-split { display: inline-flex; align-items: stretch; }
+.save-split > #saveProjectBtn { border-top-right-radius: 0; border-bottom-right-radius: 0; }
+.save-split > #saveMenuBtn { border-top-left-radius: 0; border-bottom-left-radius: 0; padding: 0 6px; margin-left: 1px; }
+.save-split > #saveMenuBtn .svg-icon { width: 12px; height: 12px; }
+/* 18.37: the units chip. Main unit plus the second unit as a quieter badge. */
+.unit-chip { display: inline-flex; align-items: center; gap: 4px; font-weight: 700; letter-spacing: 0.3px; }
+#unitChipDual { font-size: var(--fs-60); color: var(--text-muted); font-weight: 700; }
+#unitChipDual:empty { display: none; }
+/* 18.38: the dock carries the page tools and the selection actions too. A group lays
+   out the way the dock does (a column beside the page, a row on top). */
+.ds-dock-group { display: flex; flex-direction: column; align-items: center; gap: 2px; transition: opacity .12s; }
+.ds-dock.horiz .ds-dock-group { flex-direction: row; gap: 3px; }
+.ds-dock-btn.ds-dock-danger { color: #c0392b; }
+.ds-dock-btn.ds-dock-danger:hover { background: rgba(192,57,43,0.14); color: #c0392b; }
+/* A tall dock on a short window scrolls rather than running off the bottom. */
+.ds-dock.vert { max-height: calc(100vh - 170px); overflow-y: auto; scrollbar-width: none; }
+.ds-dock.vert::-webkit-scrollbar { display: none; }
+
+/* ── ELEVATION SETTINGS (18.48) ──────────────────────────────────────────────
+ * Three columns on one 26px row rhythm so the window fits a laptop screen without
+ * scrolling. Explanations are ? dots, never paragraphs. Label column is fixed so every
+ * control lines up down a column. */
+.es-card { background: var(--bg-panel); padding: 16px 18px 14px; border-radius: var(--r-8); width: min(1180px, 96vw); border: 1px solid var(--border-color); box-shadow: 0 15px 35px rgba(0,0,0,0.4); max-height: 94vh; overflow-y: auto; box-sizing: border-box; }
+.es-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.es-head h3 { margin: 0; font-size: var(--fs-105); color: var(--text-strong); }
+.es-units { background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-muted); border-radius: var(--r-4); height: 26px; padding: 0 10px; font-size: var(--fs-65); cursor: pointer; }
+.es-units b { color: var(--text-strong); margin-left: 4px; }
+.es-units:hover { border-color: var(--text-muted); }
+.es-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; align-items: start; }
+@media (max-width: 980px) { .es-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 660px) { .es-grid { grid-template-columns: minmax(0, 1fr); } }
+.es-col { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.es-sec { background: var(--bg-subpanel); border: 1px solid var(--border-color); border-radius: var(--r-6); padding: 8px 10px 10px; display: flex; flex-direction: column; gap: 6px; }
+.es-rows { display: flex; flex-direction: column; gap: 6px; }
+.es-h { display: flex; align-items: center; gap: 6px; font-size: var(--fs-60); color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.7px; font-weight: 700; margin-bottom: 2px; }
+.es-row { display: flex; align-items: center; gap: 6px; min-height: 26px; min-width: 0; }
+.es-row.es-top { align-items: flex-start; }
+.es-lbl { flex: 0 0 74px; display: flex; align-items: center; font-size: var(--fs-65); color: var(--text-muted); white-space: nowrap; }
+.es-fill { flex: 1 1 0; min-width: 0; }
+.es-row .unit-toggle { height: 26px; }
+.es-row select { height: 26px; padding: 0 5px; font-size: var(--fs-70); }
+.es-val { flex: 0 0 34px; text-align: right; font-size: var(--fs-65); color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.es-num { height: 26px; padding: 0 6px; font-size: var(--fs-75); text-align: center; box-sizing: border-box; }
+.es-unit { flex: 0 0 auto; font-size: var(--fs-65); color: var(--text-muted); }
+.es-icon { height: 26px; width: 26px; flex: 0 0 26px; }
+.es-color { flex: 0 0 26px; width: 26px; height: 22px; padding: 0; border: 1px solid var(--border-color); border-radius: var(--r-4); cursor: pointer; }
+.es-check { display: flex; align-items: center; gap: 7px; font-size: var(--fs-70); color: var(--text-main); cursor: pointer; min-height: 22px; text-transform: none; letter-spacing: 0; font-weight: 400; }
+.es-check input { width: 14px; height: 14px; margin: 0; cursor: pointer; }
+.es-h.es-check { color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.7px; font-weight: 700; font-size: var(--fs-60); }
+.es-indent { margin-left: 80px; }
+.es-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px; }
+.es-pair .es-lbl { flex-basis: 44px; }
+.es-fig { flex: 0 0 30px; height: 46px; display: flex; align-items: flex-end; justify-content: center; background: var(--bg-main); border: 1px solid var(--border-color); border-radius: var(--r-4); overflow: hidden; }
+.es-fig img { height: 42px; width: auto; display: block; }
+.es-note { font-size: var(--fs-60); color: var(--text-muted); line-height: 1.4; }
+.es-foot { display: flex; justify-content: flex-end; margin-top: 12px; }
+
+/* DASHBOARD ARTWORK THUMBNAIL (18.61): left of the Img Code field. A dashed slot means no
+ * artwork yet. Sized like the field beside it so the row height does not change. */
+.dash-art-thumb { display: inline-block; width: 22px; height: 22px; margin-right: 6px; vertical-align: middle; border-radius: var(--r-2); object-fit: cover; background: var(--bg-input); flex: none; }
+.dash-art-empty { box-sizing: border-box; border: 1px dashed var(--text-muted); background: transparent; opacity: 0.55; }
+.dash-art-pending { box-sizing: border-box; border: 1px solid var(--border-color); }

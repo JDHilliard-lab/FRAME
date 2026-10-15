@@ -31,7 +31,6 @@ const fs = require('fs');
     _dsRefresh = () => {};
     _dsClearBuiltAll = () => {};
     _dsBuildAllThumbs = () => {};
-    _dsQueueTplSwatch = () => {};
     _dsPriorityRerender = () => {};
     _dsRenderCenter = () => {};
     scheduleAutosave = () => {};
@@ -80,16 +79,19 @@ const fs = require('fs');
       if (editorialContent.specTemplate !== 'setRow') throw new Error('group choice lost after tour: ' + editorialContent.specTemplate);
     });
 
-    __check('legacy classic choice is remembered too', () => {
+    __check('a legacy classic choice cannot come back through the mode memory (18.34)', () => {
+      // classic is renamed on the next page list, memory included, so Per piece lands
+      // on the one per-piece layout whose ticks work.
       editorialContent.specTemplate = 'classic';
-      editorialContent.specTplMemory = { perPiece: 'frameSpecDetail' };   // stale older memory
-      clickMode('Install guide');    // leaving classic must overwrite the stale memory
+      editorialContent.specTplMemory = { perPiece: 'classic' };
+      _mbMigratePages();
+      clickMode('Install guide');
       clickMode('Per piece');
-      if (editorialContent.specTemplate !== 'classic') throw new Error('classic was not restored (stale memory won): ' + editorialContent.specTemplate);
+      if (editorialContent.specTemplate !== 'frameSpecDetail') throw new Error('Per piece restored ' + editorialContent.specTemplate);
     });
 
     __check('first-time entry into a mode uses its default', () => {
-      editorialContent.specTemplate = 'classic';
+      editorialContent.specTemplate = 'frameSpecDetail';
       editorialContent.specTplMemory = {};
       clickMode('Group A/B/C');
       // Shared specs: the consolidated left column is what a salon hang wants, and
@@ -111,7 +113,13 @@ const fs = require('fs');
       editorialContent.specTemplate = 'installGuide';
       editorialContent.specTplMemory = { perPiece: 'nonsenseKey' };
       clickMode('Per piece');
-      if (editorialContent.specTemplate !== 'classic') throw new Error('bad memory not rejected: ' + editorialContent.specTemplate);
+      // frameSpecDetail, not 'classic'. There is ONE per-piece layout and this is it;
+      // 'classic' is the legacy one that predates the four SHOW ON PAGE ticks, so landing
+      // on it gave a page whose ticks mostly did nothing and whose title dropped the
+      // location. The deck default and the unreadable-value fallback both moved when the
+      // per-piece layout buttons were removed; this button kept the old literal until
+      // 17.64. Since 18.34 'classic' is not remembered either; it is renamed on load.
+      if (editorialContent.specTemplate !== 'frameSpecDetail') throw new Error('bad memory not rejected: ' + editorialContent.specTemplate);
     });
   `;
 

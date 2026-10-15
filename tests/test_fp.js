@@ -330,16 +330,19 @@ const fs = require('fs');
 
     __check('the order is ONE shared function, not mirrored into the exporter', () => {
       const A = window.__appSrc;
-      // Both builders must CALL it...
+      // 18.32: ONE call site. The export walks _deckPageList instead of mirroring it,
+      // so a second caller would mean a second page list had grown back.
       const calls = (A.match(/_deckPlanSlots\\(/g) || []).length;
-      if (calls < 3) throw new Error('expected a definition and two call sites, found ' + calls);
+      if (calls !== 2) throw new Error('expected a definition and one call site, found ' + calls);
       const dsAt = A.indexOf('function _deckPageList');
-      const ds = A.slice(dsAt, dsAt + 9000);
+      // Sliced to the function's own closing brace, never a character count (it outgrew 9000).
+      const ds = A.slice(dsAt, A.indexOf(String.fromCharCode(10) + '}', dsAt));
       if (ds.indexOf('_deckPlanSlots(') < 0) throw new Error('Deck Studio does not use the shared order');
-      // ...and the export's builder, which lives near _stepsFor.
-      const exAt = A.indexOf('const _stepsFor =');
-      const ex = A.slice(exAt, exAt + 6000);
-      if (ex.indexOf('_deckPlanSlots(') < 0) throw new Error('the PDF export does not use the shared order');
+      // ...and the export prints that list rather than building its own.
+      { const _ea = A.indexOf('async function _buildSpecPagePDF');
+        if (A.slice(_ea, A.indexOf('async function exportDashNativePNG', _ea)).indexOf('const pages = _deckPageList();') < 0) throw new Error('the PDF export no longer walks _deckPageList'); }
+      const exAt = A.indexOf('async function _buildSpecPagePDF');
+      const ex = A.slice(exAt, A.indexOf('async function exportDashNativePNG', exAt));
       // Neither may still be walking the levels itself: that is the mirrored copy that
       // drifts. The old shape was floorplanLevels.forEach(...) building an emit list.
       if (/floorplanLevels\\.forEach\\([^)]*\\)\\s*\\{[\\s\\S]{0,400}?emitLevels\\.push/.test(ex)) {
@@ -557,7 +560,7 @@ const fs = require('fs');
       // Without the renumber a guestroom pin silently re-homes onto whatever plan slid
       // into its slot — a wrong drawing that looks completely normal.
       const A = window.__appSrc;
-      const del = A.slice(A.indexOf('Pins on it will be cleared'), A.indexOf('floorplanLevels.splice(removed, 1)'));
+      const del = A.slice(A.indexOf('async function _fpDeleteLevel'), A.indexOf('floorplanLevels.splice(removed, 1)'));
       if (del.indexOf('_fpPins(r)') < 0) throw new Error('level deletion ignores the pin array');
       if (del.indexOf('- 1') < 0) throw new Error('level deletion does not renumber the pins above it');
       // The arithmetic itself, as the deletion does it.
@@ -662,7 +665,9 @@ const fs = require('fs');
       // and the remove X. One of them still writing r.wallLine directly would put the bug
       // straight back for whichever gesture it owns.
       const A = window.__appSrc;
-      const panel = A.slice(A.indexOf('function _fpItemRow'), A.indexOf('function _fpPanelCats'));
+      // 17.91: the picker is the pen's menu now, which writes through _fpPickLineStyle.
+      const panel = A.slice(A.indexOf('function _fpItemRow'), A.indexOf('function _fpPanelCats'))
+        + A.slice(A.indexOf('function _fpPickLineStyle'), A.indexOf('function _fpItemHeader'));
       if (/r2\\.wallLine\\s*=|delete r2\\.wallLine/.test(panel)) throw new Error('the panel still writes a single wall line');
       if (panel.indexOf('_fpSetWall(') < 0) throw new Error('the mode picker does not write per plan');
       if (panel.indexOf('_fpClearWall(') < 0) throw new Error('the remove button does not clear per plan');
@@ -853,7 +858,9 @@ const fs = require('fs');
       // and both times a fixed window read as the code having been removed.
       const sb = A.slice(sy - 900, A.indexOf('function toggleGroupBoxVisibility'));
       if (sb.indexOf("classList.toggle('active', on)") < 0) throw new Error('the EGD button does not light for EGD');
-      if (sb.indexOf("classList.toggle('active', !on)") < 0) throw new Error('the ART button does not light for ART');
+      // 17.84: ART is lit only for a PLAIN wall (neither EGD nor glass), so a lit EGD or
+      // WF reads as something switched on that can be switched back off.
+      if (sb.indexOf("const artOn = !on && !hasGlass") < 0 || sb.indexOf("classList.toggle('active', artOn)") < 0) throw new Error('the ART button does not light for a plain wall');
       if (sb.indexOf('_isEgdWall(elevations[currentElevIndex])') < 0) throw new Error('the state is not read from this elevation');
       // ART is the DEFAULT: an elevation with no egdWall field is an art wall, so nothing
       // is written to a project for the normal case and old files open unchanged.
@@ -913,7 +920,9 @@ const fs = require('fs');
       const A = window.__appSrc;
       const i = A.indexOf("getElementById('wallModeHint')");
       if (i < 0) throw new Error('nothing writes the hint');
-      const body = A.slice(i - 900, A.indexOf('function toggleGroupBoxVisibility'));
+      // Anchored on the sync block's start, not a distance back from the hint: the
+      // button titles grew in 17.84 and pushed the glazing read outside a 900-char window.
+      const body = A.slice(A.indexOf("const egdBtn = document.getElementById('egdWallBtn')"), A.indexOf('function toggleGroupBoxVisibility'));
       if (body.indexOf('glazing') < 0) throw new Error('the hint does not look at whether the wall has glass');
       if (body.indexOf('hasGlass') < 0) throw new Error('the hint does not branch on the wall having glass');
       if (body.indexOf('does not need EGD mode') < 0) throw new Error('the hint never says a glazed wall is fine on ART');
@@ -1089,8 +1098,9 @@ const fs = require('fs');
       // The grips are rendered only on the Glass tab. Without a redraw on the tab change
       // they show up only after some unrelated edit happens to trigger one.
       const A = window.__appSrc;
+      // Sliced between landmarks (18.51): a 1100-character window broke when the tab list grew.
       const i = A.indexOf('function switchElevTab');
-      const body = A.slice(i, i + 1100);
+      const body = A.slice(i, A.indexOf('function _initElevSidebarTab', i));
       if (body.indexOf('drawElevAll()') < 0) throw new Error('changing tab does not redraw the wall');
     });
 
@@ -1240,7 +1250,8 @@ const fs = require('fs');
       if (body.indexOf('delete desc.page.place') < 0) throw new Error('the template anchor survives a hand move and will fight it');
       if (body.indexOf('_dsSyncLayoutPageOrder(list)') < 0) throw new Error('layoutPages is not reordered, so an anchor can fail to resolve');
       // The rail's number field and the drop handlers must all call it.
-      if (A.indexOf('_dsMovePageTo(desc, v - 1)') < 0) throw new Error('the number field does not use the shared move');
+      // 18.75: the field takes a PRINTED page number and resolves it to a rail position first.
+      if (A.indexOf('_dsMovePageTo(desc, to)') < 0 || A.indexOf('const to = v ? _dsIndexForPrinted(v) : -1;') < 0) throw new Error('the number field does not use the shared move');
       // ONE drop path now (it was two near-identical copies, one per cell kind), so this
       // asserts it exists rather than counting copies.
       if (A.indexOf('_dsMovePageTo(src, idx)') < 0) throw new Error('the drop path does not use the shared move');
@@ -1749,7 +1760,8 @@ const fs = require('fs');
       // Same shift the drop applies, or the two disagree by one.
       if (f.indexOf('if (from >= 0 && from < gap) gap--') < 0) throw new Error('it does not account for lifting the page out of the list');
       // Out of range, or relative to itself, does nothing rather than something wrong.
-      if (f.indexOf('n > (_dsPages || []).length') < 0) throw new Error('an out-of-range page number is not rejected');
+      // 18.75: printed numbers; one past the last printed page resolves to no position.
+      if (f.indexOf('_dsIndexForPrinted(pn)') < 0 || f.indexOf('if (ti < 0) return false;') < 0) throw new Error('an out-of-range page number is not rejected');
       if (f.indexOf('target === desc') < 0) throw new Error('placing a page relative to itself is not rejected');
       // Offered for movable pages only, ahead of the branches that return early.
       // UPDATED 17.26: this used to read a 3600-CHARACTER window after the function
@@ -1757,8 +1769,8 @@ const fs = require('fs');
       // names outright. Sliced between landmarks now, and it checks the ORDER it
       // actually cares about: the control must come before the first branch that returns.
       const rt = A.indexOf('function _dsRenderTools()');
-      const end = A.indexOf('function _dsSave()', rt);
-      if (end < 0) throw new Error('_dsSave does not follow _dsRenderTools');
+      const end = A.indexOf("window.addEventListener('resize', () => { if (_dsIsOpen() && _dsActiveTab === 'pages')", rt);
+      if (end < 0) throw new Error('the resize listener does not follow _dsRenderTools');
       const body = A.slice(rt, end);
       const place = body.indexOf('_dsPlaceRelativeInto(t, desc)');
       const firstBranch = body.indexOf("if (desc.kind === 'floorplan')");

@@ -53,14 +53,16 @@ const path = require('path');
     const __arts = () => Array.from(document.querySelectorAll('#wall .art-visual'));
 
     // ── The control ──
-    __check('EXACT REQUEST: a Wireframe letter labels & grey fill toggle in Elevations Settings', () => {
-      const cb = document.getElementById('elevWireframeToggle');
-      if (!cb) throw new Error('the toggle is not in the Settings panel');
-      if (cb.type !== 'checkbox') throw new Error('expected a checkbox');
-      if (!/setElevWireframe\\(this\\.checked\\)/.test(cb.getAttribute('onchange') || '')) throw new Error('the toggle is not wired to a handler');
-      // The label the user asked for, so it is findable.
-      const lbl = cb.closest('label');
-      if (!lbl || !/wireframe/i.test(lbl.textContent) || !/grey fill/i.test(lbl.textContent)) throw new Error('the control is not labelled as asked: ' + (lbl && lbl.textContent || '').trim());
+    // 18.49: moved on request from a checkbox in Elevation settings to a Layout Guides
+    // button in View, beside Artwork (it is project data, a view of the openings).
+    __check('EXACT REQUEST: a Wireframe toggle in Layout Guides, View, beside Artwork', () => {
+      const b = document.getElementById('wireframeToggle');
+      if (!b || !b.classList.contains('layout-guide-btn')) throw new Error('no Wireframe guide button');
+      if ((b.getAttribute('onclick') || '').indexOf('setElevWireframe(!_isWireframe())') < 0) throw new Error('the button is not wired to setElevWireframe');
+      if (b.closest('details.lg-group').getAttribute('data-lg') !== 'view') throw new Error('not in the View group');
+      if (b.previousElementSibling.id !== 'artworkToggle') throw new Error('not beside Artwork');
+      if (!/wireframe/i.test(b.textContent)) throw new Error('the button is not labelled Wireframe');
+      if (document.getElementById('elevWireframeToggle')) throw new Error('the old checkbox is still in Elevation settings');
       if (typeof setElevWireframe !== 'function' || typeof seedElevWireframeToggle !== 'function') throw new Error('handler or seeder missing');
     });
 
@@ -75,15 +77,15 @@ const path = require('path');
       if (S.indexOf('editorialContent.wireframe = !!p.wf') < 0) throw new Error('the deck preset no longer shares this flag');
     });
 
-    __check('the checkbox re-reads the project on every Settings open', () => {
+    __check('the button shows the project state, whoever changed it', () => {
       // It is PROJECT data (it travels in the file), not a localStorage drafting
       // pref, so a stale checkbox would misreport a loaded project.
       editorialContent.wireframe = true;
-      seedElevWireframeToggle();
-      if (!document.getElementById('elevWireframeToggle').checked) throw new Error('the seeder does not reflect the project');
+      syncLayoutGuideButtonStates();
+      if (!document.getElementById('wireframeToggle').classList.contains('active')) throw new Error('the guide sync does not light it from the project');
       editorialContent.wireframe = false;
       seedElevWireframeToggle();
-      if (document.getElementById('elevWireframeToggle').checked) throw new Error('the seeder does not clear');
+      if (document.getElementById('wireframeToggle').classList.contains('active')) throw new Error('the seeder does not clear it');
       const i = S.indexOf('seedElevDualUnitInputs();');
       if (S.slice(i, i + 200).indexOf('seedElevWireframeToggle()') < 0) throw new Error('the seeder is not called when the panel opens');
     });
@@ -126,7 +128,10 @@ const path = require('path');
       // The opening-size text is set with innerText (its newlines have to become
       // line breaks), which jsdom does not reflect — so that branch is pinned in
       // the source rather than in the DOM.
-      const i = S.indexOf('const unitSuffix = unitInfo(elevUnit).suffix;');
+      // Anchored on _openSfx since 18.28: it was named unitSuffix, which shadowed the
+      // unitSuffix() function and threw in the TDZ (test_nothing_floats).
+      const i = S.indexOf('const _openSfx = unitInfo(elevUnit).suffix;');
+      if (i < 0) throw new Error('anchor not found');
       const body = S.slice(i, i + 2000);
       if (body.indexOf('art.innerText = (artW > 0)') < 0) throw new Error('the opening-size text was lost from the non-wireframe branch');
     });
@@ -135,10 +140,14 @@ const path = require('path');
     __check('EXACT RISK: the SVG decides at the same point as the artwork', () => {
       const i = S.indexOf('function _maybeAddArtworkToSvg');
       const body = S.slice(i, S.indexOf('\\nasync function ', i));
-      if (body.indexOf('_isWireframe()') < 0) throw new Error('the SVG export has no wireframe branch, so it would export the artwork the editor is hiding');
+      // _curElevIsWireframe, not _isWireframe: since catalogue mockups, the answer is a
+      // question about the WALL rather than only about the deck, so one deck can carry
+      // grey placement drawings and real artwork pages at once. The branch, and where it
+      // sits, are unchanged - only what it asks.
+      if (body.indexOf('_curElevIsWireframe()') < 0) throw new Error('the SVG export has no wireframe branch, so it would export the artwork the editor is hiding');
       // Before the artwork guards, or a frame with no artworkUrl returns early and
       // gets no placeholder at all.
-      const wf = body.indexOf('_isWireframe()');
+      const wf = body.indexOf('_curElevIsWireframe()');
       const guard = body.indexOf('if (!f || !f.artworkUrl) return;');
       if (!(guard > wf)) throw new Error('the wireframe branch runs after the artwork guard, so frames without artwork export blank');
       if (body.indexOf('ELEV_WF_FILL') < 0) throw new Error('the SVG does not use the shared fill');
@@ -229,8 +238,8 @@ const path = require('path');
       if (!labelSize) throw new Error('the Label Size control is gone');
       if (size.closest('div[id]') && labelSize.closest('div[id]')) { /* structural check below */ }
       const snap = document.getElementById('snapEnabledToggle');
-      const cb = document.getElementById('elevWireframeToggle');
-      if (!cb) throw new Error('the toggle is gone');
+      const cb = document.getElementById('annotWfSize');
+      if (!cb) throw new Error('the letter style is gone');
       // Same panel as the label size; a different one from the snap toggles.
       const panelOf = (el) => { let n = el; while (n && n !== document.body) { if (n.className && /panel|section/i.test(n.className)) return n; n = n.parentElement; } return null; };
       if (snap && panelOf(cb) && panelOf(snap) && panelOf(cb) === panelOf(snap)) throw new Error('the toggle is still in the Grid & Snap panel');

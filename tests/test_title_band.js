@@ -57,7 +57,6 @@ const path = require('path');
       ['_drawTimelinePageDots', 'M, M + 14'],
       ['_drawProsePage', 'M, M + 14'],
       ['_drawStrategyPage', 'M, M + 14'],
-      ['_drawTOCPage', 'M, M + 24'],
       ['_drawArtIndexPage', 'M, M + 24'],
       ['_drawThankYouPage', 'M, M + 18'],
       ['_drawPlaceholderPage', 'M + 24, M + 44']
@@ -69,15 +68,17 @@ const path = require('path');
 
   check('every automated renderer goes through the one title drawer', () => {
     ['_drawFloorplanKeyPage', '_drawFrameRecPage', '_drawTimelinePagePills', '_drawTimelinePageDots',
-     '_drawProsePage', '_drawStrategyPage', '_drawTOCPage', '_drawArtIndexPage', '_drawThankYouPage',
+     '_drawProsePage', '_drawStrategyPage', '_drawArtIndexPage', '_drawThankYouPage',
      '_drawPlaceholderPage', '_drawFlatGraphicSpecPage', '_drawSpecSetPageBody',
-     '_drawInstallGuidePage', '_drawClassicSpecPage'].forEach(fn => {
+     '_drawInstallGuidePage'].forEach(fn => {
       if (codeOnly(fnBody(fn)).indexOf('_drawPageTitle(') < 0) throw new Error(fn + ' does not call _drawPageTitle');
     });
   });
 
   check('the template remap anchors its vertical map on the title line', () => {
-    const b = codeOnly(fnBody('_drawSpecPageTemplate'));
+    // 18.65: the map moved into _specTplMap (shared with the options sheet); the page must still use it.
+    if (codeOnly(fnBody('_drawSpecPageTemplate')).indexOf('_specTplMap(tpl, PW, PH)') < 0) throw new Error('the spec page no longer uses the shared map');
+    const b = codeOnly(fnBody('_specTplMap'));
     if (b.indexOf('ky = (1 - SF.t - SF.b) / (D.B - D.T);') >= 0) throw new Error('the vertical map still starts at the top margin, which is what pulled the title off its guide');
     if (b.indexOf('_TB.head / PH') < 0) throw new Error('the map never reaches for the title line');
     if (b.indexOf('oxf = SF.l - D.L * kx;') < 0) throw new Error('the HORIZONTAL map was changed too; only the vertical one was wrong');
@@ -87,7 +88,7 @@ const path = require('path');
     // Math.max(ts.size, 22) on the install sheet and Math.max(_ts.size, 20) on the
     // classic one meant turning the deck title DOWN moved every page except those
     // two, which is the same class of bug as nine different title offsets.
-    ['_drawInstallGuidePage', '_drawClassicSpecPage', '_drawFlatGraphicSpecPage'].forEach(fn => {
+    ['_drawInstallGuidePage', '_drawFlatGraphicSpecPage'].forEach(fn => {
       const b = codeOnly(fnBody(fn));
       if (b.indexOf('Math.max(ts.size') >= 0 || b.indexOf('Math.max(_ts.size') >= 0) throw new Error(fn + ' still floors the title size');
     });
@@ -523,14 +524,12 @@ const path = require('path');
     '  rec = new CanvasPdfRec(PW, PH);',
     '  _drawStrategyPage(rec, {}, 1, {}, { primary: "a", secondary: "b", tertiary: "c" }); grab(rec, "strategy");',
     '  rec = new CanvasPdfRec(PW, PH);',
-    '  _drawTOCPage(rec, {}, 1, {}, [{ label: "Cover", page: "1" }]); grab(rec, "contents");',
-    '  rec = new CanvasPdfRec(PW, PH);',
     '  _drawArtIndexPage(rec, {}, 1, {}, []); grab(rec, "artwork index");',
     '  seen.forEach((p) => {',
     '    if (!near(p[1], B.head, 0.5)) throw new Error(p[0] + " heading at y=" + p[1] + ", the title guide is at " + B.head);',
     '    if (!near(p[2], B.x, 0.5)) throw new Error(p[0] + " heading at x=" + p[2] + ", the left guide is at " + B.x);',
     '  });',
-    '  if (seen.length !== 8) throw new Error("only " + seen.length + " pages were exercised");',
+    '  if (seen.length !== 7) throw new Error("only " + seen.length + " pages were exercised");',
     '});',
     '',
     '__checkAsync("a spec page title lands on the guide, not on the top margin", async () => {',

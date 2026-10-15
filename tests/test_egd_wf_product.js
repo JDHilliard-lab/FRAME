@@ -209,8 +209,9 @@ const path = require('path');
       dashUnit = 'in'; editorialContent.specDualUnit = 'mm';
       const s = buildSpecStrings(egd());
       const od = s.lines.find(l => l.label === 'Overall Dimensions').value;
-      // The Ford catalog writes 192"(4876.8mm) W x 120"(3048mm) H.
-      if (od.indexOf('192"(4876.8mm)W') < 0 || od.indexOf('120"(3048mm)H') < 0) throw new Error('dual-unit overall reads: ' + od);
+      // The Ford catalog writes 192"(4876.8mm) W x 120"(3048mm) H. 18.60: mm rounds to the
+      // project setting, whole mm by default, so 4877mm.
+      if (od.indexOf('192"(4877mm)W') < 0 || od.indexOf('120"(3048mm)H') < 0) throw new Error('dual-unit overall reads: ' + od);
       editorialContent.specDualUnit = '';
     });
 
@@ -533,7 +534,9 @@ const path = require('path');
       // A framed row leaves it blank rather than shifting the column.
       dashProjectData = [base({ id: 'ART.900' })];
       const row2 = buildDashCSVString().split('\\n').find(l => l.indexOf('ART.900') >= 0);
-      if (!/,""\\s*$/.test(row2)) throw new Error('a framed row did not leave Material empty: ' + row2.slice(-60));
+      // 18.28 appends Category after the blank trailing cells, so check the row WITHOUT it.
+      const row2b = row2.replace(/\\s+$/, '').slice(0, row2.replace(/\\s+$/, '').lastIndexOf(','));
+      if (!/,""$/.test(row2b)) throw new Error('a framed row did not leave Material empty: ' + row2.slice(-60));
       // A flat graphic's Art Size must equal its Overall size in the CSV too.
       if (row.indexOf('"192","120","192","120","192.5","120.5"') < 0) throw new Error('CSV sizes disagree with the spec block: ' + row.slice(0, 160));
       dashProjectData = saved;
@@ -635,17 +638,21 @@ const path = require('path');
 
     __check('both render paths draw the flat sheet, and neither falls through to a framed one', () => {
       if (typeof _drawFlatGraphicSpecPage !== 'function') throw new Error('the flat sheet renderer is missing');
-      // Deck Studio preview / rail thumbnails.
-      const i = S.indexOf('async function renderSpecPageCanvas');
-      const b1 = S.slice(i, S.indexOf('\\nfunction ', i + 10));
-      if (b1.indexOf('_drawFlatGraphicSpecPage(') < 0) throw new Error('the canvas preview does not draw the flat sheet');
-      // The PDF export. egdDetail carries custom:true (no coordinate map), so its
+      // 18.32: the preview and the PDF export draw spec pages through ONE function,
+      // _drawDeckSpecPage. egdDetail carries custom:true (no coordinate map), so its
       // branch MUST come before the generic template branch or it renders as a
       // frameRight fallback complete with a frame mockup.
-      const j = S.indexOf('SPEC_TEMPLATES[_specTpl].flat');
-      const k = S.indexOf("_specTpl !== 'classic' && SPEC_TEMPLATES[_specTpl] && !SPEC_TEMPLATES[_specTpl].legacy");
-      if (j < 0) throw new Error('the PDF export has no flat-sheet branch');
+      const i = S.indexOf('async function _drawDeckSpecPage');
+      const b1 = S.slice(i, S.indexOf('async function _drawDeckPage(', i));
+      if (i < 0) throw new Error('the shared spec dispatch is missing');
+      const j = b1.indexOf('_drawFlatGraphicSpecPage('), k = b1.indexOf('_drawSpecPageTemplate(');
+      if (j < 0) throw new Error('the shared dispatch has no flat-sheet branch');
       if (k >= 0 && j > k) throw new Error('the flat branch sits AFTER the generic one, so it never runs');
+      // Both renderers go through it.
+      const p1 = S.indexOf('async function renderSpecPageCanvas');
+      if (S.slice(p1, S.indexOf('async function renderDeckPageCanvas', p1)).indexOf('_drawDeckSpecPage(') < 0) throw new Error('the canvas preview does not draw through the shared dispatch');
+      const e1 = S.indexOf('async function _buildSpecPagePDF');
+      if (S.slice(e1, S.indexOf('async function exportDashNativePNG', e1)).indexOf('_drawDeckPage(') < 0) throw new Error('the PDF export does not draw through the shared dispatch');
     });
 
     __check('the flat sheet reuses the shared elevation capture rather than its own copy', () => {

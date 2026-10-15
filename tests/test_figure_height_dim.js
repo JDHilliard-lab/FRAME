@@ -52,7 +52,7 @@ const path = require('path');
 
     const __seed = (unit, dual) => {
       elevUnit = unit || 'in';
-      elevDualUnit = dual || '';
+      editorialContent.specDualUnit = dual || '';   // 18.37: one project setting
       elevations = [{ name: 'Wall A', wallW: 185, wallH: 108, personPos: { x: 6, placed: true }, frames: [
         { letter: 'A', id: 'P1', x: 40, y: 40, w: 30, h: 24, active: true }
       ] }];
@@ -72,7 +72,7 @@ const path = require('path');
     __check('EXACT REQUEST: a tick box in the elevation settings turns it on and off', () => {
       if (!/id="figureDimToggle"/.test(H)) throw new Error('no tick box in the Settings panel');
       if (!/onchange="toggleFigureDim\\(this.checked\\)"/.test(H)) throw new Error('the tick box is not wired to toggleFigureDim');
-      const sf = H.indexOf('SCALE FIGURE'), cb = H.indexOf('figureDimToggle'), next = H.indexOf('NUDGE STEP', sf);
+      const sf = H.indexOf('>Scale figure<'), cb = H.indexOf('figureDimToggle'), next = H.indexOf('>Grid, snap', sf);
       if (!(cb > sf && cb < next)) throw new Error('the tick box is not inside the Scale Figure section');
       if (dimVisibility.figureHeight !== false) throw new Error('it should default off, got ' + dimVisibility.figureHeight);
       __seed('in');
@@ -123,9 +123,8 @@ const path = require('path');
       if (!/rotate\\(-90deg\\)/.test(rule)) throw new Error('the rotation is not the architectural 90 CCW: ' + rule);
     });
 
-    __check('the number follows the deck dual-unit setting and the suffix toggle', () => {
+    __check('the number follows the deck dual-unit setting and always carries its unit', () => {
       toggleFigureDim(true);
-      const sfx = showUnitSuffix; showUnitSuffix = true;
       __seed('in', '');
       if (__lbl().textContent !== '72\\u0022') throw new Error('inches gave: ' + __lbl().textContent);
       __seed('in', 'mm');
@@ -133,10 +132,9 @@ const path = require('path');
       if (__lbl().textContent !== '72\\u0022(1829mm)') throw new Error('dual mm gave: ' + __lbl().textContent);
       __seed('cm', '');
       if (__lbl().textContent !== '182.9 cm') throw new Error('a cm project gave: ' + __lbl().textContent);
-      // Interior dims drop the suffix when that toggle is off — this is one of them.
-      showUnitSuffix = false; __seed('in', '');
-      if (__lbl().textContent !== '72') throw new Error('with the suffix toggle off it still reads: ' + __lbl().textContent);
-      showUnitSuffix = sfx;
+      // 18.60: no suffix toggle any more; a single-unit drawing keeps the mark.
+      __seed('in', '');
+      if (__lbl().textContent !== '72\\u0022') throw new Error('single unit lost its mark: ' + __lbl().textContent);
       // One height for the drawn figure and the number that measures it.
       const i = S.indexOf('function _elevFigureDimLabel');
       if (S.slice(i, i + 200).indexOf('ELEV_PERSON_HEIGHT_IN') < 0) throw new Error('the dimension hardcodes its own height');
@@ -144,9 +142,8 @@ const path = require('path');
 
     __check('it takes the shared dimension styling — colour, weight, dash and line ends', () => {
       toggleFigureDim(true);
+      // 18.48: ticks are the only line ends; asking for plain still draws them.
       setAnnotDimEnds('none'); __seed('in');
-      if (__layer().querySelectorAll('[data-svg-tick]').length) throw new Error('ticks drew under the PLAIN style');
-      setAnnotDimEnds('tick'); __seed('in');
       if (__layer().querySelectorAll('[data-svg-tick]').length !== 2) throw new Error('TICKS mode did not put an architectural tick on each end');
       // The segments are the CSS-var-driven ones, so weight and colour arrive for free.
       const seg = __layer().querySelector('.dim-line-segment-v');
@@ -179,10 +176,13 @@ const path = require('path');
 
     __check('the leader overhangs the dimension line under TICKS, so the tick has its crosshair', () => {
       toggleFigureDim(true);
-      setAnnotDimEnds('none'); __seed('in');
-      elevPersonPos.dimOff = 0.8; drawElevAll();
+      // 18.48: no plain style to compare against, so take the overhang away for one
+      // draw and put it back: the leader must grow by exactly that much.
+      setAnnotDimEnds('tick'); __seed('in');
+      elevPersonPos.dimOff = 0.8;
+      const _ov = _dimExtOverhang; _dimExtOverhang = () => 0; drawElevAll();
       const plain = parseFloat(__leader().style.width);
-      setAnnotDimEnds('tick'); drawElevAll();
+      _dimExtOverhang = _ov; drawElevAll();
       const ticked = parseFloat(__leader().style.width);
       if (!(ticked > plain)) throw new Error('the leader did not gain the overhang under TICKS: ' + plain + ' vs ' + ticked);
       if (ticked - plain !== _dimExtOverhang()) throw new Error('the overhang is ' + (ticked - plain) + ', expected ' + _dimExtOverhang());

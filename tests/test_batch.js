@@ -19,8 +19,9 @@ const fs = require('fs');
 
     __check('layout page titles never reach the drawer (source guard)', () => {
       const src2 = window.__appSrc;
-      if (src2.indexOf("_drawMoodboardPage(rec, logos, 1, meta, tiles, '', desc.page.type") < 0) throw new Error('preview still passes title');
-      if ((src2.match(/_drawMoodboardPage\\(doc, logos, pageNum, meta, tiles, '', page.type, 'layout:' \\+ page.id\\);/g) || []).length !== 2) throw new Error('export still passes title');
+      // 18.32: ONE call site, shared by the preview and the export (_drawDeckPage).
+      if (src2.indexOf("_drawMoodboardPage(doc, logos, pn, meta, await _deckLoadTiles(desc.page.elements), '', desc.page.type") < 0) throw new Error('the shared dispatch passes a title to the layout drawer');
+      if (src2.indexOf("_drawMoodboardPage(doc, logos, pageNum, meta, tiles, '', page.type") >= 0) throw new Error('the export draws layout pages itself again');
     });
 
     __check('duplicate clone anchors directly after the source', () => {
@@ -106,7 +107,9 @@ const fs = require('fs');
 
     __check('line entry exists in the arrow shape menu and sets tip none (source guard)', () => {
       const src2 = window.__appSrc;
-      if (src2.indexOf("['line', 'Line (no head)'") < 0) throw new Error('line entry missing');
+      // 18.20: the menu became the dock's Lines flyout, a row per tool with its
+      // shortcut, so the entry reads ['line', 'Line', 'L', ...] now. Same tool.
+      if (src2.indexOf("['line', 'Line', 'L',") < 0) throw new Error('line entry missing');
       if (src2.indexOf("if (kind === 'line') _dsSetArrowDefault('tip', 'none');") < 0) throw new Error('line tip default missing');
       if (src2.indexOf("else if (kind === 'arrow') _dsSetArrowDefault('tip', 'arrow');") < 0) throw new Error('arrow restore missing');
     });
