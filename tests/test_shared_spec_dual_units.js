@@ -36,6 +36,11 @@ const path = require('path');
     window.__testResults = [];
     const __check = (label, fn) => { try { fn(); window.__testResults.push({ label, ok: true }); } catch (e) { window.__testResults.push({ label, ok: false, err: e.message }); } };
     editorialContent = editorialContent || {};
+    // 18.60: rounding became a project setting (Settings > Units > Rounding). This file is
+    // about FORMAT (inches first, brackets, AA as its own word), so it pins the rounding the
+    // spec pages used before: mm to 0.1, cm and inches to 0.001. The defaults have their
+    // own checks in test_unit_precision.js.
+    editorialContent.unitPrecision = { in: 3, mm: 1, cm: 3 };
 
     // A plain framed print: 0.75" profile, 0.625" rabbet, 18" square, 3" mat.
     // \`scale\` restates the same physical piece in another project unit, which is
@@ -190,17 +195,19 @@ const path = require('path');
       if (S.indexOf(\"specDualUnit: ''\") < 0) throw new Error('the editorialContent literal was not updated alongside _editorialDefaults');
     });
 
-    __check('the control appears in BOTH spec panels and nowhere it would do nothing', () => {
+    // 18.37: the second unit is ONE project setting (header chip, Project tab, and a
+    // readout with Change in both spec panels). One writer, setProjectDualUnit.
+    __check('both spec panels show the units line, and it opens the shared controls', () => {
       const S = window.__appSrc;
-      if (S.indexOf('function _dsDualUnitInto') < 0) throw new Error('no _dsDualUnitInto helper — the control was inlined, so the two panels can drift');
       const calls = (S.match(/_dsDualUnitInto\\(/g) || []).length;
       if (calls < 3) throw new Error('expected the helper plus a call from each of the two spec panels, found ' + calls + ' references');
       const i = S.indexOf('function _dsDualUnitInto');
-      const body = S.slice(i, i + 2600);
-      if (body.indexOf('specDualUnit =') < 0) throw new Error('the control does not write the deck-wide setting');
-      if (body.indexOf(\"cur || 'mm'\") < 0) throw new Error('unticking should remember the unit rather than resetting the picker');
-      if (body.indexOf('_dsClearBuiltAll') < 0 || body.indexOf('_dsRefresh') < 0) throw new Error('the control does not rebuild the previews, so it would only take effect on the next PDF');
-      if (body.indexOf('scheduleAutosave') < 0) throw new Error('the setting is not saved');
+      const body = S.slice(i, S.indexOf('\\n}\\n', i));
+      if (body.indexOf('_unitControlsInto(') < 0) throw new Error('the panel line does not open the shared unit controls');
+      if (body.indexOf('specDualUnit =') >= 0) throw new Error('the panel writes the setting itself again');
+      const w = S.indexOf('function setProjectDualUnit');
+      const wb = S.slice(w, S.indexOf('\\n}\\n', w));
+      ['pushHistory', 'scheduleAutosave', '_dsClearBuiltAll', '_dsRefresh', '_elevGuidesChanged'].forEach(n => { if (wb.indexOf(n) < 0) throw new Error('setProjectDualUnit does not call ' + n); });
     });
   `;
 

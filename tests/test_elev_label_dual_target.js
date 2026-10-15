@@ -190,10 +190,12 @@ const path = require('path');
     });
 
     // ── 2. Elevation dual units ──
-    __check('elevation dual units are off by default and independent of the spec setting', () => {
+    // 18.37 REVERSED the old "independent" rule on purpose: one second unit per project,
+    // so the same project cannot print mm on one designer's elevations and not another's.
+    __check('elevation dual units are off by default and follow the project second unit', () => {
       if (_elevDualUnit() !== '') throw new Error('default is ' + _elevDualUnit());
       editorialContent.specDualUnit = 'mm';
-      if (_elevDualUnit() !== '') throw new Error('the elevation followed the SPEC setting; they are meant to be separate');
+      if (_elevDualUnit() !== 'mm') throw new Error('the elevation ignores the project second unit');
       editorialContent.specDualUnit = '';
     });
 
@@ -212,20 +214,21 @@ const path = require('path');
       const before = elevUnit;
       setElevDualUnit('mm');
       const got = elevFmtU(102);         // 102mm stored
-      if (got.indexOf('4\\"') !== 0) throw new Error('expected inches first, got "' + got + '"');
+      // 18.60: inches print to the project rounding (0.### by default), so 102mm is 4.016".
+      if (got.indexOf('4.016\\"') !== 0) throw new Error('expected inches first, got "' + got + '"');
       if (got.indexOf('(102mm)') < 0) throw new Error('lost the companion: "' + got + '"');
       if (elevUnit !== before) throw new Error('the project unit changed to ' + elevUnit);
       setElevDualUnit('');
       elevUnit = 'in';
     });
 
-    __check('dual units bring the unit mark back even with the interior-suffix toggle off', () => {
+    // 18.60: the interior-suffix toggle is gone; every elevation number carries its unit.
+    __check('every interior number carries its unit mark, with or without dual units', () => {
       __seed('in');
-      const save = showUnitSuffix; showUnitSuffix = false;
-      if (elevFmtU(4) !== '4') throw new Error('suffix-off baseline changed: ' + elevFmtU(4));
+      if (elevFmtU(4) !== '4\\"') throw new Error('single-unit interior number lost its mark: ' + elevFmtU(4));
       setElevDualUnit('mm');
       const got = elevFmtU(4);
-      showUnitSuffix = save; setElevDualUnit('');
+      setElevDualUnit('');
       if (got.indexOf('\\"') < 0) throw new Error('a bare number with a bracketed one reads as a mistake: "' + got + '"');
     });
 
@@ -244,56 +247,35 @@ const path = require('path');
       setElevDualUnit('');
     });
 
-    __check('the corner legend says both units when dual is on', () => {
+    // 18.48: the corner legend is gone on request: with the second unit on, every
+    // number carries its own units, so the note only repeated them.
+    __check('EXACT ASK: no ALL DIMENSIONS IN note is drawn on the wall or exported', () => {
       __seed('in');
-      setElevDualUnit('mm');
-      const t = unitLegendText();
-      if (t.indexOf('INCHES') < 0 || t.indexOf('MILLIMETERS') < 0) throw new Error('legend reads: ' + t);
+      setElevDualUnit('mm'); drawElevAll();
+      if (document.getElementById('elev-unit-legend')) throw new Error('the corner note is still drawn');
+      if (typeof unitLegendText === 'function') throw new Error('the legend text builder is still there');
+      if (S.indexOf('ALL DIMENSIONS IN') >= 0) throw new Error('the legend wording is still in app.js');
       setElevDualUnit('');
-      if (unitLegendText().indexOf('MILLIMETERS') >= 0) throw new Error('legend still mentions mm with dual off: ' + unitLegendText());
     });
 
-    __check('the elevation companion uses the ELEVATION precision, not the spec pages\\'', () => {
-      // Deliberately different. An elevation is a set-out drawing, so mm are whole
-      // numbers — matching how it already prints mm as its primary unit and what
-      // the reference drawings show ('102 mm'). Spec pages keep a finer companion
-      // because they are fabrication specs where 457.2mm is the point. Each context
-      // stays internally consistent, which is what a reader notices.
-      __seed('in');
-      setElevDualUnit('mm');
-      const e = _elevDualPart(18);
-      setElevDualUnit('');
-      const s2 = _specDualPart(18, 'in', 'mm');
-      if (e !== '(457mm)') throw new Error('elevation companion should be whole mm, got ' + e);
-      if (s2 !== '(457.2mm)') throw new Error('the spec companion should keep its decimal, got ' + s2);
-    });
-
-    __check('the elevation companion is float-safe: the same size rounds the same either way', () => {
-      __seed('in');
-      setElevDualUnit('cm');
-      const fromIn = _elevDualPart(0.75);
-      elevUnit = 'cm';
-      const fromCm = _elevDualPart(1.905);      // the identical physical size
-      elevUnit = 'in'; setElevDualUnit('');
-      if (fromIn !== fromCm) throw new Error('float residue leaked in: ' + fromIn + ' vs ' + fromCm);
-    });
-
-    __check('the toggle persists, remembers the unit, and is wired into Settings', () => {
-      if (H.indexOf('elevDualUnitCb') < 0) throw new Error('no Dual Units checkbox in the Settings modal');
-      if (H.indexOf('setElevDualUnit') < 0) throw new Error('the MM/CM picker is not wired');
+    __check('the toggle persists, remembers the unit, and Elevation settings points to Settings > Units', () => {
+      // 18.48: units left the Elevation settings window for Settings > Units; the
+      // window shows them and links there.
+      if (H.indexOf('elevDualUnitCb') >= 0) throw new Error('a second units control is back in Elevation settings');
+      if (H.indexOf("openAppSettings('units')") < 0 || H.indexOf('elevSetUnitsTxt') < 0) throw new Error('Elevation settings does not show the units and link to Settings');
       setElevDualUnit('cm');
       toggleElevDualUnit(false);
       if (_elevDualUnit() !== '') throw new Error('unticking did not turn it off');
       toggleElevDualUnit(true);
       if (_elevDualUnit() !== 'cm') throw new Error('re-ticking forgot the cm choice, got ' + _elevDualUnit());
       setElevDualUnit('');
-      if (S.indexOf('loadElevDualUnit()') < 0) throw new Error('the preference is never loaded at boot');
-      if (S.indexOf('seedElevDualUnitInputs()') < 0) throw new Error('the modal never reflects the stored value');
+      // 18.37: it is project data now, so it travels in the file rather than localStorage.
+      if (S.indexOf("localStorage.getItem('elevDualUnit')") >= 0) throw new Error('a per-computer elevation unit is read again');
     });
 
     __check('switching it invalidates the breaker/install captures', () => {
-      const i = S.indexOf('function saveElevDualUnit');
-      const body = S.slice(i, i + 500);
+      const i = S.indexOf('function setProjectDualUnit');
+      const body = S.slice(i, S.indexOf('\\n}\\n', i));
       if (body.indexOf('_elevGuidesChanged') < 0) throw new Error('cached elevation images would keep the old units on every deck page');
     });
 

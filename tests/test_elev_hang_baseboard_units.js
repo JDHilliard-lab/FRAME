@@ -96,12 +96,12 @@ const path = require('path');
     });
 
     __check('the load path really does reseed the inputs and default a project that never saved them', () => {
-      const i = S.indexOf('function loadMasterProject');
+      const i = S.indexOf('function _readProjectText');
       const body = S.slice(i, S.indexOf('\\nfunction ', i + 10));
-      if (body.indexOf('seedHangBaseboardInputs()') < 0) throw new Error('loadMasterProject does not reseed the inputs, which IS the bug');
+      if (body.indexOf('seedHangBaseboardInputs()') < 0) throw new Error('the load path does not reseed the inputs, which IS the bug');
       if (body.indexOf('ELEV_STD_HANG_IN') < 0) throw new Error('a project saved before hangHeightIn existed would inherit the previous project’s value');
       // And a save has to carry them, in inches, or a reopened project is a guess.
-      const j = S.indexOf('function saveMasterProject');
+      const j = S.indexOf('function _projectPayload');
       const sBody = S.slice(j, S.indexOf('\\nfunction ', j + 10));
       if (sBody.indexOf('hangHeightIn') < 0 || sBody.indexOf('baseboardIn') < 0) throw new Error('the project JSON does not carry the hang height / baseboard');
     });
@@ -118,7 +118,8 @@ const path = require('path');
     __check('the unit conversion pass no longer multiplies these two inputs', () => {
       // It is what rounded 57 -> 144.78 -> 57.00 and back, a little off each time.
       // setElevUnit / setDashUnit are both thin wrappers; setUnit does the work.
-      const i = S.indexOf('function setUnit');
+      // 'function setUnit(' with the paren: setUnitPrecision (18.60) also starts with setUnit.
+      const i = S.indexOf('function setUnit(');
       if (i < 0) throw new Error('setUnit not found');
       const body = S.slice(i, S.indexOf('\\nfunction ', i + 10));
       if (/\\['hangHeight', null\\]|\\['baseboardHeight', null\\]/.test(body)) throw new Error('hangHeight/baseboardHeight are still in the multiply-the-input list');
