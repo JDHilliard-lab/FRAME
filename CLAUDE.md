@@ -476,7 +476,7 @@ run but passes alone is usually load timing: rerun before chasing it.
   `computeSnapForDrag` and `_ctxComputeSnap` (wall edges/centre, hang line, frames,
   glazing seams, blocks). `skip` excludes the dragged thing. Group drags skip snapping.
   Nudges debounce via `_ctxScheduleHistory`.
-  **The sidebar is tabbed** (`switchElevTab`, Art / Guides / Context / Glass; the strip sits right under the wall section, and Layout Guides is the Guides tab since 18.51, keeping the frame list above the fold). Hide panes with
+  **The sidebar is tabbed** (`switchElevTab`, Art / Guides / Context / Glass; the strip sits right under the wall section, and Layout Guides is the Guides tab since 18.51, keeping the frame list above the fold). Since 19.05 they are category tabs (`.elev-cat-tabs`: icon, name, count), still `.frame-tab`/`.active`. Hide panes with
   `display`, never detach (`initElevControls` renders all containers every time). Restore
   with `''`, never `'block'`.
   **The pane is the scroll region and needs `min-height: 0`** (`overflow-y: auto` alone
@@ -502,6 +502,10 @@ run but passes alone is usually load timing: rerun before chasing it.
   `restoreProjectState`).
   **A clone must get a new id**: `duplicateCurrentElevation` mints one (else
   `_elevIndexById` is ambiguous) and copies with `_cloneData`.
+  **DELETING A WALL ASKS ABOUT ITS PIECES (19.04).** `_elevOwnPieceIds(wall)` = rows hung (active) on this wall
+  and no other; never on a catalogue wall, never every row. When non-empty, `_confirmDestroy` gets an `alt`
+  (`Delete wall, keep pieces`) beside `Delete wall and N pieces`; `_deleteElevationNow(idx, {withPieces})`
+  re-reads the ids at confirm time and deletes them with the option-rows path (one history entry).
 - **CATALOGUE: THE MODEL AND THE CODES.** A catalogue is a document of CHOICES, not an
   order: one placement offered with several arrangements and several sets of artwork, and
   the client picks. It deliberately states no quantity.
@@ -994,6 +998,18 @@ run but passes alone is usually load timing: rerun before chasing it.
   File name goes in the document title.
   `_confirmDiscardUnsaved` runs before loading, and the picker opens from inside its Yes
   handler (a picker needs a user gesture; after an awaited modal it is refused).
+- **ONE AUTOSAVE PER TAB (18.82).** Records are keyed by `_autosaveSession` (the old
+  shared `ADB_ID = 'current'` is read and cleared, never written). `_aPrune` keeps the
+  newest `AUTOSAVE_KEEP` (5), max `AUTOSAVE_MAX_DAYS`, never this tab's. `clearAutosave`
+  deletes ONLY this tab's (+ 'current'). `_autosavePeekAll` lists them; the start screen
+  shows the newest not-live one as Continue and the rest in `_startScreenOthers`. A tab
+  still open answers `_liveTabSessions` over BroadcastChannel 'frame-tabs' (opened in
+  `_bootStart`) and is labelled, never offered. Restoring another tab's backup writes it
+  under this session, then deletes the old record. A failed write deletes only earlier
+  backups of the SAME project name.
+  **Copy reaches the other tabs (18.83):** `_dsCopySelection` wraps `_dsCopySelectionHere`
+  and posts `{t:'clip'}` on the same channel; `_tabOnMessage` makes it this tab's
+  `_dsClipboard` with `srcKey: null` (pastes in place). Ignores its own echo.
 - **THE AUTOSAVE LIVES IN INDEXEDDB** (a real project is ~23 MB vs a ~5 MB localStorage
   budget). Two stores: `ameta` (small: when, session, name) and `adata` (payload), so
   `checkAutosaveOnLoad` asks before reading the payload.
@@ -1205,6 +1221,16 @@ run but passes alone is usually load timing: rerun before chasing it.
   codes; a narrow piece drops its code, so a height check needs wide AND stacked pieces in a
   genuinely tall group. `__bandSetup` rebuilds `editorialContent` (where the guide pref
   lives), so switch the guide set AFTER the fixture.
+- **THE FRAME STRIP SHRINKS BEFORE IT GIVES WAY (18.89).** Past `box.maxW` it draws its images
+  smaller (to `FRAME_STRIP_MIN_SCALE`, bottom-aligned, codes never shrink), then drops PROFILES and
+  keeps corners, and only then returns null. It records the outcome per page in `_frameStripFit`
+  (`_noteStripFit`, debounced panel rebuild); the Show on page ticks read it for the *no room* note.
+  A `measure` is always full size. `test_frame_strip_fit` pins the order.
+  **Past half size in one row it WRAPS INTO TWO ROWS in the same band height (18.91)**, lower row's
+  codes on the caption baseline; only then profiles go. Nothing else on the page moves. A separate
+  row above the band (18.90) was tried and rejected by the designer: it shrank the art.
+  Twelve distinct codes fit as two rows of six.
+  **18.97: before any of that the gap tightens** (10pt down to `GAP_MIN` 4pt, at full size); two rows use the tight gap.
 - **A FRAME STRIP CELL IS AT LEAST AS WIDE AS ITS OWN CODE.** `_drawFrameStrip` lays cells
   right to left ending on `box.right` (the right safety guide on a group page) but draws the
   code left-aligned and unbounded (`MICH 432-29` is ~33pt at 6.5pt vs `MIN_CELL` 26). Widen
@@ -1312,6 +1338,12 @@ run but passes alone is usually load timing: rerun before chasing it.
   persisted and permanent; wording may change. A breaker selected in Per-piece or Group
   A/B/C mode gets the install-guide panel via the `desc._install && !desc._manual` branch,
   which must stay ahead of the mode branches.
+- **A NEW PICTURE NEVER KEEPS THE OLD PICTURE'S SIZE (18.94).** Every artwork apply path writes
+  `artworkW/H = w || 0` and every drop passes `(u, n, w, h)`; the dashboard and wall previews correct a
+  stored size whose proportions disagree with the pixels (`_artSizeStale`). The spec page reads real
+  pixels, so a stale size showed a squashed picture on screen and the true crop in print.
+- **SPEC ROW SPACING IS `_specRowFit` (18.94)**, for the PDF and `_deckMockHTML` alike: 8.5 on 13 unless
+  the list would pass the frame strip / thumbnails by more than 4pt, then down to 9pt lead, type to 7pt.
 - **THE INSTANT SPEC PREVIEW SETS ITS ROWS LIKE THE PDF.** `_deckMockHTML` builds one row
   per `buildSpecStrings` line (bold label, dotted leader, right-aligned value) at the PDF's
   8.5pt on a 13pt rhythm scaled by `h / 540`, with `tpl.spec.y` as the first BASELINE as in
@@ -1721,6 +1753,79 @@ run but passes alone is usually load timing: rerun before chasing it.
   (`dsDockNotes`), Upload image in Shapes; no standalone T or image button. Selection
   settings is a gear, never the theme sun.
 
+- **THE FRAME BROWSER (18.84, `openFrameBrowser`, `_fb*`)** replaces the flat Frame dropdown. Frames are
+  addressed by CODE. Project frames = frames on an item (`_fbInUse`, DERIVED from rows, never stored) +
+  `editorialContent.frameShortlist` (codes; `_fbShortlist` is READ-ONLY, `_fbSetShortlist` the one
+  writer, pushes history, deletes the field when empty). My groupings: localStorage `FB_MINE_KEY`.
+  Team groupings: `library/groupings.json`, committed by a person; the app is static and never writes
+  to GitHub (no tokens). Picking goes through `loadDashFromCustomLibrary` via the hidden
+  `libVendor`/`libCollection` selects, which must stay in the DOM. Catalogue facts (colour, family,
+  profile, series) come from `library/<v>/<c>/catalogue.json`, merged by
+  `scripts/build-library-manifest.js` with the `corners/` + `profiles/` paths. Michelangelo source is the
+  Google Sheet behind their site search (Photo_3 = corner, Photo_4 = line art); the swatch is the
+  corner's face, cross-faded to tile down the rail.
+  **Floaters need the lip width (`_f`), which the sheet does NOT carry**: it is read off each series'
+  line art (top callout; for stepped/wedge/cove profiles the wall at the canvas). The app derives the
+  inset as lip + `FLOATER_SHADOW_REVEAL`, and a collection named *floater* switches the product.
+  **THE REVEAL IS A GAP, NOT MOULDING (19.02):** `_floaterRevealOf(inset, unit)` (derived from the inset, never
+  `_faceWidth`, which is not unit-converted or carried onto wall frames) is painted dark just outside the canvas in
+  all four views (canvas renderer ring, DOM spread shadow `_floaterGapCss` KEPT when the canvas has artwork, SVG ring),
+  strength `frameFx.gap`. A lip named in the maker's text (`5/8" Face`) beats one read off a drawing.
+  **THE FRAME PICKS THE PRODUCT BOTH WAYS (19.03):** `applySwatchToRow` makes a floater (`_swatchIsFloater`: collection
+  name OR `faceWidth > 0`) a floater canvas, and a regular moulding on a FLOATER item Framed Art again. Every other
+  product is left alone; the form dropdown follows `row.product`.
+  **Larson-Juhl (18.92):** source is their Magento GraphQL (GET only, header `Store: us`, category
+  uid `Nzk1` = Mouldings) for sizes/facets, and each product page's fotorama JSON for images (GraphQL
+  media is empty). Corners are L-shaped and cropped to one leg; some galleries list the drawing first.
+  Codes `LJ-<sku>`, folders `library/larson_juhl/<collection>[-floaters]`. Floater lips read off the
+  drawings. Nielsen metal (no photos), Raw Maple (drawings only), fillets, liners, strainers left out.
+  The browser's Library groups by VENDOR (`ven:` source, `_fbOpenVendors`), plus a Style filter.
+  **Universal Arquati (18.95):** WooCommerce Store API (`/wp-json/wc/store/v1/products`, public) gives
+  Width/Height/Rabbet/Collection/Color/Style/Profile as attributes; image 0 is a photo of a strip lying
+  sideways (cut end LEFT, code label under it), image 1 the drawing. Rotated a quarter anticlockwise it
+  matches MICH. White mouldings need the near-white threshold. Discontinued = '(Discontinued)' in the
+  NAME. Floater Width is the LIP; the full rail width is read off the drawing. Codes `UA-<sku>`.
+  **International Moulding (18.98):** SvelteKit site; items from POST `newapi.internationalmoulding.com/api/
+  inventoryitem/getpagedinventoryitems2` (catalogId 741, own brand id 37, `discontinued` flag, Width = full
+  rail); images `s3.amazonaws.com/im-dropbox-sync/<itemnum>-2.jpg` (strip) and `-3.jpg` (drawing).
+  **Framerica (18.98):** WooCommerce Store API; sizes parsed from the short description; L corners like LJ;
+  drawings picked by the BW profile number (pages carry other profiles' drawings). No floaters.
+  Floater folders: never double the suffix when the collection is already named for floaters.
+  **ORIENTATION IS PART OF THE SWATCH (18.99):** every corner and swatch has the OUTER edge LEFT and the
+  rabbet notch RIGHT (MICH); `renderFrameToCanvas` draws the image's left edge as the outside of the rail.
+  IM photos are all mirrored (importer flips); Framerica is mixed (importer reads the notch side).
+  **Every corner photo is 150x400 (MICH's shape), cut end at the bottom (18.96).** A taller one reads as a
+  sliver in the browser card; the importers crop the bottom 400. A deep shadowbox may be taller, sized
+  from the FRAME's own depth/width (cut end = 150*depth/width px, +120 face, max 600), never from a cut
+  detected in the photo (fine wood grain fooled it into 1650px corners). Floater corners: wall LEFT,
+  floor along the bottom. The browser's Type filter (`FB_KINDS`) splits frames from floaters by faceWidth.
+  **Left out on purpose:** Liners and Fillets (they nest inside another frame; FRAME has no such
+  product), Flat Surfaces (rabbetless, holds no art), Stretchers (hidden). 627-45 has no photo upstream.
+  **Swatch cut:** standard (outer-edge colour change or hard edge) by default; ornate/barnwood faces
+  are busy and use the bottom-up smooth-end finder. Never floor a swatch past a real cut: deep shadow
+  boxes have a face only ~17% of the photo.
+- **THE PROJECT TAB READS SETTINGS BACK, IT DOES NOT HOLD THEM (19.06).** Units, rounding and
+  Frame effects are changed in Settings; `#projUnitsHost` is a one-line readback
+  (`_projUnitsSummaryInto`, refreshed by `_syncUnitChip` and `setUnitPrecision`) beside Units... and
+  `#projFrameFxBtn`. Name, code, location, version are one `.proj-fields` block.
+  **Its page preview draws an element page with `_dsElementPageThumbHTML(desc, w, h, undefined,
+  true)`** (the rail's builder: theme background, dark ink, notes, footer; `noBadge`), never the
+  bare `_deckMockHTML`, which ignores the page theme.
+- **FRAMES COME FROM THE LIBRARY (19.09).** New items start in `DEFAULT_FRAME_CODE` (MICH-132-29) via
+  `_defaultFrameApply` in `_fpAddCodes` (and the boot placeholder). The swatch loads once
+  (`_defaultFrameLoad`, after the bundled library); a row minted before it lands is a black colour
+  stand-in with the same code, upgraded by `_defaultFramePending` (object identity, never a row field)
+  only while untouched. The dashboard's Frame is ONE card (`#swatchSelectedDisplay` = `.frame-card`,
+  `_dashFrameCardSync`); the colour toggle, colour picker, Sync Folder and Upload buttons are gone
+  (`#fType`, `#fColor` stay as hidden inputs; colour frames still load and print). A one-off frame is
+  **Custom swatch...** in the frame browser foot (`#fbCustomSwatch` -> `#swatchUpload`). Picking a frame
+  fills `fColorName` from the catalogue only while it holds nothing or the previous frame's colour.
+  The Sync Folder modal code is dormant (previously stored swatches still load).
+  **19.10:** the card is a SQUARE picture button (`.frame-card-sq`) with `m_fCode` / `m_fColorName`
+  stacked beside it (`.frame-row-fields`); the catalogue line (`#frameCardSub`) is on the heading.
+  **Artwork is added only from the preview** (the empty opening's `.art-add-btn` with its caption,
+  and drops on `#dash-frame-visual`); the panel's upload row (`#m_artworkDrop`) is gone, and
+  `#m_artCropControls` (zoom, Reset, 1:1, Remove = `#m_artworkClear`) shows once there is artwork.
 - **ONE SETTINGS GEAR (18.47): `#appSettingsBtn` -> `openAppSettings(tab)`**, in every
   view (no `data-views`). Tabs `APP_SETTINGS_TABS`: `units` (`_unitControlsInto`), `fx`
   (`_frameFxInto`), `elev` (hands off to `openPrecisionModal`, closing Settings first).
@@ -1739,6 +1844,22 @@ run but passes alone is usually load timing: rerun before chasing it.
   it). Letter STYLE stays in Elevation settings. `svgFrameMode` is NOT stored: the export
   menu picks it per export through `_svgExportAs(mode, run)`, which puts it back (also on a
   throw) so PDF captures never inherit vector frames; `loadSvgFrameMode` clears the old key.
+- **ELEVATION SHADOWS ARE IN REAL INCHES (19.05).** `elevScale` is px per elevUnit, so `N * elevScale`
+  is N INCHES (the old drop shadow was a 40" blur). Every wall shadow uses the canvas recipe in
+  points: `_ePt = elevScale * unitFactor('in', elevUnit) / 72` (outer 35/18/0.55, frame 35/14/0.75
+  inset, mat 20/8/0.5625, art 8/3/0.3125; insets carry `dIS`'s 1.25). With artwork the picture
+  covers the opening's inset, so `.art-shade` casts it again over the `<img>`.
+- **ONE DECK-PAGE DROP SHADOW: `_frameShadowCanvas(d, wIn, hIn)`** (gated by `frameFx.pageShadow`,
+  "Also on deck pages"). `_pdfFrameShadow` (spec pages) and `exportElevSVG` `forCapture` (breaker
+  and install pages) both draw it; the capture splices all shadows in UNDER all frames
+  (`_shadowAt`), skips wireframe walls, and the SVG download never gets one.
+- **THE ELEVATION TOOL DOCK (19.05, `#elevToolDock` in `#elevDockSlot`)** is Deck Studio's
+  `.ds-dock` (not `.vert`: it scrolls and would clip the Add frames flyout `#bulkDropdownList`).
+  A 54px column between sidebar and workspace, the one deliberate cost to the on-screen fit
+  (`test_elev_rail_width`); BOTH exports hide it beside the rail. Select (V) is lit when no wall
+  tool is armed (`_elevDockSync`, from `initElevControls` and `toggleLineTool`), which also writes
+  the tab counts (`data-elevtab-n`). Moved ids kept: `lineToolBtn`, `alignBtn`, `groupDimBtn`,
+  `fitFlatBtn`, `bulkImportBtn`, `shortcutsBtn`; `contextToolBtn` now exists.
 - **INNER SHADOWS ARE TRUE INSETS (18.46, `dIS`)**: the casting stroke runs up to the edge
   and is parked off-canvas with the shadow thrown back by `shadowOffsetX`. The old stroke
   sat 10px outside, so small shadows (Onto artwork, Mat onto mat) never arrived. With NO
