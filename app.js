@@ -6,7 +6,7 @@
 // Update APP_VERSION on each release. APP_BUILD is derived from the URL (see
 // below) — the version pill turns orange on the dev site to make it obvious at a
 // glance which build you are looking at.
-const APP_VERSION = '18.81';
+const APP_VERSION = '19.12';
 const IDML_STYLE_SEED = [{"id":"sty_cover_title","name":"Cover Title","group":"Cover","font":"display","size":0.1111,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"upper","track":0.01},{"id":"sty_cover_title_centered","name":"Cover Title (Centered)","group":"Cover","font":"display","size":0.1111,"bold":true,"italic":false,"color":"#ffffff","align":"center","caps":"upper","track":0.01},{"id":"sty_cover_location","name":"Cover Location","group":"Cover","font":"serif","size":0.0222,"bold":false,"italic":false,"color":"#ffffff","align":"right","caps":"none","track":0.0},{"id":"sty_cover_project_code","name":"Cover Project Code","group":"Cover","font":"serif","size":0.0222,"bold":false,"italic":false,"color":"#ffffff","align":"right","caps":"none","track":0.0},{"id":"sty_toc_section_title","name":"TOC Section Title","group":"Table of Contents","font":"serif","size":0.0241,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.0},{"id":"sty_toc_entry","name":"TOC Entry","group":"Table of Contents","font":"serif","size":0.0185,"bold":false,"italic":false,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_section_heading","name":"Section Heading","group":"Header","font":"display","size":0.0556,"bold":true,"italic":false,"color":"#000000","align":"left","caps":"upper","track":0.01},{"id":"sty_header_one_xl","name":"Header One (XL)","group":"Header","font":"display","size":0.0444,"bold":true,"italic":false,"color":"#000000","align":"left","caps":"upper","track":0.01},{"id":"sty_paragraph_heading_right","name":"Paragraph Heading (Right)","group":"Header","font":"display","size":0.0333,"bold":true,"italic":false,"color":"#1a1a1a","align":"right","caps":"upper","track":0.01},{"id":"sty_body_copy_standard","name":"Body Copy (Standard)","group":"Body Copy","font":"serif","size":0.0148,"bold":false,"italic":false,"color":"#222222","align":"justify","caps":"none","track":0.0},{"id":"sty_body_copy_large_+_bold","name":"Body Copy (Large + Bold)","group":"Body Copy","font":"serif","size":0.0185,"bold":true,"italic":false,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_body_copy_primary","name":"Body Copy (Primary)","group":"Body Copy","font":"serif","size":0.0148,"bold":false,"italic":false,"color":"#222222","align":"justify","caps":"none","track":0.0},{"id":"sty_body_description","name":"Body Description","group":"Body Text","font":"serif","size":0.0167,"bold":false,"italic":false,"color":"#333333","align":"left","caps":"none","track":0.0},{"id":"sty_body_subheading","name":"Body Subheading","group":"Body Text","font":"serif","size":0.0204,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.0},{"id":"sty_spec_copy","name":"Spec Copy","group":"Spec Page","font":"serif","size":0.0148,"bold":false,"italic":false,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_spec_subject","name":"Spec Subject","group":"Spec Page","font":"serif","size":0.0148,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.01},{"id":"sty_spec_notes","name":"Spec Notes","group":"Spec Page","font":"serif","size":0.013,"bold":false,"italic":true,"color":"#939597","align":"left","caps":"none","track":0.005},{"id":"sty_spec_static_caption","name":"Spec Static Caption","group":"Spec Page","font":"serif","size":0.013,"bold":false,"italic":true,"color":"#999999","align":"left","caps":"none","track":0.0},{"id":"sty_image_code","name":"Image Code","group":"Captions","font":"serif","size":0.012,"bold":false,"italic":true,"color":"#7f7f7f","align":"right","caps":"none","track":0.01},{"id":"sty_caption_image_code","name":"Caption Image Code","group":"Captions","font":"serif","size":0.0111,"bold":false,"italic":false,"color":"#bfbfbf","align":"left","caps":"none","track":0.0},{"id":"sty_artist_name","name":"Artist Name","group":"Captions","font":"serif","size":0.0139,"bold":true,"italic":false,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_artwork_title","name":"Artwork Title","group":"Captions","font":"serif","size":0.013,"bold":false,"italic":true,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_thank_you_\u2014_name","name":"Thank You \u2014 Name","group":"Thank You","font":"display","size":0.0417,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"upper","track":0.0},{"id":"sty_thank_you_\u2014_role","name":"Thank You \u2014 Role","group":"Thank You","font":"serif","size":0.0148,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"none","track":0.0},{"id":"sty_thank_you_\u2014_contact","name":"Thank You \u2014 Contact","group":"Thank You","font":"serif","size":0.013,"bold":false,"italic":false,"color":"#ffffff","align":"left","caps":"none","track":0.0},{"id":"sty_subhead","name":"Subhead","group":"Subheadings","font":"display","size":0.0204,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"upper","track":0.035},{"id":"sty_section_subheading_left","name":"Section Subheading (Left)","group":"Subheadings","font":"display","size":0.0333,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"upper","track":0.01},{"id":"sty_section_subheading_right","name":"Section Subheading (Right)","group":"Subheadings","font":"display","size":0.0333,"bold":true,"italic":false,"color":"#1a1a1a","align":"right","caps":"upper","track":0.01},{"id":"sty_section_subheading_serif","name":"Section Subheading (Serif)","group":"Subheadings","font":"serif","size":0.0139,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.0},{"id":"sty_subheading_white,_center","name":"Subheading (White, Center)","group":"Subheadings","font":"serif","size":0.013,"bold":false,"italic":false,"color":"#ffffff","align":"center","caps":"none","track":0.0},{"id":"sty_quote_\u2014_druk","name":"Quote \u2014 Druk","group":"Quotes","font":"display","size":0.0694,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.025},{"id":"sty_quote_\u2014_druk_alt","name":"Quote \u2014 Druk (Alt)","group":"Quotes","font":"display","size":0.0444,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.0},{"id":"sty_quote_\u2014_serif","name":"Quote \u2014 Serif","group":"Quotes","font":"serif","size":0.0417,"bold":false,"italic":false,"color":"#ffffff","align":"left","caps":"none","track":0.0},{"id":"sty_quote_\u2014_serif_white,_cap","name":"Quote \u2014 Serif (White, Caps)","group":"Quotes","font":"display","size":0.0333,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"upper","track":0.01},{"id":"sty_display_keyword","name":"Display Keyword","group":"Keywords","font":"display","size":0.1111,"bold":true,"italic":false,"color":"#000000","align":"left","caps":"upper","track":0.01},{"id":"sty_keywords_full_page","name":"Keywords (Full Page)","group":"Keywords","font":"display","size":0.0556,"bold":true,"italic":false,"color":"#ffffff","align":"justify-all","caps":"none","track":0.02},{"id":"sty_brand_keyword","name":"Brand Keyword","group":"Keywords","font":"display","size":0.1852,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"upper","track":0.01},{"id":"sty_moodboard_keyword","name":"Moodboard Keyword","group":"Keywords","font":"display","size":0.0833,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"upper","track":0.0}];
 // The default fill for a placeholder shape, and the ONE definition of it. It was
 // written out nine times: the starter deck, the shape creator, the duplicate
@@ -255,8 +255,12 @@ const LAST_FILE_KEY = 'frameLastFileName';
 function _startScreenClose() { const m = document.getElementById('startScreen'); if (m) m.remove(); }
 async function openStartScreen() {
     _startScreenClose();
-    let peek = null;
-    try { peek = await _autosavePeek(); } catch (e) { peek = null; }
+    let peeks = [];
+    try { peeks = await _autosavePeekAll({ live: true }); } catch (e) { peeks = []; }
+    // The newest backup that is NOT open in another tab gets the Continue card; the rest
+    // (and any still open elsewhere) are listed under the cards.
+    const peek = peeks.find(p => !p.live) || null;
+    const others = peeks.filter(p => p !== peek);
     const ov = document.createElement('div');
     ov.id = 'startScreen';
     ov.className = 'frame-modal fm-over start-screen';
@@ -296,9 +300,10 @@ async function openStartScreen() {
     tl.textContent = 'New to FRAME? Take the guided tour';
     tl.onclick = () => { _startScreenClose(); startTour({ onEnd: () => { openStartScreen(); } }); };
     body.appendChild(tl);
-    if (peek) {
+    if (others.length) body.appendChild(_startScreenOthers(others));
+    if (peek || others.length) {
         const note = document.createElement('div'); note.className = 'ss-note';
-        note.textContent = 'Starting a new project or opening a file replaces this unsaved work once you make a change.';
+        note.textContent = 'Unsaved work is kept for a week, one backup per tab. Save Project to keep it for good.';
         body.appendChild(note);
     }
     wrap.appendChild(body);
@@ -311,6 +316,37 @@ async function openStartScreen() {
     if (first) first.setAttribute('data-modal-initial', '');
     try { first.focus({ preventScroll: true }); } catch (e) {}
     return ov;
+}
+// The other backups, under the cards (18.82): one row each, by project name and age,
+// with Continue and a delete. A project still open in another tab is labelled and
+// offers no Continue: the work is already on screen there.
+function _startScreenOthers(list) {
+    const box = document.createElement('div'); box.className = 'ss-others';
+    const h = document.createElement('div'); h.className = 'ss-others-h'; h.textContent = 'Other unsaved work';
+    box.appendChild(h);
+    list.forEach(p => {
+        const r = document.createElement('div'); r.className = 'ss-other';
+        const t = document.createElement('div'); t.className = 'ss-other-t';
+        t.textContent = '\u201c' + p.projName + '\u201d  \u00b7  ' + p.timeStr + (p.live ? '  \u00b7  open in another tab' : '');
+        r.appendChild(t);
+        if (!p.live) {
+            const go = document.createElement('button'); go.type = 'button'; go.className = 'action-btn ss-other-go'; go.textContent = 'Continue';
+            go.style.cssText = 'width:auto; height:26px; padding:0 12px;';
+            go.onclick = async () => { const ok = await _autosaveRestoreNow(p); if (ok !== false) _startScreenClose(); };
+            r.appendChild(go);
+            const del = document.createElement('button'); del.type = 'button'; del.className = 'action-btn btn-secondary ss-other-del'; del.textContent = 'Delete';
+            del.style.cssText = 'width:auto; height:26px; padding:0 10px;';
+            del.onclick = () => _confirmDestroy({
+                title: 'Delete this unsaved work?',
+                body: '\u201c' + p.projName + '\u201d from ' + p.timeStr + ' was never saved to a file.',
+                confirm: 'Delete', undoable: false,
+                onConfirm: async () => { if (p.legacy) { try { localStorage.removeItem(AUTOSAVE_KEY); } catch (e) {} } else { try { await _aDelete(p.id); } catch (e) {} } r.remove(); if (!box.querySelector('.ss-other')) box.remove(); }
+            });
+            r.appendChild(del);
+        }
+        box.appendChild(r);
+    });
+    return box;
 }
 // The new-project fields, in place of the three cards. Only what is known on day one
 // and expensive to change later: the name (it becomes the file name), the client, and
@@ -492,9 +528,9 @@ const FRAME_TOUR = [
     { ch: 3, view: 'elevation', target: '#elev-wall-rail', prep: () => _tourElev(),
       title: 'The wall rail',
       body: 'Every wall is its own drawing and its own page in the deck. Click a wall to open it, drag to reorder. + Add Wall asks which item code the wall is for, so no wall is left out of the deck.' },
-    { ch: 3, view: 'elevation', target: '.elev-add-arrange-fixed', prep: () => _tourElevTab('art'),
-      title: 'Add & Arrange',
-      body: 'Import Frames adds the pieces you tick in one go. The frame list below it is every piece on this wall: lock, hide, re-letter and swap artwork from there.' },
+    { ch: 3, view: 'elevation', target: '#elevToolDock', prep: () => _tourElevTab('art'),
+      title: 'The tool bar',
+      body: 'The bar beside the wall holds the tools: Select, Measure (M) and Context block (C), then Add frames (tick pieces and add them in one go), Sort A to Z, Align, Group dimension and Fit to wall, then Item codes and the keyboard shortcuts. The frame list in the Art tab is every piece on this wall: lock, hide, re-letter and swap artwork from there.' },
     { ch: 3, view: 'elevation', target: '#wall', prep: () => _tourElevTab('art'),
       title: 'Hang the work',
       body: 'Drag frames into place; they snap to the grid and to each other. Hold Shift for fine moves, Ctrl+click to select several, Ctrl+G to group. Dimensions are live: drag a line to move it, drag its number to slide it, and press M to draw your own measure line.' },
@@ -786,6 +822,16 @@ let dashLocalLibrary = {};
 // for a swatch as: insetForSwatch = swatchFaceWidth + FLOATER_SHADOW_REVEAL.
 // This is constant across all swatches; only the canvas face width varies per profile.
 const FLOATER_SHADOW_REVEAL = 0.25;
+// THE FLOATER REVEAL IS A GAP, NOT MORE MOULDING (19.01). floaterInset = face +
+// FLOATER_SHADOW_REVEAL, so the last quarter inch before the canvas is the slot down
+// into the floater: every view paints it dark ('gap' strength in Frame effects) and the
+// canvas casts into it. Derived from the inset alone (_faceWidth is not carried or
+// unit-converted everywhere); capped at half the inset so a tiny hand-typed inset keeps
+// some face. Returned in `unit`, the unit the inset is in.
+function _floaterRevealOf(inset, unit) {
+    const i = parseFloat(inset) || 0;
+    return Math.max(0, Math.min(FLOATER_SHADOW_REVEAL * unitFactor('in', unit || 'in'), i / 2));
+}
 
 // Canonical list of product types. Used by the project table's row dropdown
 // to keep its options in sync with the dashboard form's <select>. Update both
@@ -858,6 +904,23 @@ const FLAT_PH_EDGE = '#9a9a9a';
 const FLAT_PH_INK = '#6f6f6f';
 // Label size scales with the graphic but never gets silly on a 240" wall or
 // unreadable on a 14" distraction band.
+// AN EMPTY OPENING SHOWS AN ADD-IMAGE ICON, NOT ITS SIZE (19.08). The size in the middle of
+// the grey ("10" x 15"") repeated what the OD and spacing dimensions and the dashboard fields
+// already say, and on a small opening it broke into a scramble of digits. The icon says what
+// the opening is waiting for. Screen only: no export reads it (the SVG reads text only on a
+// wireframe wall, where the letter is drawn instead). `click` makes it a button (dashboard,
+// which opens the artwork upload); on the wall it is a cue, since a click there selects.
+function _artAddIconHTML(boxW, boxH, click) {
+    if (!(Math.min(boxW, boxH) >= 14)) return '';   // too small to read: dropped, not squeezed
+    const px = Math.round(Math.max(10, Math.min(44, Math.min(boxW, boxH) * 0.32)));
+    const svg = '<svg width="' + px + '" height="' + px + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+        + '<rect x="3" y="4" width="15" height="13" rx="1.5"/><circle cx="8" cy="8.5" r="1.4"/><path d="M3 15l4.5-4.5 4 4 2.5-2.5 4 4"/>'
+        + '<path d="M19.5 14.5v6M16.5 17.5h6"/></svg>';
+    return click
+        ? '<button type="button" class="art-add-ph art-add-btn" title="Add artwork: upload an image, or drag one onto the frame" onclick="' + click + '">' + svg
+            + (Math.min(boxW, boxH) >= 90 ? '<span class="art-add-cap">Click or drag &amp; drop here</span>' : '') + '</button>'
+        : '<span class="art-add-ph" aria-label="No artwork yet">' + svg + '</span>';
+}
 function _flatPhLabelPx(w, h) {
     return Math.max(9, Math.min(34, Math.min(w, h) * 0.13));
 }
@@ -4559,7 +4622,13 @@ let _isDirty = false;
 // again: see the block above performAutosave for why a project does not fit.
 const AUTOSAVE_KEY = 'frame-tool-autosave';
 const ADB_NAME = 'frameAutosave';
-const ADB_ID = 'current';
+const ADB_ID = 'current';   // the single record older builds wrote; read and cleared, never written
+// ONE BACKUP PER TAB (18.82). Every tab wrote the one 'current' record, so two projects
+// open side by side overwrote each other's backup and Continue could bring back the
+// OTHER one. Each tab now writes under its own session id; the newest AUTOSAVE_KEEP
+// are kept (a week at most) and the start screen lists them by project name.
+const AUTOSAVE_KEEP = 5;
+const AUTOSAVE_MAX_DAYS = 7;
 const AUTOSAVE_DEBOUNCE_MS = 500;  // wait this long after last change before autosaving
 let _autosaveTimer = null;
 let _dsThumbRerenderTimer = null;
@@ -4700,43 +4769,91 @@ function _aPut(buildPayload) {
         // A quota refusal aborts the transaction rather than firing onerror on
         // it, so both are wired or an over-budget write resolves as a success.
         tx.onabort = () => rej(tx.error || new Error('idb-write-aborted'));
+        const id = payload.session || _autosaveSession;
         tx.objectStore('ameta').put({
-            id: ADB_ID, type: payload.type, timestamp: payload.timestamp,
+            id: id, type: payload.type, timestamp: payload.timestamp,
             session: payload.session, projName: payload.projName,
         });
         // The LIVE objects, deliberately not a snapshot: the structured clone
         // runs synchronously inside put(), so the record cannot tear, and
         // cloning first would copy every artwork data URL for nothing. Same
         // reasoning the JSON.stringify version carried.
-        tx.objectStore('adata').put({ id: ADB_ID, payload: payload });
+        tx.objectStore('adata').put({ id: id, payload: payload });
     }));
 }
 
-function _aGetMeta() {
+function _aGetMeta(id) {
     return _adb().then(db => new Promise((res, rej) => {
-        const rq = db.transaction('ameta', 'readonly').objectStore('ameta').get(ADB_ID);
+        const rq = db.transaction('ameta', 'readonly').objectStore('ameta').get(id || _autosaveSession);
         rq.onsuccess = () => res(rq.result || null);
         rq.onerror = () => rej(rq.error || new Error('idb-read-failed'));
     }));
 }
-
-function _aGetData() {
+// Every backup's meta record (never the payloads).
+function _aListMeta() {
     return _adb().then(db => new Promise((res, rej) => {
-        const rq = db.transaction('adata', 'readonly').objectStore('adata').get(ADB_ID);
+        const st = db.transaction('ameta', 'readonly').objectStore('ameta');
+        if (typeof st.getAll !== 'function') { const one = st.get(ADB_ID); one.onsuccess = () => res(one.result ? [one.result] : []); one.onerror = () => rej(one.error); return; }
+        const rq = st.getAll();
+        rq.onsuccess = () => res(rq.result || []);
+        rq.onerror = () => rej(rq.error || new Error('idb-read-failed'));
+    }));
+}
+
+function _aGetData(id) {
+    return _adb().then(db => new Promise((res, rej) => {
+        const rq = db.transaction('adata', 'readonly').objectStore('adata').get(id || _autosaveSession);
         rq.onsuccess = () => res(rq.result ? rq.result.payload : null);
         rq.onerror = () => rej(rq.error || new Error('idb-read-failed'));
     }));
 }
 
-function _aDelete() {
+function _aDelete(id) {
+    const ids = Array.isArray(id) ? id : [id || _autosaveSession];
     return _adb().then(db => new Promise((res, rej) => {
         const tx = db.transaction(['ameta', 'adata'], 'readwrite');
         tx.oncomplete = () => res();
         tx.onerror = () => rej(tx.error || new Error('idb-delete-failed'));
         tx.onabort = () => rej(tx.error || new Error('idb-delete-aborted'));
-        tx.objectStore('ameta').delete(ADB_ID);
-        tx.objectStore('adata').delete(ADB_ID);
+        ids.forEach(k => { tx.objectStore('ameta').delete(k); tx.objectStore('adata').delete(k); });
     }));
+}
+// Keeps the newest AUTOSAVE_KEEP backups and none older than AUTOSAVE_MAX_DAYS. This
+// tab's own record is always kept. Runs after a write lands.
+async function _aPrune() {
+    let all = [];
+    try { all = await _aListMeta(); } catch (e) { return; }
+    const cutoff = Date.now() - AUTOSAVE_MAX_DAYS * 864e5;
+    const keep = all.filter(m => m && m.id === _autosaveSession);
+    const rest = all.filter(m => m && m.id !== _autosaveSession).sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+    const drop = [];
+    rest.forEach(m => { if ((m.timestamp || 0) < cutoff || keep.length >= AUTOSAVE_KEEP) drop.push(m.id); else keep.push(m); });
+    if (drop.length) { try { await _aDelete(drop); } catch (e) {} }
+}
+
+// WHICH TABS ARE OPEN (18.82), so a backup of a project still open in another tab is
+// labelled rather than offered as lost work. Every tab answers a 'who' on one
+// BroadcastChannel with its session; the asker listens for a moment. No channel (an
+// old browser, a test harness) means no labels, never an error.
+let _tabChan = null, _tabSeen = null;
+function _tabChannel() {
+    if (_tabChan !== null) return _tabChan || null;
+    try { _tabChan = (typeof BroadcastChannel === 'function') ? new BroadcastChannel('frame-tabs') : false; } catch (e) { _tabChan = false; }
+    if (_tabChan) _tabChan.onmessage = (e) => {
+        const m = (e && e.data) || {};
+        if (m.t === 'who') { try { _tabChan.postMessage({ t: 'here', session: _autosaveSession }); } catch (x) {} }
+        else if (m.t === 'here' && _tabSeen && m.session) _tabSeen[m.session] = true;
+        else if (m.t) { try { _tabOnMessage(m); } catch (x) {} }
+    };
+    return _tabChan || null;
+}
+async function _liveTabSessions(ms) {
+    const ch = _tabChannel(); if (!ch) return {};
+    _tabSeen = {};
+    try { ch.postMessage({ t: 'who' }); } catch (e) { return {}; }
+    await new Promise(r => setTimeout(r, ms || 250));
+    const out = _tabSeen; _tabSeen = null;
+    return out;
 }
 
 // The payload, assembled from the LIVE objects. Its own function because the
@@ -4777,6 +4894,7 @@ async function performAutosave() {
     try {
         await _aPut(_autosavePayload);
         _autosaveOk();
+        _aPrune().catch(() => {});
     } catch (err) {
         try { await _autosaveFail(err); } catch (e) {}
     } finally {
@@ -4806,9 +4924,14 @@ async function _autosaveFail(err) {
     // is how a failed write turned into restoring the wrong job. One from THIS
     // session is a genuine older snapshot of the same work and is worth keeping.
     // Reading `ameta` rather than `adata` keeps the decision cheap.
+    // 18.82: backups from other sessions are mostly OTHER projects (other tabs), which
+    // are fine; the stale one is an earlier backup of THIS project, which would be
+    // offered as the latest work. Those go, matched by project name.
     try {
-        const meta = await _aGetMeta();
-        if (meta && meta.session !== _autosaveSession) await _aDelete();
+        const name = (document.getElementById('g_projName') || {}).value || 'Untitled';
+        const all = await _aListMeta();
+        const stale = all.filter(m => m && m.id !== _autosaveSession && (m.projName || 'Untitled') === name).map(m => m.id);
+        if (stale.length) await _aDelete(stale);
     } catch (e) {}
     _autosaveFailed = true;
     updateDirtyIndicator();
@@ -4832,7 +4955,9 @@ function clearAutosave() {
     // change may have left a payload there, and "the autosave is no longer the
     // most recent work" has to clear both or the old one is still offered.
     try { localStorage.removeItem(AUTOSAVE_KEY); } catch (err) {}
-    _aDelete().catch(() => {});
+    // THIS tab's backup (and the single record an older build left). Other tabs' backups
+    // are other projects' unsaved work and are none of this tab's business (18.82).
+    _aDelete([_autosaveSession, ADB_ID]).catch(() => {});
 }
 
 // Read the pre-IndexedDB localStorage slot, if a build before this change left
@@ -4880,27 +5005,48 @@ function _autosaveRestore(payload) {
 // backup older than a week is cleared here and reported as nothing. Shared by the
 // start screen's Continue card and checkAutosaveOnLoad, so the two cannot disagree
 // about what counts as a backup worth offering.
+function _autosaveAgo(ts) {
+    const minutesAgo = Math.round((Date.now() - ts) / 60000);
+    if (minutesAgo < 1) return 'less than a minute ago';
+    if (minutesAgo < 60) return `${minutesAgo} minute${minutesAgo === 1 ? '' : 's'} ago`;
+    if (minutesAgo < 60 * 48) return `${Math.round(minutesAgo / 60)} hour${minutesAgo < 120 ? '' : 's'} ago`;
+    return `${Math.round(minutesAgo / 1440)} days ago`;
+}
+// EVERY backup worth offering, newest first (18.82): one per tab session, plus the
+// single record or localStorage slot an older build left. Expired ones are cleared here.
+// `live` marks a backup whose tab is still open (opts.live: ask the other tabs).
+async function _autosavePeekAll(opts) {
+    let metas = [];
+    try { metas = await _aListMeta(); } catch (e) { metas = []; }
+    const out = [], expired = [];
+    metas.forEach(m => {
+        if (!m || m.type !== 'master-studio-autosave-v1') return;
+        if ((Date.now() - (m.timestamp || 0)) / 864e5 > AUTOSAVE_MAX_DAYS) { expired.push(m.id); return; }
+        out.push({ id: m.id, stamp: m, legacy: null, timeStr: _autosaveAgo(m.timestamp), projName: m.projName || 'Untitled' });
+    });
+    if (expired.length) { try { await _aDelete(expired); } catch (e) {} }
+    const legacy = _legacyAutosaveRead();
+    if (legacy && legacy.type === 'master-studio-autosave-v1') {
+        if ((Date.now() - (legacy.timestamp || 0)) / 864e5 > AUTOSAVE_MAX_DAYS) { try { localStorage.removeItem(AUTOSAVE_KEY); } catch (e) {} }
+        else out.push({ id: null, stamp: legacy, legacy: legacy, timeStr: _autosaveAgo(legacy.timestamp), projName: legacy.projName || 'Untitled' });
+    }
+    out.sort((a, b) => (b.stamp.timestamp || 0) - (a.stamp.timestamp || 0));
+    if (opts && opts.live && out.length) {
+        const live = await _liveTabSessions();
+        out.forEach(p => { p.live = !!(p.stamp && p.stamp.session && live[p.stamp.session]); });
+    }
+    return out;
+}
+// The newest backup, for the one-question boot path (checkAutosaveOnLoad).
 async function _autosavePeek() {
-    let meta = null;
-    try { meta = await _aGetMeta(); } catch (e) { meta = null; }
-    const legacy = meta ? null : _legacyAutosaveRead();
-    const stamp = meta || legacy;
-    if (!stamp) return null;
-    if (stamp.type !== 'master-studio-autosave-v1') return null;
-    const ageDays = (Date.now() - stamp.timestamp) / (1000 * 60 * 60 * 24);
-    if (ageDays > 7) { clearAutosave(); return null; }
-    const minutesAgo = Math.round((Date.now() - stamp.timestamp) / 60000);
-    let timeStr;
-    if (minutesAgo < 1) timeStr = 'less than a minute ago';
-    else if (minutesAgo < 60) timeStr = `${minutesAgo} minute${minutesAgo === 1 ? '' : 's'} ago`;
-    else timeStr = `${Math.round(minutesAgo / 60)} hour${minutesAgo < 120 ? '' : 's'} ago`;
-    return { stamp: stamp, legacy: legacy, timeStr: timeStr, projName: stamp.projName || 'Untitled' };
+    const all = await _autosavePeekAll();
+    return all[0] || null;
 }
 // Read the payload and install it. ASK FIRST, READ SECOND: the payload is the whole
 // project, tens of megabytes of artwork, so it is only read once somebody has chosen
 // to restore it. Returns false when the record could not be read.
 async function _autosaveRestoreNow(peek) {
-    const payload = peek.legacy ? peek.legacy.payload : await _aGetData();
+    const payload = peek.legacy ? peek.legacy.payload : await _aGetData(peek.id);
     if (!payload || !payload.data) {
         if (typeof showInfoModal === 'function') showInfoModal('Could not restore', 'The backup record is there but its contents could not be read, so nothing has been changed. Load a saved .json file instead.');
         return false;
@@ -4909,6 +5055,13 @@ async function _autosaveRestoreNow(peek) {
     // A legacy payload has now been taken into the live project, so the
     // old slot is no longer the most recent work.
     if (peek.legacy) { try { localStorage.removeItem(AUTOSAVE_KEY); } catch (e) {} }
+    // The work now lives in THIS tab: write it under this session first, then drop the
+    // record it came from, so there is never a moment with no backup and never two.
+    // A backup whose tab is still open belongs to that tab and is left alone.
+    else if (peek.id && peek.id !== _autosaveSession && !peek.live) {
+        try { await performAutosave(); } catch (e) {}
+        if (!_autosaveFailed) { try { await _aDelete(peek.id); } catch (e) {} }
+    }
     return true;
 }
 async function checkAutosaveOnLoad() {
@@ -4918,7 +5071,7 @@ async function checkAutosaveOnLoad() {
         // Don't auto-restore - ask.
         const choice = await _askRestoreAutosave(peek.timeStr, peek.projName);
         if (choice === true) await _autosaveRestoreNow(peek);
-        else if (choice === false) clearAutosave();
+        else if (choice === false) { if (peek.legacy) { try { localStorage.removeItem(AUTOSAVE_KEY); } catch (e) {} } else { try { await _aDelete(peek.id); } catch (e) {} } }
         // null is "no answer at all" - there was no way to ask - and it leaves the
         // backup exactly where it is. Only an explicit Discard throws it away.
     } catch (err) {
@@ -5180,6 +5333,11 @@ function initMasterApp() {
         // previously uploaded. Saved entries override bundled ones with the
         // same code, matching the precedence rule of live syncDashLibraryFolder.
         restoreCustomLibraryFromStorage();
+        // 19.09: the default frame. The boot placeholder row (a project nobody has touched)
+        // is dressed in it too, so a new project's first item is never the flat colour.
+        const r0 = dashProjectData.length === 1 ? dashProjectData[0] : null;
+        if (r0 && r0.fType === 'color' && r0.fCode === dashDefaultData.fCode && !r0.swatchDataUrl) { _defaultFrameApply(r0); try { loadDashDataIntoControls(r0); } catch (e) {} }
+        _defaultFrameLoad();
     });
     _initFontSelects();    // fill every static font picker from FRAME_FONT_LIBRARY
     loadAnnotationStyle(); // restore saved annotation color/weight/dash defaults
@@ -5231,6 +5389,9 @@ function initMasterApp() {
         if (!elevVisible) return;
         if ((e.key === 'm' || e.key === 'M') && !e.ctrlKey && !e.metaKey) {
             toggleLineTool();
+        } else if ((e.key === 'v' || e.key === 'V') && !e.ctrlKey && !e.metaKey && !e.altKey) {
+            // The dock's Select (19.05). Not Ctrl/Cmd+V, which is paste.
+            _elevDockSelect();
         } else if ((e.key === 'c' || e.key === 'C') && !e.ctrlKey && !e.metaKey) {
             // Not Ctrl/Cmd — that is copy, and stealing it here would break it on the
             // one view where a letter shortcut and a clipboard shortcut share a key.
@@ -5306,6 +5467,7 @@ function initMasterApp() {
         if (bList && bList.style.display === 'block') {
             if (bBtn && !bBtn.contains(event.target) && !bList.contains(event.target)) {
                 bList.style.display = 'none';
+                bBtn.classList.remove('open');
             }
         }
     });
@@ -5366,6 +5528,9 @@ async function loadBundledLibrary() {
             if (it.rabbet !== undefined && it.rabbet !== null && !isNaN(parseFloat(it.rabbet))) {
                 entry.rabbet = parseFloat(it.rabbet);
             }
+            // Catalogue facts for the frame browser's search and filters (18.84), plus
+            // the corner photo it shows on each card. All optional.
+            ['corner', 'profileImg', 'color', 'family', 'profile', 'series', 'style'].forEach(k => { if (typeof it[k] === 'string' && it[k]) entry[k] = it[k]; });
             dashLocalLibrary[it.vendor][it.collection].push(entry);
         });
         populateDashVendorDropdown();
@@ -6193,7 +6358,7 @@ let dashOuterShadowsOn = true;
 // Saved per computer like the drafting style AND carried in the project file, so a
 // deck prints the same on anyone's machine. Meant to be tuned, agreed, then baked
 // into FRAME_FX_DEFAULT.
-const FRAME_FX_DEFAULT = { outer: 1, frame: 1, mat: 1, art: 1, paper: 1 };
+const FRAME_FX_DEFAULT = { outer: 1, frame: 1, mat: 1, art: 1, paper: 1, gap: 1 };
 const FRAME_FX_KEYS = Object.keys(FRAME_FX_DEFAULT);
 // pageShadow (18.42) is a switch, not a strength: drop shadow under frames on spec pages.
 let frameFx = Object.assign({}, FRAME_FX_DEFAULT);
@@ -6208,6 +6373,12 @@ function _fxSh(k, blur, off, alpha) {
 function _fxCss(k, x, y, blur, alpha, inset) {
     const v = _fxSh(k, blur, y, alpha);
     return (inset ? 'inset ' : '') + +(x * v.g).toFixed(2) + 'px ' + +v.o.toFixed(2) + 'px ' + +v.b.toFixed(2) + 'px rgba(0,0,0,' + +v.a.toFixed(3) + ')';
+}
+// The floater reveal for the DOM views: a solid ring gapPx wide, then the canvas's cast
+// (about a third of an inch of blur, the canvas renderer's 25px at 72dpi). ppi = px per inch.
+function _floaterGapCss(gapPx, ppi) {
+    const a = Math.min(1, 0.6 * _fx('gap'));
+    return '0 0 0 ' + +gapPx.toFixed(2) + 'px rgba(0,0,0,' + +a.toFixed(3) + '), ' + _fxCss('gap', 0, 0.04 * ppi, 0.35 * ppi, 0.8);
 }
 function _frameFxNormalize(src) {
     const out = Object.assign({}, FRAME_FX_DEFAULT);
@@ -6251,7 +6422,8 @@ const FRAME_FX_ROWS = [
     ['frame', 'Frame onto mat', 'The moulding onto mat 1, or straight onto the art, backer or paper when there is no mat'],
     ['mat', 'Mat onto mat', 'Mat 1 onto mat 2, or a mat onto the faux-mat paper'],
     ['art', 'Onto artwork', 'The opening onto the artwork itself'],
-    ['paper', 'Paper lift', 'A float-mounted or deckled sheet lifting off its backer']
+    ['paper', 'Paper lift', 'A float-mounted or deckled sheet lifting off its backer'],
+    ['gap', 'Floater gap', 'A canvas in a floater: the gap between the face and the canvas, and the canvas casting into it']
 ];
 // FRAME SETTINGS (18.47). One gear in the header, in every view: the things a designer
 // sets up once at the start of a project and that apply everywhere (Frame Dashboard,
@@ -6323,10 +6495,14 @@ function openFrameFx() { openAppSettings('fx'); }
 function _frameFxInto(host) {
     const intro = document.createElement('div');
     intro.style.cssText = 'font-size:var(--fs-70); color:var(--text-muted); margin-bottom:12px;';
-    intro.textContent = 'How deep the shadows are on EVERY frame in the project: the Dashboard preview, elevations, PNG exports and spec pages. 100% is the studio look. Saved on this computer and in the project file.';
+    intro.textContent = 'How deep the shadows are on every frame in the project. 100% is the studio look.';
+    intro.appendChild(_dsHelpDot('Reaches the Dashboard preview, elevations, PNG exports and deck pages. Saved on this computer and in the project file.'));
     host.appendChild(intro);
-    const body = document.createElement('div'); body.id = 'frameFxBody'; body.style.cssText = 'display:flex; gap:18px; align-items:stretch; flex-wrap:wrap;';
-    const pvCol = document.createElement('div'); pvCol.style.cssText = 'flex:1 1 300px; display:flex; flex-direction:column; gap:8px; min-width:0;';
+    // 19.07: TWO COLUMNS, ALWAYS, AND NO SCROLL. A wrapping flex row dropped the sliders under
+    // the preview inside Settings, and every slider carried a help line, so the panel ran a
+    // screen and a half. A grid cannot wrap; the help lives in ? dots.
+    const body = document.createElement('div'); body.id = 'frameFxBody'; body.style.cssText = 'display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,1fr); gap:18px; align-items:start;';
+    const pvCol = document.createElement('div'); pvCol.style.cssText = 'display:flex; flex-direction:column; gap:8px; min-width:0;';
     const tabs = document.createElement('div'); tabs.id = 'frameFxCases'; tabs.className = 'frame-tabs wrap';
     FRAME_FX_CASES.forEach(([k, label, tip]) => {
         const b = document.createElement('button'); b.type = 'button'; b.className = 'frame-tab'; b.textContent = label; b.title = tip;
@@ -6336,8 +6512,8 @@ function _frameFxInto(host) {
     });
     pvCol.appendChild(tabs);
     const pv = document.createElement('div'); pv.id = 'frameFxPreview';
-    pv.style.cssText = 'flex:1 1 auto; min-height:300px; background:#ececec; border-radius:var(--r-6); display:flex; align-items:center; justify-content:center; overflow:hidden; padding:10px;';
-    const ctl = document.createElement('div'); ctl.style.cssText = 'flex:1 1 300px; display:flex; flex-direction:column; gap:12px;';
+    pv.style.cssText = 'height:300px; box-sizing:border-box; background:#ececec; border-radius:var(--r-6); display:flex; align-items:center; justify-content:center; overflow:hidden; padding:10px;';
+    const ctl = document.createElement('div'); ctl.style.cssText = 'display:flex; flex-direction:column; gap:9px; min-width:0;';
     const on = document.createElement('label'); on.style.cssText = 'display:flex; align-items:center; gap:8px; font-size:var(--fs-75); font-weight:700; color:var(--text-main); cursor:pointer;';
     const cb = document.createElement('input'); cb.type = 'checkbox'; cb.id = 'frameFxOuterOn'; cb.checked = !!dashOuterShadowsOn;
     cb.onchange = () => { applyOuterShadowsState(cb.checked); try { localStorage.setItem('dashOuterShadowsOn', cb.checked ? '1' : '0'); } catch (e) {} _frameFxPreview(); _frameFxChanged(); _frameFxSyncRows(); };
@@ -6347,21 +6523,22 @@ function _frameFxInto(host) {
     const ps = document.createElement('label'); ps.style.cssText = 'display:flex; align-items:center; gap:8px; font-size:var(--fs-70); color:var(--text-main); cursor:pointer; margin:-4px 0 0 2px;';
     const pcb = document.createElement('input'); pcb.type = 'checkbox'; pcb.id = 'frameFxPageShadow'; pcb.checked = !!frameFx.pageShadow;
     pcb.onchange = () => { frameFx.pageShadow = pcb.checked; saveFrameFx(); _frameFxChanged(); };
-    ps.appendChild(pcb); ps.appendChild(document.createTextNode('Also on spec pages (the PDF and its previews)'));
+    ps.appendChild(pcb); ps.appendChild(document.createTextNode('Also on deck pages: spec, breaker and install'));
+    ps.appendChild(_dsHelpDot('The drop shadow under every framed piece on spec, breaker and install pages, in the PDF and its previews. Off by default, because it changes every deck\'s next PDF.'));
     ctl.appendChild(ps);
     FRAME_FX_ROWS.forEach(([k, label, help]) => {
         const row = document.createElement('div'); row.setAttribute('data-fx-row', k);
         const top = document.createElement('div'); top.style.cssText = 'display:flex; justify-content:space-between; font-size:var(--fs-70); color:var(--text-main); margin-bottom:3px;';
-        const l = document.createElement('span'); l.textContent = label; l.title = help;
-        const val = document.createElement('span'); val.style.cssText = 'color:var(--text-muted); font-variant-numeric:tabular-nums;';
+        const l = document.createElement('span'); l.textContent = label; l.title = help; l.style.cssText = 'display:inline-flex; align-items:center;';
+        l.appendChild(_dsHelpDot(help));
+        const val = document.createElement('span'); val.setAttribute('data-fx-val', k); val.style.cssText = 'color:var(--text-muted); font-variant-numeric:tabular-nums;';
         top.appendChild(l); top.appendChild(val);
         const r = document.createElement('input'); r.type = 'range'; r.min = '0'; r.max = '200'; r.step = '5'; r.style.width = '100%';
         r.setAttribute('data-fx', k); r.value = String(Math.round(_fx(k) * 100));
         const show = () => { val.textContent = r.value + '%'; };
         r.oninput = () => { show(); setFrameFx(k, (parseFloat(r.value) || 0) / 100); _frameFxPreview(); };
         show();
-        const h = document.createElement('div'); h.textContent = help; h.style.cssText = 'font-size:var(--fs-60); color:var(--text-muted); margin-top:2px;';
-        row.appendChild(top); row.appendChild(r); row.appendChild(h);
+        row.appendChild(top); row.appendChild(r);
         ctl.appendChild(row);
     });
     pvCol.appendChild(pv);
@@ -6437,7 +6614,7 @@ function _frameFxComposition() {
 function _frameFxSyncRows() {
     document.querySelectorAll('#appSettingsModal input[data-fx]').forEach(r => {
         const k = r.getAttribute('data-fx'); r.value = String(Math.round(_fx(k) * 100));
-        const v = r.parentNode.querySelector('span:last-child'); if (v) v.textContent = r.value + '%';
+        const v = r.parentNode.querySelector('[data-fx-val]'); if (v) v.textContent = r.value + '%';
         if (k === 'outer') { const row = r.closest('[data-fx-row]'); if (row) row.style.opacity = dashOuterShadowsOn ? '' : '0.45'; }
     });
 }
@@ -6454,7 +6631,7 @@ async function _frameFxPreview() {
     try {
         const out = renderFrameToCanvas(d, sw, { dpi: 72, pad: 60, artworkImg: art });
         const c = out && out.canvas; if (!c) return;
-        c.style.cssText = 'max-width:100%; max-height:360px; width:auto; height:auto; display:block;';
+        c.style.cssText = 'max-width:100%; max-height:100%; width:auto; height:auto; display:block;';
         host.innerHTML = ''; host.appendChild(c);
     } catch (e) { host.textContent = 'Preview unavailable.'; }
 }
@@ -6468,27 +6645,38 @@ async function _frameFxPreview() {
 // (35px blur, 18px drop at 72dpi). Never on a flat graphic, which sits flush.
 function _pdfFrameShadow(doc, d, x, y, w, h) {
     try {
-        if (!frameFx.pageShadow || !dashOuterShadowsOn || _fx('outer') <= 0) return false;
-        if (!d || _isFlatGraphic(d.product)) return false;
+        if (!d) return false;
         const wIn = parseFloat(d.extW), hIn = parseFloat(d.extH);
-        if (!(wIn > 0 && hIn > 0 && w > 0 && h > 0)) return false;
-        const v = _fxSh('outer', 35 / 72, 18 / 72, 0.55);          // inches
-        const padIn = v.b * 1.5 + v.o;
-        const D = 24;                                              // px per inch: a soft shadow needs few
-        const c = document.createElement('canvas');
-        c.width = Math.max(1, Math.ceil((wIn + padIn * 2) * D)); c.height = Math.max(1, Math.ceil((hIn + padIn * 2) * D));
-        const x2 = c.getContext('2d'); if (!x2) return false;
-        // Draw the rectangle one canvas-width off to the left and throw only its SHADOW
-        // back in, so nothing but the shadow lands on the transparent canvas.
-        x2.shadowColor = 'rgba(0,0,0,' + v.a + ')'; x2.shadowBlur = v.b * D;
-        x2.shadowOffsetX = c.width; x2.shadowOffsetY = v.o * D;
-        x2.fillStyle = '#000'; x2.fillRect(padIn * D - c.width, padIn * D, wIn * D, hIn * D);
+        if (!(w > 0 && h > 0)) return false;
+        const s = _frameShadowCanvas(d, wIn, hIn); if (!s) return false;
         const ppi = w / wIn;
         // Through _addPngImage (Flate), never a bare 'PNG' add: jsPDF stores that RAW plus a raw
         // alpha mask, and on a real 30-page deck these shadows were 30 MB of a 35 MB PDF (18.80).
-        _addPngImage(doc, c.toDataURL('image/png'), x - padIn * ppi, y - padIn * ppi, (wIn + padIn * 2) * ppi, (hIn + padIn * 2) * ppi);
+        _addPngImage(doc, s.canvas.toDataURL('image/png'), x - s.padIn * ppi, y - s.padIn * ppi, (wIn + s.padIn * 2) * ppi, (hIn + s.padIn * 2) * ppi);
         return true;
     } catch (e) { return false; }
+}
+// THE ONE DECK-PAGE DROP SHADOW (19.05): a transparent canvas holding only the shadow of a
+// wIn x hIn frame, padIn inches of room on every side. Spec pages (_pdfFrameShadow) and the
+// elevation capture behind breaker and install pages (exportElevSVG forCapture) both draw
+// it, so a frame casts the same shadow on every page the switch covers. Null when the
+// switch, the drop shadow or the piece says no shadow.
+function _frameShadowCanvas(d, wIn, hIn) {
+    if (!frameFx.pageShadow || !dashOuterShadowsOn || _fx('outer') <= 0) return null;
+    if (!d || _isFlatGraphic(d.product)) return null;
+    if (!(wIn > 0 && hIn > 0)) return null;
+    const v = _fxSh('outer', 35 / 72, 18 / 72, 0.55);          // inches
+    const padIn = v.b * 1.5 + v.o;
+    const D = 24;                                              // px per inch: a soft shadow needs few
+    const c = document.createElement('canvas');
+    c.width = Math.max(1, Math.ceil((wIn + padIn * 2) * D)); c.height = Math.max(1, Math.ceil((hIn + padIn * 2) * D));
+    const x2 = c.getContext('2d'); if (!x2) return null;
+    // Draw the rectangle one canvas-width off to the left and throw only its SHADOW
+    // back in, so nothing but the shadow lands on the transparent canvas.
+    x2.shadowColor = 'rgba(0,0,0,' + v.a + ')'; x2.shadowBlur = v.b * D;
+    x2.shadowOffsetX = c.width; x2.shadowOffsetY = v.o * D;
+    x2.fillStyle = '#000'; x2.fillRect(padIn * D - c.width, padIn * D, wIn * D, hIn * D);
+    return { canvas: c, padIn: padIn };
 }
 function resetFrameFx() { FRAME_FX_KEYS.forEach(k => { frameFx[k] = FRAME_FX_DEFAULT[k]; }); frameFx.pageShadow = false; saveFrameFx(); applyFrameFxCssVars(); try { updateDashVisualsFromDOM(); } catch (e) {} _frameFxChanged(); }
 
@@ -7204,6 +7392,27 @@ function deleteElevation(idx, e) {
     const target = elevations[idx];
     if (!target) return;
     const wallId = _elevId(target);
+    // DELETING A WALL ASKS ABOUT ITS PIECES (19.04). Reported: "I deleted an elevation and
+    // now I cannot figure out how to get these frames back on a wall". A plain wall delete
+    // keeps its pieces in the Dashboard, unhung, still printing spec pages; that is right
+    // when the art moves to another wall and wrong when the client turned the option down.
+    // So when pieces hang on THIS wall only, both answers are offered.
+    const own = _elevOwnPieceIds(target);
+    if (own.length) {
+        // Name the pieces; a long list collapses to its codes (ART.2B, not ART.2B-A ... G).
+        const keys = []; own.forEach(id => { const k = _artGroupKey(id) || id; if (keys.indexOf(k) < 0) keys.push(k); });
+        const n = own.length, pcs = n + (n === 1 ? ' piece' : ' pieces');
+        const names = n <= 6 ? own : keys;
+        _confirmDestroy({
+            title: 'Delete the \u201C' + (target.name || 'Untitled') + '\u201D wall?',
+            body: pcs + ' (' + names.join(', ') + (n === 1 ? ') hangs' : ') hang') + ' on this wall and nowhere else. Delete them with the wall to take them out of the presentation, or keep them in the Frame Dashboard to hang again with + Add Wall.',
+            confirm: 'Delete wall and ' + pcs,
+            alt: { label: 'Delete wall, keep pieces', onClick: () => _deleteElevationNow(_elevIndexById(wallId)) },
+            undoable: true,
+            onConfirm: () => _deleteElevationNow(_elevIndexById(wallId), { withPieces: true }),
+        });
+        return;
+    }
     _confirmDestroy({
         title: 'Delete the \u201C' + (target.name || 'Untitled') + '\u201D wall?',
         body: _isCatalogueOption(target)
@@ -7213,18 +7422,35 @@ function deleteElevation(idx, e) {
         onConfirm: () => _deleteElevationNow(_elevIndexById(wallId)),
     });
 }
-function _deleteElevationNow(idx) {
+// The pieces hung on this wall and on no other (active frames), that the project can
+// lose: never a catalogue wall (an option already takes its rows; a mockup's slots are a
+// drawing), and never every row in the project (the Dashboard keeps at least one).
+function _elevOwnPieceIds(wall) {
+    if (!wall || _isCatalogueOption(wall) || _isCatalogueMaster(wall)) return [];
+    const elsewhere = {};
+    (elevations || []).forEach(e => { if (e !== wall) (e.frames || []).forEach(f => { if (f && f.id && f.active !== false) elsewhere[f.id] = true; }); });
+    const out = [];
+    (wall.frames || []).forEach(f => {
+        if (!f || !f.id || f.active === false || elsewhere[f.id] || out.indexOf(f.id) >= 0) return;
+        if (dashProjectData.some(r => r && r.id === f.id)) out.push(f.id);
+    });
+    return out.length >= dashProjectData.length ? [] : out;
+}
+function _deleteElevationNow(idx, opts) {
     if (idx < 0 || !elevations[idx]) return;
     {
+        // Asked for with the wall (19.04): read at confirm time, the answer comes after the question.
+        const _ownGone = (opts && opts.withPieces) ? _elevOwnPieceIds(elevations[idx]) : [];
         // AN OPTION'S ROWS ARE THE OPTION (17.97). They used to be left behind, orphaned,
         // still printing as spec pages with no breaker over them and holding their number
         // so the next option could not take it. The remaining options renumber (settle).
-        const _optGone = _isCatalogueOption(elevations[idx]) ? (elevations[idx].frames || []).filter(f => f && f.id).map(f => f.id) : [];
+        const _optGone = (_isCatalogueOption(elevations[idx]) ? (elevations[idx].frames || []).filter(f => f && f.id).map(f => f.id) : []).concat(_ownGone);
         elevations.splice(idx, 1);
         if (_optGone.length) {
             dashProjectData = dashProjectData.filter(r => !(r && _optGone.indexOf(r.id) >= 0));
             if (dashSelectedRowIndex >= dashProjectData.length) dashSelectedRowIndex = Math.max(0, dashProjectData.length - 1);
             try { _codesSettle(); } catch (e) {}
+            if (_ownGone.length) try { _codesRefreshViews(); } catch (e) {}
         }
         // One pass does both jobs the two loops here used to: any variation whose
         // source id is now absent is promoted, and the numeric mirror is
@@ -7744,6 +7970,9 @@ function saveMasterProjectAs() { return saveMasterProject({ saveAs: true }); }
 // before (a harness that boots app.js must not be met by a full-screen dialog).
 function _bootStart() {
     if (typeof navigator !== 'undefined' && /jsdom/i.test(navigator.userAgent || '')) { _bootCoverOff(); return checkAutosaveOnLoad(); }
+    // Open the tab channel at boot, so this tab answers the others' "who is open"
+    // from the start (18.82). The harness branch above skips it: no tabs in a test.
+    try { _tabChannel(); } catch (e) {}
     // A failed start screen must not leave the cover up over a working app.
     return openStartScreen().catch(e => { _bootCoverOff(); throw e; });
 }
@@ -7973,9 +8202,49 @@ function recalculateDashboardQuantities() {
     if (currentView === 'dashboard') { loadDashDataIntoControls(dashProjectData[dashSelectedRowIndex]); renderDashTable(); }
 }
 
-function toggleBulkDropdown() {
+function toggleBulkDropdown(e) {
+    // Opened from the dock AND from the Art tab's Add frames: the document click that
+    // closes the list on an outside click must not see the opening click.
+    if (e && e.stopPropagation) e.stopPropagation();
     const list = document.getElementById('bulkDropdownList');
-    list.style.display = list.style.display === 'none' ? 'block' : 'none';
+    if (!list) return;
+    const open = list.style.display === 'none';
+    if (open) populateElevBulkList();
+    list.style.display = open ? 'block' : 'none';
+    const btn = document.getElementById('bulkImportBtn');
+    if (btn) btn.classList.toggle('open', open);
+}
+// ── THE ELEVATION TOOL DOCK (19.05, #elevToolDock) ─────────────────────────────
+// Deck Studio's dock, beside the drawing: Select, Measure, Context block, then the old
+// Add & Arrange tools, codes and shortcuts. Select is lit whenever no wall tool is armed,
+// so there is always one lit button saying what a click on the wall will do.
+function _elevDockSelect() {
+    if (typeof lineToolActive !== 'undefined' && lineToolActive) toggleLineTool(false);
+    if (typeof contextToolActive !== 'undefined' && contextToolActive) toggleContextTool(false);
+    if (typeof _ulCalibrateActive !== 'undefined' && _ulCalibrateActive) _ulCancelCalibrate(true);
+    _elevDockSync();
+}
+// Arming a context block brings its tab forward: the palette is where the kind is picked.
+function _elevDockContext() {
+    _elevShowTabFor('context');
+    toggleContextTool();
+}
+// Select's light and the tab counts. Called from initElevControls (every structural
+// change, and every exit of the context tool) and toggleLineTool. Never stored.
+function _elevDockSync() {
+    const sel = document.getElementById('elevDockSelect');
+    const armed = (typeof lineToolActive !== 'undefined' && lineToolActive) || (typeof contextToolActive !== 'undefined' && contextToolActive);
+    if (sel) sel.classList.toggle('active', !armed);
+    const ce = (typeof elevations !== 'undefined') ? elevations[currentElevIndex] : null;
+    const n = {
+        art: (typeof elevFrames !== 'undefined' && Array.isArray(elevFrames)) ? elevFrames.filter(f => f && f.active !== false).length : 0,
+        context: ce ? _elevContextBlocks(ce).length : 0,
+        glass: (ce && Array.isArray(ce.glazing)) ? ce.glazing.length : 0
+    };
+    document.querySelectorAll('[data-elevtab-n]').forEach(el => {
+        const v = n[el.getAttribute('data-elevtab-n')] || 0;
+        el.textContent = v ? String(v) : '';
+    });
 }
 
 function populateElevBulkList() {
@@ -8063,6 +8332,7 @@ function importSelectedFramesBulk() {
     });
 
     document.getElementById('bulkDropdownList').style.display = 'none';
+    { const b = document.getElementById('bulkImportBtn'); if (b) b.classList.remove('open'); }
     initElevControls(); drawElevAll(); recalculateDashboardQuantities();
     if (typeof renderDashTable === 'function') renderDashTable();
     pushHistory();
@@ -11204,7 +11474,7 @@ function setUnitPrecision(u, d) {
     try { if (currentView === 'elevation') drawElevAll(); } catch (e) {}
     try { if (typeof _dsClearBuiltAll === 'function') { _dsThumbCache = {}; _dsClearBuiltAll(); _dsRefresh(); } } catch (e) {}
     try { if (currentView === 'dashboard' && typeof updateDashVisualsFromDOM === 'function') updateDashVisualsFromDOM(); } catch (e) {}
-    try { const h = document.getElementById('projUnitsHost'); if (h) _unitControlsInto(h); } catch (e) {}
+    try { const h = document.getElementById('projUnitsHost'); if (h) _projUnitsSummaryInto(h); } catch (e) {}
 }
 function _syncUnitChip() {
     const m = document.getElementById('unitChipMain'), d = document.getElementById('unitChipDual');
@@ -11214,7 +11484,22 @@ function _syncUnitChip() {
     const chip = document.getElementById('unitChip');
     if (chip) chip.title = 'Units: sizes typed in ' + String(dashUnit || 'in').toUpperCase() + (du ? ', ' + du + ' printed beside inches' : ', no second unit') + '. Click to change.';
     const host = document.getElementById('projUnitsHost');
-    if (host) _unitControlsInto(host);
+    if (host) _projUnitsSummaryInto(host);
+}
+// THE PROJECT TAB SAYS WHAT THE UNITS ARE; SETTINGS IS WHERE THEY CHANGE (19.06). The full
+// units and rounding controls (and Frame effects) are in the header gear; repeating them
+// here pushed the project's name, code and location apart and made the tab scroll. One
+// line reads the setting back, and Units... opens the gear on its tab.
+function _projUnitsSummaryInto(host) {
+    host.innerHTML = '';
+    const NAME = { in: 'Inches', mm: 'mm', cm: 'cm' };
+    const pat = (u) => { const d = _unitPrecision(u); return d ? '0.' + '#'.repeat(d) : '0'; };
+    const main = dashUnit || 'in', dual = _specDualUnit();
+    const used = [main]; if (dual && dual !== main) used.push(dual);
+    const txt = document.createElement('span'); txt.className = 'proj-units-text';
+    txt.textContent = NAME[main] + (dual ? ' + ' + dual : '') + ' \u00b7 ' + used.map(u => pat(u) + ' ' + u).join(', ');
+    txt.title = 'Sizes are typed in ' + NAME[main] + (dual ? ', and ' + dual + ' prints in brackets beside inches' : ', with no second unit') + '. Rounding: ' + used.map(u => pat(u) + ' ' + u).join(', ') + '. Change them in Settings, Units.';
+    host.appendChild(txt);
 }
 function openUnitMenu() { openAppSettings('units'); }
 function setUnit(newUnit) {
@@ -11880,10 +12165,7 @@ function loadDashDataIntoControls(data) {
     applyMatFloatModeUI(!!data.useFloatMount);
     setVal('extW', dashFmt(data.extW)); setVal('extH', dashFmt(data.extH)); setVal('fType', data.fType); setVal('fW', dashFmt(data.fW)); 
     setVal('fColor', data.fColor); setVal('m_fCode', data.fCode); 
-    // Reflect frame style on the toggle buttons (hidden #fType is the source of truth)
-    document.getElementById('fTypeBtnLibrary').classList.toggle('active', data.fType === 'image');
-    document.getElementById('fTypeBtnSolid').classList.toggle('active', data.fType === 'color');
-    applyFrameStyleDimming(data.fType);
+    _dashFrameCardSync(data);
     setVal('m1_color', data.m1ColorName); setVal('m1_colorHex', data.m1ColorHex || '#ffffff');
     setVal('m2_color', data.m2ColorName); setVal('m2_colorHex', data.m2ColorHex || '#ffffff');
     setVal('m_glass', data.glass); setVal('m_hardware', data.hardware); setVal('m_mount', data.mount); setVal('m_backing', data.backing); setVal('m_notes', data.notes); setVal('m_prodNotes', data.prodNotes);
@@ -11925,7 +12207,6 @@ function loadDashDataIntoControls(data) {
     }
 
     handleDashProductChange(false);
-    document.getElementById('swatchSelectedDisplay').textContent = (data.fType === 'image' && data.swatchName) ? data.swatchName : 'Frame';
 
     if(data.swatchDataUrl && data.fType === 'image') { dashActiveImageObj.src = data.swatchDataUrl; document.getElementById('swatchThumbPreview').style.backgroundImage = `url(${data.swatchDataUrl})`; } 
     else { dashActiveImageObj.src = emptyImgUrl; document.getElementById('swatchThumbPreview').style.backgroundImage = `none`; }
@@ -12181,11 +12462,9 @@ function updateDashVisualsFromDOM() {
     // Both Library and Color rows stay visible; the inactive side dims.
     // (Previously imageControls was display:none in Color mode, which felt jarring.)
     document.getElementById('imageControls').style.display = 'flex';
-    applyFrameStyleDimming(data.fType);
+    _dashFrameCardSync(data);
     if (data.fType === 'color') {
         viewObj.style.setProperty('--frame-bg', `none`);
-        document.getElementById('swatchSelectedDisplay').textContent = "Frame";
-        document.getElementById('swatchThumbPreview').style.backgroundImage = `none`;
     } else {
         viewObj.style.setProperty('--frame-bg', `url(${data.swatchDataUrl})`);
     }
@@ -12380,6 +12659,9 @@ function updateDashVisualsFromDOM() {
     // Float mount / frameless: opaque print fill so the white paper beneath
     // doesn't bleed through (keeps dashboard + elevation identical).
     if (isFrameless || useFM) artVis.style.background = 'rgb(120,120,120)';
+    // Floater reveal (19.01): same ring and cast as the elevation.
+    const _dashGapShadow = isCanvas ? _floaterGapCss(_floaterRevealOf(floaterInsetVal, dashUnit) * ratio, ratio * unitFactor('in', dashUnit)) : '';
+    if (_dashGapShadow) artVis.style.boxShadow = _dashGapShadow;
     // No mat: the moulding sits on the art and casts the frame's shadow onto it (18.45).
     if (!effM1A && !isCanvas && !isFrameless && !useFM && !_flatDash && data.useFauxMat !== true) artVis.classList.add('fx-frame-cast');
 
@@ -12428,7 +12710,7 @@ function updateDashVisualsFromDOM() {
     // (pan/zoom), clipped to the opening. Matches the elevation + exports exactly.
     const dashHasArt = !!data.artworkUrl;
     if (dashHasArt) {
-        artVis.style.boxShadow = 'none';
+        artVis.style.boxShadow = _dashGapShadow || 'none';
         artVis.style.overflow = 'hidden';
         artVis.style.cursor = 'grab';
         const ow = artW * ratio, oh = artH * ratio;
@@ -12442,16 +12724,32 @@ function updateDashVisualsFromDOM() {
         // was uploaded before dimensions were tracked), capture them from the
         // loaded image and re-render so the true aspect ratio is used (prevents
         // the image stretching to fill the opening when the frame is resized).
-        if (!data.artworkW || !data.artworkH) {
+        {   // 18.94: also when the stored size is a DIFFERENT picture's (proportions disagree)
             aimg.addEventListener('load', () => {
                 const nw = aimg.naturalWidth, nh = aimg.naturalHeight;
-                if (nw && nh && (!data.artworkW || !data.artworkH)) {
+                if (nw && nh && _artSizeStale(data, nw, nh)) {
                     data.artworkW = nw; data.artworkH = nh;
                     updateDashVisualsFromDOM();
                 }
             });
         }
         artVis.appendChild(aimg);
+        // 19.12: WHAT YOU CAN DO TO A PICTURE, ON THE PICTURE. Once an opening had artwork
+        // nothing said a new image can be dropped on it, and Remove sat up in the zoom row.
+        // Shown on hover: Replace and Remove top-right, and a strip saying the two gestures.
+        // .art-visual takes no pointer, so the buttons opt back in; _wireArtPan ignores a
+        // press on them so a click is never a pan.
+        if (artW * ratio >= 60 && artH * ratio >= 40) {
+            const tools = document.createElement('div'); tools.className = 'art-tools';
+            tools.innerHTML = '<button type="button" class="art-tool-btn" title="Replace the artwork: pick another image (or drop one on the picture)" onclick="document.getElementById(\'m_artworkFile\').click()">Replace</button>'
+                + '<button type="button" class="art-tool-btn" title="Take the artwork off this item" onclick="clearDashArtwork()">Remove</button>';
+            artVis.appendChild(tools);
+            if (artW * ratio >= 150) {
+                const hint = document.createElement('div'); hint.className = 'art-hint';
+                hint.textContent = 'Drag to pan \u00b7 drop an image to replace';
+                artVis.appendChild(hint);
+            }
+        }
     }
     // Suffix matches the unit. unitInfo() gives '"' for IN, ' cm' for CM, ' mm' for MM.
     const dashSuf = unitInfo(dashUnit).suffix;
@@ -12476,7 +12774,7 @@ function updateDashVisualsFromDOM() {
             + dashFmt(Math.max(0, finalW)) + dashSuf + ' × ' + dashFmt(Math.max(0, finalH)) + dashSuf + '</div>'
             + '</div>';
     } else if (!dashHasArt) {
-        artVis.innerText = `${dashFmt(Math.max(0, finalW))}${dashSuf} × ${dashFmt(Math.max(0, finalH))}${dashSuf}`;
+        artVis.innerHTML = _artAddIconHTML(artW * ratio, artH * ratio, "document.getElementById('m_artworkFile').click()");
     }
     fVis.appendChild(artVis);
 }
@@ -13058,30 +13356,8 @@ function toggleDashLock() {
 
 // Frame Style toggle (Library / Color). Writes through to the hidden #fType input
 // so the existing syncDashAndCalculate plumbing keeps working unchanged.
-function setFrameStyle(val) {
-    document.getElementById('fType').value = val;
-    document.getElementById('fTypeBtnLibrary').classList.toggle('active', val === 'image');
-    document.getElementById('fTypeBtnSolid').classList.toggle('active', val === 'color');
-    applyFrameStyleDimming(val);
-    syncDashAndCalculate();
-}
 
-// Dim the accessory controls on the side that's NOT in use:
-//   Library mode → dim the color swatch
-//   Color mode   → dim the folder icon AND the library row (vendor/collection/swatch/upload)
-function applyFrameStyleDimming(val) {
-    const libSide = (val !== 'image'); // dim library accessories when NOT in library mode
-    const colSide = (val !== 'color'); // dim color swatch when NOT in color mode
-    document.getElementById('libFolderBtn').classList.toggle('fstyle-disabled', libSide);
-    document.getElementById('fColor').classList.toggle('fstyle-disabled', colSide);
-    // The vendor/collection/frame/upload row is also library-side
-    const imageControls = document.getElementById('imageControls');
-    if (imageControls) imageControls.classList.toggle('fstyle-disabled', libSide);
-}
 
-// Shadow Box: edge-style toggle (clean | torn). Writes to hidden #sbPaperEdge so
-// existing sync flow picks it up. Generates a fixed seed the first time TORN is
-// chosen so the irregular outline is stable across redraws of the same frame.
 // Rabbet field has special behavior on floaters: changing it auto-suggests
 // BOTH the canvasDepth (stretcher bar must be flush with rabbet pocket)
 // AND the canvasWrap (= rabbet + 0.5" safety margin). Both are suggestions —
@@ -13808,7 +14084,7 @@ function updateDashCustomSwatchDropdown() {
             dashTempHoverUrl = _libEntryToUrl(i.file);
             document.getElementById('swatchThumbPreview').style.backgroundImage = `url(${dashTempHoverUrl})`;
         };
-        li.onclick = () => { document.getElementById('swatchSelectedDisplay').textContent = li.dataset.label; s.style.display = 'none'; loadDashFromCustomLibrary(idx); };
+        li.onclick = () => { s.style.display = 'none'; loadDashFromCustomLibrary(idx); };
         s.appendChild(li);
     });
     s.onmouseleave = restoreDashThumbnail;
@@ -13890,6 +14166,13 @@ function processArtworkFile(file, onReady) {
 // zoom=1; pan shifts which part shows; result is clamped so the opening is
 // always fully covered (no gaps). Used identically by every render path so
 // the preview, elevation, PNG, and SVG can never drift.
+// Is the stored artwork size missing, or the size of some OTHER picture? Proportions
+// within 1% count as the same (a downscaled copy keeps its aspect).
+function _artSizeStale(o, nw, nh) {
+    const w = parseFloat(o && o.artworkW), h = parseFloat(o && o.artworkH);
+    if (!(w > 0 && h > 0)) return true;
+    return Math.abs((w / h) / (nw / nh) - 1) > 0.01;
+}
 function computeArtDrawRect(openW, openH, ar, zoom, panX, panY) {
     zoom = zoom || 1; panX = panX || 0; panY = panY || 0;
     if (!ar || !isFinite(ar) || ar <= 0) ar = (openH > 0 ? openW / openH : 1); // fallback: fill, no crop
@@ -13937,7 +14220,12 @@ function applyArtworkToCurrentRow(dataUrl, baseName, w, h) {
     if (_catRefuseArt(row)) return;
     if (row) {
         row.artworkUrl = dataUrl; row.artworkFile = baseName;
-        if (w) row.artworkW = w; if (h) row.artworkH = h;
+        // THE SIZE IS THE NEW IMAGE'S OR NOTHING (18.94). `if (w)` kept the PREVIOUS
+        // picture's size whenever a caller passed none (three drop paths did), and the
+        // dashboard + wall size the picture from it: a landscape photo was squashed to
+        // fit a portrait frame there while the spec page, which reads the real pixels,
+        // printed its true crop. 0 makes the preview measure the picture itself.
+        row.artworkW = w || 0; row.artworkH = h || 0;
         // Fresh image → reset crop to centered cover.
         row.artZoom = 1; row.artPanX = 0; row.artPanY = 0;
         // Auto-populate the Image Code from the dropped filename (this is what
@@ -13958,7 +14246,7 @@ function applyArtworkToRowIndex(idx, dataUrl, baseName, w, h) {
     if (!row) return;
     if (_catRefuseArt(row)) return;
     row.artworkUrl = dataUrl; row.artworkFile = baseName;
-    if (w) row.artworkW = w; if (h) row.artworkH = h;
+    row.artworkW = w || 0; row.artworkH = h || 0;    // never the previous picture's size (18.94)
     row.artZoom = 1; row.artPanX = 0; row.artPanY = 0;
     row.imageCode = baseName;
     pushUpdatesToElevations(idx);
@@ -13989,7 +14277,7 @@ function _processArtworkP(file) { return new Promise((res) => { try { processArt
 function _bulkApplyArtwork(idx, dataUrl, w, h) {
     const row = dashProjectData[idx]; if (!row) return;
     if (_catRefuseArt(row)) return;
-    row.artworkUrl = dataUrl; if (w) row.artworkW = w; if (h) row.artworkH = h;
+    row.artworkUrl = dataUrl; row.artworkW = w || 0; row.artworkH = h || 0;   // never the previous picture's size (18.94)
     row.artZoom = 1; row.artPanX = 0; row.artPanY = 0;        // fresh image → centered cover
     if (typeof pushUpdatesToElevations === 'function') pushUpdatesToElevations(idx);
 }
@@ -14092,13 +14380,13 @@ function _wireImageDropZone(el, onFile, opts) {
 function wireDashArtworkDrops() {
     const formZone = document.getElementById('m_artworkDrop');
     if (formZone) _wireImageDropZone(formZone, (file) => {
-        processArtworkFile(file, (u, n) => applyArtworkToCurrentRow(u, n));
+        processArtworkFile(file, (u, n, w, h) => applyArtworkToCurrentRow(u, n, w, h));
     });
     // The dashboard preview opening (delegated: the .art-visual is rebuilt each
     // render, so wire the stable container and check the target on drop).
     const previewWrap = document.getElementById('dash-frame-visual');
     if (previewWrap) _wireImageDropZone(previewWrap, (file) => {
-        processArtworkFile(file, (u, n) => applyArtworkToCurrentRow(u, n));
+        processArtworkFile(file, (u, n, w, h) => applyArtworkToCurrentRow(u, n, w, h));
     });
 }
 
@@ -14133,12 +14421,13 @@ function wireElevArtworkDrop() {
         if (!frame) { showInfoModal('No frame', 'Could not match that frame.'); return; }
         // Map to the dashboard row by id.
         const rowIdx = dashProjectData.findIndex(r => r.id === frame.id);
-        processArtworkFile(file, (u, n) => {
+        processArtworkFile(file, (u, n, w, h) => {
             if (rowIdx >= 0) {
-                applyArtworkToRowIndex(rowIdx, u, n);
+                applyArtworkToRowIndex(rowIdx, u, n, w, h);
             } else {
                 // Frame not linked to a dashboard row — set on the frame directly.
-                frame.artworkUrl = u; frame.artworkFile = n; drawElevAll(); pushHistory();
+                frame.artworkUrl = u; frame.artworkFile = n; frame.artworkW = w || 0; frame.artworkH = h || 0;
+                frame.artZoom = 1; frame.artPanX = 0; frame.artPanY = 0; drawElevAll(); pushHistory();
             }
         });
     });
@@ -14279,6 +14568,7 @@ function _wireArtPan() {
     fv.addEventListener('mousedown', (e) => {
         const row = _artCropRow();
         if (!row || !row.artworkUrl) return;
+        if (e.target && e.target.closest && e.target.closest('.art-tool-btn')) return;   // a button, not a pan
         const art = fv.querySelector('.art-visual');
         if (!art) return;
         const r = art.getBoundingClientRect();
@@ -14317,21 +14607,122 @@ function updateDashArtworkThumb(dataUrl) {
     if (clearBtn) clearBtn.style.display = dataUrl ? 'inline-block' : 'none';
 }
 
+// A floater is a floater collection OR a moulding with a lip width: the same fact the frame
+// browser's Type filter reads (faceWidth), so a floater filed under any collection name counts.
+function _swatchIsFloater(collectionName, item) {
+    return /floater/i.test(collectionName || '') || (!!item && parseFloat(item.faceWidth) > 0);
+}
+// ── THE FRAME CARD (19.09) ─────────────────────────────────────────────────────
+// The dashboard shows the item's frame as one card (corner photo, code, colour, width,
+// vendor) that opens the frame browser. Facts come from the library by CODE; a code no
+// library lists (a custom swatch) shows its own swatch; a legacy colour frame says so.
+function _dashFrameCardSync(row) {
+    // 19.10: the code is the Frame Code field beside the square; the card is picture only.
+    const pic = document.getElementById('frameCardPic'), sub = document.getElementById('frameCardSub');
+    if (!pic || !sub) return;
+    row = row || (_bulkEditing ? _bulkScratch : dashProjectData[dashSelectedRowIndex]) || {};
+    const rec = row.fCode ? _fbByCode()[_fbNorm(row.fCode)] : null;
+    pic.innerHTML = ''; pic.style.background = '';
+    if (row.fType === 'color') {
+        pic.style.background = row.fColor || '#111111';
+        sub.textContent = 'Solid colour (older project). Pick a library frame';
+        return;
+    }
+    const img = document.createElement('img'); img.alt = '';
+    const sw = row.swatchDataUrl || '';
+    img.onerror = () => { img.remove(); if (sw) pic.style.background = 'url(' + sw + ') center/cover'; };
+    if (rec) img.src = _fbImgUrl(rec.item); else if (sw) img.src = sw;
+    if (img.src) pic.appendChild(img);
+    if (rec) {
+        const it = rec.item, u = unitFactor('in', dashUnit);
+        const vend = { michaelangelo: 'Michelangelo', larson_juhl: 'Larson-Juhl', universal_arquati: 'Universal Arquati', 'international-moulding': 'International Moulding', framerica: 'Framerica' }[rec.vendor] || rec.vendor;
+        sub.textContent = [it.color, it.width ? dashFmt(it.width * u) + unitSuffix() : '', vend].filter(Boolean).join(' · ');
+    } else {
+        sub.textContent = row.swatchDataUrl ? 'Custom swatch' : 'Pick a frame';
+    }
+}
+// ── THE DEFAULT FRAME (19.09) ──────────────────────────────────────────────────
+// Every new item starts in MICH-132-29 (a 3/4" black Small Stem), a real library moulding,
+// instead of a flat-colour "Standard Black". The swatch is a library image, so it loads
+// once at boot (_defaultFrameLoad, after the bundled library) and is cached. An item made
+// before it arrives (or offline, file://) starts as a black colour frame carrying the same
+// code and sizes, and is upgraded in place when it lands (_defaultFramePending, held by
+// object identity, never a field on the row).
+const DEFAULT_FRAME_CODE = 'MICH-132-29';
+const DEFAULT_FRAME_IN = { fW: 0.75, fHeight: 1, rabbetDepth: 0.8125, fColor: '#111111' };
+let _defaultFrameSwatch = null;
+const _defaultFramePending = new Set();
+function _defaultFrameApply(row) {
+    if (!row || _isFlatGraphic(row.product)) return row;
+    const u = unitFactor('in', dashUnit);
+    row.fW = dashFmt(DEFAULT_FRAME_IN.fW * u); row.fHeight = dashFmt(DEFAULT_FRAME_IN.fHeight * u); row.rabbetDepth = dashFmt(DEFAULT_FRAME_IN.rabbetDepth * u);
+    row.fCode = DEFAULT_FRAME_CODE; row.swatchName = DEFAULT_FRAME_CODE; row.fColor = DEFAULT_FRAME_IN.fColor;
+    if (!String(row.fColorName || '').trim()) row.fColorName = 'Black';   // the catalogue's colour for it
+    if (_defaultFrameSwatch) { row.fType = 'image'; row.swatchDataUrl = _defaultFrameSwatch; }
+    else { row.fType = 'color'; row.swatchDataUrl = ''; _defaultFramePending.add(row); _defaultFrameLoad(); }
+    return row;
+}
+let _defaultFrameLoading = null;
+function _defaultFrameLoad() {
+    if (_defaultFrameSwatch) return Promise.resolve(_defaultFrameSwatch);
+    if (_defaultFrameLoading) return _defaultFrameLoading;
+    const rec = _fbByCode()[_fbNorm(DEFAULT_FRAME_CODE)];
+    if (!rec) return Promise.resolve(null);   // library not loaded yet: boot calls again after it is
+    _defaultFrameLoading = _libEntryToDataUrl(rec.item.file).then(u => {
+        _defaultFrameSwatch = u;
+        _defaultFrameUpgradePending();
+        return u;
+    }).catch(() => null).then(u => { _defaultFrameLoading = null; return u; });
+    return _defaultFrameLoading;
+}
+// Rows (and their wall copies) still exactly as minted get the real swatch. A row the
+// designer has since changed is theirs and is left alone.
+function _defaultFrameUpgradePending() {
+    if (!_defaultFrameSwatch || !_defaultFramePending.size) return;
+    const fresh = (r) => r && r.fType === 'color' && !r.swatchDataUrl && r.fCode === DEFAULT_FRAME_CODE;
+    let n = 0;
+    _defaultFramePending.forEach(row => {
+        if (!fresh(row) || dashProjectData.indexOf(row) < 0) return;
+        row.fType = 'image'; row.swatchDataUrl = _defaultFrameSwatch; n++;
+        (elevations || []).forEach(e => (e.frames || []).forEach(f => { if (f && f.id === row.id && fresh(f)) { f.fType = 'image'; f.swatchDataUrl = _defaultFrameSwatch; } }));
+    });
+    _defaultFramePending.clear();
+    if (!n) return;
+    try { renderDashTable(); } catch (e) {}
+    try { if (currentView === 'dashboard' && dashProjectData[dashSelectedRowIndex]) loadDashDataIntoControls(dashProjectData[dashSelectedRowIndex]); } catch (e) {}
+    try { if (currentView === 'elevation') drawElevAll(); } catch (e) {}
+    try { _invalidateFramesCache(); } catch (e) {}
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+}
 function applySwatchToRow(rowIdx, collectionName, item, dataUrl) {
     // In bulk-edit mode, target the scratch object (the form's data source),
     // never a real project row. rowIdx is ignored while bulk editing.
     const row = _bulkEditing ? _bulkScratch : dashProjectData[rowIdx];
     if (!row || !item) return false;
     const _uf = unitFactor('in', dashUnit);
+    // COLOR / TEXTURE FOLLOWS THE FRAME (19.09) from the catalogue, but only while it still
+    // holds the PREVIOUS frame's catalogue colour (or nothing): words typed by a designer
+    // are theirs. Designers used to leave "Standard Black" on a wood-grain moulding.
+    {
+        const prev = row.fCode ? _fbByCode()[_fbNorm(row.fCode)] : null;
+        const was = String(row.fColorName || '').trim();
+        if (item.color && (!was || (prev && prev.item.color && was === prev.item.color))) row.fColorName = item.color;
+    }
     row.fType = 'image';
     row.fW = dashFmt(item.width * _uf);
     row.fCode = item.code;
     row.swatchDataUrl = dataUrl;
     row.swatchName = item.code;
 
-    // Floater collections: switch product + derive inset/faceWidth.
-    const isFloaterCollection = /floater/i.test(collectionName || '');
-    if (isFloaterCollection) {
+    // THE FRAME PICKS THE PRODUCT, BOTH WAYS (19.03). A floater makes the item a floater
+    // canvas; a regular moulding picked on a floater item makes it Framed Art again, or it
+    // stayed a floater (inset, canvas fields, no mats) and nobody noticed. Any other product
+    // (shadow box, frameless, flat graphics, sourced object) is the designer's, left alone.
+    if (!_swatchIsFloater(collectionName, item) && row.product === 'Framed Canvas (Floater)') {
+        row.product = 'Framed Art';
+        row._faceWidth = '';
+    }
+    if (_swatchIsFloater(collectionName, item)) {
         row.product = 'Framed Canvas (Floater)';
         row.useFloatMount = false;
         if (item.faceWidth !== undefined) {
@@ -14357,14 +14748,14 @@ function loadDashFromCustomLibrary(idx) {
         // Reflect the new values in the form controls.
         document.getElementById('fW').value = row.fW;
         document.getElementById('m_fCode').value = row.fCode;
+        { const cn = document.getElementById('m_fColorName'); if (cn) cn.value = row.fColorName || ''; }
         document.getElementById('view-dashboard').style.setProperty('--frame-bg', `url(${u})`);
         document.getElementById('fType').value = 'image';
-        document.getElementById('fTypeBtnLibrary').classList.add('active');
-        document.getElementById('fTypeBtnSolid').classList.remove('active');
+        _dashFrameCardSync(row);
 
         const productSelect = document.getElementById('m_product');
-        if (/floater/i.test(c) && productSelect && productSelect.value !== "Framed Canvas (Floater)") {
-            productSelect.value = "Framed Canvas (Floater)";
+        if (productSelect && row.product && productSelect.value !== row.product) {
+            productSelect.value = row.product;
             handleDashProductChange(false);
         }
         const insetInput = document.getElementById('floaterInset');
@@ -14381,17 +14772,410 @@ function loadDashFromCustomLibrary(idx) {
     });
 }
 
+// ── THE FRAME BROWSER (18.84): openFrameBrowser ─────────────────────────────────
+// The library outgrew a dropdown (Avant-Garde alone is ~550 mouldings), so picking a
+// frame is a grid with search and filters, organised three ways:
+//   THIS PROJECT  frames already on an item (DERIVED from the rows, never stored) plus
+//                 a shortlist of candidates (editorialContent.frameShortlist, codes).
+//   TEAM          groupings everyone sees: library/groupings.json, committed to the repo.
+//                 FRAME is a static site and cannot write there, so a designer's
+//                 "Share with team" downloads a file and a person commits it. No tokens.
+//   MINE          groupings on this computer (localStorage), usable at once.
+// Frames are addressed by CODE everywhere (rows already store fCode); a code missing
+// from the library still lists in a grouping, as a greyed card, rather than vanishing.
+// Picking a card goes through loadDashFromCustomLibrary, the one apply path.
+const FB_MINE_KEY = 'frameGroupingsMine';
+const FB_WIDTHS = [['', 'Any width'], ['lt1', 'Under 1"'], ['1to15', '1" to 1½"'], ['15to2', '1½" to 2"'], ['gt2', 'Over 2"']];
+let _fbState = { src: 'project', q: '', family: '', width: '', profile: '', style: '', kind: '' };
+// Type filter (18.100): a floater is a frame with a lip width (faceWidth), the same fact that
+// switches an item to Framed Canvas (Floater) when picked. Works across every vendor.
+const FB_KINDS = [['', 'Any type'], ['frame', 'Frames'], ['floater', 'Floaters']];
+// Which vendors are expanded in the Library list (module state, never project data).
+// A vendor with ~150 collections (Larson-Juhl) would otherwise be an endless list.
+let _fbOpenVendors = {};
+let _fbTeam = null;          // [{id, name, note, codes}] once loaded
+let _fbTeamErr = '';
+let _fbObjUrls = [];         // object URLs for synced (File) swatches, revoked on close
+
+function _fbNorm(code) { return String(code || '').toUpperCase().replace(/[^A-Z0-9]/g, ''); }
+// Every library frame, flattened: { vendor, collection, idx, item }.
+function _fbAll() {
+    const out = [];
+    const lib = (typeof dashLocalLibrary !== 'undefined' && dashLocalLibrary) || {};
+    Object.keys(lib).sort().forEach(v => Object.keys(lib[v] || {}).sort().forEach(c => {
+        (lib[v][c] || []).forEach((item, idx) => out.push({ vendor: v, collection: c, idx: idx, item: item }));
+    }));
+    return out;
+}
+function _fbByCode(all) {
+    const m = {};
+    (all || _fbAll()).forEach(r => { const k = _fbNorm(r.item.code); if (k && !m[k]) m[k] = r; });
+    return m;
+}
+// Frames on an item in this project, in first-use order. Derived, so it can't go stale.
+function _fbInUse() {
+    const seen = {}, out = [];
+    ((typeof dashProjectData !== 'undefined' && dashProjectData) || []).forEach(r => {
+        if (!r || r.fType !== 'image' || !r.fCode) return;
+        const k = _fbNorm(r.fCode); if (seen[k]) return; seen[k] = 1; out.push(r.fCode);
+    });
+    return out;
+}
+// READ-ONLY: never seeds the field (an empty array would ride every snapshot).
+function _fbShortlist() {
+    const s = (typeof editorialContent !== 'undefined' && editorialContent) ? editorialContent.frameShortlist : null;
+    return Array.isArray(s) ? s.filter(x => typeof x === 'string' && x) : [];
+}
+function _fbOnShortlist(code) { const k = _fbNorm(code); return _fbShortlist().some(c => _fbNorm(c) === k); }
+// The one writer. Adds or removes codes; one undo entry per gesture.
+function _fbSetShortlist(codes, on) {
+    const cur = _fbShortlist().slice();
+    let changed = false;
+    (codes || []).forEach(code => {
+        const k = _fbNorm(code); const i = cur.findIndex(c => _fbNorm(c) === k);
+        if (on && i < 0 && k) { cur.push(code); changed = true; }
+        if (!on && i >= 0) { cur.splice(i, 1); changed = true; }
+    });
+    if (!changed) return false;
+    if (cur.length) editorialContent.frameShortlist = cur; else delete editorialContent.frameShortlist;
+    pushHistory(); scheduleAutosave();
+    return true;
+}
+function _fbMine() {
+    try { const v = JSON.parse(localStorage.getItem(FB_MINE_KEY) || '[]'); return Array.isArray(v) ? v.filter(_fbValidGrouping) : []; }
+    catch (e) { return []; }
+}
+function _fbSaveMine(list) {
+    try { localStorage.setItem(FB_MINE_KEY, JSON.stringify(list)); return true; }
+    catch (e) { showInfoModal('Grouping not saved', 'This browser refused to store your groupings (storage may be full or blocked). Share the grouping with the team so it is kept in the library instead.'); return false; }
+}
+function _fbValidGrouping(g) { return !!(g && typeof g.id === 'string' && g.id && typeof g.name === 'string' && Array.isArray(g.codes)); }
+async function _fbLoadTeam() {
+    if (_fbTeam) return _fbTeam;
+    try {
+        const r = await fetch('library/groupings.json', { cache: 'no-cache' });
+        if (!r.ok) { _fbTeam = []; return _fbTeam; }   // no team file yet: nothing to show
+        const j = await r.json();
+        const list = Array.isArray(j) ? j : (j && j.groupings);
+        _fbTeam = (Array.isArray(list) ? list : []).filter(_fbValidGrouping);
+    } catch (e) { _fbTeam = []; _fbTeamErr = String(e && e.message || e); }
+    return _fbTeam;
+}
+function _fbGroupingFor(src) {
+    if (src.indexOf('team:') === 0) return (_fbTeam || []).find(g => 'team:' + g.id === src) || null;
+    if (src.indexOf('mine:') === 0) return _fbMine().find(g => 'mine:' + g.id === src) || null;
+    return null;
+}
+// Folder names are storage (avant-garde, Shadow-Boxes); show them as words.
+function _fbVendorLabel(v) { return (typeof _prettyVendor === 'function') ? _prettyVendor(v) : String(v || ''); }
+function _fbColLabel(vendor, collection) {
+    const words = (t) => String(t || '').replace(/[-_]+/g, ' ').replace(/\b[a-z]/g, ch => ch.toUpperCase());
+    return (typeof _prettyVendor === 'function' ? _prettyVendor(vendor) : words(vendor)) + ' › ' + words(collection);
+}
+function _fbWidthOk(w, b) {
+    if (!b) return true; const n = parseFloat(w); if (isNaN(n)) return false;
+    if (b === 'lt1') return n < 1;
+    if (b === '1to15') return n >= 1 && n <= 1.5;
+    if (b === '15to2') return n > 1.5 && n <= 2;
+    if (b === 'gt2') return n > 2;
+    return true;
+}
+// What the grid shows: { rec, code } cards, rec null for a code not in the library.
+// Sections ({head}) split THIS PROJECT into In use / Shortlist.
+function _fbCards(all, byCode) {
+    const st = _fbState, q = st.q.trim().toLowerCase();
+    const keep = (rec) => {
+        if (!rec) return !q && !st.family && !st.width && !st.profile && !st.style && !st.kind;
+        const it = rec.item;
+        if (st.family && it.family !== st.family) return false;
+        if (st.profile && it.profile !== st.profile) return false;
+        if (st.style && it.style !== st.style) return false;
+        if (st.kind && ((it.faceWidth > 0) ? 'floater' : 'frame') !== st.kind) return false;
+        if (!_fbWidthOk(it.width, st.width)) return false;
+        if (q) {
+            const hay = [it.code, it.color, it.family, it.profile, it.series, it.style, rec.vendor, rec.collection].join(' ').toLowerCase();
+            if (!q.split(/\s+/).every(w => hay.indexOf(w) >= 0)) return false;
+        }
+        return true;
+    };
+    const fromCodes = (codes) => codes.map(c => ({ code: c, rec: byCode[_fbNorm(c)] || null })).filter(x => keep(x.rec));
+    if (st.src === 'project') {
+        const used = fromCodes(_fbInUse());
+        const usedK = {}; _fbInUse().forEach(c => usedK[_fbNorm(c)] = 1);
+        const short = fromCodes(_fbShortlist().filter(c => !usedK[_fbNorm(c)]));
+        return [{ head: 'In use', cards: used, empty: 'No item in this project has a library frame yet.' },
+                { head: 'Shortlist', cards: short, empty: 'Star a frame anywhere in the library to shortlist it here.' }];
+    }
+    const g = _fbGroupingFor(st.src);
+    if (g) return [{ cards: fromCodes(g.codes), empty: g.codes.length ? 'No frame in this grouping matches the filters.' : 'Empty. Add frames from the library with the ⋯ menu on a card.' }];
+    let pool = all;
+    if (st.src.indexOf('col:') === 0) pool = all.filter(r => 'col:' + r.vendor + '/' + r.collection === st.src);
+    if (st.src.indexOf('ven:') === 0) pool = all.filter(r => 'ven:' + r.vendor === st.src);
+    return [{ cards: pool.filter(keep).map(r => ({ code: r.item.code, rec: r })), empty: 'No frame matches the filters.' }];
+}
+function _fbClose() {
+    const m = document.getElementById('frameBrowser'); if (m) m.remove();
+    _fbObjUrls.forEach(u => { try { URL.revokeObjectURL(u); } catch (e) {} }); _fbObjUrls = [];
+}
+function openFrameBrowser() {
+    if (document.getElementById('frameBrowser')) return;
+    const ov = document.createElement('div'); ov.id = 'frameBrowser';
+    ov.className = 'frame-modal'; ov.setAttribute('data-modal-backdrop', ''); ov.style.display = 'flex';
+    const card = document.createElement('div'); card.className = 'fb-card';
+    card.innerHTML = '<div class="fb-side" id="fbSide"></div>'
+        + '<div class="fb-main"><div class="fb-top" id="fbTop"></div><div class="fb-head" id="fbHead"></div>'
+        + '<div class="fb-grid" id="fbGrid"></div><div class="fb-foot" id="fbFoot"></div></div>';
+    ov.appendChild(card); document.body.appendChild(ov);
+    _fbBuildTop();
+    _fbRender();
+    _fbLoadTeam().then(() => { if (document.getElementById('frameBrowser')) _fbRender(); });
+}
+function _fbBuildTop() {
+    const top = document.getElementById('fbTop'); if (!top) return;
+    const all = _fbAll();
+    const uniq = (k) => Array.from(new Set(all.map(r => r.item[k]).filter(Boolean))).sort();
+    const sel = (id, first, vals, key, title) => {
+        const s = document.createElement('select'); s.id = id; s.title = title;
+        [['', first]].concat(vals.map(v => Array.isArray(v) ? v : [v, v])).forEach(o => {
+            const op = document.createElement('option'); op.value = o[0]; op.textContent = o[1]; s.appendChild(op);
+        });
+        s.value = _fbState[key] || '';
+        s.onchange = () => { _fbState[key] = s.value; _fbRender(); };
+        return s;
+    };
+    top.innerHTML = '';
+    const q = document.createElement('input'); q.type = 'text'; q.id = 'fbSearch'; q.placeholder = 'Search code, colour, profile';
+    q.setAttribute('aria-label', 'Search frames'); q.setAttribute('data-modal-initial', ''); q.value = _fbState.q;
+    q.oninput = () => { _fbState.q = q.value; _fbRender(); };
+    top.appendChild(q);
+    top.appendChild(sel('fbFamily', 'Any colour', uniq('family'), 'family', 'Colour family'));
+    top.appendChild(sel('fbWidth', 'Any width', FB_WIDTHS.slice(1), 'width', 'Face width'));
+    top.appendChild(sel('fbProfile', 'Any profile', uniq('profile'), 'profile', 'Profile shape'));
+    top.appendChild(sel('fbStyle', 'Any style', uniq('style'), 'style', 'Style (Contemporary, Modern, Classic...)'));
+    top.appendChild(sel('fbKind', 'Any type', FB_KINDS.slice(1), 'kind', 'Frames or floaters (canvas floater frames)'));
+    const x = document.createElement('button'); x.type = 'button'; x.className = 'jump-esc'; x.textContent = 'Esc'; x.title = 'Close';
+    x.setAttribute('data-modal-close', ''); x.onclick = _fbClose;
+    top.appendChild(x);
+    try { q.focus(); } catch (e) {}
+}
+function _fbSideItem(host, src, label, count, extraCls) {
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'fb-src' + (extraCls ? ' ' + extraCls : '') + (_fbState.src === src ? ' active' : '');
+    b.setAttribute('data-fb-src', src);
+    const l = document.createElement('span'); l.textContent = label; b.appendChild(l);
+    if (count != null) { const n = document.createElement('small'); n.textContent = count; b.appendChild(n); }
+    b.onclick = () => { _fbState.src = src; _fbRender(); };
+    host.appendChild(b);
+}
+function _fbSideHead(host, text, action) {
+    const h = document.createElement('div'); h.className = 'fb-side-head';
+    const t = document.createElement('span'); t.textContent = text; h.appendChild(t);
+    if (action) {
+        const a = document.createElement('button'); a.type = 'button'; a.className = 'fb-side-add'; a.textContent = action.label; a.title = action.title;
+        a.onclick = action.onClick; h.appendChild(a);
+    }
+    host.appendChild(h);
+}
+function _fbRender() {
+    const side = document.getElementById('fbSide'); if (!side) return;
+    const all = _fbAll(), byCode = _fbByCode(all);
+    // A source that no longer exists (deleted grouping) falls back to the project.
+    if ((_fbState.src.indexOf('team:') === 0 || _fbState.src.indexOf('mine:') === 0) && !_fbGroupingFor(_fbState.src)) _fbState.src = 'project';
+    side.innerHTML = '';
+    _fbSideHead(side, 'This project');
+    const usedN = _fbInUse().length, shortN = _fbShortlist().filter(c => _fbInUse().every(u => _fbNorm(u) !== _fbNorm(c))).length;
+    _fbSideItem(side, 'project', 'Project frames', usedN + shortN);
+    _fbSideHead(side, 'Team groupings');
+    const team = _fbTeam || [];
+    if (!_fbTeam) { const p = document.createElement('div'); p.className = 'fb-side-note'; p.textContent = 'Loading…'; side.appendChild(p); }
+    else if (!team.length) { const p = document.createElement('div'); p.className = 'fb-side-note'; p.textContent = 'None yet. Share one of yours.'; side.appendChild(p); }
+    team.forEach(g => _fbSideItem(side, 'team:' + g.id, g.name, g.codes.length));
+    _fbSideHead(side, 'My groupings', { label: '+', title: 'New grouping', onClick: () => _fbNewGrouping([]) });
+    const mine = _fbMine();
+    if (!mine.length) { const p = document.createElement('div'); p.className = 'fb-side-note'; p.textContent = 'Group frames you reach for together.'; side.appendChild(p); }
+    mine.forEach(g => _fbSideItem(side, 'mine:' + g.id, g.name, g.codes.length, team.some(t => t.id === g.id) ? 'shared' : ''));
+    _fbSideHead(side, 'Library');
+    _fbSideItem(side, 'all', 'All frames', all.length);
+    // One row per VENDOR (all its frames), its collections listed under it only while
+    // it is open. Selecting a vendor or one of its collections opens it.
+    const vens = {}; all.forEach(r => { const v = vens[r.vendor] || (vens[r.vendor] = { n: 0, cols: {} }); v.n++; v.cols[r.collection] = (v.cols[r.collection] || 0) + 1; });
+    const cur = _fbState.src;
+    Object.keys(vens).sort((a, b) => _fbVendorLabel(a).localeCompare(_fbVendorLabel(b))).forEach(v => {
+        const open = !!_fbOpenVendors[v] || cur === 'ven:' + v || cur.indexOf('col:' + v + '/') === 0;
+        _fbSideItem(side, 'ven:' + v, (open ? '\u25BE ' : '\u25B8 ') + _fbVendorLabel(v), vens[v].n, 'ven');
+        const b = side.lastChild;
+        b.onclick = () => { _fbOpenVendors[v] = !(open && cur === 'ven:' + v); _fbState.src = 'ven:' + v; _fbRender(); };
+        if (!open) return;
+        Object.keys(vens[v].cols).sort((a, b) => _fbColLabel('', a).localeCompare(_fbColLabel('', b))).forEach(c => {
+            _fbSideItem(side, 'col:' + v + '/' + c, _fbColLabel('', c).replace(/^ \u203a /, ''), vens[v].cols[c], 'col');
+        });
+    });
+    _fbRenderHead();
+    _fbRenderGrid(all, byCode);
+}
+function _fbRenderHead() {
+    const head = document.getElementById('fbHead'); if (!head) return;
+    head.innerHTML = '';
+    const st = _fbState, g = _fbGroupingFor(st.src);
+    const title = document.createElement('div'); title.className = 'fb-title';
+    title.textContent = st.src === 'project' ? 'Project frames' : st.src === 'all' ? 'All frames'
+        : g ? g.name : st.src.indexOf('col:') === 0 ? _fbColLabel.apply(null, st.src.slice(4).split('/'))
+        : st.src.indexOf('ven:') === 0 ? _fbVendorLabel(st.src.slice(4)) : '';
+    head.appendChild(title);
+    if (g && g.note) { const n = document.createElement('div'); n.className = 'fb-note'; n.textContent = g.note; head.appendChild(n); }
+    const acts = document.createElement('div'); acts.className = 'fb-acts';
+    const btn = (label, title, fn, cls) => {
+        const b = document.createElement('button'); b.type = 'button'; b.className = 'fb-act' + (cls ? ' ' + cls : ''); b.textContent = label; b.title = title; b.onclick = fn; acts.appendChild(b);
+    };
+    if (g) {
+        btn('Add all to project', 'Shortlist every frame in this grouping on this project', () => {
+            const n = g.codes.filter(c => !_fbOnShortlist(c)).length;
+            if (_fbSetShortlist(g.codes, true)) _toast('Shortlisted', n + ' frame' + (n === 1 ? '' : 's') + ' added to this project.');
+            _fbRender();
+        });
+    }
+    if (g && st.src.indexOf('mine:') === 0) {
+        btn('Rename', 'Rename this grouping', () => _fbRenameGrouping(g));
+        btn('Share with team', 'Download this grouping as a file to add to the team library', () => _fbShareGrouping(g));
+        btn('Delete', 'Delete this grouping', () => _fbDeleteGrouping(g), 'danger');
+    }
+    if (st.src === 'project' && _fbShortlist().length) {
+        btn('Save as grouping', 'Save this project’s frames as one of your groupings', () => _fbNewGrouping(_fbInUse().concat(_fbShortlist())));
+    }
+    head.appendChild(acts);
+}
+function _fbImgUrl(item) {
+    const src = item.corner || item.file;
+    if (typeof src === 'string') return src;
+    const u = _libEntryToUrl(src); if (u && u.indexOf('blob:') === 0) _fbObjUrls.push(u);
+    return u;
+}
+function _fbRenderGrid(all, byCode) {
+    const grid = document.getElementById('fbGrid'); if (!grid) return;
+    grid.innerHTML = '';
+    let shown = 0;
+    _fbCards(all, byCode).forEach(sec => {
+        if (sec.head) { const h = document.createElement('div'); h.className = 'fb-sec'; h.textContent = sec.head + ' (' + sec.cards.length + ')'; grid.appendChild(h); }
+        if (!sec.cards.length) { const e = document.createElement('div'); e.className = 'fb-empty'; e.textContent = sec.empty; grid.appendChild(e); return; }
+        sec.cards.forEach(c => { grid.appendChild(_fbCardEl(c)); shown++; });
+    });
+    const foot = document.getElementById('fbFoot');
+    if (foot) {
+        const row = (typeof dashProjectData !== 'undefined' && dashProjectData[dashSelectedRowIndex]) || null;
+        foot.textContent = (typeof _bulkEditing !== 'undefined' && _bulkEditing) ? 'Click a frame to use it on every item in the bulk edit.'
+            : 'Click a frame to use it on ' + ((row && row.id) || 'the selected item') + '. ★ shortlists it on this project.';
+        // 19.09: the one-off frame no vendor lists (a client's own, a custom build). It was the
+        // dashboard's Upload swatch button; it lives where frames are chosen now. Not offered
+        // in bulk edit, which applies library frames by code.
+        if (!(typeof _bulkEditing !== 'undefined' && _bulkEditing)) {
+            const cu = document.createElement('button'); cu.type = 'button'; cu.className = 'fb-custom'; cu.id = 'fbCustomSwatch';
+            cu.textContent = 'Custom swatch\u2026';
+            cu.title = 'For a frame no vendor lists: upload a photo of its face (outer edge on the left). The code comes from the file name.';
+            cu.onclick = () => { _fbClose(); const u = document.getElementById('swatchUpload'); if (u) u.click(); };
+            foot.appendChild(cu);
+        }
+    }
+}
+function _fbCardEl(c) {
+    const rec = c.rec, it = rec ? rec.item : null;
+    const el = document.createElement('div'); el.className = 'fb-frame' + (rec ? '' : ' missing');
+    el.setAttribute('data-fb-code', c.code);
+    const pic = document.createElement('div'); pic.className = 'fb-pic';
+    if (it) { const img = document.createElement('img'); img.loading = 'lazy'; img.alt = ''; img.src = _fbImgUrl(it); pic.appendChild(img); }
+    el.appendChild(pic);
+    const t = document.createElement('div'); t.className = 'fb-code'; t.textContent = c.code; el.appendChild(t);
+    const s = document.createElement('div'); s.className = 'fb-sub';
+    s.textContent = it ? [it.color, it.width ? it.width + '"' : ''].filter(Boolean).join(' · ') : 'Not in the library';
+    el.appendChild(s);
+    const used = _fbInUse().some(u => _fbNorm(u) === _fbNorm(c.code));
+    if (used) { const b = document.createElement('span'); b.className = 'fb-used'; b.textContent = 'In use'; el.appendChild(b); }
+    const star = document.createElement('button'); star.type = 'button'; star.className = 'fb-star' + (_fbOnShortlist(c.code) ? ' on' : '');
+    star.textContent = _fbOnShortlist(c.code) ? '★' : '☆';
+    star.title = _fbOnShortlist(c.code) ? 'Remove from this project’s shortlist' : 'Shortlist on this project';
+    star.onclick = (e) => { e.stopPropagation(); _fbSetShortlist([c.code], !_fbOnShortlist(c.code)); _fbRender(); };
+    el.appendChild(star);
+    const more = document.createElement('button'); more.type = 'button'; more.className = 'fb-more'; more.textContent = '⋯'; more.title = 'Groupings';
+    more.onclick = (e) => { e.stopPropagation(); _fbCardMenu(more, c.code); };
+    el.appendChild(more);
+    if (rec) {
+        el.title = [it.code, it.color, it.profile, it.width ? it.width + '" face' : '', it.depth ? it.depth + '" deep' : ''].filter(Boolean).join(' · ');
+        el.onclick = () => _fbPick(rec);
+    }
+    return el;
+}
+function _fbCardMenu(anchor, code) {
+    const mine = _fbMine(), k = _fbNorm(code);
+    const items = [{ head: 'ADD TO GROUPING' }];
+    mine.forEach(g => {
+        const has = g.codes.some(x => _fbNorm(x) === k);
+        items.push({ label: g.name, on: has, onClick: () => _fbToggleInGrouping(g.id, code, !has) });
+    });
+    items.push({ label: 'New grouping…', onClick: () => _fbNewGrouping([code]) });
+    _frameMenu(anchor, items);
+}
+function _fbToggleInGrouping(id, code, on) {
+    const list = _fbMine(), g = list.find(x => x.id === id); if (!g) return;
+    const k = _fbNorm(code), i = g.codes.findIndex(x => _fbNorm(x) === k);
+    if (on && i < 0) g.codes.push(code);
+    if (!on && i >= 0) g.codes.splice(i, 1);
+    if (_fbSaveMine(list)) _fbRender();
+}
+async function _fbNewGrouping(codes) {
+    const r = await _askFields({ title: 'New frame grouping', confirm: 'Create', fields: [
+        { key: 'name', label: 'Name', placeholder: 'e.g. Thin black modern' },
+        { key: 'note', label: 'Note (optional)', required: false, placeholder: 'When to reach for these' }] });
+    if (!r) return null;
+    const seen = {}, uniq = (codes || []).filter(c => { const k = _fbNorm(c); if (!k || seen[k]) return false; seen[k] = 1; return true; });
+    const g = { id: 'g' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), name: r.name, note: r.note || '', codes: uniq };
+    const list = _fbMine(); list.push(g);
+    if (!_fbSaveMine(list)) return null;
+    _fbState.src = 'mine:' + g.id; _fbRender();
+    return g;
+}
+async function _fbRenameGrouping(g) {
+    const r = await _askFields({ title: 'Rename grouping', confirm: 'Save', fields: [
+        { key: 'name', label: 'Name', value: g.name }, { key: 'note', label: 'Note (optional)', value: g.note || '', required: false }] });
+    if (!r) return;
+    const list = _fbMine(), x = list.find(y => y.id === g.id); if (!x) return;
+    x.name = r.name; x.note = r.note || '';
+    if (_fbSaveMine(list)) _fbRender();
+}
+function _fbDeleteGrouping(g) {
+    _confirmDestroy({ title: 'Delete “' + g.name + '”?', confirm: 'Delete', undoable: false,
+        body: 'The grouping is removed from this computer. The frames stay in the library and on any project using them.',
+        onConfirm: () => { const list = _fbMine().filter(x => x.id !== g.id); if (_fbSaveMine(list)) { _fbState.src = 'project'; _fbRender(); } } });
+}
+// The team list is a file in the repo. Sharing downloads the grouping in the exact
+// shape library/groupings.json holds, so adding it is a paste, never a rewrite.
+function _fbGroupingFileText(g) {
+    return JSON.stringify({ type: 'frame-grouping', id: g.id, name: g.name, note: g.note || '', codes: g.codes.slice() }, null, 2) + '\n';
+}
+function _fbShareGrouping(g) {
+    const slug = String(g.name || 'grouping').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'grouping';
+    const blob = new Blob([_fbGroupingFileText(g)], { type: 'application/json' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'frame-grouping-' + slug + '.json'; a.click();
+    setTimeout(() => { try { URL.revokeObjectURL(a.href); } catch (e) {} }, 4000);
+    showInfoModal('Grouping ready to share', 'Saved as frame-grouping-' + slug + '.json in your Downloads. Send that file to whoever looks after the FRAME library. Once it is added to library/groupings.json it appears under Team groupings for everyone, and yours is marked as shared.');
+}
+// Pick = the existing dropdown path, so a frame chosen here is applied exactly as before.
+function _fbPick(rec) {
+    const v = document.getElementById('libVendor'), c = document.getElementById('libCollection');
+    if (!v || !c) return;
+    v.value = rec.vendor; updateDashCollectionDropdown();
+    c.value = rec.collection; updateDashCustomSwatchDropdown();
+    _fbClose();
+    loadDashFromCustomLibrary(rec.idx);
+}
+
 function loadDashCustomSwatch(e) {
     const f = e.target.files[0]; if(!f) return;
+    e.target.value = '';   // the same file can be picked again
     const n = f.name.split('.')[0]; const r = new FileReader();
     r.onload = e => {
         document.getElementById('fType').value = 'image';
-        document.getElementById('fTypeBtnLibrary').classList.add('active');
-        document.getElementById('fTypeBtnSolid').classList.remove('active');
         document.getElementById('view-dashboard').style.setProperty('--frame-bg', `url(${e.target.result})`);
         dashProjectData[dashSelectedRowIndex].fType = 'image'; dashProjectData[dashSelectedRowIndex].swatchDataUrl = e.target.result; dashProjectData[dashSelectedRowIndex].swatchName = n;
-        document.getElementById('m_fCode').value = n; document.getElementById('swatchSelectedDisplay').textContent = 'Frame';
-        document.getElementById('swatchThumbPreview').style.backgroundImage = `url(${e.target.result})`;
+        document.getElementById('m_fCode').value = n; dashProjectData[dashSelectedRowIndex].fCode = n;
+        _dashFrameCardSync(dashProjectData[dashSelectedRowIndex]);
         dashActiveImageObj.src = e.target.result; dashActiveImageObj.onload = () => syncDashAndCalculate();
     };
     r.readAsDataURL(f);
@@ -14918,12 +15702,24 @@ function renderFrameToCanvas(d, swatchImg, opts) {
         // FLOATER: opening is fully transparent so artwork composited behind shows
         // through. Bake an outward-projecting drop shadow on the boundary onto the
         // surrounding rail face. Shadow does NOT fall on the artwork.
+        // The reveal (19.01): the quarter inch inside the face is the slot down into
+        // the floater, so it is darkened, not left as rail.
+        const gapPx = _floaterRevealOf(d.floaterInset !== undefined ? d.floaterInset : 0.75, 'in') * dpi;
+        if (gapPx > 0) {
+            x.save();
+            x.beginPath();
+            x.rect(aX - gapPx, aY - gapPx, aW + gapPx * 2, aH + gapPx * 2);
+            x.rect(aX, aY, aW, aH);
+            x.fillStyle = 'rgba(0,0,0,' + Math.min(1, 0.6 * _fx('gap')) + ')';
+            x.fill('evenodd');
+            x.restore();
+        }
         x.save();
         x.beginPath();
         x.rect(-pad, -pad, c.width, c.height);
         x.rect(aX, aY, aW, aH);
         x.clip('evenodd');
-        { const _f = _fxSh('frame', 25, 3, 0.8); x.shadowColor = 'rgba(0,0,0,' + _f.a + ')'; x.shadowBlur = _f.b; x.shadowOffsetX = 0; x.shadowOffsetY = _f.o; }
+        { const _f = _fxSh('gap', 25, 3, 0.8); x.shadowColor = 'rgba(0,0,0,' + _f.a + ')'; x.shadowBlur = _f.b; x.shadowOffsetX = 0; x.shadowOffsetY = _f.o; }
         x.lineWidth = 6; x.strokeStyle = '#000';
         x.strokeRect(aX + 4, aY + 4, aW - 8, aH - 8);
         x.restore();
@@ -16672,6 +17468,7 @@ async function _scanFrameLibrary(norm) {
 function _prettyVendor(v) {
     if (!v) return '';
     if (/^mich/i.test(v)) return 'Michelangelo';
+    if (/^larson/i.test(v)) return 'Larson-Juhl';
     return v.replace(/[-_]+/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 }
 async function _loadFrameLibrary() {
@@ -16932,8 +17729,11 @@ function _drawFrameRecPage(doc, logos, pageNum, meta, pageArg) {
         const colFrames = frames.slice(c * perCol, (c + 1) * perCol);
         if (!colFrames.length) continue;
         const cx = M + c * (colW + colGap);
+        // ONE GRID (18.93): every column shares the row height of the fullest column, so
+        // with an odd count the short column leaves its last cell empty instead of
+        // stretching its cards to fill the page (they read as bigger frames).
         const nRows = colFrames.length;
-        const rowH = (listBot - contentTop - rowGap * (nRows - 1)) / nRows;
+        const rowH = (listBot - contentTop - rowGap * (perCol - 1)) / perCol;
         colFrames.forEach((f, i) => {
             const y = contentTop + i * (rowH + rowGap);
             // Corner sample (real corner image, never the tiled mockup swatch)
@@ -19071,7 +19871,11 @@ inner += '<div style="position:absolute; left:' + (g.planX * 100) + '%; top:' + 
             // rows ran under the frame and profile boxes in the very preview a designer
             // checks the page in. tpl.spec.y is the first BASELINE, as it is in the PDF.
             if (tpl.spec && specPairs.length) {
-                const _sfs = 8.5 / 540 * h, _slead = 13 / 540 * h, _sfam = _fontCss(_specFont(), 'serif');
+                // Same fit as the PDF (_specRowFit): stop above the frame strip / thumbnails.
+                const _fb = (tpl.plan && tpl.plan.y != null) ? tpl.plan.y : (tpl.elevation && tpl.elevation.y != null) ? tpl.elevation.y : null;
+                const _ffl = (_fb == null) ? 540 : (_fb * 540 - 6 - (tpl.frameDetail ? ((tpl.frameDetail.h != null ? tpl.frameDetail.h : .16) + (tpl.frameDetail.gap != null ? tpl.frameDetail.gap : .022)) * 540 : 0));
+                const _rf = _specRowFit(specPairs.length, tpl.spec.y * 540, _ffl);
+                const _sfs = _rf.size / 540 * h, _slead = _rf.lead / 540 * h, _sfam = _fontCss(_specFont(), 'serif');
                 let rows = '';
                 specPairs.forEach((ln, k) => {
                     rows += '<div style="position:absolute; left:0; right:0; top:' + (k * _slead).toFixed(1) + 'px; display:flex; align-items:baseline; gap:' + (4 / 540 * h).toFixed(1) + 'px; white-space:nowrap;">'
@@ -19867,6 +20671,21 @@ function _dsSpecSlotsInto(host, desc, ovKey, group) {
         txt.textContent = (SPEC_SLOT_LABELS[k] || [k])[0];
         row.appendChild(txt);
         row.title = (SPEC_SLOT_LABELS[k] || [k, ''])[1];
+        // NO ROOM (18.89): the strip shrinks to fit, then leaves the profiles off, then
+        // gives way. Say so beside the tick that lost out, from what the page REPORTED
+        // drawing (_frameStripFit), never a prediction.
+        let _fit = null; try { _fit = _frameStripFit[_deckPageKey(desc)] || null; } catch (e) {}
+        const _noRoom = cur[k] && ((k === 'profile' && (_fit === 'noProfile' || _fit === 'none')) || (k === 'frame' && _fit === 'none'));
+        if (_noRoom) {
+            const w = document.createElement('span');
+            w.className = 'ds-noroom'; w.setAttribute('data-noroom', k);
+            w.textContent = '\u26A0 no room';
+            w.title = (k === 'profile')
+                ? 'Too many mouldings for corners and profiles side by side on this page, even shrunk, so the profiles are left off and the corners kept. Every moulding still prints as a Frame Code line. Untick Floorplan or Elevation to give them room.'
+                : 'Too many mouldings to fit the frame strip on this page, even shrunk. Every moulding still prints as a Frame Code line. Untick Floorplan or Elevation to give it room.';
+            w.style.cssText = 'font-size:var(--fs-50); color:var(--warn); cursor:help;';
+            row.appendChild(w);
+        }
         // Say which pins are this page's own, so the deck's setting is never
         // silently overruled by an exception nobody can see.
         if (Object.prototype.hasOwnProperty.call(ov, k)) {
@@ -20303,6 +21122,11 @@ async function _dsRenderCoverPreview() {
         // here rather than being replaced by a worse render of itself.
         const pg = (sec.desc.kind === 'layout' || sec.desc.kind === 'fixed') ? sec.desc.page : null;
         const hasEls = !!(pg && Array.isArray(pg.elements) && pg.elements.length);
+        // 19.06: AN ELEMENT PAGE IS PICTURED BY THE RAIL'S OWN BUILDER, _dsElementPageThumbHTML:
+        // page background (image, colour, gradient, tint), dark-page ink, notes and stamps,
+        // and the footer. The bare _deckMockHTML painted the elements on white, so a cover
+        // with a background image showed none of it here, and Refresh redrew the same thing.
+        if (hasEls) { holder.innerHTML = _dsElementPageThumbHTML(sec.desc, w, h, undefined, true); return; }
         holder.innerHTML = '<div style="position:absolute; inset:0; background:#fff;">' + _deckMockHTML(sec.desc, w, h) + '</div>';
         // THE FOOTER IS PART OF THE PAGE, so a preview without one is a preview of
         // something that does not print. Canvas-rendered pages already carry it, drawn
@@ -20313,7 +21137,6 @@ async function _dsRenderCoverPreview() {
         // Deliberately not behind a toggle: it is baked into the canvas on the other
         // half of the tabs, so a switch could only ever hide it on some of them, and a
         // control that works on half the tabs is worse than no control.
-        if (hasEls) { try { _dsAddFooter(holder, w, h, sec.desc); } catch (e) {} return; }
     } catch (e) { holder.innerHTML = msg('Rendering\u2026'); }
     await _dsBrandFontsReady();
     if (token !== _dsPreviewToken) return;
@@ -26957,7 +27780,7 @@ function _popupApplyTextStyle(a, patch, tgtSel) {
     if (typeof scheduleAutosave === 'function') scheduleAutosave();
     return false;
 }
-function _dsCopySelection() {
+function _dsCopySelectionHere() {
     const _srcKey = (_dsPages && _dsPages[_dsIndex]) ? _deckPageKey(_dsPages[_dsIndex]) : null;
     // Mixed selection (elements + annotations together) copies BOTH groups.
     if (_mbSel && _mbSel.length && _mbSelAnn && _mbSelAnn.length) {
@@ -26984,6 +27807,25 @@ function _dsCopySelection() {
         if (idxs.length) { _dsClipboard = { kind: 'mb', items: idxs.map(i => JSON.parse(JSON.stringify(els[i]))).filter(Boolean), srcKey: _srcKey }; return true; }
     }
     return false;
+}
+// COPY REACHES THE OTHER TABS (18.83). Ctrl+C filled this tab's _dsClipboard only, so
+// two projects side by side could not share a layout. A copy is now also posted on the
+// tab channel and becomes the clipboard of every other FRAME tab, so Ctrl+V there pastes
+// it, at the same place on the page. Images travel inside the copied items.
+function _dsCopySelection() {
+    const ok = _dsCopySelectionHere();
+    if (ok && _dsClipboard) {
+        const ch = _tabChannel();
+        if (ch) { try { ch.postMessage({ t: 'clip', from: _autosaveSession, clip: _dsClipboard }); } catch (e) {} }
+    }
+    return ok;
+}
+// Tab-channel messages other than presence.
+function _tabOnMessage(m) {
+    if (m.t === 'clip' && m.clip && m.from !== _autosaveSession) {
+        // From another project: no page here is "the same page", so it pastes in place.
+        _dsClipboard = Object.assign({}, m.clip, { srcKey: null, fromTab: true });
+    }
 }
 function _dsPasteClipboard() {
     if (!_dsClipboard) return false;
@@ -28594,7 +29436,7 @@ function _dsThumbBadgeHTML() {
 // the exact same engine the live page and its mirror already use \u2014 so a
 // thumbnail can't wrap or position text any differently than what's on
 // screen while editing.
-function _dsElementPageThumbHTML(desc, wpx, hpx, pageIndex) {
+function _dsElementPageThumbHTML(desc, wpx, hpx, pageIndex, noBadge) {
     const key = (typeof _deckPageKey === 'function') ? _deckPageKey(desc) : null;
     // Reuse _dsPageThemeCss itself rather than re-deriving the background —
     // it already handles zoom/pan/aspect correctly via _coverRect, and its
@@ -28651,7 +29493,7 @@ function _dsElementPageThumbHTML(desc, wpx, hpx, pageIndex) {
         }
         footerHtml = tmp.innerHTML;
     } catch (e) {}
-    return '<div style="position:absolute;inset:0;overflow:hidden;' + bgDecl + '">' + _mbThumbInner({ elements: els }, wpx, hpx, key) + _dsAnnotationsThumbHTML(annList, wpx, hpx, key) + footerHtml + '</div>' + _dsThumbBadgeHTML();
+    return '<div style="position:absolute;inset:0;overflow:hidden;' + bgDecl + '">' + _mbThumbInner({ elements: els }, wpx, hpx, key) + _dsAnnotationsThumbHTML(annList, wpx, hpx, key) + footerHtml + '</div>' + (noBadge ? '' : _dsThumbBadgeHTML());
 }
 const _dsThumbLast = {};   // pageId -> last rendered dataURL (anti-flash)
 function _dsPaintThumb(ck, url) {
@@ -30629,7 +31471,6 @@ function _fpAddCodes(catKey, n, opts) {
     for (let i = 0; i < k; i++) {
         const row = JSON.parse(JSON.stringify(dashDefaultData));
         lenFields.forEach(f => { const v = parseFloat(row[f]); if (!isNaN(v)) row[f] = dashFmt(v * _f); });
-        row.fType = 'color'; row.fColor = '#000000'; row.fCode = 'Standard Black';
         row.id = k === 1 ? code : code + letters[i];
         row.category = catKey || '';
         row.qty = 0;
@@ -30639,7 +31480,7 @@ function _fpAddCodes(catKey, n, opts) {
         if (_isFlatGraphic(row.product)) {
             row.bleed = dashFmt(FLAT_GRAPHIC_BLEED_IN * _f);
             if (!(row.material || '').trim()) row.material = FLAT_GRAPHIC_APPLICATION[row.product] || '';
-        }
+        } else _defaultFrameApply(row);   // 19.09: a real moulding, not a flat colour
         dashProjectData.push(row);
     }
     // Pushed at the end of the schedule, then sorted in behind its own type: an EGD
@@ -35151,16 +35992,38 @@ function _drawGroupElevOutline(doc, er, tx, ty, tw, th) {
         if (bbIn > 0 && bbIn < wallHin) { const byy = ty + (1 - bbIn / totalHin) * th; doc.setLineWidth(0.8); doc.line(wx, byy, wx + wW, byy); }
     } catch (e) {}
 }
+// THE STRIP SHRINKS BEFORE IT GIVES WAY (18.89). It used to drop itself whole the
+// moment corners + profiles were wider than the band, so a group page with three
+// mouldings lost every corner as soon as Moulding profile was ticked. Now, in order:
+// draw the images smaller (down to FRAME_STRIP_MIN_SCALE, bottom-aligned so the codes
+// stay on the Floorplan / Elevation caption baseline; codes never shrink), then leave
+// the PROFILES off and keep the corners, and only then drop the strip. What happened is
+// recorded per page (_noteStripFit) so the panel can say so beside the tick.
+const FRAME_STRIP_MIN_SCALE = 0.5;
+const _frameStripFit = {};          // page key -> 'full' | 'scaled' | 'noProfile' | 'none'
+let _frameStripFitTimer = null;
+function _noteStripFit(fit) {
+    const k = _curPageKey; if (!k) return;
+    if (_frameStripFit[k] === fit) return;
+    _frameStripFit[k] = fit;
+    // The panel is built before an async page render reports; one debounced rebuild
+    // closes the gap and cannot loop (the second pass records the same value).
+    if (_frameStripFitTimer) return;
+    _frameStripFitTimer = setTimeout(() => {
+        _frameStripFitTimer = null;
+        try { if (typeof _dsIsOpen === 'function' && _dsIsOpen()) _dsRenderTools(); } catch (e) {}
+    }, 80);
+}
 function _drawFrameStrip(doc, frames, box) {
     if (!frames || !frames.length) return null;
     const LABEL_H = 9, GAP = 10, MIN_CELL = 26;
     const imgH = Math.max(16, box.height - LABEL_H);
-    const wideAt = (im) => {
+    const wideAt = (im, h) => {
         try {
             const iw = im.naturalWidth || im.width || 0, ih = im.naturalHeight || im.height || 0;
-            if (iw > 0 && ih > 0) return Math.min(imgH * 1.4, (iw / ih) * imgH);
+            if (iw > 0 && ih > 0) return Math.min(h * 1.4, (iw / ih) * h);
         } catch (e) {}
-        return imgH * 0.5;                                   // unknown natural size: assume a tall chip
+        return h * 0.5;                                      // unknown natural size: assume a tall chip
     };
     // On a template card there are no library images at all, so both halves get a
     // reserved slot: the corner chip in the moulding's own colour (what a colour-only
@@ -35172,13 +36035,14 @@ function _drawFrameStrip(doc, frames, box) {
     const wantCorner = (box.corner !== false);
     const wantProfile = (box.profile !== false);
     if (!wantCorner && !wantProfile) return null;
-    const cells = frames.map(f => {
-        const cw = wantCorner ? (f.img ? wideAt(f.img) : imgH * 0.45) : 0;
+    const cellsAt = (sc, withProfile) => frames.map(f => {
+        const h = imgH * sc;
+        const cw = wantCorner ? (f.img ? wideAt(f.img, h) : h * 0.45) : 0;
         // 0.6, not the ~0.9 a real profile drawing tends to measure: three cells plus
         // gaps has to clear `box.maxW` or the whole strip returns null and vanishes
         // from the one card that exists to show it. Deliberate headroom, not a guess
         // at the drawing's aspect.
-        const pw = !wantProfile ? 0 : (f.profileImg ? wideAt(f.profileImg) : (box.swatch ? imgH * 0.6 : 0));
+        const pw = !withProfile ? 0 : (f.profileImg ? wideAt(f.profileImg, h) : (box.swatch ? h * 0.6 : 0));
         // A CELL IS AT LEAST AS WIDE AS ITS OWN CODE. The label is left-aligned on the
         // cell, and a corner chip is routinely much narrower than the code printed
         // under it - MICH 432-29 measures ~33pt at 6.5pt against a 26pt floor cell - so
@@ -35193,19 +36057,70 @@ function _drawFrameStrip(doc, frames, box) {
         try { doc.setFont(_font('serif'), 'italic'); doc.setFontSize(SPEC_THUMB_CAP_SIZE); lw = doc.getTextWidth(('' + (f.code || '')).slice(0, 18)) || 0; } catch (e) {}
         return { f: f, cw: cw, pw: pw, w: Math.max(MIN_CELL, lw, cw + (pw ? 3 + pw : 0)) };
     });
-    const total = cells.reduce((a, c) => a + c.w, 0) + GAP * (cells.length - 1);
+    // The gap between mouldings tightens before anything shrinks or wraps (18.97): a cell is
+    // already as wide as its code, so 10pt gaps were most of what sent a strip to two rows.
+    const GAP_MIN = 4;
+    let gapNow = GAP;
+    const totalOf = (cs, g) => cs.reduce((a, c) => a + c.w, 0) + (g == null ? gapNow : g) * (cs.length - 1);
     // Measure only: the width this strip WOULD take at this height, drawing nothing.
-    // The left-column layout sizes its one row of thumbnails off it.
-    if (box.measure) return total;
-    if (total > box.maxW) return null;
+    // The left-column layout sizes its one row of thumbnails off it (and shrinks
+    // its own row), so a measure is always full size.
+    if (box.measure) return totalOf(cellsAt(1, wantProfile));
+    // Full size first: the widest gap that fits (10pt down to 4pt). Only at the tightest
+    // gap do the images start to shrink.
+    const shrinkToFit = (withProfile) => {
+        let sc = 1, cs = cellsAt(1, withProfile);
+        const fixed = cs.reduce((a, c) => a + c.w, 0), n = cs.length;
+        if (n > 1 && fixed + GAP_MIN * (n - 1) <= box.maxW) {
+            const g = Math.min(GAP, (box.maxW - fixed) / (n - 1));
+            return { sc: 1, cells: cs, ok: true, withProfile: withProfile, gap: g };
+        }
+        while (totalOf(cs, GAP_MIN) > box.maxW && sc > FRAME_STRIP_MIN_SCALE) {
+            sc = Math.max(FRAME_STRIP_MIN_SCALE, sc * 0.92); cs = cellsAt(sc, withProfile);
+        }
+        return { sc: sc, cells: cs, ok: totalOf(cs, n > 1 ? GAP_MIN : GAP) <= box.maxW, withProfile: withProfile, gap: n > 1 ? GAP_MIN : GAP };
+    };
+    // TWO ROWS IN THE SAME HEIGHT (18.90). Past half size in one row, the cells wrap
+    // into two rows inside the band's own height, so the art and the plan / elevation
+    // never move. Each row's images are half the band less a label and a gap; the
+    // LOWER row's codes sit on the band's caption baseline like a single row's.
+    const ROW_GAP = 4;
+    const rowImgH = (box.height - 2 * LABEL_H - ROW_GAP) / 2;
+    const twoRows = (withProfile) => {
+        if (frames.length < 2 || rowImgH < 12) return { ok: false };
+        let sc = rowImgH / imgH, cs = cellsAt(sc, withProfile);
+        const n1 = Math.ceil(cs.length / 2);
+        const widest = (c) => Math.max(totalOf(c.slice(0, n1), GAP_MIN), totalOf(c.slice(n1), GAP_MIN));
+        const floor = sc * FRAME_STRIP_MIN_SCALE;
+        while (widest(cs) > box.maxW && sc > floor) { sc = Math.max(floor, sc * 0.92); cs = cellsAt(sc, withProfile); }
+        return { sc: sc, cells: cs, ok: widest(cs) <= box.maxW, withProfile: withProfile, rows: 2, n1: n1, gap: GAP_MIN };
+    };
+    let fitR = shrinkToFit(wantProfile);
+    if (!fitR.ok) { const t = twoRows(wantProfile); if (t.ok) fitR = t; }
+    if (!fitR.ok && wantProfile && wantCorner) {
+        fitR = shrinkToFit(false);
+        if (!fitR.ok) { const t = twoRows(false); if (t.ok) fitR = t; }
+    }
+    if (!fitR.ok) { if (!box.noRecord) _noteStripFit('none'); return null; }
+    if (!box.noRecord) _noteStripFit((wantProfile && !fitR.withProfile) ? 'noProfile' : fitR.rows === 2 ? 'twoRows' : (fitR.sc < 1 ? 'scaled' : 'full'));
+    gapNow = (fitR.gap != null) ? fitR.gap : GAP;
+    const hS = imgH * fitR.sc;
+    // Each row: its cells, its image top, its caption baseline. One row is the old case.
+    const rowsOut = (fitR.rows === 2)
+        ? [{ cells: fitR.cells.slice(0, fitR.n1), top: box.top + (rowImgH - hS), base: box.top + rowImgH + LABEL_H - 1 },
+           { cells: fitR.cells.slice(fitR.n1), top: box.top + rowImgH + LABEL_H + ROW_GAP + (rowImgH - hS), base: box.top + imgH + LABEL_H - 1 }]
+        : [{ cells: fitR.cells, top: box.top + (imgH - hS), base: box.top + imgH + LABEL_H - 1 }];
+    let stripLeft = box.right;
+    rowsOut.forEach(row => {
+    const cells = row.cells, total = totalOf(cells), drawTop = row.top;
     let x = box.right - total;
     const left = x;
     cells.forEach(c => {
         const f = c.f;
         let drawnW = 0;
         if (f.img && wantCorner) {
-            try { doc.addImage(f.img, 'JPEG', x, box.top, c.cw, imgH); drawnW = c.cw; }
-            catch (e) { try { _addPngImage(doc, f.img, x, box.top, c.cw, imgH); drawnW = c.cw; } catch (e2) { drawnW = 0; } }
+            try { doc.addImage(f.img, 'JPEG', x, drawTop, c.cw, hS); drawnW = c.cw; }
+            catch (e) { try { _addPngImage(doc, f.img, x, drawTop, c.cw, hS); drawnW = c.cw; } catch (e2) { drawnW = 0; } }
         }
         if (!drawnW && wantCorner) {
             // Colour-only frame, or a library with no corner photo: a filled
@@ -35213,12 +36128,12 @@ function _drawFrameStrip(doc, frames, box) {
             // tick as well, or an unticked corner paints a zero-width rect where the
             // chip used to be.
             drawnW = c.cw;
-            try { const col = _annHexToRgb(f.color || '#888888'); doc.setFillColor(col.r, col.g, col.b); doc.rect(x, box.top, drawnW, imgH, 'F'); } catch (e) {}
+            try { const col = _annHexToRgb(f.color || '#888888'); doc.setFillColor(col.r, col.g, col.b); doc.rect(x, drawTop, drawnW, hS, 'F'); } catch (e) {}
         }
         if (f.profileImg && c.pw) {
-            try { _addPngImage(doc, f.profileImg, x + drawnW + 3, box.top, c.pw, imgH); } catch (e) {}
+            try { _addPngImage(doc, f.profileImg, x + drawnW + 3, drawTop, c.pw, hS); } catch (e) {}
         } else if (box.swatch && c.pw) {
-            _specSwatchBox(doc, x + drawnW + 3, box.top, c.pw, imgH);
+            _specSwatchBox(doc, x + drawnW + 3, drawTop, c.pw, hS);
         }
         // The code is a CAPTION, set exactly like Floorplan and Elevation beside it
         // (_specThumbCaption): it was bold sans 6.5 in a darker grey, so the one label
@@ -35234,11 +36149,13 @@ function _drawFrameStrip(doc, frames, box) {
         // identifies the moulding. Floored at the strip's own left bound so a code
         // wider than the whole band cannot walk out of the other side.
         // Left-aligned on the cell, which is now guaranteed wide enough to hold it.
-        _specThumbCaption(doc, ('' + (f.code || '')).slice(0, 18), x, box.top + imgH + LABEL_H - 1);
-        x += c.w + GAP;
+        _specThumbCaption(doc, ('' + (f.code || '')).slice(0, 18), x, row.base);
+        x += c.w + gapNow;
+    });
+    stripLeft = Math.min(stripLeft, left);
     });
     doc.setTextColor(20, 20, 20);
-    return left;
+    return stripLeft;
 }
 // Group A/B/C set pages (stacked / side-by-side / to-scale / shared specs). The
 // body below has independent exit paths — one per arrangement — and NONE of them
@@ -35654,7 +36571,7 @@ async function _drawSpecSetPageBody(doc, logos, pageNum, meta, unit, tplKey, ctx
                 // Still too wide at the floor: the strip gives way, the house rule for a
                 // part that cannot fit (every code still prints as a Frame Code row).
                 if (rowW(rowH) > colW && useStrip) {
-                    useStrip = false;
+                    useStrip = false; _noteStripFit('none');
                     rowH = Math.max(MIN_H, Math.min(budget - capGap, colW / 1.7));
                     while (rowH > MIN_H && rowW(rowH) > colW) rowH = Math.max(MIN_H, rowH * 0.94);
                 }
@@ -39188,6 +40105,19 @@ function _specTplMap(tpl, PW, PH) {
 // size and position. It brings its own ticks (`slots`), title, subheading and wall, skips
 // the artwork, the spec rows and the footer, and gets back where the specs go and the top
 // of the thumbnails, so its shared spec block can be fitted between them.
+// ONE ANSWER TO HOW TIGHT THE SPEC ROWS SET (18.94), shared by the PDF and the instant
+// preview (_deckMockHTML) so they cannot disagree. Points on a 540pt-tall page. The house
+// rhythm is 8.5pt type on 13pt; a list that would run past `floor` (the top of the frame
+// strip / thumbnails under it) tightens to fit, down to 9pt, and the type follows the
+// spacing down (never under 7pt) so the rows do not touch.
+function _specRowFit(n, top, floor) {
+    if (!(n > 1) || !(floor > top)) return { lead: 13, size: 8.5 };
+    // The floor is measured from the NOMINAL thumbnail top, which only moves down, so it
+    // errs safe: a list within 4pt of it still clears, and keeps the house rhythm.
+    if (top + 13 * (n - 1) <= floor + 4) return { lead: 13, size: 8.5 };
+    const lead = Math.max(9, (floor - top) / (n - 1));
+    return { lead: lead, size: Math.max(7, Math.min(8.5, lead * 8.5 / 13 + 0.6)) };
+}
 async function _drawSpecPageTemplate(doc, logos, pageNum, meta, r, tplKey, ctx) {
     const PW = ctx.PW, PH = ctx.PH;
     const SHEET = (ctx && ctx.sheet) || null;
@@ -39316,18 +40246,20 @@ async function _drawSpecPageTemplate(doc, logos, pageNum, meta, r, tplKey, ctx) 
         // short of them (never below 10pt). Measured from the NOMINAL top of that
         // bottom row, which only ever moves down, so the estimate errs safe. Unshifted
         // pages keep their 13pt rhythm whatever their length.
-        let _lead = 13;
-        if (_specShift > 0 && specs.lines.length > 1) {
+        // 18.94: EVERY page, not only a shifted one. A float-mount piece prints ~15 rows
+        // and ran its last four into the frame corner and profile on an ordinary page.
+        let _lead = 13, _size = 8.5;
+        {
             const _bot = (tpl.plan && tpl.plan.y != null) ? tpl.plan.y : (tpl.elevation && tpl.elevation.y != null) ? tpl.elevation.y : null;
             let _floor = SR.B;
             if (_bot != null) {
                 _floor = py(_bot) - 6;
                 if (tpl.frameDetail) _floor -= ph(tpl.frameDetail.h != null ? tpl.frameDetail.h : .16) + ph(tpl.frameDetail.gap != null ? tpl.frameDetail.gap : .022);
             }
-            const _need = sy + 13 * (specs.lines.length - 1);
-            if (_need > _floor) _lead = Math.max(10, (_floor - sy) / (specs.lines.length - 1));
+            const _fit = _specRowFit(specs.lines.length, sy, _floor);
+            _lead = _fit.lead; _size = _fit.size;
         }
-        doc.setFontSize(8.5);
+        doc.setFontSize(_size);
         specs.lines.forEach(ln => {
             doc.setFont(_font('spec'), 'bold'); doc.setTextColor(20, 20, 20); doc.text(ln.label, sx, sy);
             const lw = doc.getTextWidth(ln.label);
@@ -41517,6 +42449,7 @@ function applyIdRename(oldId, newId, quiet) {
 }
 
 function initElevControls() {
+    _elevDockSync();
     // Window panels first, and BEFORE the no-frames early return below: glass is
     // independent of frames, and a window-film-only wall legitimately has none. Same
     // trap as _drawSpecSetPage's footer — calling it at the top covers every exit.
@@ -42057,6 +42990,19 @@ function showConfirmModal(title, body, yesLabel, noLabel, onYes, onNo, opts) {
         if (typeof onNo === 'function') onNo();
     };
     btnRow.appendChild(yesBtn);
+    // A second answer (19.04), e.g. "Delete wall, keep pieces" beside "Delete wall and pieces".
+    if (o.alt && o.alt.label) {
+        const altBtn = document.createElement('button');
+        altBtn.className = 'action-btn btn-secondary';
+        altBtn.style.height = '32px'; altBtn.style.marginTop = '5px';
+        altBtn.innerText = o.alt.label;
+        altBtn.setAttribute('data-confirm-alt', '');
+        altBtn.onclick = () => {
+            document.getElementById('infoModal').style.display = 'none';
+            if (typeof o.alt.onClick === 'function') o.alt.onClick();
+        };
+        btnRow.appendChild(altBtn);
+    }
     btnRow.appendChild(noBtn);
     const _im2 = document.getElementById('infoModal'); _im2.style.zIndex = '100010'; _im2.style.display = 'flex';
 }
@@ -42145,7 +43091,7 @@ function _askText(title, label, value, confirm) {
 function _confirmDestroy(o) {
     const tail = o.undoable ? 'You can undo this with Ctrl+Z.' : 'This can’t be undone.';
     const body = (o.body ? o.body + String.fromCharCode(10, 10) : '') + tail;
-    showConfirmModal(o.title, body, o.confirm || 'Delete', 'Cancel', o.onConfirm, null, { danger: true });
+    showConfirmModal(o.title, body, o.confirm || 'Delete', 'Cancel', o.onConfirm, null, { danger: true, alt: o.alt });
 }
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -42573,7 +43519,8 @@ const HELP_REFERENCE_DATA = [
         entries: [
             { title: '+ Add (new row)', body: `Creates a new row with default values in the current unit. Each row gets an item code like <strong>ART.001</strong>.` },
             { title: 'Product type', body: `Seven options: <strong>Framed Art</strong>, <strong>Framed Art (Shadow Box)</strong>, <strong>Framed Canvas (Floater)</strong>, <strong>Frameless Canvas (Wrapped)</strong>, <strong>Sourced Object</strong>, <strong>Wallcovering (EGD)</strong> and <strong>Window Film (WF)</strong>. A canvas hides the mat controls. The two flat graphics hide the mats and dim the frame fields, because the overall size IS the graphic, and add a Material field. Sourced Object currently behaves as Framed Art.` },
-            { title: 'Frame profile (Library / Solid)', body: `<strong>Library</strong> uses real moulding profiles from the synced library, with depth and rabbet if the file name carries them. <strong>Solid</strong> uses a flat colour for quick mockups.` },
+            { title: 'Artwork', body: `Click the empty opening in the preview, or drag a picture onto it. To swap a picture, drop another one on it, or hover it and press <strong>Replace</strong>; <strong>Remove</strong> takes it off. Drag the picture to pan it; the row under the sizes has its zoom, <strong>Reset</strong>, <strong>1:1</strong> (fit the frame to the picture) and <strong>Remove</strong>.` },
+            { title: 'Frame', body: `The square under <strong>Frame</strong> shows the item's moulding, with Frame Code and Color / Texture beside it and its colour, width and vendor on the heading. Click it (or <strong>Change</strong>) to open the frame browser and pick from every vendor's library, this project's frames or a saved grouping. Picking a frame fills in its width, depth and rabbet, and the Color / Texture line unless you typed your own. New items start in <strong>MICH-132-29</strong>. For a frame no vendor lists, use <strong>Custom swatch…</strong> at the foot of the frame browser.` },
             { title: 'Mat 1, Mat 2, Faux Mat', body: `<strong>Mat 1</strong> is the main mat (set top, bottom, left and right, or all around). <strong>Mat 2</strong> adds a reveal under it. <strong>Faux Mat</strong> is a printed white border on the paper instead of a mat board.` },
             { title: 'Sync mat colours (chain icon)', body: `While it is on, Mat 2 takes Mat 1's colour. Turn it off to set them separately.` },
             { title: 'Float mount', body: `Switch the panel to <strong>FLOAT</strong>: the art floats on a paper backing with a white margin instead of a mat, with Paper Size, Paper Margin and White Border set separately. It needs at least 0.625" of rabbet.` },
@@ -42587,11 +43534,12 @@ const HELP_REFERENCE_DATA = [
     {
         id: 'elevation',
         title: 'Elevations',
-        intro: `Each wall is its own drawing. The rail on the left lists the walls. The sidebar has three tabs: <strong>Art</strong> for the pieces, <strong>Context</strong> for what is in the room, and <strong>Glass</strong> for window panels.`,
+        intro: `Each wall is its own drawing. The rail on the left lists the walls. The sidebar has four tabs: <strong>Art</strong> for the pieces, <strong>Guides</strong> for what the drawings show, <strong>Context</strong> for what is in the room, and <strong>Glass</strong> for window panels.`,
         entries: [
             { title: 'Walls and the rail', body: `Click a wall in the rail to open it and drag walls to reorder them. <strong>+ Add Wall</strong> asks which item code the wall is for: one that is not on a wall yet, or a new code of a type and frame set. Every wall belongs to a code, so none is left out of the deck. The &times; on a wall deletes it, and that can be undone.` },
             { title: 'Wall mode: ART, EGD, WF', body: `<strong>ART WALL</strong> is the default: framed art hangs on it. <strong>EGD WALL</strong> makes the wall a graphic surface: a wallcovering fills it and stays inside it, above the baseboard. <strong>WF WALL</strong> builds a standard window elevation for window film and opens the Glass tab. A wall with glass on it normally stays an ART wall.` },
-            { title: 'Adding pieces', body: `<strong>Add &amp; Arrange</strong> in the Art tab adds the pieces you tick in one go. From the dashboard, pick a piece in <strong>Push to Wall</strong> and press <strong>Send</strong>.` },
+            { title: 'The tool bar', body: `The bar to the left of the wall holds the elevation tools. <strong>Select</strong> (<span class="help-kbd">V</span>) puts a tool down, <strong>Measure</strong> (<span class="help-kbd">M</span>) draws your own dimension line and <strong>Context block</strong> (<span class="help-kbd">C</span>) draws a door, window or piece of furniture. Below them: Add frames, Sort A&ndash;Z, Align, Group dimension, Fit to wall, Item codes, and the keyboard shortcuts.` },
+            { title: 'Adding pieces', body: `<strong>Add frames</strong> (the framed plus in the tool bar, or the button over the frame list) adds the pieces you tick in one go. From the dashboard, pick a piece in <strong>Push to Wall</strong> and press <strong>Send</strong>.` },
             { title: 'Moving and selecting', body: `Drag a frame to move it; it snaps to the grid and to the other frames. <span class="help-kbd">Ctrl+click</span> adds a frame to the selection, or drag a box around several. Hold <span class="help-kbd">Shift</span> while dragging for fine movement. <span class="help-kbd">Esc</span> deselects.` },
             { title: 'Grouping and aligning', body: `Select frames and press <span class="help-kbd">Ctrl+G</span> to group them so they move as one. The <strong>Align</strong> icon opens equal-gap, align-edge and distribute tools for the selection.` },
             { title: 'Sort A&ndash;Z', body: `Re-letters the frames by their position from left to right, so A is the leftmost piece. The letters print on the drawings and the spec pages, so sort before the deck goes out.` },
@@ -42720,7 +43668,8 @@ const HELP_REFERENCE_DATA = [
             },
             {
                 title: `What's new`,
-                body: `<strong>18.81</strong> Saved project files store each image once. An artwork used on its dashboard row and on wall frames, a shared swatch, and the first floor plan were each written in full every time they appeared; the file now keeps one copy and points to it, so files are smaller and open and save faster. Older project files open as before. Files saved from this version need this version or later.<br><br><strong>18.80</strong> PDFs build about three times faster and come out several times smaller (a 30-page test deck: 75 seconds and 49 MB before, about 22 seconds and 7 MB now), with pages that look the same. Every picture is now encoded at the size it prints at the chosen quality instead of the artwork's full resolution, each image is decoded once and reused, the wall elevations draw their frames and artwork at the size the drawing needs, and frame shadows and PNG floor plans are compressed instead of stored raw. Previews in Deck Studio get the same speed-up. The downloadable SVG keeps full resolution.<br><br><strong>18.79</strong> Contents page fixes. The template's own section lines (and, after applying the Contents template a second time, its placeholder boxes) were left on the page under the automatic ones, so lines doubled up and stayed with Rules off; they are cleared now, and applying the template again starts the page fresh. Introduction, Closing, a level and the other automatic sections can be renamed on the Contents panel. The name fields hold the real name, so you can add to it (Lobby before ART.1C) instead of retyping, and a renamed field has a reset arrow back to the automatic name.<br><br><strong>18.78</strong> Contents page: section titles stay on one line when they can, because the title column widens and the lines move over (only a title that still does not fit wraps). Pages after the last artwork (Thank You and so on) go under Closing instead of joining the last divider's section. On a dark background colour or gradient the contents sets itself in white with light rules, unless you picked a colour. The Contents panel adds Bold, Italic and All caps for titles, Bold and Italic for lines, a separate Numbers colour, Rules on or off with their colour, and Spacing: Grid (the template's rows) or Even.<br><br><strong>18.77</strong> On the Contents page, section titles are links too: to their divider, or to the first page listed under them. The Contents page panel sets the type of the section titles (Titles) and the lines (Lines) (font, size, colour), with Reset to template type to go back. A divider's section title can be renamed there like any line, and a renamed line or section has a <strong>Page</strong> button that writes the new name into that page's own heading, so the page and the contents match.<br><br><strong>18.76</strong> A Contents page too long for one page now continues on a second Contents page, added right after the first, at full type size, with nothing left off. A section too long for a column carries on with its title marked (continued). The extra page goes away by itself when the contents fits on one page again, and every page number after it updates.<br><br><strong>18.75</strong> The page rail numbers pages the way the PDF does, so a Frame Recommendations card that prints on two pages reads 7–8 and every page after it matches the Contents page. Typing a page number to move a page uses those numbers too. On the Contents page, artwork lines are named by where the pieces hang (Lobby: ART.1 – ART.5) and split where the location changes. Lines and section titles still reading as template placeholder text (Divider Page Heading, Section Heading, an untitled page) are marked in amber on the Contents panel and listed in Preflight.<br><br><strong>18.74</strong> Every line on the Contents page is a link. In the PDF it jumps to that page; in Deck Studio click a line to open that page.<br><br><strong>18.73</strong> Every page's panel in Deck Studio has an <strong>In contents</strong> tick while the deck has a Contents page, and layout pages also have <strong>Starts a section</strong>, so any page can head a section, not only dividers. A blank or untitled page you add now stays off the contents until you tick it in. Unticking a wall page or the first page of an Artwork line takes the whole line off. A wall whose name already starts with its code prints the name once.<br><br><strong>18.72</strong> Applying the Contents template to a page you already have now makes it a self-filling Contents page (it used to stay a Custom page showing the placeholder text). A page already set up that way fills itself in the next time you open the deck. Applying a Divider template to a page makes it a section start, the same as adding a new divider.<br><br><strong>18.71</strong> The Contents page writes itself. Add Contents (Full) or (Half) from the Templates tab and it lists the deck with real page numbers, in the template's look, and keeps up as you add, remove and reorder pages. A divider page starts a section, titled by its heading; with no dividers the sections are Introduction, one per floor level, and Closing. A run of spec pages is one Artwork line, and a wall page stands for the spec pages after it. On the Contents page's panel, untick a line to leave it out or type over it to rename it. A deck too long for the page sets smaller type. The PDF now prints this page as you see it (it used to print a plain list instead).<br><br><strong>18.70</strong> On a catalogue options sheet the Elevation thumbnail draws the frame solid, as the grey mockup, instead of faded. Salon and group options are unchanged. Also fixed: a selected page thumbnail in Deck Studio no longer shifts or crops its edges (the footer logo stayed in view only while the page was not selected).<br><br><strong>18.69</strong> Selecting a page in Deck Studio no longer flashes. Options sheets, cards, plan details, spec pages and floorplans used to blink to a blank page with just the title, in the middle and in the page rail, every time you clicked them. Now the page you last saw stays up until the fresh render is ready, and the rail keeps its thumbnail.<br><br><strong>18.68</strong> A selected page keeps its thumbnail in the page rail. Pages drawn as a picture (Timeline, Frame Recommendations, Contacts, floorplans, spec pages, plan details, options sheets) used to show their placeholder there, or go blank, until you picked another page.<br><br><strong>18.67</strong> The catalogue options sheet has an <strong>Options per page</strong> control in Deck Studio: Auto (which shows the number it picked) or 1 to 10, for every options sheet or just this placement, so you can try three or six on a page. A picked number is used exactly, the rest follow on the next page. Also fixed: a page drawn as a picture (options sheets, cards, plan details) no longer goes blank in the page rail while it is selected.<br><br><strong>18.66</strong> On the catalogue options sheet the frame corner, profile, floorplan and elevation now print at exactly the size and position they have on a per-piece spec page, because the sheet draws them with the same layout. The spec list fits between the title and those thumbnails and shrinks rather than running into them, and the mockups start clear of the whole left column.<br><br><strong>18.65</strong> The catalogue options sheet gets its own <strong>Show on page</strong> ticks in Deck Studio, like Group A/B/C: Frame corner, Moulding profile, Floorplan and Elevation, under the specs in the left column. Set them for every options sheet or just this placement. Frame corner and profile are on by default; the plan and wall are off because the breaker in front already carries them. Options pages also show a real preview in the page rail now instead of a placeholder.<br><br><strong>18.64</strong> Catalogue options of a <strong>single piece</strong> now print as an options sheet right after the breaker: the shared specs down the left, the framed mockups on the right coded ART.1.1, ART.1.2, ART.1.3 with each image code underneath, and the options' own spec pages are no longer printed. How many fit a page is automatic (about 1.8in across at the smallest, all at one scale); more than that splits evenly, and every page repeats the specs so a sheet pinned to a board still carries them. Untick <strong>All-options page</strong> to go back to one spec page per option. New options of a single piece are coded ART.1.1, no longer ART.1.1A.<br><br><strong>18.63</strong> In the Frame Dashboard the <strong>Img Code</strong> column widens to fit the longest code, so every code reads in full without scrolling inside the field. It refits as you type.<br><br>
+                body: `<strong>19.12</strong> A framed picture in the Frame Dashboard preview shows what you can do with it when you hover: <strong>Replace</strong> and <strong>Remove</strong> in its corner, and a note that you can drag to pan or drop another image on it to swap it.<br><br>\n<strong>19.11</strong> The frame button in the Frame Dashboard shows the frame's corner the way the frame browser does: the whole corner photo on white, with Change underneath.<br><br>\n<strong>19.10</strong> A tighter Frame Dashboard panel. The frame is a square picture button (click it to change the frame) with Frame Code and Color / Texture beside it, and the frame's colour, width and vendor on the Frame heading. Artwork is added from the preview: click the empty opening or drag a picture onto it. The upload row in the panel is gone; once a piece has artwork, its zoom, Reset, 1:1 and Remove sit in one row under the sizes.<br><br>\n<strong>19.09</strong> Frames come from the library. New items start in <strong>MICH-132-29</strong>, a black moulding with a three-quarter inch face, instead of a flat black colour. In the Frame Dashboard the Library / Color switch, the colour picker, Sync Folder and the swatch upload are gone: the frame is one card showing its corner, code, colour, width and vendor, and clicking it opens the frame browser. Picking a frame also fills Color / Texture from the catalogue (never over words you typed). A frame no vendor lists can still be added with <strong>Custom swatch…</strong> in the frame browser. Older projects with colour frames still open and print as before.<br><br>\n<strong>19.08</strong> An empty opening shows an add-image icon instead of its size, on the wall and in the Frame Dashboard preview. In the dashboard, click it to upload the artwork. The size is still in the dashboard fields and the dimension guides.<br><br>\n<strong>19.07</strong> Frame effects in Settings fits on one screen: the sample frame and the sliders sit side by side, and each slider's explanation is behind a <strong>?</strong> instead of a line of text under it.<br><br>\n<strong>19.06</strong> Deck Studio's Project tab is shorter. Project name, code, location and version sit together at the top, and units, rounding and frame effects are one line that says what they are, with <strong>Units&hellip;</strong> and <strong>Frame effects&hellip;</strong> buttons into Settings (the gear in the header), where they are changed. Fixed: the page preview on the Project tab now shows a page's background image, colour and text colour, like the Pages tab; a cover with a picture showed on white before, even after Refresh preview.<br><br>\n<strong>19.05</strong> Elevations get a tool bar beside the wall, like Deck Studio's: Select (V), Measure (M) and Context block (C), then Add frames, Sort A&ndash;Z, Align, Group dimension and Fit to wall, then Item codes and the keyboard shortcuts. The Art, Guides, Context and Glass tabs are bigger, with an icon and a count of what each holds. Frame shadows on the wall are now true to size (the drop shadow was drawn many inches wide), and the shadow inside the opening also falls on the artwork. Breaker and install pages cast the same drop shadow as spec pages when <strong>Also on deck pages</strong> is ticked in Frame effects.<br><br>
+<strong>19.04</strong> Deleting a wall asks about its pieces. When pieces hang on that wall and nowhere else, you choose <strong>Delete wall and pieces</strong> (they leave the Frame Dashboard and the presentation: the way to drop the options a client turned down) or <strong>Delete wall, keep pieces</strong> (as before: they stay in the Dashboard, and + Add Wall offers them to hang again). Pieces also shown on another wall are never deleted, and Ctrl+Z brings back the wall and its pieces together.<br><br><strong>19.03</strong> The frame you pick sets the product both ways. Picking a floater makes the item Framed Canvas (Floater), as before, and picking a regular moulding on a floater item now turns it back into Framed Art (it used to stay a floater, with its canvas inset and no mats). A floater counts by its lip width too, whatever its collection is called. Shadow boxes, frameless canvas, wallcovering and window film are left as you set them.<br><br><strong>19.02</strong> Floaters show their gap. The quarter inch between a floater's face and the canvas now draws as a dark slot instead of more moulding, on the Dashboard preview, the wall, PNG and SVG exports and spec pages, and the canvas casts its shadow into it. Settings, Frame effects has a new <strong>Floater gap</strong> slider for how dark it reads (the canvas used to borrow Frame onto mat). The three Cape Cod floaters (IM-310-715, 720 and 725) now carry their 5/8in face, so a new pick sets a 7/8in inset.<br><br><strong>19.01</strong> More frames turned round to face the right way: 46 Larson-Juhl floaters (Axom, Bauhaus II, Cranbrook, Eiffel, Gramercy, Metalia, Moderne, Olsen, Ravello, Shoji and Spencer II) now show the wall on the left and the floor along the bottom like every other floater, and Academie Silver 3in (LJ-733237) matches its gold and black siblings.<br><br><strong>19.00</strong> The frame browser has a <strong>Type</strong> filter: show only floaters, or only frames, across every vendor. Frame thumbnails are cropped consistently again: about 290 International Moulding and Framerica corners had kept far too much of the moulding and showed as thin slivers. Seven more mouldings that faced the wrong way (including IM-310-710) are turned round.<br><br><strong>18.99</strong> International Moulding and Framerica frames now face the same way as every other moulding: outer edge on the left, rabbet lip on the right. Many were mirror images, so the mockup drew the lip on the outside of the frame. The old Universal folder with two frames is gone; both are in Universal Arquati.<br><br><strong>18.98</strong> The frame library adds International Moulding (about 1,000 current mouldings in 153 collections, 37 of them floaters) and Framerica (336 mouldings in 91 finishes), each with its corner photo, sizes, colour family and, where the maker publishes one, its profile drawing. Deep shadowbox corners now show the frame face above the cut end instead of only raw wood.<br><br><strong>18.97</strong> More frame corners and profiles fit on one row of a group page before it wraps: the space between mouldings tightens first, then the pictures shrink, and only then does the strip go to two rows.<br><br><strong>18.96</strong> Frame corner photos all share one shape now. Thin Universal Arquati and Larson-Juhl mouldings showed as long skinny slivers in the frame browser and on spec pages; every corner is cropped to the same proportions as the Michelangelo ones, showing the cut end and a short run of the face.<br><br><strong>18.95</strong> The frame library adds Universal Arquati: about 1,050 current mouldings in 156 collections (Universal, Valucore and the Arquati lines), including 177 floaters, each with its corner photo, profile drawing, sizes, colour, profile type and style. Discontinued mouldings, fillets, liners and stretcher bars are left out.<br><br><strong>18.94</strong> Two spec page fixes. A picture dropped onto the dashboard preview or onto a frame on the wall kept the previous picture's proportions, so the dashboard and wall stretched it to fit while the spec page printed its true crop; every drop now records the new picture's size, and pieces affected before this correct themselves the next time they are shown. On a per-piece page, a long spec list (float-mounted paper adds four rows) now tightens its rows to stop above the frame corner and profile instead of running into them.<br><br><strong>18.93</strong> The Frame Recommendations page lays frames out on an even grid. With a count that does not divide by the columns (8 frames in 3 columns), the last column used to stretch its frames to fill the page; now every frame is the same size and the last column simply ends early.<br><br><strong>18.92</strong> The frame library adds Larson-Juhl: about 1,030 current mouldings in 156 collections, including 91 floaters, each with its corner photo, profile drawing, sizes, colour family, profile type and style. In the frame browser the Library now lists each vendor once (click it to open its collections), and there is a new <strong>Style</strong> filter (Contemporary, Modern, Classic and so on). Nielsen metal frames are left out because Larson-Juhl has no photos of them.<br><br><strong>18.91</strong> When a Group A/B/C page has too many mouldings for the frame corners and profiles to fit in one row beside the floorplan and elevation, they wrap into two rows in the same space, so the artwork, floorplan and elevation keep their size and place. Seven different mouldings now show every corner and profile.<br><br><strong>18.89</strong> On a Group A/B/C page with several mouldings, ticking Moulding profile no longer makes every frame corner disappear. The corners and profiles now shrink to fit beside the floorplan and elevation; if there is still not enough room, the profiles are left off and the corners kept, and a <strong>no room</strong> note appears beside Moulding profile under Show on page.<br><br><strong>18.88</strong> The frame library now has every Michelangelo collection that works as a frame in FRAME: Barnwood, Contemporary, Modern, Shadow Boxes and Traditional join Avant-Garde, Floaters and Ornate, about 1,240 mouldings in all, each with its corner photo, profile drawing, sizes, colour and profile name. Liners, fillets, rabbetless flat surfaces and stretchers are left out because they are not a frame on their own.<br><br><strong>18.87</strong> The frame library adds Michelangelo's ornate mouldings: all 59 current ones, each with its corner photo, profile drawing, sizes, colour and profile name. Their swatches repeat the ornament down the rail without a visible seam.<br><br><strong>18.86</strong> The frame library adds Michelangelo's floaters: 229 current floater frames for canvas, each with its corner photo, profile drawing, sizes and lip width. Picking one switches the item to Framed Canvas (Floater) and sets the inset from the lip, as before.<br><br><strong>18.85</strong> The frame library now has the whole Michelangelo Avant-Garde collection: 539 current mouldings, each with its corner photo, profile drawing, sizes, colour and profile name, so the frame browser can search and filter all of them.<br><br><strong>18.84</strong> Choosing a frame opens a frame browser: click the <strong>Frame</strong> box on the dashboard. Search by code, colour or profile, and filter by colour family, face width and profile shape, with the corner photo of each moulding. <strong>Project frames</strong> lists the frames already on an item plus a shortlist: star any frame to keep it handy for this project. Save frames you use together as a grouping under <strong>My groupings</strong>, and use <strong>Share with team</strong> to send one to whoever looks after the library, so it appears under <strong>Team groupings</strong> for everyone. The library also gains 109 Michelangelo Avant-Garde mouldings.<br><br><strong>18.83</strong> Copy and paste work between two FRAME tabs. In Deck Studio, copy boxes on a page in one project (Ctrl+C or Cmd+C) and paste them into a page in the other tab (Ctrl+V or Cmd+V): text, shapes, images and lines arrive in the same place on the page, images included.<br><br><strong>18.82</strong> Two projects can be open in two browser tabs at once without risking either one's unsaved work. Each tab now keeps its own backup (they used to share one, so a crash could bring back the other project). The start screen lists every unsaved backup by project name and age, with Continue and Delete; one that is still open in another tab is marked and not offered. Saving a project clears only that tab's backup. The newest five are kept, for a week.<br><br><strong>18.81</strong> Saved project files store each image once. An artwork used on its dashboard row and on wall frames, a shared swatch, and the first floor plan were each written in full every time they appeared; the file now keeps one copy and points to it, so files are smaller and open and save faster. Older project files open as before. Files saved from this version need this version or later.<br><br><strong>18.80</strong> PDFs build about three times faster and come out several times smaller (a 30-page test deck: 75 seconds and 49 MB before, about 22 seconds and 7 MB now), with pages that look the same. Every picture is now encoded at the size it prints at the chosen quality instead of the artwork's full resolution, each image is decoded once and reused, the wall elevations draw their frames and artwork at the size the drawing needs, and frame shadows and PNG floor plans are compressed instead of stored raw. Previews in Deck Studio get the same speed-up. The downloadable SVG keeps full resolution.<br><br><strong>18.79</strong> Contents page fixes. The template's own section lines (and, after applying the Contents template a second time, its placeholder boxes) were left on the page under the automatic ones, so lines doubled up and stayed with Rules off; they are cleared now, and applying the template again starts the page fresh. Introduction, Closing, a level and the other automatic sections can be renamed on the Contents panel. The name fields hold the real name, so you can add to it (Lobby before ART.1C) instead of retyping, and a renamed field has a reset arrow back to the automatic name.<br><br><strong>18.78</strong> Contents page: section titles stay on one line when they can, because the title column widens and the lines move over (only a title that still does not fit wraps). Pages after the last artwork (Thank You and so on) go under Closing instead of joining the last divider's section. On a dark background colour or gradient the contents sets itself in white with light rules, unless you picked a colour. The Contents panel adds Bold, Italic and All caps for titles, Bold and Italic for lines, a separate Numbers colour, Rules on or off with their colour, and Spacing: Grid (the template's rows) or Even.<br><br><strong>18.77</strong> On the Contents page, section titles are links too: to their divider, or to the first page listed under them. The Contents page panel sets the type of the section titles (Titles) and the lines (Lines) (font, size, colour), with Reset to template type to go back. A divider's section title can be renamed there like any line, and a renamed line or section has a <strong>Page</strong> button that writes the new name into that page's own heading, so the page and the contents match.<br><br><strong>18.76</strong> A Contents page too long for one page now continues on a second Contents page, added right after the first, at full type size, with nothing left off. A section too long for a column carries on with its title marked (continued). The extra page goes away by itself when the contents fits on one page again, and every page number after it updates.<br><br><strong>18.75</strong> The page rail numbers pages the way the PDF does, so a Frame Recommendations card that prints on two pages reads 7–8 and every page after it matches the Contents page. Typing a page number to move a page uses those numbers too. On the Contents page, artwork lines are named by where the pieces hang (Lobby: ART.1 – ART.5) and split where the location changes. Lines and section titles still reading as template placeholder text (Divider Page Heading, Section Heading, an untitled page) are marked in amber on the Contents panel and listed in Preflight.<br><br><strong>18.74</strong> Every line on the Contents page is a link. In the PDF it jumps to that page; in Deck Studio click a line to open that page.<br><br><strong>18.73</strong> Every page's panel in Deck Studio has an <strong>In contents</strong> tick while the deck has a Contents page, and layout pages also have <strong>Starts a section</strong>, so any page can head a section, not only dividers. A blank or untitled page you add now stays off the contents until you tick it in. Unticking a wall page or the first page of an Artwork line takes the whole line off. A wall whose name already starts with its code prints the name once.<br><br><strong>18.72</strong> Applying the Contents template to a page you already have now makes it a self-filling Contents page (it used to stay a Custom page showing the placeholder text). A page already set up that way fills itself in the next time you open the deck. Applying a Divider template to a page makes it a section start, the same as adding a new divider.<br><br><strong>18.71</strong> The Contents page writes itself. Add Contents (Full) or (Half) from the Templates tab and it lists the deck with real page numbers, in the template's look, and keeps up as you add, remove and reorder pages. A divider page starts a section, titled by its heading; with no dividers the sections are Introduction, one per floor level, and Closing. A run of spec pages is one Artwork line, and a wall page stands for the spec pages after it. On the Contents page's panel, untick a line to leave it out or type over it to rename it. A deck too long for the page sets smaller type. The PDF now prints this page as you see it (it used to print a plain list instead).<br><br><strong>18.70</strong> On a catalogue options sheet the Elevation thumbnail draws the frame solid, as the grey mockup, instead of faded. Salon and group options are unchanged. Also fixed: a selected page thumbnail in Deck Studio no longer shifts or crops its edges (the footer logo stayed in view only while the page was not selected).<br><br><strong>18.69</strong> Selecting a page in Deck Studio no longer flashes. Options sheets, cards, plan details, spec pages and floorplans used to blink to a blank page with just the title, in the middle and in the page rail, every time you clicked them. Now the page you last saw stays up until the fresh render is ready, and the rail keeps its thumbnail.<br><br><strong>18.68</strong> A selected page keeps its thumbnail in the page rail. Pages drawn as a picture (Timeline, Frame Recommendations, Contacts, floorplans, spec pages, plan details, options sheets) used to show their placeholder there, or go blank, until you picked another page.<br><br><strong>18.67</strong> The catalogue options sheet has an <strong>Options per page</strong> control in Deck Studio: Auto (which shows the number it picked) or 1 to 10, for every options sheet or just this placement, so you can try three or six on a page. A picked number is used exactly, the rest follow on the next page. Also fixed: a page drawn as a picture (options sheets, cards, plan details) no longer goes blank in the page rail while it is selected.<br><br><strong>18.66</strong> On the catalogue options sheet the frame corner, profile, floorplan and elevation now print at exactly the size and position they have on a per-piece spec page, because the sheet draws them with the same layout. The spec list fits between the title and those thumbnails and shrinks rather than running into them, and the mockups start clear of the whole left column.<br><br><strong>18.65</strong> The catalogue options sheet gets its own <strong>Show on page</strong> ticks in Deck Studio, like Group A/B/C: Frame corner, Moulding profile, Floorplan and Elevation, under the specs in the left column. Set them for every options sheet or just this placement. Frame corner and profile are on by default; the plan and wall are off because the breaker in front already carries them. Options pages also show a real preview in the page rail now instead of a placeholder.<br><br><strong>18.64</strong> Catalogue options of a <strong>single piece</strong> now print as an options sheet right after the breaker: the shared specs down the left, the framed mockups on the right coded ART.1.1, ART.1.2, ART.1.3 with each image code underneath, and the options' own spec pages are no longer printed. How many fit a page is automatic (about 1.8in across at the smallest, all at one scale); more than that splits evenly, and every page repeats the specs so a sheet pinned to a board still carries them. Untick <strong>All-options page</strong> to go back to one spec page per option. New options of a single piece are coded ART.1.1, no longer ART.1.1A.<br><br><strong>18.63</strong> In the Frame Dashboard the <strong>Img Code</strong> column widens to fit the longest code, so every code reads in full without scrolling inside the field. It refits as you type.<br><br>
 <strong>18.62</strong> The amber <strong>x2</strong> badge (the same image used in another placement) sits at the right end of the Img Code field, so it no longer covers the artwork thumbnail.<br><br>
 <strong>18.61</strong> Each row in the Frame Dashboard shows a small picture of its artwork beside the Img Code, or a dashed empty slot when the piece has no artwork yet.<br><br>
 <strong>18.60</strong> <strong>Rounding</strong> is a project setting, in Settings, Units: how many decimal places inches, millimetres and centimetres print (0, 0.#, 0.##, 0.###, 0.####), and it is the same everywhere a size prints: spec pages, elevations, legends and schedules. Defaults are 0.### for inches (so 1.875" stays 1.875"), whole mm and 0.# cm. Every number on an elevation now carries its unit (1727 mm, not 1727); the Units tile in Layout Guides is gone.<br><br>
@@ -43894,8 +44843,13 @@ function drawElevAll() {
         // Gated on dashOuterShadowsOn: when off, the shadow halo is suppressed
         // so elevations match the toggle-off PNG export look.
         // Every shadow here goes through _fxCss, so the Frame Effects panel reaches the wall.
+        // 19.05: SIZED IN REAL INCHES, from the canvas renderer's own recipes (calibrated in px
+        // at 72 dpi, so _ePt is screen px per 1/72"). They were N * elevScale, i.e. N INCHES:
+        // a 16" drop under a 40" blur, which is why the wall looked smeared next to the PNG
+        // and the spec pages. Inset alphas carry dIS's 1.25 boost so the two agree.
+        const _ePt = elevScale * unitFactor('in', elevUnit) / 72;
         const elevOuterShadow = dashOuterShadowsOn
-            ? _fxCss('outer', 0, 16 * elevScale, 40 * elevScale, 0.45) + ', ' + _fxCss('outer', 0, 6 * elevScale, 12 * elevScale, 0.3)
+            ? _fxCss('outer', 0, 18 * _ePt, 35 * _ePt, 0.55)
             : 'none';
 
         if (isFlat) {
@@ -43953,7 +44907,7 @@ function drawElevAll() {
             el.style.setProperty('--m1-color', m1Color);
             // Bumped inset shadow: frame casts a stronger shadow onto the mat surface
             // (matches the canvas renderer's bumped shadow for visual consistency).
-            m1.style.boxShadow = `0 0 0 1.5px ${m1Color}, ` + _fxCss('frame', 0, 4 * elevScale, 10 * elevScale, 0.45, true) + ', ' + _fxCss('mat', 0, 2 * elevScale, 5 * elevScale, 0.15);
+            m1.style.boxShadow = `0 0 0 1.5px ${m1Color}, ` + _fxCss('frame', 0, 14 * _ePt, 35 * _ePt, 0.75, true) + ', ' + _fxCss('mat', 0, 2 * _ePt, 5 * _ePt, 0.15);
             el.appendChild(m1);
         }
         
@@ -43967,7 +44921,7 @@ function drawElevAll() {
             // Explicit borderColor — must NOT depend on inherited theme color
             m2.style.borderColor = m2Color;
             el.style.setProperty('--m2-color', m2Color);
-            m2.style.boxShadow = `0 0 0 1.5px ${m2Color}, ` + _fxCss('mat', 0, 2 * elevScale, 6 * elevScale, 0.3, true) + ', ' + _fxCss('mat', 0, 2 * elevScale, 5 * elevScale, 0.15);
+            m2.style.boxShadow = `0 0 0 1.5px ${m2Color}, ` + _fxCss('mat', 0, 8 * _ePt, 20 * _ePt, 0.5625, true) + ', ' + _fxCss('mat', 0, 2 * _ePt, 5 * _ePt, 0.15);
             el.appendChild(m2);
         }
 
@@ -44007,9 +44961,9 @@ function drawElevAll() {
                 // Magnitude similar to mat 2's inset shadow but slightly stronger
                 // when no mats above (frame casts directly).
                 if (m1Active || m2Active) {
-                    faux.style.boxShadow = _fxCss('mat', 0, 2 * elevScale, 6 * elevScale, 0.3, true);
+                    faux.style.boxShadow = _fxCss('mat', 0, 8 * _ePt, 20 * _ePt, 0.5625, true);
                 } else {
-                    faux.style.boxShadow = _fxCss('frame', 0, 4 * elevScale, 10 * elevScale, 0.45, true);
+                    faux.style.boxShadow = _fxCss('frame', 0, 14 * _ePt, 35 * _ePt, 0.75, true);
                 }
                 el.appendChild(faux);
             }
@@ -44039,7 +44993,7 @@ function drawElevAll() {
             paper.className = 'sb-paper-visual';
             const paperPx = sbPaperMarginVal * elevScale;
             const isTorn = (f.sbPaperEdge || 'clean') === 'torn';
-            paper.style.cssText = `position:absolute; box-sizing:border-box; top:${frameInsetPx + paperPx}px; left:${frameInsetPx + paperPx}px; width:${(f.w - effFw*2 - sbPaperMarginVal*2) * elevScale}px; height:${(f.h - effFw*2 - sbPaperMarginVal*2) * elevScale}px; background:${paperColor}; box-shadow: ${2 * elevScale}px ${4 * elevScale}px ${12 * elevScale}px rgba(0,0,0,0.45); ${isTorn ? `border: 1px dashed rgba(0,0,0,0.4);` : ''} pointer-events:none; z-index:3;`;
+            paper.style.cssText = `position:absolute; box-sizing:border-box; top:${frameInsetPx + paperPx}px; left:${frameInsetPx + paperPx}px; width:${(f.w - effFw*2 - sbPaperMarginVal*2) * elevScale}px; height:${(f.h - effFw*2 - sbPaperMarginVal*2) * elevScale}px; background:${paperColor}; box-shadow: ${_fxCss('paper', 2 * _ePt, 4 * _ePt, 18 * _ePt, 0.7)}; ${isTorn ? `border: 1px dashed rgba(0,0,0,0.4);` : ''} pointer-events:none; z-index:3;`;
             el.appendChild(paper);
         }
 
@@ -44084,6 +45038,11 @@ function drawElevAll() {
         if (!m1Active && !isFloater && !isFrameless && !isFlat && !useFM && f.useFauxMat !== true) art.classList.add('fx-frame-cast');
         
         art.style.cssText = `top:${artTopOffset}px; left:${artLeftOffset}px; width:${artW*elevScale}px; height:${artH*elevScale}px; z-index:4;`;
+        // THE OPENING'S SHADOW (19.05), the canvas renderer's recipe: the opening onto the art,
+        // and with no mat the moulding onto the art as well. It is an inline style, so it has to
+        // carry the frame cast itself (the .fx-frame-cast class rule loses to it).
+        const _openShadowCss = (art.classList.contains('fx-frame-cast') ? _fxCss('frame', 0, 14 * _ePt, 35 * _ePt, 0.75, true) + ', ' : '')
+            + _fxCss('art', 0, 3 * _ePt, 8 * _ePt, 0.3125, true);
         // Uploaded artwork: when present, fill the opening with the image
         // (cover-fit) rather than the grey placeholder. _showArtwork is a global
         // view toggle so the "beauty" presentation shows art and the technical
@@ -44118,8 +45077,10 @@ function drawElevAll() {
                 art.appendChild(_ph);
             }
         } else if (isFloater) {
-            // Floater: subtle dashed outline + inner shadow (image opening recessed into the canvas).
-            art.style.boxShadow = _fxCss('frame', 0, 0, 10 * elevScale, 0.35, true);
+            // Floater (19.01): the reveal is a dark ring OUTSIDE the canvas (a spread
+            // shadow exactly the gap wide), and the canvas casts past it onto the face.
+            art.style.boxShadow = _floaterGapCss(_floaterRevealOf(f.floaterInset, elevUnit) * elevScale, elevScale * unitFactor('in', elevUnit));
+            art.dataset.gapShadow = art.style.boxShadow;
             art.style.border = '1px dashed rgba(0,0,0,0.25)';
         } else if (isFrameless || useFM) {
             // Frameless canvas & float mount: dashed outline only — NO inner shadow.
@@ -44131,7 +45092,7 @@ function drawElevAll() {
             // paper margin / white border should show white.
             art.style.background = 'rgb(120,120,120)';
         } else {
-            art.style.boxShadow = _fxCss('art', 0, 2 * elevScale, 8 * elevScale, 0.2, true);
+            art.style.boxShadow = _openShadowCss;
         }
         // LAST, so it overrides the per-product opening treatments above: a wireframe
         // is a flat grey block. The inset shadow and the recessed-opening cues sell
@@ -44148,7 +45109,8 @@ function drawElevAll() {
             // background-image data URLs. Positioned via the shared crop helper
             // so pan/zoom matches the dashboard preview + exports.
             art.style.overflow = 'hidden';
-            art.style.boxShadow = 'none';
+            // The floater reveal sits OUTSIDE the canvas, so the picture keeps it.
+            art.style.boxShadow = art.dataset.gapShadow || 'none';
             const ow = artW * elevScale, oh = artH * elevScale;
             const ar = (f.artworkW && f.artworkH) ? (f.artworkW / f.artworkH) : 0;
             const rect = computeArtDrawRect(ow, oh, ar, f.artZoom, f.artPanX, f.artPanY);
@@ -44173,10 +45135,10 @@ function drawElevAll() {
                 aimg.draggable = false;
                 aimg.src = f.artworkUrl;
                 _elevArtImgCache[_aKey] = aimg;
-                if (!f.artworkW || !f.artworkH) {
+                {   // 18.94: also corrects a stored size that belongs to a different picture
                     aimg.addEventListener('load', () => {
                         const nw = aimg.naturalWidth, nh = aimg.naturalHeight;
-                        if (nw && nh && (!f.artworkW || !f.artworkH)) { f.artworkW = nw; f.artworkH = nh; drawElevAll(); }
+                        if (nw && nh && _artSizeStale(f, nw, nh)) { f.artworkW = nw; f.artworkH = nh; drawElevAll(); }
                     });
                 }
             }
@@ -44184,11 +45146,18 @@ function drawElevAll() {
             aimg.style.cssText = `position:absolute; left:${rect.dx}px; top:${rect.dy}px; width:${rect.dw}px; height:${rect.dh}px; display:block; pointer-events:none;`;
             _elevArtImgSeen[_aKey] = 1;
             art.appendChild(aimg);
+            // The picture covers the opening's inset shadow, so it is cast again OVER the
+            // picture, as the canvas renderer does after drawing the artwork (18.46). Same
+            // products as the plain opening above; never on a floater, frameless canvas,
+            // float mount, flat graphic or wireframe.
+            if (!isFlat && !isFloater && !isFrameless && !useFM) {
+                const sh = document.createElement('div'); sh.className = 'art-shade';
+                sh.style.cssText = 'position:absolute; inset:0; pointer-events:none; box-shadow:' + _openShadowCss + ';';
+                art.appendChild(sh);
+            }
         }
         
-        // NOT named unitSuffix: a const of that name shadowed the unitSuffix() FUNCTION for
-        // the whole block, so the flat-graphic placeholder above threw in the TDZ (18.28).
-        const _openSfx = unitInfo(elevUnit).suffix;
+        // THE EMPTY OPENING (19.08): the letter on a wireframe wall, else the add-image icon.
         if (!hasArtwork) {
             if (_wf) {
                 // The frame's LETTER, centred. .art-visual is already a centred flex
@@ -44209,7 +45178,7 @@ function drawElevAll() {
                 art.style.fontWeight = _elevWfFontWeight();
                 art.style.fontStyle = _elevWfFontStyle();
             } else {
-                art.innerText = (artW > 0) ? `${_fmtUnitNum(artW, elevUnit)}${_openSfx}\nx\n${_fmtUnitNum(artH, elevUnit)}${_openSfx}` : "";
+                art.innerHTML = (artW > 0) ? _artAddIconHTML(artW * elevScale, artH * elevScale) : '';
             }
         }
         el.appendChild(art);
@@ -47775,6 +48744,7 @@ function toggleLineTool(on) {
     }
     const btn = document.getElementById('lineToolBtn');
     if (btn) btn.classList.toggle('active', lineToolActive);
+    _elevDockSync();
     const wall = document.getElementById('wall');
     if (wall) wall.style.cursor = lineToolActive ? 'crosshair' : '';
     drawElevAll();
@@ -49479,6 +50449,10 @@ async function exportElevPNG(opts) {
     const _rail = document.getElementById('elev-wall-rail');
     const _railDisp = _rail ? _rail.style.display : null;
     if (_rail) _rail.style.display = 'none';
+    // The tool dock (19.05) takes width off the workspace the same way: out for the export.
+    const _dockSl = document.getElementById('elevDockSlot');
+    const _dockDisp = _dockSl ? _dockSl.style.display : null;
+    if (_dockSl) _dockSl.style.display = 'none';
 
     // THE CLIENT-ELEVATION UNDERLAY COMES OUT, for the whole export and for the same
     // reason the rail does. This path rasterises the LIVE DOM through html2canvas,
@@ -49802,6 +50776,7 @@ async function exportElevPNG(opts) {
         // Wall rail back before the final redraw, so it re-fits to the real
         // (narrower) on-screen workspace rather than the export layout.
         if (_rail) _rail.style.display = _railDisp;
+        if (_dockSl) _dockSl.style.display = _dockDisp;
         // …and the tracing guide, which is authoring UI and belongs back on screen.
         if (_ulLayer) _ulLayer.style.display = _ulDisp;
         // Restore zoom factor and re-render at user's zoom level
@@ -50020,8 +50995,10 @@ function buildFrameSVG(f, pos, unit, frameColor) {
     parts.push(strokeRect(ix, iy, iw, ih, shade(frameColor||'#333', -0.2), 0.75));
 
     if (isC) {
-        // Floater: dark shadow-gap ring between rail inner edge and the opening.
-        parts.push(ringPath({x:ix,y:iy,w:iw,h:ih}, hole, shade(frameColor||'#333',-0.5)));
+        // Floater: the reveal (19.01) is a dark ring just outside the opening. The
+        // rail's inner edge lies INSIDE a floater's opening, so measuring from it drew nothing.
+        const gp = _floaterRevealOf(f.floaterInset !== undefined ? f.floaterInset : 0.75, unit) * S;
+        if (gp > 0) parts.push(ringPath({x:aX-gp,y:aY-gp,w:aW+gp*2,h:aH+gp*2}, hole, shade(frameColor||'#333',-0.6)));
         parts.push(strokeRect(aX, aY, aW, aH, shade(frameColor||'#333',-0.2), 1));
         return parts;
     }
@@ -50177,6 +51154,10 @@ async function exportElevSVG(opts) {
     const _rail = document.getElementById('elev-wall-rail');
     const _railDisp = _rail ? _rail.style.display : null;
     if (_rail) _rail.style.display = 'none';
+    // The tool dock (19.05) takes width off the workspace the same way: out for the export.
+    const _dockSl = document.getElementById('elevDockSlot');
+    const _dockDisp = _dockSl ? _dockSl.style.display : null;
+    if (_dockSl) _dockSl.style.display = 'none';
 
     const _svgWrap = document.getElementById('export-wrap');
     const _svgWrapPadInline = _svgWrap ? _svgWrap.style.padding : '';
@@ -50492,11 +51473,28 @@ async function exportElevSVG(opts) {
             const g = computeArtDrawRect(r0.w, r0.h, ar, f.artZoom, f.artPanX, f.artPanY);
             return await _imgDownsized(f.artworkUrl, g.dw * _capK * 1.5, g.dh * _capK * 1.5);
         };
+        // BREAKER AND INSTALL PAGES CAST THE SPEC PAGES' DROP SHADOW (19.05). Only the PDF
+        // capture (`forCapture`) gets it, under the same "also on deck pages" switch, from
+        // the same _frameShadowCanvas; the SVG download stays shadowless for Illustrator,
+        // and a wireframe wall is a flat placement drawing. All shadows go in UNDER all the
+        // frames, so a neighbour's shadow never lands on a frame.
+        const _shadowAt = backLayer.length, _shadows = [];
+        const _wantShadow = !!_capK && !(typeof _curElevIsWireframe === 'function' && _curElevIsWireframe());
         for (const f of elevFrames) {
             if (!f.active) continue;
             const el = wall.querySelector(`.frame-vis[data-frame-letter="${f.letter}"]`);
             if (!el) continue;
             const pos = rectToSvg(el);
+            if (_wantShadow) {
+                try {
+                    const dIn = _frameDataInInches(Object.assign({}, f, { extW: f.w, extH: f.h }), elevUnit);
+                    const s = _frameShadowCanvas(dIn, parseFloat(dIn.extW), parseFloat(dIn.extH));
+                    if (s && pos.w > 0) {
+                        const ppi = pos.w / parseFloat(dIn.extW), p = s.padIn * ppi;
+                        _shadows.push(`<image data-frame-shadow="1" x="${(pos.x - p).toFixed(1)}" y="${(pos.y - p).toFixed(1)}" width="${(pos.w + p * 2).toFixed(1)}" height="${(pos.h + p * 2).toFixed(1)}" xlink:href="${s.canvas.toDataURL('image/png')}" preserveAspectRatio="none"/>`);
+                    }
+                } catch (e) { /* a frame without its shadow, never a page without its frame */ }
+            }
             try {
                 const swatchImg = f.swatchDataUrl ? await _loadImg(f.swatchDataUrl) : null;
                 const _href = await _artHref(f, el);
@@ -50539,6 +51537,7 @@ async function exportElevSVG(opts) {
                 backLayer.push(`<rect x="${pos.x.toFixed(1)}" y="${pos.y.toFixed(1)}" width="${pos.w.toFixed(1)}" height="${pos.h.toFixed(1)}" fill="${f.fColor || '#222'}"/>`);
             }
         }
+        if (_shadows.length) backLayer.splice(_shadowAt, 0, ..._shadows);
 
         // ── PERSON (back layer): inline the character SVG as editable vector ──
         const personWrap = document.getElementById('person-wrap');
@@ -50845,6 +51844,7 @@ async function exportElevSVG(opts) {
         // Rail back and padding un-pinned before the redraw so it re-fits the
         // real on-screen width.
         if (_rail) _rail.style.display = _railDisp;
+        if (_dockSl) _dockSl.style.display = _dockDisp;
         if (_svgWrap) _svgWrap.style.padding = _svgWrapPadInline;
         elevZoomFactor = oldZoom;
         drawElevAll();
