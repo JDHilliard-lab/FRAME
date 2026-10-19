@@ -1158,6 +1158,14 @@ run but passes alone is usually load timing: rerun before chasing it.
   silently; e.g. `_dsAddStamp` is the approval stamp, the status stamp is
   `_dsAddStatusStamp`). `test_ds_tool_dock` fails on any duplicate top-level function. Grep a
   new name before using it.
+- **THE THANK YOU PAGE PRINTS THE PROJECT'S OWN LIST (19.13).** `editorialContent.contacts`
+  (pipe lines, print order) + `contactsHidden`; `contacts/contacts.json` is a DIRECTORY to pick
+  from (`_loadRepoContacts`, `addContactFromDirectory`), never merged in. New projects start
+  empty or with the designer's `MY_CONTACTS_KEY` (localStorage) team, seeded in `_startNewProject`.
+  A file with no `contactsV` gets the old merged list written in once (`_contactsMigrateLegacy`,
+  from the FROZEN `CONTACTS_LEGACY_DIRECTORY`; don't sync it to the json) in `_editorialFromFile`,
+  `restoreProjectState` and `_versionRestore`. `_contactsParse` splits on `|` when present (roles
+  carry commas).
 - `_resolveFooter()` handles footer theming. `'auto'` means *read this page's own theme*,
   not a fixed default.
 - Templates live in `editorialContent.templates`; `type` doubles as the category key.
@@ -1166,9 +1174,20 @@ run but passes alone is usually load timing: rerun before chasing it.
   (one definition, also used for cold boot). Content exported to
   `.claude/references/Concept.json`. It is a **function, not a constant** (`Object.assign`
   shares references). Every key is top-level so a loaded project overwrites it wholesale.
-  The moodboard page id is **fixed** (`pg5ef7lopj50a`): its twelve placeholder blocks are
-  keyed `layout:<id>`. `timelineStemPos` is keyed by stage **index** and only valid with the
-  default timeline; pin checks to the stage LABEL.
+  **No starter layout page since 19.14** (the Moodboard was removed on request); older decks
+  still hold `pg5ef7lopj50a` after `fixed:slogan`, which `_starterLayoutHome` keeps as its home
+  so Reset page order leaves it alone. The cover carries a 1.5pt `#000000` rule element
+  between client name and heading. `timelineStemPos` is keyed by stage **index** and only
+  valid with the default timeline; pin checks to the stage LABEL.
+- **LINES ON A DARK PAGE FLIP ON SCREEN AS THEY DO IN THE PDF (19.14).** The PDF flips dark
+  draw colours through `_themeRemapInstall`; the layout editor (`_mbLineInk`) and the rail
+  thumbnail (`_mbThumbInner`) pass line colours through `_dsDisplayInk`, like their text.
+- **A FILE DROPPED ON A DECK STUDIO PAGE IS ITS BACKGROUND (19.14, `_dsWireBgDrop` on
+  `#dsCenter`, `_pageBgImageFromFile`, the one setter shared with Page appearance).** It only
+  takes drops nothing inside claimed (`e.defaultPrevented`: image boxes, shapes); spec pages
+  (artwork drop) and floorplans are excluded in `_dsBgDropTarget`.
+- **Thank You: `contactShiftY` (pt, moves the people, not the studio block) and
+  `contactNameSize` (`_contactNameSize`, default 12; row height grows with it).**
 - The Include-pages list in the Project tab is **checkboxes only**; fixed pages are edited in
   Deck Studio.
 - `_dsThumbCacheKey()` ↔ `data-thumb-key` identifies rail cells.
@@ -1360,6 +1379,24 @@ run but passes alone is usually load timing: rerun before chasing it.
   follows the sign of `data-line-off`, which flipped the number across onto a neighbour mid-drag.
   Pins: `elev.dimLiftSide[id]` (spacing dims; NOT in `dimOffsets`, which `snapDimOffset` aligns
   against) and `line.lblSide` (measure lines); `buildDimControls` writes `data-lift-pin`.
+- **AN UNTOUCHED SPACING DIM IS PLACED BY THE DRAWING (19.15, `_spacingAutoPlace`).** No stored
+  offset = auto: a number that doesn't fit its gap moves the line to the least-covering spot
+  (frames + numbers already placed are obstacles; the pair's own frames weigh 1, others 3; a
+  number hanging off its column while the line is in it pays for the overhang). Derived every
+  draw at the drawn scale, NEVER written to `dimOffsets`; `_dimAutoOff` (inches, current wall)
+  feeds `getDimOffset` so a drag starts from the drawn line. Number size via `_dimLabelPx`
+  (0 in jsdom = nothing moves). Side order in `_autoLiftDimLabel`: `data-lift-force` (every
+  leader runs one way: number goes the other) > pin > `data-lift-auto` > offset sign.
+- **ONE GROUP DIM PER SET OF FRAMES (19.15, `_groupDimKey` = sorted letters).** A repeat
+  selects the existing one; `getElevGroupDims` drops saved duplicates. Clicking a group number
+  sets `selectedGroupDim` (frames deselected) and Delete removes it; the frame-delete handler
+  returns while a group dim is selected, or Delete takes the frames. The × carries
+  `data-group-dim` so the wall's deselect-on-press does not redraw it out from under the click.
+- **A GROUP DIM IS THE OUTER STRING (19.16).** `renderGroupDims` moves its width line above
+  and its height line left of every spacing dim beside the box (`_groupDimObstacles`, DOM rects
+  from `#dim-layer` only; `_groupDimClearTop` / `_groupDimClearLeft`), then adds the drag.
+  Crossing lines (`ax` = the other axis) are skipped, and edge gaps are never read, or a ceiling
+  gap throws the line off the wall. Needs spacing drawn first (`drawElevAll` order).
 - `_autoLiftDimLabel(dim, type)` lifts a dim number out of its line when the gap can't
   hold it. It **measures**, so run it after `appendChild` (detached = 0, no-op).
   `data-lbl-off` carries the along-line nudge; the side comes from `data-line-off`, the
@@ -1849,6 +1886,11 @@ run but passes alone is usually load timing: rerun before chasing it.
   points: `_ePt = elevScale * unitFactor('in', elevUnit) / 72` (outer 35/18/0.55, frame 35/14/0.75
   inset, mat 20/8/0.5625, art 8/3/0.3125; insets carry `dIS`'s 1.25). With artwork the picture
   covers the opening's inset, so `.art-shade` casts it again over the `<img>`.
+- **AN EMPTY OPENING ON A DECK PAGE IS `ELEV_EMPTY_OPENING_FILL` (19.17).** `renderFrameToCanvas`
+  leaves the opening transparent; on deck pages the drop shadow sits UNDER the frame and showed
+  through as black. `opts.emptyFill` fills it (before the opening's inner shadow; never under
+  artwork or wireframe). Passed by `renderElevationToCanvas` and by `exportElevSVG` ONLY when
+  `forCapture` (`_capK`); downloads stay transparent.
 - **ONE DECK-PAGE DROP SHADOW: `_frameShadowCanvas(d, wIn, hIn)`** (gated by `frameFx.pageShadow`,
   "Also on deck pages"). `_pdfFrameShadow` (spec pages) and `exportElevSVG` `forCapture` (breaker
   and install pages) both draw it; the capture splices all shadows in UNDER all frames
@@ -1864,6 +1906,154 @@ run but passes alone is usually load timing: rerun before chasing it.
   and is parked off-canvas with the shadow thrown back by `shadowOffsetX`. The old stroke
   sat 10px outside, so small shadows (Onto artwork, Mat onto mat) never arrived. With NO
   mat the frame recipe casts onto the art (`_openShadow`, `.art-visual.fx-frame-cast`).
+
+- **TOUCH IS ONE LAYER OVER THE MOUSE HANDLERS (19.18, `_touchInstall`, `_touchArms`).** iPad
+  landscape is the touch target (iPhone not yet). A finger sends a synthetic mousedown; if its
+  handler ARMED a drag (registered mousemove/mouseup, or assigned `document/window.onmousemove`)
+  the moves are forwarded and scrolling stops, else the touch scrolls/taps natively. So a NEW
+  drag written the house way (mousedown registers document listeners) works by touch for free;
+  one that reads moves any other way will not. Inside a real scroller an armed drag waits
+  `TOUCH_HOLD_MS`; `TOUCH_SURFACES` drag at once. The layer also listens on the START element,
+  because `drawElevAll` rebuilds it mid-drag and a detached node's touches never reach window.
+  iOS compat mousedown/up/move are swallowed for `TOUCH_COMPAT_MS`; the trusted click is kept.
+  A control shown only on `:hover` needs a line in style.css's `@media (hover: none)` block.
+  **19.19:** `_touchMods` (Shift/Ctrl/Alt latched from the `#touchKeys` bar, touch screens only)
+  ride on every synthetic mouse event; the bar's Delete dispatches a real Delete keydown, and the
+  bar stops its own presses or they clear the selection. `_touchReach` retargets a touch within
+  `TOUCH_HANDLE_REACH` to a visible handle no bigger than `TOUCH_HANDLE_MAX` (`TOUCH_HANDLES`,
+  incl. any inline `-resize` cursor). The dashboard preview column yields below
+  `_dashColumnFits` without touching the saved choice (`_dashWantMode2`); the wall rail folds by
+  the `.collapsed` CLASS (`toggleElevRail`), never an inline display, which the exports own.
+  **19.20:** keys are tap-to-latch OR hold-while-used (`_touchKeyDown/Up`, `_touchHeld`); a
+  touch on the controller is never "the second finger" (`_touchLive`). Row selection on the
+  dashboard reads the CLICK, so `_touchClickMods` replaces the trusted click after a touch
+  with one carrying latched keys (only while one is on). The joystick sends arrow keydowns
+  and folds its undo entries to one per push (`_touchStickFoldHistory`, by identity). The
+  dashboard table (`toggleDashTable`, read through `_dashTableFloor()`, never
+  `DASH_TABLE_MIN_W` directly) and the elevation sidebar (`toggleElevSidebar`) fold by class;
+  BOTH exports unfold the sidebar (`_elevSidebarUnfoldForExport`) so output never depends on
+  it. Touch screens get the form as tabs (`_dashTabsInit`, `data-dtab` tags, sections stay put).
+  **19.21:** a field marked `data-touch-nofocus` is never auto-focused on a touch screen
+  (`_touchNoAutoFocus`, in `_modalOnOpen` and the frame browser): `_modalOnOpen` re-runs on
+  every redraw and would raise the keyboard, or walk focus onto the next control, each time.
+  `_elevApplyArtFile` is the ONE way a picture file reaches a wall frame (drop and the dock's
+  `elevAddArtwork`). Home-screen app: `manifest.webmanifest` (relative start_url/scope: two
+  sites, one tree), `icon-180.png`/`icon-512.png`; `_homeScreenTitle` names dev "FRAME dev".
+  **19.22:** joystick rim arrows (`_touchArrowDown`) stop their touches so the knob never
+  starts. Delete removes a selected dim via `_selDimDelete` = `{id, fn}` recorded by
+  `buildDimControls` (keyed by id); frame Delete returns while a dim/line/group dim is selected.
+- **AN EXPORT IS NEVER LAID OUT SMALLER THAN A DESKTOP (19.22, `_elevExportFloor`,
+  `ELEV_EXPORT_MIN_WS_W/H` = 1494x1034, the workspace an export gets at 1920x1080).** Dim
+  numbers and ticks are fixed print sizes, so a smaller drawn wall printed them bigger beside
+  it (an iPad deck ~2x). Both exports raise the counter beside the sidebar unfold and lower it
+  in the same `finally`; `drawElevAll` floors the measured workspace while it is > 0. A bigger
+  screen is untouched (the designer's choice). On SCREEN the iPad still draws ticks relatively
+  bigger (screen matches print by design); folding the panels brings it close to desktop.
+- **THE LETTER LEGEND DEFAULTS TO 200pt (`IG_LEGEND_W_DEFAULT`)**, install and breaker pages.
+- **iPHONE: PORTRAIT TO WORK, LANDSCAPE TO LOOK (19.23, `_phoneApply`, `_phoneBuild`).** A touch
+  screen under `PHONE_MAX_W` (600) wide or `PHONE_MAX_H` (500) tall gets `html.phone` (+
+  `html.phone-land` sideways); iPads never qualify. NO SECOND COPY OF ANY VIEW: it is CSS on
+  those classes plus built elements (`#phoneTabBar`, `#phoneMoreBtn`, `#phoneDashBack`,
+  `#phoneMetaToggle`, `#phoneDeckBar`, `#phoneRailClose`, the controller's fold via
+  `_phonePadFold`, run from BOTH builders since their order differs). Items = list then
+  detail (`_phoneDashDetail`; row fields take no taps in the list; a Shift/Ctrl tap stays on
+  the list). Walls = chips / wall / tool strip / panel, every panel section `flex: none`
+  (a flex:1 section collapses to nothing in a scrolling panel). Deck = page / `#phoneDeckBar`
+  / tools, rail as an All pages sheet. Landscape hides menus on Walls and Deck only
+  (`[data-phone-view]`, set by `_phoneSyncTabs`), never Items. `#appShell` is `100dvh` on a
+  phone (100vh runs under Safari's toolbar) and carries the safe-area insets
+  (`viewport-fit=cover`). Hooks: `_syncHeaderForView` -> `_phoneSyncTabs`, `_dsRenderCenter` ->
+  `_phoneDeckBarSync`. A test harness that reloads a dirty page hangs on beforeunload.
+  **19.24:** PINCH ZOOMS THE WALL (`_touchPinchBegin/Move/End`, two fingers both inside
+  `#scrollArea`, elevation view): drives `elevZoomFactor` like the slider (0.5..3), anchored on
+  the fingers via workspace scroll, listeners on both touched elements (frames are rebuilt
+  mid-pinch); `html.touch #scrollArea { touch-action: none }` + Safari `gesturestart` held off
+  so the app never zooms. The phone controller is the tab bar's Controls (`#phoneTabPad`,
+  `_phonePadToggle`); NO floating fold button (it covered buttons). Deck header on a phone:
+  `#phoneDeckMenuBtn` holds Generate PDF / Approval / Preflight. All pages sheet zooms each
+  rail cell (`--rail-zoom`, `PHONE_RAIL_CELL_W`). Frame browser on a phone: `_fbPhoneChrome`
+  (built in `_fbBuildTop`, which rebuilds the row) puts lists in a drawer and folds filters;
+  3 across / 5 sideways. `#dsProjRight` (Project preview) is hidden on ANY touch screen.
+  Viewport has `maximum-scale=1` (stops iOS zooming into small inputs on focus).
+  **19.25:** the frame grid is built `FB_CHUNK` (120) cards at a time with an
+  IntersectionObserver sentinel (`_fbRenderGrid`; no IO = all at once, which is what jsdom
+  tests see); in-use codes are ONE set per render (`_fbUsedSet`). Phone swatch photos are
+  absolutely pinned (Safari ignores % max-height in an aspect-ratio box: it showed a crop).
+  On a phone the deck dock lives in `#phoneDeckTools` (both `_dsDockPlace` and `_dsDockSync`
+  know it; it goes home when the phone class drops) and the page bar is ONE row above a
+  page-sized `#dsCenter`. The tools panel's pinned header has class `.ds-tools-sticky`,
+  unpinned on a phone.
+- **OFFLINE: `sw.js` (19.26, registered by `_swRegister`, https/localhost only; `?nosw` removes
+  it).** Navigation network-first (a release still arrives), versioned `?v=` files cache-first
+  and a newer page's versions adopted with the old ones PRUNED (page and app stay a pair for
+  `_checkBuildPairing`), everything else stale-while-revalidate capped at `RUNTIME_MAX`. Cache
+  names carry the SCOPE (dev and stable share an origin). It reads the versions out of the
+  page, so it needs no edit per release. Never caches POSTs or other sites (Google Fonts and
+  cdnjs excepted). `test_offline_sw.js` runs it against a fake Cache Storage.
+- **SWIPE TO FLIP (19.26, phone only, `_touchSwipeZone` / `_touchSwipeFlip`).** A touch on the
+  BACKGROUND of a wall (`#wall`, `#export-wrap`, `#scrollArea`) or deck page (`#dsCenter`,
+  `#dsLayoutCanvas`, a canvas) presses nothing until the first move: sideways = flip, else the
+  ordinary gesture from the start point, no move = a tap. Never with a drag-drawing tool armed
+  or on a floor plan page; an iPad keeps marquee.
+- **NEW ITEMS FROM PHOTOS (`dashNewFromPhotos`, `_dashItemsFromFiles`).** Finds its new rows by a
+  temporary marker stamped through `_fpAddCodes(..., {mark})`, NEVER by the returned code: the
+  settle inside the add renumbers (a gap in the numbering made ART.10 into ART.3 before the
+  picture loaded). The marker is deleted afterwards. Camera button `#phoneSnapBtn` on the phone
+  Items list; Import menu everywhere.
+- **A CORRECTED LIBRARY SWATCH NEEDS A LINE IN `LIB_SWATCH_REV` (19.27).** Picking a frame COPIES
+  its swatch into the project, so replacing a library image changes nothing for pieces already
+  in it. `_libSwatchUpgrade` (from the library load AND `_startScreenClose`, whichever is second)
+  re-copies a listed code into rows (and wall copies) whose `swatchRev` is older; only library
+  picks (`swatchName === fCode`), never an upload (`swatchCustom`, set by
+  `loadDashCustomSwatch`). A swatch is the corner's FACE, a tall cut with cross-faded ends: a
+  short slice tiles down the rail as a visible repeat (FA-BW74-2003 was 31px and read as dots).
+- **THE PHONE HEADER'S MIDDLE IS THE VIEW'S CONTROL (19.28, `#phoneCtx`, `_phoneCtxSync`).** Walls:
+  the wall name opening `openPhoneWallMenu` (the chip row is hidden on a phone); an item: the
+  way back (`#phoneDashBack` hidden); Deck: the tab name, with `#phoneDeckMenuBtn` beside the
+  more button holding Project / Pages / Templates + Generate PDF / Approval / Preflight (the
+  deck's own tab row is hidden). Synced from `_phoneSyncTabs`, `_phoneDashDetail`, `_dsTab`.
+  The item preview REDRAWS when the item screen opens (it was sized while hidden: cropped).
+  Frame library vendors are an accordion, and an explicit open/close in `_fbOpenVendors` WINS
+  over "the current list is open" (before, the vendor being viewed could never be closed).
+- **EVERY EDGE IS PADDED BY ITS SAFE-AREA INSET (19.29).** `viewport-fit=cover` lets the page run
+  under the iPhone status bar and home indicator. `#appShell` pads all four, `.frame-modal` pads
+  all four (the phone frame browser card is 100%, not 100vw/100dvh), and any phone sheet pinned
+  to the top adds `env(safe-area-inset-top)`. A new full-screen or top-pinned element must too.
+  Chrome can test it: `Emulation.setSafeAreaInsetsOverride`.
+- **PROJECT SALON HANGS ARE `asDrawn` PRESETS (19.30).** `SALON_PRESETS` also holds the Ford
+  Engineering Lab V7 hangs (`fel-<area>-<no>`, `src`, `asDrawn: true`): the project's own gaps,
+  any piece count up to the 12-letter cap. The 3"-gap and style-mix rules in `test_frame_sets`
+  apply to the HOUSE presets only; asDrawn ones must start at 0,0, never overlap and keep 1"+
+  gaps.
+- **FRAME SETS ARE PICKED FROM PICTURES (19.31, `openFrameSetPicker`).** The floorplan item's
+  frames button opens a `.frame-modal` of drawn tiles (`_frameSetThumbSVG`, to scale; frame ink
+  from the moulding's catalogue colour via `_frameSetInk`, drawn at least ~1% of the drawing so
+  long rows read): Sets / Salon hangs / Ford Engineering Lab. asDrawn preset frames carry `f`, a
+  library code; `_fpApplyFrameSetNow` dresses each piece through `applySwatchToRow`
+  (`_salonFrameDress`) from `_libSwatchMemo`, which the picker warms on open; anything late is
+  dressed by `_salonFrameDressLater`, which RETAKES the top undo snapshot (one gesture, one entry).
+- **THE PHONE DECK'S TABS ARE A STRIP ABOVE THE TAB BAR (19.32, `#phoneDeckTabs`, `PHONE_DECK_TABS`,
+  `_phoneDeckTabsSync` from `_phoneCtxSync`).** Project / Pages / Templates + `#phoneDeckMenuBtn` (Generate PDF,
+  Approval, Preflight; `data-menu-up` makes `_frameMenu` open upward). Portrait Deck only; `--phone-sub-h` adds
+  its height to the shell's bottom padding. `#appShell` is PINNED (`position: fixed`, all four edges) on a phone:
+  as 100dvh it came out a safe-area short of the fixed bars (dead band). Pinning surfaced the All pages X
+  (`.phone-x` beat its `display:none`), now hidden unless `.phone-sheet-open`.
+  **19.33:** the strip is ICONS (`PHONE_DECK_TABS` carry svg) plus `PHONE_DECK_TOOLS` (All pages, Preview,
+  Preflight via `_phoneDeckToolRun`); the menu keeps Generate PDF + Approval only. The top row (`#phoneDeckBar`)
+  NEVER SCROLLS: Preview/Preflight are hidden there, and `_dsSyncToolbar` sets `html.phone-ds-sel` so the
+  selection group replaces the page arrows while something is selected.
+  **19.34: A COLOUR AND A STRIP PER VIEW.** `--pv-deck/items/walls/ctl` (blue, pink, yellow, grey); `--pv` follows
+  `data-phone-view` (and `data-phone-deck` inside Deck: Project grey, Pages blue, Templates purple) and paints
+  the header line + title. All three strips are `.phone-substrip`, shown by ID per view: `#phoneItemsBar`
+  (`PHONE_ITEMS_TOOLS`, calls the real toolbar functions; the `.dash-toolbar` row is hidden on a phone) and
+  `#phoneWallsBar` (built from `.elev-cat-tabs`, buttons carry `data-elevtab` so `switchElevTab` lights them;
+  the sidebar strip is hidden). `PHONE_DECK_TOOL_TABS` says which deck tab owns each tool; the others are
+  `disabled` (a test harness must be on Pages before clicking Preflight / All pages).
+- **A SAVED PROJECT KEEPS ITS FOOTER FIELDS AND DECK TICKS (19.30).** `globalMeta.docCode /
+  docVersion / docLocation` carry the Project tab's code/version/location (they were never
+  saved). `seedDeckIncludeInputs` / `seedDeckPlanOrderInput` must run AFTER the editorial is
+  installed in every open path (`_readProjectText`, autosave restore, `_versionRestore`); they
+  ran before it, against the previous project's editorial.
 
 ## Design principles used here
 - Prefer dynamic behaviour over manual controls: if a layout element won't fit, drop
