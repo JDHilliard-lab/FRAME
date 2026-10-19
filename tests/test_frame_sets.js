@@ -33,6 +33,8 @@ window.eval(APP + NL + [
   '  hang: function () { return elevHangIn; }, panel: _fpPanelItems, fresh: _projectIsFresh, newProject: _startNewProject,',
   '  get armLine() { return _fpLineArmId; }, wallMode: _fpWallPanelsOn, styles: FP_LINE_STYLES, GAP: SET_GAP_IN,',
   '  goFp: function (fn) { _dsGoFloorplanItems = fn; },',
+  '  picker: openFrameSetPicker, dress: _salonFrameDress, memo: _libSwatchMemo, codes: _salonPresetCodes,',
+  '  setLib: function (by, load) { _fbByCode = by; _libEntryToDataUrl = load; },',
   '};',
 ].join(NL));
 console.error = quiet;
@@ -57,9 +59,11 @@ const gaps = (fr) => {
 };
 
 check('EXACT ASK: a salon library for 5 and 7, every neighbour exactly 3in apart, nothing overlapping', () => {
-  const five = fx.presets.filter(p => p.n === 5), seven = fx.presets.filter(p => p.n === 7);
+  // The HOUSE library (19.30: hangs copied from a real project are asDrawn, checked below).
+  const house = fx.presets.filter(p => !p.asDrawn);
+  const five = house.filter(p => p.n === 5), seven = house.filter(p => p.n === 7);
   if (five.length < 2 || seven.length < 2) throw new Error('library: ' + five.length + ' x5, ' + seven.length + ' x7');
-  fx.presets.forEach(p => {
+  house.forEach(p => {
     if (p.frames.length !== p.n) throw new Error(p.key + ' has ' + p.frames.length + ' frames');
     gaps(p.frames).forEach(g => {
       if (g.overlap) throw new Error(p.key + ': frames ' + g.i + ' and ' + g.j + ' overlap');
@@ -72,12 +76,99 @@ check('EXACT ASK: a salon library for 5 and 7, every neighbour exactly 3in apart
 });
 
 check('EXACT ASK: each salon mixes mats, no mat, and float on deckled paper, in different sizes', () => {
-  fx.presets.forEach(p => {
+  fx.presets.filter(p => !p.asDrawn).forEach(p => {
     const st = new Set(p.frames.map(f => f.s));
     ['mat', 'plain', 'float'].forEach(k => { if (!st.has(k)) throw new Error(p.key + ' has no ' + k + ' piece'); });
     const sizes = new Set(p.frames.map(f => f.w + 'x' + f.h));
     if (sizes.size < 4) throw new Error(p.key + ' is too uniform: ' + sizes.size + ' sizes');
   });
+});
+
+// 19.30: THE FORD ENGINEERING LAB HANGS, as built in its V7 installation guide.
+check('EXACT ASK: the Ford Engineering Lab salon hangs are in the set library, as drawn', () => {
+  const ford = fx.presets.filter(p => p.asDrawn);
+  if (ford.length < 10) throw new Error('only ' + ford.length + ' project hangs');
+  const want = ['fel-cor-003', 'fel-cor-015', 'fel-caf-001', 'fel-hal-001', 'fel-ent-002'];
+  want.forEach(k => { if (!ford.find(p => p.key === k)) throw new Error('missing ' + k); });
+  const keys = new Set();
+  ford.forEach(p => {
+    if (keys.has(p.key)) throw new Error('duplicate key ' + p.key); keys.add(p.key);
+    if (!p.src || p.src.indexOf('Ford Engineering Lab') < 0) throw new Error(p.key + ' does not say where it came from');
+    if (p.frames.length !== p.n) throw new Error(p.key + ' has ' + p.frames.length + ' frames for n ' + p.n);
+    if (p.n > 12) throw new Error(p.key + ' is over the 12-piece letter cap');
+    const x0 = Math.min.apply(null, p.frames.map(f => f.x)), y0 = Math.min.apply(null, p.frames.map(f => f.y));
+    if (x0 !== 0 || y0 !== 0) throw new Error(p.key + ' does not start at its bottom-left (' + x0 + ', ' + y0 + ')');
+    p.frames.forEach(f => {
+      if (!(f.w > 0 && f.h > 0)) throw new Error(p.key + ' has a frame with no size');
+      if (['mat', 'plain', 'float'].indexOf(f.s) < 0) throw new Error(p.key + ' style ' + f.s);
+    });
+    gaps(p.frames).forEach(g => {
+      if (g.overlap) throw new Error(p.key + ': frames ' + g.i + ' and ' + g.j + ' overlap');
+      if (g.gap < 1 - 1e-9) throw new Error(p.key + ': ' + g.i + '/' + g.j + ' only ' + g.gap + 'in apart');
+    });
+  });
+  // The best-known one, checked against the guide: 11 pieces in a band about 245" by 47".
+  const c3 = ford.find(p => p.key === 'fel-cor-003');
+  const W = Math.max.apply(null, c3.frames.map(f => f.x + f.w)), H = Math.max.apply(null, c3.frames.map(f => f.y + f.h));
+  if (c3.n !== 11 || Math.abs(W - 245) > 3 || Math.abs(H - 47) > 2) throw new Error('fel-cor-003 is ' + c3.n + ' pieces, ' + W + ' x ' + H);
+});
+
+check('a Ford hang applies like any set: lettered pieces on a wall in its shape', () => {
+  fresh();
+  fx.add('framed', 1);   // ART.1
+  fx.apply('ART.1', 11, 'fel-cor-003');
+  const ids = fx.rows.map(r => r.id);
+  if (ids.length !== 11 || ids[0] !== 'ART.1A' || ids[10] !== 'ART.1K') throw new Error('rows: ' + ids.join());
+  const wall = fx.elevs.find(e => (e.frames || []).some(f => f.id === 'ART.1A'));
+  if (!wall || wall.frames.length !== 11) throw new Error('not mocked up on a wall');
+  const pre = fx.presets.find(p => p.key === 'fel-cor-003');
+  const fa = wall.frames.find(f => f.id === 'ART.1A'), fb = wall.frames.find(f => f.id === 'ART.1B');
+  const dx = (fb.x - fa.x), want = pre.frames[1].x - pre.frames[0].x;
+  if (Math.abs(dx - want) > 0.01) throw new Error('A to B is ' + dx + ', the guide has ' + want);
+});
+
+// 19.31: THE FORD HANGS CARRY THEIR FRAMES, AND SETS ARE PICKED FROM PICTURES.
+check('EXACT ASK: the Ford hangs are not all one frame: each piece names its library moulding', () => {
+  const ford = fx.presets.filter(p => p.asDrawn);
+  const codes = new Set();
+  ford.forEach(p => p.frames.forEach(f => { if (f.f) { if (f.f.indexOf('MICH-') !== 0) throw new Error(p.key + ' frame code ' + f.f); codes.add(f.f); } }));
+  if (codes.size < 4) throw new Error('only ' + codes.size + ' different frames across the Ford hangs');
+  const c3 = ford.find(p => p.key === 'fel-cor-003');
+  if (new Set(c3.frames.map(f => f.f).filter(Boolean)).size < 3) throw new Error('Corridor 003 is one frame');
+  if (fx.presets.filter(p => !p.asDrawn).some(p => p.frames.some(f => f.f))) throw new Error('a house preset grew frame codes');
+});
+
+check('applying a Ford hang dresses each piece in its frame (from preloaded swatches)', () => {
+  fresh();
+  const pre = fx.presets.find(p => p.key === 'fel-cor-003');
+  const by = {};
+  pre.frames.forEach(f => { if (f.f) { by[f.f.toLowerCase().replace(/[^a-z0-9]/g, '')] = { collection: /305|360|340/.test(f.f) ? 'floaters' : 'avant-garde', item: { code: f.f, width: 1, file: f.f + '.jpg', faceWidth: /305|360|340/.test(f.f) ? 0.25 : undefined } }; fx.memo[f.f] = 'data:image/jpeg;base64,' + f.f; } });
+  const realNorm = window._fbNorm;
+  fx.setLib(() => new Proxy(by, { get: (t, k) => t[String(k).toLowerCase().replace(/[^a-z0-9]/g, '')] }), () => Promise.resolve('data:x'));
+  fx.add('framed', 1);
+  fx.apply('ART.1', 11, 'fel-cor-003');
+  const rows = fx.rows.filter(r => /^ART[.]1[A-K]$/.test(r.id));
+  pre.frames.forEach((f, i) => {
+    if (!f.f) return;
+    if (rows[i].fCode !== f.f) throw new Error(rows[i].id + ' wears ' + rows[i].fCode + ', the guide has ' + f.f);
+  });
+  const wall = fx.elevs.find(e => (e.frames || []).some(fr => fr.id === 'ART.1B'));
+  const fb = wall.frames.find(fr => fr.id === 'ART.1B');
+  if (fb.fCode !== pre.frames[1].f) throw new Error('the wall copy of B is in ' + fb.fCode);
+});
+
+check('EXACT ASK: the frames button opens a picker of drawn arrangements, not a list', () => {
+  const S = window.__appSrc || '';
+  const g = { key: 'ART.9', rows: [{ id: 'ART.9' }] };
+  const ov = fx.picker(g);
+  const tiles = doc.querySelectorAll('#frameSetPicker .fsp-tile');
+  const want = 4 + fx.presets.length;
+  if (tiles.length !== want) throw new Error(tiles.length + ' tiles, want ' + want);
+  tiles.forEach(t => { if (!t.querySelector('svg rect')) throw new Error('tile ' + t.getAttribute('data-set') + ' draws nothing'); });
+  if (!doc.querySelector('#frameSetPicker [data-set="fel-hal-001"]')) throw new Error('no Hallway 001 tile');
+  if (!doc.querySelector('#frameSetPicker .fsp-tile.on[data-set="n1"]')) throw new Error('the current set (single) is not ringed');
+  if (!doc.querySelector('#frameSetPicker [data-modal-close]')) throw new Error('no close control');
+  ov.remove();
 });
 
 check('EXACT ASK: Triptych makes ART.nA-C and hangs them on a wall, centred, at hang height, 3in apart', () => {

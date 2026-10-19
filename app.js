@@ -6,7 +6,7 @@
 // Update APP_VERSION on each release. APP_BUILD is derived from the URL (see
 // below) — the version pill turns orange on the dev site to make it obvious at a
 // glance which build you are looking at.
-const APP_VERSION = '19.12';
+const APP_VERSION = '19.34';
 const IDML_STYLE_SEED = [{"id":"sty_cover_title","name":"Cover Title","group":"Cover","font":"display","size":0.1111,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"upper","track":0.01},{"id":"sty_cover_title_centered","name":"Cover Title (Centered)","group":"Cover","font":"display","size":0.1111,"bold":true,"italic":false,"color":"#ffffff","align":"center","caps":"upper","track":0.01},{"id":"sty_cover_location","name":"Cover Location","group":"Cover","font":"serif","size":0.0222,"bold":false,"italic":false,"color":"#ffffff","align":"right","caps":"none","track":0.0},{"id":"sty_cover_project_code","name":"Cover Project Code","group":"Cover","font":"serif","size":0.0222,"bold":false,"italic":false,"color":"#ffffff","align":"right","caps":"none","track":0.0},{"id":"sty_toc_section_title","name":"TOC Section Title","group":"Table of Contents","font":"serif","size":0.0241,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.0},{"id":"sty_toc_entry","name":"TOC Entry","group":"Table of Contents","font":"serif","size":0.0185,"bold":false,"italic":false,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_section_heading","name":"Section Heading","group":"Header","font":"display","size":0.0556,"bold":true,"italic":false,"color":"#000000","align":"left","caps":"upper","track":0.01},{"id":"sty_header_one_xl","name":"Header One (XL)","group":"Header","font":"display","size":0.0444,"bold":true,"italic":false,"color":"#000000","align":"left","caps":"upper","track":0.01},{"id":"sty_paragraph_heading_right","name":"Paragraph Heading (Right)","group":"Header","font":"display","size":0.0333,"bold":true,"italic":false,"color":"#1a1a1a","align":"right","caps":"upper","track":0.01},{"id":"sty_body_copy_standard","name":"Body Copy (Standard)","group":"Body Copy","font":"serif","size":0.0148,"bold":false,"italic":false,"color":"#222222","align":"justify","caps":"none","track":0.0},{"id":"sty_body_copy_large_+_bold","name":"Body Copy (Large + Bold)","group":"Body Copy","font":"serif","size":0.0185,"bold":true,"italic":false,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_body_copy_primary","name":"Body Copy (Primary)","group":"Body Copy","font":"serif","size":0.0148,"bold":false,"italic":false,"color":"#222222","align":"justify","caps":"none","track":0.0},{"id":"sty_body_description","name":"Body Description","group":"Body Text","font":"serif","size":0.0167,"bold":false,"italic":false,"color":"#333333","align":"left","caps":"none","track":0.0},{"id":"sty_body_subheading","name":"Body Subheading","group":"Body Text","font":"serif","size":0.0204,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.0},{"id":"sty_spec_copy","name":"Spec Copy","group":"Spec Page","font":"serif","size":0.0148,"bold":false,"italic":false,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_spec_subject","name":"Spec Subject","group":"Spec Page","font":"serif","size":0.0148,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.01},{"id":"sty_spec_notes","name":"Spec Notes","group":"Spec Page","font":"serif","size":0.013,"bold":false,"italic":true,"color":"#939597","align":"left","caps":"none","track":0.005},{"id":"sty_spec_static_caption","name":"Spec Static Caption","group":"Spec Page","font":"serif","size":0.013,"bold":false,"italic":true,"color":"#999999","align":"left","caps":"none","track":0.0},{"id":"sty_image_code","name":"Image Code","group":"Captions","font":"serif","size":0.012,"bold":false,"italic":true,"color":"#7f7f7f","align":"right","caps":"none","track":0.01},{"id":"sty_caption_image_code","name":"Caption Image Code","group":"Captions","font":"serif","size":0.0111,"bold":false,"italic":false,"color":"#bfbfbf","align":"left","caps":"none","track":0.0},{"id":"sty_artist_name","name":"Artist Name","group":"Captions","font":"serif","size":0.0139,"bold":true,"italic":false,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_artwork_title","name":"Artwork Title","group":"Captions","font":"serif","size":0.013,"bold":false,"italic":true,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_thank_you_\u2014_name","name":"Thank You \u2014 Name","group":"Thank You","font":"display","size":0.0417,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"upper","track":0.0},{"id":"sty_thank_you_\u2014_role","name":"Thank You \u2014 Role","group":"Thank You","font":"serif","size":0.0148,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"none","track":0.0},{"id":"sty_thank_you_\u2014_contact","name":"Thank You \u2014 Contact","group":"Thank You","font":"serif","size":0.013,"bold":false,"italic":false,"color":"#ffffff","align":"left","caps":"none","track":0.0},{"id":"sty_subhead","name":"Subhead","group":"Subheadings","font":"display","size":0.0204,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"upper","track":0.035},{"id":"sty_section_subheading_left","name":"Section Subheading (Left)","group":"Subheadings","font":"display","size":0.0333,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"upper","track":0.01},{"id":"sty_section_subheading_right","name":"Section Subheading (Right)","group":"Subheadings","font":"display","size":0.0333,"bold":true,"italic":false,"color":"#1a1a1a","align":"right","caps":"upper","track":0.01},{"id":"sty_section_subheading_serif","name":"Section Subheading (Serif)","group":"Subheadings","font":"serif","size":0.0139,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.0},{"id":"sty_subheading_white,_center","name":"Subheading (White, Center)","group":"Subheadings","font":"serif","size":0.013,"bold":false,"italic":false,"color":"#ffffff","align":"center","caps":"none","track":0.0},{"id":"sty_quote_\u2014_druk","name":"Quote \u2014 Druk","group":"Quotes","font":"display","size":0.0694,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.025},{"id":"sty_quote_\u2014_druk_alt","name":"Quote \u2014 Druk (Alt)","group":"Quotes","font":"display","size":0.0444,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.0},{"id":"sty_quote_\u2014_serif","name":"Quote \u2014 Serif","group":"Quotes","font":"serif","size":0.0417,"bold":false,"italic":false,"color":"#ffffff","align":"left","caps":"none","track":0.0},{"id":"sty_quote_\u2014_serif_white,_cap","name":"Quote \u2014 Serif (White, Caps)","group":"Quotes","font":"display","size":0.0333,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"upper","track":0.01},{"id":"sty_display_keyword","name":"Display Keyword","group":"Keywords","font":"display","size":0.1111,"bold":true,"italic":false,"color":"#000000","align":"left","caps":"upper","track":0.01},{"id":"sty_keywords_full_page","name":"Keywords (Full Page)","group":"Keywords","font":"display","size":0.0556,"bold":true,"italic":false,"color":"#ffffff","align":"justify-all","caps":"none","track":0.02},{"id":"sty_brand_keyword","name":"Brand Keyword","group":"Keywords","font":"display","size":0.1852,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"upper","track":0.01},{"id":"sty_moodboard_keyword","name":"Moodboard Keyword","group":"Keywords","font":"display","size":0.0833,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"upper","track":0.0}];
 // The default fill for a placeholder shape, and the ONE definition of it. It was
 // written out nine times: the starter deck, the shape creator, the duplicate
@@ -252,7 +252,12 @@ function _frameLogoSvg(cls) {
 // itself is session-only on purpose (see _projectFileHandle), so this cannot reopen
 // anything; it tells you which file to pick.
 const LAST_FILE_KEY = 'frameLastFileName';
-function _startScreenClose() { const m = document.getElementById('startScreen'); if (m) m.remove(); }
+function _startScreenClose() {
+    const m = document.getElementById('startScreen'); if (m) m.remove();
+    // Every way into a project closes this screen, so corrected library swatches reach an
+    // opened project from here (19.27; the library-load hook covers the other order).
+    try { _libSwatchUpgrade(); } catch (e) {}
+}
 async function openStartScreen() {
     _startScreenClose();
     let peeks = [];
@@ -394,6 +399,8 @@ function _startNewProject(o) {
     // New projects print inches with mm alongside, on spec pages and elevations alike
     // (18.37). Set here, not in _editorialDefaults, so only a NEW project gets it.
     editorialContent.specDualUnit = 'mm'; _elevDualLast = 'mm';
+    // The Thank You page starts empty, or with this designer's saved default team (19.13).
+    editorialContent.contacts = _myContactsDefault(); editorialContent.contactsHidden = []; editorialContent.contactsV = 2;
     try { _syncUnitChip(); } catch (e) {}
     _startScreenClose();
     _dsGoFloorplanItems();
@@ -2093,9 +2100,11 @@ function _editorialFromFile(ed) {
     // which _specDualUnit reads when this is null), never a newer default.
     if (!ed || ed.specDualUnit === undefined) e.specDualUnit = null;
     if (!ed || !Array.isArray(ed.artCategories)) delete e.artCategories;
+    // Before 19.13 every deck printed the whole company directory on its Thank You page.
+    if (ed && ed.contactsV === undefined) _contactsMigrateLegacy(e);
     return e;
 }
-function _editorialDefaults() { return Object.assign({ artCategories: JSON.parse(JSON.stringify(ART_CATEGORY_TYPES)), narrative: '', contacts: '', understanding: '', strategy: { primary: '', secondary: '', tertiary: '' }, layoutPages: [], templates: [], coverPage: { elements: [] }, narrativePage: { elements: [] }, sloganPage: { elements: [] }, understandingPage: { elements: [] }, strategyPage: { elements: [] }, specTemplate: 'frameSpecDetail', specTemplateOverrides: {}, specSlots: { frame: true, profile: true, plan: true, elevation: true }, specSlotOverrides: {}, specGroupSlots: { frame: true, profile: true, plan: true, elevation: true }, specGroupSlotOverrides: {}, approvedStamp: false, approvedPages: {}, approvalStatus: {}, specCodeStyle: _specCodeStyleDefault(), paragraphStyle: { font: 'sans', size: 16, color: '#222222' }, titleStyle: { font: 'display', size: TITLE_SIZE_DEFAULT, color: '#141414' }, wireframe: false, specArtOnly: {}, manualGroups: [], scaleOpts: { codes: 'frames', elevThumb: false }, specDualUnit: '', elevBreakers: false, breakerNoPlan: false, annotations: {}, timeline: '', styles: { arrowColor: '#9aa0a6', arrowWeight: 1.2, textFont: 'serif', textSize: 0.045, textColor: '#222222', capSize: 0.02, capSide: 'bottom' } }, _starterDeck()); }
+function _editorialDefaults() { return Object.assign({ artCategories: JSON.parse(JSON.stringify(ART_CATEGORY_TYPES)), narrative: '', contacts: '', contactsV: 2, understanding: '', strategy: { primary: '', secondary: '', tertiary: '' }, layoutPages: [], templates: [], coverPage: { elements: [] }, narrativePage: { elements: [] }, sloganPage: { elements: [] }, understandingPage: { elements: [] }, strategyPage: { elements: [] }, specTemplate: 'frameSpecDetail', specTemplateOverrides: {}, specSlots: { frame: true, profile: true, plan: true, elevation: true }, specSlotOverrides: {}, specGroupSlots: { frame: true, profile: true, plan: true, elevation: true }, specGroupSlotOverrides: {}, approvedStamp: false, approvedPages: {}, approvalStatus: {}, specCodeStyle: _specCodeStyleDefault(), paragraphStyle: { font: 'sans', size: 16, color: '#222222' }, titleStyle: { font: 'display', size: TITLE_SIZE_DEFAULT, color: '#141414' }, wireframe: false, specArtOnly: {}, manualGroups: [], scaleOpts: { codes: 'frames', elevThumb: false }, specDualUnit: '', elevBreakers: false, breakerNoPlan: false, annotations: {}, timeline: '', styles: { arrowColor: '#9aa0a6', arrowWeight: 1.2, textFont: 'serif', textSize: 0.045, textColor: '#222222', capSize: 0.02, capSide: 'bottom' } }, _starterDeck()); }
 
 // ── Starter deck ──────────────────────────────────────────────────────────
 // What a brand-new project opens with. Lifted verbatim from the studio's own
@@ -2126,16 +2135,17 @@ function _starterDeck() {
     });
     // A strategy tier: bold lead-in line, then the definition, as one run pair.
     const tier = (x, w, size, head, copy) => ({ type: 'text', text: head + '\n' + copy, x, y: 0.6916787037037038, w, size, color: INK, font: 'serif', z: 6, bold: false, italic: false, weight: 400, align: 'left', caps: 'none', track: 0, outline: false, styleId: 'sty_body_copy_large_+_bold', runs: [{ text: head, bold: true }, { text: '\n' + copy }] });
-    // The moodboard page's id is fixed so its annotation key resolves. Any page
-    // the user adds later still gets a random one from _mbMigratePages.
-    const MOOD_ID = 'pg5ef7lopj50a';
     return {
         coverPage: {
             type: 'breaker',
             elements: [
                 { type: 'text', x: 0.09588183421516755, y: 0.25, w: 0.5, text: 'CLIENT NAME', font: 'display', size: 0.05197412030471526, color: INK, align: 'left', caps: 'upper', bold: true, italic: false, track: 0.02, z: 2 },
                 { type: 'text', x: 0.09735042735042738, y: 0.31389534883720926, w: 0.66, text: 'COVER PAGE HEADING', font: 'display', size: 0.1699153933038768, color: '#000000', align: 'left', caps: 'upper', bold: true, italic: false, track: 0, z: 3, leading: 77, outline: false },
-                { type: 'text', x: 0.09735042735042736, y: 0.48281369240866384, w: 0.66, text: 'SUBHEADING', font: 'display', size: 0.1699153933038768, color: INK, align: 'left', caps: 'upper', bold: true, italic: false, track: 0, z: 3, leading: 77, outline: true }
+                { type: 'text', x: 0.09735042735042736, y: 0.48281369240866384, w: 0.66, text: 'SUBHEADING', font: 'display', size: 0.1699153933038768, color: INK, align: 'left', caps: 'upper', bold: true, italic: false, track: 0, z: 3, leading: 77, outline: true },
+                // The rule between the client name and the heading (19.14): 1.5pt, in
+                // heading black, so a dark page flips it to white with the type. LAST, so
+                // the starter's element indexes stay where they were; z puts it in order.
+                { type: 'arrow', x1: 0.0967, y1: 0.301, x2: 0.652, y2: 0.301, color: '#000000', weight: 1.5, tip: 'none', startCap: 'none', z: 2 }
             ]
         },
         understandingPage: narrPage('PROJECT UNDERSTANDING'),
@@ -2156,15 +2166,9 @@ function _starterDeck() {
                 { type: 'text', text: 'GOOD ART.\nGOOD PEOPLE.', x: 0.023839061190276623, y: 0.21666666666666667, w: 0.9523218776194468, size: 0.27993599999999996, color: INK, font: 'display', z: 5, leading: 120 }
             ]
         },
-        layoutPages: [{
-            id: MOOD_ID, type: 'custom', title: 'Moodboard', afterKey: 'fixed:slogan', place: 'afterStrategy',
-            elements: [
-                { type: 'text', text: 'SECTION SUBHEADING', x: 0.023904886768256504, y: 0.18055727820844084, w: 0.21886001676445932, size: 0.0333, color: INK, font: 'display', z: 5, leading: 13, weight: 700, bold: true, align: 'left', italic: false, caps: 'upper', track: 0.01, outline: false, styleId: 'sty_section_subheading_left' },
-                { type: 'text', text: 'MOODBOARD HEADING', x: 0.023904886768256504, y: 0.09449913867355726, w: 0.2892707460184408, size: 0.07564318617600002, color: INK, font: 'display', z: 5, leading: 21, bold: true, italic: false, weight: 700, align: 'left', caps: 'upper', track: 0.01, outline: false, styleId: 'sty_section_heading' },
-                { type: 'text', text: 'Keyword / Keyword / Keyword', x: 0.576923076923077, y: 0.12019032921810698, w: 0.4, size: 0.030650744861612098, color: INK, font: 'serif', z: 6, bold: false, italic: false, weight: 400, align: 'right', caps: 'none', track: 0, outline: false, styleId: 'sty_quote_—_serif', leading: 14 },
-                { type: 'text', text: 'Artwork shown is for refernence only', x: 0.576923076923077, y: 0.19459120789506196, w: 0.4, size: 0.019315168453131325, color: INK, font: 'serif', z: 6, bold: false, italic: false, weight: 400, align: 'right', caps: 'none', track: 0, outline: false, styleId: 'sty_quote_—_serif', leading: 5 }
-            ]
-        }],
+        // No starter layout page (19.14): the moodboard that sat between Good Art Good
+        // People and Thank You was a leftover, not a house page.
+        layoutPages: [],
         annotations: {
             'fixed:understanding': [Object.assign(box(0.4914529914529915, 0.0014534883720930232, 0.507393126571668, 0.9979651162790697), { z: 1 })],
             'fixed:narrative': [Object.assign(box(0.4914529914529915, 0.0014534883720930232, 0.507393126571668, 0.9979651162790697), { z: 1 })],
@@ -2172,20 +2176,6 @@ function _starterDeck() {
                 box(0.10683760683760685, 0.2669573643410852, 0.22742665549036042, 0.39912790697674416),
                 box(0.3865864623408631, 0.26695736434108525, 0.22742665549036042, 0.39912790697674416),
                 box(0.6663353178441194, 0.26695736434108525, 0.22742665549036042, 0.39912790697674416)
-            ],
-            ['layout:' + MOOD_ID]: [
-                box(0, 0.2809000861326442, 0.17378038558256495, 0.3308139534883721),
-                box(0, 0.6315676141257536, 0.17378038558256495, 0.2668604651162791),
-                box(0.18638281714560004, 0.2797157622739017, 0.22742665549036042, 0.26395348837209304),
-                box(0.18722104011290933, 0.565891472868217, 0.1452808046940486, 0.3293604651162791),
-                box(0.34665355599974207, 0.5705749354005167, 0.1469572506286672, 0.32645348837209304),
-                box(0.4273504273504274, 0.28036175710594313, 0.0656496227996647, 0.10406976744186047),
-                box(0.42607160000286576, 0.412037037037037, 0.0656496227996647, 0.12441860465116278),
-                box(0.5050203824302735, 0.6883074935400516, 0.23077954735959766, 0.20726744186046514),
-                box(0.5056597961040543, 0.2777777777777778, 0.22826487845766974, 0.3875),
-                box(0.7478632478632479, 0.2777777777777778, 0.25173512154233024, 0.29593023255813955),
-                box(0.7478632478632479, 0.592377260981912, 0.10085498742665548, 0.3046511627906977),
-                box(0.860951705461345, 0.5925925925925926, 0.13773679798826488, 0.3046511627906977)
             ]
         },
         timeline: 'Discovery | Art Location Plan Approval\nConcept | Concept Approval\nArtwork Selection & Design Development | Artwork Approval\nProcurement | Final Specification Approval; Final Quote & PO; Final budget reconciliation\nInstall | Finished Install Approval',
@@ -2299,7 +2289,9 @@ let _mbEditTarget = null;
 let _mbActiveCanvasId = 'moodboardCanvas';   // 'moodboardCanvas' (modal) or 'dsLayoutCanvas' (deck center)
 function _mbCanvas() { return document.getElementById(_mbActiveCanvasId) || document.getElementById('moodboardCanvas'); }
 function _mbPage() { if (_mbEditTarget) return _mbEditTarget.page; _mbMigratePages(); const lp = editorialContent.layoutPages; if (!lp.length) return null; if (_mbPageIndex >= lp.length) _mbPageIndex = lp.length - 1; return lp[_mbPageIndex]; }
-function _mbEls() { return _mbPage().elements; }
+// A deck with NO layout pages (every new one since 19.14) has no page here; an empty list
+// keeps a redraw of the layout editor (undo calls one) from throwing.
+function _mbEls() { const p = _mbPage(); return p ? (p.elements || (p.elements = [])) : []; }
 function _mbAutosave() { if (typeof scheduleAutosave === 'function') scheduleAutosave(); }
 function _mbSwitchPage(i) {
     _mbMigratePages();
@@ -2441,10 +2433,10 @@ function _mbThumbInner(page, wpx, hpx, pageKey) {
             const _lh = (typeof t.leading === 'number' && t.leading > 0) ? ((t.leading / 540) * hpx) / _fs : 1.15;
             html += '<div style="position:absolute;left:' + ((t.x || 0) * wpx) + 'px;top:' + ((t.y || 0) * hpx) + 'px;width:' + ((t.w || 0.3) * wpx) + 'px;font-size:' + _fs + 'px;line-height:' + _lh + ';color:' + _ink + ';white-space:pre-wrap;font-kerning:none;overflow-wrap:break-word;font-family:' + _fam + ';' + _extra + '">' + _mbRunsHtml(t, hpx, pageKey) + '</div>';
         } else if (ty === 'arrow') {
-            svg += '<line x1="' + ((t.x1 || 0) * wpx) + '" y1="' + ((t.y1 || 0) * hpx) + '" x2="' + ((t.x2 || 0) * wpx) + '" y2="' + ((t.y2 || 0) * hpx) + '" stroke="' + (t.color || '#9aa0a6') + '" stroke-width="' + Math.max(0.5, (t.weight || 1.2) * 0.6) + '"/>';
+            svg += '<line x1="' + ((t.x1 || 0) * wpx) + '" y1="' + ((t.y1 || 0) * hpx) + '" x2="' + ((t.x2 || 0) * wpx) + '" y2="' + ((t.y2 || 0) * hpx) + '" stroke="' + ((pageKey && typeof _dsDisplayInk === 'function') ? _dsDisplayInk(t.color || '#9aa0a6', pageKey) : (t.color || '#9aa0a6')) + '" stroke-width="' + Math.max(0.5, (t.weight || 1.2) * 0.6) + '"/>';
         } else if (ty === 'elbow' && Array.isArray(t.pts) && t.pts.length > 1) {
             const pts = t.pts.map(p => ((p.x || 0) * wpx) + ',' + ((p.y || 0) * hpx)).join(' ');
-            svg += '<polyline points="' + pts + '" fill="none" stroke="' + (t.color || '#9aa0a6') + '" stroke-width="' + Math.max(0.5, (t.weight || 1.2) * 0.6) + '"/>';
+            svg += '<polyline points="' + pts + '" fill="none" stroke="' + ((pageKey && typeof _dsDisplayInk === 'function') ? _dsDisplayInk(t.color || '#9aa0a6', pageKey) : (t.color || '#9aa0a6')) + '" stroke-width="' + Math.max(0.5, (t.weight || 1.2) * 0.6) + '"/>';
         }
     });
     if (svg) html += '<svg width="' + wpx + '" height="' + hpx + '" style="position:absolute;left:0;top:0;pointer-events:none;">' + svg + '</svg>';
@@ -2554,9 +2546,10 @@ function _mbRenderPageStrip() {
         tile.ondrop = (e) => { e.preventDefault(); tile.style.outline = ''; if (_mbDragPageFrom >= 0 && _mbDragPageFrom !== i) _mbReorderPages(_mbDragPageFrom, i); _mbDragPageFrom = -1; };
         strip.appendChild(tile);
     });
-    const pt = document.getElementById('mbPageType'); if (pt) pt.value = pages[_mbPageIndex].type || 'moodboard';
-    const ti = document.getElementById('mbPageTitle'); if (ti && document.activeElement !== ti) ti.value = pages[_mbPageIndex].title || '';
-    const pl = document.getElementById('mbPagePlace'); if (pl) pl.value = pages[_mbPageIndex].place || 'afterStrategy';
+    const _curPg = pages[_mbPageIndex] || {};   // none at all on a deck with no layout pages
+    const pt = document.getElementById('mbPageType'); if (pt) pt.value = _curPg.type || 'moodboard';
+    const ti = document.getElementById('mbPageTitle'); if (ti && document.activeElement !== ti) ti.value = _curPg.title || '';
+    const pl = document.getElementById('mbPagePlace'); if (pl) pl.value = _curPg.place || 'afterStrategy';
     const mv = document.getElementById('mbMoveTo');
     if (mv) {
         let opt = '';
@@ -3506,7 +3499,7 @@ function restoreProjectState(snap) {
     // while the array is still in the order the indices were saved against.
     _elevMigrateIds();
     currentElevIndex = cloned.currentElevIndex;
-    if (cloned.editorial) editorialContent = cloned.editorial;
+    if (cloned.editorial) { editorialContent = cloned.editorial; if (editorialContent.contactsV === undefined) _contactsMigrateLegacy(editorialContent); }
     // A snapshot taken before these were part of the format has neither; leave the
     // live values alone in that case rather than resetting to the standard.
     if (typeof cloned.hangHeightIn === 'number' && cloned.hangHeightIn > 0) elevHangIn = cloned.hangHeightIn;
@@ -4089,6 +4082,13 @@ const ELEV_PT_TO_PX = 2;
 // is a wireframe project", `_isWireframe()` reads it, and choosing that preset
 // therefore gets this look for free.
 const ELEV_WF_FILL = '#b9b9b9';   // the grey placeholder block
+// AN EMPTY OPENING ON A DECK PAGE IS LIGHT GREY (19.17). The frame raster leaves the
+// opening transparent (so InDesign can composite), and on breaker and install pages the
+// "also on deck pages" drop shadow sits UNDER the frame, so a piece with no picture
+// printed a black hole. Both deck elevation renderers pass this as `emptyFill`; the
+// downloaded SVG/PNG keep the transparent opening. Lighter than ELEV_WF_FILL, so an
+// empty frame never reads as a wireframe placement block.
+const ELEV_EMPTY_OPENING_FILL = '#e4e4e4';
 const ELEV_WF_INK = '#1f1f1f';    // the letter on it
 const ELEV_WF_SIZE_DEFAULT = 18;  // px, the shipped letter size
 // The letter's size, in CSS px.
@@ -4391,7 +4391,23 @@ function getElevGroupDims() {
     const ce = elevations[currentElevIndex];
     if (!ce) return [];
     if (!Array.isArray(ce.groupDims)) ce.groupDims = [];
+    _groupDimsDedupe(ce.groupDims);
     return ce.groupDims;
+}
+// ONE GROUP DIMENSION PER SET OF FRAMES (19.15). A second press on the same selection
+// stacked identical boxes, with their delete crosses on one spot. Different sets on one
+// wall (three on the left, two on the right) are fine. The key is the sorted letters;
+// a project saved with duplicates keeps the first of each and drops the rest.
+function _groupDimKey(entry) {
+    return ((entry && entry.frameLetters) || []).slice().sort().join('|');
+}
+function _groupDimsDedupe(dims) {
+    const seen = {};
+    for (let i = 0; i < dims.length; i++) {
+        const k = _groupDimKey(dims[i]);
+        if (seen[k]) { dims.splice(i, 1); i--; } else seen[k] = true;
+    }
+    return dims;
 }
 
 // Create a group-dimension callout from the currently-selected frames.
@@ -4406,6 +4422,17 @@ function createGroupDimFromSelection() {
         return;
     }
     const dims = getElevGroupDims();
+    const key = _groupDimKey({ frameLetters: sel.map(f => f.letter) });
+    const have = dims.find(d => _groupDimKey(d) === key);
+    if (have) {
+        // Already dimensioned: select that one instead of stacking a copy on it.
+        selectedGroupDim = have.id; selectedDimId = null; selectedCustomLine = null;
+        elevFrames.forEach(f => { f.selected = false; });
+        if (typeof dimVisibility !== 'undefined' && !dimVisibility.groupBox) { dimVisibility.groupBox = true; saveDimVisibility(); }
+        drawElevAll();
+        _toast('Already dimensioned', 'These frames already have a group dimension. It is selected: press Delete to remove it.');
+        return;
+    }
     const entry = {
         id: 'gd_' + (Date.now().toString(36)) + '_' + (groupDimSeq++),
         frameLetters: sel.map(f => f.letter),
@@ -4428,6 +4455,7 @@ function removeGroupDim(id) {
     const idx = dims.findIndex(d => d.id === id);
     if (idx >= 0) {
         dims.splice(idx, 1);
+        if (selectedGroupDim === id) selectedGroupDim = null;
         drawElevAll();
         pushHistory();
     }
@@ -4541,6 +4569,9 @@ document.addEventListener('keydown', function(e) {
 
     // Delete / Backspace: remove selected frames
     if (e.key === 'Delete' || e.key === 'Backspace') {
+        // A selected dimension or measure line is what Delete is for (the elevation
+        // handler removes it); the frames stay, even if one is still selected.
+        if (selectedGroupDim || selectedDimId || selectedCustomLine) return;
         const sel = getSelectedFrames();
         if (!sel.length) return;
         e.preventDefault();
@@ -4987,6 +5018,9 @@ function _autosaveRestore(payload) {
     floorplanLevels = Array.isArray(payload.floorplanLevels) ? payload.floorplanLevels : [];
     _fpLevel = 0; _fpMigrate();
     editorialContent = _editorialFromFile(payload.editorial);
+    // Seeded AFTER the editorial is installed (19.30): restoreProjectState seeded them
+    // against the previous project's, because an autosave keeps its editorial apart.
+    try { seedDeckPlanOrderInput(); seedDeckIncludeInputs(); } catch (e) {}
     refreshAllViews();
     // After restore, push fresh history (clearing prior so undo doesn't
     // jump back to the pre-restore empty state).
@@ -5132,6 +5166,8 @@ function _versionRestore(snap) {
     floorplanLevels = Array.isArray(snap.floorplanLevels) ? snap.floorplanLevels : [];
     _fpLevel = 0; _fpMigrate();
     editorialContent = Object.assign(_editorialDefaults(), snap.editorial || {});
+    if (snap.editorial && snap.editorial.contactsV === undefined) _contactsMigrateLegacy(editorialContent);
+    try { seedDeckPlanOrderInput(); seedDeckIncludeInputs(); } catch (e) {}   // after the editorial (19.30)
     refreshAllViews();
     undoStack.length = 0; redoStack.length = 0; _isFirstHistoryPush = true; pushHistory(); markDirty();
 }
@@ -5338,12 +5374,15 @@ function initMasterApp() {
         const r0 = dashProjectData.length === 1 ? dashProjectData[0] : null;
         if (r0 && r0.fType === 'color' && r0.fCode === dashDefaultData.fCode && !r0.swatchDataUrl) { _defaultFrameApply(r0); try { loadDashDataIntoControls(r0); } catch (e) {} }
         _defaultFrameLoad();
+        _libSwatchUpgrade();   // 19.27: corrected library swatches into the boot project
     });
     _initFontSelects();    // fill every static font picker from FRAME_FONT_LIBRARY
     loadAnnotationStyle(); // restore saved annotation color/weight/dash defaults
     loadDimVisibility();   // restore saved per-element dimension hide flags
     loadSvgFrameMode();    // restore SVG frame export mode (texture/autocolor)
     loadSnapPref();        // restore snap-to-align on/off preference
+    _elevRailRestore();    // the wall list folded away or not (per computer, 19.19)
+    try { _elevSidebarApply(localStorage.getItem(ELEV_SIDEBAR_KEY) === '1'); } catch (e) {}   // 19.20
     loadDimSnapPref();     // restore dimension-drag snap preference
     seedHangBaseboardInputs(); // hang height + baseboard, derived from stored inches
     seedDeckPlanOrderInput();  // floorplan page order, a display of editorialContent.planOrder
@@ -5358,9 +5397,10 @@ function initMasterApp() {
         wallEl.addEventListener('mousedown', function (e) {
             if (lineToolActive) { handleLineToolClick(e); return; }
             // Click on empty space (not a dim/line) deselects.
-            if ((selectedCustomLine || selectedDimId) && !e.target.closest('.custom-line') && !e.target.closest('.arch-dim')) {
+            if ((selectedCustomLine || selectedDimId || selectedGroupDim) && !e.target.closest('.custom-line') && !e.target.closest('.arch-dim') && !e.target.closest('[data-group-dim]')) {
                 selectedCustomLine = null;
                 selectedDimId = null;
+                selectedGroupDim = null;
                 drawElevAll();
             }
         }, true);
@@ -5420,6 +5460,16 @@ function initMasterApp() {
             // Placing owns the arrows while it is on. Ahead of the custom-line nudge
             // below, because you cannot be doing both.
             if (_ulArrowNudge(e)) e.preventDefault();
+        } else if ((e.key === 'Delete' || e.key === 'Backspace') && selectedGroupDim) {
+            e.preventDefault();
+            removeGroupDim(selectedGroupDim);
+        } else if ((e.key === 'Delete' || e.key === 'Backspace') && selectedDimId
+                   && _selDimDelete && _selDimDelete.id === selectedDimId) {
+            // Keyed by id: a remembered delete for a dim no longer selected never runs.
+            e.preventDefault();
+            const del = _selDimDelete.fn;
+            _selDimDelete = null; selectedDimId = null;
+            del();
         } else if ((e.key === 'Delete' || e.key === 'Backspace') && selectedCustomLine) {
             e.preventDefault();
             deleteCustomLine(selectedCustomLine);
@@ -5440,11 +5490,12 @@ function initMasterApp() {
                 drawElevAll();
             }
         } else if (e.key === 'Escape' && (lineToolActive || lineToolFirstPt || selectedCustomLine
-                   || selectedDimId || contextToolActive || _ulCalibrateActive || _ulPlacing)) {
+                   || selectedDimId || selectedGroupDim || contextToolActive || _ulCalibrateActive || _ulPlacing)) {
             lineToolFirstPt = null;
             lineToolFirstAnchor = null;
             selectedCustomLine = null;
             selectedDimId = null;
+            selectedGroupDim = null;
             // Every wall mode gets its exit here, or the one you are in is a trap. Most
             // specific first: calibrating is entered FROM placing, so Escape backs out
             // one step at a time rather than dumping both.
@@ -6750,7 +6801,7 @@ function computeDashPreviewDims(extW, extH) {
     // the toolbar beneath the picture.
     const vpW = window.innerWidth;
     const vpH = window.innerHeight;
-    const maxW = vpW - 440 - DASH_TABLE_MIN_W - 48;
+    const maxW = vpW - 440 - _dashTableFloor() - 48;
     const maxH = vpH - 46 - 60 - 48;
     if (w > maxW) {
         const k = maxW / w;
@@ -6806,11 +6857,120 @@ function _dashPreviewColumn(on) {
         if (col) col.remove();
     }
 }
-function applyDashViewMode(mode2) {
+// THE PREVIEW COLUMN STANDS ASIDE WHEN IT CANNOT FIT (19.19). It needs the form pane
+// (440), the table's floor (DASH_TABLE_MIN_W) and its own toolbar width beside them;
+// on a narrower screen (an iPad mini or older iPad in landscape) it squeezed the table
+// to ~230px while clamping the picture to ~116px. Then the preview sits in the form
+// pane as in the compact mode. The CHOICE (_dashWantMode2, localStorage dashViewMode)
+// is untouched and the column comes back when the window widens (rotation, resize).
+const DASH_PREVIEW_COL_NEED = 360;   // measured: the column at its clamp is ~350px wide (toolbar, padding, scrollbar)
+let _dashWantMode2 = false;
+
+// THE ITEM TABLE FOLDS AWAY (19.20, toggleDashTable). On an iPad the table, the preview
+// column and the form cannot all fit; folding the table to a strip lets the preview sit
+// beside the whole form. A CLASS, per computer (localStorage), never project data. A
+// folded table takes DASH_TABLE_FOLDED_W, so the column's fit and the picture's size
+// read _dashTableFloor(), never DASH_TABLE_MIN_W directly.
+const DASH_TABLE_FOLDED_W = 34;
+const DASH_TABLE_FOLD_KEY = 'dashTableFolded';
+function _dashTableFolded() {
+    const p = document.querySelector('.dash-left-pane');
+    return !!(p && p.classList.contains('collapsed'));
+}
+function _dashTableFloor() { return _dashTableFolded() ? DASH_TABLE_FOLDED_W : DASH_TABLE_MIN_W; }
+function _dashTableApply(folded) {
+    const p = document.querySelector('.dash-left-pane');
+    if (!p) return;
+    p.classList.toggle('collapsed', !!folded);
+    const b = document.getElementById('dashTableToggle');
+    if (b) {
+        b.title = folded ? 'Show the item list' : 'Fold the item list away';
+        b.setAttribute('aria-expanded', folded ? 'false' : 'true');
+    }
+}
+function toggleDashTable() {
+    const f = !_dashTableFolded();
+    _dashTableApply(f);
+    try { localStorage.setItem(DASH_TABLE_FOLD_KEY, f ? '1' : '0'); } catch (e) {}
+    // The column may fit now (or no longer): same choice, new room.
+    applyDashViewMode(_dashWantMode2);
+    if (document.body.classList.contains('dash-view-2')) { try { updateDashPreviewContainerSize(); } catch (e) {} }
+}
+
+// THE FORM IS TABS ON A TOUCH SCREEN (19.20, _dashTabsInit / setDashFormTab). Item,
+// Frame, Mat and Notes, one at a time, so a section fits an iPad without scrolling.
+// Tagging, not moving: each section keeps its place and ids (data-dtab marks which
+// tab it belongs to; Frame lives INSIDE #sec-meta, so #sec-meta's children are tagged
+// one by one rather than the section). CSS hides what the current tab does not own.
+// Collapsible sections are forced open in tab mode (the tab is the heading). The
+// current tab is session state.
+const DASH_FORM_TABS = [['item', 'Item'], ['frame', 'Frame'], ['mat', 'Mat'], ['notes', 'Notes']];
+let _dashFormTab = 'item';
+function _dashTabsTag() {
+    const meta = document.getElementById('sec-meta');
+    if (!meta) return false;
+    const metaTitle = meta.previousElementSibling;
+    if (metaTitle) metaTitle.dataset.dtab = 'item';
+    Array.from(meta.children).forEach(c => { c.dataset.dtab = c.id === 'frameStyleSection' ? 'frame' : 'item'; });
+    const mat = document.getElementById('matWrapper');
+    if (mat) mat.dataset.dtab = 'mat';
+    const notes = document.getElementById('sec-notes');
+    if (notes) {
+        notes.dataset.dtab = 'notes';
+        if (notes.previousElementSibling) notes.previousElementSibling.dataset.dtab = 'notes';
+    }
+    return true;
+}
+function _dashTabsInit() {
+    const pane = document.getElementById('dashRightPane');
+    const meta = document.getElementById('sec-meta');
+    if (!pane || !meta || document.getElementById('dashFormTabs') || !_dashTabsTag()) return;
+    const bar = document.createElement('div');
+    bar.id = 'dashFormTabs';
+    bar.className = 'frame-tabs fit dash-form-tabs';
+    bar.setAttribute('role', 'tablist');
+    DASH_FORM_TABS.forEach(([k, label]) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'frame-tab';
+        b.dataset.dtabBtn = k;
+        b.setAttribute('role', 'tab');
+        b.textContent = label;
+        b.onclick = () => setDashFormTab(k);
+        bar.appendChild(b);
+    });
+    const metaTitle = meta.previousElementSibling;
+    meta.parentNode.insertBefore(bar, metaTitle || meta);
+    ['sec-meta', 'sec-mats', 'sec-notes'].forEach(id => { const el = document.getElementById(id); if (el) el.classList.add('open'); });
+    pane.classList.add('dash-tabbed');
+    setDashFormTab(_dashFormTab);
+}
+function setDashFormTab(k) {
+    if (!DASH_FORM_TABS.some(t => t[0] === k)) k = 'item';
+    _dashFormTab = k;
+    const pane = document.getElementById('dashRightPane');
+    if (pane) pane.dataset.dtabOn = k;
+    document.querySelectorAll('#dashFormTabs [data-dtab-btn]').forEach(b => {
+        const on = b.dataset.dtabBtn === k;
+        b.classList.toggle('active', on);
+        b.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+}
+function _dashColumnFits() {
+    const vpW = (typeof window !== 'undefined' && window.innerWidth) || 0;
+    if (!vpW) return true;           // no layout to measure (a harness): honour the choice
+    return vpW - 440 - _dashTableFloor() >= DASH_PREVIEW_COL_NEED;
+}
+function applyDashViewMode(want) {
+    _dashWantMode2 = !!want;
+    const mode2 = _dashWantMode2 && _dashColumnFits();
     document.body.classList.toggle('dash-view-2', mode2);
     _dashPreviewColumn(mode2);
     const btn = document.getElementById('dashViewToggle');
-    if (btn) btn.classList.toggle('active', mode2);
+    if (btn) {
+        btn.classList.toggle('active', mode2);
+        btn.classList.toggle('dash-col-squeezed', _dashWantMode2 && !mode2);
+    }
     if (mode2) {
         // Restore the saved size before first render so the container is
         // correct on entry.
@@ -6841,6 +7001,14 @@ function applyDashViewMode(mode2) {
 
 function toggleDashView() {
     const wasMode2 = document.body.classList.contains('dash-view-2');
+    if (!wasMode2 && !_dashColumnFits()) {
+        // Squeezed: the press flips the CHOICE, which shows once there is room.
+        _dashWantMode2 = !_dashWantMode2;
+        applyDashViewMode(_dashWantMode2);
+        try { localStorage.setItem('dashViewMode', _dashWantMode2 ? '2' : '1'); } catch (e) {}
+        if (_dashWantMode2) _toast('No room for the preview column', 'Fold the item list away (the arrow at its top right) to make room, or widen the window.');
+        return;
+    }
     applyDashViewMode(!wasMode2);
     try {
         localStorage.setItem('dashViewMode', !wasMode2 ? '2' : '1');
@@ -6850,6 +7018,8 @@ function toggleDashView() {
 // Restore the saved dashboard view mode on page load. Called from the
 // existing init flow alongside theme restoration.
 function initDashViewMode() {
+    try { _dashTableApply(localStorage.getItem(DASH_TABLE_FOLD_KEY) === '1'); } catch (e) {}
+    try { if (document.documentElement.classList.contains('touch')) _dashTabsInit(); } catch (e) {}
     try {
         const savedSize = parseFloat(localStorage.getItem('dashPreviewSize'));
         if (!isNaN(savedSize) && savedSize >= DASH_PREVIEW_SIZE_MIN) {
@@ -6927,7 +7097,7 @@ function setupDashPreviewDragHandle() {
         // max-size in two ways and use the tighter.
         const vpW = window.innerWidth;
         const vpH = window.innerHeight;
-        const maxByW = vpW - 440 - DASH_TABLE_MIN_W - 48;  // form pane + the table's floor
+        const maxByW = vpW - 440 - _dashTableFloor() - 48;  // form pane + the table's floor
         const maxByH = vpH - 46 - 60 - 48;                 // nav + toolbar + padding
         const data = dashProjectData[dashSelectedRowIndex];
         const ew = Math.max(1, parseFloat(data && data.extW) || 1);
@@ -6971,6 +7141,11 @@ function setupDashPreviewDragHandle() {
     window.addEventListener('resize', () => {
         if (resizeTimer) clearTimeout(resizeTimer);
         resizeTimer = setTimeout(() => {
+            // Rotating an iPad or resizing the window can make the preview column
+            // fit or stop fitting; re-apply the same choice against the new width.
+            if (_dashWantMode2 && (_dashColumnFits() !== document.body.classList.contains('dash-view-2'))) {
+                applyDashViewMode(true);
+            }
             updateDashPreviewContainerSize();
             if (typeof updateDashVisualsFromDOM === 'function') {
                 updateDashVisualsFromDOM();
@@ -6994,6 +7169,7 @@ function _syncHeaderForView() {
         const on = (el.getAttribute('data-views') || '').split(/\s+/).indexOf(currentView) >= 0;
         el.classList.toggle('hdr-off', !on);
     });
+    try { _phoneSyncTabs(); } catch (e) {}
 }
 // The Save menu: the two ways to save that are not Ctrl+S, and the version history.
 function openSaveMenu() {
@@ -7796,6 +7972,10 @@ function _flushElevationInputs() {
 function _projectPayload() {
     const getStr = (id) => document.getElementById(id).value;
     const globalMeta = { projName: getStr('g_projName'), desc: getStr('g_desc'), date: getStr('g_date'), issued: getStr('g_issued'), client: getStr('g_client'), attn: getStr('g_attn'), delivery: getStr('g_delivery') };
+    // THE DOCUMENT CODE, VERSION AND LOCATION TRAVEL WITH THE FILE (19.30). They print in
+    // every page footer and were never saved: a reopened project lost "FEL - V7".
+    const docMeta = _deckFooterMeta();
+    globalMeta.docCode = docMeta.code; globalMeta.docVersion = docMeta.version; globalMeta.docLocation = docMeta.location;
     // hangHeightIn / baseboardIn are stored in INCHES, deliberately unit-independent
     // - that's the whole point of the change, so a project written in inches and
     // opened in cm still hangs at 57". They weren't saved at all before, so the
@@ -8034,12 +8214,17 @@ function _readProjectText(text) {
             const _bIn = parseFloat(data.baseboardIn);
             elevBaseboardIn = (isFinite(_bIn) && _bIn >= 0) ? _bIn : ELEV_STD_BASEBOARD_IN;
             seedHangBaseboardInputs();
-            seedDeckPlanOrderInput();
-            seedDeckIncludeInputs();
             if (data.globalMeta) {
                 const setVal = (id, val) => { const el = document.getElementById(id); if(el) el.value = val; };
                 setVal('g_projName', data.globalMeta.projName); setVal('g_desc', data.globalMeta.desc); setVal('g_date', data.globalMeta.date);
                 setVal('g_issued', data.globalMeta.issued); setVal('g_client', data.globalMeta.client); setVal('g_attn', data.globalMeta.attn); setVal('g_delivery', data.globalMeta.delivery);
+                // 19.30: an older file has none of these; leave the fields as they are then.
+                if (data.globalMeta.docCode != null || data.globalMeta.docVersion != null || data.globalMeta.docLocation != null) {
+                    const m = { code: data.globalMeta.docCode || '', version: data.globalMeta.docVersion || '', location: data.globalMeta.docLocation || '' };
+                    window._specPdfMeta = m;
+                    const sv = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+                    sv('specPdfCode', m.code); sv('specPdfVersion', m.version); sv('specPdfLocation', m.location);
+                }
             }
             if (data.dashProjectData) dashProjectData = data.dashProjectData;
             if (data.elevations) elevations = data.elevations;
@@ -8049,6 +8234,12 @@ function _readProjectText(text) {
             floorplanLevels = Array.isArray(data.floorplanLevels) ? data.floorplanLevels : [];
             _fpLevel = 0; _fpMigrate();
             editorialContent = _editorialFromFile(data.editorial);
+            // THE DECK'S DISPLAYS ARE SEEDED FROM THE FILE'S EDITORIAL, SO AFTER IT IS
+            // INSTALLED (19.30). They ran a few lines up, against the PREVIOUS project's
+            // editorial: a saved project reopened with the last deck's include ticks (a
+            // Final Spec deck came back with its story pages on) and plan order.
+            seedDeckPlanOrderInput();
+            seedDeckIncludeInputs();
             // Code order is the house standard, so a project opens in it: gaps closed,
             // rows and walls sorted. Needs the categories (prefix order) and the walls
             // (catalogue structure), so it runs here and not earlier.
@@ -14419,18 +14610,71 @@ function wireElevArtworkDrop() {
         const letter = fEl.getAttribute('data-frame-letter');
         const frame = elevFrames.find(f => f.letter === letter);
         if (!frame) { showInfoModal('No frame', 'Could not match that frame.'); return; }
-        // Map to the dashboard row by id.
-        const rowIdx = dashProjectData.findIndex(r => r.id === frame.id);
-        processArtworkFile(file, (u, n, w, h) => {
-            if (rowIdx >= 0) {
-                applyArtworkToRowIndex(rowIdx, u, n, w, h);
-            } else {
-                // Frame not linked to a dashboard row — set on the frame directly.
-                frame.artworkUrl = u; frame.artworkFile = n; frame.artworkW = w || 0; frame.artworkH = h || 0;
-                frame.artZoom = 1; frame.artPanX = 0; frame.artPanY = 0; drawElevAll(); pushHistory();
-            }
-        });
+        _elevApplyArtFile(frame, file);
     });
+}
+
+// ONE WAY A PICTURE FILE REACHES A WALL FRAME (19.21): the drop above and the dock's Add
+// artwork button. Through the frame's dashboard row when it has one (so the row, every
+// wall it hangs on and the catalogue refusal all apply), else onto the frame itself.
+function _elevApplyArtFile(frame, file, done) {
+    const rowIdx = dashProjectData.findIndex(r => r.id === frame.id);
+    processArtworkFile(file, (u, n, w, h) => {
+        if (rowIdx >= 0) {
+            applyArtworkToRowIndex(rowIdx, u, n, w, h);
+        } else {
+            // Frame not linked to a dashboard row: set on the frame directly.
+            frame.artworkUrl = u; frame.artworkFile = n; frame.artworkW = w || 0; frame.artworkH = h || 0;
+            frame.artZoom = 1; frame.artPanX = 0; frame.artPanY = 0; drawElevAll(); pushHistory();
+        }
+        if (done) done();
+    });
+}
+
+// ADD ARTWORK FROM THE ELEVATION (19.21, #elevArtBtn). Dropping a file needs a mouse;
+// on an iPad this is the way in: select frames, tap, and the picker offers the photo
+// library, the camera or Files. One frame takes one picture; several selected frames
+// take several pictures, in LETTER order, matched to the files in name order (so
+// IMG_0012 goes before IMG_0102). A wall with one frame needs no selection.
+function _elevArtTargets() {
+    const sel = getSelectedFrames();
+    // By the LETTER (A..Z, then AA), not by array position.
+    if (sel.length) return sel.slice().sort((a, b) => String(a.letter || '').length - String(b.letter || '').length || String(a.letter || '').localeCompare(String(b.letter || '')));
+    const act = elevFrames.filter(f => f.active);
+    return act.length === 1 ? act : [];
+}
+function _elevArtFileOrder(files) {
+    return Array.from(files || []).sort((a, b) =>
+        String(a.name || '').localeCompare(String(b.name || ''), undefined, { numeric: true, sensitivity: 'base' }));
+}
+function elevAddArtwork() {
+    const targets = _elevArtTargets();
+    if (!targets.length) {
+        _toast('Select a frame first', 'Tap a frame on the wall (Ctrl on for several), then Add artwork.');
+        return;
+    }
+    const inp = document.createElement('input');
+    inp.type = 'file'; inp.accept = 'image/*';
+    if (targets.length > 1) inp.multiple = true;
+    inp.style.display = 'none';
+    inp.onchange = () => {
+        const files = _elevArtFileOrder(inp.files);
+        inp.remove();
+        _elevAddArtworkFiles(targets, files);
+    };
+    document.body.appendChild(inp);
+    inp.click();
+}
+function _elevAddArtworkFiles(targets, files) {
+    if (!files.length) return;
+    const n = Math.min(files.length, targets.length);
+    // One at a time: each apply re-renders the wall and the dashboard.
+    let i = 0;
+    const next = () => { if (i < n) { const k = i++; _elevApplyArtFile(targets[k], files[k], next); } };
+    next();
+    if (files.length > targets.length) {
+        _toast('Some pictures left over', files.length + ' pictures for ' + targets.length + ' frame' + (targets.length === 1 ? '' : 's') + ': the first ' + n + ' were used, in name order.');
+    }
 }
 
 function clearDashArtwork() {
@@ -14694,6 +14938,48 @@ function _defaultFrameUpgradePending() {
     try { _invalidateFramesCache(); } catch (e) {}
     if (typeof scheduleAutosave === 'function') scheduleAutosave();
 }
+// CORRECTED LIBRARY SWATCHES REACH PROJECTS THAT ALREADY USE THEM (19.27). Picking a frame
+// COPIES its swatch into the project (so a deck works offline and from file://), so fixing
+// a library image changes nothing for pieces already in that frame. A code listed here
+// with a revision number is copied in again, once, wherever a piece (and its wall copies)
+// still holds an older revision: `swatchRev` on the row records which. Only library picks
+// (swatchName is the code) are touched; a swatch someone uploaded is theirs.
+// When a library swatch image is corrected again, bump its number here.
+const LIB_SWATCH_REV = {
+    'FA-BW74-2003': 2   // vendor's PRODUCT HOLDER sticker painted out; 220px swatch (was 31px: it tiled as dots)
+};
+function _libSwatchStale(r) {
+    if (!r || r.fType !== 'image' || !r.fCode) return false;
+    const rev = LIB_SWATCH_REV[r.fCode];
+    return !!rev && !r.swatchCustom && r.swatchName === r.fCode && (r.swatchRev || 1) < rev;
+}
+function _libSwatchUpgrade() {
+    if (typeof dashProjectData === 'undefined' || !Array.isArray(dashProjectData)) return;
+    const codes = {};
+    dashProjectData.forEach(r => { if (_libSwatchStale(r)) codes[r.fCode] = true; });
+    Object.keys(codes).forEach(code => {
+        const rec = _fbByCode()[_fbNorm(code)];
+        if (!rec) return;   // library not loaded yet: its load calls this again
+        _libEntryToDataUrl(rec.item.file).then(u => {
+            if (!u) return;
+            const rev = LIB_SWATCH_REV[code];
+            let n = 0;
+            dashProjectData.forEach(r => {
+                if (!_libSwatchStale(r) || r.fCode !== code) return;
+                r.swatchDataUrl = u; r.swatchRev = rev; n++;
+                (elevations || []).forEach(e => (e.frames || []).forEach(f => {
+                    if (f && f.id === r.id && f.fCode === code) { f.swatchDataUrl = u; f.swatchRev = rev; }
+                }));
+            });
+            if (!n) return;
+            try { renderDashTable(); } catch (e) {}
+            try { if (dashProjectData[dashSelectedRowIndex]) loadDashDataIntoControls(dashProjectData[dashSelectedRowIndex]); } catch (e) {}
+            try { if (currentView === 'elevation') drawElevAll(); } catch (e) {}
+            try { _invalidateFramesCache(); } catch (e) {}
+            if (typeof scheduleAutosave === 'function') scheduleAutosave();
+        }).catch(() => {});
+    });
+}
 function applySwatchToRow(rowIdx, collectionName, item, dataUrl) {
     // In bulk-edit mode, target the scratch object (the form's data source),
     // never a real project row. rowIdx is ignored while bulk editing.
@@ -14713,6 +14999,9 @@ function applySwatchToRow(rowIdx, collectionName, item, dataUrl) {
     row.fCode = item.code;
     row.swatchDataUrl = dataUrl;
     row.swatchName = item.code;
+    // A fresh pick is already the current library image (19.27).
+    if (LIB_SWATCH_REV[item.code]) row.swatchRev = LIB_SWATCH_REV[item.code]; else delete row.swatchRev;
+    delete row.swatchCustom;
 
     // THE FRAME PICKS THE PRODUCT, BOTH WAYS (19.03). A floater makes the item a floater
     // canvas; a regular moulding picked on a floater item makes it Framed Art again, or it
@@ -14914,11 +15203,15 @@ function _fbCards(all, byCode) {
     return [{ cards: pool.filter(keep).map(r => ({ code: r.item.code, rec: r })), empty: 'No frame matches the filters.' }];
 }
 function _fbClose() {
+    if (_fbGridObs) { try { _fbGridObs.disconnect(); } catch (e) {} _fbGridObs = null; }
     const m = document.getElementById('frameBrowser'); if (m) m.remove();
     _fbObjUrls.forEach(u => { try { URL.revokeObjectURL(u); } catch (e) {} }); _fbObjUrls = [];
 }
 function openFrameBrowser() {
     if (document.getElementById('frameBrowser')) return;
+    // ALWAYS OPENS ON ALL FRAMES (19.21): the designer's ask. The filters and the search
+    // are kept between opens; the list is not.
+    _fbState.src = 'all';
     const ov = document.createElement('div'); ov.id = 'frameBrowser';
     ov.className = 'frame-modal'; ov.setAttribute('data-modal-backdrop', ''); ov.style.display = 'flex';
     const card = document.createElement('div'); card.className = 'fb-card';
@@ -14945,7 +15238,7 @@ function _fbBuildTop() {
     };
     top.innerHTML = '';
     const q = document.createElement('input'); q.type = 'text'; q.id = 'fbSearch'; q.placeholder = 'Search code, colour, profile';
-    q.setAttribute('aria-label', 'Search frames'); q.setAttribute('data-modal-initial', ''); q.value = _fbState.q;
+    q.setAttribute('aria-label', 'Search frames'); q.setAttribute('data-modal-initial', ''); q.setAttribute('data-touch-nofocus', ''); q.value = _fbState.q;
     q.oninput = () => { _fbState.q = q.value; _fbRender(); };
     top.appendChild(q);
     top.appendChild(sel('fbFamily', 'Any colour', uniq('family'), 'family', 'Colour family'));
@@ -14956,7 +15249,47 @@ function _fbBuildTop() {
     const x = document.createElement('button'); x.type = 'button'; x.className = 'jump-esc'; x.textContent = 'Esc'; x.title = 'Close';
     x.setAttribute('data-modal-close', ''); x.onclick = _fbClose;
     top.appendChild(x);
-    try { q.focus(); } catch (e) {}
+    // A touch screen gets no cursor in the search box on open: focusing it raises the
+    // iPad keyboard over the frames before anyone asked to type (19.21).
+    if (!_touchNoAutoFocus(q)) { try { q.focus(); } catch (e) {} }
+    if (typeof _phoneOn !== 'undefined' && _phoneOn) _fbPhoneChrome(top, q);
+}
+// THE FRAME BROWSER ON A PHONE (19.24): the frames get the screen. The library list
+// (project, groupings, vendors) is a drawer behind a menu button that names the list
+// you are in; the five filters fold behind Filters; the grid is three across (five
+// turned sideways) with unlimited rows, for flipping through. Built inside _fbBuildTop
+// because that rebuilds the top row from scratch.
+function _fbPhoneChrome(top, q) {
+    const card = top.closest('.fb-card');
+    const menu = document.createElement('button');
+    menu.type = 'button'; menu.id = 'fbMenuBtn'; menu.className = 'fb-phone-btn fb-menu-btn';
+    menu.setAttribute('aria-label', 'Frame lists');
+    menu.innerHTML = '<svg class="svg-icon" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span id="fbMenuLabel"></span>';
+    menu.onclick = () => { if (card) card.classList.toggle('side-open'); };
+    top.insertBefore(menu, top.firstChild);
+    const flt = document.createElement('button');
+    flt.type = 'button'; flt.id = 'fbFilterBtn'; flt.className = 'fb-phone-btn';
+    flt.textContent = 'Filters';
+    flt.onclick = () => { const on = top.classList.toggle('filters-open'); flt.classList.toggle('active', on); };
+    top.insertBefore(flt, q.nextSibling);
+    const side = document.getElementById('fbSide');
+    if (side && !side._phoneWired) {
+        side._phoneWired = true;
+        // Picking a list closes the drawer (after the list's own click has run).
+        side.addEventListener('click', (e) => {
+            // A vendor is a group: tapping it opens or closes its collections, so the drawer
+            // stays; a list (project, grouping, collection, All frames) closes it.
+            const src = e.target.closest && e.target.closest('.fb-src');
+            if (src && !src.classList.contains('ven')) setTimeout(() => { if (card) card.classList.remove('side-open'); }, 0);
+        });
+    }
+    _fbPhoneLabel();
+}
+function _fbPhoneLabel() {
+    const l = document.getElementById('fbMenuLabel');
+    if (!l) return;
+    const a = document.querySelector('#fbSide .fb-src.active span');
+    l.textContent = a ? a.textContent.replace(/^[\u25B8\u25BE] /, '') : 'Lists';
 }
 function _fbSideItem(host, src, label, count, extraCls) {
     const b = document.createElement('button'); b.type = 'button'; b.className = 'fb-src' + (extraCls ? ' ' + extraCls : '') + (_fbState.src === src ? ' active' : '');
@@ -14976,6 +15309,7 @@ function _fbSideHead(host, text, action) {
     host.appendChild(h);
 }
 function _fbRender() {
+    try { setTimeout(_fbPhoneLabel, 0); } catch (e) {}
     const side = document.getElementById('fbSide'); if (!side) return;
     const all = _fbAll(), byCode = _fbByCode(all);
     // A source that no longer exists (deleted grouping) falls back to the project.
@@ -15000,10 +15334,18 @@ function _fbRender() {
     const vens = {}; all.forEach(r => { const v = vens[r.vendor] || (vens[r.vendor] = { n: 0, cols: {} }); v.n++; v.cols[r.collection] = (v.cols[r.collection] || 0) + 1; });
     const cur = _fbState.src;
     Object.keys(vens).sort((a, b) => _fbVendorLabel(a).localeCompare(_fbVendorLabel(b))).forEach(v => {
-        const open = !!_fbOpenVendors[v] || cur === 'ven:' + v || cur.indexOf('col:' + v + '/') === 0;
+        // An explicit open/close wins (19.28): before, the vendor you were viewing was forced
+        // open, so tapping it to close it never worked. Untouched, the current list decides.
+        const open = (v in _fbOpenVendors) ? !!_fbOpenVendors[v] : (cur === 'ven:' + v || cur.indexOf('col:' + v + '/') === 0);
         _fbSideItem(side, 'ven:' + v, (open ? '\u25BE ' : '\u25B8 ') + _fbVendorLabel(v), vens[v].n, 'ven');
         const b = side.lastChild;
-        b.onclick = () => { _fbOpenVendors[v] = !(open && cur === 'ven:' + v); _fbState.src = 'ven:' + v; _fbRender(); };
+        // One vendor open at a time (19.28): opening Framerica listed its 30-odd collections
+        // and pushed the other vendors off screen. Tapping the open, current vendor closes it.
+        b.onclick = () => {
+            const willOpen = !(open && cur === 'ven:' + v);
+            Object.keys(_fbOpenVendors).forEach(k => { _fbOpenVendors[k] = false; });
+            _fbOpenVendors[v] = willOpen; _fbState.src = 'ven:' + v; _fbRender();
+        };
         if (!open) return;
         Object.keys(vens[v].cols).sort((a, b) => _fbColLabel('', a).localeCompare(_fbColLabel('', b))).forEach(c => {
             _fbSideItem(side, 'col:' + v + '/' + c, _fbColLabel('', c).replace(/^ \u203a /, ''), vens[v].cols[c], 'col');
@@ -15049,15 +15391,46 @@ function _fbImgUrl(item) {
     const u = _libEntryToUrl(src); if (u && u.indexOf('blob:') === 0) _fbObjUrls.push(u);
     return u;
 }
+// THE GRID IS BUILT A SCREENFUL AT A TIME (19.25). All frames is ~4,800 cards; building
+// every one up front made the browser lag (badly on a phone). The first FB_CHUNK go in at
+// once and a sentinel at the end of the grid adds the next chunk as it scrolls into view,
+// so the rows never run out. No IntersectionObserver (a test harness): everything at once.
+// The project's in-use codes are worked out ONCE per render (_fbUsedSet), not per card.
+const FB_CHUNK = 120;
+let _fbUsedSet = null, _fbGridObs = null;
 function _fbRenderGrid(all, byCode) {
     const grid = document.getElementById('fbGrid'); if (!grid) return;
     grid.innerHTML = '';
-    let shown = 0;
+    if (_fbGridObs) { try { _fbGridObs.disconnect(); } catch (e) {} _fbGridObs = null; }
+    _fbUsedSet = new Set(_fbInUse().map(_fbNorm));
+    const ops = [];
     _fbCards(all, byCode).forEach(sec => {
-        if (sec.head) { const h = document.createElement('div'); h.className = 'fb-sec'; h.textContent = sec.head + ' (' + sec.cards.length + ')'; grid.appendChild(h); }
-        if (!sec.cards.length) { const e = document.createElement('div'); e.className = 'fb-empty'; e.textContent = sec.empty; grid.appendChild(e); return; }
-        sec.cards.forEach(c => { grid.appendChild(_fbCardEl(c)); shown++; });
+        if (sec.head) ops.push({ head: sec.head + ' (' + sec.cards.length + ')' });
+        if (!sec.cards.length) { ops.push({ empty: sec.empty }); return; }
+        sec.cards.forEach(c => ops.push({ card: c }));
     });
+    let at = 0;
+    const addChunk = () => {
+        const old = grid.querySelector('.fb-sentinel'); if (old) old.remove();
+        let cards = 0;
+        const frag = document.createDocumentFragment();
+        while (at < ops.length && (cards < FB_CHUNK || !_fbGridObs && typeof IntersectionObserver === 'undefined')) {
+            const o = ops[at++];
+            if (o.head) { const h = document.createElement('div'); h.className = 'fb-sec'; h.textContent = o.head; frag.appendChild(h); }
+            else if (o.empty) { const e = document.createElement('div'); e.className = 'fb-empty'; e.textContent = o.empty; frag.appendChild(e); }
+            else { frag.appendChild(_fbCardEl(o.card)); cards++; }
+        }
+        grid.appendChild(frag);
+        if (at < ops.length && typeof IntersectionObserver !== 'undefined') {
+            const sen = document.createElement('div'); sen.className = 'fb-sentinel';
+            grid.appendChild(sen);
+            if (!_fbGridObs) _fbGridObs = new IntersectionObserver((ents) => {
+                if (ents.some(en => en.isIntersecting)) addChunk();
+            }, { root: grid, rootMargin: '600px 0px' });
+            _fbGridObs.observe(sen);
+        }
+    };
+    addChunk();
     const foot = document.getElementById('fbFoot');
     if (foot) {
         const row = (typeof dashProjectData !== 'undefined' && dashProjectData[dashSelectedRowIndex]) || null;
@@ -15086,7 +15459,7 @@ function _fbCardEl(c) {
     const s = document.createElement('div'); s.className = 'fb-sub';
     s.textContent = it ? [it.color, it.width ? it.width + '"' : ''].filter(Boolean).join(' · ') : 'Not in the library';
     el.appendChild(s);
-    const used = _fbInUse().some(u => _fbNorm(u) === _fbNorm(c.code));
+    const used = _fbUsedSet ? _fbUsedSet.has(_fbNorm(c.code)) : _fbInUse().some(u => _fbNorm(u) === _fbNorm(c.code));
     if (used) { const b = document.createElement('span'); b.className = 'fb-used'; b.textContent = 'In use'; el.appendChild(b); }
     const star = document.createElement('button'); star.type = 'button'; star.className = 'fb-star' + (_fbOnShortlist(c.code) ? ' on' : '');
     star.textContent = _fbOnShortlist(c.code) ? '★' : '☆';
@@ -15174,6 +15547,8 @@ function loadDashCustomSwatch(e) {
         document.getElementById('fType').value = 'image';
         document.getElementById('view-dashboard').style.setProperty('--frame-bg', `url(${e.target.result})`);
         dashProjectData[dashSelectedRowIndex].fType = 'image'; dashProjectData[dashSelectedRowIndex].swatchDataUrl = e.target.result; dashProjectData[dashSelectedRowIndex].swatchName = n;
+        // The designer's own photo: never replaced by a corrected library swatch (19.27).
+        dashProjectData[dashSelectedRowIndex].swatchCustom = true; delete dashProjectData[dashSelectedRowIndex].swatchRev;
         document.getElementById('m_fCode').value = n; dashProjectData[dashSelectedRowIndex].fCode = n;
         _dashFrameCardSync(dashProjectData[dashSelectedRowIndex]);
         dashActiveImageObj.src = e.target.result; dashActiveImageObj.onload = () => syncDashAndCalculate();
@@ -15689,6 +16064,11 @@ function renderFrameToCanvas(d, swatchImg, opts) {
         aW = fauxW - fauxBorderPx * 2; aH = fauxH - fauxBorderPx * 2;
     }
     x.clearRect(aX, aY, aW, aH);
+    // Empty opening on a deck page (ELEV_EMPTY_OPENING_FILL): filled before the opening
+    // treatment below, so the moulding / mat still casts its inner shadow onto it.
+    if (opts.emptyFill && !opts.artworkImg && !opts.wireframe && aW > 0 && aH > 0) {
+        x.fillStyle = opts.emptyFill; x.fillRect(aX, aY, aW, aH);
+    }
     // WHAT CASTS INTO THE OPENING (18.45). Behind a mat it is the mat's bevel, a thin
     // 'art' shadow. With NO mat it is the moulding itself, sitting right on the art, so
     // it casts the frame's own shadow, scaled by Frame onto mat; the thin bevel shadow
@@ -16098,6 +16478,7 @@ async function renderElevationToCanvas(elev, featuredId, opts) {
             // letter is passed only from here: it is an elevation convention, and a
             // spec page identifies its piece by the code in the title instead.
             wireframe: !!opts.wireframe, wireframeLetter: opts.wireframe ? f.letter : '',
+            emptyFill: ELEV_EMPTY_OPENING_FILL,
         });
         if (!fr || !fr.canvas) continue;
         x.save();
@@ -18301,16 +18682,16 @@ function _drawThankYouPage(doc, logos, pageNum, meta, contactsRaw) {
     if (Array.isArray(contactsRaw)) {
         contacts = contactsRaw.filter(c => !c._hidden && (c.name || c.role || c.email || c.phone));
     } else {
-        contacts = (contactsRaw || '').split('\n').map(l => l.trim()).filter(Boolean).map(l => {
-            const p = l.split(/\s*[|,]\s*/);
-            return { name: p[0] || '', role: p[1] || '', email: p[2] || '', phone: p[3] || '' };
-        });
+        contacts = _contactsParse(contactsRaw || '');
     }
 
+    // Name size (19.14): the names were fixed at 12pt. The card's height follows it,
+    // so a bigger name pushes its own role and email down, never into them.
+    const nameFs = _contactNameSize();
     // A single contact card drawn at (x,y) within width w.
     const drawContact = (c, x, y, w) => {
-        doc.setFont(_font('display'), 'bold'); doc.setFontSize(12); doc.setTextColor(ink.strong[0], ink.strong[1], ink.strong[2]);
-        doc.text((c.name || '').toUpperCase(), x, y); y += 14;
+        doc.setFont(_font('display'), 'bold'); doc.setFontSize(nameFs); doc.setTextColor(ink.strong[0], ink.strong[1], ink.strong[2]);
+        doc.text((c.name || '').toUpperCase(), x, y); y += nameFs + 2;
         doc.setFont(_font('serif'), 'bold'); doc.setFontSize(8); doc.setTextColor(ink.strong[0], ink.strong[1], ink.strong[2]);
         if (c.role) { doc.text(c.role, x, y); y += 11; }
         doc.setFont(_font('serif'), 'normal'); doc.setFontSize(7.5); doc.setTextColor(ink.mid[0], ink.mid[1], ink.mid[2]);
@@ -18320,8 +18701,10 @@ function _drawThankYouPage(doc, logos, pageNum, meta, contactsRaw) {
     };
 
     const layout = (editorialContent.contactLayout || 'grouped');
-    const gridTop = B.body + 30;
-    const rowH = 78;
+    // The contacts move up or down as one group (contactShiftY, points); the studio
+    // block and divider stay put. A bigger name makes every row taller by the same.
+    const gridTop = B.body + 30 + _contactShiftY();
+    const rowH = 78 + (nameFs - CONTACT_NAME_FS_DEFAULT);
 
     // Spacing sliders (grouped layout): -1..+1 nudge horizontal/vertical.
     const gapH = (typeof editorialContent.contactGapH === 'number') ? editorialContent.contactGapH : 0;
@@ -18340,8 +18723,9 @@ function _drawThankYouPage(doc, logos, pageNum, meta, contactsRaw) {
         // Divider + studio block on the right.
         const rx = PW * 0.76;
         doc.setDrawColor(ink.line[0], ink.line[1], ink.line[2]); doc.setLineWidth(0.6);
-        doc.line(PW * 0.71, gridTop - 6, PW * 0.71, PH - 90);
-        _drawStudioBlock(doc, rx, gridTop, PW - M - rx, ink);
+        const fixedTop = B.body + 30;
+        doc.line(PW * 0.71, fixedTop - 6, PW * 0.71, PH - 90);
+        _drawStudioBlock(doc, rx, fixedTop, PW - M - rx, ink);
     } else {
         // Even grid of N columns across the full width.
         const cols = Math.min(4, Math.max(1, parseInt(layout, 10) || 1));
@@ -18359,6 +18743,9 @@ function _drawThankYouPage(doc, logos, pageNum, meta, contactsRaw) {
     _drawPdfFooter(doc, logos, pageNum, meta);
     _curFooter = { text: 'dark', leftTheme: 'dark' };
 }
+const CONTACT_NAME_FS_DEFAULT = 12;
+function _contactNameSize() { const v = parseFloat(editorialContent.contactNameSize); return isFinite(v) ? Math.max(8, Math.min(28, v)) : CONTACT_NAME_FS_DEFAULT; }
+function _contactShiftY() { const v = parseFloat(editorialContent.contactShiftY); return isFinite(v) ? Math.max(-80, Math.min(200, v)) : 0; }
 // Studio address + copyright block, theme-aware.
 function _drawStudioBlock(doc, x, y, w, ink) {
     ink = ink || { strong: [20, 20, 20], mid: [60, 60, 60], soft: [120, 120, 120] };
@@ -21169,6 +21556,7 @@ function _dsTab(which, _confirmed) {
         try { _dsCleanupTemplateEditSession(); } catch (e) { console.error(e); }
     }
     _dsActiveTab = which;
+    try { _phoneCtxSync(); } catch (e) {}
     const isTemplateEditor = (which === 'templateEditor');
     _dsInTemplateLibraryMode = isTemplateEditor;
     const effectiveShow = isTemplateEditor ? 'pages' : which;   // which content div is actually shown
@@ -23845,7 +24233,9 @@ function _dsPlaceRelativeInto(parent, desc) {
 // The anchors are read from _starterDeck once, so the two can never disagree.
 function _starterLayoutHome() {
     if (!_starterLayoutHome._c) {
-        const m = {};
+        // The Moodboard left the starter deck in 19.14; decks made before then still hold it
+        // on its old anchor, and that is still home for them.
+        const m = { pg5ef7lopj50a: 'fixed:slogan' };
         try { (_starterDeck().layoutPages || []).forEach(p => { if (p && p.id && p.afterKey) m[p.id] = p.afterKey; }); } catch (e) {}
         _starterLayoutHome._c = m;
     }
@@ -25411,6 +25801,8 @@ function _dsSyncToolbar() {
     // layout-page box. _dsSelToFront / _dsSelToBack / _dsSelDelete route to the right one.
     const _anySel = selected || !!mbEl || _anyMulti >= 1;
     if (grp) { grp.style.display = ''; grp.style.opacity = _anySel ? '1' : '0.4'; grp.style.pointerEvents = _anySel ? 'auto' : 'none'; }
+    // On a phone the toolbar is ONE row: the selection actions take the page arrows' place (19.33).
+    document.documentElement.classList.toggle('phone-ds-sel', _anySel);
     const hint = document.getElementById('dsSelHint');
     if (hint) hint.textContent = mbEl ? (mbType === 'text' ? 'Text \u2014 font, size & colour at left \u00b7 double-click to edit' : 'Element \u2014 drag to move, corner to resize, layer & delete at left')
         : !selected ? 'Select a box to style it \u00b7 double-click to edit \u00b7 drag to move'
@@ -25582,6 +25974,13 @@ function _dsDockSide() {
 // so moving the node is the whole job: every button keeps its id and handler.
 function _dsDockPlace(side) {
     const dock = document.getElementById('dsToolDock'); if (!dock) return;
+    const ph = (typeof _phoneOn !== 'undefined' && _phoneOn) ? document.getElementById('phoneDeckTools') : null;
+    if (ph) {
+        if (dock.parentNode !== ph) ph.appendChild(dock);
+        ['dsDockLeftSlot', 'dsDockRightSlot', 'dsDockTopSlot'].forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
+        dock.classList.remove('vert'); dock.classList.add('horiz');
+        return;
+    }
     side = DS_DOCK_SIDES.indexOf(side) >= 0 ? side : 'left';
     const slots = { left: 'dsDockLeftSlot', right: 'dsDockRightSlot', top: 'dsDockTopSlot' };
     const host = document.getElementById(slots[side]); if (!host) return;
@@ -25605,7 +26004,9 @@ function _dsSetDockSide(side) {
 function _dsDockSync() {
     const dock = document.getElementById('dsToolDock'); if (!dock) return;
     const side = _dsDockSide();
-    const want = side === 'top' ? 'dsDockTopSlot' : (side === 'right' ? 'dsDockRightSlot' : 'dsDockLeftSlot');
+    // On a phone the dock rides in the page bar above the page (19.25, #phoneDeckTools).
+    const want = (typeof _phoneOn !== 'undefined' && _phoneOn && document.getElementById('phoneDeckTools')) ? 'phoneDeckTools'
+        : side === 'top' ? 'dsDockTopSlot' : (side === 'right' ? 'dsDockRightSlot' : 'dsDockLeftSlot');
     if (!dock.parentNode || dock.parentNode.id !== want) _dsDockPlace(side);
     const set = (id, on) => { const b = document.getElementById(id); if (b) b.classList.toggle('active', !!on); };
     set('dsDockSelect', !_dsArmedShape);
@@ -28798,6 +29199,8 @@ function _dsThumbCacheKey(desc) {
         }
         // The overview draws every option's walls and images, so any edit can change it.
         if (desc && desc.kind === 'catov') k += '|' + (typeof _dsEditGen !== 'undefined' ? _dsEditGen : 0);
+        // The Thank You page draws the project's own contact list (19.13).
+        if (desc && desc.kind === 'card' && desc.type === 'contacts') { const cs = (editorialContent.contacts || '') + '#' + (editorialContent.contactsHidden || []).join(',') + '#' + [editorialContent.contactLayout, editorialContent.contactGapH, editorialContent.contactGapV, editorialContent.contactShiftY, editorialContent.contactNameSize].join(','); let h = 5381; for (let i = 0; i < cs.length; i++) h = ((h * 33) ^ cs.charCodeAt(i)) >>> 0; k += '|c' + h.toString(36); }
         // The contents page rewrites itself when anything else in the deck moves.
         if (desc && desc.kind === 'layout' && desc.page && desc.page.toc) k += '|toc' + (desc.page.toc.sig || '');
         return k;
@@ -29012,6 +29415,73 @@ function _dsGradBarInto(host, th, refresh, paintOnly, dot) {
     row.insertBefore(sw, row.firstChild);
     host.appendChild(row);
 }
+// A page's background image from a file: the Page appearance button and a file dropped
+// onto the page in Deck Studio (19.14) both come here.
+function _pageBgImageFromFile(key, f, done) {
+    if (!key || !f) return;
+    const rd = new FileReader();
+    rd.onload = () => {
+        // THE ONE BOUND - see _boundImageDataUrl. This path used to write
+        // FileReader's result straight in, which is how two backgrounds came
+        // to be 11.1 MB of a 22.9 MB project. It reports the dimensions it
+        // ended up with, so th.imgW/imgH cannot disagree with th.image.
+        _boundImageDataUrl(rd.result, _pageBgMaxEdge(), 0.88, (url, w, h) => {
+            if (!url) return;
+            const themes = _pageThemes();
+            const th = themes[key] || (themes[key] = { mode: 'light', bg: null, image: null });
+            th.image = url;
+            th.bgMode = 'image';
+            th.imgW = w || 0; th.imgH = h || 0;
+            th.imageZoom = 1; th.imagePanX = 0; th.imagePanY = 0;
+            th._bakedImg = null;
+            if (done) done();
+        });
+    };
+    rd.readAsDataURL(f);
+}
+// DROP AN IMAGE ON A PAGE TO MAKE IT THE BACKGROUND (19.14). Designers drag from another
+// window rather than dig through a file dialog. Wired once on #dsCenter, so it only sees
+// drops nothing inside claimed: image boxes, shapes and spec-page frames take their own
+// drop and stop it. Plans and spec pages are left out: a file dropped on a spec page is
+// ARTWORK for the frame under it (_dsWireSpecArtDrop), never a background.
+function _dsBgDropTarget() {
+    const desc = _dsPages[_dsIndex];
+    if (!desc || desc.kind === 'floorplan' || desc.kind === 'planDetail' || desc.kind === 'spec') return null;
+    if (_dsInTemplateLibraryMode && !_dsTemplateEditSession) return null;
+    return desc;
+}
+function _dsWireBgDrop(c) {
+    if (!c || c._bgDropWired) return;
+    c._bgDropWired = true;
+    const hasFile = (e) => e.dataTransfer && Array.from(e.dataTransfer.types || []).indexOf('Files') >= 0;
+    c.addEventListener('dragover', (e) => {
+        // Something inside (an image box, a shape) already took this drag: it is not a background drop.
+        if (!hasFile(e) || !_dsBgDropTarget() || e.defaultPrevented) { c.classList.remove('ds-bg-drop'); return; }
+        e.preventDefault();
+        try { e.dataTransfer.dropEffect = 'copy'; } catch (_) {}
+        c.classList.add('ds-bg-drop');
+    });
+    c.addEventListener('dragleave', (e) => { if (!c.contains(e.relatedTarget)) c.classList.remove('ds-bg-drop'); });
+    c.addEventListener('drop', (e) => {
+        c.classList.remove('ds-bg-drop');
+        if (!hasFile(e) || e.defaultPrevented) return;
+        const desc = _dsBgDropTarget(); if (!desc) return;
+        e.preventDefault();
+        const fl = Array.from(e.dataTransfer.files || []);
+        const f = fl.find(ff => /^image\//.test(ff.type || '') || /\.(jpe?g|png|webp)$/i.test(ff.name || '')) || fl[0];
+        const pre = _imageFilePrecheck(f);
+        if (pre) { showInfoModal(pre.title, pre.body); return; }
+        const key = _deckPageKey(desc);
+        if (typeof pushHistory === 'function') pushHistory();
+        _pageBgImageFromFile(key, f, () => {
+            if (typeof scheduleAutosave === 'function') scheduleAutosave();
+            try { if (typeof _dsBuilt !== 'undefined' && _dsBuilt[key]) delete _dsBuilt[key]; } catch (err) {}
+            _dsRenderTools(); _dsRenderCenter();
+            try { _dsPriorityRerender(desc); } catch (err) {}
+            _toast('Background set', 'Pan, zoom or remove it in Page appearance.');
+        });
+    });
+}
 function _dsThemeControlInto(t, key, desc) {
     const themes = _pageThemes();
     const th = themes[key] || (themes[key] = { mode: 'light', bg: null, image: null });
@@ -29195,21 +29665,7 @@ function _dsThemeControlInto(t, key, desc) {
     const file = document.createElement('input'); file.type = 'file'; file.accept = 'image/png,image/jpeg,image/webp'; file.style.display = 'none';
     file.onchange = () => {
         const f = file.files && file.files[0]; if (!f) return;
-        const rd = new FileReader();
-        rd.onload = () => {
-            // THE ONE BOUND - see _boundImageDataUrl. This path used to write
-            // FileReader's result straight in, which is how two backgrounds came
-            // to be 11.1 MB of a 22.9 MB project. It reports the dimensions it
-            // ended up with, so th.imgW/imgH cannot disagree with th.image.
-            _boundImageDataUrl(rd.result, _pageBgMaxEdge(), 0.88, (url, w, h) => {
-                th.image = url;
-                th.bgMode = 'image';
-                th.imgW = w || 0; th.imgH = h || 0;
-                th._bakedImg = null;
-                refresh();
-            });
-        };
-        rd.readAsDataURL(f);
+        _pageBgImageFromFile(key, f, refresh);
     };
     const iOn = (mode === 'image');
     const iWrap = iconBtn(_dsImageIconSVG(), iOn,
@@ -29961,8 +30417,10 @@ function _dsCenterPlaceholder(desc, key) {
 // blind every test that asserts on what it renders.
 function _dsRenderCenter() {
     try { _dsDockSync(); } catch (e) {}
+    try { _phoneDeckBarSync(); } catch (e) {}
     const c = document.getElementById('dsCenter'); if (!c) return;
     c.innerHTML = '';
+    _dsWireBgDrop(c);
     if (_dsInTemplateLibraryMode && !_dsTemplateEditSession) {
         const msg = document.createElement('div');
         msg.style.cssText = 'color:var(--text-muted); font-size:var(--fs-80); text-align:center; max-width:340px;';
@@ -31098,7 +31556,9 @@ function _frameMenu(anchor, items) {
     const vw = window.innerWidth || 1200, vh = window.innerHeight || 800;
     const mw = m.offsetWidth || 200, mh = m.offsetHeight || 160;
     m.style.left = Math.min(Math.max(8, r.right - mw), vw - mw - 8) + 'px';
-    m.style.top = ((r.bottom + 4 + mh > vh) ? Math.max(8, r.top - mh - 4) : r.bottom + 4) + 'px';
+    // An anchor marked data-menu-up (a bar along the bottom) always opens upward.
+    const up = (anchor && anchor.dataset && anchor.dataset.menuUp) || (r.bottom + 4 + mh > vh);
+    m.style.top = (up ? Math.max(8, r.top - mh - 4) : r.bottom + 4) + 'px';
     setTimeout(() => {
         document.addEventListener('mousedown', onDoc, true);
         document.addEventListener('keydown', onKey, true);
@@ -31134,6 +31594,7 @@ function openDashMenu(btn, which) {
         import: [
             { label: 'Import CSV…', hint: 'a database exported from FRAME', onClick: () => { const f = document.getElementById('csvImport'); if (f) f.click(); } },
             { label: 'Bulk Images…', hint: 'replace artwork, matched by name', onClick: () => openBulkReplaceModal() },
+            { label: 'New items from photos…', hint: 'one new item per picture', onClick: () => dashNewFromPhotos() },
         ],
         export: [
             { label: 'Export Database', hint: 'CSV of every piece', onClick: () => exportDashCSV() },
@@ -31481,6 +31942,9 @@ function _fpAddCodes(catKey, n, opts) {
             row.bleed = dashFmt(FLAT_GRAPHIC_BLEED_IN * _f);
             if (!(row.material || '').trim()) row.material = FLAT_GRAPHIC_APPLICATION[row.product] || '';
         } else _defaultFrameApply(row);   // 19.09: a real moulding, not a flat colour
+        // opts.mark (19.26): fields stamped on the new row BEFORE the settle below, which
+        // can renumber it, so a caller can find it again (the returned code may be stale).
+        if (opts && opts.mark) Object.assign(row, opts.mark);
         dashProjectData.push(row);
     }
     // Pushed at the end of the schedule, then sorted in behind its own type: an EGD
@@ -31543,6 +32007,122 @@ const SALON_PRESETS = [
         { x: 49, y: 15, w: 15, h: 10, s: 'float' },
         { x: 49, y: 0,  w: 15, h: 12, s: 'mat' },
         { x: 67, y: 7,  w: 17, h: 26, s: 'plain' } ] },
+    // SALON HANGS FROM A REAL PROJECT (19.30): every hang of four or more pieces in the Ford
+    // Engineering Lab V7 installation guide, as built. `asDrawn` marks them: their gaps are
+    // the project's own (3.5", 5", 7"...), not SET_GAP_IN, and they are offered in their
+    // own section of the frame set picker with any piece count. Sizes are each piece's
+    // overall dimensions; styles say only mat / no mat / float, the set tool's vocabulary;
+    // `f` is the piece's library frame as built (applying the set dresses each piece in
+    // it, see _salonFrameDress), absent where the library has no such moulding.
+    { key: 'fel-caf-001', n: 10, label: 'Cafe 001, long row of 10', src: 'Ford Engineering Lab FEL.CAF.001', asDrawn: true, frames: [
+        { x: 0, y: 17, w: 18, h: 18, s: 'plain', f: 'MICH-708-290' },
+        { x: 21, y: 24, w: 24, h: 18, s: 'mat', f: 'MICH-247-79' },
+        { x: 24, y: 3, w: 34, h: 18, s: 'plain', f: 'MICH-622-61' },
+        { x: 61, y: 21, w: 24, h: 24, s: 'mat' },
+        { x: 61, y: 0, w: 24, h: 18, s: 'plain', f: 'MICH-708-290' },
+        { x: 89, y: 10.5, w: 24, h: 24, s: 'plain', f: 'MICH-340-20' },
+        { x: 117, y: 5.5, w: 28, h: 34, s: 'mat', f: 'MICH-432-29' },
+        { x: 149, y: 10, w: 18, h: 18, s: 'plain' },
+        { x: 173, y: 24, w: 34, h: 18, s: 'float', f: 'MICH-708-290' },
+        { x: 170, y: 3, w: 24, h: 18, s: 'mat', f: 'MICH-247-79' } ] },   // 207in x 45in,
+    { key: 'fel-caf-002', n: 6, label: 'Cafe 002, row of 6', src: 'Ford Engineering Lab FEL.CAF.002', asDrawn: true, frames: [
+        { x: 0, y: 3, w: 42, h: 30, s: 'mat', f: 'MICH-247-79' },
+        { x: 45, y: 20, w: 18, h: 18, s: 'plain', f: 'MICH-622-61' },
+        { x: 45, y: 0, w: 18, h: 18, s: 'float', f: 'MICH-622-61' },
+        { x: 66, y: 1, w: 28, h: 34, s: 'mat', f: 'MICH-247-79' },
+        { x: 97, y: 8, w: 18, h: 18, s: 'plain', f: 'MICH-708-290' },
+        { x: 118, y: 7, w: 26, h: 20, s: 'plain', f: 'MICH-247-79' } ] },   // 144in x 38in,
+    { key: 'fel-cor-003', n: 11, label: 'Corridor 003, long row of 11', src: 'Ford Engineering Lab FEL.COR.003', asDrawn: true, frames: [
+        { x: 0, y: 10, w: 18, h: 18, s: 'plain', f: 'MICH-305-29' },
+        { x: 25, y: 24.5, w: 34, h: 18, s: 'float', f: 'MICH-622-61' },
+        { x: 21, y: 3, w: 24, h: 18, s: 'plain', f: 'MICH-247-79' },
+        { x: 62.5, y: 10, w: 42, h: 30, s: 'plain', f: 'MICH-432-29' },
+        { x: 108.5, y: 8, w: 28, h: 34, s: 'mat', f: 'MICH-247-79' },
+        { x: 140, y: 23, w: 24, h: 24, s: 'plain', f: 'MICH-708-290' },
+        { x: 140, y: 0, w: 24, h: 18, s: 'plain', f: 'MICH-432-29' },
+        { x: 167.5, y: 8, w: 28, h: 34, s: 'mat', f: 'MICH-247-79' },
+        { x: 198, y: 26.5, w: 18, h: 18, s: 'plain', f: 'MICH-708-290' },
+        { x: 209.5, y: 2, w: 24, h: 18, s: 'mat', f: 'MICH-622-61' },
+        { x: 219, y: 23.5, w: 24, h: 18, s: 'float', f: 'MICH-360-79' } ] },   // 243in x 47in,
+    { key: 'fel-cor-006', n: 4, label: 'Corridor 006, cluster of 4', src: 'Ford Engineering Lab FEL.COR.006', asDrawn: true, frames: [
+        { x: 0, y: 0, w: 30, h: 42, s: 'mat', f: 'MICH-622-61' },
+        { x: 33, y: 22.5, w: 24, h: 18, s: 'plain', f: 'MICH-622-61' },
+        { x: 36, y: 1.5, w: 18, h: 18, s: 'plain', f: 'MICH-305-29' },
+        { x: 60, y: 0, w: 30, h: 42, s: 'mat', f: 'MICH-432-29' } ] },   // 90in x 42in,
+    { key: 'fel-cor-007', n: 6, label: 'Corridor 007, row of 6', src: 'Ford Engineering Lab FEL.COR.007', asDrawn: true, frames: [
+        { x: 0, y: 3.5, w: 42, h: 30, s: 'mat', f: 'MICH-432-29' },
+        { x: 45, y: 20.5, w: 18, h: 18, s: 'plain', f: 'MICH-622-61' },
+        { x: 45, y: 0, w: 18, h: 18, s: 'plain', f: 'MICH-708-290' },
+        { x: 66, y: 1, w: 28, h: 34, s: 'mat', f: 'MICH-247-79' },
+        { x: 98, y: 8, w: 18, h: 18, s: 'mat', f: 'MICH-708-290' },
+        { x: 120, y: 8.5, w: 26, h: 20, s: 'plain', f: 'MICH-622-61' } ] },   // 146in x 38.5in,
+    { key: 'fel-cor-013', n: 6, label: 'Corridor 013, row of 6', src: 'Ford Engineering Lab FEL.COR.013', asDrawn: true, frames: [
+        { x: 0, y: 5, w: 42, h: 30, s: 'plain' },
+        { x: 45, y: 21, w: 18, h: 18, s: 'plain', f: 'MICH-432-29' },
+        { x: 45, y: 1, w: 18, h: 18, s: 'plain', f: 'MICH-305-29' },
+        { x: 66, y: 3, w: 28, h: 34, s: 'mat', f: 'MICH-247-79' },
+        { x: 97, y: 22, w: 22, h: 18, s: 'plain', f: 'MICH-622-61' },
+        { x: 97, y: 0, w: 26, h: 20, s: 'mat', f: 'MICH-708-290' } ] },   // 123in x 40in,
+    { key: 'fel-cor-015', n: 11, label: 'Corridor 015, long row of 11', src: 'Ford Engineering Lab FEL.COR.015', asDrawn: true, frames: [
+        { x: 0, y: 3, w: 24, h: 24, s: 'plain', f: 'MICH-708-290' },
+        { x: 17, y: 28, w: 18, h: 18, s: 'plain', f: 'MICH-340-20' },
+        { x: 38, y: 7, w: 28, h: 34, s: 'mat', f: 'MICH-432-29' },
+        { x: 70, y: 22, w: 24, h: 24, s: 'float', f: 'MICH-622-61' },
+        { x: 70, y: 0, w: 24, h: 18, s: 'plain', f: 'MICH-708-290' },
+        { x: 98, y: 10, w: 24, h: 30, s: 'plain' },
+        { x: 126, y: 10, w: 42, h: 30, s: 'mat', f: 'MICH-432-29' },
+        { x: 172, y: 22, w: 18, h: 24, s: 'plain', f: 'MICH-247-79' },
+        { x: 172, y: 0, w: 18, h: 18, s: 'plain' },
+        { x: 193, y: 25, w: 34, h: 18, s: 'plain', f: 'MICH-708-290' },
+        { x: 193, y: 4, w: 24, h: 18, s: 'plain', f: 'MICH-622-61' } ] },   // 227in x 46in,
+    { key: 'fel-cor-024', n: 4, label: 'Corridor 024, cluster of 4', src: 'Ford Engineering Lab FEL.COR.024', asDrawn: true, frames: [
+        { x: 0, y: 0, w: 30, h: 42, s: 'mat', f: 'MICH-622-61' },
+        { x: 33, y: 23, w: 22, h: 18, s: 'plain', f: 'MICH-432-29' },
+        { x: 33, y: 3, w: 22, h: 18, s: 'plain', f: 'MICH-340-20' },
+        { x: 58, y: 0, w: 30, h: 42, s: 'mat', f: 'MICH-432-29' } ] },   // 88in x 42in,
+    { key: 'fel-cor-029', n: 4, label: 'Corridor 029, cluster of 4', src: 'Ford Engineering Lab FEL.COR.029', asDrawn: true, frames: [
+        { x: 0, y: 14, w: 26, h: 20, s: 'plain', f: 'MICH-247-79' },
+        { x: 28, y: 20, w: 18, h: 18, s: 'mat', f: 'MICH-708-290' },
+        { x: 28, y: 0, w: 22, h: 18, s: 'plain', f: 'MICH-340-20' },
+        { x: 52, y: 5, w: 34, h: 28, s: 'mat', f: 'MICH-247-79' } ] },   // 86in x 38in,
+    { key: 'fel-ent-001', n: 6, label: 'Entry 001, row of 6', src: 'Ford Engineering Lab FEL.ENT.001', asDrawn: true, frames: [
+        { x: 0, y: 12, w: 18, h: 24, s: 'float', f: 'MICH-708-290' },
+        { x: 24, y: 7, w: 28, h: 34, s: 'mat', f: 'MICH-247-79' },
+        { x: 58, y: 9, w: 42, h: 30, s: 'float', f: 'MICH-432-29' },
+        { x: 106, y: 26, w: 24, h: 24, s: 'mat', f: 'MICH-622-61' },
+        { x: 106, y: 0, w: 26, h: 20, s: 'plain', f: 'MICH-247-79' },
+        { x: 136, y: 12, w: 18, h: 24, s: 'plain', f: 'MICH-340-20' } ] },   // 154in x 50in,
+    { key: 'fel-ent-002', n: 8, label: 'Entry 002, long row of 8', src: 'Ford Engineering Lab FEL.ENT.002', asDrawn: true, frames: [
+        { x: 8, y: 24, w: 18, h: 18, s: 'plain', f: 'MICH-622-61' },
+        { x: 0, y: 0, w: 24, h: 18, s: 'float', f: 'MICH-708-290' },
+        { x: 30, y: 5, w: 42, h: 34, s: 'mat', f: 'MICH-247-79' },
+        { x: 76, y: 1, w: 30, h: 40, s: 'plain', f: 'MICH-340-20' },
+        { x: 110, y: 10, w: 24, h: 24, s: 'plain' },
+        { x: 138, y: 5, w: 28, h: 34, s: 'plain', f: 'MICH-305-29' },
+        { x: 170, y: 23, w: 24, h: 18, s: 'float', f: 'MICH-622-61' },
+        { x: 173.5, y: 2, w: 12, h: 18, s: 'plain', f: 'MICH-432-29' } ] },   // 194in x 42in,
+    { key: 'fel-hal-001', n: 7, label: 'Hallway 001, row of 7', src: 'Ford Engineering Lab FEL.HAL.001', asDrawn: true, frames: [
+        { x: 0, y: 9, w: 20, h: 26, s: 'plain', f: 'MICH-247-79' },
+        { x: 23, y: 4, w: 36, h: 36, s: 'plain', f: 'MICH-622-61' },
+        { x: 62, y: 5, w: 28, h: 34, s: 'mat', f: 'MICH-708-290' },
+        { x: 93, y: 12, w: 18, h: 22, s: 'mat', f: 'MICH-432-29' },
+        { x: 114, y: 23, w: 18, h: 18, s: 'plain', f: 'MICH-622-61' },
+        { x: 114, y: 0, w: 26, h: 20, s: 'mat', f: 'MICH-247-79' },
+        { x: 135, y: 23, w: 18, h: 18, s: 'plain', f: 'MICH-432-29' } ] },   // 153in x 41in,
+    { key: 'fel-hal-002', n: 6, label: 'Hallway 002, row of 6', src: 'Ford Engineering Lab FEL.HAL.002', asDrawn: true, frames: [
+        { x: 6, y: 27, w: 18, h: 18, s: 'plain', f: 'MICH-305-29' },
+        { x: 0, y: 0, w: 24, h: 24, s: 'float', f: 'MICH-708-290' },
+        { x: 28, y: 5, w: 28, h: 34, s: 'mat', f: 'MICH-247-79' },
+        { x: 60, y: 4, w: 36, h: 36, s: 'plain', f: 'MICH-432-29' },
+        { x: 100, y: 22, w: 26, h: 20, s: 'plain', f: 'MICH-247-79' },
+        { x: 100, y: 0, w: 18, h: 18, s: 'mat', f: 'MICH-708-290' } ] },   // 126in x 45in,
+    { key: 'fel-hal-003', n: 6, label: 'Hallway 003, row of 6', src: 'Ford Engineering Lab FEL.HAL.003', asDrawn: true, frames: [
+        { x: 0, y: 13, w: 20, h: 26, s: 'float', f: 'MICH-247-79' },
+        { x: 24, y: 0, w: 38, h: 50, s: 'plain', f: 'MICH-340-20' },
+        { x: 66, y: 27, w: 18, h: 22, s: 'plain', f: 'MICH-432-29' },
+        { x: 66, y: 1, w: 18, h: 22, s: 'mat', f: 'MICH-708-290' },
+        { x: 88, y: 12, w: 34, h: 28, s: 'mat', f: 'MICH-247-79' },
+        { x: 126, y: 9, w: 28, h: 34, s: 'plain', f: 'MICH-708-290' } ] },   // 154in x 50in
 ];
 function _salonPreset(key) { return SALON_PRESETS.find(p => p.key === key) || null; }
 // The layout for a set, in inches: [{x, y, w, h, s?}], x/y from the group's bottom-left.
@@ -31585,6 +32165,152 @@ function _applyFrameStyle(row, style) {
         row.sbPaperMargin = dashFmt(1.5 * k); row.sbPaperBorder = dashFmt(0.5 * k);
     }
 }
+// ── FRAMES THAT COME WITH A SET (19.31) ──────────────────────────────────────
+// A preset copied from a real project names each piece's library moulding (`f`).
+// Applying it dresses the piece in that frame through applySwatchToRow, the same path
+// a pick in the frame browser takes (so a floater moulding makes a floater canvas).
+// Swatches load asynchronously; the picker warms _libSwatchMemo as it opens so a click
+// normally dresses everything at once. Anything not yet loaded is dressed when it
+// arrives and folded into the SAME undo entry (the top snapshot is retaken).
+// The set is a starting point: select its pieces and bulk edit to change every frame.
+const _libSwatchMemo = {};
+function _salonPresetCodes() {
+    const out = {};
+    SALON_PRESETS.forEach(p => (p.frames || []).forEach(f => { if (f.f) out[f.f] = true; }));
+    return Object.keys(out);
+}
+function _salonSwatchWarm() {
+    let by = {}; try { by = _fbByCode(); } catch (e) { return Promise.resolve(); }
+    return Promise.all(_salonPresetCodes().map(c => {
+        const rec = by[_fbNorm(c)];
+        if (!rec || _libSwatchMemo[c]) return null;
+        return _libEntryToDataUrl(rec.item.file).then(u => { if (u) _libSwatchMemo[c] = u; }).catch(() => {});
+    }));
+}
+function _salonDressRow(r, rec, url) {
+    const idx = dashProjectData.indexOf(r);
+    if (idx < 0) return false;
+    return applySwatchToRow(idx, rec.collection, rec.item, url);
+}
+// Dresses what it can now; returns the rest as [row, rec, code] for _salonFrameDressLater.
+function _salonFrameDress(rows, lay) {
+    const pend = [];
+    let by = {}; try { by = _fbByCode(); } catch (e) { return pend; }
+    rows.forEach((r, i) => {
+        const code = lay[i] && lay[i].f;
+        const rec = code ? by[_fbNorm(code)] : null;
+        if (!rec) return;
+        if (_libSwatchMemo[code]) _salonDressRow(r, rec, _libSwatchMemo[code]);
+        else pend.push([r, rec, code]);
+    });
+    return pend;
+}
+function _salonFrameDressLater(pend) {
+    Promise.all(pend.map(([r, rec, code]) => _libEntryToDataUrl(rec.item.file).then(u => { if (u) _libSwatchMemo[code] = u; return u; }).catch(() => null)))
+        .then(() => {
+            let n = 0;
+            pend.forEach(([r, rec, code]) => {
+                if (!_libSwatchMemo[code] || !_salonDressRow(r, rec, _libSwatchMemo[code])) return;
+                n++;
+                const idx = dashProjectData.indexOf(r);
+                try { pushUpdatesToElevations(idx); } catch (e) {}
+            });
+            if (!n) return;
+            try { _invalidateFramesCache(); } catch (e) {}
+            try { renderDashTable(); } catch (e) {}
+            try { if (currentView === 'elevation') drawElevAll(); } catch (e) {}
+            // One gesture, one undo entry: retake the snapshot the apply just pushed.
+            try { if (undoStack.length) undoStack[undoStack.length - 1] = snapshotProjectState({ plans: true }); } catch (e) {}
+            if (typeof scheduleAutosave === 'function') scheduleAutosave();
+        });
+}
+
+// ── THE FRAME SET PICKER (19.31, openFrameSetPicker) ─────────────────────────
+// Choosing a set was a text menu of names; a designer picking an arrangement wants to
+// SEE it. A dialog of drawn thumbnails, three sections: the simple sets, the house salon
+// hangs, and the hangs copied from real projects. Each drawing is to scale: frame in the
+// moulding's colour, a mat as a white border, a float mount as paper on a backer, the
+// art as grey. The current set is ringed. Clicking one applies it (_fpApplyFrameSet).
+function _frameSetInk(code) {
+    let it = null;
+    try { const rec = code && _fbByCode()[_fbNorm(code)]; it = rec && rec.item; } catch (e) {}
+    const c = String((it && (it.color || it.family)) || '').toLowerCase();
+    if (/gold/.test(c) && !/black/.test(c)) return '#b08d3e';
+    if (/oak|maple|natural|honey|light wood/.test(c)) return '#b8864b';
+    if (/walnut|brown|mahogany|espresso/.test(c)) return '#5a3d2b';
+    if (/silver|steel|nickel|pewter/.test(c)) return '#8a8f94';
+    if (/white/.test(c)) return '#e9e9e9';
+    if (/woodgrain/.test(c)) return '#2b2420';
+    return '#161616';
+}
+function _frameSetThumbSVG(lay) {
+    const W = Math.max.apply(null, lay.map(f => f.x + f.w)), H = Math.max.apply(null, lay.map(f => f.y + f.h));
+    const pad = Math.max(W, H) * 0.07;
+    let rec = {}; try { rec = _fbByCode(); } catch (e) {}
+    const parts = lay.map(f => {
+        const it = f.f && rec[_fbNorm(f.f)] ? rec[_fbNorm(f.f)].item : null;
+        const floater = it && parseFloat(it.faceWidth) > 0;
+        // Drawn at least ~1% of the drawing's size, or a 245"-wide row draws hairline frames
+        // and the moulding colours (the point of a project hang) do not read.
+        const fw = Math.max(Math.max(W, H) * 0.011, Math.min(2.2, floater ? 0.5 : ((it && parseFloat(it.width)) || 1)), 0.6);
+        const x = f.x, y = H - f.y - f.h, w = f.w, h = f.h;
+        const ink = _frameSetInk(f.f);
+        const r = (x0, y0, w0, h0, fill, extra) => (w0 > 0 && h0 > 0) ? '<rect x="' + x0.toFixed(2) + '" y="' + y0.toFixed(2) + '" width="' + w0.toFixed(2) + '" height="' + h0.toFixed(2) + '" fill="' + fill + '"' + (extra || '') + '/>' : '';
+        let out = r(x, y, w, h, ink);
+        if (f.s === 'mat') {
+            const m = Math.min(3, Math.min(w, h) * 0.18);
+            out += r(x + fw, y + fw, w - 2 * fw, h - 2 * fw, '#ffffff') + r(x + fw + m, y + fw + m, w - 2 * (fw + m), h - 2 * (fw + m), '#c5c9cf');
+        } else if (f.s === 'float') {
+            const m = Math.min(2, Math.min(w, h) * 0.14);
+            out += r(x + fw, y + fw, w - 2 * fw, h - 2 * fw, '#f1f1f1') + r(x + fw + m, y + fw + m, w - 2 * (fw + m), h - 2 * (fw + m), '#ffffff', ' stroke="#d8d8d8" stroke-width="0.3"')
+                + r(x + fw + m + 0.8, y + fw + m + 0.8, w - 2 * (fw + m + 0.8), h - 2 * (fw + m + 0.8), '#c5c9cf');
+        } else {
+            out += r(x + fw, y + fw, w - 2 * fw, h - 2 * fw, floater ? '#2a2a2a' : '#c5c9cf');
+            if (floater) out += r(x + fw + 0.35, y + fw + 0.35, w - 2 * (fw + 0.35), h - 2 * (fw + 0.35), '#c5c9cf');
+        }
+        return out;
+    }).join('');
+    return '<svg viewBox="' + (-pad).toFixed(2) + ' ' + (-pad).toFixed(2) + ' ' + (W + 2 * pad).toFixed(2) + ' ' + (H + 2 * pad).toFixed(2) + '" preserveAspectRatio="xMidYMid meet" aria-hidden="true">' + parts + '</svg>';
+}
+function openFrameSetPicker(g) {
+    if (!g) return;
+    const old = document.getElementById('frameSetPicker'); if (old) old.remove();
+    const cur = _fpGroupSet(g);
+    _salonSwatchWarm();
+    const ov = document.createElement('div');
+    ov.id = 'frameSetPicker'; ov.className = 'frame-modal'; ov.setAttribute('data-modal-backdrop', ''); ov.style.display = 'flex';
+    const card = document.createElement('div'); card.className = 'fsp-card';
+    const head = document.createElement('div'); head.className = 'fsp-head';
+    head.innerHTML = '<div><div class="fsp-title"></div><div class="fsp-sub">Pick an arrangement. Each piece can be changed after, one at a time or all together with Bulk Edit.</div></div>';
+    head.querySelector('.fsp-title').textContent = 'Frame set for ' + g.key;
+    const x = document.createElement('button'); x.type = 'button'; x.className = 'fsp-close phone-x'; x.setAttribute('data-modal-close', ''); x.setAttribute('aria-label', 'Close');
+    x.innerHTML = '<svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+    x.onclick = () => ov.remove();
+    head.appendChild(x);
+    card.appendChild(head);
+    const section = (title, tiles) => {
+        if (!tiles.length) return;
+        const h = document.createElement('div'); h.className = 'fsp-sec'; h.textContent = title; card.appendChild(h);
+        const grid = document.createElement('div'); grid.className = 'fsp-grid'; card.appendChild(grid);
+        tiles.forEach(t => {
+            const b = document.createElement('button'); b.type = 'button';
+            b.className = 'fsp-tile' + (t.on ? ' on' : '');
+            b.setAttribute('data-set', t.key || ('n' + t.n));
+            b.innerHTML = '<div class="fsp-pic">' + _frameSetThumbSVG(t.lay) + '</div><div class="fsp-name"></div><div class="fsp-hint"></div>';
+            b.querySelector('.fsp-name').textContent = t.label;
+            b.querySelector('.fsp-hint').textContent = t.n + (t.n === 1 ? ' piece' : ' pieces');
+            b.onclick = () => { ov.remove(); _fpApplyFrameSet(g.key, t.n, t.key || ''); };
+            grid.appendChild(b);
+        });
+    };
+    section('Sets', [1, 2, 3, 4].map(k => ({ n: k, key: '', label: FRAME_SET_SIMPLE[k].label, lay: _frameSetLayout(k, ''), on: !cur.preset && cur.n === k })));
+    section('Salon hangs', SALON_PRESETS.filter(p => !p.asDrawn).map(p => ({ n: p.n, key: p.key, label: p.label, lay: p.frames, on: cur.preset === p.key })));
+    section('Ford Engineering Lab', SALON_PRESETS.filter(p => p.asDrawn).map(p => ({ n: p.n, key: p.key, label: p.label, lay: p.frames, on: cur.preset === p.key })));
+    ov.appendChild(card);
+    document.body.appendChild(ov);
+    return ov;
+}
+
 // What set a placement is now: its piece count, and a salon preset if one was applied.
 function _fpGroupSet(g) {
     const n = (g && g.rows) ? g.rows.length : 1;
@@ -31645,6 +32371,9 @@ function _fpApplyFrameSetNow(key, rows0, n, presetKey) {
         if (pre0) { const L = pre0[i]; r.extW = dashFmt(L.w * kIn); r.extH = dashFmt(L.h * kIn); _applyFrameStyle(r, L.s); r.salonPreset = presetKey; }
         else { delete r.salonPreset; if (!(parseFloat(r.extW) > 0) || !(parseFloat(r.extH) > 0)) { r.extW = dashFmt(S.size[0] * kIn); r.extH = dashFmt(S.size[1] * kIn); } }
     });
+    // A preset from a real project carries each piece's frame (19.31): dress them now,
+    // from swatches the picker preloaded, so the wall below is drawn in them.
+    const _pend = pre0 ? _salonFrameDress(rows, pre0) : [];
     const kOut = unitFactor(dashUnit, 'in');
     const lay = pre0 || _frameSetLayout(n, '', rows.map(r => [parseFloat(r.extW) * kOut, parseFloat(r.extH) * kOut]));
     _fpMockSetOnWall(key, rows, lay);
@@ -31654,6 +32383,7 @@ function _fpApplyFrameSetNow(key, rows0, n, presetKey) {
     if (typeof populateDashPushSelector === 'function') populateDashPushSelector();
     if (typeof pushHistory === 'function') pushHistory();
     if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    if (_pend.length) _salonFrameDressLater(_pend);
     const label = presetKey ? ('salon hang, ' + _salonPreset(presetKey).label) : (FRAME_SET_SIMPLE[n] ? FRAME_SET_SIMPLE[n].label : n + ' set');
     _toast(key + ' is a ' + label.toLowerCase(), 'Mocked up on its wall in Elevations. Ctrl+Z undoes it.');
     try { _dsRefresh(); _dsRenderTools(); _dsRenderCenter(); } catch (e) {}
@@ -31735,7 +32465,7 @@ function _placementList() {
 // The frame sets offered when a code is minted: the simple ones, then the salon presets.
 function _placementSetChoices() {
     const out = FP_FRAME_SETS.filter(s => FRAME_SET_SIMPLE[s.n]).map(s => ({ value: 'n' + s.n, n: s.n, preset: '', label: s.label }));
-    SALON_PRESETS.forEach(p => out.push({ value: p.key, n: p.n, preset: p.key, label: p.n + ' set salon, ' + p.label.toLowerCase() }));
+    SALON_PRESETS.forEach(p => out.push({ value: p.key, n: p.n, preset: p.key, label: p.asDrawn ? (p.n + ' set salon, Ford ' + p.label) : (p.n + ' set salon, ' + p.label.toLowerCase()) }));
     return out;
 }
 // The layout a placement's rows hang in, in inches. A salon preset only counts while
@@ -32615,16 +33345,8 @@ function _fpItemRow(g, desc) {
     frB.innerHTML = '<svg class="svg-icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="1"/><rect x="7" y="8" width="10" height="8"/></svg><span class="fp-set-n">' + _set.n + '</span>';
     frB.style.cssText = 'width:' + FP_ITEM_COLS.frames + 'px; height:22px; padding:0 3px; flex:0 0 auto; display:inline-flex; align-items:center; justify-content:center; gap:2px;';
     frB.title = 'Frames: ' + (_set.preset ? ('salon hang, ' + _salonPreset(_set.preset).label) : (FRAME_SET_SIMPLE[_set.n] ? FRAME_SET_SIMPLE[_set.n].label : _set.n + ' pieces')) + '. Click to change the set; it is mocked up on the wall in Elevations.';
-    frB.onclick = (e) => {
-        e.stopPropagation();
-        const items = [{ head: 'FRAME SET' }];
-        [1, 2, 3, 4].forEach(k => items.push({ label: FRAME_SET_SIMPLE[k].label, on: !_set.preset && _set.n === k, onClick: () => _fpApplyFrameSet(g.key, k, '') }));
-        [5, 7].forEach(k => {
-            items.push({ head: k + ' SET · SALON HANGS' });
-            SALON_PRESETS.filter(p => p.n === k).forEach(p => items.push({ label: p.label, hint: k + ' pieces', on: _set.preset === p.key, onClick: () => _fpApplyFrameSet(g.key, k, p.key) }));
-        });
-        _frameMenu(frB, items);
-    };
+    // The arrangements as pictures (19.31, openFrameSetPicker), not a list of names.
+    frB.onclick = (e) => { e.stopPropagation(); openFrameSetPicker(g); };
     row.appendChild(num); row.appendChild(code); row.appendChild(sel); row.appendChild(lnB); row.appendChild(frB);
     row.onclick = () => _dsFpArm(g.key);
     _fpWireItemDrag(row, g);
@@ -32970,6 +33692,9 @@ function _dsRenderTools() {
         // Sticky top: approval + layout controls stay locked while templates scroll.
         const _toolsBg = getComputedStyle(t).backgroundColor;
         const head = document.createElement('div');
+        // .ds-tools-sticky (19.25): a phone's panel is ~230px tall, and a pinned 150px
+        // header left the choices scrolling behind it; style.css unpins it there.
+        head.className = 'ds-tools-sticky';
         head.style.cssText = 'position:sticky; top:0; z-index:3; background:' + ((_toolsBg && _toolsBg !== 'rgba(0, 0, 0, 0)') ? _toolsBg : 'var(--bg-panel,#1d1d20)') + '; padding-bottom:10px; margin-bottom:8px; border-bottom:1px solid var(--border-color);';
 
         const lbl = document.createElement('div');
@@ -33330,16 +34055,18 @@ function _dsRenderTools() {
             _dsThumbCache = {}; _dsRenderTools(); _dsRenderCenter(); _dsRenderRail();
         });
         // Spacing sliders — nudge contacts closer/further horizontally + vertically.
-        const slider = (label, prop, min, max, step) => {
+        const slider = (label, prop, min, max, step, def) => {
             const s2 = document.createElement('div'); s2.textContent = label; s2.style.cssText = 'font-size:var(--fs-60); text-transform:uppercase; letter-spacing:0.6px; color:var(--text-muted); margin:10px 0 3px;'; t.appendChild(s2);
             const inp = document.createElement('input'); inp.type = 'range'; inp.min = min; inp.max = max; inp.step = step;
-            inp.value = (typeof editorialContent[prop] === 'number') ? editorialContent[prop] : 0;
+            inp.value = (typeof editorialContent[prop] === 'number') ? editorialContent[prop] : (def || 0);
             inp.style.cssText = 'width:100%;';
             inp.oninput = () => { editorialContent[prop] = parseFloat(inp.value); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderCenter(); clearTimeout(_dsSliderDebounce); _dsSliderDebounce = setTimeout(() => { _dsPriorityRerender(desc); }, 350); };
             t.appendChild(inp);
         };
         slider('Horizontal spacing', 'contactGapH', -0.8, 1.5, 0.05);
         slider('Vertical spacing', 'contactGapV', -0.6, 1.5, 0.05);
+        slider('Move contacts up / down', 'contactShiftY', -80, 200, 2);
+        slider('Name size', 'contactNameSize', 8, 28, 0.5, CONTACT_NAME_FS_DEFAULT);
     }
     else if (desc.kind === 'planDetail') {
         _pdEditorInto(t, desc.pd);
@@ -34255,14 +34982,32 @@ function _mbApplyModeUI() {
     const lab = document.getElementById('mbModeLabel'); if (lab) lab.textContent = fixed ? ('Editing: ' + (_mbEditTarget.label || 'Page')) : '';
 }
 
-// ── Contacts editor: structured add/remove for the Thank You page. Reads and
-// writes editorialContent.contacts (the "Name | Role | Email | Phone" string),
-// so the deck renderer and persistence are unchanged. ──────────────────────
+// ── Contacts editor: the Thank You page's people (19.13). The project holds its OWN
+// list (editorialContent.contacts, "Name | Role | Email | Phone" per line, in print
+// order); a new project starts empty, or with the designer's saved default team.
+// contacts/contacts.json is the company DIRECTORY: a pick list, never printed by
+// itself. Before 19.13 every directory entry printed on every deck; a file from then
+// (no contactsV) has that old list written into it once by _contactsMigrateLegacy,
+// from the frozen CONTACTS_LEGACY_DIRECTORY, so an old deck prints what it printed.
+const CONTACTS_LEGACY_DIRECTORY = [
+    { name: 'Jordan Hilliard', role: 'Principal', email: 'jordan@farmboyfinearts.com', phone: '' },
+    { name: 'Todd Towers', role: 'President & CEO', email: 'ttowers@farmboyfinearts.com', phone: '604 699 2462' },
+    { name: 'Laurenn Machin', role: 'Creative Director', email: 'lmachin@farmboyfinearts.com', phone: '604-200-4018' },
+    { name: 'Heather Merenda', role: 'Art Director', email: 'hmerenda@farmboyfinearts.com', phone: '672-275-0542' },
+    { name: 'Michael Clarke', role: 'Project Manager', email: 'mclarke@farmboyfinearts.com', phone: '604-398-3382' },
+    { name: 'Dominique Cassidy', role: 'Art Director', email: 'dcassidy@farmboyfinearts.com', phone: '604-256-6835' },
+    { name: 'Sarah Goble', role: 'Project Manager', email: 'sgoble@farmboyfinearts.com', phone: '604 630 1672' },
+    { name: 'Ricky Alvarez', role: 'Sales Coordinator', email: 'ralvarez@farmboyfinearts.com', phone: '604-332-4718' },
+    { name: 'Farmboy Fine Arts', role: 'Studio', email: 'studio@farmboyfinearts.com', phone: '' }
+];
+const MY_CONTACTS_KEY = 'frameMyContacts';
 let _contactsDraft = [];
 let _contactsDragFrom = null;
 let _contactsSelected = -1;
 let _repoContactsCache = null;
-// Load the shared company contacts committed to the repo (contacts/contacts.json).
+let _contactsDirOpen = false;
+let _contactsDirQuery = '';
+// Load the company directory committed to the repo (contacts/contacts.json).
 // Falls back silently if the file is missing. Cached for the session.
 async function _loadRepoContacts() {
     if (_repoContactsCache) return _repoContactsCache;
@@ -34286,66 +35031,83 @@ async function _loadRepoContacts() {
             }
             if (!j) continue;
             const arr = Array.isArray(j) ? j : (Array.isArray(j.contacts) ? j.contacts : null);
-            if (arr) { _repoContactsCache = arr.map(c => ({ name: c.name || '', role: c.role || '', email: c.email || '', phone: c.phone || '', _repo: true })); return _repoContactsCache; }
+            if (arr) { _repoContactsCache = arr.map(c => ({ name: c.name || '', role: c.role || '', email: c.email || '', phone: c.phone || '', team: c.team || '' })); return _repoContactsCache; }
         } catch (e) {}
     }
     _repoContactsCache = [];
     return _repoContactsCache;
 }
+// A line written by FRAME uses '|', so a comma inside a role ("Senior Designer, 3D &
+// Innovation") stays in the role. Commas separate fields only on a line with no '|'.
 function _contactsParse(str) {
-    return (str || '').split('\n').map(l => l.trim()).filter(Boolean).map(l => { const p = l.split(/\s*[|,]\s*/); return { name: p[0] || '', role: p[1] || '', email: p[2] || '', phone: p[3] || '' }; });
+    return (str || '').split('\n').map(l => l.trim()).filter(Boolean).map(l => { const p = l.split(l.indexOf('|') >= 0 ? /\s*\|\s*/ : /\s*,\s*/); return { name: p[0] || '', role: p[1] || '', email: p[2] || '', phone: p[3] || '' }; });
 }
-// A stable identity for a contact (name+email) so hide/order survive edits.
+// A stable identity for a contact (name+email) so the hide flag survives edits.
 function _contactKey(c) { return ((c.name || '') + '~' + (c.email || '')).toLowerCase().trim(); }
-// The merged working list: repo contacts first, then project-added ones, with
-// per-project hide flags and custom order applied. Used by BOTH the editor and
+// The project's list, in print order, with hide flags. Used by BOTH the editor and
 // the Thank You page so preview and PDF always match.
 async function _contactsResolved() {
-    const repo = await _loadRepoContacts();
-    const local = _contactsParse(editorialContent.contacts || '').map(c => Object.assign({}, c, { _repo: false }));
-    // De-dupe: a project-added contact with the same key overrides the repo one.
-    const byKey = {}; const merged = [];
-    repo.forEach(c => { const k = _contactKey(c); byKey[k] = c; merged.push(c); });
-    local.forEach(c => { const k = _contactKey(c); if (byKey[k]) { Object.assign(byKey[k], c, { _repo: byKey[k]._repo }); } else { byKey[k] = c; merged.push(c); } });
     const hidden = new Set(editorialContent.contactsHidden || []);
-    merged.forEach(c => { c._hidden = hidden.has(_contactKey(c)); });
-    // Apply custom order: keys listed in contactsOrder come first, in that order.
-    const order = editorialContent.contactsOrder || [];
+    return _contactsParse(editorialContent.contacts || '').map(c => Object.assign(c, { _hidden: hidden.has(_contactKey(c)) }));
+}
+// Once, on a file from before 19.13: write the list it used to print (frozen directory
+// merged with its own additions, its custom order applied) into the project itself.
+function _contactsMigrateLegacy(e) {
+    const local = _contactsParse(e.contacts || '');
+    const byKey = {}; const merged = [];
+    CONTACTS_LEGACY_DIRECTORY.forEach(c => { const x = Object.assign({}, c); byKey[_contactKey(x)] = x; merged.push(x); });
+    local.forEach(c => { const k = _contactKey(c); if (byKey[k]) Object.assign(byKey[k], c); else { byKey[k] = c; merged.push(c); } });
+    const order = Array.isArray(e.contactsOrder) ? e.contactsOrder : [];
     if (order.length) {
         merged.sort((a, b) => {
             const ia = order.indexOf(_contactKey(a)), ib = order.indexOf(_contactKey(b));
             if (ia < 0 && ib < 0) return 0; if (ia < 0) return 1; if (ib < 0) return -1; return ia - ib;
         });
     }
-    return merged;
+    e.contacts = _contactsSerialize(merged);
+    delete e.contactsOrder;
+    e.contactsV = 2;
+    return e;
 }
 function _contactsSerialize(arr) {
     return (arr || []).filter(c => (c.name || c.role || c.email || c.phone)).map(c => [c.name || '', c.role || '', c.email || '', c.phone || ''].join(' | ')).join('\n');
 }
+// The designer's own default team, per computer. A new project starts with it.
+function _myContactsDefault() { try { return localStorage.getItem(MY_CONTACTS_KEY) || ''; } catch (e) { return ''; } }
+function saveMyDefaultContacts() {
+    const s = _contactsSerialize(_contactsDraft.filter(c => !c._hidden));
+    if (!s) { _toast('Add some people first, then save them as your default.'); return; }
+    try { localStorage.setItem(MY_CONTACTS_KEY, s); } catch (e) { showInfoModal('Could not save your default', 'This browser would not store it. Your contacts on this project are unchanged.'); return; }
+    const n = s.split('\n').length;
+    _toast('Saved ' + n + (n === 1 ? ' person' : ' people') + ' as your default team. New projects start with them.');
+    _contactsRender();
+}
+function useMyDefaultContacts() {
+    const s = _myContactsDefault(); if (!s) return;
+    if (typeof pushHistory === 'function') pushHistory();
+    _contactsDraft = _contactsParse(s).map(c => Object.assign(c, { _hidden: false }));
+    _contactsSelected = -1;
+    _contactsCommit(); _contactsRender();
+}
 function _contactsCommit() {
-    // Persist project-added contacts (legacy string) + order + hidden flags.
-    editorialContent.contacts = _contactsSerialize(_contactsDraft.filter(c => !c._repo));
-    editorialContent.contactsOrder = _contactsDraft.map(c => _contactKey(c));
+    editorialContent.contacts = _contactsSerialize(_contactsDraft);
     editorialContent.contactsHidden = _contactsDraft.filter(c => c._hidden).map(c => _contactKey(c));
+    delete editorialContent.contactsOrder;
+    editorialContent.contactsV = 2;
     const ta = document.getElementById('specPdfContacts'); if (ta) ta.value = editorialContent.contacts;
     if (typeof markDirty === 'function') markDirty();
     if (typeof scheduleAutosave === 'function') scheduleAutosave();
 }
-// _contactsDraft is the merged, ordered working list (repo + project contacts).
-// Repo contacts show a small badge and can't be edited or deleted here (edit
-// them in the repo sheet), but they CAN be hidden or reordered per project.
-function _contactsPersistOrderHide() {
-    editorialContent.contactsOrder = _contactsDraft.map(c => _contactKey(c));
-    editorialContent.contactsHidden = _contactsDraft.filter(c => c._hidden).map(c => _contactKey(c));
-    // Project-added (non-repo) contacts persist as the legacy string.
-    editorialContent.contacts = _contactsSerialize(_contactsDraft.filter(c => !c._repo));
-    const ta = document.getElementById('specPdfContacts'); if (ta) ta.value = editorialContent.contacts;
-    if (typeof markDirty === 'function') markDirty();
-    if (typeof scheduleAutosave === 'function') scheduleAutosave();
-}
+function _contactsPersistOrderHide() { _contactsCommit(); }
 function _contactsRender() {
     const wrap = document.getElementById('contactsRows'); if (!wrap) return;
     wrap.innerHTML = '';
+    if (!_contactsDraft.length) {
+        const p = document.createElement('div');
+        p.textContent = 'No one on the Thank You page yet. Add people from the directory, or type someone in.';
+        p.style.cssText = 'color:var(--text-muted); font-size:var(--fs-75); padding:6px 0 10px;';
+        wrap.appendChild(p);
+    }
     _contactsDraft.forEach((c, i) => {
         const row = document.createElement('div');
         row.draggable = true;
@@ -34355,28 +35117,60 @@ function _contactsRender() {
         row.ondragend = () => { row.style.opacity = c._hidden ? '0.45' : '1'; };
         row.ondragover = (e) => { e.preventDefault(); row.style.borderTop = '2px solid var(--accent)'; };
         row.ondragleave = () => { row.style.borderTop = ''; };
-        row.ondrop = (e) => { e.preventDefault(); row.style.borderTop = ''; const from = _contactsDragFrom; const to = i; if (from == null || from === to) return; const moved = _contactsDraft.splice(from, 1)[0]; _contactsDraft.splice(to, 0, moved); _contactsDragFrom = null; _contactsPersistOrderHide(); _contactsRender(); };
+        row.ondrop = (e) => { e.preventDefault(); row.style.borderTop = ''; const from = _contactsDragFrom; const to = i; if (from == null || from === to) return; const moved = _contactsDraft.splice(from, 1)[0]; _contactsDraft.splice(to, 0, moved); _contactsDragFrom = null; _contactsCommit(); _contactsRender(); };
         // Single drag handle (grip). Click a row to select it, then use the
         // Up/Down arrow keys to nudge it — mirrors the CSV grip behaviour.
         if (i === _contactsSelected) row.style.outline = '2px solid var(--accent)';
         row.onclick = (e) => { if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return; _contactsSelected = i; _contactsRender(); const w2 = document.getElementById('contactsRows'); if (w2 && w2.children[i]) w2.children[i].focus && w2.children[i].focus(); };
         const grip = document.createElement('div'); grip.innerHTML = svgMove; grip.title = 'Drag to reorder (or select the row and use the up/down arrow keys)'; grip.style.cssText = 'flex:0 0 auto; color:var(--text-muted); cursor:grab; padding:0 2px; user-select:none; display:flex; align-items:center; justify-content:center;';
         row.appendChild(grip);
-        const mk = (ph, field, w) => { const inp = document.createElement('input'); inp.type = 'text'; inp.value = c[field] || ''; inp.placeholder = ph; inp.disabled = !!c._repo; inp.oninput = () => { _contactsDraft[i][field] = inp.value; _contactsCommit(); }; inp.style.cssText = 'flex:' + w + '; min-width:0; height:30px; font-size:var(--fs-75); padding:0 8px; background:' + (c._repo ? 'var(--bg-main)' : 'var(--bg-input)') + '; color:var(--text-main); border:1px solid var(--border-color); border-radius:var(--r-4);'; return inp; };
+        const mk = (ph, field, w) => { const inp = document.createElement('input'); inp.type = 'text'; inp.value = c[field] || ''; inp.placeholder = ph; inp.oninput = () => { _contactsDraft[i][field] = inp.value; _contactsCommit(); }; inp.style.cssText = 'flex:' + w + '; min-width:0; height:30px; font-size:var(--fs-75); padding:0 8px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:var(--r-4);'; return inp; };
         row.appendChild(mk('Name', 'name', '2'));
         row.appendChild(mk('Role', 'role', '2'));
         row.appendChild(mk('Email', 'email', '3'));
         row.appendChild(mk('Phone', 'phone', '2'));
-        if (c._repo) { const badge = document.createElement('span'); badge.textContent = 'repo'; badge.title = 'From the shared company sheet \u2014 edit it in the repo'; badge.style.cssText = 'flex:0 0 auto; font-size:var(--fs-55); text-transform:uppercase; letter-spacing:0.5px; color:var(--text-muted); border:1px solid var(--border-color); border-radius:var(--r-4); padding:2px 4px;'; row.appendChild(badge); }
         // Hide toggle
-        const hide = document.createElement('button'); hide.textContent = c._hidden ? '\u2298' : '\u25c9'; hide.title = c._hidden ? 'Show on Thank You page' : 'Hide from Thank You page'; hide.className = 'action-btn btn-secondary'; hide.style.cssText = 'width:30px; height:30px; padding:0; font-size:var(--fs-80); flex:0 0 auto;';
-        hide.onclick = () => { _contactsDraft[i]._hidden = !_contactsDraft[i]._hidden; _contactsPersistOrderHide(); _contactsRender(); };
+        const hide = document.createElement('button'); hide.textContent = c._hidden ? '⊘' : '◉'; hide.title = c._hidden ? 'Show on Thank You page' : 'Hide from Thank You page'; hide.className = 'action-btn btn-secondary'; hide.style.cssText = 'width:30px; height:30px; padding:0; font-size:var(--fs-80); flex:0 0 auto;';
+        hide.onclick = () => { _contactsDraft[i]._hidden = !_contactsDraft[i]._hidden; _contactsCommit(); _contactsRender(); };
         row.appendChild(hide);
-        // Delete (project contacts only; repo ones are hidden instead)
-        const del = document.createElement('button'); del.textContent = '\u2715'; del.title = c._repo ? 'Repo contacts can\u2019t be deleted here \u2014 hide it, or edit the repo sheet' : 'Remove contact'; del.className = 'action-btn btn-secondary'; del.style.cssText = 'width:30px; height:30px; padding:0; font-size:var(--fs-75); flex:0 0 auto;' + (c._repo ? ' opacity:0.4; cursor:not-allowed;' : ''); del.disabled = !!c._repo; if (!c._repo) del.onclick = () => removeContact(i);
+        const del = document.createElement('button'); del.textContent = '✕'; del.title = 'Take off this project'; del.className = 'action-btn btn-secondary'; del.style.cssText = 'width:30px; height:30px; padding:0; font-size:var(--fs-75); flex:0 0 auto;'; del.onclick = () => removeContact(i);
         row.appendChild(del);
         wrap.appendChild(row);
     });
+    const useBtn = document.getElementById('contactsUseDefaultBtn');
+    if (useBtn) { const has = !!_myContactsDefault(); useBtn.disabled = !has; useBtn.title = has ? 'Replace this list with your saved default team' : 'Nothing saved yet: set up the list, then Save as my default'; }
+    _contactsDirRender();
+}
+// The company directory as a pick list: click a person to add them to this project.
+function toggleContactsDirectory() { _contactsDirOpen = !_contactsDirOpen; _contactsDirRender(); if (_contactsDirOpen) { const q = document.getElementById('contactsDirSearch'); if (q) q.focus(); } }
+async function _contactsDirRender() {
+    const box = document.getElementById('contactsDirectory'); if (!box) return;
+    box.style.display = _contactsDirOpen ? '' : 'none';
+    const btn = document.getElementById('contactsDirBtn'); if (btn) btn.classList.toggle('active', _contactsDirOpen);
+    if (!_contactsDirOpen) return;
+    const list = document.getElementById('contactsDirList'); if (!list) return;
+    const dir = await _loadRepoContacts();
+    const have = new Set(_contactsDraft.map(c => (c.name || '').toLowerCase().trim()));
+    const q = (_contactsDirQuery || '').toLowerCase().trim();
+    const hits = dir.filter(c => !q || [c.name, c.role, c.team, c.email].join(' ').toLowerCase().indexOf(q) >= 0);
+    list.innerHTML = '';
+    if (!dir.length) { list.innerHTML = '<div style="color:var(--text-muted); font-size:var(--fs-70); padding:6px 2px;">The company directory (contacts/contacts.json) could not be loaded.</div>'; return; }
+    if (!hits.length) { list.innerHTML = '<div style="color:var(--text-muted); font-size:var(--fs-70); padding:6px 2px;">No one matches.</div>'; return; }
+    hits.forEach(c => {
+        const added = have.has((c.name || '').toLowerCase().trim());
+        const b = document.createElement('button');
+        b.type = 'button'; b.className = 'contacts-dir-item'; b.disabled = added;
+        b.title = added ? 'Already on this project' : 'Add to the Thank You page';
+        b.style.cssText = 'display:flex; align-items:baseline; gap:8px; width:100%; text-align:left; padding:5px 8px; background:none; border:0; border-radius:var(--r-4); color:var(--text-main); font-size:var(--fs-75); cursor:' + (added ? 'default' : 'pointer') + ';' + (added ? ' opacity:0.45;' : '');
+        b.innerHTML = '<span style="flex:0 0 auto; width:14px; color:var(--text-muted);">' + (added ? '✓' : '+') + '</span><span style="flex:0 0 auto; font-weight:600;">' + _esc(c.name) + '</span><span style="flex:1; min-width:0; color:var(--text-muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">' + _esc([c.role, c.team].filter(Boolean).join(' · ')) + '</span>';
+        if (!added) b.onclick = () => addContactFromDirectory(c);
+        list.appendChild(b);
+    });
+}
+function addContactFromDirectory(c) {
+    if (typeof pushHistory === 'function') pushHistory();
+    _contactsDraft.push({ name: c.name || '', role: c.role || '', email: c.email || '', phone: c.phone || '', _hidden: false });
+    _contactsCommit(); _contactsRender();
 }
 function _contactsKeydown(e) {
     if (_contactsSelected < 0) return;
@@ -34390,19 +35184,25 @@ function _contactsKeydown(e) {
     const moved = _contactsDraft.splice(i, 1)[0];
     _contactsDraft.splice(to, 0, moved);
     _contactsSelected = to;
-    _contactsPersistOrderHide(); _contactsRender();
+    _contactsCommit(); _contactsRender();
 }
 async function openContactsEditor() {
     const m = document.getElementById('contactsModal'); if (m) m.style.display = 'flex';
     document.removeEventListener('keydown', _contactsKeydown); document.addEventListener('keydown', _contactsKeydown);
-    const wrap = document.getElementById('contactsRows'); if (wrap) wrap.innerHTML = '<p style="color:var(--text-muted); font-size:var(--fs-70);">Loading company contacts\u2026</p>';
     try { _contactsDraft = await _contactsResolved(); } catch (e) { _contactsDraft = _contactsParse(editorialContent.contacts || ''); }
-    if (!_contactsDraft.length) _contactsDraft = [{ name: '', role: '', email: '', phone: '', _repo: false, _hidden: false }];
+    // An empty project opens straight onto the directory: picking people is the job.
+    _contactsDirOpen = !_contactsDraft.length;
+    _contactsDirQuery = ''; const q = document.getElementById('contactsDirSearch'); if (q) q.value = '';
     _contactsRender();
 }
-function closeContactsEditor() { document.removeEventListener('keydown', _contactsKeydown); _contactsSelected = -1; const m = document.getElementById('contactsModal'); if (m) m.style.display = 'none'; }
-function addContact() { _contactsDraft.push({ name: '', role: '', email: '', phone: '', _repo: false, _hidden: false }); _contactsRender(); _contactsCommit(); }
-function removeContact(i) { if (_contactsDraft[i] && _contactsDraft[i]._repo) return; _contactsDraft.splice(i, 1); _contactsRender(); _contactsCommit(); }
+function closeContactsEditor() {
+    document.removeEventListener('keydown', _contactsKeydown); _contactsSelected = -1;
+    const m = document.getElementById('contactsModal'); if (m) m.style.display = 'none';
+    // The Thank You page's picture is stale now; redraw it if Deck Studio is showing.
+    try { if (typeof _dsRefresh === 'function' && typeof _dsPages !== 'undefined' && _dsPages && _dsPages.length) { _dsRefresh(); _dsRenderCenter(); } } catch (e) {}
+}
+function addContact() { _contactsDraft.push({ name: '', role: '', email: '', phone: '', _hidden: false }); _contactsCommit(); _contactsRender(); }
+function removeContact(i) { if (!_contactsDraft[i]) return; if (typeof pushHistory === 'function') pushHistory(); _contactsDraft.splice(i, 1); if (_contactsSelected >= _contactsDraft.length) _contactsSelected = -1; _contactsCommit(); _contactsRender(); }
 
 function _mbKeyDelete(e) {
     if (_mbPlacing) return;
@@ -34428,6 +35228,9 @@ function closeMoodboardModal() {
 
 // One arrow segment as a rotated element with a wide transparent hit band so
 // thin lines are easy to grab. Returns the wrapper (caller wires idx/handlers).
+// A line on the editable page takes the same dark-page flip its text does (and the PDF
+// already applies through setDrawColor), or a black rule vanishes on a dark cover.
+function _mbLineInk(hex) { try { return (_mbActiveCanvasId === 'dsLayoutCanvas' && _dsPages[_dsIndex]) ? _dsDisplayInk(hex, _deckPageKey(_dsPages[_dsIndex])) : hex; } catch (e) { return hex; } }
 function _mbSegEl(Ax, Ay, Bx, By, color, wt, withHead, sel) {
     const len = Math.hypot(Bx - Ax, By - Ay), ang = Math.atan2(By - Ay, Bx - Ax) * 180 / Math.PI;
     const hit = Math.max(wt, 13);
@@ -35093,7 +35896,7 @@ function renderMoodboardCanvas() {
         const sel = (i === _mbSelected) || _mbSel.indexOf(i) >= 0; const single = sel && _mbSel.length <= 1; const ty = _elType(t);
         if (ty === 'arrow') {
             const Ax = t.x1 * cr.width, Ay = t.y1 * cr.height, Bx = t.x2 * cr.width, By = t.y2 * cr.height;
-            const wt = Math.max(0.5, t.weight || 1.2), col = t.color || '#9aa0a6';
+            const wt = Math.max(0.5, t.weight || 1.2), col = _mbLineInk(t.color || '#9aa0a6');
             const wrap = _mbSegEl(Ax, Ay, Bx, By, col, wt, t.tip !== 'none', sel);
             wrap.dataset.idx = i; wrap.onmousedown = (e) => _mbTileDown(e, i);
             wrap.style.zIndex = String(100 + (t.z || 0));
@@ -35106,7 +35909,7 @@ function renderMoodboardCanvas() {
             return;
         }
         if (ty === 'elbow') {
-            const pts = t.pts || []; const wt = Math.max(0.5, t.weight || 1.2), col = t.color || '#9aa0a6';
+            const pts = t.pts || []; const wt = Math.max(0.5, t.weight || 1.2), col = _mbLineInk(t.color || '#9aa0a6');
             for (let k = 0; k < pts.length - 1; k++) {
                 const Ax = pts[k].x * cr.width, Ay = pts[k].y * cr.height, Bx = pts[k + 1].x * cr.width, By = pts[k + 1].y * cr.height;
                 const wrap = _mbSegEl(Ax, Ay, Bx, By, col, wt, k === pts.length - 2, sel);
@@ -37921,10 +38724,14 @@ const IG_PLAN_H_FRAC = 0.42;
 // drawing that starts at the top margin behind it would print through the heading.
 const IG_TITLE_CLEAR = 18;   // gap between the title block's right edge and the drawing
 const IG_COL_MIN = 110, IG_COL_MAX = 340;
+// THE LETTER LEGEND IS 200pt WIDE BY DEFAULT (19.22), install and breaker pages alike, on
+// every device; was 170 / 150. Only an unset width reads it: a width someone dragged is
+// stored and kept.
+const IG_LEGEND_W_DEFAULT = 200;
 const IG_ELEV_MIN_FRAC = 0.45;   // the drawing never drops below this share of the width
 const IG_COL_GUTTER = 20;
 function _igColW(cfg, contentW) {
-    const w = (cfg && isFinite(cfg.legendW)) ? Number(cfg.legendW) : 170;
+    const w = (cfg && isFinite(cfg.legendW)) ? Number(cfg.legendW) : IG_LEGEND_W_DEFAULT;
     const room = (contentW > 0) ? (contentW * (1 - IG_ELEV_MIN_FRAC) - IG_COL_GUTTER) : IG_COL_MAX;
     return Math.max(IG_COL_MIN, Math.min(Math.min(IG_COL_MAX, room), w));
 }
@@ -38034,7 +38841,7 @@ function _igCfg(ovKey) {
         legend: !!g.breakerLegend,
         legendCols: g.breakerLegendCols === 2 ? 2 : 1,
         legendScale: (typeof g.breakerLegendScale === 'number') ? g.breakerLegendScale : 1,
-        legendW: (typeof g.breakerLegendW === 'number') ? g.breakerLegendW : 150,
+        legendW: (typeof g.breakerLegendW === 'number') ? g.breakerLegendW : IG_LEGEND_W_DEFAULT,
         planScale: (typeof g.breakerPlanScale === 'number') ? g.breakerPlanScale : 1,
         noteW: (typeof g.breakerNoteW === 'number') ? g.breakerNoteW : 1,
         noteFs: (typeof g.breakerNoteFs === 'number') ? g.breakerNoteFs : 1,
@@ -38057,7 +38864,7 @@ function _igCfg(ovKey) {
         legendCols: g.legendCols === 2 ? 2 : 1, // frame corner+profile legend columns
         legend: !!g.legend,                     // letter/size/image-code spec legend under the title
         legendScale: (typeof g.legendScale === 'number') ? g.legendScale : 1,   // frame thumbnail size
-        legendW: (typeof g.legendW === 'number') ? g.legendW : 170,             // letter-legend spec block width (pt)
+        legendW: (typeof g.legendW === 'number') ? g.legendW : IG_LEGEND_W_DEFAULT,   // letter-legend spec block width (pt)
         planScale: (typeof g.planScale === 'number') ? g.planScale : 1,        // zoomed-plan display size, anchored bottom-left
         // Installation-note column: width multiplier + type scale. Both trade off
         // directly against how big the elevation can be, which is why they're
@@ -43193,9 +44000,19 @@ function _modalFocus(el) {
 
 const _modalOpener = new WeakMap();
 
+// ON A TOUCH SCREEN A DIALOG DOES NOT RAISE THE KEYBOARD BY ITSELF (19.21). A field
+// marked data-touch-nofocus (an optional search, like the frame browser's) is never
+// focused for you there: tap it to type. Nothing else is focused instead either,
+// because the open path re-runs on every redraw and would otherwise move focus onto the
+// next control each time the keyboard closes (it landed on the colour filter).
+function _touchNoAutoFocus(el) {
+    return !!(el && el.hasAttribute && el.hasAttribute('data-touch-nofocus')
+        && document.documentElement.classList.contains('touch'));
+}
 function _modalOnOpen(m) {
     if (!_modalOpener.has(m)) _modalOpener.set(m, document.activeElement);
     if (m.contains(document.activeElement)) return;
+    if (_touchNoAutoFocus(m.querySelector('[data-modal-initial]'))) return;
     // [data-modal-initial] wins over document order, so a destructive
     // confirm lands on Cancel rather than on the button that destroys.
     const pref = m.querySelector('[data-modal-initial]');
@@ -43435,6 +44252,1257 @@ if (typeof window !== 'undefined' && window.addEventListener) {
 }
 
 // ──────────────────────────────────────────────────────────────────────────
+// TOUCH: A FINGER DRIVES THE MOUSE HANDLERS (19.18)
+// ──────────────────────────────────────────────────────────────────────────
+// Every drag in this file is mouse-shaped: a mousedown handler registers
+// mousemove/mouseup and the move does the work. iOS turns a tap into a click,
+// but a finger DRAG only scrolls and never sends mousemove, so on an iPad
+// nothing could be moved. Rather than rewrite ~150 handlers, one layer turns a
+// finger into the mouse they already understand:
+//   touchstart -> synthetic mousedown on the element under the finger, and we
+//   WATCH whether that handler armed a drag (registered mousemove/mouseup, or
+//   assigned document/window.onmousemove/up). Armed: the finger's moves become
+//   mousemove and its lift a mouseup, and the page does not scroll. Not armed:
+//   the touch scrolls and taps natively; only a mouseup is sent on lift so the
+//   pair stays balanced.
+// Inside a scrolling list (rail, frame list) an armed drag waits for a short
+// press (TOUCH_HOLD_MS) so a swipe still scrolls; on a drawing surface
+// (TOUCH_SURFACES) it starts at once. iOS follows a tap with its own
+// compatibility mousedown/mouseup/mousemove: those are swallowed for
+// TOUCH_COMPAT_MS after a handled touch, or every tap would press twice. The
+// trusted click is left alone (it is what opens file pickers and links).
+// Form controls are never touched: native typing, sliders and pickers win.
+// Two fingers are never handled (native pinch and two-finger scroll).
+const TOUCH_SLOP_PX = 8;
+const TOUCH_HOLD_MS = 280;
+const TOUCH_COMPAT_MS = 700;
+const TOUCH_DBL_MS = 320;
+const TOUCH_SURFACES = '#scrollArea, #dsCenter, #fpPlanArea, .frame-modal canvas';
+const TOUCH_NATIVE = 'input, textarea, select, option, [contenteditable="true"], [contenteditable=""]';
+let _touchG = null;             // the gesture in flight
+let _touchCompatUntil = 0;      // swallow iOS compatibility mouse events until then
+let _touchLastTap = null;       // {t, x, y, target} for the synthetic dblclick
+// THE MODIFIER KEYS A FINGER HAS NOT GOT (19.19). Shift locks a line or drag to an
+// axis, Ctrl/Cmd adds to a selection, Alt skips snapping: all read off the mouse
+// event. The touch key bar (#touchKeys) latches them here and every synthetic mouse
+// event carries them until the key is tapped off again (sticky, like caps lock: a
+// second finger holding a key would end the one-finger drag). Session state only.
+const _touchMods = { shift: false, ctrl: false, alt: false };
+// HANDLES ARE 8px; A FINGER IS NOT (19.19). A touch that lands within
+// TOUCH_HANDLE_REACH of a small drag handle (resize corners, dimension chevrons,
+// grips) grabs the handle instead of whatever is under it. Small = both sides at
+// most TOUCH_HANDLE_MAX, so a big box with a resize cursor is never a magnet.
+const TOUCH_HANDLE_REACH = 16;
+const TOUCH_HANDLE_MAX = 24;
+const TOUCH_HANDLES = '[style*="-resize"], .dim-arrow, .dim-drag-grip, .gz-grip, [data-bend-grip], .dim-hide-x';
+
+function _touchMouse(type, target, pt, buttons, detail) {
+    if (!target || !target.dispatchEvent) return true;
+    const ev = new MouseEvent(type, {
+        bubbles: true, cancelable: true, view: window, detail: detail || 1,
+        clientX: pt.clientX, clientY: pt.clientY, screenX: pt.screenX, screenY: pt.screenY,
+        button: 0, buttons: buttons,
+        shiftKey: _touchMods.shift, ctrlKey: _touchMods.ctrl, metaKey: _touchMods.ctrl, altKey: _touchMods.alt
+    });
+    return target.dispatchEvent(ev);
+}
+
+// Sends the mousedown and reports whether its handlers armed a drag. The
+// addEventListener patch lives only for the synchronous dispatch.
+function _touchArms(target, pt) {
+    let armed = false;
+    const P = EventTarget.prototype, add = P.addEventListener;
+    P.addEventListener = function (type, fn, opts) {
+        if (type === 'mousemove' || type === 'mouseup') armed = true;
+        return add.call(this, type, fn, opts);
+    };
+    const before = [document.onmousemove, document.onmouseup, window.onmousemove, window.onmouseup];
+    try { _touchMouse('mousedown', target, pt, 1); }
+    finally { P.addEventListener = add; }
+    const after = [document.onmousemove, document.onmouseup, window.onmousemove, window.onmouseup];
+    for (let i = 0; i < 4; i++) if (after[i] !== before[i] && after[i]) armed = true;
+    // A standing element-level onmousemove (the floorplan pin tool) is a drag
+    // surface too: it reads moves without arming anything on mousedown.
+    if (!armed) for (let n = target; n && n.nodeType === 1; n = n.parentNode) {
+        if (n.onmousemove) { armed = true; break; }
+    }
+    return armed;
+}
+
+// The nearest ancestor that actually scrolls, unless a drawing surface comes first.
+function _touchScroller(el) {
+    for (let n = el; n && n.nodeType === 1 && n !== document.body; n = n.parentNode) {
+        if (n.matches && n.matches(TOUCH_SURFACES)) return null;
+        let cs = null;
+        try { cs = getComputedStyle(n); } catch (e) {}
+        if (!cs) continue;
+        const oy = cs.overflowY, ox = cs.overflowX;
+        if ((oy === 'auto' || oy === 'scroll') && n.scrollHeight > n.clientHeight + 1) return n;
+        if ((ox === 'auto' || ox === 'scroll') && n.scrollWidth > n.clientWidth + 1) return n;
+    }
+    return null;
+}
+
+// The nearest small, visible handle within reach of the finger, or null. A handle
+// already under the finger wins outright; hidden ones (zero size, or covered by a
+// dialog) are skipped by asking the browser what is on top at the handle's centre.
+function _touchReach(target, pt) {
+    if (target.closest && target.closest(TOUCH_HANDLES)) return null;
+    let best = null, bestD = TOUCH_HANDLE_REACH + 1;
+    let list = [];
+    try { list = document.querySelectorAll(TOUCH_HANDLES); } catch (e) {}
+    for (let i = 0; i < list.length; i++) {
+        const h = list[i];
+        if (h === document.body || h === document.documentElement) continue;
+        const r = h.getBoundingClientRect();
+        if (!r.width || !r.height || r.width > TOUCH_HANDLE_MAX || r.height > TOUCH_HANDLE_MAX) continue;
+        const dx = Math.max(r.left - pt.clientX, 0, pt.clientX - r.right);
+        const dy = Math.max(r.top - pt.clientY, 0, pt.clientY - r.bottom);
+        const d = Math.hypot(dx, dy);
+        if (d >= bestD) continue;
+        let top = null;
+        try { top = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2); } catch (e) {}
+        if (top && top !== h && !h.contains(top)) continue;
+        best = h; bestD = d;
+    }
+    return best;
+}
+
+function _touchAt(pt, fallback) {
+    let el = null;
+    try { el = document.elementFromPoint(pt.clientX, pt.clientY); } catch (e) {}
+    // A redrawn-away element would swallow the event: the drag listens on document.
+    return el || (fallback && fallback.isConnected !== false ? fallback : document);
+}
+
+function _touchStart(e) {
+    // A finger on the controller (holding Shift, pushing the joystick) is not a
+    // second finger on the page: leave the gesture alone.
+    if (!_touchLive(e.changedTouches).length) return;
+    const live = _touchLive(e.touches);
+    if (live.length !== 1) {
+        // A second finger joins: let go of whatever one finger was doing.
+        if (_touchG) _touchEnd(e, true);
+        if (live.length === 2) _touchPinchBegin(live);
+        return;
+    }
+    _touchMarkHeldUsed();
+    const t = live[0];
+    let target = e.target && e.target.nodeType === 1 ? e.target : (e.target && e.target.parentNode);
+    if (!target || (target.closest && target.closest(TOUCH_NATIVE + ', #touchKeys'))) { _touchG = null; return; }
+    const pt = { clientX: t.clientX, clientY: t.clientY, screenX: t.screenX, screenY: t.screenY };
+    const near = _touchReach(target, pt);
+    if (near) target = near;
+    // A finger on the BACKGROUND of a wall or deck page on a phone may be a swipe (19.26):
+    // nothing is pressed until the first move says which. Sideways = flip; anything else
+    // becomes the ordinary gesture from where it started; no move = a tap.
+    const zone = near ? null : _touchSwipeZone(target);
+    if (zone) {
+        _touchG = { id: t.identifier, target, start: pt, last: pt, moved: false, mode: 'pending', zone, t0: Date.now(), timer: null };
+        return;
+    }
+    const armed = _touchArms(target, pt);
+    const scroller = armed ? _touchScroller(target) : null;
+    _touchG = {
+        id: t.identifier, target, start: pt, last: pt, moved: false,
+        mode: !armed ? 'pass' : (scroller ? 'hold' : 'drag'), timer: null
+    };
+    if (_touchG.mode === 'hold') {
+        const g = _touchG;
+        g.timer = setTimeout(() => { if (_touchG === g && g.mode === 'hold') g.mode = 'drag'; }, TOUCH_HOLD_MS);
+    }
+    // A drag redraws: drawElevAll rebuilds the frame under the finger on every move,
+    // and once the touch's target leaves the document its touchmove/touchend go to
+    // the DETACHED node and never reach window. Listen on the target too for this
+    // gesture; _touchSeen stops an event that reaches both from counting twice.
+    if (armed) {
+        target.addEventListener('touchmove', _touchMove, { passive: false });
+        target.addEventListener('touchend', _touchEndOk, { passive: true });
+        target.addEventListener('touchcancel', _touchEndCancel, { passive: true });
+    }
+}
+const _touchSeen = (typeof WeakSet !== 'undefined') ? new WeakSet() : null;
+function _touchFirst(e) {
+    if (!_touchSeen) return true;
+    if (_touchSeen.has(e)) return false;
+    _touchSeen.add(e);
+    return true;
+}
+function _touchEndOk(e) { _touchEnd(e, false); }
+function _touchEndCancel(e) { _touchEnd(e, true); }
+function _touchUnhook(target) {
+    if (!target) return;
+    target.removeEventListener('touchmove', _touchMove, { passive: false });
+    target.removeEventListener('touchend', _touchEndOk, { passive: true });
+    target.removeEventListener('touchcancel', _touchEndCancel, { passive: true });
+}
+
+function _touchMove(e) {
+    const g = _touchG;
+    if (!g || !_touchFirst(e)) return;
+    let t = null;
+    for (let i = 0; i < e.changedTouches.length; i++) if (e.changedTouches[i].identifier === g.id) t = e.changedTouches[i];
+    if (!t) return;
+    const pt = { clientX: t.clientX, clientY: t.clientY, screenX: t.screenX, screenY: t.screenY };
+    const far = Math.abs(pt.clientX - g.start.clientX) > TOUCH_SLOP_PX || Math.abs(pt.clientY - g.start.clientY) > TOUCH_SLOP_PX;
+    if (far) g.moved = true;
+    if (g.mode === 'pending') {
+        if (!far) return;
+        const dx = pt.clientX - g.start.clientX, dy = pt.clientY - g.start.clientY;
+        if (Math.abs(dx) > Math.abs(dy) * TOUCH_SWIPE_RATIO) { g.mode = 'swipe'; }
+        else {
+            // Not sideways: press where the finger landed and carry on as usual.
+            const armed = _touchArms(g.target, g.start);
+            g.mode = armed ? 'drag' : 'pass';
+            if (armed) {
+                g.target.addEventListener('touchmove', _touchMove, { passive: false });
+                g.target.addEventListener('touchend', _touchEndOk, { passive: true });
+                g.target.addEventListener('touchcancel', _touchEndCancel, { passive: true });
+            }
+        }
+    }
+    if (g.mode === 'swipe') { if (e.cancelable) e.preventDefault(); g.last = pt; return; }
+    if (g.mode === 'hold') {
+        if (!far) return;
+        // Moved before the hold: this was a swipe. Close the drag where it
+        // started (zero delta, so it lands as a no-op) and let the list scroll.
+        clearTimeout(g.timer);
+        _touchMouse('mouseup', g.target, g.start, 0);
+        g.mode = 'pass';
+        g.closed = true;
+        return;
+    }
+    if (g.mode !== 'drag') return;
+    if (e.cancelable) e.preventDefault();
+    g.last = pt;
+    _touchMouse('mousemove', _touchAt(pt, g.target), pt, 1);
+}
+
+function _touchEnd(e, cancelled) {
+    const g = _touchG;
+    if (!g || (e && e.type && !_touchFirst(e))) return;
+    let t = null;
+    if (e.changedTouches) for (let i = 0; i < e.changedTouches.length; i++) if (e.changedTouches[i].identifier === g.id) t = e.changedTouches[i];
+    if (!t && !cancelled) return;
+    clearTimeout(g.timer);
+    _touchUnhook(g.target);
+    _touchG = null;
+    const pt = t ? { clientX: t.clientX, clientY: t.clientY, screenX: t.screenX, screenY: t.screenY } : g.last;
+    if (g.mode === 'swipe') {
+        g.closed = true;   // nothing was pressed, so nothing is released
+        const dx = pt.clientX - g.start.clientX;
+        if (!cancelled && Math.abs(dx) >= TOUCH_SWIPE_MIN_PX && Date.now() - g.t0 <= TOUCH_SWIPE_MAX_MS) _touchSwipeFlip(g.zone, dx < 0 ? 1 : -1);
+    } else if (g.mode === 'pending') {
+        // A tap on the background: the press it deferred, then the release below.
+        _touchMouse('mousedown', g.target, g.start, 1);
+    }
+    if (!g.closed) _touchMouse('mouseup', g.mode === 'drag' ? _touchAt(pt, g.target) : (g.target.isConnected === false ? document : g.target), pt, 0);
+    _touchCompatUntil = Date.now() + TOUCH_COMPAT_MS;
+    // A double tap is a dblclick (renaming a wall, editing a text box, removing
+    // a pin). iOS only sends one when the page is not zoomable, so make it here
+    // and swallow any native one in the compat window.
+    if (!cancelled && !g.moved) {
+        const now = Date.now(), last = _touchLastTap;
+        if (last && now - last.t < TOUCH_DBL_MS && last.target === g.target
+            && Math.abs(last.x - pt.clientX) < 24 && Math.abs(last.y - pt.clientY) < 24) {
+            _touchLastTap = null;
+            const tg = g.target;
+            // After the native click of this second tap has landed.
+            setTimeout(() => _touchMouse('dblclick', tg, pt, 0, 2), 0);
+        } else {
+            _touchLastTap = { t: now, x: pt.clientX, y: pt.clientY, target: g.target };
+        }
+    }
+}
+
+// PINCH TO ZOOM THE WALL (19.24). Two fingers on the elevation workspace drive the
+// same zoom as the slider (elevZoomFactor, 0.5 to 3) and keep the spot between them
+// under the fingers; moving them together pans. The browser's own pinch, which zooms
+// the WHOLE app, is held off there (touch-action:none on #scrollArea in style.css, plus
+// Safari's gesture events). Listeners also go on both touched elements, since
+// drawElevAll rebuilds frames mid-pinch and a detached node's touches never reach window.
+const ELEV_PINCH_MIN = 0.5, ELEV_PINCH_MAX = 3;
+let _touchPinch = null;
+function _touchInWall(t) {
+    const el = t && t.target;
+    return !!(el && el.nodeType === 1 && el.closest && el.closest('#scrollArea'));
+}
+function _touchPinchBegin(live) {
+    if (_touchPinch || currentView !== 'elevation') return;
+    if (!_touchInWall(live[0]) || !_touchInWall(live[1])) return;
+    const ws = document.getElementById('scrollArea');
+    if (!ws) return;
+    const r = ws.getBoundingClientRect();
+    const a = live[0], b = live[1];
+    const mx = (a.clientX + b.clientX) / 2, my = (a.clientY + b.clientY) / 2;
+    _touchPinch = {
+        ids: [a.identifier, b.identifier], targets: [a.target, b.target],
+        d0: Math.max(1, Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY)),
+        z0: elevZoomFactor,
+        // The content point under the fingers, in the workspace's scrolled coordinates.
+        cx: mx - r.left + ws.scrollLeft, cy: my - r.top + ws.scrollTop
+    };
+    _touchPinch.targets.forEach(t => {
+        t.addEventListener('touchmove', _touchPinchMove, { passive: false });
+        t.addEventListener('touchend', _touchPinchEnd, { passive: true });
+        t.addEventListener('touchcancel', _touchPinchEnd, { passive: true });
+    });
+}
+function _touchPinchMove(e) {
+    const p = _touchPinch;
+    if (!p || !_touchFirst(e)) return;
+    let a = null, b = null;
+    for (let i = 0; i < e.touches.length; i++) {
+        const t = e.touches[i];
+        if (t.identifier === p.ids[0]) a = t; else if (t.identifier === p.ids[1]) b = t;
+    }
+    if (!a || !b) return;
+    if (e.cancelable) e.preventDefault();
+    const ws = document.getElementById('scrollArea');
+    if (!ws) return;
+    const d = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+    const z = Math.max(ELEV_PINCH_MIN, Math.min(ELEV_PINCH_MAX, p.z0 * d / p.d0));
+    if (Math.abs(z - elevZoomFactor) > 0.005) {
+        elevZoomFactor = z;
+        const sl = document.getElementById('zoomSlider');
+        if (sl) sl.value = String(Math.round(z * 10) / 10);
+        try { drawElevAll(); } catch (er) {}
+    }
+    const r = ws.getBoundingClientRect(), k = elevZoomFactor / p.z0;
+    const mx = (a.clientX + b.clientX) / 2, my = (a.clientY + b.clientY) / 2;
+    ws.scrollLeft = p.cx * k - (mx - r.left);
+    ws.scrollTop = p.cy * k - (my - r.top);
+}
+function _touchPinchEnd(e) {
+    const p = _touchPinch;
+    if (!p || (e && !_touchFirst(e))) return;
+    if (e && e.touches) {
+        let n = 0;
+        for (let i = 0; i < e.touches.length; i++) if (p.ids.indexOf(e.touches[i].identifier) >= 0) n++;
+        if (n >= 2) return;
+    }
+    p.targets.forEach(t => {
+        t.removeEventListener('touchmove', _touchPinchMove, { passive: false });
+        t.removeEventListener('touchend', _touchPinchEnd, { passive: true });
+        t.removeEventListener('touchcancel', _touchPinchEnd, { passive: true });
+    });
+    _touchPinch = null;
+}
+
+// SWIPE TO FLIP (19.26, phone only): sideways across the background of a wall flips to
+// the next or previous wall, across a deck page to the next or previous page. Never on a
+// thing (a frame, a box, a note, a handle: they drag), never while a tool that draws by
+// dragging is armed (measure, context, tracing, deck lines), never on a floor plan page
+// (a drag there draws wall lines). An iPad keeps the drag (marquee on empty wall).
+const TOUCH_SWIPE_RATIO = 1.3, TOUCH_SWIPE_MIN_PX = 50, TOUCH_SWIPE_MAX_MS = 900;
+function _touchSwipeZone(target) {
+    if (typeof _phoneOn === 'undefined' || !_phoneOn || !target || !target.closest) return null;
+    if (currentView === 'elevation') {
+        if (!target.matches('#wall, #export-wrap, #scrollArea')) return null;
+        if ((typeof lineToolActive !== 'undefined' && lineToolActive) || (typeof contextToolActive !== 'undefined' && contextToolActive)
+            || (typeof _ulPlacing !== 'undefined' && _ulPlacing) || (typeof _ulCalibrateActive !== 'undefined' && _ulCalibrateActive)) return null;
+        return (elevations && elevations.length > 1) ? 'wall' : null;
+    }
+    if (currentView === 'deck') {
+        const c = document.getElementById('dsCenter');
+        if (!c || !c.contains(target) || _dsArmedShape) return null;
+        const d = (typeof _dsPages !== 'undefined' && _dsPages) ? _dsPages[_dsIndex] : null;
+        if (!d || d.kind === 'floorplan' || d.kind === 'plandetail') return null;
+        const bg = target === c || target.id === 'dsLayoutCanvas' || target.tagName === 'CANVAS'
+            || (target.tagName === 'DIV' && !!target.querySelector('canvas, #dsLayoutCanvas'));
+        return bg && _dsPages.length > 1 ? 'deck' : null;
+    }
+    return null;
+}
+function _touchSwipeFlip(zone, d) {
+    if (zone === 'deck') { try { _phoneDeckStep(d); } catch (e) {} return; }
+    if (zone === 'wall') {
+        const i = Math.max(0, Math.min(elevations.length - 1, currentElevIndex + d));
+        if (i !== currentElevIndex) { try { switchView('elevation', i); } catch (e) {} }
+    }
+}
+
+function _touchSwallowCompat(e) {
+    if (e.isTrusted && Date.now() < _touchCompatUntil) {
+        e.stopImmediatePropagation();
+        if (e.cancelable) e.preventDefault();
+    }
+}
+
+// THE TOUCH CONTROLLER (19.19 key bar, 19.20 joystick, #touchKeys), touch screens only.
+// Shift / Ctrl / Alt: a quick TAP latches the key (lit) until tapped again, for one-hand
+// use; PRESS AND HOLD keeps it on only while held, for two hands (left thumb on Shift,
+// right hand drags). A held key that was used, or held past TOUCH_KEY_HOLD_MS, goes
+// back to how it was on release. Touches on the controller never count as the second
+// finger that would end a one-finger drag (_touchLive). Delete sends a real Delete
+// keydown. The JOYSTICK nudges the selection by sending arrow keys: 8 directions, a
+// light push steps slowly and a full push repeats fast, Shift latched/held = big steps
+// (every arrow handler already reads e.shiftKey). One push is ONE undo entry
+// (_touchStickFoldHistory). The grip moves the controller; where it sits is
+// remembered per device (localStorage TOUCH_PAD_POS_KEY). The controller swallows its
+// own presses: one reaching the page reads as a tap on empty space and clears the
+// selection Delete and the joystick act on.
+const TOUCH_KEYS = [
+    { k: 'shift', label: 'Shift', tip: 'Shift: tap to keep it on, or hold it while you drag with the other hand. Locks a line to an axis, extends a selection, big nudge steps.' },
+    { k: 'ctrl', label: 'Ctrl', tip: 'Ctrl / Cmd: tap to keep it on, or hold it. Adds to a selection.' },
+    { k: 'alt', label: 'Alt', tip: 'Alt: tap to keep it on, or hold it. Drag without snapping.' },
+    { k: 'del', label: 'Delete', tip: 'Delete the selection (the Delete key).' }
+];
+const TOUCH_KEY_HOLD_MS = 400;
+const TOUCH_STICK_R = 34;          // how far the knob travels from centre (px)
+const TOUCH_STICK_DEAD = 9;        // push below this does nothing
+const TOUCH_STICK_SLOW_MS = 380;   // repeat at the lightest push
+const TOUCH_STICK_FAST_MS = 55;    // repeat at a full push
+const TOUCH_PAD_POS_KEY = 'frameTouchPadPos';
+const _touchHeld = {};             // k -> { wasOn, t0, used } while a key is held down
+let _touchStick = null;            // the joystick push in flight
+
+function _touchOnPad(t) {
+    const el = t && t.target;
+    return !!(el && el.nodeType === 1 && el.closest && el.closest('#touchKeys'));
+}
+// The touches that are fingers on the page, leaving out any on the controller.
+function _touchLive(list) {
+    const out = [];
+    for (let i = 0; i < (list ? list.length : 0); i++) if (!_touchOnPad(list[i])) out.push(list[i]);
+    return out;
+}
+
+function _touchKeysBuild() {
+    if (document.getElementById('touchKeys') || !document.body) return;
+    const bar = document.createElement('div');
+    bar.id = 'touchKeys';
+    bar.className = 'touch-keys';
+    bar.setAttribute('role', 'toolbar');
+    bar.setAttribute('aria-label', 'Touch controller');
+    ['mousedown', 'mouseup', 'pointerdown', 'touchstart'].forEach(type =>
+        bar.addEventListener(type, (e) => { e.stopPropagation(); if (type === 'mousedown') e.preventDefault(); }));
+    const grip = document.createElement('div');
+    grip.className = 'touch-pad-grip';
+    grip.title = 'Drag to move the controller';
+    bar.appendChild(grip);
+    const stick = document.createElement('div');
+    stick.className = 'touch-stick';
+    stick.title = 'Nudge the selection: push the knob the way it should move';
+    const knob = document.createElement('div');
+    knob.className = 'touch-stick-knob';
+    stick.appendChild(knob);
+    // THE ARROWS (19.22): one exact nudge per tap, on the rim around the knob. Held, they
+    // repeat after TOUCH_ARROW_HOLD_MS. Their presses stop at the arrow, so the knob
+    // underneath never starts a push of its own.
+    [['u', 'Nudge up'], ['r', 'Nudge right'], ['d', 'Nudge down'], ['l', 'Nudge left']].forEach(([dir, tip]) => {
+        const a = document.createElement('button');
+        a.type = 'button';
+        a.className = 'touch-stick-arrow touch-stick-arrow-' + dir;
+        a.dataset.dir = dir;
+        a.title = tip + ' (hold to repeat; Shift for a big step)';
+        a.setAttribute('aria-label', tip);
+        a.innerHTML = '<svg viewBox="0 0 16 16" width="14" height="14"><polyline points="4,10 8,6 12,10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        a.addEventListener('touchstart', (e) => { e.stopPropagation(); if (e.cancelable) e.preventDefault(); _touchArrowDown(dir, a); }, { passive: false });
+        a.addEventListener('touchend', (e) => { e.stopPropagation(); if (e.cancelable) e.preventDefault(); _touchArrowUp(); }, { passive: false });
+        a.addEventListener('touchcancel', (e) => { e.stopPropagation(); _touchArrowUp(); });
+        // A mouse or keyboard press: one step.
+        a.onclick = (e) => { e.stopPropagation(); _touchSendKey(TOUCH_STICK_KEYS[dir][0], TOUCH_STICK_KEYS[dir][1]); };
+        stick.appendChild(a);
+    });
+    bar.appendChild(stick);
+    const keys = document.createElement('div');
+    keys.className = 'touch-key-grid';
+    TOUCH_KEYS.forEach(def => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'touch-key' + (def.k === 'del' ? ' touch-key-del' : '');
+        b.textContent = def.label;
+        b.title = def.tip;
+        b.dataset.key = def.k;
+        if (def.k !== 'del') {
+            b.setAttribute('aria-pressed', 'false');
+            b.addEventListener('touchstart', (e) => { if (e.cancelable) e.preventDefault(); _touchKeyDown(def.k); }, { passive: false });
+            b.addEventListener('touchend', (e) => { if (e.cancelable) e.preventDefault(); _touchKeyUp(def.k); }, { passive: false });
+            b.addEventListener('touchcancel', () => _touchKeyUp(def.k, true));
+        }
+        // A mouse or keyboard press (and a Delete tap, whose click is left alone).
+        b.onclick = (e) => { e.stopPropagation(); _touchKeyPress(def.k); };
+        keys.appendChild(b);
+    });
+    bar.appendChild(keys);
+    stick.addEventListener('touchstart', _touchStickDown, { passive: false });
+    stick.addEventListener('touchmove', _touchStickMove, { passive: false });
+    stick.addEventListener('touchend', _touchStickUp, { passive: false });
+    stick.addEventListener('touchcancel', _touchStickUp, { passive: false });
+    grip.addEventListener('touchstart', _touchPadMoveDown, { passive: false });
+    document.body.appendChild(bar);
+    _touchPadPlace(bar);
+    try { if (_phoneOn) _phonePadFold(); } catch (e) {}
+}
+
+function _touchKeyDown(k) {
+    _touchHeld[k] = { wasOn: !!_touchMods[k], t0: Date.now(), used: false };
+    _touchMods[k] = true;
+    _touchKeysSync();
+}
+function _touchKeyUp(k, cancelled) {
+    const h = _touchHeld[k];
+    delete _touchHeld[k];
+    if (!h) return;
+    const tap = !cancelled && !h.used && (Date.now() - h.t0) < TOUCH_KEY_HOLD_MS;
+    _touchMods[k] = tap ? !h.wasOn : h.wasOn;
+    _touchKeysSync();
+}
+// A gesture on the page while a key is held makes that hold a HOLD, not a tap.
+function _touchMarkHeldUsed() { Object.keys(_touchHeld).forEach(k => { _touchHeld[k].used = true; }); }
+
+function _touchKeyPress(k) {
+    if (k === 'del') {
+        const a = document.activeElement;
+        // Typing in a field: Delete there means the field, which the field already has.
+        if (a && a.closest && a.closest(TOUCH_NATIVE)) return;
+        _touchSendKey('Delete', 46);
+        return;
+    }
+    _touchMods[k] = !_touchMods[k];
+    _touchKeysSync();
+}
+function _touchSendKey(key, code) {
+    const opts = { key: key, code: key, keyCode: code, which: code, bubbles: true, cancelable: true,
+        shiftKey: _touchMods.shift, ctrlKey: _touchMods.ctrl, metaKey: _touchMods.ctrl, altKey: _touchMods.alt };
+    const tgt = document.body || document;
+    tgt.dispatchEvent(new KeyboardEvent('keydown', opts));
+    tgt.dispatchEvent(new KeyboardEvent('keyup', opts));
+}
+function _touchKeysSync() {
+    const bar = document.getElementById('touchKeys');
+    if (!bar) return;
+    bar.querySelectorAll('.touch-key[aria-pressed]').forEach(b => {
+        const on = !!_touchMods[b.dataset.key];
+        b.classList.toggle('active', on);
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+}
+
+// ── The joystick ──
+const TOUCH_STICK_KEYS = { l: ['ArrowLeft', 37], r: ['ArrowRight', 39], u: ['ArrowUp', 38], d: ['ArrowDown', 40] };
+// The arrow keys for a knob offset: none inside the dead zone, else up to two (a
+// diagonal is two keys, sent together), chosen by 22.5-degree sectors.
+function _touchStickDirs(dx, dy) {
+    const m = Math.hypot(dx, dy);
+    if (m < TOUCH_STICK_DEAD) return [];
+    const out = [];
+    if (Math.abs(dx) / m > 0.38) out.push(dx < 0 ? 'l' : 'r');
+    if (Math.abs(dy) / m > 0.38) out.push(dy < 0 ? 'u' : 'd');
+    return out;
+}
+function _touchStickDelay(dx, dy) {
+    const f = Math.max(0, Math.min(1, (Math.hypot(dx, dy) - TOUCH_STICK_DEAD) / (TOUCH_STICK_R - TOUCH_STICK_DEAD)));
+    return Math.round(TOUCH_STICK_SLOW_MS + (TOUCH_STICK_FAST_MS - TOUCH_STICK_SLOW_MS) * f);
+}
+function _touchStickStep() {
+    const s = _touchStick;
+    if (!s) return;
+    const dirs = _touchStickDirs(s.dx, s.dy);
+    if (dirs.length) {
+        dirs.forEach(d => _touchSendKey(TOUCH_STICK_KEYS[d][0], TOUCH_STICK_KEYS[d][1]));
+        s.steps++;
+        _touchStickFoldHistory(s);
+    }
+    s.timer = setTimeout(_touchStickStep, dirs.length ? _touchStickDelay(s.dx, s.dy) : 60);
+}
+// Every nudge pushes its own undo entry; a held stick would leave dozens. Keep only
+// the newest snapshot after the one the push started from, found by IDENTITY (the
+// stack shifts at MAX_HISTORY, so an index would drift).
+function _touchStickFoldHistory(s) {
+    if (typeof undoStack === 'undefined' || !s.base) return;
+    const i = undoStack.lastIndexOf(s.base);
+    if (i < 0) return;
+    const extra = undoStack.length - i - 2;
+    if (extra > 0) undoStack.splice(i + 1, extra);
+}
+const TOUCH_ARROW_HOLD_MS = 450;
+const TOUCH_ARROW_REPEAT_MS = 110;
+let _touchArrow = null;
+function _touchArrowDown(dir, el) {
+    _touchArrowUp();
+    const k = TOUCH_STICK_KEYS[dir];
+    _touchArrow = { el, timer: null, base: (typeof undoStack !== 'undefined' && undoStack.length) ? undoStack[undoStack.length - 1] : null };
+    el.classList.add('pressed');
+    _touchMarkHeldUsed();
+    _touchSendKey(k[0], k[1]);
+    const a = _touchArrow;
+    const rep = () => {
+        if (_touchArrow !== a) return;
+        _touchSendKey(k[0], k[1]);
+        _touchStickFoldHistory(a);
+        a.timer = setTimeout(rep, TOUCH_ARROW_REPEAT_MS);
+    };
+    a.timer = setTimeout(rep, TOUCH_ARROW_HOLD_MS);
+}
+function _touchArrowUp() {
+    const a = _touchArrow;
+    if (!a) return;
+    clearTimeout(a.timer);
+    a.el.classList.remove('pressed');
+    _touchArrow = null;
+}
+
+function _touchStickDown(e) {
+    if (e.cancelable) e.preventDefault();
+    const t = e.changedTouches[0];
+    if (!t || _touchStick) return;
+    const r = e.currentTarget.getBoundingClientRect();
+    _touchStick = { id: t.identifier, cx: r.left + r.width / 2, cy: r.top + r.height / 2, dx: 0, dy: 0, steps: 0,
+        timer: null, el: e.currentTarget,
+        base: (typeof undoStack !== 'undefined' && undoStack.length) ? undoStack[undoStack.length - 1] : null };
+    _touchMarkHeldUsed();
+    _touchStickMove(e);
+    _touchStickStep();
+}
+function _touchStickMove(e) {
+    const s = _touchStick;
+    if (!s) return;
+    if (e.cancelable) e.preventDefault();
+    let t = null;
+    for (let i = 0; i < e.changedTouches.length; i++) if (e.changedTouches[i].identifier === s.id) t = e.changedTouches[i];
+    if (!t) return;
+    let dx = t.clientX - s.cx, dy = t.clientY - s.cy;
+    const m = Math.hypot(dx, dy);
+    if (m > TOUCH_STICK_R) { dx *= TOUCH_STICK_R / m; dy *= TOUCH_STICK_R / m; }
+    s.dx = dx; s.dy = dy;
+    const knob = s.el.querySelector('.touch-stick-knob');
+    if (knob) knob.style.transform = 'translate(' + dx.toFixed(1) + 'px, ' + dy.toFixed(1) + 'px)';
+    s.el.classList.toggle('pushed', _touchStickDirs(dx, dy).length > 0);
+}
+function _touchStickUp(e) {
+    const s = _touchStick;
+    if (!s) return;
+    if (e && e.cancelable) e.preventDefault();
+    clearTimeout(s.timer);
+    _touchStick = null;
+    const knob = s.el.querySelector('.touch-stick-knob');
+    if (knob) knob.style.transform = '';
+    s.el.classList.remove('pushed');
+}
+
+// ── Moving the controller ──
+function _touchPadPlace(bar) {
+    let pos = null;
+    try { pos = JSON.parse(localStorage.getItem(TOUCH_PAD_POS_KEY) || 'null'); } catch (e) {}
+    if (pos && isFinite(pos.x) && isFinite(pos.y)) _touchPadSet(bar, pos.x, pos.y);
+}
+// Stored as the controller's left/top; clamped into the window so a rotation or a
+// smaller screen can never strand it off-screen.
+function _touchPadSet(bar, x, y) {
+    const w = bar.offsetWidth || 0, h = bar.offsetHeight || 0;
+    const W = window.innerWidth || 0, H = window.innerHeight || 0;
+    if (W && H) { x = Math.max(4, Math.min(W - w - 4, x)); y = Math.max(4, Math.min(H - h - 4, y)); }
+    bar.style.left = Math.round(x) + 'px'; bar.style.top = Math.round(y) + 'px';
+    bar.style.right = 'auto'; bar.style.bottom = 'auto';
+    return { x: Math.round(x), y: Math.round(y) };
+}
+function _touchPadMoveDown(e) {
+    if (e.cancelable) e.preventDefault();
+    const bar = document.getElementById('touchKeys');
+    const t = e.changedTouches[0];
+    if (!bar || !t) return;
+    const r = bar.getBoundingClientRect();
+    const ox = t.clientX - r.left, oy = t.clientY - r.top, id = t.identifier;
+    let last = null;
+    const mv = (ev) => {
+        for (let i = 0; i < ev.changedTouches.length; i++) {
+            const c = ev.changedTouches[i];
+            if (c.identifier !== id) continue;
+            if (ev.cancelable) ev.preventDefault();
+            last = _touchPadSet(bar, c.clientX - ox, c.clientY - oy);
+        }
+    };
+    const up = (ev) => {
+        let mine = false;
+        for (let i = 0; i < ev.changedTouches.length; i++) if (ev.changedTouches[i].identifier === id) mine = true;
+        if (!mine) return;
+        window.removeEventListener('touchmove', mv, true);
+        window.removeEventListener('touchend', up, true);
+        window.removeEventListener('touchcancel', up, true);
+        if (last) { try { localStorage.setItem(TOUCH_PAD_POS_KEY, JSON.stringify(last)); } catch (er) {} }
+    };
+    window.addEventListener('touchmove', mv, { capture: true, passive: false });
+    window.addEventListener('touchend', up, true);
+    window.addEventListener('touchcancel', up, true);
+}
+// A rotation or resize can put a moved controller off-screen: re-clamp it.
+function _touchPadReclamp() {
+    const bar = document.getElementById('touchKeys');
+    if (!bar || !bar.style.left || bar.style.left === 'auto') return;
+    _touchPadSet(bar, parseFloat(bar.style.left) || 0, parseFloat(bar.style.top) || 0);
+}
+
+// A TAP'S CLICK CARRIES THE LATCHED KEYS (19.20). The click after a tap is made by
+// the browser and knows nothing of the controller, so Shift-click (range) and
+// Ctrl-click (add) on the dashboard table never fired. While a key is on, the
+// trusted click right after a handled touch is replaced by one carrying the keys.
+// With nothing latched the real click passes untouched (file pickers, links).
+function _touchClickMods(e) {
+    if (!e.isTrusted || Date.now() >= _touchCompatUntil) return;
+    if (!(_touchMods.shift || _touchMods.ctrl || _touchMods.alt)) return;
+    if (e.shiftKey === _touchMods.shift && e.ctrlKey === _touchMods.ctrl && e.altKey === _touchMods.alt) return;
+    const t = e.target;
+    if (!t || (t.closest && t.closest('#touchKeys'))) return;
+    e.stopImmediatePropagation();
+    e.preventDefault();
+    t.dispatchEvent(new MouseEvent('click', {
+        bubbles: true, cancelable: true, view: window, detail: e.detail,
+        clientX: e.clientX, clientY: e.clientY, screenX: e.screenX, screenY: e.screenY, button: 0,
+        shiftKey: _touchMods.shift, ctrlKey: _touchMods.ctrl, metaKey: _touchMods.ctrl, altKey: _touchMods.alt
+    }));
+}
+
+// The home-screen app's name (19.21). One tree serves both sites, so the static tag says
+// FRAME and dev rewrites it before anyone can Add to Home Screen.
+function _homeScreenTitle() {
+    try {
+        if (APP_BUILD !== 'dev') return;
+        const m = document.querySelector('meta[name="apple-mobile-web-app-title"]');
+        if (m) m.setAttribute('content', 'FRAME dev');
+    } catch (e) {}
+}
+_homeScreenTitle();
+
+function _touchInstall() {
+    if (typeof window === 'undefined' || !window.addEventListener || window._frameTouchInstalled) return;
+    window._frameTouchInstalled = true;
+    // Capture phase so no handler below can stopPropagation the layer out, and
+    // not passive, because a drag has to preventDefault the scroll.
+    window.addEventListener('touchstart', _touchStart, { capture: true, passive: true });
+    window.addEventListener('touchmove', (e) => { if (_touchPinch) _touchPinchMove(e); else _touchMove(e); }, { capture: true, passive: false });
+    window.addEventListener('touchend', (e) => { if (_touchPinch) _touchPinchEnd(e); _touchEndOk(e); }, { capture: true, passive: true });
+    window.addEventListener('touchcancel', (e) => { if (_touchPinch) _touchPinchEnd(e); _touchEndCancel(e); }, { capture: true, passive: true });
+    // Safari's own pinch gesture: never over the wall (it would zoom the whole app).
+    ['gesturestart', 'gesturechange'].forEach(type => document.addEventListener(type, (e) => {
+        const t = e.target;
+        if (t && t.closest && t.closest('#scrollArea') && e.cancelable) e.preventDefault();
+    }, { passive: false }));
+    ['mousedown', 'mouseup', 'mousemove', 'dblclick'].forEach(type =>
+        window.addEventListener(type, _touchSwallowCompat, true));
+    window.addEventListener('click', _touchClickMods, true);
+    window.addEventListener('resize', () => { try { _touchPadReclamp(); } catch (e) {} });
+    try {
+        if (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) {
+            document.documentElement.classList.add('touch');
+            if (document.body) _touchKeysBuild();
+            else document.addEventListener('DOMContentLoaded', _touchKeysBuild);
+        }
+    } catch (e) {}
+}
+_touchInstall();
+
+// ──────────────────────────────────────────────────────────────────────────
+// iPHONE (19.23): PORTRAIT TO WORK, LANDSCAPE TO LOOK
+// ──────────────────────────────────────────────────────────────────────────
+// A phone (a touch screen under PHONE_MAX_W wide, or under PHONE_MAX_H tall when
+// turned) gets html.phone, and html.phone-land when turned sideways. Everything else
+// is CSS on those two classes plus a few elements built here, never a second copy of
+// any view: every id, handler and renderer is the desktop one.
+//   PORTRAIT is the working mode: one column, a bottom tab bar (Deck / Items / Walls),
+//   a compact header with a more menu, the dashboard as list then detail, the
+//   elevation as wall chips / wall / tool strip / panel, the deck as page / page bar
+//   (with an All pages sheet) / tools.
+//   LANDSCAPE is the viewing mode for the two landscape-shaped things: on Walls and
+//   Deck every menu goes and the wall or page fills the screen (the deck keeps a small
+//   page bar). Turn back to portrait to edit. The Items list just uses the width.
+// The controller starts folded to a button on a phone (it would cover half the screen).
+const PHONE_MAX_W = 600, PHONE_MAX_H = 500;
+// [tab, label, icon]: icons, so the strip never reads as a second Page / Templates / Layers row (19.33).
+const PHONE_DECK_TABS = [
+    ['project', 'Project', '<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>'],
+    ['pages', 'Pages', '<rect x="7" y="3" width="13" height="16" rx="1"/><path d="M4 7v13a1 1 0 0 0 1 1h11"/>'],
+    ['templateEditor', 'Templates', '<rect x="3" y="4" width="18" height="16" rx="1"/><path d="M3 9h18M9 9v11"/>']
+];
+// The page tools that sit with them on a phone: [id, label, icon, action name].
+const PHONE_DECK_TOOLS = [
+    ['phoneDeckAll', 'All pages', '<rect x="4" y="4" width="7" height="7"/><rect x="13" y="4" width="7" height="7"/><rect x="4" y="13" width="7" height="7"/><rect x="13" y="13" width="7" height="7"/>', 'all'],
+    ['phoneDeckPreview', 'Preview: render this page exactly as it exports', '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/>', 'preview'],
+    ['phoneDeckPreflight', 'Preflight: check the deck before exporting', '<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>', 'preflight']
+];
+// Which deck tab each tool belongs to (19.34): it lights up in that tab's colour and
+// greys out on the others. All pages on Templates is the template list.
+const PHONE_DECK_TOOL_TABS = { all: ['pages', 'templateEditor'], preview: ['pages'], preflight: ['pages'] };
+// Items strip: [id, label, icon, action, lead]. Edit / Import / Export open their menus upward.
+const PHONE_ITEMS_TOOLS = [
+    ['phoneItemAdd', '+ Add Item', '<path d="M12 5v14M5 12h14"/>', () => addDashRow(), true],
+    ['phoneItemDup', 'Duplicate the selected piece', '<rect x="8" y="8" width="12" height="12" rx="1"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/>', () => duplicateDashRow()],
+    ['phoneItemDel', 'Delete the selected piece(s)', '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>', () => deleteDashRow()],
+    null,
+    ['phoneItemEdit', 'Edit: Move To, Bulk Edit, Duplicate as Series, item codes', '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/>', (b) => openDashMenu(b, 'edit')],
+    ['phoneItemImport', 'Import: CSV, Bulk Images, new items from photos', '<path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 19h16"/>', (b) => openDashMenu(b, 'import')],
+    ['phoneItemExport', 'Export: database, batch PNGs, InDesign script', '<path d="M12 15V3M7 8l5-5 5 5"/><path d="M4 19h16"/>', (b) => openDashMenu(b, 'export')]
+];
+// One icon strip over the tab bar (Deck has its own builder; Items and Walls use this).
+function _phoneStripBtn(cls, id, label, svg) {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = cls; if (id) b.id = id;
+    b.title = label; b.setAttribute('aria-label', label.split(':')[0]);
+    b.innerHTML = '<svg class="svg-icon" viewBox="0 0 24 24">' + svg + '</svg>';
+    return b;
+}
+function _phoneBuildStrips() {
+    if (!document.getElementById('phoneItemsBar')) {
+        const st = document.createElement('div');
+        st.id = 'phoneItemsBar'; st.className = 'phone-substrip';
+        PHONE_ITEMS_TOOLS.forEach(t => {
+            if (!t) { const sp = document.createElement('span'); sp.className = 'phone-decktab-sep'; st.appendChild(sp); return; }
+            const [id, label, svg, run, lead] = t;
+            const b = _phoneStripBtn('phone-decktab-tool' + (lead ? ' lead' : ''), id, label, svg);
+            if (run.length) b.dataset.menuUp = '1';
+            b.onclick = () => { try { run(b); } catch (e) { console.error(e); } };
+            st.appendChild(b);
+        });
+        document.body.appendChild(st);
+    }
+    // Walls: the four category tabs, as icons. They carry data-elevtab, so switchElevTab
+    // lights them exactly as it lights the sidebar's own strip.
+    if (!document.getElementById('phoneWallsBar')) {
+        const st = document.createElement('div');
+        st.id = 'phoneWallsBar'; st.className = 'phone-substrip';
+        document.querySelectorAll('.elev-cat-tabs [data-elevtab]').forEach(src => {
+            const k = src.getAttribute('data-elevtab');
+            const svg = src.querySelector('svg');
+            const label = (src.querySelector('span') || {}).textContent || k;
+            const b = _phoneStripBtn('phone-decktab', 'phoneWallTab-' + k, label, svg ? svg.innerHTML : '');
+            b.setAttribute('data-elevtab', k);
+            b.classList.toggle('active', src.classList.contains('active'));
+            b.onclick = () => switchElevTab(k);
+            st.appendChild(b);
+        });
+        document.body.appendChild(st);
+    }
+}
+function _phoneDeckToolRun(act) {
+    if (act === 'all') _phoneRailSheet(true);
+    else if (act === 'preview') _dsBuildPage();
+    else if (act === 'preflight') _dsShowPreflight();
+}
+const PHONE_TABS = [
+    ['deck', 'Deck', '<rect x="3" y="5" width="18" height="13" rx="1"/><path d="M8 21h8"/>'],
+    ['dashboard', 'Items', '<rect x="4" y="4" width="16" height="16" rx="1"/><rect x="8" y="8" width="8" height="8"/>'],
+    ['elevation', 'Walls', '<path d="M3 20h18"/><rect x="5" y="6" width="5" height="7"/><rect x="13" y="8" width="6" height="5"/>']
+];
+let _phoneOn = false, _phoneLand = false;
+function _phoneQuery() {
+    try {
+        const mm = window.matchMedia;
+        if (!mm || !mm('(pointer: coarse)').matches) return { on: false, land: false };
+        const w = window.innerWidth || 0, h = window.innerHeight || 0;
+        const on = (w > 0 && w <= PHONE_MAX_W) || (h > 0 && h <= PHONE_MAX_H);
+        return { on, land: on && w > h };
+    } catch (e) { return { on: false, land: false }; }
+}
+function _phoneApply(force) {
+    const q = _phoneQuery();
+    if (!force && q.on === _phoneOn && q.land === _phoneLand) return;
+    _phoneOn = q.on; _phoneLand = q.land;
+    const root = document.documentElement;
+    root.classList.toggle('phone', _phoneOn);
+    root.classList.toggle('phone-land', _phoneLand);
+    if (_phoneOn) _phoneBuild();
+    // The drawing and the page size themselves to what they measure: let them.
+    setTimeout(() => {
+        try { if (currentView === 'elevation') drawElevAll(); } catch (e) {}
+        try { if (currentView === 'deck' && typeof _dsRenderCenter === 'function') _dsRenderCenter(); } catch (e) {}
+    }, 60);
+}
+function _phoneBuild() {
+    if (!document.body) return;
+    if (document.getElementById('phoneTabBar')) { _phonePadFold(); return; }
+    // Bottom tab bar.
+    const bar = document.createElement('nav');
+    bar.id = 'phoneTabBar';
+    bar.className = 'phone-tabbar';
+    bar.setAttribute('aria-label', 'Views');
+    PHONE_TABS.forEach(([v, label, icon]) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'phone-tab';
+        b.dataset.view = v;
+        b.innerHTML = '<svg class="svg-icon" viewBox="0 0 24 24">' + icon + '</svg><span>' + label + '</span>';
+        b.onclick = () => { try { switchView(v); } catch (e) {} };
+        bar.appendChild(b);
+    });
+    // THE CONTROLLER LIVES IN THE TAB BAR (19.24): a floating button covered buttons
+    // underneath it. Tap to show the joystick and keys above the bar, tap to hide.
+    const padTab = document.createElement('button');
+    padTab.type = 'button';
+    padTab.className = 'phone-tab phone-tab-pad';
+    padTab.id = 'phoneTabPad';
+    padTab.innerHTML = '<svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg><span>Controls</span>';
+    padTab.onclick = () => _phonePadToggle();
+    bar.appendChild(padTab);
+    document.body.appendChild(bar);
+    // The mark beside the wordmark logo (the wordmark does not fit a phone header).
+    const brand = document.querySelector('.nav-brand');
+    if (brand && !brand.querySelector('.phone-mark')) {
+        const m = document.createElement('img');
+        m.className = 'phone-mark'; m.src = 'icon-180.png'; m.alt = 'FRAME';
+        brand.appendChild(m);
+    }
+    // THE HEADER'S MIDDLE IS THE VIEW'S OWN CONTROL (19.28): the wall picker on Walls, the
+    // way back on an item, the deck tab on Deck. Replaces the rows each view spent on them.
+    const navFixed = document.getElementById('nav-tabs-fixed');
+    if (navFixed && !document.getElementById('phoneCtx')) {
+        const ctx = document.createElement('div');
+        ctx.id = 'phoneCtx';
+        ctx.className = 'phone-ctx';
+        navFixed.parentNode.insertBefore(ctx, navFixed.nextSibling);
+    }
+    // More menu: what the compact header leaves out.
+    const save = document.querySelector('.save-split');
+    if (save && !document.getElementById('phoneMoreBtn')) {
+        const more = document.createElement('button');
+        more.id = 'phoneMoreBtn';
+        more.className = 'action-btn btn-secondary';
+        more.type = 'button';
+        more.title = 'More: open a project, settings, help, theme';
+        more.setAttribute('aria-label', 'More');
+        more.innerHTML = '<svg class="svg-icon" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="19" cy="12" r="1.3"/></svg>';
+        more.onclick = () => openPhoneMenu(more);
+        save.parentNode.insertBefore(more, save.nextSibling);
+    }
+    // THE DECK'S TABS SIT ABOVE THE TAB BAR (19.32): Project / Pages / Templates as a strip
+    // over the bottom bar on Deck, with the menu (Generate PDF, Approval, Preflight) at its
+    // right end. They were a hamburger in the header, a reach and a tap away.
+    if (!document.getElementById('phoneDeckTabs')) {
+        const st = document.createElement('div');
+        st.id = 'phoneDeckTabs';
+        st.className = 'phone-decktabs phone-substrip';
+        const ico = (svg) => '<svg class="svg-icon" viewBox="0 0 24 24">' + svg + '</svg>';
+        PHONE_DECK_TABS.forEach(([t, label, svg]) => {
+            const b = document.createElement('button');
+            b.type = 'button'; b.className = 'phone-decktab'; b.dataset.dtab = t;
+            b.title = label; b.setAttribute('aria-label', label); b.innerHTML = ico(svg);
+            b.onclick = () => { try { t === 'templateEditor' ? _dsOpenTemplateEditor() : _dsTab(t); } catch (e) {} _phoneDeckTabsSync(); };
+            st.appendChild(b);
+        });
+        const sep = document.createElement('span'); sep.className = 'phone-decktab-sep'; st.appendChild(sep);
+        PHONE_DECK_TOOLS.forEach(([id, label, svg, act]) => {
+            const b = document.createElement('button');
+            b.type = 'button'; b.id = id; b.className = 'phone-decktab-tool'; b.dataset.act = act;
+            b.title = label; b.setAttribute('aria-label', label.split(':')[0]); b.innerHTML = ico(svg);
+            b.onclick = () => { try { _phoneDeckToolRun(act); } catch (e) {} };
+            st.appendChild(b);
+        });
+        const mb = document.createElement('button');
+        mb.id = 'phoneDeckMenuBtn';
+        mb.type = 'button';
+        mb.className = 'phone-decktab-menu';
+        mb.dataset.menuUp = '1';
+        mb.title = 'Generate PDF, Approval, Preflight';
+        mb.setAttribute('aria-label', 'Deck menu');
+        mb.innerHTML = '<svg class="svg-icon" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>';
+        mb.onclick = () => openPhoneDeckMenu(mb);
+        st.appendChild(mb);
+        document.body.appendChild(st);
+    }
+    _phoneBuildStrips();
+    // Items: the camera button, for a new item straight from a photo (19.26).
+    if (!document.getElementById('phoneSnapBtn')) {
+        const snap = document.createElement('button');
+        snap.id = 'phoneSnapBtn';
+        snap.type = 'button';
+        snap.className = 'phone-snap';
+        snap.title = 'New item from a photo';
+        snap.setAttribute('aria-label', 'New item from a photo');
+        snap.innerHTML = '<svg class="svg-icon" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>';
+        snap.onclick = () => dashNewFromPhotos();
+        document.body.appendChild(snap);
+    }
+    // Dashboard: the back bar of the detail screen, and the project-details fold.
+    const rp = document.getElementById('dashRightPane');
+    if (rp && !document.getElementById('phoneDashBack')) {
+        const back = document.createElement('div');
+        back.id = 'phoneDashBack';
+        back.className = 'phone-backbar';
+        back.innerHTML = '<button type="button" class="phone-back-btn"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg><span>All items</span></button><span class="phone-back-title" id="phoneDashTitle"></span>';
+        back.querySelector('button').onclick = () => _phoneDashDetail(false);
+        rp.insertBefore(back, rp.firstChild);
+    }
+    const meta = document.querySelector('#view-dashboard .global-meta');
+    if (meta && !document.getElementById('phoneMetaToggle')) {
+        const t = document.createElement('button');
+        t.id = 'phoneMetaToggle';
+        t.type = 'button';
+        t.className = 'phone-meta-toggle';
+        t.innerHTML = '<span>Project details</span><svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>';
+        t.onclick = () => { const on = meta.classList.toggle('phone-open'); t.classList.toggle('open', on); };
+        meta.parentNode.insertBefore(t, meta);
+    }
+    // A tap on a list row opens that item (the row's own handler selects it first).
+    const tbl = document.getElementById('rfiTable');
+    if (tbl && !tbl._phoneWired) {
+        tbl._phoneWired = true;
+        tbl.addEventListener('click', (e) => {
+            if (!_phoneOn) return;
+            const tr = e.target.closest && e.target.closest('tbody tr');
+            if (!tr) return;
+            if (_touchMods.shift || _touchMods.ctrl) return;   // building a selection: stay on the list
+            setTimeout(() => _phoneDashDetail(true), 0);
+        });
+    }
+    // Deck: the page bar and the All pages sheet.
+    const center = document.getElementById('dsCenter');
+    if (center && !document.getElementById('phoneDeckBar')) {
+        const pb = document.createElement('div');
+        pb.id = 'phoneDeckBar';
+        pb.className = 'phone-deckbar';
+        pb.innerHTML = '<button type="button" class="phone-pg-btn" data-step="-1" aria-label="Previous page"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>'
+            + '<span class="phone-pg-num" id="phoneDeckNum"></span>'
+            + '<button type="button" class="phone-pg-btn" data-step="1" aria-label="Next page"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>'
+            + '<div class="phone-deck-tools" id="phoneDeckTools"></div>';
+        pb.querySelectorAll('.phone-pg-btn').forEach(b => { b.onclick = () => _phoneDeckStep(+b.dataset.step); });
+        center.parentNode.insertBefore(pb, center.nextSibling);
+        const close = document.createElement('button');
+        close.id = 'phoneRailClose';
+        close.type = 'button';
+        close.className = 'phone-sheet-close phone-x';
+        close.setAttribute('aria-label', 'Close');
+        close.innerHTML = '<svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+        close.onclick = () => _phoneRailSheet(false);
+        document.body.appendChild(close);
+        const rail = document.getElementById('dsRail');
+        if (rail) rail.addEventListener('click', (e) => {
+            // Picking a page in the sheet takes you to it.
+            if (rail.classList.contains('phone-sheet') && e.target.closest && e.target.closest('[data-thumb-key]')) {
+                setTimeout(() => _phoneRailSheet(false), 0);
+            }
+        });
+    }
+    _phonePadFold();
+    _phoneSyncTabs();
+    _phoneDeckBarSync();
+}
+// The controller starts hidden on a phone; the tab bar's Controls shows it. Its own
+// step, run from both builders, because which is built first differs between boot paths.
+function _phonePadFold() {
+    const pad = document.getElementById('touchKeys');
+    if (pad && _phoneOn && !pad._phoneFolded) { pad._phoneFolded = true; pad.classList.add('collapsed'); }
+    _phonePadSync();
+}
+function _phonePadToggle() {
+    const pad = document.getElementById('touchKeys');
+    if (!pad) return;
+    pad.classList.toggle('collapsed');
+    _phonePadSync();
+}
+function _phonePadSync() {
+    const pad = document.getElementById('touchKeys'), t = document.getElementById('phoneTabPad');
+    if (t) t.classList.toggle('active', !!(pad && !pad.classList.contains('collapsed')));
+}
+function openPhoneDeckMenu(anchor) {
+    const ap = document.getElementById('dsApprovedBtn');
+    _frameMenu(anchor, [
+        { label: 'Generate PDF...', onClick: () => _dsOpenGenerate() },
+        { label: 'Approval stamp', hint: (ap && ap.disabled) ? 'open a spec page first' : '', onClick: () => {
+            if (!ap || ap.disabled) { _toast('Open a spec page first', 'The approval stamp goes on one artwork page at a time.'); return; }
+            ap.click();
+        } }
+    ]);
+}
+// The header's middle for the current view (19.28).
+function _phoneCtxSync() {
+    const ctx = document.getElementById('phoneCtx');
+    if (!ctx || !_phoneOn) return;
+    ctx.innerHTML = '';
+    const btn = (label, chev, onClick, title, back) => {
+        const b = document.createElement('button');
+        b.type = 'button'; b.className = 'phone-ctx-btn' + (back ? ' back' : '');
+        b.title = title || label;
+        b.innerHTML = (back ? '<svg class="svg-icon" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>' : '')
+            + '<span></span>' + (chev ? '<svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>' : '');
+        b.querySelector('span').textContent = label;
+        b.onclick = onClick;
+        ctx.appendChild(b);
+        return b;
+    };
+    if (currentView === 'elevation') {
+        const e = elevations[currentElevIndex];
+        const b = btn((e && e.name) || 'Wall', true, () => openPhoneWallMenu(b), 'Switch walls or add one');
+    } else if (currentView === 'dashboard') {
+        const v = document.getElementById('view-dashboard');
+        const r = dashProjectData[dashSelectedRowIndex];
+        if (v && v.classList.contains('phone-detail') && r) btn(r.id || 'Item', false, () => _phoneDashDetail(false), 'Back to all items', true);
+        else { const l = document.createElement('span'); l.className = 'phone-ctx-title'; l.textContent = 'Items'; ctx.appendChild(l); }
+    } else if (currentView === 'deck') {
+        const t = (typeof _dsActiveTab !== 'undefined') ? _dsActiveTab : 'pages';
+        const l = document.createElement('span'); l.className = 'phone-ctx-title';
+        l.textContent = t === 'project' ? 'Project' : t === 'templateEditor' ? 'Templates' : t === 'styles' ? 'Styles' : 'Pages';
+        ctx.appendChild(l);
+    }
+    _phoneDeckTabsSync();
+}
+function _phoneDeckTabsSync() {
+    const t = (typeof _dsActiveTab !== 'undefined') ? _dsActiveTab : 'pages';
+    const st = document.getElementById('phoneDeckTabs');
+    if (st) st.dataset.mode = (t === 'project' || t === 'templateEditor') ? t : 'pages';
+    document.documentElement.setAttribute('data-phone-deck', st ? st.dataset.mode : 'pages');
+    document.querySelectorAll('#phoneDeckTabs .phone-decktab-tool').forEach(b => {
+        const tabs = PHONE_DECK_TOOL_TABS[b.dataset.act];
+        b.disabled = !!tabs && tabs.indexOf(st ? st.dataset.mode : 'pages') < 0;
+    });
+    document.querySelectorAll('#phoneDeckTabs .phone-decktab').forEach(b => {
+        const on = b.dataset.dtab === t;
+        b.classList.toggle('active', on);
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+}
+function openPhoneWallMenu(anchor) {
+    const items = (elevations || []).map((e, i) => ({ label: (e && e.name) || ('Wall ' + (i + 1)), on: i === currentElevIndex, onClick: () => switchView('elevation', i) }));
+    items.push({ head: '' });
+    items.push({ label: '+ Add Wall', onClick: () => addNewElevationTab() });
+    _frameMenu(anchor, items);
+}
+function _phoneSyncTabs() {
+    // Landscape view mode keys off the view (CSS: [data-phone-view]).
+    document.documentElement.setAttribute('data-phone-view', currentView);
+    _phoneCtxSync();
+    document.querySelectorAll('#phoneTabBar .phone-tab').forEach(b => {
+        const on = b.dataset.view === currentView;
+        b.classList.toggle('active', on);
+        b.setAttribute('aria-current', on ? 'page' : 'false');
+    });
+}
+function openPhoneMenu(anchor) {
+    const light = document.body.classList.contains('light-theme');
+    _frameMenu(anchor, [
+        { label: 'Open project...', onClick: () => openMasterProject() },
+        { label: 'Save As...', onClick: () => saveMasterProjectAs() },
+        { label: 'Versions...', onClick: () => openVersionsModal() },
+        { head: '' },
+        { label: 'Settings', onClick: () => openAppSettings() },
+        { label: 'Help', onClick: () => openHelpModal() },
+        { label: light ? 'Dark theme' : 'Light theme', onClick: () => toggleTheme() },
+        { label: 'Version ' + APP_VERSION + (APP_BUILD === 'dev' ? ' (dev)' : ''), onClick: () => openVersionInfo() }
+    ]);
+}
+// NEW ITEMS FROM PHOTOS (19.26). The fastest idea on a phone is "see a piece, snap it":
+// each picture becomes a new item of the selected item's type (the next code, through
+// _fpAddCodes like + Add Item's "new code"), with the picture applied by the normal
+// artwork path, and the first one opens. The phone's camera button over the Items list
+// (#phoneSnapBtn) and Import > New items from photos... both come here.
+function dashNewFromPhotos() {
+    const inp = document.createElement('input');
+    inp.type = 'file'; inp.accept = 'image/*'; inp.multiple = true; inp.style.display = 'none';
+    inp.onchange = () => { const files = _elevArtFileOrder(inp.files); inp.remove(); _dashItemsFromFiles(files); };
+    document.body.appendChild(inp);
+    inp.click();
+}
+function _dashItemsFromFiles(files, done) {
+    if (!files || !files.length) return [];
+    const cur = dashProjectData[dashSelectedRowIndex];
+    const cat = cur ? (cur.category || '') : '';
+    // Found again by a temporary MARKER, never by code: codes are positions, and the settle
+    // inside each add (or a gap in the numbering) renumbers a new item before its picture
+    // has loaded; even the code _fpAddCodes returns can already be stale. The marker is
+    // stamped on as the row is made (opts.mark) and removed once its picture is on.
+    const tag = '_photoNew' + Date.now().toString(36);
+    files.forEach((f, k) => { const mark = {}; mark[tag] = k + 1; _fpAddCodes(cat, 1, { quiet: true, mark: mark }); });
+    _placementDone(null);   // settle, refresh, ONE history entry for the new items
+    const rowIdx = (k) => dashProjectData.findIndex(r => r && r[tag] === k + 1);
+    let k = 0;
+    const next = () => {
+        if (k >= files.length) {
+            const ids = files.map((f, j) => { const i = rowIdx(j); return i >= 0 ? dashProjectData[i].id : null; });
+            const i0 = rowIdx(0);
+            dashProjectData.forEach(r => { if (r) delete r[tag]; });
+            if (i0 >= 0) {
+                dashSelectedRowIndex = i0;
+                try { loadDashDataIntoControls(dashProjectData[i0]); renderDashTable(); checkGlobalEditingWarning(ids[0]); } catch (e) {}
+                if (_phoneOn) _phoneDashDetail(true);
+            }
+            if (done) done(ids);
+            return;
+        }
+        const f = files[k], j = k++;
+        processArtworkFile(f, (u, n, w, h) => {
+            const i = rowIdx(j);
+            if (i >= 0) applyArtworkToRowIndex(i, u, n, w, h);
+            next();
+        });
+    };
+    next();
+}
+
+// The dashboard on a phone is two screens: the item list, then one item's settings.
+function _phoneDashDetail(on) {
+    const v = document.getElementById('view-dashboard');
+    if (!v) return;
+    v.classList.toggle('phone-detail', !!on);
+    const t = document.getElementById('phoneDashTitle');
+    if (t) { const r = dashProjectData[dashSelectedRowIndex]; t.textContent = (on && r) ? (r.id || '') : ''; }
+    const rp = document.getElementById('dashRightPane');
+    if (rp && on) rp.scrollTop = 0;
+    // The preview sizes itself to its box, and the item screen was hidden (zero size) when
+    // it last drew: it came out cropped and off-centre. Draw it again now it is shown (19.28).
+    if (on) requestAnimationFrame(() => { try { updateDashVisualsFromDOM(); } catch (e) {} });
+    _phoneCtxSync();
+}
+function _phoneDeckStep(d) {
+    if (typeof _dsPages === 'undefined' || !_dsPages || !_dsPages.length) return;
+    const i = Math.max(0, Math.min(_dsPages.length - 1, (_dsIndex || 0) + d));
+    if (i !== _dsIndex) _dsSelectPage(i);
+}
+function _phoneDeckBarSync() {
+    const n = document.getElementById('phoneDeckNum');
+    if (!n || typeof _dsPages === 'undefined' || !_dsPages) return;
+    const total = _dsPages.length, i = Math.min(_dsIndex || 0, Math.max(0, total - 1));
+    n.textContent = total ? (i + 1) + ' / ' + total : '';
+    document.querySelectorAll('#phoneDeckBar .phone-pg-btn').forEach(b => {
+        b.disabled = !total || (+b.dataset.step < 0 ? i <= 0 : i >= total - 1);
+    });
+}
+// THE ALL PAGES SHEET SHOWS PAGES AS BIG AS THE PHONE ALLOWS (19.24). Each rail cell
+// (thumbnail, caption and its - / move / + controls) is drawn at its desktop size,
+// PHONE_RAIL_CELL_W wide, and zoomed to fill the sheet: the controls sit at the page's
+// edge instead of across a gap, and grow to finger size with it. Cached thumbnails are
+// rendered at 1.5x the full page, so the zoom stays sharp.
+const PHONE_RAIL_CELL_W = 186;
+function _phoneRailZoom() {
+    const w = (window.innerWidth || 390) - 20;   // 8px gutters (19.28: tighter)
+    return Math.max(1, Math.min(4, w / PHONE_RAIL_CELL_W));
+}
+function _phoneRailSheet(open) {
+    const rail = document.getElementById('dsRail');
+    if (!rail) return;
+    if (open) rail.style.setProperty('--rail-zoom', _phoneRailZoom().toFixed(3));
+    rail.classList.toggle('phone-sheet', !!open);
+    document.documentElement.classList.toggle('phone-sheet-open', !!open);
+}
+function _phoneInit() {
+    if (typeof window === 'undefined' || !window.addEventListener || window._framePhoneInstalled) return;
+    window._framePhoneInstalled = true;
+    const go = () => _phoneApply(true);
+    if (document.body) go(); else document.addEventListener('DOMContentLoaded', go);
+    window.addEventListener('resize', () => _phoneApply(false));
+    window.addEventListener('orientationchange', () => setTimeout(() => _phoneApply(false), 120));
+}
+_phoneInit();
+
+// OFFLINE (19.26): sw.js keeps a copy of FRAME on the device so the home-screen app opens
+// with no signal (see the notes at its top). Registered only where a service worker can
+// run (https, or localhost while testing); never from file:// or a test harness. Opening
+// the app with ?nosw removes it from the device, the way out if it ever misbehaves.
+function _swRegister() {
+    try {
+        if (typeof navigator === 'undefined' || !navigator.serviceWorker || typeof location === 'undefined') return;
+        if (/(^|[?&])nosw(=|&|$)/.test(location.search || '')) {
+            navigator.serviceWorker.getRegistrations().then(rs => rs.forEach(r => r.unregister())).catch(() => {});
+            if (window.caches) caches.keys().then(ks => ks.forEach(k => { if (k.indexOf('frame-') === 0) caches.delete(k); })).catch(() => {});
+            return;
+        }
+        const h = location.hostname || '';
+        if (location.protocol !== 'https:' && h !== 'localhost' && h !== '127.0.0.1') return;
+        const go = () => navigator.serviceWorker.register('sw.js').catch(() => {});
+        if (document.readyState === 'complete') go(); else window.addEventListener('load', go);
+    } catch (e) {}
+}
+_swRegister();
+
+// ──────────────────────────────────────────────────────────────────────────
 // HELP MODAL
 // ──────────────────────────────────────────────────────────────────────────
 // Opens via the ? button in the header. Two tabs: Video (placeholder until
@@ -43668,7 +45736,9 @@ const HELP_REFERENCE_DATA = [
             },
             {
                 title: `What's new`,
-                body: `<strong>19.12</strong> A framed picture in the Frame Dashboard preview shows what you can do with it when you hover: <strong>Replace</strong> and <strong>Remove</strong> in its corner, and a note that you can drag to pan or drop another image on it to swap it.<br><br>\n<strong>19.11</strong> The frame button in the Frame Dashboard shows the frame's corner the way the frame browser does: the whole corner photo on white, with Change underneath.<br><br>\n<strong>19.10</strong> A tighter Frame Dashboard panel. The frame is a square picture button (click it to change the frame) with Frame Code and Color / Texture beside it, and the frame's colour, width and vendor on the Frame heading. Artwork is added from the preview: click the empty opening or drag a picture onto it. The upload row in the panel is gone; once a piece has artwork, its zoom, Reset, 1:1 and Remove sit in one row under the sizes.<br><br>\n<strong>19.09</strong> Frames come from the library. New items start in <strong>MICH-132-29</strong>, a black moulding with a three-quarter inch face, instead of a flat black colour. In the Frame Dashboard the Library / Color switch, the colour picker, Sync Folder and the swatch upload are gone: the frame is one card showing its corner, code, colour, width and vendor, and clicking it opens the frame browser. Picking a frame also fills Color / Texture from the catalogue (never over words you typed). A frame no vendor lists can still be added with <strong>Custom swatch…</strong> in the frame browser. Older projects with colour frames still open and print as before.<br><br>\n<strong>19.08</strong> An empty opening shows an add-image icon instead of its size, on the wall and in the Frame Dashboard preview. In the dashboard, click it to upload the artwork. The size is still in the dashboard fields and the dimension guides.<br><br>\n<strong>19.07</strong> Frame effects in Settings fits on one screen: the sample frame and the sliders sit side by side, and each slider's explanation is behind a <strong>?</strong> instead of a line of text under it.<br><br>\n<strong>19.06</strong> Deck Studio's Project tab is shorter. Project name, code, location and version sit together at the top, and units, rounding and frame effects are one line that says what they are, with <strong>Units&hellip;</strong> and <strong>Frame effects&hellip;</strong> buttons into Settings (the gear in the header), where they are changed. Fixed: the page preview on the Project tab now shows a page's background image, colour and text colour, like the Pages tab; a cover with a picture showed on white before, even after Refresh preview.<br><br>\n<strong>19.05</strong> Elevations get a tool bar beside the wall, like Deck Studio's: Select (V), Measure (M) and Context block (C), then Add frames, Sort A&ndash;Z, Align, Group dimension and Fit to wall, then Item codes and the keyboard shortcuts. The Art, Guides, Context and Glass tabs are bigger, with an icon and a count of what each holds. Frame shadows on the wall are now true to size (the drop shadow was drawn many inches wide), and the shadow inside the opening also falls on the artwork. Breaker and install pages cast the same drop shadow as spec pages when <strong>Also on deck pages</strong> is ticked in Frame effects.<br><br>
+                body: `<strong>19.34</strong> iPhone: every view has its colour (Deck blue, Items pink, Walls yellow, Controls grey) and the header wears the one you are on. Items and Walls get the same icon strip over the bottom bar as Deck: Add Item, Duplicate, Delete, Edit, Import and Export on Items; Art, Guides, Context and Glass on Walls. In Deck, Project, Pages and Templates each have a colour, and the tools that belong to the tab you are on light up in it while the rest grey out.<br><br><strong>19.33</strong> iPhone Deck: the bottom strip is icons (Project, Pages, Templates) with All pages, Preview and Preflight beside them, and the page toolbar fits one row: with something selected, its settings, front, back and delete take the page arrows' place (swipe still flips pages).<br><br><strong>19.32</strong> iPhone: on Deck, Project, Pages and Templates sit in a strip just above the bottom bar, with the deck menu (Generate PDF, Approval, Preflight) at its right end, instead of a menu up in the header. The empty band above the bottom bar is gone.<br><br><strong>19.31</strong> Frame sets are picked from pictures: the frames button on a floorplan item code opens a window of drawn arrangements (sets, salon hangs and the Ford Engineering Lab hangs), each to scale with its frames, mats and float mounts. The Ford hangs now come in their real mix of frames (oak, black woodgrain, black and gold, floaters); select the set and use Bulk Edit to change them all at once.<br><br><strong>19.30</strong> Fourteen salon hangs from the Ford Engineering Lab installation guide are now frame sets: on the floorplan Items list, click a code's frames button and pick from <strong>Salon hangs · Ford Engineering Lab</strong> (4 to 11 pieces, sized and spaced exactly as built). A saved project now keeps its document code, version and location (they print in every page footer), and reopens with its own include-page ticks and plan order rather than the previous project's.<br><br><strong>19.29</strong> iPhone: the top bar, dialogs, the frame browser and All pages no longer slide under the status bar (camera, clock and battery) in the home-screen app.<br><br><strong>19.28</strong> iPhone: the top bar now does more. On Walls it names the wall (tap to switch walls or add one), on an item it is the way back to the list, and on Deck a menu button beside the three dots holds Project, Pages, Templates, Generate PDF, Approval and Preflight, so each screen loses a row. The item preview no longer opens cropped and off-centre. Align and space opens as a sheet you can see in full. All pages is tighter, with the filter at the very top and a round X to close; the frame browser closes with the same X. In the frame library one vendor is open at a time, and tapping the open vendor closes it (on every device).<br><br><strong>19.27</strong> Frame FA-BW74-2003 (Framerica American Walnut): the vendor's PRODUCT HOLDER sticker is gone from its corner photo, and its frame no longer tiles as a row of dots (its swatch was a sliver of the moulding; it is now a long, seamless piece of the grain). Pieces already in that frame pick up the corrected look when the project opens, on their walls too; a swatch you uploaded yourself is never replaced.<br><br><strong>19.26</strong> FRAME now keeps a copy of itself on your device, so the home-screen app opens with no signal (a basement, a site with no reception) and opens faster everywhere; it still updates whenever there is signal. On iPhone: the round camera button on Items makes a new item straight from a photo (take one or pick several; each becomes its own item with the picture on it), and a sideways swipe across an empty part of a wall flips to the next wall, across a deck page to the next page. Swiping on a frame or a text box still moves it. Import has <strong>New items from photos</strong> on every device.<br><br><strong>19.25</strong> The frame browser builds a screenful of frames at a time and adds more as you scroll, so All frames opens straight away; on iPhone the frame swatches show the whole corner photo (they looked zoomed in). On iPhone, Deck Studio puts the page numbers, All pages and the tools in one row above the page, and the page area fits the page, leaving more room for the layout choices; the Presentation layout and breaker settings now scroll with the panel instead of covering the choices below them.<br><br><strong>19.24</strong> Pinch with two fingers on a wall to zoom it (and drag two fingers to move around); the rest of the app no longer zooms with it. On iPhone the controller is the <strong>Controls</strong> button in the bottom bar instead of a floating button; Deck Studio's Generate PDF and Approval are in its menu button; All pages shows each page as wide as the phone; the frame browser fills the screen three across (five sideways) with the frame lists behind the menu button and the filters behind Filters. On iPhone and iPad the Project tab no longer shows a page preview, and on iPhone it is one column.<br><br><strong>19.23</strong> FRAME on iPhone. Hold the phone upright to work: Deck, Items and Walls are tabs along the bottom, Save and undo stay in the header and everything else is under the three-dot menu. Items is a list; tap one to open its settings, and All items takes you back. Walls shows the wall chips, the wall, the tools and then the frames, with the wall settings below. Deck shows one page at a time with a page bar and All pages. Turn the phone sideways to look: on Walls and Deck the menus go and the wall or page fills the screen. The controller folds to a round button bottom-right.<br><br><strong>19.22</strong> The joystick has four arrows round its rim: tap one for exactly one nudge, hold it to keep nudging (Shift on for big steps). Delete now removes a selected dimension (tap its number or line first; it shows a dashed box and its number ringed), and leaves frames alone while a dimension is selected. On a touch screen dimension lines and their delete buttons are easier to hit. The letter legend is 200pt wide by default. Elevations in PDFs and exports are laid out at least as large as on a desktop screen, so a deck made on an iPad prints its dimensions the same size as one made on the desktop.<br><br><strong>19.21</strong> On an iPad, use Safari's Share button, then <strong>Add to Home Screen</strong>: FRAME opens from its icon as its own full-screen app with no Safari toolbar. In the elevation dock, <strong>Add artwork</strong> (the picture button) puts a photo in the selected frame from the photo library, the camera or Files; select several frames to add several pictures at once, in letter order. The frame browser always opens on All frames, and on a touch screen it no longer brings up the keyboard until you tap the search box.<br><br><strong>19.20</strong> iPad: the key bar is now a controller (bottom-left; drag its dotted grip to move it). Its <strong>joystick</strong> nudges whatever is selected: push the knob the way it should go, a light push steps slowly and a full push moves faster, with Shift on for big steps; one push undoes in one go. The keys can be <strong>tapped</strong> to stay on or <strong>held</strong> with one hand while the other hand drags. With Shift or Ctrl on, tapping rows in the dashboard table selects a range or adds to the selection. The dashboard item list and the elevation wall panel fold away with the tab on their edge; with the list folded the dashboard picture gets its own column beside the form, and on a touch screen the form is four tabs (Item, Frame, Mat, Notes) so each fits without scrolling.<br><br><strong>19.19</strong> More for iPad. On a touch screen a small key bar sits bottom-right: <strong>Shift</strong>, <strong>Ctrl</strong> and <strong>Alt</strong> stay on once tapped (lit) and apply to every drag and tap until tapped off, and <strong>Delete</strong> deletes the selection like the Delete key. A finger that lands just beside a small resize corner or dimension handle picks the handle up. The wall list beside an elevation folds away with the arrow at its top, giving the wall more room (on any computer). On a narrow screen the dashboard keeps the picture above the form instead of in its own column, so the item table keeps its width; the column comes back when there is room.<br><br><strong>19.18</strong> FRAME works with a finger on iPad: drag frames, context blocks, glass, dimension lines, deck page boxes and floorplan pins by touch. In a scrolling list (the wall rail, the frame list) a swipe scrolls and a short press and hold picks the item up. Double-tap does what double-click does. Buttons that only appeared on mouse hover now show on a touch screen.<br><br><strong>19.17</strong> On deck pages, a frame with no picture in it shows a light grey opening instead of a black one (the drop shadow under the frame was showing through). Downloaded SVG and PNG elevations keep the clear opening for InDesign.<br><br><strong>19.16</strong> Group dimensions step out past the spacing dimensions: the overall width line sits above the row of spacing numbers and the height line left of any beside the group, so the two never run through each other. Drag a group line and it moves out from there.<br><br><strong>19.15</strong> Spacing dimensions place themselves: a number too wide for its gap now moves its line above or below the group (left or right for a vertical gap) to the nearest spot clear of every frame, and in a tight stack it sits over its gap inside the column. Drag one and it stays where you put it; Reset dimension positions hands it back. A line pulled out of the group always puts its number on the outside, away from the dashed extension lines. A set of frames gets one group dimension: pressing Group again on the same frames selects the one already there (a different set on the same wall still gets its own). Click a group dimension's number to select it, then press Delete to remove it.<br><br><strong>19.14</strong> Drop an image from another window onto a page in Deck Studio and it becomes that page’s background (pan, zoom or remove it in Page appearance); image boxes and spec-page frames still take their own drops. The Thank You page has two new sliders: <strong>Move contacts up / down</strong> and <strong>Name size</strong>. A new project’s cover has a 1.5pt rule between the client name and the heading that turns white on a dark page, and the starter deck no longer includes a moodboard page.<br><br>
+<strong>19.13</strong> The Thank You page starts empty. Open <strong>Edit contacts</strong> and pick your team with <strong>+ From directory</strong> (the company directory, now updated), or type someone in. <strong>Save as my default</strong> keeps that team on this computer, and every new project you start begins with it; <strong>Use my default</strong> puts it back on an existing project. Older projects keep the people they already printed.<br><br>
+<strong>19.12</strong> A framed picture in the Frame Dashboard preview shows what you can do with it when you hover: <strong>Replace</strong> and <strong>Remove</strong> in its corner, and a note that you can drag to pan or drop another image on it to swap it.<br><br>\n<strong>19.11</strong> The frame button in the Frame Dashboard shows the frame's corner the way the frame browser does: the whole corner photo on white, with Change underneath.<br><br>\n<strong>19.10</strong> A tighter Frame Dashboard panel. The frame is a square picture button (click it to change the frame) with Frame Code and Color / Texture beside it, and the frame's colour, width and vendor on the Frame heading. Artwork is added from the preview: click the empty opening or drag a picture onto it. The upload row in the panel is gone; once a piece has artwork, its zoom, Reset, 1:1 and Remove sit in one row under the sizes.<br><br>\n<strong>19.09</strong> Frames come from the library. New items start in <strong>MICH-132-29</strong>, a black moulding with a three-quarter inch face, instead of a flat black colour. In the Frame Dashboard the Library / Color switch, the colour picker, Sync Folder and the swatch upload are gone: the frame is one card showing its corner, code, colour, width and vendor, and clicking it opens the frame browser. Picking a frame also fills Color / Texture from the catalogue (never over words you typed). A frame no vendor lists can still be added with <strong>Custom swatch…</strong> in the frame browser. Older projects with colour frames still open and print as before.<br><br>\n<strong>19.08</strong> An empty opening shows an add-image icon instead of its size, on the wall and in the Frame Dashboard preview. In the dashboard, click it to upload the artwork. The size is still in the dashboard fields and the dimension guides.<br><br>\n<strong>19.07</strong> Frame effects in Settings fits on one screen: the sample frame and the sliders sit side by side, and each slider's explanation is behind a <strong>?</strong> instead of a line of text under it.<br><br>\n<strong>19.06</strong> Deck Studio's Project tab is shorter. Project name, code, location and version sit together at the top, and units, rounding and frame effects are one line that says what they are, with <strong>Units&hellip;</strong> and <strong>Frame effects&hellip;</strong> buttons into Settings (the gear in the header), where they are changed. Fixed: the page preview on the Project tab now shows a page's background image, colour and text colour, like the Pages tab; a cover with a picture showed on white before, even after Refresh preview.<br><br>\n<strong>19.05</strong> Elevations get a tool bar beside the wall, like Deck Studio's: Select (V), Measure (M) and Context block (C), then Add frames, Sort A&ndash;Z, Align, Group dimension and Fit to wall, then Item codes and the keyboard shortcuts. The Art, Guides, Context and Glass tabs are bigger, with an icon and a count of what each holds. Frame shadows on the wall are now true to size (the drop shadow was drawn many inches wide), and the shadow inside the opening also falls on the artwork. Breaker and install pages cast the same drop shadow as spec pages when <strong>Also on deck pages</strong> is ticked in Frame effects.<br><br>
 <strong>19.04</strong> Deleting a wall asks about its pieces. When pieces hang on that wall and nowhere else, you choose <strong>Delete wall and pieces</strong> (they leave the Frame Dashboard and the presentation: the way to drop the options a client turned down) or <strong>Delete wall, keep pieces</strong> (as before: they stay in the Dashboard, and + Add Wall offers them to hang again). Pieces also shown on another wall are never deleted, and Ctrl+Z brings back the wall and its pieces together.<br><br><strong>19.03</strong> The frame you pick sets the product both ways. Picking a floater makes the item Framed Canvas (Floater), as before, and picking a regular moulding on a floater item now turns it back into Framed Art (it used to stay a floater, with its canvas inset and no mats). A floater counts by its lip width too, whatever its collection is called. Shadow boxes, frameless canvas, wallcovering and window film are left as you set them.<br><br><strong>19.02</strong> Floaters show their gap. The quarter inch between a floater's face and the canvas now draws as a dark slot instead of more moulding, on the Dashboard preview, the wall, PNG and SVG exports and spec pages, and the canvas casts its shadow into it. Settings, Frame effects has a new <strong>Floater gap</strong> slider for how dark it reads (the canvas used to borrow Frame onto mat). The three Cape Cod floaters (IM-310-715, 720 and 725) now carry their 5/8in face, so a new pick sets a 7/8in inset.<br><br><strong>19.01</strong> More frames turned round to face the right way: 46 Larson-Juhl floaters (Axom, Bauhaus II, Cranbrook, Eiffel, Gramercy, Metalia, Moderne, Olsen, Ravello, Shoji and Spencer II) now show the wall on the left and the floor along the bottom like every other floater, and Academie Silver 3in (LJ-733237) matches its gold and black siblings.<br><br><strong>19.00</strong> The frame browser has a <strong>Type</strong> filter: show only floaters, or only frames, across every vendor. Frame thumbnails are cropped consistently again: about 290 International Moulding and Framerica corners had kept far too much of the moulding and showed as thin slivers. Seven more mouldings that faced the wrong way (including IM-310-710) are turned round.<br><br><strong>18.99</strong> International Moulding and Framerica frames now face the same way as every other moulding: outer edge on the left, rabbet lip on the right. Many were mirror images, so the mockup drew the lip on the outside of the frame. The old Universal folder with two frames is gone; both are in Universal Arquati.<br><br><strong>18.98</strong> The frame library adds International Moulding (about 1,000 current mouldings in 153 collections, 37 of them floaters) and Framerica (336 mouldings in 91 finishes), each with its corner photo, sizes, colour family and, where the maker publishes one, its profile drawing. Deep shadowbox corners now show the frame face above the cut end instead of only raw wood.<br><br><strong>18.97</strong> More frame corners and profiles fit on one row of a group page before it wraps: the space between mouldings tightens first, then the pictures shrink, and only then does the strip go to two rows.<br><br><strong>18.96</strong> Frame corner photos all share one shape now. Thin Universal Arquati and Larson-Juhl mouldings showed as long skinny slivers in the frame browser and on spec pages; every corner is cropped to the same proportions as the Michelangelo ones, showing the cut end and a short run of the face.<br><br><strong>18.95</strong> The frame library adds Universal Arquati: about 1,050 current mouldings in 156 collections (Universal, Valucore and the Arquati lines), including 177 floaters, each with its corner photo, profile drawing, sizes, colour, profile type and style. Discontinued mouldings, fillets, liners and stretcher bars are left out.<br><br><strong>18.94</strong> Two spec page fixes. A picture dropped onto the dashboard preview or onto a frame on the wall kept the previous picture's proportions, so the dashboard and wall stretched it to fit while the spec page printed its true crop; every drop now records the new picture's size, and pieces affected before this correct themselves the next time they are shown. On a per-piece page, a long spec list (float-mounted paper adds four rows) now tightens its rows to stop above the frame corner and profile instead of running into them.<br><br><strong>18.93</strong> The Frame Recommendations page lays frames out on an even grid. With a count that does not divide by the columns (8 frames in 3 columns), the last column used to stretch its frames to fill the page; now every frame is the same size and the last column simply ends early.<br><br><strong>18.92</strong> The frame library adds Larson-Juhl: about 1,030 current mouldings in 156 collections, including 91 floaters, each with its corner photo, profile drawing, sizes, colour family, profile type and style. In the frame browser the Library now lists each vendor once (click it to open its collections), and there is a new <strong>Style</strong> filter (Contemporary, Modern, Classic and so on). Nielsen metal frames are left out because Larson-Juhl has no photos of them.<br><br><strong>18.91</strong> When a Group A/B/C page has too many mouldings for the frame corners and profiles to fit in one row beside the floorplan and elevation, they wrap into two rows in the same space, so the artwork, floorplan and elevation keep their size and place. Seven different mouldings now show every corner and profile.<br><br><strong>18.89</strong> On a Group A/B/C page with several mouldings, ticking Moulding profile no longer makes every frame corner disappear. The corners and profiles now shrink to fit beside the floorplan and elevation; if there is still not enough room, the profiles are left off and the corners kept, and a <strong>no room</strong> note appears beside Moulding profile under Show on page.<br><br><strong>18.88</strong> The frame library now has every Michelangelo collection that works as a frame in FRAME: Barnwood, Contemporary, Modern, Shadow Boxes and Traditional join Avant-Garde, Floaters and Ornate, about 1,240 mouldings in all, each with its corner photo, profile drawing, sizes, colour and profile name. Liners, fillets, rabbetless flat surfaces and stretchers are left out because they are not a frame on their own.<br><br><strong>18.87</strong> The frame library adds Michelangelo's ornate mouldings: all 59 current ones, each with its corner photo, profile drawing, sizes, colour and profile name. Their swatches repeat the ornament down the rail without a visible seam.<br><br><strong>18.86</strong> The frame library adds Michelangelo's floaters: 229 current floater frames for canvas, each with its corner photo, profile drawing, sizes and lip width. Picking one switches the item to Framed Canvas (Floater) and sets the inset from the lip, as before.<br><br><strong>18.85</strong> The frame library now has the whole Michelangelo Avant-Garde collection: 539 current mouldings, each with its corner photo, profile drawing, sizes, colour and profile name, so the frame browser can search and filter all of them.<br><br><strong>18.84</strong> Choosing a frame opens a frame browser: click the <strong>Frame</strong> box on the dashboard. Search by code, colour or profile, and filter by colour family, face width and profile shape, with the corner photo of each moulding. <strong>Project frames</strong> lists the frames already on an item plus a shortlist: star any frame to keep it handy for this project. Save frames you use together as a grouping under <strong>My groupings</strong>, and use <strong>Share with team</strong> to send one to whoever looks after the library, so it appears under <strong>Team groupings</strong> for everyone. The library also gains 109 Michelangelo Avant-Garde mouldings.<br><br><strong>18.83</strong> Copy and paste work between two FRAME tabs. In Deck Studio, copy boxes on a page in one project (Ctrl+C or Cmd+C) and paste them into a page in the other tab (Ctrl+V or Cmd+V): text, shapes, images and lines arrive in the same place on the page, images included.<br><br><strong>18.82</strong> Two projects can be open in two browser tabs at once without risking either one's unsaved work. Each tab now keeps its own backup (they used to share one, so a crash could bring back the other project). The start screen lists every unsaved backup by project name and age, with Continue and Delete; one that is still open in another tab is marked and not offered. Saving a project clears only that tab's backup. The newest five are kept, for a week.<br><br><strong>18.81</strong> Saved project files store each image once. An artwork used on its dashboard row and on wall frames, a shared swatch, and the first floor plan were each written in full every time they appeared; the file now keeps one copy and points to it, so files are smaller and open and save faster. Older project files open as before. Files saved from this version need this version or later.<br><br><strong>18.80</strong> PDFs build about three times faster and come out several times smaller (a 30-page test deck: 75 seconds and 49 MB before, about 22 seconds and 7 MB now), with pages that look the same. Every picture is now encoded at the size it prints at the chosen quality instead of the artwork's full resolution, each image is decoded once and reused, the wall elevations draw their frames and artwork at the size the drawing needs, and frame shadows and PNG floor plans are compressed instead of stored raw. Previews in Deck Studio get the same speed-up. The downloadable SVG keeps full resolution.<br><br><strong>18.79</strong> Contents page fixes. The template's own section lines (and, after applying the Contents template a second time, its placeholder boxes) were left on the page under the automatic ones, so lines doubled up and stayed with Rules off; they are cleared now, and applying the template again starts the page fresh. Introduction, Closing, a level and the other automatic sections can be renamed on the Contents panel. The name fields hold the real name, so you can add to it (Lobby before ART.1C) instead of retyping, and a renamed field has a reset arrow back to the automatic name.<br><br><strong>18.78</strong> Contents page: section titles stay on one line when they can, because the title column widens and the lines move over (only a title that still does not fit wraps). Pages after the last artwork (Thank You and so on) go under Closing instead of joining the last divider's section. On a dark background colour or gradient the contents sets itself in white with light rules, unless you picked a colour. The Contents panel adds Bold, Italic and All caps for titles, Bold and Italic for lines, a separate Numbers colour, Rules on or off with their colour, and Spacing: Grid (the template's rows) or Even.<br><br><strong>18.77</strong> On the Contents page, section titles are links too: to their divider, or to the first page listed under them. The Contents page panel sets the type of the section titles (Titles) and the lines (Lines) (font, size, colour), with Reset to template type to go back. A divider's section title can be renamed there like any line, and a renamed line or section has a <strong>Page</strong> button that writes the new name into that page's own heading, so the page and the contents match.<br><br><strong>18.76</strong> A Contents page too long for one page now continues on a second Contents page, added right after the first, at full type size, with nothing left off. A section too long for a column carries on with its title marked (continued). The extra page goes away by itself when the contents fits on one page again, and every page number after it updates.<br><br><strong>18.75</strong> The page rail numbers pages the way the PDF does, so a Frame Recommendations card that prints on two pages reads 7–8 and every page after it matches the Contents page. Typing a page number to move a page uses those numbers too. On the Contents page, artwork lines are named by where the pieces hang (Lobby: ART.1 – ART.5) and split where the location changes. Lines and section titles still reading as template placeholder text (Divider Page Heading, Section Heading, an untitled page) are marked in amber on the Contents panel and listed in Preflight.<br><br><strong>18.74</strong> Every line on the Contents page is a link. In the PDF it jumps to that page; in Deck Studio click a line to open that page.<br><br><strong>18.73</strong> Every page's panel in Deck Studio has an <strong>In contents</strong> tick while the deck has a Contents page, and layout pages also have <strong>Starts a section</strong>, so any page can head a section, not only dividers. A blank or untitled page you add now stays off the contents until you tick it in. Unticking a wall page or the first page of an Artwork line takes the whole line off. A wall whose name already starts with its code prints the name once.<br><br><strong>18.72</strong> Applying the Contents template to a page you already have now makes it a self-filling Contents page (it used to stay a Custom page showing the placeholder text). A page already set up that way fills itself in the next time you open the deck. Applying a Divider template to a page makes it a section start, the same as adding a new divider.<br><br><strong>18.71</strong> The Contents page writes itself. Add Contents (Full) or (Half) from the Templates tab and it lists the deck with real page numbers, in the template's look, and keeps up as you add, remove and reorder pages. A divider page starts a section, titled by its heading; with no dividers the sections are Introduction, one per floor level, and Closing. A run of spec pages is one Artwork line, and a wall page stands for the spec pages after it. On the Contents page's panel, untick a line to leave it out or type over it to rename it. A deck too long for the page sets smaller type. The PDF now prints this page as you see it (it used to print a plain list instead).<br><br><strong>18.70</strong> On a catalogue options sheet the Elevation thumbnail draws the frame solid, as the grey mockup, instead of faded. Salon and group options are unchanged. Also fixed: a selected page thumbnail in Deck Studio no longer shifts or crops its edges (the footer logo stayed in view only while the page was not selected).<br><br><strong>18.69</strong> Selecting a page in Deck Studio no longer flashes. Options sheets, cards, plan details, spec pages and floorplans used to blink to a blank page with just the title, in the middle and in the page rail, every time you clicked them. Now the page you last saw stays up until the fresh render is ready, and the rail keeps its thumbnail.<br><br><strong>18.68</strong> A selected page keeps its thumbnail in the page rail. Pages drawn as a picture (Timeline, Frame Recommendations, Contacts, floorplans, spec pages, plan details, options sheets) used to show their placeholder there, or go blank, until you picked another page.<br><br><strong>18.67</strong> The catalogue options sheet has an <strong>Options per page</strong> control in Deck Studio: Auto (which shows the number it picked) or 1 to 10, for every options sheet or just this placement, so you can try three or six on a page. A picked number is used exactly, the rest follow on the next page. Also fixed: a page drawn as a picture (options sheets, cards, plan details) no longer goes blank in the page rail while it is selected.<br><br><strong>18.66</strong> On the catalogue options sheet the frame corner, profile, floorplan and elevation now print at exactly the size and position they have on a per-piece spec page, because the sheet draws them with the same layout. The spec list fits between the title and those thumbnails and shrinks rather than running into them, and the mockups start clear of the whole left column.<br><br><strong>18.65</strong> The catalogue options sheet gets its own <strong>Show on page</strong> ticks in Deck Studio, like Group A/B/C: Frame corner, Moulding profile, Floorplan and Elevation, under the specs in the left column. Set them for every options sheet or just this placement. Frame corner and profile are on by default; the plan and wall are off because the breaker in front already carries them. Options pages also show a real preview in the page rail now instead of a placeholder.<br><br><strong>18.64</strong> Catalogue options of a <strong>single piece</strong> now print as an options sheet right after the breaker: the shared specs down the left, the framed mockups on the right coded ART.1.1, ART.1.2, ART.1.3 with each image code underneath, and the options' own spec pages are no longer printed. How many fit a page is automatic (about 1.8in across at the smallest, all at one scale); more than that splits evenly, and every page repeats the specs so a sheet pinned to a board still carries them. Untick <strong>All-options page</strong> to go back to one spec page per option. New options of a single piece are coded ART.1.1, no longer ART.1.1A.<br><br><strong>18.63</strong> In the Frame Dashboard the <strong>Img Code</strong> column widens to fit the longest code, so every code reads in full without scrolling inside the field. It refits as you type.<br><br>
 <strong>18.62</strong> The amber <strong>x2</strong> badge (the same image used in another placement) sits at the right end of the Img Code field, so it no longer covers the artwork thumbnail.<br><br>
 <strong>18.61</strong> Each row in the Frame Dashboard shows a small picture of its artwork beside the Img Code, or a dashed empty slot when the piece has no artwork yet.<br><br>
@@ -44737,8 +46807,14 @@ function drawElevAll() {
     // inside the threshold as well, so fit-to-window doesn't sit on the edge.
     const SB_RESERVE = 18;   // widest common scrollbar, both axes
     const wsRect = workspace.getBoundingClientRect();
-    const wsW = wsRect.width || workspace.clientWidth;
-    const wsH = wsRect.height || workspace.clientHeight;
+    let wsW = wsRect.width || workspace.clientWidth;
+    let wsH = wsRect.height || workspace.clientHeight;
+    // AN EXPORT IS NEVER LAID OUT SMALLER THAN ON A DESKTOP (19.22). Dimension numbers and
+    // ticks are fixed print sizes, so the smaller the wall is drawn the bigger they print
+    // beside it: an iPad deck printed them ~2x the desktop's. While an export runs the
+    // workspace counts as at least ELEV_EXPORT_MIN_WS (what a 1920x1080 window gives);
+    // a bigger screen is untouched.
+    if (_elevExportFloor > 0) { wsW = Math.max(wsW, ELEV_EXPORT_MIN_WS_W); wsH = Math.max(wsH, ELEV_EXPORT_MIN_WS_H); }
     const pad = _elevWrapPadding();
     const usableW = Math.max(240, wsW - pad.x - SB_RESERVE);
     const usableH = Math.max(240, wsH - pad.y - SB_RESERVE);
@@ -45366,6 +47442,52 @@ function _elevMarqueeUp(e) {
 // #group-dim-layer. Each callout = dashed bbox + width line (above) + height
 // line (left) + measurement labels. Recomputed every drawElevAll so the box
 // tracks frame moves automatically.
+// GROUP DIMS STEP OUT PAST THE SPACING DIMS (19.16). The overall is the outer string, so
+// a group's width line goes above, and its height line left of, every spacing dim
+// already drawn beside the box (its number, and a line parallel to the group line), as
+// measured in the DOM. Lines that CROSS the group line (vertical ones above it, their
+// extension lines, edge gaps running to the ceiling) cannot be stepped over and are
+// not counted, or a ceiling gap would throw the group line off the wall: _spacingAutoPlace lands those just outside the frames, which is exactly where the
+// group line sat (26px out), and the two numbers crashed. A drag adds to the cleared
+// position. Nothing measurable (jsdom, detached) leaves the old 26px.
+const GROUP_DIM_CLEAR_PX = 6;
+function _groupDimObstacles(layer) {
+    const out = [];
+    try {
+        const lb = layer.getBoundingClientRect();
+        const L = document.getElementById('dim-layer');
+        if (L && L.style.display !== 'none') {
+            L.querySelectorAll('.arch-dim, .arch-label-new').forEach(el => {
+                if (el.closest('[data-export-skip]')) return;   // controls, not drawing
+                const r = el.getBoundingClientRect();
+                if (!(r.width > 0 || r.height > 0)) return;
+                const cl = el.classList;
+                // h = blocks the width line only, v = the height line only, '' = both (a number)
+                const ax = cl.contains('arch-dim-h') ? 'h' : cl.contains('arch-dim-v') ? 'v' : '';
+                out.push({ ax, l: r.left - lb.left, r: r.right - lb.left, t: r.top - lb.top, b: r.bottom - lb.top });
+            });
+        }
+    } catch (e) {}
+    return out;
+}
+// Width line: above everything that starts above the box over its span.
+function _groupDimClearTop(obst, x0, x1, boxTop, lineY, fontSize) {
+    const half = (fontSize || 13) / 2 + 3;   // the number is centred on the line
+    obst.forEach(o => {
+        if (o.ax === 'v' || o.r <= x0 || o.l >= x1 || o.t >= boxTop - 1) return;
+        lineY = Math.min(lineY, o.t - half - GROUP_DIM_CLEAR_PX);
+    });
+    return lineY;
+}
+// Height line: left of everything that starts left of the box along its span.
+function _groupDimClearLeft(obst, y0, y1, boxLeft, lineX, fontSize) {
+    const half = (fontSize || 13) / 2 + 3;   // the number is rotated onto the line
+    obst.forEach(o => {
+        if (o.ax === 'h' || o.b <= y0 || o.t >= y1 || o.l >= boxLeft - 1) return;
+        lineX = Math.min(lineX, o.l - half - GROUP_DIM_CLEAR_PX);
+    });
+    return lineX;
+}
 function renderGroupDims() {
     const layer = document.getElementById('group-dim-layer');
     if (!layer) return;
@@ -45374,6 +47496,7 @@ function renderGroupDims() {
     if (typeof dimVisibility !== 'undefined' && !dimVisibility.groupBox) return;
     const dims = getElevGroupDims();
     if (!dims.length) return;
+    const _gdObst = _groupDimObstacles(layer);
 
     const wallH = parseFloat(document.getElementById('wallH').value) || 1;
     // Convert elevation-inch coords → layer pixels. x grows right; the layer's
@@ -45525,7 +47648,7 @@ function renderGroupDims() {
             const wId = 'group-' + entry.id + '-w';
             // Drag offset stored in inches; convert to px (further UP = larger gap).
             const wOffPx = getDimOffset(wId) * elevScale;
-            const lineY = boxTop - OFFSET - Math.max(0, wOffPx);
+            const lineY = _groupDimClearTop(_gdObst, boxLeft, boxLeft + boxW, boxTop, boxTop - OFFSET, fontSize) - Math.max(0, wOffPx);
             const totalGap = boxTop - lineY;
             layer.appendChild(mkLine(boxLeft, lineY, boxW, 0, 'solid'));   // solid dim line
             layer.appendChild(mkTick(boxLeft, lineY, true));
@@ -45537,7 +47660,8 @@ function renderGroupDims() {
             const wLblOffPx = getLabelOffset(wId) * elevScale;
             const wLbl = mkLabel(elevFmtU(bbox.w), boxLeft + boxW / 2 + wLblOffPx, lineY);
             wLbl.style.pointerEvents = 'auto'; wLbl.style.cursor = 'move'; wLbl.style.zIndex = '52';
-            attachGroupLabelDrag(wLbl, 'h', wId, boxW * 0.5 * elevScale);
+            wLbl.setAttribute('data-group-dim', entry.id);
+            attachGroupLabelDrag(wLbl, 'h', wId, boxW * 0.5 * elevScale, entry.id);
             layer.appendChild(wLbl);
             buildGroupArrows(wLbl, 'h', wId, boxW * 0.5 * elevScale);
         }
@@ -45546,7 +47670,7 @@ function renderGroupDims() {
         if (entry.showHeight !== false) {
             const hId = 'group-' + entry.id + '-h';
             const hOffPx = getDimOffset(hId) * elevScale;
-            const lineX = boxLeft - OFFSET - Math.max(0, hOffPx);
+            const lineX = _groupDimClearLeft(_gdObst, boxTop, boxTop + boxH, boxLeft, boxLeft - OFFSET, fontSize) - Math.max(0, hOffPx);
             const totalGap = boxLeft - lineX;
             layer.appendChild(mkLine(lineX, boxTop, 0, boxH, 'solid'));    // solid dim line
             layer.appendChild(mkTick(lineX, boxTop, false));
@@ -45559,7 +47683,8 @@ function renderGroupDims() {
             const hl = mkLabel(elevFmtU(bbox.h), lineX, boxTop + boxH / 2 - hLblOffPx);
             hl.style.transform = 'translate(-50%,-50%) rotate(-90deg)';
             hl.style.pointerEvents = 'auto'; hl.style.cursor = 'move'; hl.style.zIndex = '52';
-            attachGroupLabelDrag(hl, 'v', hId, boxH * 0.5 * elevScale);
+            hl.setAttribute('data-group-dim', entry.id);
+            attachGroupLabelDrag(hl, 'v', hId, boxH * 0.5 * elevScale, entry.id);
             layer.appendChild(hl);
             buildGroupArrows(hl, 'v', hId, boxH * 0.5 * elevScale);
         }
@@ -45568,6 +47693,7 @@ function renderGroupDims() {
         // so the SVG/PNG export skips it (it's an editor control, not artwork).
         const del = document.createElement('div');
         del.className = 'group-dim-delete';
+        del.setAttribute('data-group-dim', entry.id);   // the wall's deselect-on-press must not redraw it away
         del.setAttribute('data-export-skip', '1');
         del.setAttribute('data-html2canvas-ignore', 'true');
         del.textContent = '×';
@@ -45577,8 +47703,14 @@ function renderGroupDims() {
             `width:18px; height:18px; line-height:16px; text-align:center; border-radius:50%;` +
             `background:${color}; color:#fff; font-size:14px; font-weight:bold; cursor:pointer;` +
             `z-index:6; opacity:0; transition:opacity 0.15s; user-select:none; pointer-events:auto;`;
+        const _sel = (selectedGroupDim === entry.id);
+        if (_sel) {
+            rect.style.outline = '1px dashed var(--selected)'; rect.style.outlineOffset = '4px';
+            layer.querySelectorAll('[data-group-dim="' + entry.id + '"]').forEach(l => { l.style.outline = '1px solid var(--selected)'; l.style.outlineOffset = '2px'; });
+            del.style.opacity = '0.95';
+        }
         const showDel = () => { del.style.opacity = '0.95'; };
-        const hideDel = () => { del.style.opacity = '0'; };
+        const hideDel = () => { if (!_sel) del.style.opacity = '0'; };
         del.onmouseenter = showDel;
         del.onmouseleave = hideDel;
         hoverZone.onmouseenter = showDel;
@@ -46061,6 +48193,72 @@ function clearSnapGuides() {
 // ─────────────────────────────────────────────────────────────────────
 // END SNAP-TO-OTHER-FRAMES
 // ─────────────────────────────────────────────────────────────────────
+
+// THE WALL LIST FOLDS AWAY (19.19, toggleElevRail). On an iPad in landscape the three
+// fixed columns leave the wall ~430px; folding the 165px rail to a strip gives it back.
+// A CLASS on the rail, never an inline display: both exports hide the rail with
+// style.display and restore '' afterwards, which a class survives. The drawing fits
+// itself to the workspace it measures, so a redraw is all the resize needs. Per
+// computer (localStorage), never project data.
+const ELEV_RAIL_KEY = 'elevRailCollapsed';
+function _elevRailApply(collapsed) {
+    const rail = document.getElementById('elev-wall-rail');
+    if (!rail) return;
+    rail.classList.toggle('collapsed', !!collapsed);
+    const b = document.getElementById('elevRailToggle');
+    if (b) {
+        b.title = collapsed ? 'Show the wall list' : 'Hide the wall list';
+        b.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+    }
+}
+function _elevRailRestore() {
+    let c = false;
+    try { c = localStorage.getItem(ELEV_RAIL_KEY) === '1'; } catch (e) {}
+    _elevRailApply(c);
+}
+// THE SIDEBAR FOLDS TOO (19.20, toggleElevSidebar): the frame list and wall settings,
+// 425px of an iPad's width. Same rules as the rail: a CLASS, per computer, a redraw.
+// Exports and deck captures UNFOLD it for their duration (_elevSidebarUnfoldForExport),
+// so a printed elevation never depends on how a panel was left.
+const ELEV_SIDEBAR_KEY = 'elevSidebarCollapsed';
+// The export floor (19.22, read in drawElevAll): the workspace an export gets in a
+// 1920x1080 window (measured: rail and dock hidden, sidebar open). A counter, not a flag,
+// so an export inside another never lowers it early.
+const ELEV_EXPORT_MIN_WS_W = 1494, ELEV_EXPORT_MIN_WS_H = 1034;
+let _elevExportFloor = 0;
+function _elevSidebarApply(collapsed) {
+    const sb = document.querySelector('#view-elevation .elev-sidebar');
+    if (!sb) return;
+    sb.classList.toggle('collapsed', !!collapsed);
+    const b = document.getElementById('elevSidebarToggle');
+    if (b) {
+        b.title = collapsed ? 'Show the wall panel' : 'Fold the wall panel away';
+        b.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+    }
+}
+function toggleElevSidebar() {
+    const sb = document.querySelector('#view-elevation .elev-sidebar');
+    if (!sb) return;
+    const c = !sb.classList.contains('collapsed');
+    _elevSidebarApply(c);
+    try { localStorage.setItem(ELEV_SIDEBAR_KEY, c ? '1' : '0'); } catch (e) {}
+    try { drawElevAll(); } catch (e) {}
+}
+// Returns a restore function. Called beside the rail hide in both exports.
+function _elevSidebarUnfoldForExport() {
+    const sb = document.querySelector('#view-elevation .elev-sidebar');
+    if (!sb || !sb.classList.contains('collapsed')) return () => {};
+    sb.classList.remove('collapsed');
+    return () => sb.classList.add('collapsed');
+}
+function toggleElevRail() {
+    const rail = document.getElementById('elev-wall-rail');
+    if (!rail) return;
+    const c = !rail.classList.contains('collapsed');
+    _elevRailApply(c);
+    try { localStorage.setItem(ELEV_RAIL_KEY, c ? '1' : '0'); } catch (e) {}
+    try { drawElevAll(); } catch (e) {}
+}
 
 function makeElevDraggable(el, idx) {
     el.onmousedown = function(e) {
@@ -48661,7 +50859,13 @@ function restoreHiddenDims() {
 // elevation unit for use in rendering math.
 function getDimOffset(id) {
     const off = getElevDimOffsets()[id];
-    if (typeof off !== 'number') return 0;
+    if (typeof off !== 'number') {
+        // Untouched spacing dim: where auto placement put it (19.15), so a drag starts
+        // from the line you can see, not from the gap.
+        const ce = elevations[currentElevIndex];
+        const a = _dimAutoOff.m[id];
+        return (ce && _dimAutoOff.elev === _elevId(ce) && typeof a === 'number') ? a * unitFactor('in', elevUnit) : 0;
+    }
     return off * unitFactor('in', elevUnit); // inches → current unit
 }
 function setDimOffset(id, valueInCurrentUnit) {
@@ -48718,6 +50922,12 @@ let lineToolFirstPt = null;   // {x,y} in inches, the pending first click
 let lineToolFirstAnchor = null; // the tagged anchor of the pending first click
 let selectedCustomLine = null; // id of selected custom line
 let selectedDimId = null;      // id of selected spacing/edge-gap dim
+// THE DELETE KEY REMOVES A SELECTED DIMENSION (19.22). Only the small x did before, so the
+// controller's Delete did nothing to one. buildDimControls records the selected dim's own
+// onDelete here as {id, fn} (each dim type removes itself differently: hide, untick,
+// figure off).
+let _selDimDelete = null;
+let selectedGroupDim = null;   // id of the selected group dimension (19.15), clicked on its number
 
 function getElevCustomLines() {
     const ce = elevations[currentElevIndex];
@@ -49403,9 +51613,147 @@ function toggleAllSpacing(scopeChosen) {
     }
     initElevControls(); drawElevAll(); pushHistory(); _syncMagnetBtn();
 }
+// AUTO PLACEMENT OF SPACING DIMS (19.15). A spacing dim the designer has not dragged
+// (no stored offset) is placed by the drawing, every draw: if its number fits the gap
+// it stays there; if the lifted number would land on a frame, the line moves to the
+// nearest spot where the number, the line and its extension lines clear every frame
+// (and every number placed before it), above or below the pair for a horizontal gap,
+// left or right for a vertical one. When nothing is fully clear (a tight stack hemmed
+// in on both sides) it takes the spot that covers the least frame, which for a stack
+// is the number sitting inside the column over the gap. Derived, never stored: it is
+// redone at the drawn scale (numbers are fixed px, frames scale), so the export gets
+// the placement that is clear at ITS scale. A drag stores an offset and wins from then
+// on; Reset dimension positions hands the dim back. _dimAutoOff holds the result (in
+// inches, current wall only) so getDimOffset and a drag start see the line as drawn.
+const DIM_AUTO_PAD_PX = 4;        // clearance between a placed number and a frame
+let _dimAutoOff = { elev: null, m: {} };
+function _dimLabelPx(container, label, cache) {
+    if (cache && cache[label]) return cache[label];
+    let r = { w: 0, h: 0 };
+    try {
+        const probe = document.createElement('span');
+        probe.className = 'arch-label-new';
+        probe.style.cssText = 'position:absolute; visibility:hidden; left:-9999px; top:0; white-space:nowrap;';
+        probe.innerHTML = label;
+        container.appendChild(probe);
+        r = { w: probe.offsetWidth || 0, h: probe.offsetHeight || 0 };
+        probe.remove();
+    } catch (e) {}
+    if (cache) cache[label] = r;
+    return r;
+}
+function _dimOverlapArea(a, b) {
+    const w = Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0);
+    const h = Math.min(a.y1, b.y1) - Math.max(a.y0, b.y0);
+    return (w > 0 && h > 0) ? w * h : 0;
+}
+// o: { type 'h'|'v', lo, hi (the gap, along the line), base (line position across it
+// at offset 0), band1, band2 (each frame's extent across the line), lbl {w,h} px,
+// obstacles [world rects {x0,y0,x1,y1}], wallW, wallH }. Returns {off, side, rect}
+// (off in elevUnit, rect = the number in world coords) or null to leave the dim alone.
+function _spacingAutoPlace(o) {
+    const S = elevScale;
+    if (!(S > 0) || !(o.lbl.w > 0) || !(o.lbl.h > 0)) return null;   // cannot measure
+    const H = o.type === 'h';
+    // The number's size along and across the line (an upright number on a vertical line
+    // is as tall as the text along it and as wide as the text across it).
+    const la = (H ? o.lbl.w : o.lbl.h) / S, lp = (H ? o.lbl.h : o.lbl.w) / S;
+    if ((H ? o.lbl.w : o.lbl.h) + DIM_LABEL_END_ROOM * 2 <= (o.hi - o.lo) * S) return null;   // fits the gap
+    const lift = _dimLabelLift() / S;
+    const t = ((_dimEndStyle() === 'tick') ? DIM_TICK_LEN / 2 : 1) / S;
+    const pad = DIM_AUTO_PAD_PX / S;
+    const mid = (o.lo + o.hi) / 2;
+    const toW = (a0, a1, p0, p1) => H ? { x0: a0, x1: a1, y0: p0, y1: p1 } : { x0: p0, x1: p1, y0: a0, y1: a1 };
+    const obst = o.obstacles.map(r => ({ x0: r.x0 - pad, y0: r.y0 - pad, x1: r.x1 + pad, y1: r.y1 + pad }));
+    // Covering the edge of one of the two frames being measured is a sliver beside the
+    // gap; covering any other piece (or another number) is worse, so it counts triple.
+    const wt = o.obstacles.map(r => (r.f && (o.own || []).indexOf(r.f) >= 0) ? 1 : 3);
+    const wallP = H ? o.wallH : o.wallW;
+    const bands = [o.band1, o.band2].filter(Boolean);
+    const ovLo = Math.max(...bands.map(b => b.lo)), ovHi = Math.min(...bands.map(b => b.hi));
+    // What a line at P with its number on `side` puts on the wall.
+    const parts = (P, side) => {
+        const lab = side > 0 ? [P + lift, P + lift + lp] : [P - lift - lp, P - lift];
+        const out = [toW(mid - la / 2, mid + la / 2, lab[0], lab[1]), toW(o.lo, o.hi, P - t, P + t)];
+        // Extension lines, from each frame's near edge to the line, on the gap side of it.
+        [[o.band1, o.lo, o.lo + t], [o.band2, o.hi - t, o.hi]].forEach(([b, a0, a1]) => {
+            if (!b) return;
+            if (P > b.hi) out.push(toW(a0, a1, b.hi, P));
+            else if (P < b.lo) out.push(toW(a0, a1, P, b.lo));
+        });
+        return out;
+    };
+    const score = (P, side) => {
+        let s = 0;
+        const ps = parts(P, side);
+        // True cover, plus a quarter for merely crowding inside the padding.
+        ps.forEach(q => o.obstacles.forEach((r, i) => { s += wt[i] * (_dimOverlapArea(q, r) + 0.25 * _dimOverlapArea(q, obst[i])); }));
+        // Off the wall it would fight the outer wall dims: count it double.
+        const lab = ps[0], l0 = H ? lab.y0 : lab.x0, l1 = H ? lab.y1 : lab.x1;
+        s += 2 * (Math.max(0, l1 - wallP) + Math.max(0, -l0)) * la;
+        // A line still inside the column both frames share whose number hangs off the
+        // side of it: that overhang lands in the next gap, where other dims and their
+        // extension lines run. Counted like covering a frame edge, or a number half off
+        // a tight stack scores better than one sitting squarely over its gap.
+        if (bands.length === 2 && ovHi > ovLo && P >= ovLo && P <= ovHi) {
+            s += ((l1 - l0) - Math.max(0, Math.min(l1, ovHi) - Math.max(l0, ovLo))) * la;
+        }
+        return s;
+    };
+    // Walk outward until nothing is hit: from just past both frames, hop over whatever
+    // the number, line or extensions land on.
+    const walk = (side) => {
+        let P = side > 0 ? Math.max(...bands.map(b => b.hi)) + t + pad : Math.min(...bands.map(b => b.lo)) - t - pad;
+        for (let i = 0; i < 24; i++) {
+            const hits = obst.filter(r => parts(P, side).some(q => _dimOverlapArea(q, r) > 0));
+            if (!hits.length) break;
+            P = side > 0 ? Math.max(...hits.map(r => H ? r.y1 : r.x1)) + t
+                         : Math.min(...hits.map(r => H ? r.y0 : r.x0)) - t;
+        }
+        return P;
+    };
+    const cands = [{ P: o.base, side: 1 }, { P: o.base, side: -1 }];
+    if (bands.length) { cands.push({ P: walk(1), side: 1 }); cands.push({ P: walk(-1), side: -1 }); }
+    // The number centred across the column both frames share, inside the gap.
+    if (bands.length === 2 && ovHi > ovLo) {
+        const c = (ovLo + ovHi) / 2;
+        cands.push({ P: c - lift - lp / 2, side: 1 }, { P: c + lift + lp / 2, side: -1 });
+    }
+    // Least cover wins. Within 10% of it, the number that stays inside the column the
+    // two frames share (it does not hang into the next gap, where other dims run), then
+    // the shorter move, then above / right (the default side).
+    const ovw = (lo, hi) => Math.max(0, hi - lo);
+    cands.forEach(c => {
+        c.s = score(c.P, c.side); c.d = Math.abs(c.P - o.base);
+        const lab = parts(c.P, c.side)[0], l0 = H ? lab.y0 : lab.x0, l1 = H ? lab.y1 : lab.x1;
+        c.o = (bands.length === 2 && ovHi > ovLo) ? (l1 - l0) - ovw(Math.max(l0, ovLo), Math.min(l1, ovHi)) : 0;
+    });
+    const sMin = Math.min(...cands.map(c => c.s));
+    const near = cands.filter(c => c.s <= sMin * 1.1 + 1e-6);
+    near.sort((a, b) => (a.o - b.o) || (a.d - b.d) || (b.side - a.side));
+    const best = near[0];
+    if (!best) return null;
+    return { off: best.P - o.base, side: best.side, rect: parts(best.P, best.side)[0] };
+}
 function drawElevTargetedSpacing() {
     const layer = document.getElementById('dim-layer'); layer.innerHTML = '';
     let drawnPairs = new Set();
+    // Auto placement (19.15): frames are obstacles; each placed number joins them.
+    const _ce = elevations[currentElevIndex];
+    _dimAutoOff = { elev: _ce ? _elevId(_ce) : null, m: {} };
+    const _stored = getElevDimOffsets();
+    const _obst = elevFrames.filter(f => f && f.active).map(f => ({ x0: f.x, y0: f.y, x1: f.x + f.w, y1: f.y + f.h, f }));
+    const _lblCache = {};
+    const _auto = (id, o) => {
+        if (typeof _stored[id] === 'number' || isDimHidden(id)) return null;
+        o.lbl = _dimLabelPx(layer, o.label, _lblCache);
+        o.obstacles = _obst; o.wallW = elevResolvedWallW; o.wallH = elevResolvedWallH;
+        const r = _spacingAutoPlace(o);
+        if (!r) return null;
+        _obst.push(r.rect);
+        _dimAutoOff.m[id] = r.off * unitFactor(elevUnit, 'in');
+        return r;
+    };
     elevFrames.forEach(f1 => {
         if (!f1.active || !f1.dimTo) return;
         f1.dimTo.forEach(targetLetter => {
@@ -49419,11 +51767,13 @@ function drawElevTargetedSpacing() {
                         let oTop = Math.max(leftF.y, rightF.y); let oBot = Math.min(leftF.y + leftF.h, rightF.y + rightF.h);
                         let anchorY = oBot > oTop ? oTop + (oBot - oTop)/2 : (leftF.y + leftF.h/2 + rightF.y + rightF.h/2)/2;
                         const hId = 'spacing-h-' + pairId;
+                        const hBand1 = { lo: leftF.y, hi: leftF.y + leftF.h }, hBand2 = { lo: rightF.y, hi: rightF.y + rightF.h };
+                        const hLbl = _spacingLabel(gapX);
+                        const hAuto = _auto(hId, { own: [leftF, rightF], type: 'h', lo: leftF.x + leftF.w, hi: rightF.x, base: anchorY, band1: hBand1, band2: hBand2, label: hLbl });
                         const hOff = getDimOffset(hId);
                         anchorY += hOff;
-                        createElevArchSpacing(leftF.x + leftF.w, anchorY, rightF.x, anchorY, 'h', layer, _spacingLabel(gapX), hId, hOff, {
-                            band1: { lo: leftF.y, hi: leftF.y + leftF.h },
-                            band2: { lo: rightF.y, hi: rightF.y + rightF.h },
+                        createElevArchSpacing(leftF.x + leftF.w, anchorY, rightF.x, anchorY, 'h', layer, hLbl, hId, hOff, {
+                            band1: hBand1, band2: hBand2, autoSide: hAuto ? hAuto.side : 0,
                         });
                     }
                     let botF = f1.y < f2.y ? f1 : f2; let topF = f1.y < f2.y ? f2 : f1;
@@ -49432,11 +51782,13 @@ function drawElevTargetedSpacing() {
                         let oLeft = Math.max(botF.x, topF.x); let oRight = Math.min(botF.x + botF.w, topF.x + topF.w);
                         let anchorX = oRight > oLeft ? oLeft + (oRight - oLeft)/2 : (botF.x + botF.w/2 + topF.x + topF.w/2)/2;
                         const vId = 'spacing-v-' + pairId;
+                        const vBand1 = { lo: botF.x, hi: botF.x + botF.w }, vBand2 = { lo: topF.x, hi: topF.x + topF.w };
+                        const vLbl = _spacingLabel(gapY);
+                        const vAuto = _auto(vId, { own: [botF, topF], type: 'v', lo: botF.y + botF.h, hi: topF.y, base: anchorX, band1: vBand1, band2: vBand2, label: vLbl });
                         const vOff = getDimOffset(vId);
                         anchorX += vOff;
-                        createElevArchSpacing(anchorX, botF.y + botF.h, anchorX, topF.y, 'v', layer, _spacingLabel(gapY), vId, vOff, { rotateLabel: 'auto',
-                            band1: { lo: botF.x, hi: botF.x + botF.w },
-                            band2: { lo: topF.x, hi: topF.x + topF.w },
+                        createElevArchSpacing(anchorX, botF.y + botF.h, anchorX, topF.y, 'v', layer, vLbl, vId, vOff, { rotateLabel: 'auto',
+                            band1: vBand1, band2: vBand2, autoSide: vAuto ? vAuto.side : 0,
                         });
                     }
                     drawnPairs.add(pairId);
@@ -49639,12 +51991,13 @@ function createElevArchSpacing(x1, y1, x2, y2, type, container, label, dimId, of
                 { xv: x1, band: bandOpt.band1 },
                 { xv: x2, band: bandOpt.band2 },
             ];
+            let _up = 0, _dn = 0;
             ends.forEach(({ xv, band }) => {
                 if (atWallX(xv)) return;          // wall side → never
                 if (!band) return;                // no frame band → skip
                 let edgeY = null;
-                if (lineY > band.hi + 0.02) edgeY = band.hi;       // pulled above this frame
-                else if (lineY < band.lo - 0.02) edgeY = band.lo;  // pulled below this frame
+                if (lineY > band.hi + 0.02) { edgeY = band.hi; _up++; }       // pulled above this frame
+                else if (lineY < band.lo - 0.02) { edgeY = band.lo; _dn++; }  // pulled below this frame
                 // else: line still alongside THIS frame → no leader for it
                 if (edgeY === null) return;
                 // The extension line spans frame edge → dimension line, and
@@ -49658,6 +52011,9 @@ function createElevArchSpacing(x1, y1, x2, y2, type, container, label, dimId, of
                     `position:absolute; left:${xv*elevScale}px; bottom:${lo}px; height:${(hi-lo)}px; pointer-events:none;`,
                     'dim-leader'));
             });
+            // Leaders all run down to the frames: number above. All up: number below.
+            if (_up && !_dn) dim.setAttribute('data-lift-force', '1');
+            else if (_dn && !_up) dim.setAttribute('data-lift-force', '-1');
         }
     } else {
         let height = Math.abs(y2 - y1) * elevScale; const left = x1 * elevScale;
@@ -49682,12 +52038,13 @@ function createElevArchSpacing(x1, y1, x2, y2, type, container, label, dimId, of
                 { yv: y1, band: bandOpt.band1 },
                 { yv: y2, band: bandOpt.band2 },
             ];
+            let _rt = 0, _lf = 0;
             ends.forEach(({ yv, band }) => {
                 if (atWallY(yv)) return;
                 if (!band) return;
                 let edgeX = null;
-                if (lineX > band.hi + 0.02) edgeX = band.hi;
-                else if (lineX < band.lo - 0.02) edgeX = band.lo;
+                if (lineX > band.hi + 0.02) { edgeX = band.hi; _rt++; }
+                else if (lineX < band.lo - 0.02) { edgeX = band.lo; _lf++; }
                 if (edgeX === null) return;
                 const ov = _dimExtOverhang();          // overhang on the dim-line end
                 const frameEnd = edgeX * elevScale;
@@ -49697,8 +52054,11 @@ function createElevArchSpacing(x1, y1, x2, y2, type, container, label, dimId, of
                     `position:absolute; bottom:${yv*elevScale}px; left:${lo}px; width:${(hi-lo)}px; pointer-events:none;`,
                     'dim-leader'));
             });
+            if (_rt && !_lf) dim.setAttribute('data-lift-force', '1');
+            else if (_lf && !_rt) dim.setAttribute('data-lift-force', '-1');
         }
     }
+    if (bandOpt.autoSide === 1 || bandOpt.autoSide === -1) dim.setAttribute('data-lift-auto', String(bandOpt.autoSide));
     // Unified 4-way controls (arrows around the number + select + ×). The
     // line's pixel span sets the clamp so the number can't slide past the ends.
     if (dimId) {
@@ -49804,6 +52164,18 @@ function _autoLiftDimLabel(dim, type) {
     // WITH the drag and can be pushed clear. Reset dimension positions clears the pins.
     const pin = parseFloat(dim.getAttribute('data-lift-pin') || '0') || 0;
     if (pin) lineOff = pin;
+    else {
+        // No pin: the side auto placement chose (19.15, _spacingAutoPlace) beats the sign.
+        const auto = parseFloat(dim.getAttribute('data-lift-auto') || '0') || 0;
+        if (auto) lineOff = auto;
+    }
+    // A LINE PULLED CLEAR OF ITS FRAMES PUTS THE NUMBER OUTSIDE (19.15). Its extension
+    // lines run back to the frames, so the number goes on the far side whatever the pin
+    // says: a pin taken at offset 0 said 'above', and a line dragged below the group kept
+    // its number between the line and the frames, over the dashes. createElevArchSpacing
+    // writes data-lift-force only when every leader runs the same way.
+    const force = parseFloat(dim.getAttribute('data-lift-force') || '0') || 0;
+    if (force) lineOff = force;
     // The line becomes continuous: with the number out of flow the two segments
     // split the span evenly again.
     dim.querySelectorAll('.dim-line-segment, .dim-line-segment-v').forEach(s => { s.style.flex = '1 1 50%'; });
@@ -49845,6 +52217,10 @@ function _autoLiftDimLabel(dim, type) {
     }
     return true;
 }
+const DIM_HIT_TOUCH_PX = 28;
+function _isTouchUI() {
+    return !!(typeof document !== 'undefined' && document.documentElement && document.documentElement.classList.contains('touch'));
+}
 function buildDimControls(opts) {
     const { dim, type, id, isSelected, select, getLabelOff, setLabelOff,
             getLineOff, setLineOff, onDelete, spanPx } = opts;
@@ -49853,6 +52229,7 @@ function buildDimControls(opts) {
     const getLiftSide = opts.getLiftSide || null, setLiftSide = opts.setLiftSide || null;
     if (getLiftSide) { const ps = getLiftSide(); if (ps === 1 || ps === -1) dim.setAttribute('data-lift-pin', String(ps)); }
     const sel = isSelected();
+    if (sel && onDelete) _selDimDelete = { id: id, fn: onDelete };
     const lblEl = dim.querySelector('.arch-label-new');
     if (!lblEl) return;
     // ROTATED LABELS. The architectural standard turns a vertical dimension's number
@@ -49909,7 +52286,13 @@ function buildDimControls(opts) {
     lblEl.style.zIndex = '56';
     lblEl.style.cursor = 'pointer';
     lblEl.style.pointerEvents = 'auto';
-    if (sel) dim.style.outline = '1px dashed var(--selected)';
+    // Selected reads at a glance (19.22): the dashed box, and the number ringed.
+    if (sel) {
+        dim.style.outline = '1.5px dashed var(--selected)';
+        dim.style.outlineOffset = '2px';
+        lblEl.style.boxShadow = '0 0 0 2px var(--selected)';
+    }
+    lblEl.title = 'Tap to select this dimension, then Delete (or the x at the end of the line)';
 
     // Click number to select.
     lblEl.addEventListener('mousedown', (e) => {
@@ -50012,9 +52395,11 @@ function buildDimControls(opts) {
     const hit = document.createElement('div');
     hit.setAttribute('data-export-skip', '1');
     hit.setAttribute('data-html2canvas-ignore', 'true');
+    // A finger needs a fatter strip than a mouse to land on a hairline (19.22).
+    const hitPx = _isTouchUI() ? DIM_HIT_TOUCH_PX : 12;
     hit.style.cssText = (type === 'h')
-        ? 'position:absolute; left:0; right:0; top:50%; height:12px; transform:translateY(-50%); cursor:pointer; z-index:40; pointer-events:auto;'
-        : 'position:absolute; top:0; bottom:0; left:50%; width:12px; transform:translateX(-50%); cursor:pointer; z-index:40; pointer-events:auto;';
+        ? 'position:absolute; left:0; right:0; top:50%; height:' + hitPx + 'px; transform:translateY(-50%); cursor:pointer; z-index:40; pointer-events:auto;'
+        : 'position:absolute; top:0; bottom:0; left:50%; width:' + hitPx + 'px; transform:translateX(-50%); cursor:pointer; z-index:40; pointer-events:auto;';
     hit.addEventListener('mousedown', (e) => {
         e.stopPropagation();
         select();
@@ -50032,9 +52417,10 @@ function buildDimControls(opts) {
         del.setAttribute('data-html2canvas-ignore', 'true');
         del.textContent = '×';
         del.title = 'Delete this dimension';
+        const xPx = _isTouchUI() ? 24 : 16;   // finger-sized on a touch screen (19.22)
         del.style.cssText =
-            'position:absolute; width:16px; height:16px; line-height:14px; text-align:center; border-radius:50%;' +
-            'background:var(--dim-color); color:#fff; font-size:13px; font-weight:bold; cursor:pointer;' +
+            'position:absolute; width:' + xPx + 'px; height:' + xPx + 'px; line-height:' + (xPx - 2) + 'px; text-align:center; border-radius:50%;' +
+            'background:var(--dim-color); color:#fff; font-size:' + (xPx - 3) + 'px; font-weight:bold; cursor:pointer;' +
             'z-index:60; opacity:0.95; user-select:none; border:1.5px solid #fff; box-sizing:border-box; pointer-events:auto;' +
             (type === 'h'
                 ? 'left:100%; top:50%; transform:translate(7px,-50%);'   // right end
@@ -50246,10 +52632,18 @@ function buildGroupArrows(lblEl, type, id, halfSpanPx) {
 
 // Slide a group-dim number along its line (h: left/right, v: up/down), clamped
 // to the line span. Stores via the label-offset helper (group-<id>-w/h-lbl).
-function attachGroupLabelDrag(lblEl, type, lblId, halfSpanPx) {
+function attachGroupLabelDrag(lblEl, type, lblId, halfSpanPx, groupId) {
     const clampPx = Math.max(0, halfSpanPx - 12);
     lblEl.addEventListener('mousedown', (e) => {
         e.preventDefault(); e.stopPropagation();
+        // Pressing the number selects the group dim (19.15): Delete removes it, like
+        // every other dimension. Its frames are let go so Delete cannot take them.
+        let _picked = false, _moved = false;
+        if (groupId && selectedGroupDim !== groupId) {
+            selectedGroupDim = groupId; selectedDimId = null; selectedCustomLine = null;
+            elevFrames.forEach(f => { f.selected = false; });
+            _picked = true;
+        }
         const startX = e.clientX, startY = e.clientY;
         const startOff = getLabelOffset(lblId); // current unit
         document.body.style.cursor = 'move';
@@ -50262,13 +52656,15 @@ function attachGroupLabelDrag(lblEl, type, lblId, halfSpanPx) {
             const px = v * elevScale;
             v = Math.max(-clampPx, Math.min(clampPx, px)) / elevScale;
             setLabelOffset(lblId, v);
+            _moved = true;
             drawElevAll();
         };
         const onUp = () => {
             document.removeEventListener('mousemove', onMove);
             document.removeEventListener('mouseup', onUp);
             document.body.style.cursor = '';
-            if (typeof pushHistory === 'function') pushHistory();
+            if (_moved) { if (typeof pushHistory === 'function') pushHistory(); }
+            else if (_picked) drawElevAll();   // a plain click: show the selection
         };
         document.addEventListener('mousemove', onMove);
         document.addEventListener('mouseup', onUp);
@@ -50449,6 +52845,9 @@ async function exportElevPNG(opts) {
     const _rail = document.getElementById('elev-wall-rail');
     const _railDisp = _rail ? _rail.style.display : null;
     if (_rail) _rail.style.display = 'none';
+    // A folded sidebar (19.20) would hand the export a wider workspace: unfold it for the export.
+    const _sbRestore = _elevSidebarUnfoldForExport();
+    _elevExportFloor++;   // laid out at least desktop size (19.22)
     // The tool dock (19.05) takes width off the workspace the same way: out for the export.
     const _dockSl = document.getElementById('elevDockSlot');
     const _dockDisp = _dockSl ? _dockSl.style.display : null;
@@ -50776,6 +53175,8 @@ async function exportElevPNG(opts) {
         // Wall rail back before the final redraw, so it re-fits to the real
         // (narrower) on-screen workspace rather than the export layout.
         if (_rail) _rail.style.display = _railDisp;
+        _sbRestore();
+        _elevExportFloor = Math.max(0, _elevExportFloor - 1);
         if (_dockSl) _dockSl.style.display = _dockDisp;
         // …and the tracing guide, which is authoring UI and belongs back on screen.
         if (_ulLayer) _ulLayer.style.display = _ulDisp;
@@ -51154,6 +53555,9 @@ async function exportElevSVG(opts) {
     const _rail = document.getElementById('elev-wall-rail');
     const _railDisp = _rail ? _rail.style.display : null;
     if (_rail) _rail.style.display = 'none';
+    // A folded sidebar (19.20) would hand the export a wider workspace: unfold it for the export.
+    const _sbRestore = _elevSidebarUnfoldForExport();
+    _elevExportFloor++;   // laid out at least desktop size (19.22)
     // The tool dock (19.05) takes width off the workspace the same way: out for the export.
     const _dockSl = document.getElementById('elevDockSlot');
     const _dockDisp = _dockSl ? _dockSl.style.display : null;
@@ -51519,7 +53923,11 @@ async function exportElevSVG(opts) {
                 const dInches = _frameDataInInches(renderData, elevUnit);
                 const prevShadow = dashOuterShadowsOn;
                 dashOuterShadowsOn = false;
-                const { canvas: _fc } = renderFrameToCanvas(dInches, swatchImg, { dpi: 150, pad: 0 });
+                // The PDF capture fills an empty opening (ELEV_EMPTY_OPENING_FILL), or the
+                // drop shadow under the frame shows through it. Artwork is layered on after,
+                // so "empty" means nothing will be: no picture, or the Artwork guide is off.
+                const _empty = !!_capK && (!f.artworkUrl || (typeof _showArtwork !== 'undefined' && !_showArtwork));
+                const { canvas: _fc } = renderFrameToCanvas(dInches, swatchImg, { dpi: 150, pad: 0, emptyFill: _empty ? ELEV_EMPTY_OPENING_FILL : '' });
                 dashOuterShadowsOn = prevShadow;
                 if (!_fc.width || !_fc.height) throw new Error('zero-size canvas');
                 let canvas = _fc;
@@ -51844,6 +54252,8 @@ async function exportElevSVG(opts) {
         // Rail back and padding un-pinned before the redraw so it re-fits the
         // real on-screen width.
         if (_rail) _rail.style.display = _railDisp;
+        _sbRestore();
+        _elevExportFloor = Math.max(0, _elevExportFloor - 1);
         if (_dockSl) _dockSl.style.display = _dockDisp;
         if (_svgWrap) _svgWrap.style.padding = _svgWrapPadInline;
         elevZoomFactor = oldZoom;

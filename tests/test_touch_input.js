@@ -1,0 +1,655 @@
+// 19.18: A FINGER DRIVES THE MOUSE HANDLERS.
+// Reported: on an iPad nothing could be dragged. Every drag in app.js is a mousedown
+// handler that registers mousemove/mouseup on the document; iOS turns a tap into a click
+// but a finger drag only scrolls and never sends mousemove. _touchInstall turns the
+// finger into those mouse events, deciding drag vs scroll by whether the mousedown
+// handler ARMED a drag. These checks fire real touch events through the installed layer.
+// No regex: patterns written into a test file here lose their backslashes.
+const fs = require('fs');
+const path = require('path');
+const { JSDOM } = require('jsdom');
+const root = path.join(__dirname, '..');
+const APP = fs.readFileSync(path.join(root, 'app.js'), 'utf8');
+const HTML = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+const CSS = fs.readFileSync(path.join(root, 'style.css'), 'utf8');
+const NL = String.fromCharCode(10);
+const results = [];
+const check = (label, fn) => { try { fn(); results.push({ label, ok: true }); } catch (e) { results.push({ label, ok: false, err: e.message }); } };
+
+check('the layer is installed at module scope, ahead of initMasterApp', () => {
+  const at = APP.indexOf(NL + '_touchInstall();');
+  const boot = APP.lastIndexOf(NL + 'initMasterApp();');
+  if (at < 0) throw new Error('_touchInstall() is not called at module scope');
+  if (boot < 0 || at > boot) throw new Error('installed after boot');
+});
+check('touchmove is NOT passive (a drag must be able to stop the scroll)', () => {
+  // 19.24 wraps it so a pinch is routed first; still capture phase, still not passive.
+  if (APP.indexOf("addEventListener('touchmove', (e) => { if (_touchPinch) _touchPinchMove(e); else _touchMove(e); }, { capture: true, passive: false })") < 0)
+    throw new Error('touchmove listener is passive or not in capture phase');
+});
+check('the CSS half: no double-tap zoom, no callout on surfaces, hover controls shown', () => {
+  if (CSS.indexOf('html { touch-action: manipulation; }') < 0) throw new Error('double-tap zoom not disabled');
+  if (CSS.indexOf('-webkit-touch-callout: none') < 0) throw new Error('no callout suppression');
+  const hv = CSS.indexOf('@media (hover: none)');
+  if (hv < 0) throw new Error('no hover-less block');
+  const blk = CSS.slice(hv, CSS.indexOf('}' , CSS.indexOf('.tab-close', hv)) + 1);
+  ['.fb-more', '.art-tools', '.ds-insstrip > button'].forEach(s => {
+    if (blk.indexOf(s) < 0) throw new Error(s + ' stays hidden without a mouse');
+  });
+});
+
+check('the dashboard row handler reads the CLICK (why a tap needs _touchClickMods)', () => {
+  if (APP.indexOf("tr.addEventListener('click', (ev) => {") < 0) throw new Error('row selection moved off click: recheck _touchClickMods');
+  if (APP.indexOf("window.addEventListener('click', _touchClickMods, true);") < 0) throw new Error('the click fixer is not installed');
+});
+check('both exports unfold a folded wall panel and fold it back', () => {
+  if (APP.split('const _sbRestore = _elevSidebarUnfoldForExport();').length - 1 !== 2) throw new Error('an export does not unfold the sidebar');
+  if (APP.split('        _sbRestore();').length - 1 !== 2) throw new Error('an export does not restore the sidebar');
+});
+
+check('ADD TO HOME SCREEN: manifest, a crisp icon and the web-app tags', () => {
+  const man = JSON.parse(fs.readFileSync(path.join(root, 'manifest.webmanifest'), 'utf8'));
+  if (man.display !== 'standalone') throw new Error('manifest display is ' + man.display);
+  if (man.start_url !== './' || man.scope !== './') throw new Error('start_url/scope must be relative (two sites, one tree)');
+  ['icon-180.png', 'icon-512.png'].forEach(f => {
+    const b = fs.readFileSync(path.join(root, f));
+    if (b.readUInt32BE(0) !== 0x89504e47) throw new Error(f + ' is not a PNG');
+    const w = b.readUInt32BE(16), h = b.readUInt32BE(20);
+    if (w + 'x' + h !== f.slice(5, 8) + 'x' + f.slice(5, 8)) throw new Error(f + ' is ' + w + 'x' + h);
+  });
+  const H = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+  ['rel="manifest" href="manifest.webmanifest"', 'rel="apple-touch-icon" href="icon-180.png"',
+   'name="apple-mobile-web-app-capable" content="yes"', 'name="apple-mobile-web-app-title"'].forEach(t => {
+    if (H.indexOf(t) < 0) throw new Error('index.html lacks ' + t);
+  });
+  if (H.indexOf('rel="apple-touch-icon" href="favicon.png"') >= 0) throw new Error('the 32px favicon is still the home-screen icon');
+});
+
+check('the letter legend defaults to 200pt on install AND breaker pages', () => {
+  if (APP.indexOf('const IG_LEGEND_W_DEFAULT = 200;') < 0) throw new Error('no 200pt default');
+  ["typeof g.breakerLegendW === 'number') ? g.breakerLegendW : IG_LEGEND_W_DEFAULT",
+   "typeof g.legendW === 'number') ? g.legendW : IG_LEGEND_W_DEFAULT",
+   "Number(cfg.legendW) : IG_LEGEND_W_DEFAULT"].forEach(t => { if (APP.indexOf(t) < 0) throw new Error('a default still bypasses the constant: ' + t); });
+  [": 170;", "g.breakerLegendW : 150"].forEach(t => { if (APP.indexOf('legendW) ? Number(cfg.legendW) ' + t) >= 0 || APP.indexOf(t + ',') >= 0 && t.indexOf('150') >= 0) throw new Error('old default left: ' + t); });
+});
+check('both exports raise and lower the export floor in step', () => {
+  if (APP.split('    _elevExportFloor++;').length - 1 !== 2) throw new Error('an export does not raise the floor');
+  if (APP.split('        _elevExportFloor = Math.max(0, _elevExportFloor - 1);').length - 1 !== 2) throw new Error('an export does not lower it');
+});
+
+function inApp() {
+  window.__touchDone = (async () => {
+    const out = [];
+    const ok = async (label, fn) => { try { await fn(); out.push({ label, ok: true }); } catch (e) { out.push({ label, ok: false, err: e.message }); } };
+    const host = document.createElement('div');
+    document.body.appendChild(host);
+    const touch = (type, target, x, y, id) => {
+      const ev = new Event(type, { bubbles: true, cancelable: true });
+      const t = { identifier: id || 1, clientX: x, clientY: y, screenX: x, screenY: y, target };
+      Object.defineProperty(ev, 'touches', { value: type === 'touchend' || type === 'touchcancel' ? [] : [t] });
+      Object.defineProperty(ev, 'changedTouches', { value: [t] });
+      target.dispatchEvent(ev);
+      return ev;
+    };
+    // A drag exactly as app.js writes them.
+    const mkDrag = () => {
+      const el = document.createElement('div');
+      const log = [];
+      el.addEventListener('mousedown', (e) => {
+        log.push('down:' + e.clientX + ',' + e.clientY + ':' + e.buttons);
+        const mv = (m) => log.push('move:' + m.clientX + ',' + m.clientY + ':' + m.buttons);
+        const up = (u) => { log.push('up:' + u.clientX + ',' + u.clientY); document.removeEventListener('mousemove', mv); document.removeEventListener('mouseup', up); };
+        document.addEventListener('mousemove', mv);
+        document.addEventListener('mouseup', up);
+      });
+      host.appendChild(el);
+      return { el, log };
+    };
+
+    await ok('EXACT BUG: a finger drag reaches the drag handler as down, moves and up', () => {
+      const { el, log } = mkDrag();
+      touch('touchstart', el, 10, 10);
+      const m1 = touch('touchmove', el, 30, 15);
+      touch('touchmove', el, 60, 40);
+      touch('touchend', el, 60, 40);
+      const want = ['down:10,10:1', 'move:30,15:1', 'move:60,40:1', 'up:60,40'];
+      if (log.join('|') !== want.join('|')) throw new Error('got ' + log.join('|'));
+      if (!m1.defaultPrevented) throw new Error('the page would scroll under the drag');
+    });
+
+    await ok('a drag survives its element being redrawn away (drawElevAll rebuilds frames per move)', () => {
+      const { el, log } = mkDrag();
+      touch('touchstart', el, 0, 0);
+      touch('touchmove', el, 10, 0);
+      el.remove();   // the redraw: later touches go to a node that no longer reaches window
+      touch('touchmove', el, 20, 0);
+      touch('touchmove', el, 30, 0);
+      touch('touchend', el, 30, 0);
+      const want = ['down:0,0:1', 'move:10,0:1', 'move:20,0:1', 'move:30,0:1', 'up:30,0'];
+      if (log.join('|') !== want.join('|')) throw new Error('got ' + log.join('|'));
+    });
+
+    await ok('an event reaching both window and the element counts once', () => {
+      const { el, log } = mkDrag();
+      touch('touchstart', el, 0, 0);
+      touch('touchmove', el, 15, 0);
+      touch('touchend', el, 15, 0);
+      if (log.filter(s => s.indexOf('move:') === 0).length !== 1) throw new Error('got ' + log.join('|'));
+      if (log.filter(s => s.indexOf('up:') === 0).length !== 1) throw new Error('mouseup sent twice: ' + log.join('|'));
+    });
+
+    await ok('document.onmousemove assignment counts as arming a drag', () => {
+      const el = document.createElement('div'); host.appendChild(el);
+      const log = [];
+      el.onmousedown = () => { document.onmousemove = (m) => log.push(m.clientX); document.onmouseup = () => { document.onmousemove = null; document.onmouseup = null; log.push('up'); }; };
+      touch('touchstart', el, 0, 0);
+      const m = touch('touchmove', el, 50, 0);
+      touch('touchend', el, 50, 0);
+      if (log.join(',') !== '50,up') throw new Error('got ' + log.join(','));
+      if (!m.defaultPrevented) throw new Error('scroll not stopped');
+    });
+
+    await ok('a touch on something with no drag scrolls natively and still gets its mouseup', () => {
+      const el = document.createElement('button'); host.appendChild(el);
+      const log = [];
+      el.addEventListener('mousedown', () => log.push('down'));
+      el.addEventListener('mouseup', () => log.push('up'));
+      el.addEventListener('mousemove', () => log.push('move'));
+      touch('touchstart', el, 5, 5);
+      const m = touch('touchmove', el, 5, 80);
+      touch('touchend', el, 5, 80);
+      if (m.defaultPrevented) throw new Error('a plain touch blocked scrolling');
+      if (log.join(',') !== 'down,up') throw new Error('got ' + log.join(','));
+    });
+
+    await ok('form controls are left to the browser', () => {
+      const inp = document.createElement('input'); host.appendChild(inp);
+      let n = 0; inp.addEventListener('mousedown', () => n++);
+      touch('touchstart', inp, 1, 1); touch('touchend', inp, 1, 1);
+      if (n) throw new Error('a synthetic mousedown was sent to an input');
+    });
+
+    await ok('inside a scrolling list, a quick swipe scrolls and the drag closes in place', () => {
+      const list = document.createElement('div'); list.style.overflowY = 'auto';
+      Object.defineProperty(list, 'scrollHeight', { value: 900 });
+      Object.defineProperty(list, 'clientHeight', { value: 200 });
+      host.appendChild(list);
+      const { el, log } = mkDrag(); list.appendChild(el);
+      touch('touchstart', el, 10, 10);
+      const m = touch('touchmove', el, 10, 60);
+      touch('touchmove', el, 10, 120);
+      touch('touchend', el, 10, 120);
+      if (m.defaultPrevented) throw new Error('the swipe was stopped from scrolling');
+      if (log.join('|') !== 'down:10,10:1|up:10,10') throw new Error('got ' + log.join('|'));
+    });
+
+    await ok('inside a scrolling list, a press and hold becomes the drag', async () => {
+      const list = document.createElement('div'); list.style.overflowY = 'auto';
+      Object.defineProperty(list, 'scrollHeight', { value: 900 });
+      Object.defineProperty(list, 'clientHeight', { value: 200 });
+      host.appendChild(list);
+      const { el, log } = mkDrag(); list.appendChild(el);
+      touch('touchstart', el, 10, 10);
+      await new Promise(r => setTimeout(r, TOUCH_HOLD_MS + 60));
+      const m = touch('touchmove', el, 10, 60);
+      touch('touchend', el, 10, 60);
+      if (!m.defaultPrevented) throw new Error('held drag still scrolls');
+      if (log.join('|') !== 'down:10,10:1|move:10,60:1|up:10,60') throw new Error('got ' + log.join('|'));
+    });
+
+    await ok('a drawing surface drags at once even when it overflows', () => {
+      const surf = document.createElement('div'); surf.id = 'dsCenter'; surf.style.overflow = 'auto';
+      Object.defineProperty(surf, 'scrollHeight', { value: 900 });
+      Object.defineProperty(surf, 'clientHeight', { value: 200 });
+      host.appendChild(surf);
+      const { el, log } = mkDrag(); surf.appendChild(el);
+      touch('touchstart', el, 0, 0);
+      const m = touch('touchmove', el, 0, 40);
+      touch('touchend', el, 0, 40);
+      if (!m.defaultPrevented || log.length !== 3) throw new Error('got ' + log.join('|'));
+      surf.remove();
+    });
+
+    await ok('a double tap is a dblclick', async () => {
+      const el = document.createElement('div'); host.appendChild(el);
+      let n = 0; el.addEventListener('dblclick', () => n++);
+      touch('touchstart', el, 20, 20); touch('touchend', el, 20, 20);
+      touch('touchstart', el, 22, 21); touch('touchend', el, 22, 21);
+      await new Promise(r => setTimeout(r, 10));
+      if (n !== 1) throw new Error('dblclick fired ' + n + ' times');
+    });
+
+    await ok('a second finger lets go of the one-finger drag', () => {
+      const { el, log } = mkDrag();
+      touch('touchstart', el, 0, 0);
+      const ev = new Event('touchstart', { bubbles: true, cancelable: true });
+      const a = { identifier: 1, clientX: 0, clientY: 0 }, b = { identifier: 2, clientX: 50, clientY: 50 };
+      Object.defineProperty(ev, 'touches', { value: [a, b] });
+      Object.defineProperty(ev, 'changedTouches', { value: [b] });
+      el.dispatchEvent(ev);
+      if (log[log.length - 1].indexOf('up:') !== 0) throw new Error('drag left open: ' + log.join('|'));
+      touch('touchmove', el, 90, 90, 1);
+      if (log.length !== 2) throw new Error('moves still forwarded after the pinch began');
+    });
+
+    await ok('iOS compatibility mouse events after a touch are swallowed; real mouse is not', () => {
+      const fake = (trusted) => ({ isTrusted: trusted, cancelable: true, stopped: false, prevented: false,
+        stopImmediatePropagation() { this.stopped = true; }, preventDefault() { this.prevented = true; } });
+      _touchCompatUntil = Date.now() + 500;
+      const a = fake(true); _touchSwallowCompat(a);
+      if (!a.stopped) throw new Error('compat mousedown got through: every tap would press twice');
+      const b = fake(false); _touchSwallowCompat(b);
+      if (b.stopped) throw new Error('our own synthetic event was swallowed');
+      _touchCompatUntil = 0;
+      const c = fake(true); _touchSwallowCompat(c);
+      if (c.stopped) throw new Error('a real mouse (no recent touch) was swallowed');
+    });
+
+    await ok('the addEventListener watch is removed after each touch', () => {
+      const before = EventTarget.prototype.addEventListener;
+      const { el } = mkDrag();
+      touch('touchstart', el, 0, 0); touch('touchend', el, 0, 0);
+      if (EventTarget.prototype.addEventListener !== before) throw new Error('prototype left patched');
+    });
+    // ── 19.19 ──
+    await ok('a latched modifier rides on every synthetic mouse event, and lets go when tapped off', () => {
+      const el = document.createElement('div'); host.appendChild(el);
+      const seen = [];
+      el.addEventListener('mousedown', (e) => {
+        seen.push([e.shiftKey, e.ctrlKey, e.metaKey, e.altKey].join());
+        const mv = (m) => seen.push('m' + [m.shiftKey, m.altKey].join());
+        const up = () => { document.removeEventListener('mousemove', mv); document.removeEventListener('mouseup', up); };
+        document.addEventListener('mousemove', mv); document.addEventListener('mouseup', up);
+      });
+      _touchKeyPress('shift'); _touchKeyPress('ctrl'); _touchKeyPress('alt');
+      touch('touchstart', el, 0, 0); touch('touchmove', el, 20, 0); touch('touchend', el, 20, 0);
+      _touchKeyPress('shift'); _touchKeyPress('ctrl'); _touchKeyPress('alt');
+      touch('touchstart', el, 0, 0); touch('touchend', el, 0, 0);
+      if (seen[0] !== 'true,true,true,true') throw new Error('mousedown carried ' + seen[0]);
+      if (seen[1] !== 'mtrue,true') throw new Error('mousemove carried ' + seen[1]);
+      if (seen[2] !== 'false,false,false,false') throw new Error('still latched after tapping off: ' + seen[2]);
+    });
+
+    await ok('the key bar: four keys, latches light, Delete sends the Delete key, its presses stay on the bar', () => {
+      _touchKeysBuild();
+      const bar = document.getElementById('touchKeys');
+      if (!bar || bar.querySelectorAll('.touch-key').length !== 4) throw new Error('bar not built with four keys');
+      const sh = bar.querySelector('[data-key="shift"]');
+      sh.click();
+      if (!sh.classList.contains('active') || sh.getAttribute('aria-pressed') !== 'true' || !_touchMods.shift) throw new Error('Shift did not latch visibly');
+      sh.click();
+      if (sh.classList.contains('active') || _touchMods.shift) throw new Error('Shift did not release');
+      let keys = [], downs = 0;
+      const kd = (e) => keys.push(e.key), md = () => downs++;
+      document.addEventListener('keydown', kd); document.addEventListener('mousedown', md);
+      bar.querySelector('[data-key="del"]').dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+      bar.querySelector('[data-key="del"]').click();
+      document.removeEventListener('keydown', kd); document.removeEventListener('mousedown', md);
+      if (keys.join() !== 'Delete') throw new Error('Delete sent ' + JSON.stringify(keys));
+      if (downs) throw new Error('a press on the bar reached the page (it would clear the selection Delete is for)');
+    });
+
+    await ok('Delete leaves a focused text field alone', () => {
+      const inp = document.createElement('input'); host.appendChild(inp); inp.focus();
+      let n = 0; const kd = () => n++;
+      document.addEventListener('keydown', kd);
+      _touchKeyPress('del');
+      document.removeEventListener('keydown', kd);
+      inp.remove();
+      if (n) throw new Error('Delete fired while typing in a field');
+    });
+
+    await ok('a finger just off a small handle grabs the handle; a big resize box is never a magnet', () => {
+      const box = document.createElement('div'); host.appendChild(box);
+      const handle = document.createElement('div');
+      handle.style.cssText = 'position:absolute; width:8px; height:8px; cursor:nwse-resize;';
+      box.appendChild(handle);
+      const big = document.createElement('div'); big.style.cssText = 'cursor:ew-resize;'; host.appendChild(big);
+      handle.getBoundingClientRect = () => ({ left: 100, top: 100, right: 108, bottom: 108, width: 8, height: 8 });
+      big.getBoundingClientRect = () => ({ left: 0, top: 0, right: 300, bottom: 300, width: 300, height: 300 });
+      box.getBoundingClientRect = () => ({ left: 0, top: 0, right: 104, bottom: 104, width: 104, height: 104 });
+      const efp = document.elementFromPoint;
+      document.elementFromPoint = (x, y) => (x >= 100 && x <= 108 && y >= 100 && y <= 108) ? handle : box;
+      let got = '';
+      handle.addEventListener('mousedown', () => { got = 'handle'; });
+      box.addEventListener('mousedown', (e) => { if (!got) got = 'box'; });
+      try {
+        touch('touchstart', box, 118, 116); touch('touchend', box, 118, 116);   // 10px off the corner
+        if (got !== 'handle') throw new Error('near miss went to ' + got);
+        got = '';
+        touch('touchstart', box, 60, 60); touch('touchend', box, 60, 60);       // far away
+        if (got !== 'box') throw new Error('a far touch was pulled to ' + got);
+        // Covered by something else (a dialog): not a magnet.
+        document.elementFromPoint = () => box;
+        got = '';
+        touch('touchstart', box, 112, 112); touch('touchend', box, 112, 112);
+        if (got !== 'box') throw new Error('a hidden handle was grabbed');
+      } finally { document.elementFromPoint = efp; }
+    });
+
+    await ok('the dashboard preview column stands aside when it cannot fit, and the choice is kept', () => {
+      const iw = Object.getOwnPropertyDescriptor(window, 'innerWidth');
+      const setW = (w) => Object.defineProperty(window, 'innerWidth', { value: w, configurable: true });
+      try {
+        setW(1024);
+        applyDashViewMode(true);
+        if (document.getElementById('dashPreviewCol')) throw new Error('THE BUG: the column squeezes the table at 1024px');
+        if (!_dashWantMode2) throw new Error('the saved choice was dropped');
+        if (document.body.classList.contains('dash-view-2')) throw new Error('mode-2 class left on');
+        setW(1440);
+        applyDashViewMode(_dashWantMode2);
+        if (!document.getElementById('dashPreviewCol')) throw new Error('the column did not come back with room');
+      } finally { if (iw) Object.defineProperty(window, 'innerWidth', iw); else setW(1024); applyDashViewMode(false); }
+    });
+
+    await ok('the wall list folds by a CLASS (exports restore style.display) and is remembered', () => {
+      const rail = document.getElementById('elev-wall-rail');
+      const before = rail.classList.contains('collapsed');
+      toggleElevRail();
+      if (rail.classList.contains('collapsed') === before) throw new Error('did not fold');
+      if (rail.style.display) throw new Error('fold wrote an inline display');
+      if (localStorage.getItem('elevRailCollapsed') !== (before ? '0' : '1')) throw new Error('not remembered');
+      toggleElevRail();
+      if (rail.classList.contains('collapsed') !== before) throw new Error('did not unfold');
+    });
+    // ── 19.20 ──
+    await ok('EXACT BUG: a tap with Shift latched reaches a click handler as a Shift-click (dashboard range select)', () => {
+      const el = document.createElement('div'); host.appendChild(el);
+      const got = [];
+      el.addEventListener('click', (e) => got.push(e.shiftKey + '/' + e.ctrlKey));
+      _touchMods.shift = true; _touchCompatUntil = Date.now() + 500;
+      const fake = { isTrusted: true, target: el, shiftKey: false, ctrlKey: false, altKey: false, detail: 1, clientX: 1, clientY: 1, screenX: 1, screenY: 1,
+        stopped: false, prevented: false, stopImmediatePropagation() { this.stopped = true; }, preventDefault() { this.prevented = true; } };
+      _touchClickMods(fake);
+      _touchMods.shift = false; _touchCompatUntil = 0;
+      if (!fake.stopped || !fake.prevented) throw new Error('the plain click was not replaced');
+      if (got.join() !== 'true/false') throw new Error('handler saw ' + got.join());
+      // Nothing latched: the real click passes untouched (file pickers, links).
+      const plain = Object.assign({}, fake, { stopped: false, stopImmediatePropagation() { this.stopped = true; } });
+      _touchCompatUntil = Date.now() + 500; _touchClickMods(plain); _touchCompatUntil = 0;
+      if (plain.stopped) throw new Error('a click with nothing latched was replaced');
+    });
+
+    await ok('a key is a TAP-to-latch or a HOLD-while-used', () => {
+      _touchMods.shift = false;
+      _touchKeyDown('shift'); _touchKeyUp('shift');
+      if (!_touchMods.shift) throw new Error('a quick tap did not latch');
+      _touchKeyDown('shift'); _touchKeyUp('shift');
+      if (_touchMods.shift) throw new Error('a second tap did not release');
+      _touchKeyDown('shift');
+      if (!_touchMods.shift) throw new Error('not on while held');
+      _touchMarkHeldUsed();          // the other hand dragged meanwhile
+      _touchKeyUp('shift');
+      if (_touchMods.shift) throw new Error('a used hold stayed on after release');
+    });
+
+    await ok('a finger on the controller does not end the one-finger drag on the page', () => {
+      _touchKeysBuild();
+      const key = document.querySelector('#touchKeys [data-key="shift"]');
+      const { el, log } = mkDrag();
+      touch('touchstart', el, 0, 0);
+      touch('touchmove', el, 10, 0);
+      // The thumb lands on Shift: touches now holds both fingers.
+      const ev = new Event('touchstart', { bubbles: true, cancelable: true });
+      const a = { identifier: 1, clientX: 10, clientY: 0, target: el }, b = { identifier: 9, clientX: 5, clientY: 5, target: key };
+      Object.defineProperty(ev, 'touches', { value: [a, b] });
+      Object.defineProperty(ev, 'changedTouches', { value: [b] });
+      key.dispatchEvent(ev);
+      touch('touchmove', el, 30, 0);
+      touch('touchend', el, 30, 0);
+      _touchKeyUp('shift', true); _touchMods.shift = false;
+      if (log.join('|') !== 'down:0,0:1|move:10,0:1|move:30,0:1|up:30,0') throw new Error('got ' + log.join('|'));
+    });
+
+    await ok('joystick directions: dead zone, four ways and diagonals', () => {
+      const d = (x, y) => _touchStickDirs(x, y).join('');
+      if (d(3, 3) !== '') throw new Error('dead zone moved');
+      if (d(30, 0) !== 'r' || d(-30, 2) !== 'l' || d(0, -30) !== 'u' || d(1, 30) !== 'd') throw new Error('four ways wrong');
+      if (d(20, -20) !== 'ru') throw new Error('diagonal is ' + d(20, -20));
+      if (!(_touchStickDelay(TOUCH_STICK_R, 0) < _touchStickDelay(TOUCH_STICK_DEAD + 1, 0))) throw new Error('a full push is not faster');
+    });
+
+    await ok('holding the joystick repeats arrow keys (Shift rides along) and stops on release', async () => {
+      _touchKeysBuild();
+      const stick = document.querySelector('#touchKeys .touch-stick');
+      stick.getBoundingClientRect = () => ({ left: 0, top: 0, width: 90, height: 90, right: 90, bottom: 90 });
+      const keys = [];
+      const kd = (e) => keys.push(e.key + (e.shiftKey ? '+S' : ''));
+      document.addEventListener('keydown', kd);
+      _touchMods.shift = true;
+      touch('touchstart', stick, 45 + 34, 45, 4);
+      await new Promise(r => setTimeout(r, 300));
+      touch('touchend', stick, 45 + 34, 45, 4);
+      const n = keys.length;
+      await new Promise(r => setTimeout(r, 200));
+      document.removeEventListener('keydown', kd);
+      _touchMods.shift = false;
+      if (n < 3) throw new Error('only ' + n + ' steps in 300ms at a full push');
+      if (keys.some(k => k !== 'ArrowRight+S')) throw new Error('sent ' + keys.join());
+      if (keys.length !== n) throw new Error('kept nudging after release');
+    });
+
+    await ok('one joystick push is ONE undo entry', () => {
+      const base = { b: 1 };
+      const saved = undoStack.slice();
+      undoStack.length = 0; undoStack.push({ old: 1 }, base);
+      const s = { base };
+      for (let i = 0; i < 5; i++) { undoStack.push({ step: i }); _touchStickFoldHistory(s); }
+      const ok1 = undoStack.length === 3 && undoStack[1] === base && undoStack[2].step === 4;
+      undoStack.length = 0; saved.forEach(x => undoStack.push(x));
+      if (!ok1) throw new Error('stack is ' + JSON.stringify(undoStack));
+    });
+
+    await ok('folding the item table makes room for the preview column at 1024px', () => {
+      const iw = Object.getOwnPropertyDescriptor(window, 'innerWidth');
+      Object.defineProperty(window, 'innerWidth', { value: 1024, configurable: true });
+      try {
+        _dashTableApply(false);
+        if (_dashColumnFits()) throw new Error('fits with the table open at 1024?');
+        toggleDashTable();
+        if (!_dashTableFolded() || localStorage.getItem('dashTableFolded') !== '1') throw new Error('did not fold / not remembered');
+        if (!_dashColumnFits()) throw new Error('THE ASK: still no room with the table folded');
+        if (_dashTableFloor() !== DASH_TABLE_FOLDED_W) throw new Error('the picture still budgets the open table');
+        toggleDashTable();
+        if (_dashTableFolded()) throw new Error('did not unfold');
+      } finally { if (iw) Object.defineProperty(window, 'innerWidth', iw); applyDashViewMode(false); }
+    });
+
+    await ok('on a touch screen the form is four tabs; Frame shows only the frame section', () => {
+      _dashTabsInit();
+      const bar = document.getElementById('dashFormTabs');
+      if (!bar || bar.querySelectorAll('.frame-tab').length !== 4) throw new Error('no four-tab strip');
+      if (!bar.classList.contains('frame-tabs')) throw new Error('not the shared .frame-tabs strip');
+      setDashFormTab('frame');
+      const pane = document.getElementById('dashRightPane');
+      if (pane.dataset.dtabOn !== 'frame') throw new Error('tab not recorded');
+      if (document.getElementById('frameStyleSection').dataset.dtab !== 'frame') throw new Error('frame section not tagged frame');
+      if (document.getElementById('matWrapper').dataset.dtab !== 'mat') throw new Error('mat not tagged');
+      if (document.getElementById('sec-notes').dataset.dtab !== 'notes') throw new Error('notes not tagged');
+      const itemKids = Array.from(document.getElementById('sec-meta').children).filter(c => c.id !== 'frameStyleSection');
+      if (!itemKids.length || itemKids.some(c => c.dataset.dtab !== 'item')) throw new Error('item fields not tagged item');
+      if (!bar.querySelector('[data-dtab-btn="frame"]').classList.contains('active')) throw new Error('active tab not lit');
+      setDashFormTab('bogus');
+      if (pane.dataset.dtabOn !== 'item') throw new Error('an unknown tab did not fall back to Item');
+    });
+
+    await ok('the wall panel folds by a class, and an export unfolds it for its duration', () => {
+      const sb = document.querySelector('#view-elevation .elev-sidebar');
+      toggleElevSidebar();
+      if (!sb.classList.contains('collapsed') || sb.style.display) throw new Error('did not fold by class');
+      const restore = _elevSidebarUnfoldForExport();
+      if (sb.classList.contains('collapsed')) throw new Error('still folded during the export');
+      restore();
+      if (!sb.classList.contains('collapsed')) throw new Error('not folded again after');
+      toggleElevSidebar();
+      if (sb.classList.contains('collapsed')) throw new Error('did not unfold');
+      if (localStorage.getItem('elevSidebarCollapsed') !== '0') throw new Error('not remembered');
+    });
+    // ── 19.21 ──
+    await ok('EXACT BUG: on a touch screen the frame browser opens with no cursor in the search (no keyboard)', () => {
+      document.documentElement.classList.add('touch');
+      try {
+        openFrameBrowser();
+        const q = document.getElementById('fbSearch');
+        if (!q) throw new Error('browser did not open');
+        if (document.activeElement === q) throw new Error('THE BUG: the search box took focus and would raise the keyboard');
+        // The dialog redraws; focus must not be handed to the next control either.
+        const fb = document.getElementById('frameBrowser');
+        fb.className = fb.className + ' x'; fb.className = fb.className.replace(' x', '');
+        _modalOnOpen(fb);
+        const a = document.activeElement;
+        if (a && fb.contains(a) && ['INPUT', 'SELECT', 'TEXTAREA'].indexOf(a.tagName) >= 0) throw new Error('a redraw moved focus into a field (' + a.id + '), raising the keyboard or a picker');
+        _fbClose();
+      } finally { document.documentElement.classList.remove('touch'); }
+    });
+
+    await ok('with a mouse the search still takes focus (typing straight away)', () => {
+      openFrameBrowser();
+      const q = document.getElementById('fbSearch');
+      const was = document.activeElement === q;
+      _fbClose();
+      if (!was) throw new Error('desktop lost the type-to-search focus');
+    });
+
+    await ok('the frame browser always opens on All frames', () => {
+      _fbState.src = 'project';
+      openFrameBrowser();
+      const src = _fbState.src;
+      const lit = document.querySelector('#frameBrowser .fb-src.active');
+      _fbClose();
+      if (src !== 'all') throw new Error('opened on ' + src);
+      if (!lit || lit.getAttribute('data-fb-src') !== 'all') throw new Error('All frames not lit');
+    });
+
+    await ok('Add artwork: several selected frames take several pictures in letter order, files in name order', () => {
+      const files = _elevArtFileOrder([{ name: 'IMG_0102.jpg' }, { name: 'IMG_0012.jpg' }, { name: 'img_0013.JPG' }]).map(f => f.name);
+      if (files.join() !== 'IMG_0012.jpg,img_0013.JPG,IMG_0102.jpg') throw new Error('file order ' + files.join());
+      const saved = elevFrames.slice();
+      const A = { id: 'zA', letter: 'A', active: true, selected: true }, B = { id: 'zB', letter: 'B', active: true, selected: true }, C = { id: 'zC', letter: 'C', active: true, selected: false };
+      const AA = { id: 'zAA', letter: 'AA', active: true, selected: true };
+      elevFrames.length = 0; elevFrames.push(AA, B, C, A);   // stored out of letter order on purpose
+      B.selected = true; A.selected = true;
+      const order = _elevArtTargets().map(f => f.letter).join();
+      A.selected = false; B.selected = false; AA.selected = false;
+      const none = _elevArtTargets().length;
+      elevFrames.length = 0; elevFrames.push(C);
+      C.selected = false;
+      const lone = _elevArtTargets().map(f => f.letter).join();
+      elevFrames.length = 0; saved.forEach(f => elevFrames.push(f));
+      if (order !== 'A,B,AA') throw new Error('targets ' + order);
+      if (none !== 0) throw new Error('with nothing selected on a busy wall it guessed a frame');
+      if (lone !== 'C') throw new Error('a lone frame was not used without selecting');
+    });
+
+    await ok('Add artwork applies through the same path as a drop, one picture per frame, in order', () => {
+      const real = _elevApplyArtFile, got = [];
+      _elevApplyArtFile = (frame, file, done) => { got.push(frame.letter + '=' + file.name); if (done) done(); };
+      const lefts = [];
+      const rt = _toast; _toast = (t) => lefts.push(t);
+      try {
+        _elevAddArtworkFiles([{ letter: 'A' }, { letter: 'B' }], [{ name: '1.jpg' }, { name: '2.jpg' }, { name: '3.jpg' }]);
+      } finally { _elevApplyArtFile = real; _toast = rt; }
+      if (got.join() !== 'A=1.jpg,B=2.jpg') throw new Error('applied ' + got.join());
+      if (!lefts.length) throw new Error('left-over pictures were dropped silently');
+    });
+
+    await ok('the dock has the Add artwork button and nothing selected says why', () => {
+      const b = document.getElementById('elevArtBtn');
+      if (!b || b.getAttribute('onclick') !== 'elevAddArtwork()') throw new Error('no Add artwork button in the dock');
+      const saved = elevFrames.slice(); elevFrames.length = 0;
+      elevFrames.push({ letter: 'A', active: true }, { letter: 'B', active: true });
+      const msgs = []; const rt = _toast; _toast = (t) => msgs.push(t);
+      try { elevAddArtwork(); } finally { _toast = rt; elevFrames.length = 0; saved.forEach(f => elevFrames.push(f)); }
+      if (!msgs.length) throw new Error('no nudge when nothing is selected');
+    });
+    // ── 19.22 ──
+    await ok('joystick arrows: one exact nudge per tap, held they repeat, and the knob does not start', async () => {
+      _touchKeysBuild();
+      const arrows = document.querySelectorAll('#touchKeys .touch-stick-arrow');
+      if (arrows.length !== 4) throw new Error(arrows.length + ' arrows on the joystick');
+      const keys = []; const kd = (e) => keys.push(e.key);
+      document.addEventListener('keydown', kd);
+      const up = document.querySelector('#touchKeys .touch-stick-arrow-u');
+      touch('touchstart', up, 0, 0, 6); touch('touchend', up, 0, 0, 6);
+      await new Promise(r => setTimeout(r, TOUCH_ARROW_HOLD_MS + 50));
+      const tapN = keys.length;
+      const right = document.querySelector('#touchKeys .touch-stick-arrow-r');
+      touch('touchstart', right, 0, 0, 6);
+      await new Promise(r => setTimeout(r, TOUCH_ARROW_HOLD_MS + TOUCH_ARROW_REPEAT_MS * 2 + 40));
+      touch('touchend', right, 0, 0, 6);
+      const heldN = keys.length - tapN;
+      await new Promise(r => setTimeout(r, 200));
+      document.removeEventListener('keydown', kd);
+      if (tapN !== 1 || keys[0] !== 'ArrowUp') throw new Error('a tap sent ' + JSON.stringify(keys.slice(0, tapN)));
+      if (heldN < 3) throw new Error('a held arrow sent only ' + heldN);
+      if (keys.slice(tapN).some(k => k !== 'ArrowRight')) throw new Error('the knob joined in: ' + keys.join());
+      if (keys.length !== tapN + heldN) throw new Error('kept repeating after release');
+      if (_touchStick) throw new Error('the knob push started under an arrow');
+    });
+
+    await ok('EXACT BUG: Delete removes a selected spacing dimension (only the x did)', () => {
+      let gone = null;
+      _selDimDelete = { id: 'spacing-h-A-B', fn: () => { gone = 'spacing-h-A-B'; } };
+      selectedDimId = 'spacing-h-A-B';
+      const iv = document.getElementById('view-elevation'); const wasD = iv.style.display; iv.style.display = 'flex';
+      try { document.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'Delete', bubbles: true, cancelable: true })); }
+      finally { iv.style.display = wasD; }
+      if (gone !== 'spacing-h-A-B') throw new Error('THE BUG: Delete did nothing to the selected dimension');
+      if (selectedDimId) throw new Error('selection left behind');
+    });
+
+    await ok('a remembered delete for another dimension never runs', () => {
+      let ran = false;
+      _selDimDelete = { id: 'edge-A-floor', fn: () => { ran = true; } };
+      selectedDimId = 'spacing-h-A-B';
+      const iv = document.getElementById('view-elevation'); const wasD = iv.style.display; iv.style.display = 'flex';
+      try { document.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'Delete', bubbles: true, cancelable: true })); }
+      finally { iv.style.display = wasD; selectedDimId = null; _selDimDelete = null; }
+      if (ran) throw new Error('deleted a dimension that was not the selected one');
+    });
+
+    await ok('Delete with a dimension selected leaves a still-selected frame alone', () => {
+      const saved = elevFrames.slice();
+      const F = { id: 'zF', letter: 'A', active: true, selected: true, x: 0, y: 0, w: 10, h: 10 };
+      elevFrames.length = 0; elevFrames.push(F);
+      _selDimDelete = { id: 'spacing-h-A-B', fn: () => {} }; selectedDimId = 'spacing-h-A-B';
+      const iv = document.getElementById('view-elevation'); const wasD = iv.style.display; iv.style.display = 'flex';
+      let n;
+      try { document.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'Delete', bubbles: true, cancelable: true })); n = elevFrames.length; }
+      finally { iv.style.display = wasD; elevFrames.length = 0; saved.forEach(f => elevFrames.push(f)); selectedDimId = null; _selDimDelete = null; }
+      if (n !== 1) throw new Error('the frame was deleted along with the dimension');
+    });
+
+    await ok('an export lays the wall out at least desktop size; a bigger screen is untouched', () => {
+      const saved = _elevExportFloor;
+      try {
+        _elevExportFloor = 0; drawElevAll(); const small = elevScale;
+        _elevExportFloor = 1; drawElevAll(); const exp = elevScale;
+        _elevExportFloor = 0; drawElevAll();
+        if (!(exp > small * 2)) throw new Error('export scale ' + exp + ' vs screen ' + small + ': the floor did not apply');
+      } finally { _elevExportFloor = saved; drawElevAll(); }
+    });
+    host.remove();
+    return out;
+  })();
+}
+
+const dom = new JSDOM(HTML, { url: 'https://example.com/', pretendToBeVisual: true, runScripts: 'outside-only' });
+const { window } = dom;
+window.HTMLCanvasElement.prototype.getContext = () => new Proxy({}, { get: (t, k) => (k === 'measureText' ? (s) => ({ width: String(s || '').length * 4 }) : (k in t ? t[k] : () => {})), set: (t, k, v) => { t[k] = v; return true; } });
+window.HTMLCanvasElement.prototype.toDataURL = () => 'data:image/png;base64,AAAA';
+window.fetch = () => Promise.resolve({ ok: false, json: () => Promise.resolve(null) });
+global.window = window; global.document = window.document; global.navigator = window.navigator;
+const q = console.error, w = console.warn; console.error = () => {}; console.warn = () => {};
+(async () => {
+  try {
+    window.eval(APP + NL + '_autosaveToldUser = true;' + NL + '(' + inApp.toString() + ')();');
+    (await window.__touchDone).forEach(r => results.push(r));
+  } catch (e) { results.push({ label: 'eval', ok: false, err: e.message }); }
+  console.error = q; console.warn = w;
+  let fail = 0;
+  results.forEach(r => { console.log((r.ok ? 'PASS ' : 'FAIL ') + r.label + (r.ok ? '' : ': ' + r.err)); if (!r.ok) fail++; });
+  console.log(NL + '--- Summary ---');
+  console.log(fail ? fail + ' FAILED of ' + results.length : 'ALL PASSED (' + results.length + ')');
+  setTimeout(() => process.exit(fail ? 1 : 0), 50);
+})();

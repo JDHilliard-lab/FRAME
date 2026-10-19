@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
     <title>FRAME - Integrated Workspace</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,7 +11,18 @@
          all modern browsers; apple-touch-icon covers iOS home-screen
          bookmarks. Same file used for both since we only have one image. -->
     <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="apple-touch-icon" href="favicon.png">
+    <!-- 19.21: ADD TO HOME SCREEN opens FRAME as its own full-screen app on an iPad, with no
+         Safari toolbar (a page in a Safari tab cannot hide the toolbar itself). The manifest
+         and the apple-mobile-web-app tags declare that; icon-180 is the home-screen icon
+         (the 32px favicon was blurry there). On dev the title is rewritten to "FRAME dev"
+         by _homeScreenTitle so the two apps can be told apart. -->
+    <link rel="apple-touch-icon" href="icon-180.png">
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="FRAME">
+    <meta name="theme-color" content="#1e1e1e">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <!-- JSZip: vendored locally (lib-jszip.min.js) so the batch ZIP export
          works even when CDNs are unreachable. ~95KB. Used by
@@ -27,7 +38,7 @@
          anything driven by a new CSS rule is simply absent. That is exactly how the
          gradient-painted dashes went missing on screen while still exporting fine
          from the JS side. -->
-    <link rel="stylesheet" href="style.css?v=19.12">
+    <link rel="stylesheet" href="style.css?v=19.34">
 </head>
 <body>
 <!-- BOOT COVER (18.17): the first thing painted, so the dashboard behind it never flashes
@@ -35,7 +46,7 @@
      after 6s by CSS alone if app.js never gets that far. -->
 <div id="bootCover" class="boot-cover" aria-hidden="true"></div>
 
-<div style="display: flex; flex-direction: column; height: 100vh; width: 100%; overflow: hidden;">
+<div id="appShell" style="display: flex; flex-direction: column; height: 100vh; width: 100%; overflow: hidden;">
     
     <div class="app-top-nav">
         <div class="nav-brand" style="padding: 0 20px; border-right: 1px solid var(--border-color); margin-right: 10px; display:flex; align-items:center; height:100%;">
@@ -106,6 +117,8 @@
 
         <div id="view-dashboard" class="view-container active">
             <div class="dash-left-pane">
+                <!-- 19.20: folds the item table to a strip so the preview column fits beside the form (toggleDashTable). -->
+                <button class="pane-fold-btn dash-table-toggle" id="dashTableToggle" type="button" onclick="toggleDashTable()" title="Fold the item list away" aria-expanded="true"><svg class="svg-icon" viewBox="0 0 24 24" width="14" height="14"><path d="M15 6l-6 6 6 6"/></svg></button>
                 <div class="top-grey-section">
                     <div class="global-meta" style="padding: 8px 20px 6px;">
                         <div><label>Project Name</label><input type="text" id="g_projName" value="Project X"></div>
@@ -116,7 +129,7 @@
                         <div><label>Attn:</label><input type="text" id="g_attn" value="PM"></div>
                         <div><label>Delivery</label><input type="text" id="g_delivery" value="TBD"></div>
                     </div>
-                    <div class="pane-header" style="border-top: 1px solid var(--border-color); border-bottom: none; padding: 6px 20px;">
+                    <div class="pane-header dash-toolbar" style="border-top: 1px solid var(--border-color); border-bottom: none; padding: 6px 20px;">
                         <!-- 18.52: THREE BUTTONS AND THREE MENUS. Thirteen equal-weight buttons in two rows
                              made the one you use most (+ Add Item) look like everything else. The rarer jobs
                              are grouped by what they do (openDashMenu): Edit, Import, Export. -->
@@ -543,6 +556,8 @@
 
         <div id="view-elevation" class="view-container">
             <div class="elev-sidebar">
+                <!-- 19.20: folds the wall panel to a strip so the wall gets the width (toggleElevSidebar). -->
+                <button class="pane-fold-btn elev-sidebar-toggle" id="elevSidebarToggle" type="button" onclick="toggleElevSidebar()" title="Fold the wall panel away" aria-expanded="true"><svg class="svg-icon" viewBox="0 0 24 24" width="14" height="14"><path d="M15 6l-6 6 6 6"/></svg></button>
                 <div class="elev-sidebar-header">
                     <!-- RETURN BAR. Filled by _elevSyncReturnBtn only when you arrived here from a
                          deck page, so it is absent the rest of the time rather than parked
@@ -898,6 +913,8 @@
                             </div>
                         </div>
                     </div>
+                    <!-- 19.21: the tap way to put a picture in a frame (dropping a file needs a mouse). -->
+                    <button type="button" id="elevArtBtn" class="ds-dock-btn" onclick="elevAddArtwork()" title="Add artwork: put a picture in the selected frame. Select several frames to add several pictures, in letter order."><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="1"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 9"/></svg></button>
                     <button type="button" class="ds-dock-btn" onclick="autoElevRelabel()" title="Sort A&ndash;Z: re-letter the frames by position, left to right"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v16M3 17l3 3 3-3M14 4h7l-7 7h7M14 13h7l-7 7h7"/></svg></button>
                     <button type="button" class="ds-dock-btn" id="alignBtn" onclick="openAlignmentDialog()" title="Align &amp; space: equal gaps, align edges and distribute the selected frames"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h12M3 12h18M3 18h9"/></svg></button>
                     <button type="button" class="ds-dock-btn" id="groupDimBtn" onclick="createGroupDimFromSelection()" title="Group dimension: a dashed box with width and height around the selected frames"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="12" stroke-dasharray="3 2"/><line x1="3" y1="3" x2="21" y2="3"/><line x1="3" y1="1.5" x2="3" y2="4.5"/><line x1="21" y1="1.5" x2="21" y2="4.5"/></svg></button>
@@ -1003,6 +1020,8 @@
                  lookup is unchanged, but drops the .nav-tabs class, which
                  carried the old horizontal overflow rules. -->
             <div class="elev-wall-rail" id="elev-wall-rail">
+                <!-- 19.19: folds the rail to a strip so the wall gets the width (toggleElevRail). -->
+                <button class="elev-rail-toggle" id="elevRailToggle" type="button" onclick="toggleElevRail()" title="Hide the wall list" aria-expanded="true"><svg class="svg-icon" viewBox="0 0 24 24" width="14" height="14"><path d="M9 6l6 6-6 6"/></svg></button>
                 <div id="nav-tabs-container"></div>
                 <button class="nav-add-tab" onclick="addNewElevationTab()">+ Add Wall</button>
             </div>
@@ -1083,7 +1102,7 @@
                     <span style="flex:1;"></span>
                     <span id="dsSelHint" style="font-size:var(--fs-65); color:var(--text-muted);">Select a box to style it · double-click to edit · drag to move</span>
                 </div>
-                <div style="flex:1; display:flex; min-height:0;">
+                <div id="dsPagesRow" style="flex:1; display:flex; min-height:0;">
                     <div id="dsRail" style="width:200px; flex-shrink:0; border-right:1px solid var(--border-color); overflow-y:auto; padding:12px; background:var(--bg-panel);"><!-- thumbnails --></div>
                     <div id="dsDockLeftSlot" class="ds-dock-slot ds-dock-slot-left">
                         <div id="dsToolDock" class="ds-dock vert" role="toolbar" aria-label="Page tools">
@@ -1700,13 +1719,23 @@
         <div style="padding:14px 18px; border-bottom:1px solid var(--border-color); display:flex; align-items:center; justify-content:space-between;">
             <div>
                 <h3 style="margin:0; font-size:var(--fs-105); color:var(--text-strong);">Thank You — contacts</h3>
-                <p style="margin:2px 0 0; font-size:var(--fs-70); color:var(--text-muted);">These appear on the Thank You page. Add or remove people as needed.</p>
+                <p style="margin:2px 0 0; font-size:var(--fs-70); color:var(--text-muted);">The people on this project’s Thank You page, in print order. Pick them from the company directory, and save your usual team as your default so new projects start with it.</p>
             </div>
             <button data-modal-close class="action-btn" style="width:auto; height:30px; padding:0 16px; font-size:var(--fs-75);" onclick="closeContactsEditor()">Done</button>
         </div>
-        <div id="contactsRows" style="flex:1; overflow-y:auto; padding:16px 18px;"><!-- contact rows --></div>
-        <div style="padding:12px 18px; border-top:1px solid var(--border-color);">
+        <div style="flex:1; overflow-y:auto; padding:16px 18px;">
+            <div id="contactsRows"><!-- contact rows --></div>
+            <div id="contactsDirectory" style="display:none; margin-top:10px; border:1px solid var(--border-color); border-radius:var(--r-4); padding:8px;">
+                <input id="contactsDirSearch" type="text" placeholder="Search the company directory" oninput="_contactsDirQuery = this.value; _contactsDirRender();" style="width:100%; box-sizing:border-box; height:30px; font-size:var(--fs-75); padding:0 8px; margin-bottom:6px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:var(--r-4);">
+                <div id="contactsDirList" style="max-height:240px; overflow-y:auto;"></div>
+            </div>
+        </div>
+        <div style="padding:12px 18px; border-top:1px solid var(--border-color); display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+            <button id="contactsDirBtn" class="action-btn btn-secondary" style="width:auto; height:32px; padding:0 14px; font-size:var(--fs-75);" onclick="toggleContactsDirectory()">+ From directory</button>
             <button class="action-btn btn-secondary" style="width:auto; height:32px; padding:0 14px; font-size:var(--fs-75);" onclick="addContact()">+ Add contact</button>
+            <span style="flex:1;"></span>
+            <button id="contactsUseDefaultBtn" class="action-btn btn-secondary" style="width:auto; height:32px; padding:0 14px; font-size:var(--fs-75);" onclick="useMyDefaultContacts()">Use my default</button>
+            <button class="action-btn btn-secondary" style="width:auto; height:32px; padding:0 14px; font-size:var(--fs-75);" onclick="saveMyDefaultContacts()" title="New projects you start on this computer begin with these people">Save as my default</button>
         </div>
     </div>
 </div>
@@ -2190,9 +2219,9 @@
      FRAME_HTML_VERSION is what this file EXPECTS. app.js compares it with
      APP_VERSION at boot and says so if the two disagree, because the query
      string alone cannot help once a browser has already cached the pair. -->
-<script>window.FRAME_HTML_VERSION = '19.12';</script>
-<script src="templates.js?v=19.12"></script>
-<script src="app.js?v=19.12"></script>
+<script>window.FRAME_HTML_VERSION = '19.34';</script>
+<script src="templates.js?v=19.34"></script>
+<script src="app.js?v=19.34"></script>
 
 </body>
 </html>
