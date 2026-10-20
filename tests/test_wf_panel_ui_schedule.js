@@ -1025,7 +1025,9 @@ const path = require('path');
       if (body.indexOf('_elevPrimeActive; i++') < 0) throw new Error('the wait is not a loop on the flag');
       // Bounded, so a stuck flag degrades to the old behaviour rather than hanging a
       // build with no way out.
-      if (body.indexOf('i < 60') < 0) throw new Error('the wait is unbounded');
+      // 19.42: longer during an export (it cancels the pass on the way in, so this is one
+      // wall), still bounded either way.
+      if (body.indexOf('i < (_exporting ? 600 : 60)') < 0) throw new Error('the wait is unbounded');
       // A cancel still gets out.
       if (body.slice(body.indexOf('&& _elevPrimeActive) {')).indexOf('_pdfCheckCancel') < 0) {
         throw new Error('Cancel cannot interrupt the wait');
@@ -1033,7 +1035,10 @@ const path = require('path');
       // And the batch may have filled this very key on its way past.
       if (body.indexOf('cap = _igCapCache[capKey] || cap;') < 0) throw new Error('it does not re-read the cache after waiting');
       // The suppressor itself stays: a THUMBNAIL render must still not steal the view.
-      if (body.indexOf('!_igNoCapture && !_elevPrimeActive') < 0) throw new Error('the original guard was removed rather than preceded');
+      // 19.43: the suppressor reads through _noCap, which drops the THUMBNAIL flag only
+      // while an export owns the captures; outside one a thumbnail still cannot capture.
+      if (body.indexOf('const _noCap = _igNoCapture && !_exporting;') < 0) throw new Error('the thumbnail suppressor is gone');
+      if (body.indexOf('!_noCap && !_elevPrimeActive') < 0) throw new Error('the original guard was removed rather than preceded');
     });
 
     __check('the schedule prints in the same unit convention as the spec rows above it', () => {

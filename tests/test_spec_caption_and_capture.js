@@ -70,7 +70,11 @@ const path = require('path');
       });
       const i = S.indexOf('async function _captureElevWithGuides');
       const body = S.slice(i, S.indexOf('async function _drawInstallGuidePage', i));
-      if (body.indexOf("toDataURL('image/png')") >= 0) throw new Error('the capture emits a PNG data URL again');
+      // 19.43: the capture also carries the scale figure as its own small transparent PNG
+      // (drawn through _addPngImage); the PICTURE itself must stay JPEG.
+      if (body.indexOf("dataUrl: out.toDataURL('image/jpeg'") < 0) throw new Error('the capture emits a PNG data URL again');
+      if (body.split("toDataURL('image/png')").length - 1 > 1) throw new Error('a second PNG crept into the capture');
+      if (body.indexOf("person = { png: pc.toDataURL('image/png')") < 0) throw new Error('the only PNG must be the figure layer');
       if (body.indexOf("toDataURL('image/jpeg', _capQ.q)") < 0) throw new Error('the capture no longer emits a JPEG at the quality setting');
       // Every placement must agree on the format; a mismatch draws nothing at all.
       const j = S.indexOf('async function _drawInstallGuidePage');
@@ -167,10 +171,11 @@ const path = require('path');
       const i = S.indexOf('async function _drawInstallGuidePage');
       const body = S.slice(i, i + 40000);
       if (/drawCaption\\('Elevation', ex, /.test(body)) throw new Error('a caption is still left-aligned to the image edge, outside the wall dimension');
-      if (body.indexOf("drawCaption('Elevation', ex + ew, yBot - 2, 'right')") < 0) throw new Error('expected the caption right-aligned to the image right edge');
-      // Both elevation layouts (elevOnly and elevPlan) must agree.
-      const n = (body.match(/drawCaption\\('Elevation', ex \\+ ew[^)]*'right'\\)/g) || []).length;
-      if (n < 2) throw new Error('only ' + n + ' of the elevation layouts right-aligns its caption');
+      // 19.41: things DO sit right of the wall (tick ends, a figure beside it), so the
+      // image's right edge is not the wall's corner. The caption ends on the wall's right
+      // edge as reported by the capture (_igPlaceElev's wallR), in both layouts.
+      if (body.split("drawCaption('Elevation', _wa.wallR, yBot - 2, 'right')").length - 1 !== 2) throw new Error('expected the caption right-aligned to the wall right edge in both layouts');
+      // Both elevation layouts (elevOnly and elevPlan) must agree (counted above, 19.41).
       // The helper has to be able to do it at all.
       const j = S.indexOf('function _specThumbCaption');
       if (S.slice(j, j + 600).indexOf("align: 'right'") < 0) throw new Error('_specThumbCaption cannot right-align');
