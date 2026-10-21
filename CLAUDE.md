@@ -2060,6 +2060,106 @@ run but passes alone is usually load timing: rerun before chasing it.
   installed in every open path (`_readProjectText`, autosave restore, `_versionRestore`); they
   ran before it, against the previous project's editorial.
 
+- **ONE BREAKER PER WALL (19.44, `_breakerWallShare`, `_breakerWallOf`).** Units whose wall
+  (most members) is the same share one breaker: the FIRST in the shared `units` array earns it
+  (stateless, like the catalogue mockup), `br.units` lists the peers, `_breakerNameFor` joins
+  their codes (`ART.10AB / ART.11`), the key stays `elevgrp:<first unit key>`. Manual groups,
+  catalogue units and skipped flat-only units take no part. Memo hangs off the function.
+- **CODES THAT HANG AS ONE SET ARE SUGGESTED, NEVER REGROUPED (19.44).** `_codesSetSuggestions`
+  (same wall, same prefix, every piece hung only there, edge gap <= `CODE_SET_GAP_IN` 12" in
+  inches), shown in Preflight (warn, Make set / Keep apart / Wall) and on the wall
+  (`#wallSetHint`, `_elevSetHintSync`, top of `initElevControls`). `_codesJoinSet` (no history;
+  `_codesJoinSetNow` is the gesture) re-letters in code order via temp ids, then `_codesSettle`.
+  Keep apart = `editorialContent.codeSetsApart` (row-id lists), kept current by `applyIdRename`.
+  **A wall NAMED FOR EXACTLY ITS CODES follows them** (`_wallNamesFollowCodes`, wraps the
+  renumber in `_codesSettle` and the join; `_wallCodeHead` parses `ART.8A / 8B / 9 | Loc`);
+  any other name is never touched.
+- **PREFLIGHT WEARS ITS RESULT (19.44, `_pfBadgeSchedule` / `_pfBadgePaint`, `PF_BADGE_BTNS`).**
+  `data-pf` = err / warn / ok + `data-pf-n` count on every Preflight button; spelling never
+  colours it. Re-run debounced off `scheduleAutosave`, only while the deck view is showing
+  (stale otherwise, caught up by `_dsDockSync`); `_pfBadgeRunning` ignores the autosaves its own
+  page-list build triggers. **Preflight must stay READ-ONLY** (it runs in the background now):
+  `_dsSpellIgnoreList` no longer seeds `spellIgnore` (the guided tour test caught it).
+
+- **THE SET-OUT IS PER WALL (19.45, `_elevHangOn`, `_elevWallClOn`, `_elevBlockCLs`).** The Hang / CL
+  toggle stays deck-wide; `elev.hangGuide === false` drops hang line, AFF dim and target on that
+  wall; `block.cl` draws `.ctx-cl-guide` (a `center-guide`, dashed, label `_elevBlockCLLabel` =
+  "CL CREDENZA") in `#guide-layer`; the wall CL is on unless a block carries a CL, and
+  `elev.wallCL` true/false overrides (stored only when it differs from that default). UI is the
+  Guides tab's THIS WALL block (`#elevWallGuides`, `_elevWallGuidesSync`, top of
+  `initElevControls`) and a CL button per context row. **The notes follow the wall:**
+  `_installNoteLines(elev)`; the `aff` tick prints `_installNoteSetOut(elev)` (hang sentence, or
+  "dimensions shown" when off, plus a line per block CL); `group` is dropped when hang is off.
+  `elev` is threaded through `_installNoteFit` / `_installNoteBoxH` / `_drawInstallNoteBox` (an
+  argument, never a module flag: the renderer awaits). No `elev` = the deck-wide panel list.
+- **CANVAS ELEVATIONS DRAW CONTEXT BLOCKS (19.45, `_ctxDrawToCanvas`)**, after the frames (they
+  occlude), art via `_ctxArtSvg` with `_ctxInkHex()` and explicit width/height, rasterised by
+  `_loadImg`. That is the spec-page thumbnail path (`renderElevationToCanvas`).
+- **GROUP A/B/C ART IS RIGHT-ANCHORED (19.45)**: the as-hung branch of `_drawSpecSetPageBody` puts
+  the group's right edge on `regX + regW`, the elevation thumbnail's right edge.
+
+- **A THUMBNAIL ROW FOLLOWS THE BOX, NEVER THE DRAWING (19.46).** The floorplan square and the
+  frame strip take the elevation BOX's height: per-piece `_elevDrawn = {y: boxY0, h: boxH}` with
+  the box from `_specThumbBox` (4:3 at the template width, bottom on the template line); group
+  `_thumbBox.th = thH` (band height). A long wall draws shorter inside. `test_spec_thumb_size`.
+- **THE WALL IS ALWAYS IN THE CAPTURE CROP (19.46):** `boxes.wall` from `exportElevSVG`, first in
+  `_CAP_BASE_BOXES`. The wall outline is an op with no guide, so a crop that only reached the
+  wall through a spanning guide (the hang line) mis-scaled every hang-off wall.
+- **Canvas context art is weighted for the PRINTED size** (`ctxLinePx = cw / 260` in
+  `renderElevationToCanvas`), and loads through `_loadImgRaw` (`_loadImg`'s cache keys on
+  length + tail, identical for every block SVG).
+
+- **FREE LINES ARE `elev.marks` (19.47, `renderMarks`, `toggleMarkTool`, key L, `#markToolBtn`).**
+  `{id, a, b, arrow: none|end|both, dash, label}`; ends are measure-tool anchors (`stripAnchor` /
+  `resolveStoredAnchor`), so they follow frames and blocks and free ends are inches. Drawn in
+  `#mark-layer` (always shown, not a guide): the stroke is a `data-svg-passthrough` `<svg>` (vector,
+  angled), the LABEL is a plain text element (an svg `<text>` inside a passthrough is walked and
+  prints twice). Hit stroke, end handles and the `.mark-pop` strip are `data-export-skip`.
+  Registered in `annotationLayers`, the bounds list, `_CAP_BASE_BOXES` and `CAT_WALL_DEEP` (skipped on
+  the layout hop like customLines). One line then back to Select, selected. Delete/Escape branches sit
+  before the custom-line ones; the frame Delete returns while `selectedMark`.
+- **KEEP CLEAR (19.47, `_ctxAvoid`, `_elevClashes`, `renderClashMarks`).** `b.avoid` boolean wins, else
+  the preset's `avoid` (only the Keep clear library group): existing thermostats did not change.
+  Hatch kind `'avoid'` in `_ctxFillOps` (the DOM fill the export reuses) and in `_ctxDrawToCanvas`.
+  Clash marks are screen-only (`data-export-skip` + html2canvas-ignore); Preflight warns with a Wall
+  button (`it.wall` without `it.set`).
+- **NOTES FOR ONE PAGE LIVE ON THE WALL (19.47):** `elev.notesOff` ('std:key' / 'c:id') and
+  `elev.wallNote`, read by `_installNoteLines(elev)`; panel `_dsPageNotesInto` (from
+  `_dsInstallNotesInto`, wall = `elevations[desc._elevIdx]`). Both are EXCLUDED from
+  `_elevCaptureSignature` (text beside the drawing must not recapture every wall).
+
+- **LINE KINDS (19.48, `MARK_KINDS`, `markKind`, `openMarkKinds` flyout `#markKindList`).** `m.kind`:
+  `line` (absent = line), `cl` (one x-anchor, full height, label CL at the top inside the wall),
+  `clmid` (two x-anchors, CL at the midpoint), `level` (one y-anchor, full width). The non-line
+  kinds store ONLY anchors; `_markEnds(m)` derives the ends from the wall every draw. One-axis
+  snapping is `_markAxisAt` / `_markAxisTargets` (centres and edges of frames, blocks, wall;
+  `MARK_SNAP_PX`, a centre wins a near tie). L arms the last kind; picking a kind always arms.
+- **AN EXPORT-SKIPPED ELEMENT TAKES ITS SUBTREE WITH IT (19.48).** `exportElevSVG`'s `walk` skips
+  `data-export-skip` children BEFORE `emitEl` and does not descend; emitEl alone skipped only
+  the element, so a selected line's settings strip and the clash tag printed.
+
+- **DECK STUDIO TABS ARE ICONS (19.49, `.frame-tab-icon`).** `dsTabBtnProject/Pages/Templates` and
+  `dsToolsBtnPage/Templates/Layers` carry an svg (the `PHONE_DECK_TABS` glyphs, a page, layers) and
+  their name as `title` + `aria-label`; code only toggles `.active`, never their text.
+  **`#dsToolsPageBody` has NO top padding** (`padding:0 16px 16px` + a 16px `::before` spacer): the
+  sticky `.ds-tools-sticky` pins at the scrollport edge, and a padded top let scrolled content show
+  in the band above it.
+
+- **THE RAIL'S PINNED BAR OUTRANKS THE RAIL (19.50, `#dsRailBar`, `RAIL_BAR_Z` = 20).** Cells' side
+  + / - buttons are z 7; at z 5 they scrolled over the bar and took the rebuild button's click
+  (added/removed pages). Every thumbnail box is `isolation:isolate` (and the selected-page mirror
+  wrap too), so a preview's own high z (element pages' z 8000 overlay) stays inside it. Anything
+  new in the rail stays below `RAIL_BAR_Z`; `test_rail_bar_on_top` renders the rail and checks.
+
+- **PROJECT HANGS CARRY `proj` (19.51).** `asDrawn` presets are grouped into one picker section per
+  `p.proj` (absent = 'Ford Engineering Lab', the original set); Ford Salt Lake City is `slc-*`, made
+  from its install file (2 and 3 piece hangs too, incl. codes that hang together like 12 / 13 / 14).
+  Tests filter the Engineering Lab ones as `asDrawn && !proj`.
+- **NO CATEGORY READS AS A "?" (19.51, `.fp-cat-wrap` / `.fp-cat-q`).** The Items row's chip sits in a
+  wrapper so a "?" can overlay it (pointer-events none); `FP_ITEM_COLS.cat` is 50 for the CATEGORY head.
+  19.52: the chip is a `FP_CAT_CHIP` (22px) square, the height of the line / frames buttons, so the
+  three share top and bottom and the row's 5px gap; it need not sit centred under its heading.
+
 ## Design principles used here
 - Prefer dynamic behaviour over manual controls: if a layout element won't fit, drop
   it automatically rather than exposing a control that can produce broken output.
