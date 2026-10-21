@@ -6,7 +6,7 @@
 // Update APP_VERSION on each release. APP_BUILD is derived from the URL (see
 // below) — the version pill turns orange on the dev site to make it obvious at a
 // glance which build you are looking at.
-const APP_VERSION = '19.43';
+const APP_VERSION = '19.52';
 const IDML_STYLE_SEED = [{"id":"sty_cover_title","name":"Cover Title","group":"Cover","font":"display","size":0.1111,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"upper","track":0.01},{"id":"sty_cover_title_centered","name":"Cover Title (Centered)","group":"Cover","font":"display","size":0.1111,"bold":true,"italic":false,"color":"#ffffff","align":"center","caps":"upper","track":0.01},{"id":"sty_cover_location","name":"Cover Location","group":"Cover","font":"serif","size":0.0222,"bold":false,"italic":false,"color":"#ffffff","align":"right","caps":"none","track":0.0},{"id":"sty_cover_project_code","name":"Cover Project Code","group":"Cover","font":"serif","size":0.0222,"bold":false,"italic":false,"color":"#ffffff","align":"right","caps":"none","track":0.0},{"id":"sty_toc_section_title","name":"TOC Section Title","group":"Table of Contents","font":"serif","size":0.0241,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.0},{"id":"sty_toc_entry","name":"TOC Entry","group":"Table of Contents","font":"serif","size":0.0185,"bold":false,"italic":false,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_section_heading","name":"Section Heading","group":"Header","font":"display","size":0.0556,"bold":true,"italic":false,"color":"#000000","align":"left","caps":"upper","track":0.01},{"id":"sty_header_one_xl","name":"Header One (XL)","group":"Header","font":"display","size":0.0444,"bold":true,"italic":false,"color":"#000000","align":"left","caps":"upper","track":0.01},{"id":"sty_paragraph_heading_right","name":"Paragraph Heading (Right)","group":"Header","font":"display","size":0.0333,"bold":true,"italic":false,"color":"#1a1a1a","align":"right","caps":"upper","track":0.01},{"id":"sty_body_copy_standard","name":"Body Copy (Standard)","group":"Body Copy","font":"serif","size":0.0148,"bold":false,"italic":false,"color":"#222222","align":"justify","caps":"none","track":0.0},{"id":"sty_body_copy_large_+_bold","name":"Body Copy (Large + Bold)","group":"Body Copy","font":"serif","size":0.0185,"bold":true,"italic":false,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_body_copy_primary","name":"Body Copy (Primary)","group":"Body Copy","font":"serif","size":0.0148,"bold":false,"italic":false,"color":"#222222","align":"justify","caps":"none","track":0.0},{"id":"sty_body_description","name":"Body Description","group":"Body Text","font":"serif","size":0.0167,"bold":false,"italic":false,"color":"#333333","align":"left","caps":"none","track":0.0},{"id":"sty_body_subheading","name":"Body Subheading","group":"Body Text","font":"serif","size":0.0204,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.0},{"id":"sty_spec_copy","name":"Spec Copy","group":"Spec Page","font":"serif","size":0.0148,"bold":false,"italic":false,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_spec_subject","name":"Spec Subject","group":"Spec Page","font":"serif","size":0.0148,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.01},{"id":"sty_spec_notes","name":"Spec Notes","group":"Spec Page","font":"serif","size":0.013,"bold":false,"italic":true,"color":"#939597","align":"left","caps":"none","track":0.005},{"id":"sty_spec_static_caption","name":"Spec Static Caption","group":"Spec Page","font":"serif","size":0.013,"bold":false,"italic":true,"color":"#999999","align":"left","caps":"none","track":0.0},{"id":"sty_image_code","name":"Image Code","group":"Captions","font":"serif","size":0.012,"bold":false,"italic":true,"color":"#7f7f7f","align":"right","caps":"none","track":0.01},{"id":"sty_caption_image_code","name":"Caption Image Code","group":"Captions","font":"serif","size":0.0111,"bold":false,"italic":false,"color":"#bfbfbf","align":"left","caps":"none","track":0.0},{"id":"sty_artist_name","name":"Artist Name","group":"Captions","font":"serif","size":0.0139,"bold":true,"italic":false,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_artwork_title","name":"Artwork Title","group":"Captions","font":"serif","size":0.013,"bold":false,"italic":true,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_thank_you_\u2014_name","name":"Thank You \u2014 Name","group":"Thank You","font":"display","size":0.0417,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"upper","track":0.0},{"id":"sty_thank_you_\u2014_role","name":"Thank You \u2014 Role","group":"Thank You","font":"serif","size":0.0148,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"none","track":0.0},{"id":"sty_thank_you_\u2014_contact","name":"Thank You \u2014 Contact","group":"Thank You","font":"serif","size":0.013,"bold":false,"italic":false,"color":"#ffffff","align":"left","caps":"none","track":0.0},{"id":"sty_subhead","name":"Subhead","group":"Subheadings","font":"display","size":0.0204,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"upper","track":0.035},{"id":"sty_section_subheading_left","name":"Section Subheading (Left)","group":"Subheadings","font":"display","size":0.0333,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"upper","track":0.01},{"id":"sty_section_subheading_right","name":"Section Subheading (Right)","group":"Subheadings","font":"display","size":0.0333,"bold":true,"italic":false,"color":"#1a1a1a","align":"right","caps":"upper","track":0.01},{"id":"sty_section_subheading_serif","name":"Section Subheading (Serif)","group":"Subheadings","font":"serif","size":0.0139,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.0},{"id":"sty_subheading_white,_center","name":"Subheading (White, Center)","group":"Subheadings","font":"serif","size":0.013,"bold":false,"italic":false,"color":"#ffffff","align":"center","caps":"none","track":0.0},{"id":"sty_quote_\u2014_druk","name":"Quote \u2014 Druk","group":"Quotes","font":"display","size":0.0694,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.025},{"id":"sty_quote_\u2014_druk_alt","name":"Quote \u2014 Druk (Alt)","group":"Quotes","font":"display","size":0.0444,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.0},{"id":"sty_quote_\u2014_serif","name":"Quote \u2014 Serif","group":"Quotes","font":"serif","size":0.0417,"bold":false,"italic":false,"color":"#ffffff","align":"left","caps":"none","track":0.0},{"id":"sty_quote_\u2014_serif_white,_cap","name":"Quote \u2014 Serif (White, Caps)","group":"Quotes","font":"display","size":0.0333,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"upper","track":0.01},{"id":"sty_display_keyword","name":"Display Keyword","group":"Keywords","font":"display","size":0.1111,"bold":true,"italic":false,"color":"#000000","align":"left","caps":"upper","track":0.01},{"id":"sty_keywords_full_page","name":"Keywords (Full Page)","group":"Keywords","font":"display","size":0.0556,"bold":true,"italic":false,"color":"#ffffff","align":"justify-all","caps":"none","track":0.02},{"id":"sty_brand_keyword","name":"Brand Keyword","group":"Keywords","font":"display","size":0.1852,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"upper","track":0.01},{"id":"sty_moodboard_keyword","name":"Moodboard Keyword","group":"Keywords","font":"display","size":0.0833,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"upper","track":0.0}];
 // The default fill for a placeholder shape, and the ONE definition of it. It was
 // written out nine times: the starter deck, the shape creator, the duplicate
@@ -3587,8 +3587,10 @@ function _elevCaptureSignature() {
         // active flags, per-frame dim toggles, group dims, custom measure lines,
         // the character. Artwork/swatch data URLs are replaced by their length —
         // they're megabytes of base64, and length is enough to spot a swap.
+        // Per-wall notes (19.47) print beside the drawing, never in it: not a capture input.
         parts.push(JSON.stringify(typeof elevations !== 'undefined' ? elevations : [], (k, v) =>
-            (typeof v === 'string' && v.length > 256) ? ('#' + v.length) : v));
+            (k === 'wallNote' || k === 'notesOff') ? undefined
+            : (typeof v === 'string' && v.length > 256) ? ('#' + v.length) : v));
         // Drawing inputs that live outside the elevations array. Hang height and
         // baseboard come from the stored INCHES, not their inputs: the input value
         // changes on a unit switch without the drawing changing shape, so hashing it
@@ -4611,7 +4613,7 @@ document.addEventListener('keydown', function(e) {
     if (e.key === 'Delete' || e.key === 'Backspace') {
         // A selected dimension or measure line is what Delete is for (the elevation
         // handler removes it); the frames stay, even if one is still selected.
-        if (selectedGroupDim || selectedDimId || selectedCustomLine) return;
+        if (selectedGroupDim || selectedDimId || selectedCustomLine || selectedMark) return;
         const sel = getSelectedFrames();
         if (!sel.length) return;
         e.preventDefault();
@@ -4781,6 +4783,8 @@ function scheduleAutosave() {
     _autosaveTimer = setTimeout(performAutosave, AUTOSAVE_DEBOUNCE_MS);
     // What is left to do moves with every edit that reaches here.
     if (typeof _scheduleNavBadges === 'function') _scheduleNavBadges();
+    // ...and so does what Preflight would say (19.44).
+    try { _pfBadgeSchedule(); } catch (e) {}
     // Any change significant enough to autosave is significant enough to
     // warrant a fresh thumbnail — otherwise the rail silently goes stale
     // the moment you edit text, move an element, swap an image, etc.,
@@ -5438,17 +5442,20 @@ function initMasterApp() {
     if (wallEl) {
         wallEl.addEventListener('mousedown', function (e) {
             if (lineToolActive) { handleLineToolClick(e); return; }
+            if (markToolActive) { handleMarkToolClick(e); return; }
             // Click on empty space (not a dim/line) deselects.
-            if ((selectedCustomLine || selectedDimId || selectedGroupDim) && !e.target.closest('.custom-line') && !e.target.closest('.arch-dim') && !e.target.closest('[data-group-dim]')) {
+            if ((selectedCustomLine || selectedDimId || selectedGroupDim || selectedMark) && !e.target.closest('.custom-line') && !e.target.closest('.arch-dim') && !e.target.closest('[data-group-dim]') && !e.target.closest('.elev-mark')) {
                 selectedCustomLine = null;
                 selectedDimId = null;
                 selectedGroupDim = null;
+                selectedMark = null;
                 drawElevAll();
             }
         }, true);
         // Live anchor-point indicator: blue dot snaps to the nearest anchor
         // while the measure tool is active.
         wallEl.addEventListener('mousemove', function (e) {
+            if (markToolActive) { _markPreview(e); return; }
             if (!lineToolActive) return;
             updateAnchorHoverDot(e);
         });
@@ -5463,6 +5470,10 @@ function initMasterApp() {
             if (typeof _ulPlacing !== 'undefined' && _ulPlacing) _ulWheelScale(e);
         }, { passive: false });
     }
+    // The Lines flyout (19.48) closes on any click outside it.
+    document.addEventListener('click', function (e) {
+        if (!(e.target && e.target.closest && e.target.closest('#markKindList, #markToolBtn'))) _markFlyClose();
+    });
     document.addEventListener('keydown', function (e) {
         const typing = /^(INPUT|TEXTAREA|SELECT)$/.test((e.target && e.target.tagName) || '');
         if (typing) return;
@@ -5471,6 +5482,11 @@ function initMasterApp() {
         if (!elevVisible) return;
         if ((e.key === 'm' || e.key === 'M') && !e.ctrlKey && !e.metaKey) {
             toggleLineTool();
+        } else if ((e.key === 'l' || e.key === 'L') && !e.ctrlKey && !e.metaKey && !e.altKey) {
+            toggleMarkTool();   // free lines (19.47)
+        } else if ((e.key === 'Delete' || e.key === 'Backspace') && selectedMark) {
+            e.preventDefault();
+            deleteMark(selectedMark);
         } else if ((e.key === 'v' || e.key === 'V') && !e.ctrlKey && !e.metaKey && !e.altKey) {
             // The dock's Select (19.05). Not Ctrl/Cmd+V, which is paste.
             _elevDockSelect();
@@ -5531,6 +5547,11 @@ function initMasterApp() {
                 if (typeof pushHistory === 'function') pushHistory();
                 drawElevAll();
             }
+        } else if (e.key === 'Escape' && (markToolActive || selectedMark)) {
+            // A pending first point backs out first; then the tool; then the selection.
+            if (markFirstAnchor) { markFirstAnchor = null; drawElevAll(); }
+            else if (markToolActive) toggleMarkTool(false);
+            else { selectedMark = null; drawElevAll(); }
         } else if (e.key === 'Escape' && (lineToolActive || lineToolFirstPt || selectedCustomLine
                    || selectedDimId || selectedGroupDim || contextToolActive || _ulCalibrateActive || _ulPlacing)) {
             lineToolFirstPt = null;
@@ -8543,6 +8564,7 @@ function toggleBulkDropdown(e) {
 function _elevDockSelect() {
     if (typeof lineToolActive !== 'undefined' && lineToolActive) toggleLineTool(false);
     if (typeof contextToolActive !== 'undefined' && contextToolActive) toggleContextTool(false);
+    if (typeof markToolActive !== 'undefined' && markToolActive) toggleMarkTool(false);
     if (typeof _ulCalibrateActive !== 'undefined' && _ulCalibrateActive) _ulCancelCalibrate(true);
     _elevDockSync();
 }
@@ -8555,7 +8577,8 @@ function _elevDockContext() {
 // change, and every exit of the context tool) and toggleLineTool. Never stored.
 function _elevDockSync() {
     const sel = document.getElementById('elevDockSelect');
-    const armed = (typeof lineToolActive !== 'undefined' && lineToolActive) || (typeof contextToolActive !== 'undefined' && contextToolActive);
+    const armed = (typeof lineToolActive !== 'undefined' && lineToolActive) || (typeof contextToolActive !== 'undefined' && contextToolActive)
+        || (typeof markToolActive !== 'undefined' && markToolActive);
     if (sel) sel.classList.toggle('active', !armed);
     const ce = (typeof elevations !== 'undefined') ? elevations[currentElevIndex] : null;
     const n = {
@@ -9672,6 +9695,25 @@ const CONTEXT_LIBRARY = [
              + _D + '<rect x="2.5" y="3.4" width="35" height="2.4"/>' + _G
              + _F + '<path d="M4.3 15 h31.4"/>' + _G },
     ] },
+    // KEEP CLEAR (19.47): things art must not cover. `avoid: true` makes a new block a
+    // keep-clear zone (hatched; a frame over one is flagged on the wall and in Preflight).
+    // Sizes are typical North American cover plates and devices; AFF centres per ADA reach.
+    { cat: 'Keep clear', items: [
+        { key: 'kc-switch', name: 'Light switch', w: 3, h: 5, aff: 48, affMode: 'center', avoid: true,
+          shape: 'rect', fill: 'plain', label: 'Switch' },
+        { key: 'kc-thermostat', name: 'Thermostat', w: 5, h: 5, aff: 48, affMode: 'center', avoid: true,
+          shape: 'rect', fill: 'plain', label: 'Thermostat' },
+        { key: 'kc-outlet', name: 'Outlet', w: 3, h: 5, aff: 18, affMode: 'center', avoid: true,
+          shape: 'rect', fill: 'plain', label: 'Outlet' },
+        { key: 'kc-alarm', name: 'Fire alarm strobe', w: 6, h: 6, aff: 80, affMode: 'bottom', avoid: true,
+          shape: 'rect', fill: 'plain', label: 'Strobe' },
+        { key: 'kc-reader', name: 'Card reader', w: 4, h: 6, aff: 42, affMode: 'center', avoid: true,
+          shape: 'rect', fill: 'plain', label: 'Reader' },
+        { key: 'kc-sign', name: 'Room sign', w: 8, h: 8, aff: 60, affMode: 'center', avoid: true,
+          shape: 'rect', fill: 'plain', label: 'Sign' },
+        { key: 'kc-zone', name: 'Keep-clear zone', w: 24, h: 24, aff: null, affMode: 'center', freeform: true, avoid: true,
+          shape: 'rect', fill: 'plain', label: 'Keep clear' },
+    ] },
     { cat: 'Basic', items: [
         // FREEFORM: these have no catalogue size worth placing, so a click does nothing
         // and a drag is the only way to make one. That keeps the tool forgiving about a
@@ -10405,7 +10447,7 @@ const CAT_SPEC_FIELDS = CAT_SLOT_FIELDS.filter(k => k !== 'x' && k !== 'y');
 // layout work, and a mockup whose measurements do not reach its own options means doing
 // that work once per option. The layer toggles still decide what prints.
 const CAT_WALL_FIELDS = ['wallW', 'wallH', 'egdWall'];
-const CAT_WALL_DEEP = ['personPos', 'contextBlocks', 'glazing', 'groupDims', 'customLines'];
+const CAT_WALL_DEEP = ['personPos', 'contextBlocks', 'glazing', 'groupDims', 'customLines', 'marks'];
 // A row-level mirror as well: the PLAN PIN belongs to the placement. A dealership hangs
 // ONE piece in that spot and picks which image goes in it, so pinning the mockup's slot
 // on the floorplan has to reach every option's spec page. Pin ART.1.A once, not six
@@ -10550,7 +10592,7 @@ function _catSyncArrangements() {
         arr.slice(1).forEach(e => {
             CAT_WALL_FIELDS.forEach(f2 => { if (e[f2] !== prim[f2]) { e[f2] = prim[f2]; moved = true; } });
             CAT_WALL_DEEP.forEach(f2 => {
-                if (f2 === 'groupDims' || f2 === 'customLines') return;
+                if (f2 === 'groupDims' || f2 === 'customLines' || f2 === 'marks') return;
                 const a = JSON.stringify(prim[f2] === undefined ? null : prim[f2]);
                 if (a !== JSON.stringify(e[f2] === undefined ? null : e[f2])) { e[f2] = _cloneData(prim[f2]); moved = true; }
             });
@@ -16489,6 +16531,63 @@ function _drawScaleCluster(doc, x, y, w, h, pieces) {
     });
 }
 
+// Context blocks onto a canvas elevation, in the wall's own geometry. Line art goes
+// through _ctxArtSvg (the one drawing source, ink as a real hex: there is no CSS
+// `color` inside an <img>), rasterised at its drawn size; a block with no art draws its
+// primitive. Labels only where they fit, as on the wall.
+async function _ctxDrawToCanvas(x, elev, g) {
+    const bs = (elev && Array.isArray(elev.contextBlocks)) ? elev.contextBlocks : [];
+    for (const b of bs) {
+        const wIn = g.toIn(b.w), hIn = g.toIn(b.h);
+        if (!(wIn > 0) || !(hIn > 0)) continue;
+        const bx = g.left + g.toIn(b.x || 0) * g.ppi, bw = wIn * g.ppi, bh = hIn * g.ppi;
+        const by = g.floor - (g.toIn(b.y || 0) + hIn) * g.ppi;
+        const shape = _ctxShape(b);
+        const art = _ctxArtFor(b.preset, _ctxViewOf(b), _ctxVariantOf(b));
+        x.save();
+        x.fillStyle = (!art && shape === 'tv') ? '#dedede' : CONTEXT_FILL;
+        const linePx = g.linePx || Math.max(1, g.lw * 0.6);
+        x.strokeStyle = _ctxInkHex(); x.lineWidth = linePx;
+        if (!art && shape === 'ellipse') {
+            x.beginPath(); x.ellipse(bx + bw / 2, by + bh / 2, bw / 2, bh / 2, 0, 0, Math.PI * 2); x.fill(); x.stroke();
+        } else {
+            x.fillRect(bx, by, bw, bh);
+            if (!art) {
+                x.strokeRect(bx, by, bw, bh);
+                if (shape === 'shelf') { x.lineWidth = linePx * 2; x.beginPath(); x.moveTo(bx, by); x.lineTo(bx + bw, by); x.stroke(); }
+            }
+        }
+        if (_ctxAvoid(b)) {
+            // Keep-clear hatch (19.47), clipped to the block.
+            x.save(); x.beginPath(); x.rect(bx, by, bw, bh); x.clip();
+            x.strokeStyle = _ctxInkHex(); x.lineWidth = Math.max(0.5, linePx * 0.6);
+            const st = Math.max(linePx * 4, 4);
+            x.beginPath();
+            for (let t = st; t < bw + bh; t += st) { x.moveTo(bx + Math.min(t, bw), by + Math.max(0, t - bw)); x.lineTo(bx + Math.max(0, t - bh), by + Math.min(t, bh)); }
+            x.stroke(); x.restore();
+        }
+        if (art) {
+            const W = Math.max(1, Math.round(bw)), H = Math.max(1, Math.round(bh));
+            // _ctxArtSvg divides authored weights by its scale; this scale makes the
+            // OBJECT line come out at linePx and the rest of the hierarchy in proportion.
+            const svg = _ctxArtSvg(art, _ctxInkHex(), (bw / (art.w || 1)) * (CTX_LW_OBJ / linePx)).replace('<svg ', '<svg width="' + W + '" height="' + H + '" ');
+            try {
+                // NOT _loadImg: its cache keys on length + the last 32 characters, and every
+                // one of these ends in the same closing tags, so two drawings could swap.
+                const img = await _loadImgRaw('data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg));
+                if (img) x.drawImage(img, bx, by, bw, bh);
+            } catch (e) {}
+        }
+        const lab = String(b.label || '').trim().toUpperCase();
+        const fpx = Math.max(6, (g.linePx || g.ppi) * 5);
+        if (lab && bh > fpx * 2) {
+            x.font = '600 ' + fpx + 'px sans-serif';
+            const tw = x.measureText(lab).width;
+            if (tw < bw - 4) { x.fillStyle = _ctxInkHex(); x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(lab, bx + bw / 2, by + bh / 2); }
+        }
+        x.restore();
+    }
+}
 // Composite an entire elevation onto a canvas (beauty view: artwork baked in),
 // with one frame featured (full color) and the others faded. Used by the spec
 // page so the elevation itself carries the scale + context. Self-contained:
@@ -16617,6 +16716,16 @@ async function renderElevationToCanvas(elev, featuredId, opts) {
         x.drawImage(fr.canvas, fx, fy, fWin * ppi, fHin * ppi);
         x.restore();
     }
+    // CONTEXT BLOCKS (19.44): the credenza, counter or booth the art is hung over. The
+    // breaker drew them and the spec-page thumbnail did not, so the thumbnail showed art
+    // floating on a bare wall. Drawn after the frames because a block OCCLUDES, as on the
+    // wall (opaque white body, z above #frame-layer); its white body also breaks the
+    // baseboard line drawn earlier, which is what the wall's gapped baseboard does.
+    // Line weight for the blocks as a share of the WHOLE canvas width (19.46): this canvas
+    // is ~8x the size it prints at, so screen-pixel weights thinned to nothing in the
+    // thumbnail (the lounge chair "not rendered"). 1/260 of the width prints ~0.4pt.
+    const ctxLinePx = Math.max(lw, cw / 260);
+    try { await _ctxDrawToCanvas(x, elev, { left: wallLeftPx, floor: floorPx, ppi: ppi, toIn: toIn, lw: lw, linePx: ctxLinePx }); } catch (e) {}
     // TIGHT: a spec-page thumbnail is the WALL, not the wall plus the 6in of margin
     // this canvas reserves around it (the band the dimensions print in on an
     // elevation). With the margin left on, the wall's top edge sat 6in below the
@@ -19706,6 +19815,16 @@ function _breakerElevFor(u, units) {
         const gi = (elevations || []).indexOf(mock);
         return gi < 0 ? null : { elev: mock, idx: gi, mockup: true };
     }
+    const own = _breakerWallOf(u);
+    if (!own) return null;
+    // ONE BREAKER PER WALL (19.44): ART.4 and ART.5 on one long wall are two placements
+    // and one drawing. The first unit on the wall earns it and the rest ride behind it.
+    const share = units ? _breakerWallShare(units).get(u) : null;
+    if (share && share.earner !== u) return null;
+    return { elev: own.elev, idx: own.idx, mockup: false, units: share ? share.peers : [u] };
+}
+// The wall holding most of a unit's members.
+function _breakerWallOf(u) {
     const members = (u && u.members) || [];
     let ge = null, gi = -1, best = 0;
     (elevations || []).forEach((e, ei) => {
@@ -19713,7 +19832,30 @@ function _breakerElevFor(u, units) {
         let c = 0; members.forEach(m => { if (e.frames.some(fr => fr && fr.id === m.id)) c++; });
         if (c > best) { best = c; ge = e; gi = ei; }
     });
-    return ge ? { elev: ge, idx: gi, mockup: false } : null;
+    return ge ? { elev: ge, idx: gi } : null;
+}
+// Which units share a breaker: unit -> { earner, peers }. STATELESS like the catalogue
+// rule above (first unit in the shared `units` array wins), so the studio and the export
+// cannot disagree. Manual groups, catalogue units and units that skip their breaker
+// (flat graphics only) take no part. Memoized on the array: _deckPageList builds a new
+// one per call. The memo hangs off the function, so no module-scope TDZ to mind.
+function _breakerWallShare(units) {
+    const memo = _breakerWallShare._memo || (_breakerWallShare._memo = new WeakMap());
+    if (!units || typeof units !== 'object') return new Map();
+    let m = memo.get(units);
+    if (m) return m;
+    m = new Map();
+    const byWall = new Map();
+    (units || []).forEach(u => {
+        if (!u || u._manual || _catMockupForUnit(u) || _breakerSkipUnit(u.members)) return;
+        const w = _breakerWallOf(u);
+        if (!w) return;
+        if (!byWall.has(w.elev)) byWall.set(w.elev, []);
+        byWall.get(w.elev).push(u);
+    });
+    byWall.forEach(list => { list.forEach(u => m.set(u, { earner: list[0], peers: list })); });
+    memo.set(units, m);
+    return m;
 }
 // The breaker's title and its per-page settings key. A placement breaker is titled with
 // the MOCKUP's own code (ART.1, the way the reference sheets read) and keyed on the
@@ -20119,7 +20261,10 @@ async function _drawCatOverviewPage(doc, logos, pageNum, meta, place, ctx) {
     _drawPdfFooter(doc, logos, pageNum, meta);
 }
 function _breakerNameFor(u, br) {
-    return (br && br.mockup) ? (_catBaseCode(br.elev) || br.elev.name || '') : _breakerCodeFor(u);
+    if (br && br.mockup) return _catBaseCode(br.elev) || br.elev.name || '';
+    // A shared breaker is titled with every placement on it: ART.10AB / ART.11.
+    if (br && br.units && br.units.length > 1) return br.units.map(_breakerCodeFor).join(' / ');
+    return _breakerCodeFor(u);
 }
 function _breakerOvKeyFor(u, br) {
     return (br && br.mockup) ? ('elevgrp:cat:' + _elevId(br.elev)) : ('elevgrp:' + u.key);
@@ -22933,8 +23078,10 @@ function _dsDuplicateLayoutPage(desc) {
 // is a separate, deck-wide pass instead: run it, jump straight to every page
 // with a possible typo, and fix it there.
 const _DS_SPELL_DICT = new Set(['a', 'about', 'above', 'across', 'after', 'again', 'against', 'all', 'almost', 'alone', 'along', 'already', 'also', 'although', 'always', 'am', 'among', 'an', 'and', 'another', 'any', 'anyone', 'anything', 'appear', 'appears', 'approach', 'approx', 'approximate', 'are', 'area', 'around', 'arrange', 'arrangement', 'art', 'artist', 'artistic', 'artwork', 'as', 'ask', 'at', 'attach', 'available', 'avoid', 'away', 'back', 'background', 'be', 'because', 'become', 'been', 'before', 'begin', 'behind', 'being', 'below', 'beneath', 'beside', 'best', 'better', 'between', 'beyond', 'big', 'black', 'blank', 'blue', 'board', 'body', 'both', 'bottom', 'box', 'breaker', 'bring', 'brought', 'build', 'building', 'built', 'but', 'by', 'call', 'called', 'came', 'can', 'cannot', 'canvas', 'capture', 'care', 'case', 'catalog', 'center', 'centered', 'certain', 'change', 'changed', 'choose', 'chosen', 'city', 'classic', 'clean', 'clear', 'client', 'close', 'closer', 'code', 'collection', 'color', 'colors', 'coloured', 'column', 'come', 'comes', 'coming', 'complete', 'completed', 'complex', 'composed', 'comprises', 'concept', 'condition', 'connect', 'consider', 'considered', 'consistent', 'consists', 'contact', 'contain', 'contains', 'contemporary', 'content', 'continue', 'contrast', 'control', 'convert', 'copy', 'corner', 'correct', 'could', 'count', 'country', 'cover', 'crate', 'create', 'created', 'creation', 'crisp', 'crop', 'cropped', 'curated', 'curator', 'current', 'custom', 'cut', 'damage', 'dark', 'dashboard', 'date', 'day', 'days', 'deck', 'decor', 'deep', 'define', 'delivered', 'depth', 'described', 'description', 'design', 'designed', 'designer', 'detail', 'details', 'determine', 'developed', 'dialogue', 'different', 'dimension', 'dimensions', 'direction', 'directly', 'display', 'displayed', 'distance', 'document', 'does', 'done', 'door', 'down', 'drag', 'draw', 'drawing', 'drop', 'due', 'during', 'each', 'early', 'edge', 'edit', 'edited', 'editorial', 'effect', 'either', 'elevation', 'else', 'empty', 'end', 'ensure', 'enter', 'entire', 'environment', 'equal', 'equally', 'especially', 'even', 'evening', 'event', 'ever', 'every', 'everything', 'exact', 'example', 'except', 'exhibit', 'exhibition', 'existing', 'exit', 'export', 'expose', 'extend', 'extra', 'facade', 'face', 'facing', 'fact', 'fair', 'fall', 'family', 'far', 'feature', 'featured', 'few', 'field', 'figure', 'file', 'fill', 'final', 'find', 'fine', 'first', 'fit', 'fits', 'fitting', 'fixed', 'floor', 'floorplan', 'flow', 'focal', 'focus', 'following', 'font', 'foot', 'for', 'form', 'format', 'forward', 'found', 'four', 'frame', 'framed', 'frames', 'framing', 'free', 'french', 'from', 'front', 'full', 'function', 'further', 'gallery', 'gap', 'gave', 'general', 'get', 'given', 'giving', 'glass', 'go', 'goes', 'going', 'gold', 'good', 'grade', 'gray', 'great', 'grid', 'group', 'grouping', 'guide', 'guides', 'had', 'half', 'hall', 'hallway', 'hand', 'handling', 'hang', 'hanging', 'hard', 'has', 'have', 'having', 'height', 'held', 'help', 'here', 'high', 'higher', 'highlight', 'hold', 'home', 'hour', 'house', 'how', 'however', 'hung', 'idea', 'identify', 'if', 'image', 'images', 'important', 'improve', 'in', 'inch', 'inches', 'include', 'included', 'includes', 'including', 'indicate', 'inline', 'inside', 'inspiration', 'install', 'installation', 'installed', 'installing', 'instead', 'into', 'is', 'issue', 'item', 'its', 'itself', 'just', 'keep', 'key', 'kind', 'know', 'known', 'label', 'labeled', 'large', 'larger', 'last', 'later', 'layer', 'layers', 'layout', 'lead', 'least', 'leave', 'left', 'len', 'length', 'less', 'let', 'letter', 'level', 'light', 'lighter', 'like', 'line', 'lines', 'list', 'listed', 'live', 'load', 'located', 'location', 'logo', 'long', 'longer', 'look', 'looking', 'lower', 'made', 'main', 'mainly', 'major', 'make', 'making', 'manual', 'many', 'margin', 'mark', 'match', 'matches', 'material', 'matt', 'matte', 'maximum', 'may', 'maybe', 'me', 'mean', 'measure', 'measurement', 'measurements', 'measures', 'medium', 'method', 'middle', 'might', 'minimum', 'minute', 'mismatch', 'missing', 'mixed', 'mockup', 'model', 'moderate', 'modern', 'month', 'more', 'most', 'mount', 'mounted', 'mounting', 'move', 'moved', 'moving', 'much', 'multiple', 'museum', 'must', 'my', 'name', 'narrative', 'near', 'nearby', 'need', 'needed', 'needs', 'never', 'new', 'next', 'nice', 'no', 'non', 'none', 'normal', 'not', 'note', 'notes', 'now', 'number', 'numbers', 'object', 'of', 'off', 'offer', 'office', 'often', 'okay', 'old', 'on', 'once', 'one', 'only', 'onto', 'open', 'opening', 'opens', 'option', 'options', 'or', 'order', 'orientation', 'original', 'other', 'others', 'our', 'out', 'outer', 'outside', 'over', 'overall', 'own', 'page', 'pages', 'paint', 'painted', 'painting', 'palette', 'panel', 'panels', 'paper', 'part', 'particular', 'parts', 'pass', 'past', 'pattern', 'people', 'per', 'perfect', 'perform', 'perhaps', 'person', 'photo', 'photograph', 'photography', 'piece', 'pieces', 'pin', 'pinned', 'place', 'placed', 'placement', 'places', 'placing', 'plan', 'planned', 'plans', 'plate', 'please', 'plus', 'point', 'pointed', 'points', 'portrait', 'position', 'positioned', 'positions', 'possible', 'practice', 'precise', 'precisely', 'prefer', 'preferred', 'prepare', 'presence', 'present', 'presentation', 'presented', 'preview', 'previous', 'primary', 'print', 'printed', 'prior', 'process', 'produce', 'product', 'production', 'profile', 'program', 'project', 'projects', 'proper', 'properly', 'proportion', 'proportions', 'provide', 'provided', 'provides', 'put', 'quality', 'quantity', 'quarter', 'question', 'quick', 'quickly', 'quite', 'quote', 'rail', 'range', 'rare', 'rate', 'rather', 'ratio', 'ready', 'real', 'really', 'reason', 'receive', 'receiving', 'recent', 'recently', 'recommend', 'recommended', 'reduce', 'reduces', 'reference', 'refine', 'reflect', 'regard', 'regarding', 'relate', 'related', 'relative', 'relatively', 'remain', 'remaining', 'remains', 'remember', 'remove', 'removed', 'render', 'rendered', 'rendering', 'repeat', 'repeated', 'replace', 'replaced', 'replacement', 'report', 'represent', 'represents', 'request', 'require', 'required', 'requires', 'resize', 'resolution', 'respect', 'rest', 'result', 'resulting', 'results', 'return', 'review', 'reviewed', 'right', 'room', 'row', 'said', 'same', 'sample', 'save', 'saved', 'saving', 'say', 'scale', 'scan', 'scene', 'schedule', 'scheme', 'screen', 'second', 'section', 'see', 'seen', 'select', 'selected', 'selection', 'self', 'sell', 'send', 'sense', 'sent', 'separate', 'series', 'set', 'sets', 'several', 'shall', 'shape', 'shapes', 'share', 'sheet', 'shelf', 'shift', 'ship', 'short', 'should', 'show', 'showing', 'shown', 'shows', 'side', 'sign', 'significant', 'significantly', 'similar', 'simple', 'simply', 'since', 'single', 'site', 'situation', 'size', 'sized', 'sizes', 'small', 'smaller', 'so', 'some', 'someone', 'something', 'soon', 'sort', 'sorted', 'source', 'space', 'spacing', 'spec', 'specific', 'specification', 'specifications', 'specified', 'specify', 'spot', 'spread', 'square', 'staff', 'stand', 'standard', 'stands', 'start', 'started', 'state', 'statement', 'static', 'status', 'stay', 'step', 'steps', 'still', 'stock', 'stone', 'straight', 'strategy', 'street', 'strength', 'strong', 'studio', 'study', 'style', 'styled', 'subject', 'submit', 'subsequent', 'such', 'suggest', 'suggested', 'suit', 'suitable', 'summary', 'support', 'supported', 'sure', 'surface', 'swap', 'swatch', 'system', 'take', 'taken', 'takes', 'taking', 'talk', 'target', 'team', 'template', 'templates', 'term', 'terms', 'text', 'than', 'that', 'the', 'their', 'them', 'then', 'there', 'therefore', 'these', 'they', 'thin', 'thing', 'things', 'think', 'third', 'this', 'those', 'though', 'thought', 'three', 'through', 'throughout', 'thumbnail', 'thus', 'time', 'times', 'title', 'titled', 'to', 'today', 'together', 'too', 'took', 'top', 'total', 'touch', 'toward', 'towards', 'track', 'transfer', 'treat', 'treatment', 'true', 'try', 'turn', 'turned', 'two', 'type', 'types', 'typical', 'under', 'underneath', 'understand', 'understanding', 'unique', 'unit', 'units', 'until', 'up', 'update', 'updated', 'upload', 'uploaded', 'upon', 'upper', 'us', 'use', 'used', 'useful', 'user', 'uses', 'using', 'usual', 'usually', 'value', 'values', 'variable', 'variant', 'variants', 'variation', 'various', 'version', 'versions', 'vertical', 'very', 'via', 'view', 'viewed', 'viewer', 'viewing', 'visible', 'vision', 'visit', 'visual', 'wait', 'wall', 'walls', 'want', 'warm', 'was', 'watch', 'way', 'ways', 'we', 'well', 'went', 'were', 'what', 'whatever', 'when', 'where', 'whether', 'which', 'while', 'white', 'who', 'whole', 'whose', 'why', 'width', 'will', 'window', 'wire', 'wish', 'with', 'within', 'without', 'wood', 'word', 'work', 'worked', 'working', 'works', 'would', 'wrap', 'year', 'years', 'yellow', 'yes', 'yet', 'you', 'your']);
-function _dsSpellIgnoreList() { if (!Array.isArray(editorialContent.spellIgnore)) editorialContent.spellIgnore = []; return editorialContent.spellIgnore; }
-function _dsSpellIgnoreWord(w) { const l = _dsSpellIgnoreList(); const lw = (w || '').toLowerCase(); if (lw && l.indexOf(lw) < 0) { l.push(lw); if (typeof scheduleAutosave === 'function') scheduleAutosave(); } }
+// READ-ONLY (19.44): Preflight now runs in the background for its badge, and a read that
+// seeded an empty list wrote into the project (the guided tour caught it).
+function _dsSpellIgnoreList() { return Array.isArray(editorialContent.spellIgnore) ? editorialContent.spellIgnore : []; }
+function _dsSpellIgnoreWord(w) { if (!Array.isArray(editorialContent.spellIgnore)) editorialContent.spellIgnore = []; const l = editorialContent.spellIgnore; const lw = (w || '').toLowerCase(); if (lw && l.indexOf(lw) < 0) { l.push(lw); if (typeof scheduleAutosave === 'function') scheduleAutosave(); } }
 function _dsSpellStems(lw) {
     const out = [lw];
     if (lw.length > 4 && lw.slice(-3) === 'ies') out.push(lw.slice(0, -3) + 'y');
@@ -23054,9 +23201,71 @@ function _dsRunPreflight() {
             });
         }
     } catch (e) {}
+    // Art over a keep-clear block (19.47): the installer cannot hang it as drawn.
+    try {
+        (elevations || []).forEach(e => {
+            if (!e || _isCatalogueMaster(e)) return;
+            _elevClashes(e).forEach(c => issues.push({ sev: 'warn',
+                text: (c.frame.id || c.frame.letter || 'A frame') + ' \u2014 covers the ' + _ctxBlockName(c.block).toLowerCase() + ' on ' + String(e.name || 'a wall') + ' (marked keep clear)',
+                idx: null, wall: { kind: 'wall', elevId: _elevId(e) } }));
+        });
+    } catch (e) {}
+    // Codes that hang as one set (19.44): a warning, because the deck prints them as
+    // separate placements (plan callouts, breakers, spec pages) and that may be wrong.
+    try {
+        _codesSetSuggestions().forEach(sg => {
+            const plan = _codesJoinPlan(sg.keys);
+            if (!plan) return;
+            const wall = String((sg.elev && sg.elev.name) || ('Wall ' + (sg.elevIdx + 1)));
+            issues.push({ sev: 'warn', text: sg.keys.join(', ') + ' \u2014 hang ' + _num1(sg.gapIn) + '" apart on ' + wall + '. One set, ' + plan.label + '?', idx: null, set: sg, setPlan: plan, wall: { kind: 'wall', elevId: _elevId(sg.elev) } });
+        });
+    } catch (e) {}
     // Spelling \u2014 a separate pass, see _dsRunSpellCheck for what it does and doesn't do.
     try { issues.push.apply(issues, _dsRunSpellCheck()); } catch (e) {}
     return issues;
+}
+// ── PREFLIGHT WEARS ITS RESULT (19.44) ──────────────────────────────────────
+// Never a popup: the Preflight buttons turn red (errors) or amber (warnings) and carry
+// a count, so the habit is "glance at Preflight", not "wait to be told". Spelling does
+// not colour it (too many false alarms to mean anything). Re-run on a debounce off
+// scheduleAutosave, and only while the deck is on screen; a hidden deck marks it stale
+// and the next _dsDockSync catches up.
+const PF_BADGE_MS = 1500;
+const PF_BADGE_BTNS = ['dsPreflightBtn', 'projPreflightBtn', 'phoneDeckPreflight'];
+let _pfBadgeTimer = null, _pfBadgeStale = true;
+let _pfBadgeRunning = false;
+function _pfBadgeSchedule() {
+    // A preflight run builds the page list, which may itself autosave: not a new edit.
+    if (_pfBadgeRunning) return;
+    _pfBadgeStale = true;
+    if (_pfBadgeTimer) clearTimeout(_pfBadgeTimer);
+    _pfBadgeTimer = setTimeout(() => {
+        _pfBadgeTimer = null;
+        if (typeof currentView === 'undefined' || currentView !== 'deck') return;
+        _pfBadgeRunning = true;
+        try { _pfBadgePaint(_dsRunPreflight()); } catch (e) {}
+        finally { _pfBadgeRunning = false; }
+    }, PF_BADGE_MS);
+}
+function _pfBadgeState(issues) {
+    const errs = (issues || []).filter(x => x && x.sev === 'err').length;
+    const warns = (issues || []).filter(x => x && x.sev === 'warn').length;
+    return { level: errs ? 'err' : (warns ? 'warn' : 'ok'), n: errs + warns, errs: errs, warns: warns };
+}
+function _pfBadgePaint(issues) {
+    _pfBadgeStale = false;
+    const st = _pfBadgeState(issues);
+    PF_BADGE_BTNS.forEach(id => {
+        const b = document.getElementById(id); if (!b) return;
+        b.setAttribute('data-pf', st.level);
+        b.setAttribute('data-pf-n', st.n > 99 ? '99+' : String(st.n));
+        if (!b.hasAttribute('data-pf-title')) b.setAttribute('data-pf-title', b.title || '');
+        const base = b.getAttribute('data-pf-title');
+        b.title = st.level === 'ok' ? base
+            : (st.errs ? st.errs + ' error' + (st.errs === 1 ? '' : 's') : '') + (st.errs && st.warns ? ', ' : '')
+              + (st.warns ? st.warns + ' warning' + (st.warns === 1 ? '' : 's') : '') + '. ' + base;
+    });
+    return st;
 }
 function _dsPreflightGo(i) {
     const m = document.getElementById('_dsPreflightModal'); if (m) m.remove();
@@ -23067,6 +23276,7 @@ function _dsPreflightGo(i) {
 function _dsShowPreflight() {
     let m = document.getElementById('_dsPreflightModal'); if (m) m.remove();
     const issues = _dsRunPreflight();
+    try { _pfBadgePaint(issues); } catch (e) {}
     const errs = issues.filter(x => x.sev === 'err'), warns = issues.filter(x => x.sev === 'warn'), spells = issues.filter(x => x.sev === 'spell');
     m = document.createElement('div'); m.id = '_dsPreflightModal';
     // The shared dialog shell, so Escape and the backdrop close it like every other
@@ -23103,6 +23313,32 @@ function _dsShowPreflight() {
                     ig.style.cssText = 'width:auto; height:22px; padding:0 8px; font-size:var(--fs-55);';
                     ig.onclick = () => { it.words.forEach(w => _dsSpellIgnoreWord(w)); _dsShowPreflight(); };
                     row.appendChild(ig);
+                }
+                if (it.set) {
+                    const mk = document.createElement('button'); mk.textContent = 'Make set'; mk.className = 'action-btn';
+                    mk.setAttribute('data-pf-act', 'join');
+                    mk.title = 'Make them ' + it.setPlan.label + ' and renumber the codes after them. Plan, walls and pages follow. Ctrl+Z undoes it.';
+                    mk.style.cssText = 'width:auto; height:22px; padding:0 10px; font-size:var(--fs-60);';
+                    mk.onclick = () => { _codesJoinSetNow(it.set.keys); _dsShowPreflight(); };
+                    row.appendChild(mk);
+                    const ka = document.createElement('button'); ka.textContent = 'Keep apart'; ka.className = 'action-btn btn-secondary';
+                    ka.setAttribute('data-pf-act', 'apart');
+                    ka.title = 'They are separate pieces. Stop suggesting this for these codes.';
+                    ka.style.cssText = 'width:auto; height:22px; padding:0 8px; font-size:var(--fs-60);';
+                    ka.onclick = () => { _codesKeepApart(it.set.ids); _dsShowPreflight(); };
+                    row.appendChild(ka);
+                    const wl = document.createElement('button'); wl.textContent = 'Wall'; wl.className = 'action-btn btn-secondary';
+                    wl.title = 'Open this wall in Elevations';
+                    wl.style.cssText = 'width:auto; height:22px; padding:0 10px; font-size:var(--fs-60);';
+                    wl.onclick = () => { const mm = document.getElementById('_dsPreflightModal'); if (mm) mm.remove(); _jumpGo(it.wall); };
+                    row.appendChild(wl);
+                }
+                if (it.wall && !it.set) {
+                    const wl = document.createElement('button'); wl.textContent = 'Wall'; wl.className = 'action-btn btn-secondary';
+                    wl.title = 'Open this wall in Elevations';
+                    wl.style.cssText = 'width:auto; height:22px; padding:0 10px; font-size:var(--fs-60);';
+                    wl.onclick = () => { const mm = document.getElementById('_dsPreflightModal'); if (mm) mm.remove(); _jumpGo(it.wall); };
+                    row.appendChild(wl);
                 }
                 if (it.go) {
                     const pc = document.createElement('button'); pc.textContent = 'Piece'; pc.className = 'action-btn btn-secondary';
@@ -24210,6 +24446,7 @@ function _dsOpenInsertMenu(anchorBtn, afterKey) {
 // indicator, no ambiguity.
 //
 // `gapIdx` is the raw insert position: the strip above page N inserts at N.
+const RAIL_BAR_Z = 20;   // the rail's pinned filter bar; above the cells' z 7 controls
 function _dsInsertStrip(afterKey, tw, gapIdx) {
     const strip = document.createElement('div');
     strip.setAttribute('data-insstrip', '1');
@@ -24578,7 +24815,11 @@ function _dsRenderRail() {
     // rail's own controls. Negative margins pull it out over the rail's padding so it spans
     // edge to edge, an opaque panel fill stops anything showing through, and a bottom rule
     // plus a short shadow say where the header ends and the deck begins.
-    bar.style.cssText = 'position:sticky; top:-12px; z-index:5; margin:-12px -12px 6px; padding:10px 12px 8px;'
+    // ABOVE EVERY RAIL CONTROL (19.50): a page's side + / - buttons sit at z 7, so at z 5 they
+    // scrolled OVER this bar, showed through it and took the click meant for the rebuild
+    // button, adding or removing a page. RAIL_BAR_Z must stay above every z in the rail.
+    bar.id = 'dsRailBar';
+    bar.style.cssText = 'position:sticky; top:-12px; z-index:' + RAIL_BAR_Z + '; margin:-12px -12px 6px; padding:10px 12px 8px;'
         + ' background:var(--bg-panel); border-bottom:1px solid var(--border-color);'
         + ' box-shadow:0 4px 8px -6px rgba(0,0,0,0.45);';
     const inp = document.createElement('input');
@@ -24639,7 +24880,10 @@ function _dsRenderRail() {
         cell.onclick = () => _dsSelectPage(i);
         _dsWireRailDrag(cell, desc, i);
         const thumb = document.createElement('div');
-        thumb.style.cssText = 'position:relative; width:' + tw + 'px; height:' + th + 'px; background:#fff; border-radius:var(--r-4); overflow:hidden; border:2px solid ' + (i === _dsIndex ? 'var(--ui-active)' : 'var(--border-color)') + ';';
+        // isolation (19.50): a page preview carries its own high-z layers (an element page's
+        // notes/footer overlay is z 8000); they stack INSIDE the thumbnail, never over the
+        // rail's pinned bar as it scrolls under.
+        thumb.style.cssText = 'position:relative; isolation:isolate; width:' + tw + 'px; height:' + th + 'px; background:#fff; border-radius:var(--r-4); overflow:hidden; border:2px solid ' + (i === _dsIndex ? 'var(--ui-active)' : 'var(--border-color)') + ';';
         const _tck = _dsThumbCacheKey(desc);
         thumb.dataset.thumbKey = _tck;
         const _pid = _deckPageKey(desc) || (desc.kind + ':' + i);
@@ -26270,6 +26514,8 @@ function _dsSetDockSide(side) {
 // has to remember to call it. Placement is applied here too, lazily, so a fresh
 // load needs no boot hook to put the dock where it was left.
 function _dsDockSync() {
+    // The deck is on screen: if Preflight's colour went stale while it was hidden, re-run it.
+    try { if (_pfBadgeStale && !_pfBadgeTimer) _pfBadgeSchedule(); } catch (e) {}
     const dock = document.getElementById('dsToolDock'); if (!dock) return;
     const side = _dsDockSide();
     // On a phone the dock rides in the page bar above the page (19.25, #phoneDeckTools).
@@ -32154,7 +32400,8 @@ function _fpPanelItems(t, desc) {
     _fpFillItemList(desc);
 }
 // The header widths are the row's widths (FP_ITEM_COLS), so the two cannot drift.
-const FP_ITEM_COLS = { num: 24, cat: 26, line: 34, frames: 38 };
+const FP_CAT_CHIP = 22;   // the category chip: a square as tall as the line / frames buttons (19.52)
+const FP_ITEM_COLS = { num: 24, cat: 50, line: 34, frames: 38 };   // cat wide enough for its CATEGORY heading (19.51)
 // The line styles, in menu order. 'custom' keeps its stored value and is labelled
 // BREAKER: separate start/end runs, the line drawn along a corridor between its doors.
 const FP_LINE_STYLES = [
@@ -32193,7 +32440,7 @@ function _fpItemHeader() {
     };
     cell('#', FP_ITEM_COLS.num, 'Pin number. Hollow until the code is pinned on a plan.');
     cell('Item code', 0, 'Double-click a code to rename it', true);
-    cell('Cat', FP_ITEM_COLS.cat, 'Category: sets the pin and line colour');
+    cell('Category', FP_ITEM_COLS.cat, 'Category: sets the pin and line colour');
     cell('Line', FP_ITEM_COLS.line, 'Pick a line style (Single, Diptych, Triptych, Breaker, Wrap) and draw it on this plan');
     cell('Frames', FP_ITEM_COLS.frames, 'Single, Diptych, Triptych, Quad, or a 5 / 7 piece salon hang. Mocked up on the wall in Elevations.');
     return h;
@@ -32441,6 +32688,43 @@ const SALON_PRESETS = [
         { x: 66, y: 1, w: 18, h: 22, s: 'mat', f: 'MICH-708-290' },
         { x: 88, y: 12, w: 34, h: 28, s: 'mat', f: 'MICH-247-79' },
         { x: 126, y: 9, w: 28, h: 34, s: 'plain', f: 'MICH-708-290' } ] },   // 154in x 50in
+    // SALON HANGS FROM FORD SALT LAKE CITY (19.51), from its V6 install file: every piece set
+    // that hangs together on one wall, including the ones its codes split (6 / 7, 8A / 8B / 9,
+    // 12 / 13 / 14). `proj` names the picker section; geometry rules as the Engineering Lab ones.
+    { key: 'slc-3', n: 3, label: 'ART.3A / 3B / 3C, row of 3', src: 'Ford Salt Lake City ART.3A / 3B / 3C', proj: 'Ford Salt Lake City', asDrawn: true, frames: [
+        { x: 0, y: 0, w: 22, h: 29, s: 'mat', f: 'MICH-41-29' },
+        { x: 26, y: 0.125, w: 40.75, h: 28.75, s: 'mat', f: 'MICH-41-29' },
+        { x: 70.75, y: 0, w: 22, h: 29, s: 'mat', f: 'MICH-41-29' } ] },
+    { key: 'slc-6-7', n: 2, label: 'ART.6 / 7, pair', src: 'Ford Salt Lake City ART.6 / 7', proj: 'Ford Salt Lake City', asDrawn: true, frames: [
+        { x: 0, y: 0, w: 27, h: 37, s: 'mat', f: 'MICH-41-29' },
+        { x: 31, y: 0, w: 56, h: 37, s: 'mat', f: 'MICH-41-29' } ] },
+    { key: 'slc-8-9', n: 3, label: 'ART.9 / 8B / 8A, row of 3', src: 'Ford Salt Lake City ART.8A / 8B / 9', proj: 'Ford Salt Lake City', asDrawn: true, frames: [
+        { x: 0, y: 0, w: 56, h: 37, s: 'mat', f: 'MICH-41-29' },
+        { x: 60, y: 0, w: 27, h: 37, s: 'float', f: 'MICH-241-29' },
+        { x: 91, y: 0, w: 42, h: 37, s: 'mat', f: 'MICH-41-29' } ] },
+    { key: 'slc-10', n: 2, label: 'ART.10A / 10B, pair', src: 'Ford Salt Lake City ART.10A / 10B', proj: 'Ford Salt Lake City', asDrawn: true, frames: [
+        { x: 0, y: 0, w: 28.75, h: 35.75, s: 'mat', f: 'MICH-41-22' },
+        { x: 32.75, y: 0, w: 28.75, h: 35.75, s: 'mat', f: 'MICH-41-22' } ] },
+    { key: 'slc-12-14', n: 3, label: 'ART.12 / 13 / 14, row of 3', src: 'Ford Salt Lake City ART.12 / 13 / 14', proj: 'Ford Salt Lake City', asDrawn: true, frames: [
+        { x: 0, y: 0.125, w: 29.75, h: 36.75, s: 'mat', f: 'MICH-41-29' },
+        { x: 33.75, y: 0, w: 48, h: 37, s: 'float', f: 'MICH-241-29' },
+        { x: 85.75, y: 0, w: 30, h: 37, s: 'mat', f: 'MICH-41-29' } ] },
+    { key: 'slc-15', n: 3, label: 'ART.15A / 15B / 15C, shelf of 3', src: 'Ford Salt Lake City ART.15A / 15B / 15C', proj: 'Ford Salt Lake City', asDrawn: true, frames: [
+        { x: 0, y: 0, w: 20, h: 12, s: 'mat', f: 'MICH-432-29' },
+        { x: 23, y: 0, w: 15, h: 18, s: 'plain', f: 'MICH-432-29' },
+        { x: 41, y: 0, w: 14, h: 16, s: 'plain', f: 'MICH-348-29' } ] },
+    { key: 'slc-21', n: 2, label: 'ART.21A / 21B, pair', src: 'Ford Salt Lake City ART.21A / 21B', proj: 'Ford Salt Lake City', asDrawn: true, frames: [
+        { x: 0, y: 0, w: 24, h: 30, s: 'mat', f: 'MICH-247-82' },
+        { x: 28, y: 0, w: 42, h: 30, s: 'mat', f: 'MICH-247-82' } ] },
+    { key: 'slc-30', n: 2, label: 'ART.30A / 30B, pair', src: 'Ford Salt Lake City ART.30A / 30B', proj: 'Ford Salt Lake City', asDrawn: true, frames: [
+        { x: 0, y: 0, w: 34.75, h: 26.75, s: 'plain', f: 'MICH-41-22' },
+        { x: 38.75, y: 0, w: 34.75, h: 26.75, s: 'mat', f: 'MICH-41-22' } ] },
+    { key: 'slc-31', n: 2, label: 'ART.31A / 31B, pair', src: 'Ford Salt Lake City ART.31A / 31B', proj: 'Ford Salt Lake City', asDrawn: true, frames: [
+        { x: 0, y: 0.125, w: 30.75, h: 42.75, s: 'mat', f: 'MICH-41-29' },
+        { x: 34.75, y: 0, w: 31, h: 43, s: 'float', f: 'MICH-241-29' } ] },
+    { key: 'slc-37', n: 2, label: 'ART.37A / 37B, stacked pair', src: 'Ford Salt Lake City ART.37A / 37B', proj: 'Ford Salt Lake City', asDrawn: true, frames: [
+        { x: 0, y: 22, w: 25, h: 20, s: 'mat', f: 'MICH-432-29' },
+        { x: 0, y: 0, w: 25, h: 20, s: 'mat', f: 'MICH-432-29' } ] },
 ];
 function _salonPreset(key) { return SALON_PRESETS.find(p => p.key === key) || null; }
 // The layout for a set, in inches: [{x, y, w, h, s?}], x/y from the group's bottom-left.
@@ -32623,7 +32907,10 @@ function openFrameSetPicker(g) {
     };
     section('Sets', [1, 2, 3, 4].map(k => ({ n: k, key: '', label: FRAME_SET_SIMPLE[k].label, lay: _frameSetLayout(k, ''), on: !cur.preset && cur.n === k })));
     section('Salon hangs', SALON_PRESETS.filter(p => !p.asDrawn).map(p => ({ n: p.n, key: p.key, label: p.label, lay: p.frames, on: cur.preset === p.key })));
-    section('Ford Engineering Lab', SALON_PRESETS.filter(p => p.asDrawn).map(p => ({ n: p.n, key: p.key, label: p.label, lay: p.frames, on: cur.preset === p.key })));
+    // One section per real project (19.51): `proj` names it; the Engineering Lab hangs predate it.
+    const _projs = [];
+    SALON_PRESETS.filter(p => p.asDrawn).forEach(p => { const nm = p.proj || 'Ford Engineering Lab'; if (_projs.indexOf(nm) < 0) _projs.push(nm); });
+    _projs.forEach(nm => section(nm, SALON_PRESETS.filter(p => p.asDrawn && (p.proj || 'Ford Engineering Lab') === nm).map(p => ({ n: p.n, key: p.key, label: p.label, lay: p.frames, on: cur.preset === p.key }))));
     ov.appendChild(card);
     document.body.appendChild(ov);
     return ov;
@@ -32783,7 +33070,7 @@ function _placementList() {
 // The frame sets offered when a code is minted: the simple ones, then the salon presets.
 function _placementSetChoices() {
     const out = FP_FRAME_SETS.filter(s => FRAME_SET_SIMPLE[s.n]).map(s => ({ value: 'n' + s.n, n: s.n, preset: '', label: s.label }));
-    SALON_PRESETS.forEach(p => out.push({ value: p.key, n: p.n, preset: p.key, label: p.asDrawn ? (p.n + ' set salon, Ford ' + p.label) : (p.n + ' set salon, ' + p.label.toLowerCase()) }));
+    SALON_PRESETS.forEach(p => out.push({ value: p.key, n: p.n, preset: p.key, label: p.asDrawn ? (p.n + ' set salon, ' + (p.proj || 'Ford') + ' ' + p.label) : (p.n + ' set salon, ' + p.label.toLowerCase()) }));
     return out;
 }
 // The layout a placement's rows hang in, in inches. A salon preset only counts while
@@ -33255,7 +33542,8 @@ function _codesSettle(opts) {
     // placements themselves (17.97).
     try { _catSettleAll(); } catch (e) {}
     const moves = {};
-    _codePrefixesInUse().forEach(p => Object.assign(moves, _renumberPrefix(p)));
+    // A wall named for its codes ("ART.15A / 15B / 15C | Kitchenette") follows them (19.44).
+    _wallNamesFollowCodes(() => { _codePrefixesInUse().forEach(p => Object.assign(moves, _renumberPrefix(p))); });
     _codesSortRows();
     if (!opts || opts.walls !== false) _codesSortWalls();
     return moves;
@@ -33404,6 +33692,222 @@ function _codesRefreshViews() {
     try { renderDashTable(); } catch (e) {}
     try { populateDashPushSelector(); } catch (e) {}
     try { recalculateDashboardQuantities(); } catch (e) {}
+}
+// ── PLACEMENTS THAT HANG AS ONE SET (19.44) ─────────────────────────────────
+// ART.12, ART.13 and ART.14 a few inches apart on one wall are a triptych that was coded
+// as three placements: three plan callouts, three breakers, and a renumber of everything
+// after them if anyone fixes it by hand. FRAME SUGGESTS, it never regroups on its own: a
+// code is what the client and the installer go by, and a drag must not rename the
+// project. The suggestion lives in Preflight and on the wall; one click joins.
+// Edge to edge, in inches, between any frame of one placement and any of the other.
+const CODE_SET_GAP_IN = 12;
+// "Keep apart" answers, as sorted row-id lists. applyIdRename keeps them current.
+function _codesApartList() { return Array.isArray(editorialContent.codeSetsApart) ? editorialContent.codeSetsApart : []; }
+function _codesSetSig(ids) { return (ids || []).slice().sort().join('|'); }
+function _codesWallIsPlain(e) { return !!(e && e.frames && !_isCatalogueMaster(e) && !e.catalogueOption); }
+// Every suggestion on the project: [{ elev, elevIdx, keys, ids, gapIn }], keys in number order.
+function _codesSetSuggestions() {
+    const out = [];
+    const els = (typeof elevations !== 'undefined' && elevations) || [];
+    const rows = (typeof dashProjectData !== 'undefined' && dashProjectData) || [];
+    if (!els.length || !rows.length) return out;
+    const cr = _catalogueRowIds();
+    const byId = {}; rows.forEach(r => { if (r && r.id) byId[r.id] = r; });
+    // Where each piece hangs. A placement split across two walls is not offered.
+    const hung = {};
+    els.forEach(e => { if (!_codesWallIsPlain(e)) return; e.frames.forEach(f => { if (f && f.id && f.active !== false) (hung[f.id] = hung[f.id] || new Set()).add(e); }); });
+    const apart = {}; _codesApartList().forEach(a => { if (Array.isArray(a)) apart[_codesSetSig(a)] = 1; });
+    let k = 1; try { k = unitFactor(elevUnit, 'in') || 1; } catch (e) {}
+    const gapOf = (a, b) => {
+        const dx = Math.max(0, Math.max(a.x, b.x) - Math.min(a.x + a.w, b.x + b.w));
+        const dy = Math.max(0, Math.max(a.y, b.y) - Math.min(a.y + a.h, b.y + b.h));
+        return Math.sqrt(dx * dx + dy * dy) * k;
+    };
+    els.forEach((e, ei) => {
+        if (!_codesWallIsPlain(e)) return;
+        const byKey = {};
+        e.frames.forEach(f => {
+            if (!f || !f.id || f.active === false) return;
+            const r = byId[f.id];
+            if (!r || cr[f.id] || _isFlatGraphic(r.product)) return;
+            const key = _artGroupKey(f.id);
+            if (!_plainCodeParts(key)) return;
+            (byKey[key] = byKey[key] || []).push(f);
+        });
+        const keys = Object.keys(byKey).filter(key => rows.every(r => !r || _artGroupKey(r.id) !== key
+            || (hung[r.id] && hung[r.id].size === 1 && hung[r.id].has(e))));
+        if (keys.length < 2) return;
+        // Union by distance, same prefix only.
+        const root = {}; keys.forEach(x => { root[x] = x; });
+        const find = (x) => { while (root[x] !== x) x = root[x] = root[root[x]]; return x; };
+        const near = {};
+        for (let i = 0; i < keys.length; i++) for (let j = i + 1; j < keys.length; j++) {
+            const a = keys[i], b = keys[j];
+            if (_plainCodeParts(a).prefix !== _plainCodeParts(b).prefix) continue;
+            let g = Infinity;
+            byKey[a].forEach(fa => byKey[b].forEach(fb => { g = Math.min(g, gapOf(fa, fb)); }));
+            if (g <= CODE_SET_GAP_IN) { root[find(a)] = find(b); near[a + '|' + b] = g; }
+        }
+        const groups = {};
+        keys.forEach(x => { const r0 = find(x); (groups[r0] = groups[r0] || []).push(x); });
+        Object.keys(groups).forEach(r0 => {
+            const ks = groups[r0].sort((x, y) => _plainCodeParts(x).n - _plainCodeParts(y).n);
+            if (ks.length < 2) return;
+            const ids = rows.filter(r => r && ks.indexOf(_artGroupKey(r.id)) >= 0).map(r => r.id);
+            if (apart[_codesSetSig(ids)]) return;
+            let gapIn = 0;
+            Object.keys(near).forEach(p => { const [a, b] = p.split('|'); if (ks.indexOf(a) >= 0 && ks.indexOf(b) >= 0) gapIn = Math.max(gapIn, near[p]); });
+            out.push({ elev: e, elevIdx: ei, keys: ks, ids: ids, gapIn: gapIn });
+        });
+    });
+    return out;
+}
+// The codes a join would produce, for the question: ART.12A, 12B, 12C.
+function _codesJoinPlan(keys) {
+    const ks = (keys || []).filter(x => _plainCodeParts(x)).sort((x, y) => _plainCodeParts(x).n - _plainCodeParts(y).n);
+    if (ks.length < 2) return null;
+    const pre = _plainCodeParts(ks[0]).prefix;
+    if (ks.some(x => _plainCodeParts(x).prefix !== pre)) return null;
+    const T = ks[0];
+    const byId = (a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
+    const rows = [];
+    ks.forEach(key => (dashProjectData || []).filter(r => r && _artGroupKey(r.id) === key).sort(byId).forEach(r => rows.push(r)));
+    if (rows.length < 2) return null;
+    const cr = _catalogueRowIds();
+    if (rows.some(r => cr[r.id])) return null;
+    // Keep the separator the target's pieces already use (ART-2.1-A), else none (ART.12A).
+    let sep = '';
+    rows.forEach(r => { if (!sep && _artGroupKey(r.id) === T && r.id !== T) { const m = /^[-._\s]+/.exec(r.id.slice(T.length)); if (m) sep = m[0]; } });
+    const pairs = rows.map((r, i) => ({ r: r, from: r.id, to: T + sep + getElevLetter(i) }));
+    return { target: T, keys: ks, pairs: pairs, label: pairs.map((p, i) => i ? p.to.slice(T.length - String(_plainCodeParts(T).raw).length) : p.to).join(', ') };
+}
+// Join placements into one set and close the gap behind them. Pushes no history; the
+// caller's entry covers it (one gesture, one Ctrl+Z). Returns { target, moves } or null.
+function _codesJoinSet(keys) {
+    const plan = _codesJoinPlan(keys);
+    if (!plan) return null;
+    const mine = new Set(plan.pairs.map(p => p.r));
+    const clash = plan.pairs.find(p => (dashProjectData || []).some(o => o && !mine.has(o) && o.id === p.to));
+    if (clash) { _toast(clash.to + ' is already taken', 'Nothing was joined.'); return null; }
+    let moves = {};
+    _wallNamesFollowCodes(() => {
+        const stamp = Date.now().toString(36);
+        plan.pairs.forEach((p, i) => { p.tmp = '__JN' + i + '__' + stamp; applyIdRename(p.from, p.tmp, true); });
+        plan.pairs.forEach(p => applyIdRename(p.tmp, p.to, true));
+        // The joined placements' per-page settings follow their first piece. The target
+        // keeps its own key: in Group A/B/C that IS the set's page.
+        plan.keys.slice(1).forEach(key => { const p = plan.pairs.find(x => _artGroupKey(x.from) === key); if (p) _renamePageKeys(key, p.to); });
+        const kmap = {}; plan.keys.forEach(key => { kmap[key] = plan.target; });
+        const imap = {}; plan.pairs.forEach(p => { imap[p.from] = p.to; });
+        (editorialContent.planDetails || []).forEach(pd => {
+            if (pd && Array.isArray(pd.ids)) pd.ids = pd.ids.map(x => kmap[x] || x).filter((x, i, a) => a.indexOf(x) === i);
+        });
+        (editorialContent.manualGroups || []).forEach(g => { if (g && Array.isArray(g.members)) g.members = g.members.map(x => imap[x] || x); });
+        moves = _codesSettle();
+    });
+    return { target: plan.target, moves: moves, plan: plan };
+}
+// The gesture: Preflight's and the wall hint's "Make set".
+function _codesJoinSetNow(keys) {
+    const res = _codesJoinSet(keys);
+    if (!res) return null;
+    if (typeof pushHistory === 'function') pushHistory();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    _codesRefreshViews();
+    try { _dsRefresh(); } catch (e) {}
+    const later = Object.keys(res.moves || {}).length;
+    _toast(res.plan.keys.join(', ') + ' are now ' + res.plan.label,
+        (later ? later + ' later code' + (later === 1 ? '' : 's') + ' renumbered to close the gap. ' : '') + 'Plan, walls and pages follow. Ctrl+Z undoes it.');
+    try { _pfBadgeSchedule(); } catch (e) {}
+    return res;
+}
+function _codesKeepApart(ids) {
+    const list = _codesApartList().slice();
+    if (!list.some(a => _codesSetSig(a) === _codesSetSig(ids))) list.push((ids || []).slice());
+    editorialContent.codeSetsApart = list;
+    if (typeof pushHistory === 'function') pushHistory();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    try { _elevSetHintSync(); } catch (e) {}
+    try { _pfBadgeSchedule(); } catch (e) {}
+}
+// ── A WALL NAMED FOR ITS CODES KEEPS NAMING THEM ─────────────────────────────
+// "ART.12 / 13 / 14 | Circulation C-101" lists exactly the codes on it. After a join or
+// a renumber the list is rewritten from the frames; a name that does not list exactly
+// its own codes (ART.4 LOBBY, a hand-written title) is never touched.
+function _wallCodeHead(name) {
+    const s = String(name || '');
+    const bar = s.indexOf(' | ');
+    const head = bar >= 0 ? s.slice(0, bar) : s;
+    const toks = head.split('/').map(t => t.trim());
+    const m0 = /^([A-Za-z][A-Za-z0-9]*)\.(\d+[A-Za-z]*)$/.exec(toks[0] || '');
+    if (!m0) return null;
+    const ids = [toks[0]];
+    for (let i = 1; i < toks.length; i++) {
+        const t = toks[i];
+        if (/^[A-Za-z][A-Za-z0-9]*\.\d+[A-Za-z]*$/.test(t)) ids.push(t);
+        else if (/^\d+[A-Za-z]*$/.test(t)) ids.push(m0[1] + '.' + t);
+        else return null;
+    }
+    return { ids: ids, rest: bar >= 0 ? s.slice(bar) : '' };
+}
+function _wallCodeHeadFor(ids) {
+    const list = ids.slice().sort((a, b) => {
+        const pa = _plainCodeParts(_artGroupKey(a)), pb = _plainCodeParts(_artGroupKey(b));
+        if (pa && pb && pa.prefix === pb.prefix && pa.n !== pb.n) return pa.n - pb.n;
+        return a < b ? -1 : a > b ? 1 : 0;
+    });
+    const pre = (id) => { const m = /^([A-Za-z][A-Za-z0-9]*)\./.exec(id); return m ? m[1] : ''; };
+    return list.map((id, i) => (i && pre(id) && pre(id) === pre(list[0])) ? id.slice(pre(id).length + 1) : id).join(' / ');
+}
+function _wallFrameIds(e) {
+    const out = [];
+    ((e && e.frames) || []).forEach(f => { if (f && f.id && f.active !== false && out.indexOf(f.id) < 0) out.push(f.id); });
+    return out;
+}
+function _wallNamesFollowCodes(run) {
+    const keep = [];
+    ((typeof elevations !== 'undefined' && elevations) || []).forEach(e => {
+        if (!_codesWallIsPlain(e)) return;
+        const h = _wallCodeHead(e.name);
+        if (!h) return;
+        const ids = _wallFrameIds(e);
+        if (ids.length && _codesSetSig(ids) === _codesSetSig(h.ids)) keep.push({ e: e, rest: h.rest });
+    });
+    try { return run(); }
+    finally { keep.forEach(o => { const ids = _wallFrameIds(o.e); if (ids.length) o.e.name = _wallCodeHeadFor(ids) + o.rest; }); }
+}
+// The quiet line on the wall itself: the same suggestion Preflight lists, for this wall.
+function _elevSetHintSync() {
+    const box = document.getElementById('wallSetHint');
+    if (!box) return;
+    const e = (typeof elevations !== 'undefined' && elevations) ? elevations[currentElevIndex] : null;
+    let sug = [];
+    try { sug = e ? _codesSetSuggestions().filter(s => s.elev === e) : []; } catch (err) {}
+    let clashes = [];
+    try { clashes = _elevClashes(e); } catch (err) {}
+    box.innerHTML = '';
+    box.style.display = (sug.length || clashes.length) ? '' : 'none';
+    clashes.forEach(c => {
+        const row = document.createElement('div'); row.className = 'wall-set-row';
+        const tx = document.createElement('div'); tx.className = 'wall-set-text wall-clash-text';
+        tx.textContent = (c.frame.id || ('Frame ' + (c.frame.letter || ''))) + ' covers the ' + _ctxBlockName(c.block).toLowerCase() + ' (keep clear).';
+        row.appendChild(tx); box.appendChild(row);
+    });
+    sug.forEach(s => {
+        const plan = _codesJoinPlan(s.keys);
+        if (!plan) return;
+        const row = document.createElement('div'); row.className = 'wall-set-row';
+        const tx = document.createElement('div'); tx.className = 'wall-set-text';
+        tx.textContent = s.keys.join(', ') + ' hang ' + _num1(s.gapIn) + '" apart. One set?';
+        tx.title = 'Pieces this close usually read as one set: one code, one plan callout, one breaker. Joining makes them ' + plan.label + ' and renumbers the codes after them.';
+        const go = document.createElement('button'); go.className = 'action-btn'; go.textContent = 'Make ' + plan.label;
+        go.onclick = () => { _codesJoinSetNow(s.keys); };
+        const no = document.createElement('button'); no.className = 'action-btn btn-secondary'; no.textContent = 'Keep apart';
+        no.title = 'They are separate pieces. Stop suggesting this.';
+        no.onclick = () => { _codesKeepApart(s.ids); };
+        row.appendChild(tx); row.appendChild(go); row.appendChild(no);
+        box.appendChild(row);
+    });
 }
 // Say what moved, in one line. A rename that only re-sorted says nothing.
 function _codesAnnounce(from, to, moves) {
@@ -33621,11 +34125,28 @@ function _fpItemRow(g, desc) {
     const sel = document.createElement('select');
     sel.title = 'Category';
     sel.className = 'fp-cat-chip';
-    sel.style.cssText = 'flex:0 0 ' + FP_ITEM_COLS.cat + 'px; width:' + FP_ITEM_COLS.cat + 'px; height:20px; font-size:var(--fs-50); padding:0; cursor:pointer; -webkit-appearance:none; appearance:none;'
+    sel.style.cssText = 'display:block; width:100%; height:100%; margin:0; min-height:0; box-sizing:border-box; font-size:var(--fs-50); padding:0; cursor:pointer; -webkit-appearance:none; appearance:none;'
         + ' background:' + categoryColor(g.category) + '; color:#fff; border:1px solid var(--border-color); border-radius:var(--r-4);';
     _artCats().forEach(cc => { const o = document.createElement('option'); o.value = cc.key; o.textContent = cc.label; if ((g.category || '') === cc.key) o.selected = true; sel.appendChild(o); });
     sel.onclick = (e) => e.stopPropagation();
     sel.onchange = (e) => _dsFpSetCategory(g.key, e.target.value);
+    // NO CATEGORY READS AS A QUESTION (19.51): a plain grey chip did not say it wanted a
+    // pick. The "?" sits over the chip and lets clicks through to it.
+    const catWrap = document.createElement('span');
+    catWrap.className = 'fp-cat-wrap';
+    // A SQUARE THE HEIGHT OF THE LINE AND FRAMES BUTTONS (19.52), so the three sit on one top and
+    // bottom line with the row's even gap between them. The heading column stays wider for its
+    // word; the chip need not sit under it.
+    catWrap.style.cssText = 'position:relative; flex:0 0 ' + FP_CAT_CHIP + 'px; width:' + FP_CAT_CHIP + 'px; height:' + FP_CAT_CHIP + 'px; display:block;';
+    catWrap.appendChild(sel);
+    const _noCat = !_artCats().some(cc => cc.key && cc.key === (g.category || ''));
+    if (_noCat) {
+        sel.title = 'No category yet: click to pick one (sets the pin and line colour)';
+        const q = document.createElement('span');
+        q.className = 'fp-cat-q';
+        q.textContent = '?';
+        catWrap.appendChild(q);
+    }
     // The line state is read for THIS plan, not for the group's primary: a piece with a
     // line on Level 1 and none here must show the button as empty, or you cannot tell
     // which plans still need one.
@@ -33665,7 +34186,7 @@ function _fpItemRow(g, desc) {
     frB.title = 'Frames: ' + (_set.preset ? ('salon hang, ' + _salonPreset(_set.preset).label) : (FRAME_SET_SIMPLE[_set.n] ? FRAME_SET_SIMPLE[_set.n].label : _set.n + ' pieces')) + '. Click to change the set; it is mocked up on the wall in Elevations.';
     // The arrangements as pictures (19.31, openFrameSetPicker), not a list of names.
     frB.onclick = (e) => { e.stopPropagation(); openFrameSetPicker(g); };
-    row.appendChild(num); row.appendChild(code); row.appendChild(sel); row.appendChild(lnB); row.appendChild(frB);
+    row.appendChild(num); row.appendChild(code); row.appendChild(catWrap); row.appendChild(lnB); row.appendChild(frB);
     row.onclick = () => _dsFpArm(g.key);
     _fpWireItemDrag(row, g);
     return row;
@@ -36147,7 +36668,9 @@ function _dsSyncActiveThumbnailMirror() {
         if (!wrap) {
             wrap = document.createElement('div');
             wrap.className = '_dsThumbMirrorWrap';
-            wrap.style.cssText = 'position:absolute; inset:0; overflow:hidden; background:#fff;';
+            // isolation (19.50): the mirrored page carries the centre's z 8000 chrome; it must
+            // stack INSIDE this cell, never over the rail's pinned bar.
+            wrap.style.cssText = 'position:absolute; inset:0; overflow:hidden; background:#fff; isolation:isolate;';
             cell.innerHTML = '';
             cell.appendChild(wrap);
             try { cell.insertAdjacentHTML('beforeend', _dsThumbBadgeHTML()); } catch (e) {}
@@ -37480,8 +38003,10 @@ async function _drawSpecSetPageBody(doc, logos, pageNum, meta, unit, tplKey, ctx
             geo.forEach(g => { minX = Math.min(minX, g.x); minY = Math.min(minY, g.y); maxX = Math.max(maxX, g.x + g.w); maxY = Math.max(maxY, g.y + g.h); });
             const bbW = Math.max(0.01, maxX - minX), bbH = Math.max(0.01, maxY - minY);
             const sc = Math.min(regW / bbW, artH / bbH);
-            // Bottom-right in left-column mode; centred and hung from the spec line otherwise.
-            const offX = _thumbsLeft ? (regX + regW - bbW * sc) : (regX + (regW - bbW * sc) / 2);
+            // RIGHT-ANCHORED (19.44): the group's right edge sits on the same line as the
+            // elevation thumbnail's under it (regX + regW), so the page reads as one column.
+            // Bottom-right in left-column mode; hung from the spec line otherwise.
+            const offX = regX + regW - bbW * sc;
             const offY = _thumbsLeft ? (artTop + artH - bbH * sc) : artTop;
             // elevation y is measured bottom-up (larger y = higher on the wall),
             // so flip it into top-down page space or the stack comes out upside down.
@@ -37492,7 +38017,7 @@ async function _drawSpecSetPageBody(doc, logos, pageNum, meta, unit, tplKey, ctx
             const totalW = dims.reduce((a, d) => a + d.w, 0) + gap * (dims.length - 1);
             const maxH = dims.reduce((a, d) => Math.max(a, d.h), 0);
             const sc = Math.min(regW / totalW, artH / maxH);
-            let x = _thumbsLeft ? (regX + regW - totalW * sc) : (regX + (regW - totalW * sc) / 2);
+            let x = regX + regW - totalW * sc;   // right-anchored, as above
             const baseY = _thumbsLeft ? (artTop + artH) : (artTop + maxH * sc);
             members.forEach((r, i) => { const d = dims[i]; const bw = d.w * sc, bh = d.h * sc; placed.push({ r: r, letter: letters[i] || ('' + (i + 1)), bx: x, by: baseY - bh, bw: bw, bh: bh }); x += bw + gap * sc; });
         }
@@ -37544,13 +38069,18 @@ async function _drawSpecSetPageBody(doc, logos, pageNum, meta, unit, tplKey, ctx
             // which makes the frame strip MORE likely to fit rather than less: its cell
             // widths derive from the band height, and it is width that drops it.
             const bandY = regY + regH + 22, bandBot = BB;
+            // ONE THUMBNAIL SIZE ON EVERY GROUP PAGE (19.46): the band's full height at a fixed
+            // width (ART.1's size). A long wall draws shorter INSIDE this box; the plan and the
+            // frame strip keep the band height instead of following the drawing down.
+            const thH = (bandBot - bandY) - 12, thTop = bandY;
+            const _tRef = { w: SW * 0.17, h: thH };
             let legendRight = regX + regW;
             let _thumbBox = null;               // the elevation thumbnail's rect, so the frame strip can match it
             if (_wantElev && SWATCH) {
                 // Grey box, roughly a wall's proportions, in the corner the real
                 // thumbnail lands in — a card shows where it goes, not what's on it.
-                const boxH = (bandBot - bandY) - 12, boxW = Math.min(SW * 0.17, boxH * 1.6);
-                const tx = regX + regW - boxW, ty = bandY;
+                const boxH = thH, boxW = _tRef.w;
+                const tx = regX + regW - boxW, ty = thTop;
                 _specSwatchBox(doc, tx, ty, boxW, boxH, 'Elevation', Math.min(ty + boxH + 8, BB));
                 legendRight = tx - 14;
                 _thumbBox = { tx: tx, ty: ty, tw: boxW, th: boxH };
@@ -37558,18 +38088,20 @@ async function _drawSpecSetPageBody(doc, logos, pageNum, meta, unit, tplKey, ctx
                 try {
                     const er = await renderElevationToCanvas(groupElev, null, { wireframe: _elevIsWireframe(groupElev), dpi: 24, tight: true });
                     if (er && er.canvas) {
-                        const flat = document.createElement('canvas'); const _rf = _rasterFit(er.canvas, SW * 0.17, (bandBot - bandY) - 12, 2.5); flat.width = _rf.w; flat.height = _rf.h; const fc = flat.getContext('2d'); fc.fillStyle = '#fff'; fc.fillRect(0, 0, flat.width, flat.height); fc.imageSmoothingQuality = 'high', fc.drawImage(er.canvas, 0, 0, _rf.w, _rf.h);
-                        const boxW = SW * 0.17, boxH = (bandBot - bandY) - 12;   // leave room for the caption below
+                        const flat = document.createElement('canvas'); const _rf = _rasterFit(er.canvas, _tRef.w, thH, 2.5); flat.width = _rf.w; flat.height = _rf.h; const fc = flat.getContext('2d'); fc.fillStyle = '#fff'; fc.fillRect(0, 0, flat.width, flat.height); fc.imageSmoothingQuality = 'high', fc.drawImage(er.canvas, 0, 0, _rf.w, _rf.h);
+                        const boxW = _tRef.w, boxH = thH;   // the shared box; caption room is below it
                         const fit = Math.min(boxW / flat.width, boxH / flat.height);
                         const tw = flat.width * fit, th = flat.height * fit;
-                        const tx = regX + regW - tw, ty = bandY + (boxH - th);
+                        const tx = regX + regW - tw, ty = thTop + (boxH - th);
                         doc.addImage(flat.toDataURL('image/jpeg', 0.85), 'JPEG', tx, ty, tw, th);
                         _drawGroupElevOutline(doc, er, tx, ty, tw, th);
                         _specThumbCaption(doc, 'Elevation', tx, Math.min(ty + th + 8, BB));
                         // The elevation thumbnail is a link too; in Deck Studio it opens this wall (18.27).
                         _specPlanRectAdd(doc, tx, ty, tw, th, members[0] && members[0].level, groupElev);   // opens its wall (18.27)
                         legendRight = tx - 14;
-                        _thumbBox = { tx: tx, ty: ty, tw: tw, th: th };
+                        // The BOX's height, not the drawing's (19.46): a long wall draws
+                        // shorter, and the plan and strip beside it must not follow it down.
+                        _thumbBox = { tx: tx, ty: thTop, tw: tw, th: boxH };
                     }
                 } catch (e) {}
             }
@@ -37577,8 +38109,8 @@ async function _drawSpecSetPageBody(doc, logos, pageNum, meta, unit, tplKey, ctx
             // page - a deck part way through has groups whose wall is not drawn yet,
             // and a page that reflows when it finally is cannot be laid out.
             if (_wantElev && !_thumbBox) {
-                const boxH = (bandBot - bandY) - 12, boxW = Math.min(SW * 0.17, boxH * 1.6);
-                const tx = regX + regW - boxW, ty = bandY;
+                const boxH = thH, boxW = _tRef.w;
+                const tx = regX + regW - boxW, ty = thTop;
                 _specSwatchBox(doc, tx, ty, boxW, boxH, 'Elevation', Math.min(ty + boxH + 8, BB));
                 legendRight = tx - 14;
                 _thumbBox = { tx: tx, ty: ty, tw: boxW, th: boxH };
@@ -37588,8 +38120,8 @@ async function _drawSpecSetPageBody(doc, logos, pageNum, meta, unit, tplKey, ctx
             //   whatever the one on its right actually drew rather than to a column of
             //   its own: untick the elevation and everything slides right.
             if (_wantPlan) {
-                const pH = _thumbBox ? _thumbBox.th : ((bandBot - bandY) - 12);
-                const pTop = _thumbBox ? _thumbBox.ty : bandY;
+                const pH = _thumbBox ? _thumbBox.th : thH;
+                const pTop = _thumbBox ? _thumbBox.ty : thTop;
                 const pRight = _thumbBox ? (_thumbBox.tx - 14) : (regX + regW);
                 const px0 = pRight - pH;                    // square crop, matched to the band height
                 let pc = null;
@@ -37612,12 +38144,12 @@ async function _drawSpecSetPageBody(doc, logos, pageNum, meta, unit, tplKey, ctx
             //   in the band and the same height as it. With nothing else on the page
             //   it anchors to the right edge of the band instead.
             if (_wantStrip) {
-                const stripTop = _thumbBox ? _thumbBox.ty : bandY;
+                const stripTop = _thumbBox ? _thumbBox.ty : thTop;
                 // +9 is the strip's own label band (LABEL_H): the chip then fills the
                 // SAME height as the plan and elevation beside it, top and bottom, and
                 // its code lands on their caption baseline (top + h + 8). Passing the
                 // bare height made the chip 9pt short and pushed its code up inside the row.
-                const stripH = (_thumbBox ? _thumbBox.th : ((bandBot - bandY) - 12)) + 9;
+                const stripH = (_thumbBox ? _thumbBox.th : thH) + 9;
                 const stripRight = _thumbBox ? (_thumbBox.tx - 14) : (regX + regW);
                 const left = _drawFrameStrip(doc, _sharedFrames, {
                     right: stripRight, top: stripTop, height: stripH, maxW: Math.max(0, stripRight - regX), swatch: SWATCH,
@@ -38058,7 +38590,10 @@ function _dsInstallNotesInto(body, desc) {
     // came down to not being able to see, from the panel, whether a note resolved to
     // anything at all - the tick list says a note is ON, and the page is the only other
     // place that has an opinion. This closes that gap without opening the PDF.
-    const prevLines = _installNoteLines();
+    // THIS PAGE (19.47): leave deck notes off this wall's page, and a note for it alone.
+    const _pgWall = (desc && desc._elevIdx != null && typeof elevations !== 'undefined') ? elevations[desc._elevIdx] : null;
+    if (_pgWall) _dsPageNotesInto(body, desc, _pgWall, save);
+    const prevLines = _installNoteLines(_pgWall);
     const prevWrap = document.createElement('div');
     prevWrap.style.cssText = 'margin-top:8px;';
     const prevLbl = document.createElement('div');
@@ -38090,6 +38625,58 @@ function _dsInstallNotesInto(body, desc) {
     prevWrap.appendChild(chip);
     body.appendChild(prevWrap);
     _dsNoteSizeSliders(body, desc);
+}
+function _dsPageNotesInto(body, desc, wall, save) {
+    const n = _installNotesCfg();
+    const head = document.createElement('div');
+    head.className = 'ds-pgnotes-head';
+    head.appendChild(document.createTextNode('This page'));
+    head.appendChild(_dsHelpDot('For this wall\'s page only. Untick a deck note to leave it off here (it still prints everywhere else), '
+        + 'and type a note that prints on this page and nowhere else.'));
+    body.appendChild(head);
+    const toggleOff = (id, on) => {
+        const list = Array.isArray(wall.notesOff) ? wall.notesOff.filter(x => x !== id) : [];
+        if (!on) list.push(id);
+        if (list.length) wall.notesOff = list; else delete wall.notesOff;
+        save();
+    };
+    const rows = [];
+    FRAME_INSTALL_NOTES.forEach(note => {
+        if (!_installNoteOn(note.key)) return;
+        if (note.key === 'units' && !_specDualUnit()) return;
+        rows.push({ id: 'std:' + note.key, label: note.label });
+    });
+    _installNoteList().forEach(r => { if (r && r.on && (r.text || '').trim()) rows.push({ id: 'c:' + r.id, label: r.text.trim() }); });
+    if (!rows.length) {
+        const e = document.createElement('div'); e.className = 'ds-pgnotes-empty';
+        e.textContent = 'No deck notes are ticked.';
+        body.appendChild(e);
+    }
+    rows.forEach(rw => {
+        const row = document.createElement('label');
+        row.className = 'ds-pgnotes-row';
+        row.setAttribute('data-pgnote', rw.id);
+        const cb = document.createElement('input');
+        cb.type = 'checkbox'; cb.checked = !_installNoteOffHere(wall, rw.id);
+        cb.title = 'Print this deck note on this page';
+        cb.onchange = () => toggleOff(rw.id, cb.checked);
+        const t = document.createElement('span'); t.textContent = rw.label;
+        row.appendChild(cb); row.appendChild(t);
+        body.appendChild(row);
+    });
+    const ta = document.createElement('textarea');
+    ta.className = 'ds-pgnotes-text';
+    ta.setAttribute('data-wall-note', '');
+    ta.value = wall.wallNote || '';
+    ta.placeholder = 'Note for this wall only (each line prints as its own note)';
+    const commit = () => {
+        const v = String(ta.value || '').replace(/\s+$/, '');
+        if ((wall.wallNote || '') === v) return;
+        if (v.trim()) wall.wallNote = v; else delete wall.wallNote;
+        save();
+    };
+    ta.onchange = commit; ta.onblur = commit;
+    body.appendChild(ta);
 }
 // Width and type-size sliders for the note column. Both trade off directly against
 // how big the elevation can be, and the right compromise depends on the wall and how
@@ -38926,19 +39513,50 @@ function _installNoteOn(key) {
 // The resolved note paragraphs for the install/breaker pages, ticked ones in list
 // order, then any free text. Returns [] when nothing is ticked, which is what the
 // renderer uses to decide whether to reserve any space at all.
-function _installNoteLines() {
+// `elev` (19.44) is the wall the page draws. A wall whose art is NOT hung to the hang
+// height (on a shelf, over a credenza) drops the hang-height notes, which would contradict
+// the drawing, and says what governs instead; a wall with a context-block centre line says
+// to centre on it. Derived from the wall, never a second tick. No wall = the deck-wide list.
+// THIS PAGE (19.47): `elev.notesOff` lists deck notes this wall's page leaves out ('std:'
+// key or 'c:' custom id) and `elev.wallNote` is text printed on this wall's page only,
+// after the deck notes. Both live on the WALL: an install or breaker page IS its wall.
+function _installNoteOffHere(elev, id) { return !!(elev && Array.isArray(elev.notesOff) && elev.notesOff.indexOf(id) >= 0); }
+function _installWallNoteLines(elev) {
+    return String((elev && elev.wallNote) || '').split(/\n+/).map(t => t.trim()).filter(Boolean);
+}
+function _installNoteLines(elev) {
     const out = [];
     FRAME_INSTALL_NOTES.forEach(n => {
         if (!_installNoteOn(n.key)) return;
+        if (_installNoteOffHere(elev, 'std:' + n.key)) return;
         // The units note would be nonsense with dual units off, whatever is stored.
         if (n.key === 'units' && !_specDualUnit()) return;
+        if (elev && n.key === 'aff') { _installNoteSetOut(elev).forEach(t => out.push(t)); return; }
+        if (elev && n.key === 'group' && !_elevHangOn(elev)) return;
         const t = _installNoteText(n);
         if (t) out.push(t);
     });
-    _installNoteList().forEach(r => { if (r && r.on) { const t = (r.text || '').trim(); if (t) out.push(t); } });
+    _installNoteList().forEach(r => { if (r && r.on && !_installNoteOffHere(elev, 'c:' + r.id)) { const t = (r.text || '').trim(); if (t) out.push(t); } });
+    _installWallNoteLines(elev).forEach(t => out.push(t));
     return out;
 }
 
+// The set-out note for one wall: the hang-height sentence on an ordinary wall, its
+// replacement on a wall hung to something else, plus one line per centre line drawn
+// through a context block.
+function _installNoteSetOut(elev) {
+    const out = [];
+    const aff = FRAME_INSTALL_NOTES.find(n => n.key === 'aff');
+    if (_elevHangOn(elev)) { const t = aff ? _installNoteText(aff) : ''; if (t) out.push(t); }
+    else out.push('Set the height from the dimensions shown on this elevation, not from a standard hang height.');
+    const cls = _elevBlockCLs(elev);
+    cls.forEach(b => {
+        const nm = _elevBlockCLName(b);
+        out.push('Centre the artwork on the ' + (nm ? nm.toLowerCase() : 'object below') + ', on the line marked ' + _elevBlockCLLabel(b)
+            + (_elevWallClOn(elev) ? '.' : ', not on the wall centre.'));
+    });
+    return out;
+}
 // The INSTALLATION NOTE block on an install-guide or breaker page: a single narrow
 // COLUMN down the right-hand side.
 //
@@ -38996,8 +39614,8 @@ function _installNoteFsScale(cfg) {
 }
 // Wrap each note to the column, keeping them as separate paragraphs so the gap
 // between them survives into the draw pass.
-function _installNoteParas(doc, boxW, fs) {
-    const lines = _installNoteLines();
+function _installNoteParas(doc, boxW, fs, elev) {
+    const lines = _installNoteLines(elev);
     if (!lines.length) return null;
     const out = [];
     doc.setFont(_font('sans'), 'normal'); doc.setFontSize(fs);
@@ -39067,21 +39685,21 @@ function _igColWForElevW(elevW, contentW) {
 function _igNominalContentW() {
     try { const r = _safeFrameRect(960, 540); return r.R - r.L; } catch (e) { return 915; }
 }
-function _installNoteFit(doc, boxW, maxH, fsScale) {
+function _installNoteFit(doc, boxW, maxH, fsScale, elev) {
     const start = IG_NOTE_FS * (fsScale || 1);
     let fs = start, lead = IG_NOTE_LEAD * (fsScale || 1);
-    let paras = _installNoteParas(doc, boxW, fs);
+    let paras = _installNoteParas(doc, boxW, fs, elev);
     if (!paras) return null;
     // Auto-shrink is a LAST RESORT on top of whatever size was asked for: it only
     // engages when the column would run off the page.
     while (fs > IG_NOTE_FS_MIN && maxH > 0 && _installNoteHeightAt(paras, fs, lead) > maxH) {
         fs -= 0.3; lead = fs * (IG_NOTE_LEAD / IG_NOTE_FS);
-        paras = _installNoteParas(doc, boxW, fs);
+        paras = _installNoteParas(doc, boxW, fs, elev);
     }
     return { paras: paras, fs: fs, lead: lead, h: _installNoteHeightAt(paras, fs, lead) };
 }
-function _installNoteBoxH(doc, boxW, maxH, fsScale) {
-    const f = _installNoteFit(doc, boxW, maxH || 0, fsScale);
+function _installNoteBoxH(doc, boxW, maxH, fsScale, elev) {
+    const f = _installNoteFit(doc, boxW, maxH || 0, fsScale, elev);
     return f ? f.h : 0;
 }
 // A hex, defaulted. Kept separate from the drawer so the measure pass and the draw pass
@@ -39110,8 +39728,8 @@ function _installNoteBodyRgb(rgb) {
     const lift = (c) => Math.max(0, Math.min(255, Math.round(c + (255 - c) * 0.12)));
     return { r: lift(rgb.r), g: lift(rgb.g), b: lift(rgb.b) };
 }
-function _drawInstallNoteBox(doc, x, y, boxW, maxH, fsScale, ink) {
-    const f = _installNoteFit(doc, boxW, maxH || 0, fsScale);
+function _drawInstallNoteBox(doc, x, y, boxW, maxH, fsScale, ink, elev) {
+    const f = _installNoteFit(doc, boxW, maxH || 0, fsScale, elev);
     if (!f) return;
     try { doc.setLineDashPattern([], 0); } catch (e) {}
     let ty = y + f.fs;
@@ -39600,7 +40218,7 @@ function _elevGuideVis() {
 // figure only if the person guide is on, and the floor / right-wall positions re-read
 // for the crop. Cached per capture and crop. A capture without guide data (older path,
 // or one that fell back to a flat raster) is drawn as it is.
-const _CAP_BASE_BOXES = ['frame-layer', 'context-layer', 'glazing-dim-layer'];
+const _CAP_BASE_BOXES = ['wall', 'frame-layer', 'context-layer', 'glazing-dim-layer', 'mark-layer'];
 const _capViewCache = new WeakMap();
 function _capShiftOp(o, dx, dy) {
     const n = Object.assign({}, o);
@@ -40448,6 +41066,8 @@ async function _drawInstallGuidePage(doc, logos, pageNum, meta, arg, ctx) {
     // drawing it up front covers every exit for free. The title block that follows
     // sets its own font, size and colour, so leaving those changed here is harmless.
     const _igNoteCfg = _igCfg((arg && arg._ovKey) || '');
+    // The wall this page draws, for the notes that depend on it (19.44).
+    const _igNoteWall = (arg && arg.frames) ? arg : _elevShowingPiece(arg && arg.id);
     const _igNoteFs = _installNoteFsScale(_igNoteCfg);
     const _igNoteW = _installNoteColW(SR.R - SR.L, _igNoteCfg);
     // The column takes its width off whichever edge it sits on. Everything below fits to
@@ -40464,9 +41084,9 @@ async function _drawInstallGuidePage(doc, logos, pageNum, meta, arg, ctx) {
     // band is measured and still ahead of every early return.
     let _igNoteH = 0;
     if (!_igNoteLeft) {
-        _igNoteH = _installNoteBoxH(doc, _igNoteW, SR.B - SR.T, _igNoteFs);
+        _igNoteH = _installNoteBoxH(doc, _igNoteW, SR.B - SR.T, _igNoteFs, _igNoteWall);
         if (_igNoteH > 0) {
-            _drawInstallNoteBox(doc, SR.R - _igNoteW, SR.T, _igNoteW, SR.B - SR.T, _igNoteFs, _igNoteCfg && _igNoteCfg.noteInk);
+            _drawInstallNoteBox(doc, SR.R - _igNoteW, SR.T, _igNoteW, SR.B - SR.T, _igNoteFs, _igNoteCfg && _igNoteCfg.noteInk, _igNoteWall);
             // Off the RIGHT edge, not the bottom. Every layout below fits its drawing to
             // SR.R, so shrinking it once here is the whole change, and on a widescreen
             // page most of that width was slack the drawing was not using.
@@ -40585,8 +41205,8 @@ async function _drawInstallGuidePage(doc, logos, pageNum, meta, arg, ctx) {
     if (_igNoteLeft) {
         const nw = _igLeftColW;
         const ny = _igLegTop + (_igLegendOn ? (_igLegendH + IG_NOTE_GUTTER) : 0);
-        _igNoteH = _installNoteBoxH(doc, nw, SR.B - ny, _igNoteFs);
-        if (_igNoteH > 0) _drawInstallNoteBox(doc, SR.L, ny, nw, SR.B - ny, _igNoteFs, _igNoteCfg && _igNoteCfg.noteInk);
+        _igNoteH = _installNoteBoxH(doc, nw, SR.B - ny, _igNoteFs, _igNoteWall);
+        if (_igNoteH > 0) _drawInstallNoteBox(doc, SR.L, ny, nw, SR.B - ny, _igNoteFs, _igNoteCfg && _igNoteCfg.noteInk, _igNoteWall);
     }
     // What the left column has already spent, so the plan knows where it can start.
     const _igLeftUsedH = (_igLegendOn ? _igLegendH : 0)
@@ -41473,6 +42093,13 @@ function _tplDesignFrame(tpl) {
 }
 // The template-to-page map, ONE copy: the per-piece page and the options sheet (which
 // borrows its left column) must put the same thumbnail in the same place.
+// THE PER-PIECE THUMBNAIL BOX (19.46). The floorplan square and the frame strip are matched
+// to the elevation box, never to the drawing in it, so a long wall draws shorter INSIDE the
+// box instead of shrinking everything beside it. The box is 4:3 at the template's width
+// (SPEC_THUMB_ASPECT): the template's own box is taller than it is wide, so a typical wall
+// drew at the width and a shorter height, which is what the row printed at.
+const SPEC_THUMB_ASPECT = 4 / 3;
+function _specThumbBox(pwF, phF) { const w = pwF; return { w: w, h: Math.min(phF, w / SPEC_THUMB_ASPECT) }; }
 function _specTplMap(tpl, PW, PH) {
     const SF = _layoutSafeFrame();
     const D = SF ? _tplDesignFrame(tpl) : null;
@@ -41668,7 +42295,8 @@ async function _drawSpecPageTemplate(doc, logos, pageNum, meta, r, tplKey, ctx) 
         // elevation per card was the expensive half of the old swatches, and the
         // demo piece isn't on a wall anyway. Sized to the full declared box (rather
         // than a capture's aspect) so the reserved area is what you see.
-        const boxH = ph(tpl.elevation.h), boxW = pw(tpl.elevation.w), boxY = py(tpl.elevation.y);
+        const _tb = _specThumbBox(pw(tpl.elevation.w), ph(tpl.elevation.h));
+        const boxH = _tb.h, boxW = _tb.w, boxY = py(tpl.elevation.y) + (tpl.elevation.alignBottom ? (ph(tpl.elevation.h) - boxH) : 0);
         const boxX = (tpl.plan && tpl.plan.matchElev) ? (px(tpl.plan.x) + boxH + 5) : px(tpl.elevation.x);
         _specSwatchBox(doc, boxX, boxY, boxW, boxH, 'Elevation', _capY(boxY + boxH));
         _elevDrawn = { y: boxY, h: boxH };
@@ -41680,7 +42308,8 @@ async function _drawSpecPageTemplate(doc, logos, pageNum, meta, r, tplKey, ctx) 
         // lay out until the project is finished. Same grey box the template cards
         // use, so “nothing here yet” looks the same everywhere.
         const _elevMiss = () => {
-            const boxW = pw(tpl.elevation.w), boxH = ph(tpl.elevation.h), boxY = py(tpl.elevation.y);
+            const _tb = _specThumbBox(pw(tpl.elevation.w), ph(tpl.elevation.h));
+            const boxW = _tb.w, boxH = _tb.h, boxY = py(tpl.elevation.y) + (tpl.elevation.alignBottom ? (ph(tpl.elevation.h) - boxH) : 0);
             const boxX = (tpl.plan && tpl.plan.matchElev) ? (px(tpl.plan.x) + boxH + 5) : px(tpl.elevation.x);
             _specSwatchBox(doc, boxX, boxY, boxW, boxH, 'Elevation', _capY(boxY + boxH));
             _elevDrawn = { y: boxY, h: boxH };
@@ -41695,7 +42324,10 @@ async function _drawSpecPageTemplate(doc, logos, pageNum, meta, r, tplKey, ctx) 
                 let url;
                 try { const flat = document.createElement('canvas'); const _rf = _rasterFit(er.canvas, pw(tpl.elevation.w), ph(tpl.elevation.h), 2.5); flat.width = _rf.w; flat.height = _rf.h; const ex = flat.getContext('2d'); ex.fillStyle = '#ffffff'; ex.fillRect(0, 0, flat.width, flat.height); ex.imageSmoothingQuality = 'high', ex.drawImage(er.canvas, 0, 0, _rf.w, _rf.h); url = flat.toDataURL('image/jpeg', 0.82); }
                 catch (e) { url = er.canvas.toDataURL('image/jpeg', 0.82); }
-                const boxY0 = py(tpl.elevation.y), boxW = pw(tpl.elevation.w), boxH = ph(tpl.elevation.h);
+                // The shared 4:3 box (19.46), on the template box's bottom line when aligned there.
+                const _tb = _specThumbBox(pw(tpl.elevation.w), ph(tpl.elevation.h));
+                const boxW = _tb.w, boxH = _tb.h;
+                const boxY0 = py(tpl.elevation.y) + (tpl.elevation.alignBottom ? (ph(tpl.elevation.h) - boxH) : 0);
                 const fit = Math.min(boxW / er.canvas.width, boxH / er.canvas.height);
                 const ew = er.canvas.width * fit, eh = er.canvas.height * fit;
                 // When paired with the plan, the plan is a square sized to THIS
@@ -41703,7 +42335,10 @@ async function _drawSpecPageTemplate(doc, logos, pageNum, meta, r, tplKey, ctx) 
                 // elevation image to 5pt right of that square so they read as one
                 // tight row rather than drifting to a fixed column.
                 let boxX = px(tpl.elevation.x);
-                if (tpl.plan && tpl.plan.matchElev) boxX = px(tpl.plan.x) + eh + 5;
+                // THE BOX, NOT THE DRAWING, SETS THE ROW (19.46). A long wall draws shorter
+                // than its box; the plan and the frame strip used to follow that drawn
+                // height, so every thumbnail on a long-wall page came out smaller.
+                if (tpl.plan && tpl.plan.matchElev) boxX = px(tpl.plan.x) + boxH + 5;
                 const boxY = tpl.elevation.alignBottom ? (boxY0 + Math.max(0, boxH - eh)) : boxY0;
                 try { doc.addImage(url, 'JPEG', boxX, boxY, ew, eh); } catch (e) {}
                 // Crisp vector wall + baseboard + floor on top: the baked raster
@@ -41721,7 +42356,7 @@ async function _drawSpecPageTemplate(doc, logos, pageNum, meta, r, tplKey, ctx) 
                     let bbIn = 4; try { const b = getBaseboardHeight(); if (!isNaN(b)) bbIn = parseFloat(b) * unitFactor((typeof elevUnit !== 'undefined' ? elevUnit : 'in'), 'in'); } catch (e) {}
                     if (bbIn > 0 && bbIn < wallHin) { const byy = boxY + (1 - bbIn / totalHin) * eh; doc.setLineWidth(0.6); doc.line(wx, byy, wx + wW, byy); }
                 } catch (e) {}
-                _elevDrawn = { y: boxY, h: eh };
+                _elevDrawn = { y: boxY0, h: boxH };
                 const capX = boxX + (er.wallLeftFrac || 0) * ew;   // align caption to the wall line, not the image edge
                 // Same face, size and grey as the Frame and Floorplan captions
                 // below. This one was hardcoded to helvetica at a different grey,
@@ -43832,6 +44467,8 @@ function applyIdRename(oldId, newId, quiet) {
     elevations.forEach(elev => {
         elev.frames.forEach(f => { if (f.id === oldId) f.id = newId; });
     });
+    // "Keep apart" answers name rows by id (19.44).
+    try { (editorialContent.codeSetsApart || []).forEach(a => { if (Array.isArray(a)) a.forEach((x, i) => { if (x === oldId) a[i] = newId; }); }); } catch (e) {}
     // QUIET for a batch: a renumber renames every piece twice, and re-rendering the
     // elevation, the dashboard and the push list per row made sixty codes crawl. The
     // batch redraws once at the end (_codesRefreshViews).
@@ -43855,6 +44492,9 @@ function initElevControls() {
     // needs them.
     renderUnderlayControls();
     renderContextControls();
+    // Codes on this wall that hang as one set (19.44), ahead of the same early return.
+    try { _elevSetHintSync(); } catch (e) {}
+    try { _elevWallGuidesSync(); } catch (e) {}
     const container = document.getElementById('frame-controls');
     // Empty state: when no frames are placed yet on this elevation, show a
     // helpful hint about the dashboard→elevation workflow. The container is
@@ -46292,6 +46932,8 @@ const HELP_REFERENCE_DATA = [
             { title: 'Selection', body: `<span class="help-kbd">Click</span> selects one frame, <span class="help-kbd">Ctrl+Click</span> adds or removes one, <span class="help-kbd">Esc</span> deselects.` },
             { title: 'Moving', body: `Arrow keys nudge the selection by the small step; hold <span class="help-kbd">Shift</span> for the big step.` },
             { title: 'Duplicate, group, delete', body: `<span class="help-kbd">Ctrl+D</span> duplicates, <span class="help-kbd">Ctrl+G</span> groups or ungroups, and <span class="help-kbd">Delete</span> takes the selected frames off the wall (they stay in the dashboard).` },
+            { title: 'Lines', body: `The Lines button in the elevation dock offers four kinds: <strong>Line / arrow</strong> (two clicks, any angle), <strong>Centre line</strong> (one click on a frame, an object or the middle of the wall: a full-height CL through its centre), <strong>Centre between</strong> (click two things: a CL halfway between them) and <strong>Level line</strong> (one click on a top, bottom or centre: a full-width line through it). Each follows what it was placed on. <span class="help-kbd">L</span> arms the kind used last.` },
+            { title: 'Free line', body: `<span class="help-kbd">L</span> draws a free line on the wall: click where it starts and where it ends. Ends snap to frames, context blocks and the wall and stay attached when those move; hold Shift for 0, 45 or 90 degrees. The selected line has a label box, arrowheads (none, one end, both) and Dashed. <span class="help-kbd">Delete</span> removes it and <span class="help-kbd">Esc</span> backs out.` },
             { title: 'Measure line', body: `<span class="help-kbd">M</span> toggles the measure-line tool. With a line selected, arrow keys move it and <span class="help-kbd">Esc</span> clears it. Double-click a measure line's number to print EQ instead (and again to bring the number back); a small * over two numbers that read the same marks them both EQ in one click.` },
             { title: 'Undo and save', body: `<span class="help-kbd">Ctrl+Z</span> undoes, <span class="help-kbd">Ctrl+Shift+Z</span> or <span class="help-kbd">Ctrl+Y</span> redoes. <span class="help-kbd">Ctrl+S</span> saves and <span class="help-kbd">Ctrl+Shift+S</span> saves a copy somewhere else.` },
             { title: 'Dialogs', body: `<span class="help-kbd">Esc</span> closes the dialog on top, and on a question it means Cancel. <span class="help-kbd">Tab</span> stays inside an open dialog. The full-screen tools (the floorplan markup and the layout editor) keep <span class="help-kbd">Esc</span> for their own tools instead.` },
@@ -46322,7 +46964,7 @@ const HELP_REFERENCE_DATA = [
             },
             {
                 title: `What's new`,
-                body: `<strong>19.43</strong> Turning an elevation guide on or off (spacing, wall dimensions, hang / CL, labels, measure lines, the person and the rest) no longer re-captures every wall. Each wall is captured once with every guide on, and each page shows only the guides that are on, cropped exactly as before, so a toggle just redraws the pages that show an elevation, with their old previews staying up until the new ones are ready. Switching EQ on or off, or changing how dimensions look, still updates the drawings.<br><br><strong>19.42</strong> Generate PDF no longer prints a page with the grey <em>Updating this elevation drawing</em> placeholder where the wall should be. The export now stops the rail's background elevation updates and waits for the elevation view before it starts, each page waits and tries again instead of giving up, and if a page still missed its drawing the PDF is built once more. If an elevation still will not draw after that, you are told which pages before anything is saved, and can cancel or save anyway.<br><br><strong>19.41</strong> On install pages the elevation's right wall now sits on the right safety guide on every page, with the Elevation caption ending exactly on that wall line, so the drawings no longer shift from page to page. A figure standing just past the right wall shrinks the drawing very slightly to keep the wall on the guide; one standing well past it keeps the drawing where it was (move the figure inside the wall to line it up).<br><br><strong>19.40</strong> Client logo set to <strong>Before text</strong> now sits between the page number and the project name (the page number stays at the margin). The White / As uploaded choice is gone: upload the logo dark and it turns white by itself on dark pages. On install pages the wall's floor now lines up exactly with the bottom of the floor plan beside it.<br><br><strong>19.39</strong> The elevation guides you turn on (spacing, measure lines, person, hang / CL and the rest) are saved in the project, so it reopens showing the dimensions you set up, on any computer. Page previews no longer all rebuild when nothing changed: pressing M for the measure tool or ticking an edge gap used to throw every preview away. Turning a guide on in the Elevations tab no longer flashes the wall or leaves you on a different one. Install pages for a wall with one piece no longer repeat its item code in grey under ELEVATION DETAIL. The client logo can print before or after the project line in the footer (Project tab, Footer and branding), and on dark pages a dark logo prints white, or as uploaded if its colours must stay. An SVG logo now prints in the PDF (it only showed on screen before).<br><br><strong>19.38</strong> A measure line drawn to a context block now really stays attached to it: the measure tool used to save the block's corner as a fixed point, so the line got no dashed connector to the block and did not follow it when the block moved. Lines already drawn that way are re-attached when the wall opens.<br><br><strong>19.37</strong> The scale figure prints in front of context blocks in PDFs and SVG exports, as it shows on screen (a whiteboard or base cabinets no longer cover it). A measure line drawn to a context block (a counter, a door) gets the dashed connector back to the block, the way one drawn to a frame does. On install and breaker pages the letter legend widens to fit a long image code on one line instead of dropping it under its label; it never goes narrower than the width you set, and stops before the drawing loses its share of the page.<br><br><strong>19.36</strong> A measure line can print <strong>EQ</strong> instead of its number: double-click the number to switch it (double-click again for the number back). When two measure lines on a wall read the same, a small * appears above each number; click it to mark them all EQ at once. Use it to say a piece is centred between two doors without quoting the quarter inch. On install pages the elevation is now as tall as the page allows whatever the length of the heading (a long wall name used to keep the drawing under the title at about two thirds of the size). On the floor plan page every | lines up down the list and a set reads <strong>ART.3 | A / B / C</strong> followed by its location.<br><br><strong>19.35</strong> iPhone: the open view's tab and the strip of tools above it are now one grey shape, so it is clear the bottom button opened that row. The camera is in the Items strip (the round button covered the list). The controller takes its own room above the bar instead of covering the panel, the next-step bar sits above the strip, and the keyboard shortcuts button is gone (a phone has no keyboard). The guided tour has its own phone version that walks the phone's controls, and Help > Start here has an <strong>On iPhone and iPad</strong> entry.<br><br><strong>19.34</strong> iPhone: every view has its colour (Deck blue, Items pink, Walls yellow, Controls grey) and the header wears the one you are on. Items and Walls get the same icon strip over the bottom bar as Deck: Add Item, Duplicate, Delete, Edit, Import and Export on Items; Art, Guides, Context and Glass on Walls. In Deck, Project, Pages and Templates each have a colour, and the tools that belong to the tab you are on light up in it while the rest grey out.<br><br><strong>19.33</strong> iPhone Deck: the bottom strip is icons (Project, Pages, Templates) with All pages, Preview and Preflight beside them, and the page toolbar fits one row: with something selected, its settings, front, back and delete take the page arrows' place (swipe still flips pages).<br><br><strong>19.32</strong> iPhone: on Deck, Project, Pages and Templates sit in a strip just above the bottom bar, with the deck menu (Generate PDF, Approval, Preflight) at its right end, instead of a menu up in the header. The empty band above the bottom bar is gone.<br><br><strong>19.31</strong> Frame sets are picked from pictures: the frames button on a floorplan item code opens a window of drawn arrangements (sets, salon hangs and the Ford Engineering Lab hangs), each to scale with its frames, mats and float mounts. The Ford hangs now come in their real mix of frames (oak, black woodgrain, black and gold, floaters); select the set and use Bulk Edit to change them all at once.<br><br><strong>19.30</strong> Fourteen salon hangs from the Ford Engineering Lab installation guide are now frame sets: on the floorplan Items list, click a code's frames button and pick from <strong>Salon hangs · Ford Engineering Lab</strong> (4 to 11 pieces, sized and spaced exactly as built). A saved project now keeps its document code, version and location (they print in every page footer), and reopens with its own include-page ticks and plan order rather than the previous project's.<br><br><strong>19.29</strong> iPhone: the top bar, dialogs, the frame browser and All pages no longer slide under the status bar (camera, clock and battery) in the home-screen app.<br><br><strong>19.28</strong> iPhone: the top bar now does more. On Walls it names the wall (tap to switch walls or add one), on an item it is the way back to the list, and on Deck a menu button beside the three dots holds Project, Pages, Templates, Generate PDF, Approval and Preflight, so each screen loses a row. The item preview no longer opens cropped and off-centre. Align and space opens as a sheet you can see in full. All pages is tighter, with the filter at the very top and a round X to close; the frame browser closes with the same X. In the frame library one vendor is open at a time, and tapping the open vendor closes it (on every device).<br><br><strong>19.27</strong> Frame FA-BW74-2003 (Framerica American Walnut): the vendor's PRODUCT HOLDER sticker is gone from its corner photo, and its frame no longer tiles as a row of dots (its swatch was a sliver of the moulding; it is now a long, seamless piece of the grain). Pieces already in that frame pick up the corrected look when the project opens, on their walls too; a swatch you uploaded yourself is never replaced.<br><br><strong>19.26</strong> FRAME now keeps a copy of itself on your device, so the home-screen app opens with no signal (a basement, a site with no reception) and opens faster everywhere; it still updates whenever there is signal. On iPhone: the round camera button on Items makes a new item straight from a photo (take one or pick several; each becomes its own item with the picture on it), and a sideways swipe across an empty part of a wall flips to the next wall, across a deck page to the next page. Swiping on a frame or a text box still moves it. Import has <strong>New items from photos</strong> on every device.<br><br><strong>19.25</strong> The frame browser builds a screenful of frames at a time and adds more as you scroll, so All frames opens straight away; on iPhone the frame swatches show the whole corner photo (they looked zoomed in). On iPhone, Deck Studio puts the page numbers, All pages and the tools in one row above the page, and the page area fits the page, leaving more room for the layout choices; the Presentation layout and breaker settings now scroll with the panel instead of covering the choices below them.<br><br><strong>19.24</strong> Pinch with two fingers on a wall to zoom it (and drag two fingers to move around); the rest of the app no longer zooms with it. On iPhone the controller is the <strong>Controls</strong> button in the bottom bar instead of a floating button; Deck Studio's Generate PDF and Approval are in its menu button; All pages shows each page as wide as the phone; the frame browser fills the screen three across (five sideways) with the frame lists behind the menu button and the filters behind Filters. On iPhone and iPad the Project tab no longer shows a page preview, and on iPhone it is one column.<br><br><strong>19.23</strong> FRAME on iPhone. Hold the phone upright to work: Deck, Items and Walls are tabs along the bottom, Save and undo stay in the header and everything else is under the three-dot menu. Items is a list; tap one to open its settings, and All items takes you back. Walls shows the wall chips, the wall, the tools and then the frames, with the wall settings below. Deck shows one page at a time with a page bar and All pages. Turn the phone sideways to look: on Walls and Deck the menus go and the wall or page fills the screen. The controller folds to a round button bottom-right.<br><br><strong>19.22</strong> The joystick has four arrows round its rim: tap one for exactly one nudge, hold it to keep nudging (Shift on for big steps). Delete now removes a selected dimension (tap its number or line first; it shows a dashed box and its number ringed), and leaves frames alone while a dimension is selected. On a touch screen dimension lines and their delete buttons are easier to hit. The letter legend is 200pt wide by default. Elevations in PDFs and exports are laid out at least as large as on a desktop screen, so a deck made on an iPad prints its dimensions the same size as one made on the desktop.<br><br><strong>19.21</strong> On an iPad, use Safari's Share button, then <strong>Add to Home Screen</strong>: FRAME opens from its icon as its own full-screen app with no Safari toolbar. In the elevation dock, <strong>Add artwork</strong> (the picture button) puts a photo in the selected frame from the photo library, the camera or Files; select several frames to add several pictures at once, in letter order. The frame browser always opens on All frames, and on a touch screen it no longer brings up the keyboard until you tap the search box.<br><br><strong>19.20</strong> iPad: the key bar is now a controller (bottom-left; drag its dotted grip to move it). Its <strong>joystick</strong> nudges whatever is selected: push the knob the way it should go, a light push steps slowly and a full push moves faster, with Shift on for big steps; one push undoes in one go. The keys can be <strong>tapped</strong> to stay on or <strong>held</strong> with one hand while the other hand drags. With Shift or Ctrl on, tapping rows in the dashboard table selects a range or adds to the selection. The dashboard item list and the elevation wall panel fold away with the tab on their edge; with the list folded the dashboard picture gets its own column beside the form, and on a touch screen the form is four tabs (Item, Frame, Mat, Notes) so each fits without scrolling.<br><br><strong>19.19</strong> More for iPad. On a touch screen a small key bar sits bottom-right: <strong>Shift</strong>, <strong>Ctrl</strong> and <strong>Alt</strong> stay on once tapped (lit) and apply to every drag and tap until tapped off, and <strong>Delete</strong> deletes the selection like the Delete key. A finger that lands just beside a small resize corner or dimension handle picks the handle up. The wall list beside an elevation folds away with the arrow at its top, giving the wall more room (on any computer). On a narrow screen the dashboard keeps the picture above the form instead of in its own column, so the item table keeps its width; the column comes back when there is room.<br><br><strong>19.18</strong> FRAME works with a finger on iPad: drag frames, context blocks, glass, dimension lines, deck page boxes and floorplan pins by touch. In a scrolling list (the wall rail, the frame list) a swipe scrolls and a short press and hold picks the item up. Double-tap does what double-click does. Buttons that only appeared on mouse hover now show on a touch screen.<br><br><strong>19.17</strong> On deck pages, a frame with no picture in it shows a light grey opening instead of a black one (the drop shadow under the frame was showing through). Downloaded SVG and PNG elevations keep the clear opening for InDesign.<br><br><strong>19.16</strong> Group dimensions step out past the spacing dimensions: the overall width line sits above the row of spacing numbers and the height line left of any beside the group, so the two never run through each other. Drag a group line and it moves out from there.<br><br><strong>19.15</strong> Spacing dimensions place themselves: a number too wide for its gap now moves its line above or below the group (left or right for a vertical gap) to the nearest spot clear of every frame, and in a tight stack it sits over its gap inside the column. Drag one and it stays where you put it; Reset dimension positions hands it back. A line pulled out of the group always puts its number on the outside, away from the dashed extension lines. A set of frames gets one group dimension: pressing Group again on the same frames selects the one already there (a different set on the same wall still gets its own). Click a group dimension's number to select it, then press Delete to remove it.<br><br><strong>19.14</strong> Drop an image from another window onto a page in Deck Studio and it becomes that page’s background (pan, zoom or remove it in Page appearance); image boxes and spec-page frames still take their own drops. The Thank You page has two new sliders: <strong>Move contacts up / down</strong> and <strong>Name size</strong>. A new project’s cover has a 1.5pt rule between the client name and the heading that turns white on a dark page, and the starter deck no longer includes a moodboard page.<br><br>
+                body: `<strong>19.52</strong> On the floor plan Items list the category chip is a square the same height as the line and frames buttons, lined up top and bottom with them and evenly spaced.<br><br><strong>19.51</strong> On the floor plan Items list, a code with no category shows a <strong>?</strong> on its chip, so it is clear one still needs picking, and the column heading reads Category. The frame set picker has a <strong>Ford Salt Lake City</strong> section: ten hangs from that project as built (rows of three, pairs, the shelf of three and the stacked pair), each piece in its own frame, mat or float.<br><br><strong>19.50</strong> The page list's filter box and refresh button now stay on top while the pages scroll under them: a page's side + and - buttons used to slide over the refresh button and take the click, adding or removing a page by accident. Page previews no longer show through the filter bar either.<br><br><strong>19.49</strong> Deck Studio's tabs are icons: Project (folder), Pages and Templates beside the title, and Page, Templates and Layers over the right panel, the same glyphs as on the phone. Hover one for its name. The right panel's pinned settings now sit flush under those tabs, so nothing scrolls into view between them.<br><br><strong>19.48</strong> The Lines tool in the elevation dock opens a short menu of kinds. <strong>Centre line</strong>: one click on a frame, an object or the middle of the wall draws a dashed full-height line through its centre, labelled <strong>CL</strong> at the top like the wall's own. <strong>Centre between</strong>: click two things (two frames, a frame and a counter) and the CL lands exactly halfway between them. <strong>Level line</strong>: one click on a top, bottom or centre draws a dashed line across the wall through it, to line tops up. Clicks snap to centres and edges, and every one of these follows the art or object it was placed on when that moves. Change the label (CL ART.4, TOP OF FRAMES) in the box under the selected line. Also fixed: a selected line's settings box could print on the PDF if the line was still selected when the page was drawn.<br><br><strong>19.47</strong> Three tools for hangs that are not straightforward. <strong>Free lines</strong>: the new Line tool in the elevation dock (or <strong>L</strong>) draws a line at any angle, with an arrowhead at one end, both or neither, solid or dashed, and an optional label at its tail such as ALIGN TOP TO MULLION. Its ends stick to frames, context blocks and the wall, and it prints as a clean line in the PDF. <strong>Keep clear</strong>: the Context library has a Keep clear group (switch, thermostat, outlet, strobe, card reader, room sign and a free keep-clear zone), and any block can be marked <strong>Keep clear</strong> in its row. Keep-clear blocks are hatched; a frame covering one is outlined in red on the wall (not in the PDF), noted under the wall settings and listed in Preflight. <strong>Notes for one page</strong>: in Deck Studio, an install or breaker page's notes panel has a <strong>This page</strong> section where you can untick a deck note for that wall only and type a note that prints on that page and nowhere else.<br><br><strong>19.46</strong> Spec-page thumbnails stay one size on every page: a long wall used to draw its elevation short, and the frame corner, profile and floor plan beside it shrank to match. They now keep the full size and the long wall draws inside the same box. An install page whose wall has hang height turned off (ART.15 on its shelf) no longer blows the elevation up past the page and into the specs. Furniture drawings such as the lounge chair now show in the small elevation thumbnails (their lines were too fine to survive the shrink).<br><br><strong>19.45</strong> Art that is not hung to the hang height (on a shelf, over a booth, a counter or a credenza) no longer gets a 57" AFF line and an install note telling the installer to centre it at 57". In Elevations, the Guides tab has a <strong>This wall</strong> section: untick <strong>Hang height</strong> for that wall only and its hang line, AFF dimension and target go, and its install note says to work from the dimensions shown. Pick a context block there (or press <strong>CL</strong> on it in the Context tab) to run a dashed centre line through it, printed as <strong>CL CREDENZA</strong>; it replaces the wall centre line (tick <strong>Wall centre line</strong> to keep both), and the install note says to centre the art on it. Art dragged near a block's centre snaps to it. Spec-page elevation thumbnails now show the context blocks (credenzas, counters, booths) the breaker shows. On Group A/B/C spec pages the artwork lines up on the right with the elevation thumbnail below it.<br><br><strong>19.44</strong> One wall, one breaker: when several codes hang on the same wall (ART.4 and ART.5 at either end of a corridor) the deck prints the wall's elevation breaker once, titled with all of them, followed by each code's own spec pages, in Per-piece and Group A/B/C alike. Codes that hang within 12 inches of each other on one wall are flagged as a possible set: Preflight lists them, and the wall shows a quiet note with <strong>Make ART.12A, 12B, 12C</strong>, which joins them into one set and renumbers every code after them, with the floor plan, walls and pages following (Ctrl+Z undoes it), or <strong>Keep apart</strong> to stop asking. A wall named for its codes (ART.15A / 15B / 15C | Kitchenette) is renamed when they renumber. The Preflight buttons now turn amber for warnings and red for errors and show how many, so a glance tells you whether the deck is clean; nothing pops up while you work.<br><br><strong>19.43</strong> Turning an elevation guide on or off (spacing, wall dimensions, hang / CL, labels, measure lines, the person and the rest) no longer re-captures every wall. Each wall is captured once with every guide on, and each page shows only the guides that are on, cropped exactly as before, so a toggle just redraws the pages that show an elevation, with their old previews staying up until the new ones are ready. Switching EQ on or off, or changing how dimensions look, still updates the drawings.<br><br><strong>19.42</strong> Generate PDF no longer prints a page with the grey <em>Updating this elevation drawing</em> placeholder where the wall should be. The export now stops the rail's background elevation updates and waits for the elevation view before it starts, each page waits and tries again instead of giving up, and if a page still missed its drawing the PDF is built once more. If an elevation still will not draw after that, you are told which pages before anything is saved, and can cancel or save anyway.<br><br><strong>19.41</strong> On install pages the elevation's right wall now sits on the right safety guide on every page, with the Elevation caption ending exactly on that wall line, so the drawings no longer shift from page to page. A figure standing just past the right wall shrinks the drawing very slightly to keep the wall on the guide; one standing well past it keeps the drawing where it was (move the figure inside the wall to line it up).<br><br><strong>19.40</strong> Client logo set to <strong>Before text</strong> now sits between the page number and the project name (the page number stays at the margin). The White / As uploaded choice is gone: upload the logo dark and it turns white by itself on dark pages. On install pages the wall's floor now lines up exactly with the bottom of the floor plan beside it.<br><br><strong>19.39</strong> The elevation guides you turn on (spacing, measure lines, person, hang / CL and the rest) are saved in the project, so it reopens showing the dimensions you set up, on any computer. Page previews no longer all rebuild when nothing changed: pressing M for the measure tool or ticking an edge gap used to throw every preview away. Turning a guide on in the Elevations tab no longer flashes the wall or leaves you on a different one. Install pages for a wall with one piece no longer repeat its item code in grey under ELEVATION DETAIL. The client logo can print before or after the project line in the footer (Project tab, Footer and branding), and on dark pages a dark logo prints white, or as uploaded if its colours must stay. An SVG logo now prints in the PDF (it only showed on screen before).<br><br><strong>19.38</strong> A measure line drawn to a context block now really stays attached to it: the measure tool used to save the block's corner as a fixed point, so the line got no dashed connector to the block and did not follow it when the block moved. Lines already drawn that way are re-attached when the wall opens.<br><br><strong>19.37</strong> The scale figure prints in front of context blocks in PDFs and SVG exports, as it shows on screen (a whiteboard or base cabinets no longer cover it). A measure line drawn to a context block (a counter, a door) gets the dashed connector back to the block, the way one drawn to a frame does. On install and breaker pages the letter legend widens to fit a long image code on one line instead of dropping it under its label; it never goes narrower than the width you set, and stops before the drawing loses its share of the page.<br><br><strong>19.36</strong> A measure line can print <strong>EQ</strong> instead of its number: double-click the number to switch it (double-click again for the number back). When two measure lines on a wall read the same, a small * appears above each number; click it to mark them all EQ at once. Use it to say a piece is centred between two doors without quoting the quarter inch. On install pages the elevation is now as tall as the page allows whatever the length of the heading (a long wall name used to keep the drawing under the title at about two thirds of the size). On the floor plan page every | lines up down the list and a set reads <strong>ART.3 | A / B / C</strong> followed by its location.<br><br><strong>19.35</strong> iPhone: the open view's tab and the strip of tools above it are now one grey shape, so it is clear the bottom button opened that row. The camera is in the Items strip (the round button covered the list). The controller takes its own room above the bar instead of covering the panel, the next-step bar sits above the strip, and the keyboard shortcuts button is gone (a phone has no keyboard). The guided tour has its own phone version that walks the phone's controls, and Help > Start here has an <strong>On iPhone and iPad</strong> entry.<br><br><strong>19.34</strong> iPhone: every view has its colour (Deck blue, Items pink, Walls yellow, Controls grey) and the header wears the one you are on. Items and Walls get the same icon strip over the bottom bar as Deck: Add Item, Duplicate, Delete, Edit, Import and Export on Items; Art, Guides, Context and Glass on Walls. In Deck, Project, Pages and Templates each have a colour, and the tools that belong to the tab you are on light up in it while the rest grey out.<br><br><strong>19.33</strong> iPhone Deck: the bottom strip is icons (Project, Pages, Templates) with All pages, Preview and Preflight beside them, and the page toolbar fits one row: with something selected, its settings, front, back and delete take the page arrows' place (swipe still flips pages).<br><br><strong>19.32</strong> iPhone: on Deck, Project, Pages and Templates sit in a strip just above the bottom bar, with the deck menu (Generate PDF, Approval, Preflight) at its right end, instead of a menu up in the header. The empty band above the bottom bar is gone.<br><br><strong>19.31</strong> Frame sets are picked from pictures: the frames button on a floorplan item code opens a window of drawn arrangements (sets, salon hangs and the Ford Engineering Lab hangs), each to scale with its frames, mats and float mounts. The Ford hangs now come in their real mix of frames (oak, black woodgrain, black and gold, floaters); select the set and use Bulk Edit to change them all at once.<br><br><strong>19.30</strong> Fourteen salon hangs from the Ford Engineering Lab installation guide are now frame sets: on the floorplan Items list, click a code's frames button and pick from <strong>Salon hangs · Ford Engineering Lab</strong> (4 to 11 pieces, sized and spaced exactly as built). A saved project now keeps its document code, version and location (they print in every page footer), and reopens with its own include-page ticks and plan order rather than the previous project's.<br><br><strong>19.29</strong> iPhone: the top bar, dialogs, the frame browser and All pages no longer slide under the status bar (camera, clock and battery) in the home-screen app.<br><br><strong>19.28</strong> iPhone: the top bar now does more. On Walls it names the wall (tap to switch walls or add one), on an item it is the way back to the list, and on Deck a menu button beside the three dots holds Project, Pages, Templates, Generate PDF, Approval and Preflight, so each screen loses a row. The item preview no longer opens cropped and off-centre. Align and space opens as a sheet you can see in full. All pages is tighter, with the filter at the very top and a round X to close; the frame browser closes with the same X. In the frame library one vendor is open at a time, and tapping the open vendor closes it (on every device).<br><br><strong>19.27</strong> Frame FA-BW74-2003 (Framerica American Walnut): the vendor's PRODUCT HOLDER sticker is gone from its corner photo, and its frame no longer tiles as a row of dots (its swatch was a sliver of the moulding; it is now a long, seamless piece of the grain). Pieces already in that frame pick up the corrected look when the project opens, on their walls too; a swatch you uploaded yourself is never replaced.<br><br><strong>19.26</strong> FRAME now keeps a copy of itself on your device, so the home-screen app opens with no signal (a basement, a site with no reception) and opens faster everywhere; it still updates whenever there is signal. On iPhone: the round camera button on Items makes a new item straight from a photo (take one or pick several; each becomes its own item with the picture on it), and a sideways swipe across an empty part of a wall flips to the next wall, across a deck page to the next page. Swiping on a frame or a text box still moves it. Import has <strong>New items from photos</strong> on every device.<br><br><strong>19.25</strong> The frame browser builds a screenful of frames at a time and adds more as you scroll, so All frames opens straight away; on iPhone the frame swatches show the whole corner photo (they looked zoomed in). On iPhone, Deck Studio puts the page numbers, All pages and the tools in one row above the page, and the page area fits the page, leaving more room for the layout choices; the Presentation layout and breaker settings now scroll with the panel instead of covering the choices below them.<br><br><strong>19.24</strong> Pinch with two fingers on a wall to zoom it (and drag two fingers to move around); the rest of the app no longer zooms with it. On iPhone the controller is the <strong>Controls</strong> button in the bottom bar instead of a floating button; Deck Studio's Generate PDF and Approval are in its menu button; All pages shows each page as wide as the phone; the frame browser fills the screen three across (five sideways) with the frame lists behind the menu button and the filters behind Filters. On iPhone and iPad the Project tab no longer shows a page preview, and on iPhone it is one column.<br><br><strong>19.23</strong> FRAME on iPhone. Hold the phone upright to work: Deck, Items and Walls are tabs along the bottom, Save and undo stay in the header and everything else is under the three-dot menu. Items is a list; tap one to open its settings, and All items takes you back. Walls shows the wall chips, the wall, the tools and then the frames, with the wall settings below. Deck shows one page at a time with a page bar and All pages. Turn the phone sideways to look: on Walls and Deck the menus go and the wall or page fills the screen. The controller folds to a round button bottom-right.<br><br><strong>19.22</strong> The joystick has four arrows round its rim: tap one for exactly one nudge, hold it to keep nudging (Shift on for big steps). Delete now removes a selected dimension (tap its number or line first; it shows a dashed box and its number ringed), and leaves frames alone while a dimension is selected. On a touch screen dimension lines and their delete buttons are easier to hit. The letter legend is 200pt wide by default. Elevations in PDFs and exports are laid out at least as large as on a desktop screen, so a deck made on an iPad prints its dimensions the same size as one made on the desktop.<br><br><strong>19.21</strong> On an iPad, use Safari's Share button, then <strong>Add to Home Screen</strong>: FRAME opens from its icon as its own full-screen app with no Safari toolbar. In the elevation dock, <strong>Add artwork</strong> (the picture button) puts a photo in the selected frame from the photo library, the camera or Files; select several frames to add several pictures at once, in letter order. The frame browser always opens on All frames, and on a touch screen it no longer brings up the keyboard until you tap the search box.<br><br><strong>19.20</strong> iPad: the key bar is now a controller (bottom-left; drag its dotted grip to move it). Its <strong>joystick</strong> nudges whatever is selected: push the knob the way it should go, a light push steps slowly and a full push moves faster, with Shift on for big steps; one push undoes in one go. The keys can be <strong>tapped</strong> to stay on or <strong>held</strong> with one hand while the other hand drags. With Shift or Ctrl on, tapping rows in the dashboard table selects a range or adds to the selection. The dashboard item list and the elevation wall panel fold away with the tab on their edge; with the list folded the dashboard picture gets its own column beside the form, and on a touch screen the form is four tabs (Item, Frame, Mat, Notes) so each fits without scrolling.<br><br><strong>19.19</strong> More for iPad. On a touch screen a small key bar sits bottom-right: <strong>Shift</strong>, <strong>Ctrl</strong> and <strong>Alt</strong> stay on once tapped (lit) and apply to every drag and tap until tapped off, and <strong>Delete</strong> deletes the selection like the Delete key. A finger that lands just beside a small resize corner or dimension handle picks the handle up. The wall list beside an elevation folds away with the arrow at its top, giving the wall more room (on any computer). On a narrow screen the dashboard keeps the picture above the form instead of in its own column, so the item table keeps its width; the column comes back when there is room.<br><br><strong>19.18</strong> FRAME works with a finger on iPad: drag frames, context blocks, glass, dimension lines, deck page boxes and floorplan pins by touch. In a scrolling list (the wall rail, the frame list) a swipe scrolls and a short press and hold picks the item up. Double-tap does what double-click does. Buttons that only appeared on mouse hover now show on a touch screen.<br><br><strong>19.17</strong> On deck pages, a frame with no picture in it shows a light grey opening instead of a black one (the drop shadow under the frame was showing through). Downloaded SVG and PNG elevations keep the clear opening for InDesign.<br><br><strong>19.16</strong> Group dimensions step out past the spacing dimensions: the overall width line sits above the row of spacing numbers and the height line left of any beside the group, so the two never run through each other. Drag a group line and it moves out from there.<br><br><strong>19.15</strong> Spacing dimensions place themselves: a number too wide for its gap now moves its line above or below the group (left or right for a vertical gap) to the nearest spot clear of every frame, and in a tight stack it sits over its gap inside the column. Drag one and it stays where you put it; Reset dimension positions hands it back. A line pulled out of the group always puts its number on the outside, away from the dashed extension lines. A set of frames gets one group dimension: pressing Group again on the same frames selects the one already there (a different set on the same wall still gets its own). Click a group dimension's number to select it, then press Delete to remove it.<br><br><strong>19.14</strong> Drop an image from another window onto a page in Deck Studio and it becomes that page’s background (pan, zoom or remove it in Page appearance); image boxes and spec-page frames still take their own drops. The Thank You page has two new sliders: <strong>Move contacts up / down</strong> and <strong>Name size</strong>. A new project’s cover has a 1.5pt rule between the client name and the heading that turns white on a dark page, and the starter deck no longer includes a moodboard page.<br><br>
 <strong>19.13</strong> The Thank You page starts empty. Open <strong>Edit contacts</strong> and pick your team with <strong>+ From directory</strong> (the company directory, now updated), or type someone in. <strong>Save as my default</strong> keeps that team on this computer, and every new project you start begins with it; <strong>Use my default</strong> puts it back on an existing project. Older projects keep the people they already printed.<br><br>
 <strong>19.12</strong> A framed picture in the Frame Dashboard preview shows what you can do with it when you hover: <strong>Replace</strong> and <strong>Remove</strong> in its corner, and a note that you can drag to pan or drop another image on it to swap it.<br><br>\n<strong>19.11</strong> The frame button in the Frame Dashboard shows the frame's corner the way the frame browser does: the whole corner photo on white, with Change underneath.<br><br>\n<strong>19.10</strong> A tighter Frame Dashboard panel. The frame is a square picture button (click it to change the frame) with Frame Code and Color / Texture beside it, and the frame's colour, width and vendor on the Frame heading. Artwork is added from the preview: click the empty opening or drag a picture onto it. The upload row in the panel is gone; once a piece has artwork, its zoom, Reset, 1:1 and Remove sit in one row under the sizes.<br><br>\n<strong>19.09</strong> Frames come from the library. New items start in <strong>MICH-132-29</strong>, a black moulding with a three-quarter inch face, instead of a flat black colour. In the Frame Dashboard the Library / Color switch, the colour picker, Sync Folder and the swatch upload are gone: the frame is one card showing its corner, code, colour, width and vendor, and clicking it opens the frame browser. Picking a frame also fills Color / Texture from the catalogue (never over words you typed). A frame no vendor lists can still be added with <strong>Custom swatch…</strong> in the frame browser. Older projects with colour frames still open and print as before.<br><br>\n<strong>19.08</strong> An empty opening shows an add-image icon instead of its size, on the wall and in the Frame Dashboard preview. In the dashboard, click it to upload the artwork. The size is still in the dashboard fields and the dimension guides.<br><br>\n<strong>19.07</strong> Frame effects in Settings fits on one screen: the sample frame and the sliders sit side by side, and each slider's explanation is behind a <strong>?</strong> instead of a line of text under it.<br><br>\n<strong>19.06</strong> Deck Studio's Project tab is shorter. Project name, code, location and version sit together at the top, and units, rounding and frame effects are one line that says what they are, with <strong>Units&hellip;</strong> and <strong>Frame effects&hellip;</strong> buttons into Settings (the gear in the header), where they are changed. Fixed: the page preview on the Project tab now shows a page's background image, colour and text colour, like the Pages tab; a cover with a picture showed on white before, even after Refresh preview.<br><br>\n<strong>19.05</strong> Elevations get a tool bar beside the wall, like Deck Studio's: Select (V), Measure (M) and Context block (C), then Add frames, Sort A&ndash;Z, Align, Group dimension and Fit to wall, then Item codes and the keyboard shortcuts. The Art, Guides, Context and Glass tabs are bigger, with an icon and a count of what each holds. Frame shadows on the wall are now true to size (the drop shadow was drawn many inches wide), and the shadow inside the opening also falls on the artwork. Breaker and install pages cast the same drop shadow as spec pages when <strong>Also on deck pages</strong> is ticked in Frame effects.<br><br>
 <strong>19.04</strong> Deleting a wall asks about its pieces. When pieces hang on that wall and nowhere else, you choose <strong>Delete wall and pieces</strong> (they leave the Frame Dashboard and the presentation: the way to drop the options a client turned down) or <strong>Delete wall, keep pieces</strong> (as before: they stay in the Dashboard, and + Add Wall offers them to hang again). Pieces also shown on another wall are never deleted, and Ctrl+Z brings back the wall and its pieces together.<br><br><strong>19.03</strong> The frame you pick sets the product both ways. Picking a floater makes the item Framed Canvas (Floater), as before, and picking a regular moulding on a floater item now turns it back into Framed Art (it used to stay a floater, with its canvas inset and no mats). A floater counts by its lip width too, whatever its collection is called. Shadow boxes, frameless canvas, wallcovering and window film are left as you set them.<br><br><strong>19.02</strong> Floaters show their gap. The quarter inch between a floater's face and the canvas now draws as a dark slot instead of more moulding, on the Dashboard preview, the wall, PNG and SVG exports and spec pages, and the canvas casts its shadow into it. Settings, Frame effects has a new <strong>Floater gap</strong> slider for how dark it reads (the canvas used to borrow Frame onto mat). The three Cape Cod floaters (IM-310-715, 720 and 725) now carry their 5/8in face, so a new pick sets a 7/8in inset.<br><br><strong>19.01</strong> More frames turned round to face the right way: 46 Larson-Juhl floaters (Axom, Bauhaus II, Cranbrook, Eiffel, Gramercy, Metalia, Moderne, Olsen, Ravello, Shoji and Spencer II) now show the wall on the left and the floor along the bottom like every other floater, and Academie Silver 3in (LJ-733237) matches its gold and black siblings.<br><br><strong>19.00</strong> The frame browser has a <strong>Type</strong> filter: show only floaters, or only frames, across every vendor. Frame thumbnails are cropped consistently again: about 290 International Moulding and Framerica corners had kept far too much of the moulding and showed as thin slivers. Seven more mouldings that faced the wrong way (including IM-310-710) are turned round.<br><br><strong>18.99</strong> International Moulding and Framerica frames now face the same way as every other moulding: outer edge on the left, rabbet lip on the right. Many were mirror images, so the mockup drew the lip on the outside of the frame. The old Universal folder with two frames is gone; both are in Universal Arquati.<br><br><strong>18.98</strong> The frame library adds International Moulding (about 1,000 current mouldings in 153 collections, 37 of them floaters) and Framerica (336 mouldings in 91 finishes), each with its corner photo, sizes, colour family and, where the maker publishes one, its profile drawing. Deep shadowbox corners now show the frame face above the cut end instead of only raw wood.<br><br><strong>18.97</strong> More frame corners and profiles fit on one row of a group page before it wraps: the space between mouldings tightens first, then the pictures shrink, and only then does the strip go to two rows.<br><br><strong>18.96</strong> Frame corner photos all share one shape now. Thin Universal Arquati and Larson-Juhl mouldings showed as long skinny slivers in the frame browser and on spec pages; every corner is cropped to the same proportions as the Michelangelo ones, showing the cut end and a short run of the face.<br><br><strong>18.95</strong> The frame library adds Universal Arquati: about 1,050 current mouldings in 156 collections (Universal, Valucore and the Arquati lines), including 177 floaters, each with its corner photo, profile drawing, sizes, colour, profile type and style. Discontinued mouldings, fillets, liners and stretcher bars are left out.<br><br><strong>18.94</strong> Two spec page fixes. A picture dropped onto the dashboard preview or onto a frame on the wall kept the previous picture's proportions, so the dashboard and wall stretched it to fit while the spec page printed its true crop; every drop now records the new picture's size, and pieces affected before this correct themselves the next time they are shown. On a per-piece page, a long spec list (float-mounted paper adds four rows) now tightens its rows to stop above the frame corner and profile instead of running into them.<br><br><strong>18.93</strong> The Frame Recommendations page lays frames out on an even grid. With a count that does not divide by the columns (8 frames in 3 columns), the last column used to stretch its frames to fill the page; now every frame is the same size and the last column simply ends early.<br><br><strong>18.92</strong> The frame library adds Larson-Juhl: about 1,030 current mouldings in 156 collections, including 91 floaters, each with its corner photo, profile drawing, sizes, colour family, profile type and style. In the frame browser the Library now lists each vendor once (click it to open its collections), and there is a new <strong>Style</strong> filter (Contemporary, Modern, Classic and so on). Nielsen metal frames are left out because Larson-Juhl has no photos of them.<br><br><strong>18.91</strong> When a Group A/B/C page has too many mouldings for the frame corners and profiles to fit in one row beside the floorplan and elevation, they wrap into two rows in the same space, so the artwork, floorplan and elevation keep their size and place. Seven different mouldings now show every corner and profile.<br><br><strong>18.89</strong> On a Group A/B/C page with several mouldings, ticking Moulding profile no longer makes every frame corner disappear. The corners and profiles now shrink to fit beside the floorplan and elevation; if there is still not enough room, the profiles are left off and the corners kept, and a <strong>no room</strong> note appears beside Moulding profile under Show on page.<br><br><strong>18.88</strong> The frame library now has every Michelangelo collection that works as a frame in FRAME: Barnwood, Contemporary, Modern, Shadow Boxes and Traditional join Avant-Garde, Floaters and Ornate, about 1,240 mouldings in all, each with its corner photo, profile drawing, sizes, colour and profile name. Liners, fillets, rabbetless flat surfaces and stretchers are left out because they are not a frame on their own.<br><br><strong>18.87</strong> The frame library adds Michelangelo's ornate mouldings: all 59 current ones, each with its corner photo, profile drawing, sizes, colour and profile name. Their swatches repeat the ornament down the rail without a visible seam.<br><br><strong>18.86</strong> The frame library adds Michelangelo's floaters: 229 current floater frames for canvas, each with its corner photo, profile drawing, sizes and lip width. Picking one switches the item to Framed Canvas (Floater) and sets the inset from the lip, as before.<br><br><strong>18.85</strong> The frame library now has the whole Michelangelo Avant-Garde collection: 539 current mouldings, each with its corner photo, profile drawing, sizes, colour and profile name, so the frame browser can search and filter all of them.<br><br><strong>18.84</strong> Choosing a frame opens a frame browser: click the <strong>Frame</strong> box on the dashboard. Search by code, colour or profile, and filter by colour family, face width and profile shape, with the corner photo of each moulding. <strong>Project frames</strong> lists the frames already on an item plus a shortlist: star any frame to keep it handy for this project. Save frames you use together as a grouping under <strong>My groupings</strong>, and use <strong>Share with team</strong> to send one to whoever looks after the library, so it appears under <strong>Team groupings</strong> for everyone. The library also gains 109 Michelangelo Avant-Garde mouldings.<br><br><strong>18.83</strong> Copy and paste work between two FRAME tabs. In Deck Studio, copy boxes on a page in one project (Ctrl+C or Cmd+C) and paste them into a page in the other tab (Ctrl+V or Cmd+V): text, shapes, images and lines arrive in the same place on the page, images included.<br><br><strong>18.82</strong> Two projects can be open in two browser tabs at once without risking either one's unsaved work. Each tab now keeps its own backup (they used to share one, so a crash could bring back the other project). The start screen lists every unsaved backup by project name and age, with Continue and Delete; one that is still open in another tab is marked and not offered. Saving a project clears only that tab's backup. The newest five are kept, for a week.<br><br><strong>18.81</strong> Saved project files store each image once. An artwork used on its dashboard row and on wall frames, a shared swatch, and the first floor plan were each written in full every time they appeared; the file now keeps one copy and points to it, so files are smaller and open and save faster. Older project files open as before. Files saved from this version need this version or later.<br><br><strong>18.80</strong> PDFs build about three times faster and come out several times smaller (a 30-page test deck: 75 seconds and 49 MB before, about 22 seconds and 7 MB now), with pages that look the same. Every picture is now encoded at the size it prints at the chosen quality instead of the artwork's full resolution, each image is decoded once and reused, the wall elevations draw their frames and artwork at the size the drawing needs, and frame shadows and PNG floor plans are compressed instead of stored raw. Previews in Deck Studio get the same speed-up. The downloadable SVG keeps full resolution.<br><br><strong>18.79</strong> Contents page fixes. The template's own section lines (and, after applying the Contents template a second time, its placeholder boxes) were left on the page under the automatic ones, so lines doubled up and stayed with Rules off; they are cleared now, and applying the template again starts the page fresh. Introduction, Closing, a level and the other automatic sections can be renamed on the Contents panel. The name fields hold the real name, so you can add to it (Lobby before ART.1C) instead of retyping, and a renamed field has a reset arrow back to the automatic name.<br><br><strong>18.78</strong> Contents page: section titles stay on one line when they can, because the title column widens and the lines move over (only a title that still does not fit wraps). Pages after the last artwork (Thank You and so on) go under Closing instead of joining the last divider's section. On a dark background colour or gradient the contents sets itself in white with light rules, unless you picked a colour. The Contents panel adds Bold, Italic and All caps for titles, Bold and Italic for lines, a separate Numbers colour, Rules on or off with their colour, and Spacing: Grid (the template's rows) or Even.<br><br><strong>18.77</strong> On the Contents page, section titles are links too: to their divider, or to the first page listed under them. The Contents page panel sets the type of the section titles (Titles) and the lines (Lines) (font, size, colour), with Reset to template type to go back. A divider's section title can be renamed there like any line, and a renamed line or section has a <strong>Page</strong> button that writes the new name into that page's own heading, so the page and the contents match.<br><br><strong>18.76</strong> A Contents page too long for one page now continues on a second Contents page, added right after the first, at full type size, with nothing left off. A section too long for a column carries on with its title marked (continued). The extra page goes away by itself when the contents fits on one page again, and every page number after it updates.<br><br><strong>18.75</strong> The page rail numbers pages the way the PDF does, so a Frame Recommendations card that prints on two pages reads 7–8 and every page after it matches the Contents page. Typing a page number to move a page uses those numbers too. On the Contents page, artwork lines are named by where the pieces hang (Lobby: ART.1 – ART.5) and split where the location changes. Lines and section titles still reading as template placeholder text (Divider Page Heading, Section Heading, an untitled page) are marked in amber on the Contents panel and listed in Preflight.<br><br><strong>18.74</strong> Every line on the Contents page is a link. In the PDF it jumps to that page; in Deck Studio click a line to open that page.<br><br><strong>18.73</strong> Every page's panel in Deck Studio has an <strong>In contents</strong> tick while the deck has a Contents page, and layout pages also have <strong>Starts a section</strong>, so any page can head a section, not only dividers. A blank or untitled page you add now stays off the contents until you tick it in. Unticking a wall page or the first page of an Artwork line takes the whole line off. A wall whose name already starts with its code prints the name once.<br><br><strong>18.72</strong> Applying the Contents template to a page you already have now makes it a self-filling Contents page (it used to stay a Custom page showing the placeholder text). A page already set up that way fills itself in the next time you open the deck. Applying a Divider template to a page makes it a section start, the same as adding a new divider.<br><br><strong>18.71</strong> The Contents page writes itself. Add Contents (Full) or (Half) from the Templates tab and it lists the deck with real page numbers, in the template's look, and keeps up as you add, remove and reorder pages. A divider page starts a section, titled by its heading; with no dividers the sections are Introduction, one per floor level, and Closing. A run of spec pages is one Artwork line, and a wall page stands for the spec pages after it. On the Contents page's panel, untick a line to leave it out or type over it to rename it. A deck too long for the page sets smaller type. The PDF now prints this page as you see it (it used to print a plain list instead).<br><br><strong>18.70</strong> On a catalogue options sheet the Elevation thumbnail draws the frame solid, as the grey mockup, instead of faded. Salon and group options are unchanged. Also fixed: a selected page thumbnail in Deck Studio no longer shifts or crops its edges (the footer logo stayed in view only while the page was not selected).<br><br><strong>18.69</strong> Selecting a page in Deck Studio no longer flashes. Options sheets, cards, plan details, spec pages and floorplans used to blink to a blank page with just the title, in the middle and in the page rail, every time you clicked them. Now the page you last saw stays up until the fresh render is ready, and the rail keeps its thumbnail.<br><br><strong>18.68</strong> A selected page keeps its thumbnail in the page rail. Pages drawn as a picture (Timeline, Frame Recommendations, Contacts, floorplans, spec pages, plan details, options sheets) used to show their placeholder there, or go blank, until you picked another page.<br><br><strong>18.67</strong> The catalogue options sheet has an <strong>Options per page</strong> control in Deck Studio: Auto (which shows the number it picked) or 1 to 10, for every options sheet or just this placement, so you can try three or six on a page. A picked number is used exactly, the rest follow on the next page. Also fixed: a page drawn as a picture (options sheets, cards, plan details) no longer goes blank in the page rail while it is selected.<br><br><strong>18.66</strong> On the catalogue options sheet the frame corner, profile, floorplan and elevation now print at exactly the size and position they have on a per-piece spec page, because the sheet draws them with the same layout. The spec list fits between the title and those thumbnails and shrinks rather than running into them, and the mockups start clear of the whole left column.<br><br><strong>18.65</strong> The catalogue options sheet gets its own <strong>Show on page</strong> ticks in Deck Studio, like Group A/B/C: Frame corner, Moulding profile, Floorplan and Elevation, under the specs in the left column. Set them for every options sheet or just this placement. Frame corner and profile are on by default; the plan and wall are off because the breaker in front already carries them. Options pages also show a real preview in the page rail now instead of a placeholder.<br><br><strong>18.64</strong> Catalogue options of a <strong>single piece</strong> now print as an options sheet right after the breaker: the shared specs down the left, the framed mockups on the right coded ART.1.1, ART.1.2, ART.1.3 with each image code underneath, and the options' own spec pages are no longer printed. How many fit a page is automatic (about 1.8in across at the smallest, all at one scale); more than that splits evenly, and every page repeats the specs so a sheet pinned to a board still carries them. Untick <strong>All-options page</strong> to go back to one spec page per option. New options of a single piece are coded ART.1.1, no longer ART.1.1A.<br><br><strong>18.63</strong> In the Frame Dashboard the <strong>Img Code</strong> column widens to fit the longest code, so every code reads in full without scrolling inside the field. It refits as you type.<br><br>
@@ -47934,6 +48576,8 @@ function drawElevAll() {
     // for the current elevation. Done after frames so the boxes overlay them.
     renderGroupDims();
     renderCustomLines();
+    renderMarks();          // free lines (19.47)
+    renderClashMarks();     // frames over a keep-clear block (19.47), screen only
     // Drop any cached artwork node this pass didn't use — see _elevArtImgCache.
     _sweepElevArtImgCache();
 
@@ -49157,6 +49801,138 @@ function _elevCenterTarget(leftPx, bottomPx) {
     return d;
 }
 
+// ── THE SET-OUT IS PER WALL (19.44) ───────────────────────────────────────────
+// The Hang / CL toggle is deck-wide (what the drawings show); WHETHER a wall is set out
+// from its centre and the hang height is the wall's own fact. Art on a shelf, over a
+// booth or a credenza is hung to the object, and a 57" AFF line beside it contradicts
+// the drawing. All read-only: nothing is written until a toggle is pressed.
+//   elev.hangGuide === false  no hang line, AFF dimension or target on this wall
+//   elev.wallCL               true / false wins; unset = on unless a block carries a CL
+//   block.cl                  a centre line through that context block, "CL CREDENZA"
+function _elevHangOn(elev) { return !(elev && elev.hangGuide === false); }
+function _elevBlockCLs(elev) {
+    const bs = (elev && Array.isArray(elev.contextBlocks)) ? elev.contextBlocks : [];
+    return bs.filter(b => b && b.cl && (parseFloat(b.w) || 0) > 0);
+}
+function _elevWallClOn(elev) {
+    if (elev && elev.wallCL === false) return false;
+    if (elev && elev.wallCL === true) return true;
+    return !_elevBlockCLs(elev).length;
+}
+function _elevBlockCLName(b) { return String((b && b.label) || '').trim(); }
+function _elevBlockCLLabel(b) { const n = _elevBlockCLName(b); return n ? ('CL ' + n.toUpperCase()) : 'CL'; }
+function _elevSetOutChanged() {
+    try { drawElevAll(); } catch (e) {}
+    try { initElevControls(); } catch (e) {}
+    pushHistory();
+}
+function setElevHangGuide(on) {
+    const e = elevations[currentElevIndex]; if (!e) return;
+    if (on) delete e.hangGuide; else e.hangGuide = false;
+    _elevSetOutChanged();
+}
+function setElevWallCL(on) {
+    const e = elevations[currentElevIndex]; if (!e) return;
+    e.wallCL = !!on;
+    // Back to the default when that is what was asked for, so a file carries no noise.
+    if (e.wallCL === !_elevBlockCLs(e).length) delete e.wallCL;
+    _elevSetOutChanged();
+}
+function toggleContextCL(ci) {
+    const e = elevations[currentElevIndex]; if (!e) return;
+    const b = _elevContextBlocks(e)[ci]; if (!b) return;
+    if (b.cl) delete b.cl; else b.cl = true;
+    // A stored wall-CL answer that now equals the default is dropped (see setElevWallCL).
+    if (typeof e.wallCL === 'boolean' && e.wallCL === !_elevBlockCLs(e).length) delete e.wallCL;
+    _elevSetOutChanged();
+}
+// ── KEEP CLEAR (19.47) ───────────────────────────────────────────────────────
+// A block flagged keep-clear is something art must not cover. Its own `avoid` boolean
+// wins; absent, the library item decides (the Keep clear group says yes, nothing else
+// does), so existing thermostats and outlets drawn before this did not change.
+function _ctxAvoid(b) {
+    if (!b) return false;
+    if (typeof b.avoid === 'boolean') return b.avoid;
+    const p = b.preset ? _ctxPreset(b.preset) : null;
+    return !!(p && p.key === b.preset && p.avoid);
+}
+function toggleContextAvoid(ci) {
+    const e = elevations[currentElevIndex]; if (!e) return;
+    const b = _elevContextBlocks(e)[ci]; if (!b) return;
+    const next = !_ctxAvoid(b);
+    const p = b.preset ? _ctxPreset(b.preset) : null;
+    const dflt = !!(p && p.key === b.preset && p.avoid);
+    if (next === dflt) delete b.avoid; else b.avoid = next;
+    _elevSetOutChanged();
+}
+// Which frames cover a keep-clear block on a wall: [{ frame, block, x, y, w, h }] with
+// the overlap rect in the wall's units. Read-only, and a touch (under 1/8in) is not a hit.
+function _elevClashes(elev) {
+    const out = [];
+    if (!elev || !Array.isArray(elev.frames) || !Array.isArray(elev.contextBlocks)) return out;
+    const blocks = elev.contextBlocks.filter(b => b && _ctxAvoid(b) && (parseFloat(b.w) || 0) > 0 && (parseFloat(b.h) || 0) > 0);
+    if (!blocks.length) return out;
+    let eps = 0.125; try { eps = 0.125 * unitFactor('in', elevUnit); } catch (e) {}
+    elev.frames.forEach(f => {
+        if (!f || f.active === false) return;
+        const fx = parseFloat(f.x) || 0, fy = parseFloat(f.y) || 0, fw = parseFloat(f.w) || 0, fh = parseFloat(f.h) || 0;
+        blocks.forEach(b => {
+            const bx = parseFloat(b.x) || 0, by = parseFloat(b.y) || 0, bw = parseFloat(b.w) || 0, bh = parseFloat(b.h) || 0;
+            const x0 = Math.max(fx, bx), y0 = Math.max(fy, by), x1 = Math.min(fx + fw, bx + bw), y1 = Math.min(fy + fh, by + bh);
+            if (x1 - x0 > eps && y1 - y0 > eps) out.push({ frame: f, block: b, x: x0, y: y0, w: x1 - x0, h: y1 - y0 });
+        });
+    });
+    return out;
+}
+function _ctxBlockName(b) { return String((b && b.label) || '').trim() || (b && b.preset ? (_ctxPreset(b.preset).name || 'block') : 'block'); }
+// On the wall only (never exported): the overlap outlined in the warning colour, with a
+// word saying what is covered. Drawn into #mark-layer after the free lines.
+function renderClashMarks() {
+    const layer = document.getElementById('mark-layer');
+    if (!layer) return;
+    _elevClashes(elevations[currentElevIndex]).forEach(c => {
+        const d = document.createElement('div');
+        d.className = 'elev-clash';
+        d.setAttribute('data-export-skip', '1'); d.setAttribute('data-html2canvas-ignore', 'true');
+        d.title = (c.frame.id || c.frame.letter || 'A frame') + ' covers the ' + _ctxBlockName(c.block).toLowerCase() + ', which is marked keep clear.';
+        d.style.cssText = 'position:absolute; left:' + (c.x * elevScale) + 'px; bottom:' + (c.y * elevScale) + 'px; width:' + (c.w * elevScale) + 'px; height:' + (c.h * elevScale) + 'px;';
+        const t = document.createElement('span');
+        t.className = 'elev-clash-tag';
+        t.textContent = 'Covers ' + _ctxBlockName(c.block);
+        d.appendChild(t);
+        layer.appendChild(d);
+    });
+}
+// The Guides tab's THIS WALL block: the two set-out switches and a CL chip per block.
+function _elevWallGuidesSync() {
+    const box = document.getElementById('elevWallGuides');
+    if (!box) return;
+    const e = (typeof elevations !== 'undefined' && elevations) ? elevations[currentElevIndex] : null;
+    if (!e) { box.innerHTML = ''; return; }
+    const blocks = Array.isArray(e.contextBlocks) ? e.contextBlocks : [];
+    const hangTxt = (typeof getHangHeight === 'function') ? _elevAffLabel(getHangHeight()) : 'AFF';
+    let html = '<div class="section-title section-title-static">This wall</div>';
+    if (_isEgdWall(e)) {
+        html += '<div class="ewg-note">An EGD wall shows no centre line or hang height.</div>';
+        box.innerHTML = html; return;
+    }
+    html += '<label class="ewg-row" title="The dashed hang line, its ' + _svgEsc(hangTxt) + ' dimension and the target. Turn off where the art is hung to a shelf, booth or furniture instead; the install note then says to work from the dimensions shown.">'
+        + '<input type="checkbox" data-ewg="hang"' + (_elevHangOn(e) ? ' checked' : '') + ' onchange="setElevHangGuide(this.checked)"> Hang height (' + _svgEsc(hangTxt) + ')</label>';
+    html += '<label class="ewg-row" title="The CL line down the middle of the wall. Off by itself once a context block carries a centre line.">'
+        + '<input type="checkbox" data-ewg="wallcl"' + (_elevWallClOn(e) ? ' checked' : '') + ' onchange="setElevWallCL(this.checked)"> Wall centre line</label>';
+    if (blocks.length) {
+        html += '<div class="ewg-sub">Centre line through</div><div class="ewg-chips">';
+        blocks.forEach((b, ci) => {
+            const nm = _elevBlockCLName(b) || ('Block ' + (ci + 1));
+            html += '<button type="button" class="gz-btn' + (b.cl ? ' gz-btn-on' : '') + '" data-ewg-cl="' + ci + '" onclick="toggleContextCL(' + ci + ')"'
+                + ' title="Run a dashed centre line through the ' + _svgEsc(nm) + ', for art centred on it. Prints as ' + _svgEsc(_elevBlockCLLabel(b)) + '.">' + _svgEsc(nm) + '</button>';
+        });
+        html += '</div>';
+    } else {
+        html += '<div class="ewg-note">To centre art on furniture, draw it on the Context tab and pick it here.</div>';
+    }
+    box.innerHTML = html;
+}
 function drawElevGuides(wallW, wallH) {
     const guideLayer = document.getElementById('guide-layer'); guideLayer.innerHTML = '';
     const archLayer = document.getElementById('arch-dim-layer'); archLayer.innerHTML = '';
@@ -49195,10 +49971,22 @@ function drawElevGuides(wallW, wallH) {
     // than centred on it, and inside rather than above, and the collision cannot
     // happen at any wall length or unit.
     cl.innerHTML = `<span class="center-label">CL</span>`;
-    guideLayer.appendChild(cl);
+    const _ge = elevations[currentElevIndex];
+    // PER WALL (19.44): art centred on a credenza or standing on a shelf is not set out
+    // from the wall centre or the hang height, so those guides can be turned off on this
+    // wall alone, and a centre line runs through any context block marked CL.
+    if (_elevWallClOn(_ge)) guideLayer.appendChild(cl);
+    _elevBlockCLs(_ge).forEach(b => {
+        const bl = document.createElement('div'); bl.className = 'center-guide dim-dash-v ctx-cl-guide';
+        bl.setAttribute('data-svg-pen', 'line'); bl.setAttribute('data-svg-dash', '1');
+        bl.style.left = (((parseFloat(b.x) || 0) + (parseFloat(b.w) || 0) / 2) * elevScale) + 'px'; bl.style.bottom = '0px';
+        const lab = document.createElement('span'); lab.className = 'center-label'; lab.textContent = _elevBlockCLLabel(b);
+        bl.appendChild(lab);
+        guideLayer.appendChild(bl);
+    });
 
     const hangVal = getHangHeight();
-    if (hangVal < wallH) {
+    if (hangVal < wallH && _elevHangOn(_ge)) {
         // The dashed hang line. There is deliberately NO "HANG HEIGHT" word next
         // to it any more: it lived outside the wall on the left, which is exactly
         // where the wall-height dimension sits, and in mm/cm the longer number
@@ -49218,8 +50006,9 @@ function drawElevGuides(wallW, wallH) {
         //
         // Lives in the guide layer, so it appears and disappears with the Guides
         // toggle that owns both lines — it can never be left floating with no lines
-        // under it.
-        guideLayer.appendChild(_elevCenterTarget((wallW / 2) * elevScale, hangVal * elevScale));
+        // under it. Only where the wall centre line is drawn: without it there is no
+        // crossing to mark.
+        if (_elevWallClOn(_ge)) guideLayer.appendChild(_elevCenterTarget((wallW / 2) * elevScale, hangVal * elevScale));
 
         // Floor-to-hangline vertical dimension. Shows the hang height as a
         // measured callout from the floor up to the hang line. Positioned a
@@ -50063,8 +50852,11 @@ function renderContextBlocks(wallW, wallH) {
         // A plain primitive with no art still fills, which is the one case where the whole
         // rectangle IS the material.
         const hatchRegion = hasArt ? _ctxHatchRegion(b, art) : null;
-        if (!hasArt || hatchRegion) {
-            const fillSvg = _ctxFillSvg(fillKind, pw, ph, hatchRegion, art, b.id);
+        const avoid = _ctxAvoid(b);
+        if (avoid) el.classList.add('ctx-avoid');
+        // A keep-clear block is hatched over its whole box, art or not (19.47).
+        if (!hasArt || hatchRegion || avoid) {
+            const fillSvg = _ctxFillSvg(avoid ? 'avoid' : fillKind, pw, ph, avoid ? null : hatchRegion, art, b.id);
             if (fillSvg) {
                 const fw = document.createElement('div');
                 fw.className = 'ctx-fill';
@@ -50116,6 +50908,8 @@ function renderContextBlocks(wallW, wallH) {
 const CTX_WOOD_STEP = 16;     // px between grain lines
 const CTX_GLASS_STEP = 22;    // px between hatch lines
 const CTX_FILL_INK = 'rgba(70,70,70,0.18)';
+const CTX_AVOID_STEP = 7;                       // px, keep-clear hatch (19.47)
+const CTX_AVOID_INK = 'rgba(70,70,70,0.5)';
 // Which part of a drawing may carry a material hatch, in the item's own viewBox
 // coordinates. Declared per view, because a bed's wooden plinth is a different shape
 // end-on than it is lengthwise. Null means "this drawing has no region for it" and the
@@ -50194,6 +50988,16 @@ function _ctxFillOps(kind, w, h) {
             const sx = Math.min(x, w), sy = x > w ? (x - w) : 0;
             const len = Math.min(x, w, h - sy) * Math.SQRT2;
             if (len > 1) ops.push({ x: sx, y: sy, len: len, rot: 135, color: CTX_FILL_INK });
+        }
+    } else if (kind === 'avoid') {
+        // KEEP CLEAR (19.47): the same 45-degree run, tighter and darker, the drafting
+        // convention for "nothing goes here". Not one of CONTEXT_FILLS: it follows the
+        // block's keep-clear flag, never the surface picker.
+        const step = CTX_AVOID_STEP;
+        for (let x = step; x < w + h && ops.length < MAX; x += step) {
+            const sx = Math.min(x, w), sy = x > w ? (x - w) : 0;
+            const len = Math.min(x, w, h - sy) * Math.SQRT2;
+            if (len > 1) ops.push({ x: sx, y: sy, len: len, rot: 135, color: CTX_AVOID_INK });
         }
     }
     return ops;
@@ -50313,6 +51117,10 @@ function toggleContextTool(on, presetKey) {
     // whichever bound last would silently win.
     if (contextToolActive) {
         if (typeof lineToolActive !== 'undefined' && lineToolActive) toggleLineTool(false);
+        if (typeof markToolActive !== 'undefined' && markToolActive) {
+            markToolActive = false; markFirstAnchor = null;
+            const mb = document.getElementById('markToolBtn'); if (mb) mb.classList.remove('active');
+        }
         if (typeof _ulCalibrateActive !== 'undefined' && _ulCalibrateActive) _ulCancelCalibrate(true);
         _ulPlacing = false;
         contextToolActive = true;       // those toggles redraw; keep our mode on
@@ -51306,6 +52114,10 @@ function renderContextControls() {
                       title="Keep this object's true proportions when either dimension changes — scaling it up can then never stretch or squash the drawing">${_ctxLocked(b) ? '&#128274;' : '&#128275;'} Aspect</button>
               <button class="gz-btn" onclick="resetContextAspect(${ci})"
                       title="Undo any stretch, keeping the current width">Un-stretch</button>
+              <button class="gz-btn${_ctxAvoid(b) ? ' gz-btn-on' : ''}" data-ctx-avoid="${ci}" onclick="toggleContextAvoid(${ci})"
+                      title="Keep clear: art must not cover this (a switch, a thermostat). Hatched on the drawing; a frame over it is flagged on the wall and in Preflight">Keep clear</button>
+              <button class="gz-btn${b.cl ? ' gz-btn-on' : ''}" data-ctx-cl="${ci}" onclick="toggleContextCL(${ci})"
+                      title="Centre line: run a dashed line through the middle of this object, for art centred on it (prints as ${_svgEsc(_elevBlockCLLabel(b))})">CL</button>
             </div>
           </div>`;
     });
@@ -51527,6 +52339,11 @@ function toggleLineTool(on) {
     lineToolActive = (typeof on === 'boolean') ? on : !lineToolActive;
     lineToolFirstPt = null;
     lineToolFirstAnchor = null;
+    // One wall tool at a time: they all want the same mousedown.
+    if (lineToolActive && typeof markToolActive !== 'undefined' && markToolActive) {
+        markToolActive = false; markFirstAnchor = null;
+        const mb = document.getElementById('markToolBtn'); if (mb) mb.classList.remove('active');
+    }
     // Turning the draw tool on must make custom lines visible — otherwise new
     // lines are created but hidden, which looks like the tool isn't working.
     if (lineToolActive && typeof dimVisibility !== 'undefined') {
@@ -51927,6 +52744,405 @@ function renderCustomLines() {
     });
 }
 
+// ── FREE LINES ON THE ELEVATION (19.47) ─────────────────────────────────────
+// "what if I want to draw some additional lines freestyle in the elevation layout". A
+// line at any angle, solid or dashed, with an arrowhead at none, one or both ends and an
+// optional label at its tail ("ALIGN TO MULLION", "CLEAR OF SWITCH"). Not a dimension:
+// it prints no number. Its ends use the measure tool's anchors (stripAnchor /
+// resolveStoredAnchor), so an end dropped on a frame or a context block stays attached
+// when that moves, and a free end is stored in inches like the measure tool's.
+//   elev.marks = [{ id, kind, a, b, arrow: 'none'|'end'|'both', dash, label }]
+// KINDS (19.48), picked from the dock button's flyout; L arms the last one used:
+//   line   two clicks, any angle (the original)
+//   cl     one click on a frame / object / wall centre: a full-height CL through its
+//          centre (or edge), labelled CL at the top like the wall's own
+//   clmid  two clicks on two things: a full-height CL halfway between them
+//   level  one click on a top / bottom / centre: a full-width horizontal line through it
+// The CL kinds and level keep only the anchors (`a`, and `b` for clmid); the line's ends
+// are DERIVED from the wall every draw (_markEnds), so they follow the art and the wall.
+// Drawn into #mark-layer, always shown (it is content, not a guide toggle), and in both
+// export lists and the capture crop's base boxes. The line is an inline <svg> carried by
+// data-svg-passthrough so an angled stroke prints as a vector; the label is an ordinary
+// text element so emitEl sets it like a dimension number (an SVG <text> inside the
+// passthrough would be walked and printed twice).
+let markToolActive = false;
+let markFirstAnchor = null;      // stored-form anchor of the pending first click
+let selectedMark = null;         // id
+let markKind = 'line';           // the armed kind; L re-arms the last one (module state)
+const MARK_ARROWS = ['none', 'end', 'both'];
+const MARK_KINDS = [
+    ['line', 'Line / arrow', 'Two clicks, any angle. Arrowheads, dashes and a label are on the selected line.'],
+    ['cl', 'Centre line', 'One click on a frame, an object or the middle of the wall: a full-height CL through its centre.'],
+    ['clmid', 'Centre between', 'Click two things (two frames, a door and a window): a full-height CL halfway between them.'],
+    ['level', 'Level line', 'One click on a top, bottom or centre: a full-width line through it, to line things up.']
+];
+const MARK_ARROW_PX = 9;         // arrowhead leg, screen px (a drafting mark, not a size)
+const MARK_HIT_PX = 10;          // click target either side of the stroke
+const MARK_SNAP_PX = 12;         // axis snap reach for the CL / level kinds, screen px
+function _markKindOf(m) { const k = m && m.kind; return (k === 'cl' || k === 'clmid' || k === 'level') ? k : 'line'; }
+function getElevMarks(elev) {
+    const e = elev || ((typeof elevations !== 'undefined' && elevations) ? elevations[currentElevIndex] : null);
+    return (e && Array.isArray(e.marks)) ? e.marks : [];
+}
+function _markById(id) { return getElevMarks().find(m => m && m.id === id) || null; }
+function toggleMarkTool(on, kind) {
+    if (kind && MARK_KINDS.some(k => k[0] === kind)) {
+        // Picking a kind always arms it, even when the tool is already on.
+        markKind = kind;
+        on = true;
+    }
+    markToolActive = (typeof on === 'boolean') ? on : !markToolActive;
+    markFirstAnchor = null;
+    if (markToolActive) {
+        if (typeof lineToolActive !== 'undefined' && lineToolActive) toggleLineTool(false);
+        if (typeof contextToolActive !== 'undefined' && contextToolActive) toggleContextTool(false);
+        markToolActive = true;
+    }
+    _markFlyClose();
+    const btn = document.getElementById('markToolBtn');
+    if (btn) { btn.classList.toggle('active', markToolActive); btn.title = _markBtnTitle(); }
+    const wall = document.getElementById('wall');
+    if (wall) wall.style.cursor = markToolActive ? 'crosshair' : '';
+    _elevDockSync();
+    drawElevAll();
+}
+function _markBtnTitle() {
+    const k = MARK_KINDS.find(x => x[0] === markKind) || MARK_KINDS[0];
+    return 'Lines (L): free lines, centre lines, centre between two things and level lines. L arms the last one used (now: ' + k[1] + ').';
+}
+// The dock button opens the kinds; L skips the menu.
+function openMarkKinds(e) {
+    if (e && e.stopPropagation) e.stopPropagation();
+    if (markToolActive) { toggleMarkTool(false); return; }
+    const fly = document.getElementById('markKindList');
+    if (!fly) { toggleMarkTool(true); return; }
+    const open = fly.style.display === 'none';
+    if (open) {
+        fly.innerHTML = '<div class="elev-fly-title">Lines</div>' + MARK_KINDS.map(k =>
+            '<button type="button" class="mark-kind' + (k[0] === markKind ? ' active' : '') + '" data-mark-kind="' + k[0] + '" title="' + _svgEsc(k[2]) + '">'
+            + '<span class="mark-kind-name">' + _svgEsc(k[1]) + '</span><span class="mark-kind-help">' + _svgEsc(k[2]) + '</span></button>').join('');
+        fly.querySelectorAll('[data-mark-kind]').forEach(b => { b.onclick = (ev) => { ev.stopPropagation(); toggleMarkTool(true, b.getAttribute('data-mark-kind')); }; });
+    }
+    fly.style.display = open ? 'block' : 'none';
+    const btn = document.getElementById('markToolBtn'); if (btn) btn.classList.toggle('open', open);
+}
+function _markFlyClose() {
+    const fly = document.getElementById('markKindList'); if (fly) fly.style.display = 'none';
+    const btn = document.getElementById('markToolBtn'); if (btn) btn.classList.remove('open');
+}
+// Where a click lands: the nearest anchor (frame, block, wall), else a free point. With
+// Shift and a first point, a free end locks to 0 / 45 / 90 degrees from it.
+function _markAnchorAt(e, from) {
+    const pt = eventToElevInches(e);
+    const near = nearestAnchorPoint(pt.x, pt.y);
+    if (near && !(e && e.shiftKey && from)) return near;
+    let x = pt.x, y = pt.y;
+    const p0 = from ? resolveStoredAnchor(from) : null;
+    if (p0 && e && e.shiftKey) {
+        const dx = x - p0.x, dy = y - p0.y, len = Math.hypot(dx, dy);
+        const ang = Math.round(Math.atan2(dy, dx) / (Math.PI / 4)) * (Math.PI / 4);
+        x = p0.x + Math.cos(ang) * len; y = p0.y + Math.sin(ang) * len;
+    }
+    return { ref: 'free', x: x, y: y };
+}
+// One-axis snapping for the CL and level kinds: centres first-class, edges too, on the
+// frames, the blocks and the wall. Returns the stored anchor and its value on that axis.
+function _markAxisTargets(axis) {
+    const W = elevResolvedWallW, H = elevResolvedWallH, out = [];
+    const ks = [['0', 0], ['m', 0.5], ['1', 1]];
+    ks.forEach(([k, f]) => out.push(axis === 'x'
+        ? { v: W * f, a: { ref: 'wall', xc: 'x' + k, yc: 'y0', x: W * f, y: 0 }, c: k === 'm' }
+        : { v: H * f, a: { ref: 'wall', xc: 'x0', yc: 'y' + k, x: 0, y: H * f }, c: k === 'm' }));
+    (elevFrames || []).forEach(f => {
+        if (!f || f.active === false) return;
+        ks.forEach(([k, t]) => out.push(axis === 'x'
+            ? { v: f.x + f.w * t, a: { ref: 'frame', letter: f.letter, xc: 'x' + k, yc: 'y0', x: f.x + f.w * t, y: f.y }, c: k === 'm' }
+            : { v: f.y + f.h * t, a: { ref: 'frame', letter: f.letter, xc: 'x0', yc: 'y' + k, x: f.x, y: f.y + f.h * t }, c: k === 'm' }));
+    });
+    _elevContextBlocks(elevations[currentElevIndex]).forEach(bk => {
+        const bx = parseFloat(bk.x) || 0, by = parseFloat(bk.y) || 0, bw = parseFloat(bk.w) || 0, bh = parseFloat(bk.h) || 0;
+        if (!(bw > 0) || !(bh > 0)) return;
+        ks.forEach(([k, t]) => out.push(axis === 'x'
+            ? { v: bx + bw * t, a: { ref: 'context', cid: bk.id, xc: 'x' + k, yc: 'y0', x: bx + bw * t, y: by }, c: k === 'm' }
+            : { v: by + bh * t, a: { ref: 'context', cid: bk.id, xc: 'x0', yc: 'y' + k, x: bx, y: by + bh * t }, c: k === 'm' }));
+    });
+    return out;
+}
+function _markAxisAt(e, axis) {
+    const pt = eventToElevInches(e);
+    const v = axis === 'x' ? pt.x : pt.y;
+    const reach = MARK_SNAP_PX / (elevScale || 1);
+    let best = null, bd = Infinity;
+    _markAxisTargets(axis).forEach(t => {
+        // A centre wins a tie with an edge it sits close to: centring is what this is for.
+        const d = Math.abs(t.v - v) - (t.c ? reach * 0.25 : 0);
+        if (Math.abs(t.v - v) <= reach && d < bd) { bd = d; best = t; }
+    });
+    if (best) return { v: best.v, anchor: stripAnchor(best.a) };
+    return { v: v, anchor: stripAnchor({ ref: 'free', x: pt.x, y: pt.y }) };
+}
+// A line's two ends in the wall's units, whatever its kind.
+function _markEnds(m) {
+    const k = _markKindOf(m);
+    const W = elevResolvedWallW, H = elevResolvedWallH;
+    if (k === 'line') {
+        const pa = resolveStoredAnchor(m.a), pb = resolveStoredAnchor(m.b);
+        return (pa && pb) ? { pa: pa, pb: pb } : null;
+    }
+    if (k === 'cl' || k === 'clmid') {
+        const ra = resolveStoredAnchor(m.a);
+        const rb = (k === 'clmid') ? resolveStoredAnchor(m.b) : ra;
+        if (!ra || !rb) return null;
+        const x = (ra.x + rb.x) / 2;
+        return { pa: { x: x, y: 0 }, pb: { x: x, y: H }, ra: ra, rb: rb };
+    }
+    const ra = resolveStoredAnchor(m.a);
+    if (!ra) return null;
+    return { pa: { x: 0, y: ra.y }, pb: { x: W, y: ra.y }, ra: ra };
+}
+function _markNewId() { return 'mk' + Date.now().toString(36) + Math.floor(Math.random() * 1e4).toString(36); }
+function _markCommit(m) {
+    const ce = elevations[currentElevIndex];
+    if (!Array.isArray(ce.marks)) ce.marks = [];
+    ce.marks.push(m);
+    selectedMark = m.id;
+    markFirstAnchor = null;
+    // One line, then back to Select with it selected, so its label box is right there.
+    // Same rhythm as the context draw tool.
+    markToolActive = false;
+    const btn = document.getElementById('markToolBtn'); if (btn) btn.classList.remove('active');
+    const wall = document.getElementById('wall'); if (wall) wall.style.cursor = '';
+    _elevDockSync();
+    pushHistory();
+    drawElevAll();
+}
+function handleMarkToolClick(e) {
+    if (!markToolActive) return;
+    e.preventDefault(); e.stopPropagation();
+    if (markKind === 'cl') { _markCommit({ id: _markNewId(), kind: 'cl', a: _markAxisAt(e, 'x').anchor, arrow: 'none', dash: true, label: 'CL' }); return; }
+    if (markKind === 'level') { _markCommit({ id: _markNewId(), kind: 'level', a: _markAxisAt(e, 'y').anchor, arrow: 'none', dash: true, label: '' }); return; }
+    if (markKind === 'clmid') {
+        const at = _markAxisAt(e, 'x');
+        if (!markFirstAnchor) { markFirstAnchor = at.anchor; drawElevAll(); return; }
+        const ra = resolveStoredAnchor(markFirstAnchor);
+        if (!ra || Math.abs(ra.x - at.v) * unitFactor(elevUnit, 'in') < 0.5) { markFirstAnchor = null; drawElevAll(); return; }
+        _markCommit({ id: _markNewId(), kind: 'clmid', a: markFirstAnchor, b: at.anchor, arrow: 'none', dash: true, label: 'CL' });
+        return;
+    }
+    const a = _markAnchorAt(e, markFirstAnchor);
+    if (!markFirstAnchor) { markFirstAnchor = stripAnchor(a); drawElevAll(); return; }
+    const m = { id: _markNewId(), kind: 'line', a: markFirstAnchor, b: stripAnchor(a), arrow: 'end', dash: false, label: '' };
+    const pa = resolveStoredAnchor(m.a), pb = resolveStoredAnchor(m.b);
+    if (!pa || !pb || Math.hypot(pa.x - pb.x, pa.y - pb.y) * unitFactor(elevUnit, 'in') < 0.5) { markFirstAnchor = null; drawElevAll(); return; }
+    _markCommit(m);
+}
+function setMarkField(id, k, v) {
+    const m = _markById(id); if (!m) return;
+    if (k === 'label') v = String(v || '').trim().slice(0, 60);
+    if (k === 'arrow' && MARK_ARROWS.indexOf(v) < 0) v = 'end';
+    if (k === 'dash') v = !!v;
+    if (m[k] === v) return;
+    m[k] = v;
+    pushHistory();
+    drawElevAll();
+}
+function deleteMark(id) {
+    const ce = elevations[currentElevIndex];
+    if (!ce || !Array.isArray(ce.marks)) return;
+    ce.marks = ce.marks.filter(m => m && m.id !== id);
+    if (!ce.marks.length) delete ce.marks;
+    if (selectedMark === id) selectedMark = null;
+    pushHistory();
+    drawElevAll();
+}
+// The stroke and its arrowheads, in a box of the given size (screen px, y down).
+function _markSvg(m, P, Q, w, h, ink, lw) {
+    const dash = m.dash ? ' stroke-dasharray="' + _dimDashArray() + '"' : '';
+    const ln = (x1, y1, x2, y2, d) => '<line x1="' + x1.toFixed(2) + '" y1="' + y1.toFixed(2) + '" x2="' + x2.toFixed(2) + '" y2="' + y2.toFixed(2)
+        + '" stroke="' + ink + '" stroke-width="' + lw.toFixed(3) + '" stroke-linecap="butt"' + (d || '') + '/>';
+    let out = ln(P.x, P.y, Q.x, Q.y, dash);
+    const head = (tip, from) => {
+        const ang = Math.atan2(from.y - tip.y, from.x - tip.x), sp = Math.PI / 7;
+        [ang - sp, ang + sp].forEach(t => { out += ln(tip.x, tip.y, tip.x + Math.cos(t) * MARK_ARROW_PX, tip.y + Math.sin(t) * MARK_ARROW_PX); });
+    };
+    if (_markKindOf(m) === 'line') {
+        if (m.arrow === 'end' || m.arrow === 'both') head(Q, P);
+        if (m.arrow === 'both') head(P, Q);
+    }
+    return '<svg width="' + w.toFixed(2) + '" height="' + h.toFixed(2) + '" viewBox="0 0 ' + w.toFixed(2) + ' ' + h.toFixed(2)
+        + '" style="display:block; overflow:visible;" xmlns="http://www.w3.org/2000/svg">' + out + '</svg>';
+}
+function renderMarks() {
+    const layer = document.getElementById('mark-layer');
+    if (!layer) return;
+    layer.innerHTML = '';
+    const ce = elevations[currentElevIndex];
+    const ink = (annotationStyle && annotationStyle.color) || '#333333';
+    const lw = Math.max(0.5, _dimLineWeight());
+    const skip = (el) => { el.setAttribute('data-export-skip', '1'); el.setAttribute('data-html2canvas-ignore', 'true'); return el; };
+    // Pending first point.
+    if (markToolActive && markFirstAnchor) {
+        const p = resolveStoredAnchor(markFirstAnchor);
+        if (p) {
+            const d = skip(document.createElement('div'));
+            d.style.cssText = 'position:absolute; left:' + (p.x * elevScale) + 'px; bottom:' + (p.y * elevScale) + 'px; width:8px; height:8px; transform:translate(-50%,50%); background:var(--selected); border-radius:50%; z-index:60;';
+            layer.appendChild(d);
+        }
+    }
+    getElevMarks(ce).forEach(m => {
+        if (!m || !m.id) return;
+        const ends = _markEnds(m);
+        if (!ends) return;
+        const kind = _markKindOf(m);
+        const pa = ends.pa, pb = ends.pb;
+        // Bottom-up px, then a box padded for the arrowheads.
+        const ax = pa.x * elevScale, ay = pa.y * elevScale, bx = pb.x * elevScale, by = pb.y * elevScale;
+        const pad = MARK_ARROW_PX + 2;
+        const L = Math.min(ax, bx) - pad, B = Math.min(ay, by) - pad;
+        const w = Math.abs(bx - ax) + pad * 2, h = Math.abs(by - ay) + pad * 2;
+        const P = { x: ax - L, y: (B + h) - ay }, Q = { x: bx - L, y: (B + h) - by };
+        const wrap = document.createElement('div');
+        wrap.className = 'elev-mark' + (selectedMark === m.id ? ' elev-mark-sel' : '');
+        wrap.setAttribute('data-mark-id', m.id);
+        wrap.setAttribute('data-mark-kind', kind);
+        wrap.style.cssText = 'position:absolute; left:' + L + 'px; bottom:' + B + 'px; width:' + w + 'px; height:' + h + 'px; pointer-events:none;';
+        const art = document.createElement('div');
+        art.setAttribute('data-svg-passthrough', '1');
+        art.style.cssText = 'position:absolute; inset:0; line-height:0; pointer-events:none;';
+        art.innerHTML = _markSvg(m, P, Q, w, h, ink, lw);
+        wrap.appendChild(art);
+        // The click target: a wide transparent stroke, never exported.
+        const hit = skip(document.createElement('div'));
+        hit.style.cssText = 'position:absolute; inset:0; line-height:0; pointer-events:none;';
+        hit.innerHTML = '<svg width="' + w + '" height="' + h + '" style="display:block; overflow:visible;"><line x1="' + P.x + '" y1="' + P.y + '" x2="' + Q.x + '" y2="' + Q.y
+            + '" stroke="' + (selectedMark === m.id ? 'var(--selected)' : 'transparent') + '" stroke-opacity="' + (selectedMark === m.id ? '0.35' : '1') + '" stroke-width="' + (MARK_HIT_PX * (selectedMark === m.id ? 0.6 : 1)) + '" style="pointer-events:stroke; cursor:pointer;"/></svg>';
+        hit.querySelector('line').addEventListener('mousedown', (ev) => {
+            if (markToolActive || (typeof lineToolActive !== 'undefined' && lineToolActive)) return;
+            ev.stopPropagation(); ev.preventDefault();
+            selectedMark = m.id; selectedCustomLine = null; selectedDimId = null; selectedGroupDim = null;
+            drawElevAll();
+        });
+        wrap.appendChild(hit);
+        // The label. A CL reads at the TOP of its line, inside the wall, beside the line,
+        // the way the wall's own CL does; a level line at its left end above the line; a
+        // free line at its tail (where a leader note sits), or above the middle when it has
+        // no single tail. Plain text, so it prints like a dimension number.
+        if (m.label) {
+            const lab = document.createElement('div');
+            lab.className = 'mark-label';
+            lab.textContent = m.label;
+            let left, bottom, tr;
+            if (kind === 'cl' || kind === 'clmid') { left = ax - L + 4; bottom = (by - B) - 5; tr = 'translate(0,100%)'; }
+            else if (kind === 'level') { left = 6; bottom = (ay - B) + 3; tr = 'translate(0,0)'; }
+            else if (m.arrow === 'end') {
+                const ux = ax - bx, uy = ay - by;
+                if (Math.abs(ux) >= Math.abs(uy)) { left = (ax - L) + (ux >= 0 ? 4 : -4); bottom = ay - B; tr = 'translate(' + (ux >= 0 ? '0' : '-100%') + ',50%)'; }
+                else { left = ax - L; bottom = (ay - B) + (uy >= 0 ? 4 : -4); tr = 'translate(-50%,' + (uy >= 0 ? '0' : '100%') + ')'; }
+            } else { left = (ax + bx) / 2 - L; bottom = (ay + by) / 2 - B + 4; tr = 'translate(-50%,0)'; }
+            lab.style.cssText = 'position:absolute; left:' + left + 'px; bottom:' + bottom + 'px; transform:' + tr + '; white-space:nowrap; color:var(--dim-color);'
+                + ' font-family:var(--dim-font-family); font-size:var(--dim-font-size); font-weight:var(--dim-font-weight, 600); background:#ffffff; padding:0 3px; line-height:1.2; pointer-events:none;';
+            wrap.appendChild(lab);
+        }
+        if (selectedMark === m.id) _markChrome(wrap, m, P, Q, w, h, skip, ends, L, B);
+        layer.appendChild(wrap);
+    });
+}
+// Selection chrome: handles to re-attach (an end each on a free line; the line itself on a
+// CL or level line; the two things on a centre-between) and the settings strip.
+function _markChrome(wrap, m, P, Q, w, h, skip, ends, L, B) {
+    const kind = _markKindOf(m);
+    const handle = (pt, k, onMove) => {
+        const hd = skip(document.createElement('div'));
+        hd.className = 'mark-end';
+        hd.setAttribute('data-mark-end', k);
+        hd.style.cssText = 'position:absolute; left:' + pt.x + 'px; top:' + pt.y + 'px; width:9px; height:9px; transform:translate(-50%,-50%); border-radius:50%; background:#fff; border:2px solid var(--selected); pointer-events:auto; cursor:move; z-index:2;';
+        hd.addEventListener('mousedown', (ev) => {
+            ev.stopPropagation(); ev.preventDefault();
+            const before = JSON.stringify(m[k]);
+            const move = (e2) => { m[k] = onMove(e2); drawElevAll(); };
+            const up = () => {
+                document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up);
+                if (JSON.stringify(m[k]) !== before) pushHistory();
+            };
+            document.addEventListener('mousemove', move); document.addEventListener('mouseup', up);
+        });
+        wrap.appendChild(hd);
+    };
+    const mid = { x: (P.x + Q.x) / 2, y: (P.y + Q.y) / 2 };
+    if (kind === 'line') {
+        handle(P, 'a', (e2) => stripAnchor(_markAnchorAt(e2, m.b)));
+        handle(Q, 'b', (e2) => stripAnchor(_markAnchorAt(e2, m.a)));
+    } else if (kind === 'cl') {
+        handle(mid, 'a', (e2) => _markAxisAt(e2, 'x').anchor);
+    } else if (kind === 'level') {
+        handle(mid, 'a', (e2) => _markAxisAt(e2, 'y').anchor);
+    } else {
+        // The two things it sits between, at mid-height of the wall.
+        handle({ x: ends.ra.x * elevScale - L, y: mid.y }, 'a', (e2) => _markAxisAt(e2, 'x').anchor);
+        handle({ x: ends.rb.x * elevScale - L, y: mid.y }, 'b', (e2) => _markAxisAt(e2, 'x').anchor);
+    }
+    const pop = skip(document.createElement('div'));
+    pop.className = 'mark-pop';
+    const my = (kind === 'cl' || kind === 'clmid') ? (h * 0.5) : Math.max(P.y, Q.y);
+    pop.style.cssText = 'position:absolute; left:' + mid.x + 'px; top:' + (my + 14) + 'px; transform:translateX(-50%); pointer-events:auto; z-index:3;';
+    const stop = (ev) => ev.stopPropagation();
+    pop.addEventListener('mousedown', stop);
+    const lab = document.createElement('input');
+    lab.type = 'text'; lab.className = 'mark-pop-label'; lab.value = m.label || ''; lab.maxLength = 60;
+    lab.placeholder = (kind === 'line') ? 'Label (optional)' : (kind === 'level' ? 'Label, e.g. TOP OF FRAMES' : 'Label, e.g. CL or CL ART.4');
+    lab.title = (kind === 'line') ? 'Printed at the tail of the line, like a leader note' : 'Printed on the line';
+    lab.onchange = () => setMarkField(m.id, 'label', lab.value);
+    lab.onkeydown = (ev) => { ev.stopPropagation(); if (ev.key === 'Enter') lab.blur(); };
+    pop.appendChild(lab);
+    if (kind === 'line') {
+        const arrow = document.createElement('select');
+        arrow.className = 'mark-pop-arrow'; arrow.title = 'Arrowheads';
+        [['none', 'No arrow'], ['end', 'Arrow'], ['both', 'Both ends']].forEach(([v, t]) => { const o = document.createElement('option'); o.value = v; o.textContent = t; if ((m.arrow || 'end') === v) o.selected = true; arrow.appendChild(o); });
+        arrow.onchange = () => setMarkField(m.id, 'arrow', arrow.value);
+        pop.appendChild(arrow);
+    }
+    const dash = document.createElement('button');
+    dash.type = 'button'; dash.className = 'gz-btn mark-pop-dash' + (m.dash ? ' gz-btn-on' : ''); dash.textContent = 'Dashed';
+    dash.title = 'Dashed line, for a centre line or an alignment';
+    dash.onclick = () => setMarkField(m.id, 'dash', !m.dash);
+    const del = document.createElement('button');
+    del.type = 'button'; del.className = 'gz-btn gz-btn-del mark-pop-del'; del.innerHTML = '&times;'; del.title = 'Delete this line (Delete key)';
+    del.onclick = () => deleteMark(m.id);
+    pop.appendChild(dash); pop.appendChild(del);
+    wrap.appendChild(pop);
+}
+// Live preview while the tool is armed: where the next click lands, and what it will draw.
+function _markPreview(e) {
+    const layer = document.getElementById('mark-layer');
+    if (!layer) return;
+    let pv = document.getElementById('mark-preview');
+    if (!pv) {
+        pv = document.createElement('div'); pv.id = 'mark-preview';
+        pv.setAttribute('data-export-skip', '1'); pv.setAttribute('data-html2canvas-ignore', 'true');
+        pv.style.cssText = 'position:absolute; inset:0; pointer-events:none; z-index:61;';
+        layer.appendChild(pv);
+    }
+    const Hp = elevResolvedWallH * elevScale, Wp = elevResolvedWallW * elevScale;
+    const sel = 'stroke="var(--selected)" stroke-width="1.5" stroke-dasharray="4 3"';
+    let svg = '';
+    if (markKind === 'cl' || markKind === 'clmid') {
+        const at = _markAxisAt(e, 'x');
+        let x = at.v;
+        const p0 = (markKind === 'clmid' && markFirstAnchor) ? resolveStoredAnchor(markFirstAnchor) : null;
+        if (p0) { svg += '<line x1="' + (p0.x * elevScale) + '" y1="0" x2="' + (p0.x * elevScale) + '" y2="' + Hp + '" stroke="var(--selected)" stroke-width="1" stroke-opacity="0.5"/>'; x = (p0.x + at.v) / 2; }
+        svg += '<line x1="' + (at.v * elevScale) + '" y1="0" x2="' + (at.v * elevScale) + '" y2="' + Hp + '" stroke="var(--selected)" stroke-width="1" stroke-opacity="0.5"/>';
+        svg += '<line x1="' + (x * elevScale) + '" y1="0" x2="' + (x * elevScale) + '" y2="' + Hp + '" ' + sel + '/>';
+    } else if (markKind === 'level') {
+        const at = _markAxisAt(e, 'y');
+        svg += '<line x1="0" y1="' + (Hp - at.v * elevScale) + '" x2="' + Wp + '" y2="' + (Hp - at.v * elevScale) + '" ' + sel + '/>';
+    } else {
+        const a = _markAnchorAt(e, markFirstAnchor);
+        svg += '<circle cx="' + (a.x * elevScale) + '" cy="' + (Hp - a.y * elevScale) + '" r="5" fill="var(--selected)" stroke="#fff" stroke-width="2"/>';
+        const p0 = markFirstAnchor ? resolveStoredAnchor(markFirstAnchor) : null;
+        if (p0) svg += '<line x1="' + (p0.x * elevScale) + '" y1="' + (Hp - p0.y * elevScale) + '" x2="' + (a.x * elevScale) + '" y2="' + (Hp - a.y * elevScale) + '" ' + sel + '/>';
+    }
+    pv.innerHTML = '<svg width="100%" height="100%" style="position:absolute; inset:0; overflow:visible;">' + svg + '</svg>';
+}
 // Dashed leader connecting a measurement-line endpoint back to the clicked
 // anchor. dir 'v' = vertical leader (connects along y) at a fixed x = posPerp;
 // dir 'h' = horizontal leader at a fixed y = posPerp. `lineCoord` is the line's
@@ -54315,7 +55531,7 @@ async function exportElevSVG(opts) {
         // elevation on the wall — see the three export sites on the model.
         ['frame-layer','arch-dim-layer','dim-layer','floor-ceiling-layer',
          'frame-center-layer','guide-layer','label-layer','od-layer',
-         'group-dim-layer','figure-dim-layer','glazing-dim-layer','context-layer'].forEach(id => {
+         'group-dim-layer','figure-dim-layer','glazing-dim-layer','context-layer','mark-layer'].forEach(id => {
             const lyr = document.getElementById(id);
             if (lyr && getComputedStyle(lyr).display !== 'none') boundsEls.push(lyr);
         });
@@ -54714,6 +55930,8 @@ async function exportElevSVG(opts) {
             'arch-dim-layer', 'dim-layer', 'floor-ceiling-layer',
             'frame-center-layer', 'guide-layer', 'label-layer',
             'od-layer', 'group-dim-layer', 'custom-lines-layer',
+            // Free lines and their labels (19.47).
+            'mark-layer',
             // The scale-figure caption. It is a text element with an opaque
             // background, so emitEl's generic text case draws it as a chip plus
             // <text> in the front layer — nothing special needed, but it has to be
@@ -54917,6 +56135,10 @@ async function exportElevSVG(opts) {
 
         const walk = (node) => {
             for (const child of node.children) {
+                // An editor-only element takes its WHOLE subtree with it (19.48): emitEl skipped
+                // the element but the walk still went inside, so a selected line's settings
+                // strip (its input and buttons) and a clash tag's text printed on the page.
+                if (child.getAttribute && child.getAttribute('data-export-skip')) continue;
                 emitEl(child);
                 if (child.children.length > 0) walk(child);
             }
@@ -54977,6 +56199,12 @@ async function exportElevSVG(opts) {
             try { const _wr = rectToSvg(document.getElementById('wall')); if (_wr && _wr.h > 0) { floorY = _wr.y + _wr.h; wallRightX = _wr.x + _wr.w; } } catch (e) {}
             const boxes = {};
             Object.keys(_boxesPx).forEach(k => { const b = _boxesPx[k]; boxes[k] = [b[0] + ox, b[1] + oy, b[2] + ox, b[3] + oy]; });
+            // THE WALL ITSELF is always in the crop (19.46). Its outline is an op with no
+            // guide, so it always draws; the crop only ever reached the wall's ends through
+            // a guide that happened to span it (the hang line). With hang height off on a
+            // wall, the picture was cropped to the art while the outline drew full width,
+            // and the elevation ran off the page into the specs.
+            try { const _wb = rectToSvg(document.getElementById('wall')); if (_wb && _wb.w > 0 && _wb.h > 0) boxes.wall = [_wb.x, _wb.y, _wb.x + _wb.w, _wb.y + _wb.h]; } catch (e) {}
             return {
                 blob: blob, filename: fname,
                 artW: svgW, artH: svgH, floorY: floorY, wallRightX: wallRightX,

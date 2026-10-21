@@ -38,7 +38,7 @@
          anything driven by a new CSS rule is simply absent. That is exactly how the
          gradient-painted dashes went missing on screen while still exporting fine
          from the JS side. -->
-    <link rel="stylesheet" href="style.css?v=19.43">
+    <link rel="stylesheet" href="style.css?v=19.52">
 </head>
 <body>
 <!-- BOOT COVER (18.17): the first thing painted, so the dashboard behind it never flashes
@@ -655,6 +655,9 @@
                              on ART is correct. Without this line the only way to learn that
                              is to switch mode and watch the film move. -->
                         <div id="wallModeHint" style="font-size:var(--fs-60); color:var(--text-muted); line-height:1.4; margin-top:5px;"></div>
+                        <!-- Codes on this wall that hang as one set (19.44, _elevSetHintSync): the
+                             same suggestion Preflight lists, quiet, never a popup. -->
+                        <div id="wallSetHint" class="wall-set-hint" style="display:none"></div>
                         <!-- OPTIONS ARE MADE IN DECK STUDIO (17.89). The Catalogue mockup button and
                              the + LAYOUT / + SET row lived here; "+ Add option" on a page's Options
                              section now does all of it, including turning the wall into the
@@ -815,6 +818,10 @@
                             </button>
                         </div>
                         </details>
+                        <!-- THIS WALL (19.44, _elevWallGuidesSync): the set-out switches that belong to
+                             one wall, not the deck: hang height, wall centre line, and a centre line
+                             through a context block for art centred on furniture. -->
+                        <div id="elevWallGuides" class="elev-wall-guides"></div>
                         <button class="action-btn btn-secondary" id="allGuidesToggle" onclick="toggleAllElevGuides()" title="All guides on/off — flips every layout guide at once: labels, frame dims, spacing, person, hang guides, grid, centers, wall dims, group boxes, edge gaps, custom lines, image codes" style="width:100%; height:26px; margin-top:6px; font-size:var(--fs-60); letter-spacing:0.3px; display:flex; align-items:center; justify-content:center; gap:6px;">
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
                             All guides on / off
@@ -898,6 +905,10 @@
                 <div id="elevToolDock" class="ds-dock elev-dock" role="toolbar" aria-label="Elevation tools">
                     <button type="button" id="elevDockSelect" class="ds-dock-btn active" title="Select (V): put the measure or context tool down, and select and drag frames" onclick="_elevDockSelect()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3l12 9-5.5 1.2L15.5 20l-2.6 1.1-3-6.6L6 18z"/></svg></button>
                     <button type="button" id="lineToolBtn" class="ds-dock-btn" title="Measure (M): click two points to draw your own dimension line. Snaps to frame, wall, floor and ceiling edges." onclick="toggleLineTool()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17 L17 3"/><path d="M2 14 L6 18 M5 11 L9 15 M8 8 L12 12 M11 5 L15 9" stroke-width="1.3"/></svg></button>
+                    <div class="elev-dock-fly">
+                        <button type="button" id="markToolBtn" class="ds-dock-btn has-fly" title="Lines (L): free lines, centre lines, centre between two things and level lines. L arms the last one used." onclick="openMarkKinds(event)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20 L19 5"/><path d="M12 5 h7 v7"/></svg></button>
+                        <div id="markKindList" class="mark-kind-list" style="display:none;"></div>
+                    </div>
                     <button type="button" id="contextToolBtn" class="ds-dock-btn" title="Context block (C): draw a door, window, furniture or fixture on the wall. Opens the Context tab to pick one." onclick="_elevDockContext()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="11" height="18"/><path d="M2 21h20"/><circle cx="13" cy="12" r="0.6"/></svg></button>
                     <span class="ds-dock-sep"></span>
                     <div class="elev-dock-fly">
@@ -966,6 +977,7 @@
                         <div id="od-layer" class="od-layer" style="z-index:32;"></div>
                         <div id="group-dim-layer" class="group-dim-layer" style="z-index:38;"></div>
                         <div id="custom-lines-layer" class="dim-layer" style="z-index:40;"></div>
+                        <div id="mark-layer" class="dim-layer" style="z-index:41;"></div>
                         <div id="label-layer" class="label-layer" style="z-index:42;"></div>
                         <!-- Scale-figure height dimension. Its own layer, ABOVE the
                              other dimension layers: inside #person-wrap it would be
@@ -1038,9 +1050,9 @@
             <div style="padding:12px 18px; border-bottom:1px solid var(--border-color); display:flex; align-items:center; gap:10px;">
                 <h3 style="margin:0; font-size:var(--fs-105); color:var(--text-strong);">Deck Studio</h3>
                 <div class="frame-tabs" style="margin-left:8px;">
-                    <button id="dsTabBtnProject" onclick="_dsTab('project')" class="frame-tab active">Project</button>
-                    <button id="dsTabBtnPages" onclick="_dsTab('pages')" class="frame-tab">Pages</button>
-                    <button id="dsTabBtnTemplates" onclick="_dsOpenTemplateEditor()" class="frame-tab">Templates</button>
+                    <button id="dsTabBtnProject" onclick="_dsTab('project')" class="frame-tab frame-tab-icon active" title="Project: name, client, units and which pages are in the deck" aria-label="Project"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></button>
+                    <button id="dsTabBtnPages" onclick="_dsTab('pages')" class="frame-tab frame-tab-icon" title="Pages: every page of the deck, in order" aria-label="Pages"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="3" width="13" height="16" rx="1"/><path d="M4 7v13a1 1 0 0 0 1 1h11"/></svg></button>
+                    <button id="dsTabBtnTemplates" onclick="_dsOpenTemplateEditor()" class="frame-tab frame-tab-icon" title="Templates: edit the layout templates" aria-label="Templates"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="1"/><path d="M3 9h18M9 9v11"/></svg></button>
                     <button id="dsTabBtnStyles" onclick="_dsTab('styles')" class="frame-tab" style="display:none;">Styles</button>
                 </div>
                 <span style="flex:1;"></span>
@@ -1068,7 +1080,7 @@
                         <option value="print">Print — maximum fidelity (largest)</option>
                     </select>
                     <div style="display:flex; gap:8px; align-items:center;">
-                        <button class="action-btn btn-secondary" style="width:auto; height:34px; padding:0 14px; font-size:var(--fs-70);" title="Scan the deck for missing artwork, pins, plan images, and empty frames" onclick="_dsShowPreflight()">Run Preflight</button>
+                        <button id="projPreflightBtn" class="action-btn btn-secondary" style="width:auto; height:34px; padding:0 14px; font-size:var(--fs-70);" title="Scan the deck for missing artwork, pins, plan images, and empty frames" onclick="_dsShowPreflight()">Run Preflight</button>
                         <button data-modal-close class="action-btn btn-secondary" style="width:auto; height:34px; padding:0 14px; font-size:var(--fs-70); margin-left:auto;" onclick="document.getElementById('dsGenerateModal').style.display='none'">Cancel</button>
                         <button class="action-btn" style="width:auto; height:34px; padding:0 18px; font-size:var(--fs-80); font-weight:700;" onclick="document.getElementById('dsGenerateModal').style.display='none'; applySpecPdfModal();">Generate</button>
                     </div>
@@ -1141,11 +1153,11 @@
                     <div id="dsDockRightSlot" class="ds-dock-slot ds-dock-slot-right" style="display:none;"></div>
                     <div id="dsTools" style="width:280px; flex-shrink:0; min-height:0; border-left:1px solid var(--border-color); display:flex; flex-direction:column;">
                         <div id="dsToolsSubTabBar" class="frame-tabs fit" style="flex-shrink:0; padding:10px 10px 0;">
-                            <button id="dsToolsBtnPage" onclick="_dsToolsTab('page')" class="frame-tab active">Page</button>
-                            <button id="dsToolsBtnTemplates" onclick="_dsToolsTab('templates')" class="frame-tab">Templates</button>
-                            <button id="dsToolsBtnLayers" onclick="_dsToolsTab('layers')" class="frame-tab">Layers</button>
+                            <button id="dsToolsBtnPage" onclick="_dsToolsTab('page')" class="frame-tab frame-tab-icon active" title="Page: settings for the selected page" aria-label="Page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg></button>
+                            <button id="dsToolsBtnTemplates" onclick="_dsToolsTab('templates')" class="frame-tab frame-tab-icon" title="Templates: apply a layout to this page" aria-label="Templates"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="1"/><path d="M3 9h18M9 9v11"/></svg></button>
+                            <button id="dsToolsBtnLayers" onclick="_dsToolsTab('layers')" class="frame-tab frame-tab-icon" title="Layers: everything on this page" aria-label="Layers"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 8l10 5 10-5z"/><path d="M2 13l10 5 10-5"/><path d="M2 18l10 5 10-5" opacity="0.55"/></svg></button>
                         </div>
-                        <div id="dsToolsPageBody" style="flex:1; overflow-y:auto; padding:16px;"><!-- per-page tools --></div>
+                        <div id="dsToolsPageBody" style="flex:1; overflow-y:auto; padding:0 16px 16px;"><!-- per-page tools --></div>
                         <div id="dsToolsTemplatesBody" style="flex:1; min-height:0; display:none; flex-direction:column;"><!-- compact template browser --></div>
                         <div id="dsToolsLayersBody" style="flex:1; min-height:0; overflow-y:auto; padding:10px; display:none;"><!-- layers list --></div>
                     </div>
@@ -2219,9 +2231,9 @@
      FRAME_HTML_VERSION is what this file EXPECTS. app.js compares it with
      APP_VERSION at boot and says so if the two disagree, because the query
      string alone cannot help once a browser has already cached the pair. -->
-<script>window.FRAME_HTML_VERSION = '19.43';</script>
-<script src="templates.js?v=19.43"></script>
-<script src="app.js?v=19.43"></script>
+<script>window.FRAME_HTML_VERSION = '19.52';</script>
+<script src="templates.js?v=19.52"></script>
+<script src="app.js?v=19.52"></script>
 
 </body>
 </html>

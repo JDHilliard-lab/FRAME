@@ -3457,3 +3457,69 @@ html.phone .frame-tour .tour-card { left: 8px !important; right: 8px !important;
    element carries data-export-skip, so nothing here reaches an export. */
 .dim-eq-hint { position: absolute; left: 100%; bottom: 100%; margin-left: -1px; margin-bottom: -9px; padding: 0 2px; font-size: 20px; font-weight: 700; line-height: 1; color: var(--selected); cursor: pointer; pointer-events: auto; z-index: 59; }
 .dim-eq-hint:hover { transform: scale(1.3); }
+
+/* PREFLIGHT WEARS ITS RESULT (19.44, _pfBadgePaint): red for errors, amber for
+   warnings, with a count. Never a popup; the habit is to glance at it. */
+[data-pf="err"], [data-pf="warn"] { position: relative; }
+[data-pf="err"] { color: var(--btn-danger); }
+[data-pf="warn"] { color: var(--warn); }
+[data-pf="err"]::before, [data-pf="warn"]::before {
+    content: attr(data-pf-n); position: absolute; top: -3px; right: -3px;
+    min-width: 14px; height: 14px; padding: 0 3px; box-sizing: border-box;
+    border-radius: 50%; font-size: var(--fs-55); line-height: 14px; font-weight: 700;
+    text-align: center; color: #fff; pointer-events: none;
+}
+[data-pf="err"]::before { background: var(--btn-danger); }
+[data-pf="warn"]::before { background: var(--warn); }
+.ds-dock-btn[data-pf="err"], .ds-dock-btn[data-pf="warn"] { box-shadow: inset 0 0 0 1.5px currentColor; }
+.ds-dock-btn.active[data-pf="err"], .ds-dock-btn.active[data-pf="warn"] { color: #fff; }
+/* Codes on this wall that hang as one set (19.44, _elevSetHintSync). */
+.wall-set-hint { margin-top: 6px; padding: 6px 8px; border-left: 3px solid var(--warn); background: var(--bg-subpanel); border-radius: var(--r-4); }
+.wall-set-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.wall-set-row + .wall-set-row { margin-top: 6px; }
+.wall-set-text { flex: 1 1 100%; font-size: var(--fs-65); line-height: 1.4; color: var(--text-main); }
+.wall-set-row .action-btn { width: auto; flex: 0 0 auto; height: 24px; padding: 0 10px; font-size: var(--fs-60); }
+
+/* THIS WALL set-out switches in the Guides tab (19.44, _elevWallGuidesSync). */
+.elev-wall-guides { margin-top: 8px; }
+.elev-wall-guides .ewg-row { display: flex; align-items: center; gap: 6px; font-size: var(--fs-65); color: var(--text-main); padding: 3px 0; cursor: pointer; }
+.elev-wall-guides .ewg-sub { font-size: var(--fs-60); color: var(--text-muted); margin: 6px 0 4px; }
+.elev-wall-guides .ewg-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.elev-wall-guides .ewg-note { font-size: var(--fs-60); color: var(--text-muted); line-height: 1.4; margin-top: 4px; }
+
+/* FREE LINES (19.47, renderMarks): the settings strip under a selected line. */
+.mark-pop { width: max-content; max-width: 360px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 4px; background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--r-6); box-shadow: 0 4px 14px rgba(0,0,0,0.25); white-space: nowrap; }
+.mark-pop .mark-pop-label { width: 140px; height: 22px; font-size: var(--fs-65); padding: 0 6px; box-sizing: border-box; }
+.mark-pop select { height: 22px; font-size: var(--fs-60); }
+.mark-pop .gz-btn { height: 22px; }
+/* KEEP CLEAR (19.47): a frame over a keep-clear block, on screen only. */
+.elev-clash { position: absolute; border: 2px dashed var(--btn-danger); background: rgba(211,47,47,0.12); pointer-events: none; z-index: 5; box-sizing: border-box; }
+.elev-clash-tag { position: absolute; left: 0; top: 100%; margin-top: 2px; white-space: nowrap; font-size: var(--fs-55); font-weight: 700; color: #fff; background: var(--btn-danger); padding: 1px 4px; border-radius: var(--r-2); }
+.wall-clash-text { color: var(--btn-danger); }
+/* THIS PAGE notes (19.47, _dsPageNotesInto). */
+.ds-pgnotes-head { display: flex; align-items: center; gap: 4px; font-size: var(--fs-55); font-weight: 700; letter-spacing: 0.3px; text-transform: uppercase; color: var(--text-muted); margin: 10px 0 4px; }
+.ds-pgnotes-row { display: flex; align-items: center; gap: 6px; font-size: var(--fs-60); color: var(--text-main); padding: 2px 4px; cursor: pointer; }
+.ds-pgnotes-row span { flex: 1 1 40px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ds-pgnotes-empty { font-size: var(--fs-55); color: var(--text-muted); }
+.ds-pgnotes-text { width: 100%; min-height: 40px; resize: vertical; box-sizing: border-box; font-size: var(--fs-60); line-height: 1.35; padding: 5px; margin-top: 4px; border: 1px solid var(--border-color); border-radius: var(--r-4); background: var(--bg-input); color: var(--text-main); }
+
+/* LINES flyout (19.48, openMarkKinds): the four kinds of free line. */
+.mark-kind-list { position: absolute; left: calc(100% + 10px); top: -6px; z-index: 200; width: 260px; box-sizing: border-box; background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--r-8); box-shadow: 0 10px 30px rgba(0,0,0,0.4); padding: 6px; }
+.mark-kind { display: block; width: 100%; text-align: left; padding: 6px 8px; border: none; border-radius: var(--r-6); background: transparent; color: var(--text-main); cursor: pointer; }
+.mark-kind:hover { background: var(--btn-hover); }
+.mark-kind.active { background: var(--bg-subpanel); box-shadow: inset 3px 0 0 var(--ui-active); }
+.mark-kind-name { display: block; font-size: var(--fs-70); font-weight: 700; }
+.mark-kind-help { display: block; font-size: var(--fs-60); color: var(--text-muted); line-height: 1.35; margin-top: 2px; white-space: normal; }
+
+/* DECK STUDIO TABS ARE ICONS (19.49): Project / Pages / Templates beside the title and
+   Page / Templates / Layers over the right panel, the phone's glyphs. The name rides on
+   title + aria-label. */
+.frame-tab.frame-tab-icon { display: inline-flex; align-items: center; justify-content: center; min-width: 40px; height: 30px; padding: 0 10px; }
+.frame-tab-icon svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+/* THE PINNED HEADER SITS FLUSH UNDER THE TABS (19.49). The panel's top padding scrolled
+   with its content, and the sticky header stopped below it, so whatever scrolled up
+   showed in that band between the tabs and the header. The space is a spacer now. */
+#dsToolsPageBody::before { content: ''; display: block; height: 16px; }
+
+/* A placement with no category shows a "?" on its chip (19.51, .fp-cat-q). */
+.fp-cat-q { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; color: #fff; font-size: var(--fs-70); font-weight: 800; line-height: 1; }
