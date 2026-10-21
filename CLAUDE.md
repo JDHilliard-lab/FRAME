@@ -2112,7 +2112,7 @@ run but passes alone is usually load timing: rerun before chasing it.
 - **FREE LINES ARE `elev.marks` (19.47, `renderMarks`, `toggleMarkTool`, key L, `#markToolBtn`).**
   `{id, a, b, arrow: none|end|both, dash, label}`; ends are measure-tool anchors (`stripAnchor` /
   `resolveStoredAnchor`), so they follow frames and blocks and free ends are inches. Drawn in
-  `#mark-layer` (always shown, not a guide): the stroke is a `data-svg-passthrough` `<svg>` (vector,
+  `#mark-layer` (a guide since 19.53, Free lines button): the stroke is a `data-svg-passthrough` `<svg>` (vector,
   angled), the LABEL is a plain text element (an svg `<text>` inside a passthrough is walked and
   prints twice). Hit stroke, end handles and the `.mark-pop` strip are `data-export-skip`.
   Registered in `annotationLayers`, the bounds list, `_CAP_BASE_BOXES` and `CAT_WALL_DEEP` (skipped on
@@ -2159,6 +2159,29 @@ run but passes alone is usually load timing: rerun before chasing it.
   wrapper so a "?" can overlay it (pointer-events none); `FP_ITEM_COLS.cat` is 50 for the CATEGORY head.
   19.52: the chip is a `FP_CAT_CHIP` (22px) square, the height of the line / frames buttons, so the
   three share top and bottom and the row's 5px gap; it need not sit centred under its heading.
+
+- **TWO GUIDE MASTERS (19.53): `toggleMyElevGuides` (`#myGuidesToggle`) and `toggleAllElevGuides`
+  (`#allGuidesToggle`).** Turning guides off by EITHER remembers the state
+  (`editorialContent.elevGuidesMine`, `_elevGuidesRemember`); My guides on puts that back through
+  `_elevGuidesApply(st, true)` (the same apply the project-open restore uses, recorded); All on is
+  every guide. Labels say the next action (`_elevGuidesMasterSync`, from every toggle).
+  **19.54: "everything" is never remembered** (`_elevGuidesFromAll`, set AFTER All on's own set,
+  cleared by any single-guide toggle and by My guides on), or All on then All off overwrote the
+  selection with every guide.
+  **Free lines are a guide now** (`mark-layer` in `_ELEV_GUIDE_LAYERS` + `#markLayerToggle`, in
+  `_elevGuideVis`, NOT in `_CAP_BASE_BOXES`); the layer starts `display:block`, and arming the
+  Lines tool shows it.
+
+- **A FLOOR PLAN WALL LINE CAN BE MOVED (19.55, `_fpSelLine`, `_fpWallLinesPaint`, `_fpLineDragStart`,
+  `_fpLineNudge`).** The plan's lines are painted by ONE function from `_fpLinePaintCtx` (svg, wrap,
+  level, S), which is NOT gated on isConnected (the overlay is built before the page is attached;
+  a gate drew nothing). With no tool armed it adds `[data-fp-hit]` click targets on the STORED
+  segments (`_fpStoredSegs`; a diptych is one stored run) and, for the selected line, a highlight
+  and `.fp-line-end` handles. Drags apply from the mousedown state (no drift), one undo; arrows go
+  through a capture-phase keydown (floor plan page only), one undo per burst (`FP_LINE_NUDGE_MS`).
+  The rail's selected-page mirror CLONES these (no listeners): a probe must query `#dsCenter`.
+  The loupe draws `#dsFpLoupeMark` (the stroke as a square at the landing point, `_fpLineDrawW` x
+  `FP_LOUPE_ZOOM`, and the line while drawing) and `#dsFpTip` (`_fpLineTipText`); hide both together.
 
 ## Design principles used here
 - Prefer dynamic behaviour over manual controls: if a layout element won't fit, drop
