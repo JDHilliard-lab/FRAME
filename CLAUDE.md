@@ -1158,6 +1158,40 @@ run but passes alone is usually load timing: rerun before chasing it.
   silently; e.g. `_dsAddStamp` is the approval stamp, the status stamp is
   `_dsAddStatusStamp`). `test_ds_tool_dock` fails on any duplicate top-level function. Grep a
   new name before using it.
+- **A SET MAY DIFFER FROM THE DECK (19.62, `unitPages`, `unitBreakers`, `_specUnitPagesOf`, `_specUnitBreakerOn`,
+  `setSpecUnitPages`, `setSpecUnitBreaker`, `_dsUnitPagesInto`).** Keyed `'spec:' + unit key` (renames follow via
+  `_renamePageKeys`), stored only when different from the deck, ignored in Install-guide mode. Units are grouped
+  whenever anything is per set (`unitsGrouped`). A page not in the deck's mode carries `_tplFixed` + `_specTpl`
+  (`_perPieceTplKey` / `_groupTplKey`, from `specTplMemory`); `_deckSpecTpl` honours it, and so must ANY new place
+  that resolves a page's layout (thumbnail key, `_dsPageElevIdx`, the panel branch and its `_pgTpl` gate). Breaker
+  sharing (19.44) runs over `brUnits`, only the sets whose breaker is on. Pages carry `_unitKey`
+  (`_specUnitKeyOf` falls back to the art group / manual group of the row).
+- **A COMBINED PAGE IS A GROUP A/B/C PAGE (19.63, `manualGroups`, `_combineUnitWith`, `_combinedTitle`,
+  `_specSetKeysForCombine`, `unitArrange`, `_specUnitArrange`, `SPEC_SIDE_GAP_IN`).** A manual group (codes that
+  share a page) renders through `_groupTplKey()` with `_tplFixed`, titled `ART.4 / ART.5`, subheading letters to
+  codes; its old `layout` ('setRow'/'setRight') is ignored. Arrangement per set: `side` (one row, one scale, centres
+  level, 6in apart) or `hung` (wall positions); default side for a combined page, hung for a set; swapped into
+  `geo` in `_drawSpecSetPageBody`. The thumbnail key carries the arrangement and a combined page's codes. The
+  controls are in This set (`_dsUnitPagesInto`); the legacy `_dsManualSection` remains only for a combined install
+  page. A combined page takes no breaker.
+- **BIG SETS (19.64).** The plan lists a set's letters through `_planLetters` (more than three: `_letterRun`
+  ranges, A–K). A group page holds `SPEC_SET_PAGE_MAX` (12; the renderer drops the rest), so `groupPages` in
+  `_deckPageList` splits a set into `_specUnitParts` pages (auto past 12; `unitSplit` 1..3 per set); part i is
+  `_ovKey` `<key>~i`, page key `spec:<key>~i` (`_deckPageKey`), `_letterFrom` offsets its letters, `_renamePageKeys`
+  carries `~i` keys. Arrangement and set settings read `unit.setKey`, never the part key.
+  **Long walls show FIXED WINDOWS** (`_elevThumbFit`: fewest equal windows of the room's width, the one holding most
+  of the page's pieces), so the per-piece room is the TEMPLATE's artwork box, never the drawn piece (else each page
+  gets different windows). A cut side draws `_elevBreakLine` (zig-zag), never a wall end.
+- **ONE THUMBNAIL ROW HEIGHT FOR THE DECK (19.66, `_groupThumbRowH(PW, PH)`).** The Group A/B/C band height,
+  from the guides only; the group page's `thH` IS this function, and the per-piece `_specThumbBox(w, h, rowH)` caps
+  its box at it (still on the template's bottom line). ~79pt on the default guides. Change the band in one place.
+- **A SET MAY ASK FOR THE WHOLE WALL (19.65, `unitElevFit`, `_specUnitElevFit`, `setSpecUnitElevFit`,
+  `_specUnitKeyOfRow`).** `_elevThumbFit(..., whole)` fits the entire wall to the room instead of a window; the
+  drawing is then shorter than the row and bottom-aligned (`_thumbBox`/`_elevDrawn` keep the ROW height, so the
+  plan and strip do not follow it down). In the thumbnail key as `|ew`; control is This set's Long wall row.
+- **FRAME RECOMMENDATIONS NAMES ITSELF (19.61, `_frameRecTitle`, `_frameRecSub`, `setFrameRecText`).**
+  `editorialContent.frameRec.title` / `.sub`, stored only when not the default (blank sub = none). Read by
+  `_drawFrameRecPage`, the page list title and `_dsThumbCacheKey` (`|fr`); never a literal again.
 - **THE THANK YOU PAGE PRINTS THE PROJECT'S OWN LIST (19.13).** `editorialContent.contacts`
   (pipe lines, print order) + `contactsHidden`; `contacts/contacts.json` is a DIRECTORY to pick
   from (`_loadRepoContacts`, `addContactFromDirectory`), never merged in. New projects start
@@ -2102,6 +2136,11 @@ run but passes alone is usually load timing: rerun before chasing it.
   frame strip take the elevation BOX's height: per-piece `_elevDrawn = {y: boxY0, h: boxH}` with
   the box from `_specThumbBox` (4:3 at the template width, bottom on the template line); group
   `_thumbBox.th = thH` (band height). A long wall draws shorter inside. `test_spec_thumb_size`.
+- **THE ELEVATION THUMBNAIL IS AS TALL AS THE ROW (19.60, `_elevThumbFit`, `_elevFocusFrac`,
+  `ELEV_THUMB_MAX_FRAC`).** Group and per-piece pages draw it at the row height (never fitted inside the box), as wide
+  as its aspect makes it, up to 0.34 of the safe width (per piece also up to the DRAWN artwork, `_artLeftX`); wider
+  is CROPPED around the page's pieces. `_drawGroupElevOutline` (now both pages', `opts` ink/lw/bbw) leaves the cut
+  side open (wall fractions outside 0..1). The group band packs leftward off the wider box; the strip shrinks.
 - **THE WALL IS ALWAYS IN THE CAPTURE CROP (19.46):** `boxes.wall` from `exportElevSVG`, first in
   `_CAP_BASE_BOXES`. The wall outline is an op with no guide, so a crop that only reached the
   wall through a spanning guide (the hang line) mis-scaled every hang-off wall.
@@ -2182,6 +2221,60 @@ run but passes alone is usually load timing: rerun before chasing it.
   The rail's selected-page mirror CLONES these (no listeners): a probe must query `#dsCenter`.
   The loupe draws `#dsFpLoupeMark` (the stroke as a square at the landing point, `_fpLineDrawW` x
   `FP_LOUPE_ZOOM`, and the line while drawing) and `#dsFpTip` (`_fpLineTipText`); hide both together.
+
+- **A LAYOUT SWITCH KEEPS THE PREVIEWS (19.56).** `switchMode` must NOT call `_dsClearBuiltAll` (it wiped
+  thumbnails AND the frame mockups: 16 to 23 s to come back to a layout). It parks the cache
+  (`_dsParkThumbs` / `_dsUnparkThumbs`, `_dsThumbParked`, valid only while `_dsParkedGen === _dsEditGen`,
+  gen set AFTER the switch's own push), clears only `_dsBuilt`. Thumbnail keys already carry layout + ticks.
+- **THE PAGE RAIL REBUILD IS CHEAP ONLY IF NOTHING IS RE-PARSED (19.56).** Chrome loads a `data:` <img>
+  synchronously on insert and parses markup character by character: cached thumbnails go through
+  `_dsThumbImgInto` (one kept <img> per data URL, `_dsRailGen` guards a second use in one rebuild),
+  markup previews (element pages, mocks) through `_dsHtmlInto` (kept by markup, swept when a rebuild
+  did not use them) after `_dsThumbSlim` swaps photos over `DS_SLIM_MIN` for a `_imgDownsized` copy.
+  Never `innerHTML = '<img src="' + dataUrl ...` in the rail or centre.
+- **A PREVIEW TAKES THE CANVAS (19.56, `_docImgSrc(doc, cnv, mime, q)`)**: a `CanvasPdfRec` gets the canvas,
+  jsPDF the encoded string (unchanged). Spec-page image sites go through it. `_loadImg` caches FILE
+  paths in `_imgUrlCache` (not `blob:`), apart from the 40-entry data-URL cache.
+- **A COLOUR INPUT ON THE DASHBOARD SYNCS LIVE (19.57, `syncDashAndCalculate({live:true})`, `_dashLiveFlush`,
+  `DASH_LIVE_MS`).** A picker fires `input` every frame; a full sync rebuilds the item table (~120ms on 50 rows).
+  Live writes the row + preview only; table, walls, warnings follow once after the colour settles, or at once on
+  `change`. The pending pass tracks the ROW OBJECT, never the index; a full sync of another row flushes it first.
+  A new continuous control on the form (colour, slider) takes the live form plus an `onchange` settle.
+- **A PREVIEW DRAWS A FRAME AT THE SIZE IT IS SHOWN (19.58, `_specFrameDpi`, `_artSmall`).** The four spec-page
+  mockup sites ask `_specFrameDpi(doc, dIn, boxW, boxH)`: a `CanvasPdfRec` (which carries `_pxPerPt`, set by both
+  canvas renderers) gets the dpi its box needs plus `shadowScale` (= dpi / 96; `renderFrameToCanvas` scales every
+  `_fxSh` blur and offset by it through `_fxShR`, so shadows keep their size in inches). Since 19.59 jsPDF too, at
+  exactly what `_rasterFit` keeps (box x `_expR()` x 1.5); never above 96. Artwork for a
+  reduced frame (and every elevation thumbnail) comes from `_artSmall` (cover-sized canvas, cached, original when
+  not much bigger). A new spec-page mockup site must ask too (`test_layout_prebuild` counts four).
+- **THE OTHER LAYOUTS BUILD WHILE YOU PAUSE (19.58, `_dsBgRun`, `_dsBgTpl`, `_dsBgStop`, `_dsParkPut`).** After
+  `DS_IDLE_PREBUILD_MS` with an empty thumbnail queue, the other layouts' pages render into the PARKED set.
+  `_dsBgTpl` is the layout being built and is read ONLY where the page list and the resolver read the layout
+  (`_specTplResolve`, `specTplKey` in `_deckPageList`, the `_previewTpl` fallback); the project's specTemplate never
+  changes. Anything stops it and clears `_dsBgTpl` first: capture-phase pointerdown/keydown/wheel/touchstart,
+  `_thumbPump`, `_dsBuildAllThumbs`, `_dsRefresh`, `_deckPageList` (unless `_dsBgListing`), both canvas renderers
+  (unless `bg`), `pushHistory`. A stopped render is discarded by token. Its list skips `_tocSyncAll`, its pages number
+  from `_dsBgPages`, and its doc carries `_bgBuild` so `_noteStripFit` / `_noteTitleSlot` ignore it (pass `doc`).
+  It NEVER captures a wall (34 walls = 99 s with 5.5 s freezes); uncaptured install pages render incomplete and are
+  not kept. A NEW READ OF THE CURRENT LAYOUT in the render path must honour `_dsBgTpl` or the prebuild is wrong.
+- **THE OFFLINE WORKER NEVER HOLDS A RESPONSE FOR ITS CACHE (19.59, `storeRuntime`, `TRIM_EVERY`).** A new
+  library file is returned at once; the copy is stored behind it (`event.waitUntil`) and the runtime cache trimmed
+  on the first new file and every `TRIM_EVERY` after, down to `RUNTIME_MAX - TRIM_EVERY`, one trim at a time. It used
+  to await put + a full `keys()` trim per file, and a frame-browser scroll queued hundreds: picks hung 30 to 60 s.
+- **THE FRAME INDEX IS BUILT ONCE PER LIBRARY STATE (19.59, `_fbMemoFresh`, `_fbLibSig`).** `_fbAll()` and
+  `_fbByCode()` (no argument) return shared, read-only memos, rebuilt when `dashLocalLibrary` is replaced or its
+  collection/frame counts change. Never sort or mutate what they return.
+- **A FRAME PICK: ONLY THE LATEST LANDS (19.59, `_libPickSeq`, `LIB_PICK_SLOW_MS`).** `loadDashFromCustomLibrary`
+  drops an answer that is not the latest pick (or arrives for another item) and toasts Loading frame past 0.8 s.
+- **A SET'S FRAME FACTS APPLY BEFORE ITS PICTURE (19.59).** `applySwatchToRow(..., null)` writes code, width,
+  colour, product (floater), inset, depth, rabbet and leaves the swatch fields; `_salonFrameDress` calls it for every
+  pending row, so a floater is a floater while its swatch loads, and if it never does.
+- **A SPEC THUMBNAIL FADES WHAT IS NOT ON THE PAGE (19.67).** `renderElevationToCanvas(elev, featured)` takes one row
+  id (per-piece) or a LIST (group page: `members.map(m => m.id)`, both sites in `_drawSpecSetPageBody`); empty
+  or null = every frame full. A split part's `members` are that part's, so the other half fades. Never pass
+  null from a group page again (`test_elev_thumb_fade`).
+- **Measuring speed:** drive Chrome over CDP (`Profiler.start` around a click) against the real Ford project;
+  self time in a big anonymous loop with cheap helpers means native DOM work (parsing, sync image loads).
 
 ## Design principles used here
 - Prefer dynamic behaviour over manual controls: if a layout element won't fit, drop
