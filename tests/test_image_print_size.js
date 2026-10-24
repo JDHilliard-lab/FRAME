@@ -63,7 +63,7 @@ const path = require('path');
         if (!(line.w > r.w)) throw new Error('line work gets no extra headroom');
       });
       __check('every deck-page mockup and elevation thumbnail is sized before it is encoded', () => {
-        const n = S.split('_rasterFit(cnv, ').length - 1, m = S.split('_rasterFit(er.canvas, ').length - 1;
+        const n = S.split('_rasterFit(cnv, ').length - 1, m = S.split('_rasterFit(er.canvas, ').length - 1 + S.split('_rasterFit(ft.canvas, ').length - 1;   // ft: the row-height fit (19.60)
         if (n < 8) throw new Error(n + ' mockup sites (expected 8)');
         if (m < 5) throw new Error(m + ' elevation thumbnail sites (expected 5)');
         if (S.indexOf('flat.width = cnv.width; flat.height = cnv.height;') >= 0) throw new Error('a mockup is still flattened at full size');
@@ -96,7 +96,7 @@ const path = require('path');
         _loadImgRaw = realRaw;
       }
       __check('PNGs reach the PDF compressed: shadows, plans, logos', () => {
-        if (fnBody('_pdfFrameShadow').indexOf("_addPngImage(doc, s.canvas.toDataURL('image/png')") < 0) throw new Error('the frame shadow is added as a bare PNG');
+        if (fnBody('_pdfFrameShadow').indexOf("_addPngImage(doc, _docImgSrc(doc, s.canvas, 'image/png')") < 0) throw new Error('the frame shadow is added as a bare PNG');
         if (fnBody('_drawFloorplanKeyPage').indexOf('_addPngImage(doc, planImg.src') < 0) throw new Error('a PNG plan page is stored raw');
         if (S.indexOf("if (/^data:image\\\\/png/i.test(srcData || '')) _addPngImage(doc, srcData, px0, py0, pw2, ph2);") < 0) throw new Error('the plan thumbnail on breaker pages is stored raw');
         const bare = (S.match(/addImage\\([^;]*'PNG'[^;]*\\)/g) || []).filter(x => x.indexOf("'MEDIUM'") < 0);

@@ -84,7 +84,8 @@ const fs = require('fs');
       const start = s.indexOf('async function _drawSpecSetPageBody');
       if (start < 0) throw new Error('_drawSpecSetPageBody not found');
       const body = s.slice(start, s.indexOf('\\nasync function ', start + 10));
-      if (!/const letters = _setLetters\\(members\\.length\\)/.test(body)) throw new Error('_drawSpecSetPageBody still has its own letters list');
+      // 19.64: offset for a split set's later part (G-K), still from _setLetters
+      if (!/const letters = _setLetters\\(/.test(body) || /const letters = \\[/.test(body)) throw new Error('_drawSpecSetPageBody still has its own letters list');
       if (/letters = \\['A', 'B', 'C', 'D', 'E', 'F'\\]/.test(body)) throw new Error('the 6-entry literal is still there');
     });
 
@@ -296,7 +297,8 @@ const fs = require('fs');
     __check('the as-hung options panel is gated on the flag, not on the setScale string', () => {
       const s = window.__appSrc;
       if (/globalTpl === 'setScale'/.test(s)) throw new Error('still gating the options block on a literal key, so setLegend gets no controls');
-      if (!/SPEC_TEMPLATES\\[globalTpl\\] && SPEC_TEMPLATES\\[globalTpl\\]\\.scale/.test(s)) throw new Error('no flag-based gate found');
+      // 19.62: gated on the PAGE's layout (_pgTpl), which may differ from the deck's
+      if (!/SPEC_TEMPLATES\\[_pgTpl\\] && SPEC_TEMPLATES\\[_pgTpl\\]\\.scale/.test(s)) throw new Error('no flag-based gate found');
     });
 
     __check('one grouped page per set, same as the other group layouts', () => {
