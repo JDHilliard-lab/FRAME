@@ -2287,6 +2287,48 @@ run but passes alone is usually load timing: rerun before chasing it.
   `ELEV_FRAME_RASTER_DPI` 150, shadows scaled by dpi/150): 150 dpi + shrink was ~70% of an install
   export (279 s -> 67 s on Ford). `_capK` 0 (SVG download) keeps 150. `_imgDownsized` keeps PNG only
   when `_imageDataHasAlpha` says so.
+- **WALLCOVERING COORDINATION (19.80).** SPACER is a mark kind (`kind:'spacer'`, `a` an edge point,
+  `axis` the edge's fixed axis, `dir`, `size` INCHES, `len` off a point): geometry `_markSpacerGeo`, rect
+  `_markRectOf` (box too). Anchors may be `ref:'mark', mid` (resolveAnchor / stripAnchor), so a measure line
+  follows a spacer; spacer/box edges are in `anchorPointsForSnap`, `_elevSnapPoint`, `_markAxisTargets` and
+  `_elevSnapTargets` (which skips a spacer hanging off the dragged piece, `_markOwner`). FLIP: a lift pin of
+  +-2 (`setDimLiftSide`, `L.lblSide`) is the designer's side: beats `data-lift-force`, lifts a number that
+  fits, keeps the label upright; `.dim-flip` / key F via `_selDimFlip`. Per wall `elev.gfxFade` (white wash
+  over the graphic layer in DOM, `_gfxWashSvg`, canvas) and `elev.dimKnockout` (no chip; export cuts
+  `<line>` strings under numbers with `_knockSplitLine`, screen masks lines in `_dimKnockoutScreen`).
+  A point on the graphic is its own leader band in `renderCustomLines` (it was the whole wallcovering).
+  SPLIT INSTALL PAGES: `cfg.parts` (Full width only, `_igPartsOf`), descs `_igPart/_igParts`, keys
+  `spec:elev:<i>~n`, one `_ovKey`. Captured at `_elevCaptureZoom` x (drawElevAll's fit, `_elevCapTargetW`,
+  key `_igCapKey(i, z)`, prime jobs `{idx, z}`), cut by `_capWindow` in gaps (`_igWindows`) at one scale (`envW`).
+- **A MEASURE END ON A SPACER OR GUIDE BOX IS A POINT (19.81).** `frameBand` in `renderCustomLines` bands a `ref:'mark'` anchor (and a graphic point) as the clicked point, so its leader starts there; frames and context blocks keep their whole-edge band (no dashes beside a printed edge).
+- **SPACER CALLOUTS AND PER-PAGE HIDES (19.82).** A measure line with ANY point end (`_customLinePointy`: mark ref or
+  gfx) bands BOTH ends as their clicked points, frame and context ends included; frame to frame keeps the edge rule.
+  `toggleSpacerDim` adds/removes a line with both ends on the spacer (found by its ends, `_markSpacerDims`, never an
+  id); `deleteMark` takes it along. `IG_PAGE_HIDE` / `setIgPageHide` store `perPage[ovKey].hideGuides` (page only,
+  `_igHideN`), passed to `_capView(cap, hide)` by the install renderer (person also drops `figure-dim-layer` and
+  its crop box), in `_dsThumbCacheKey` as `|hg`; panel `_igPageHideInto` lists what the Elevations tab shows.
+- **DETAIL PAGES AND OUTLINES (19.83).** `cfg.detail` (install-guide `elev:` pages, `_igSet` simple list) adds
+  descs `_igDetail/_igDetails` after the wall page, keys `spec:elev:<i>~d<n>`, drawn by `_drawInstallDetailPage`
+  (dispatched FIRST in `_drawInstallGuidePage`: no title, notes or legend; drawing at the safety height, caption +
+  footer). Count from `_igDetailPlan` (nominal 960x540, ends G 14in, vertical Gv 4in kept SMALL so a planned
+  window really fits), zoom `_igDetailZoom` = 1/numScale only: the numbers ZOOM WITH the drawing (holding them at overview size left them unreadable), also in `_dsPageCapJob`, windows `_capWindow(.., n)`. OUTLINES:
+  `#outline-layer` guide (`outlineToggle`, `renderPieceOutlines` in drawElevAll, every non-graphic piece, solid
+  `data-svg-pen` border), registered in `_ELEV_GUIDE_LAYERS`, `_elevGuideVis`, bounds, annotationLayers,
+  `IG_PAGE_HIDE`, `_DS_ELEV_GUIDES`. Install Layout is a `<select>` (`#igLayoutSel`, `selRow`).
+- **A PAGE FITS EACH DASHED LINE TO ITS LENGTH AND CUTS WITH THE NUMBERS IT SHOWS (19.84).** `_drawElevAnnOps`
+  passes every dashed line through `_dashFitLen(pat, printedLen)` (>= `ELEV_DASH_MIN_N` dashes, starts and ends on
+  a dash, never longer than the setting, solid under `ELEV_DASH_MIN_PT`). With knockout, a CAPTURE (`forCapture`)
+  is not cut at export: it emits `<rect data-knock>` per number inside its layer group, `_elevAnnOps` parses them
+  as `knock` ops (tagged `gl`), and `_knockOps` cuts lines at draw time with the knock ops that survived
+  `_capView`'s guide filter (`_capWindow` clips them like rects). Downloads still cut at export (`_knockSplitLine`).
+- **FULL-BLEED CLOSE-UPS (19.85).** `perPage[ovKey].closeups = [{x, y, z}]` (one writer `setIgCloseups`, cleaned by
+  `_igCloseN`; x/y = drawing point at the page centre as 0..1 of the `_capView` drawing, z over "drawing height fills
+  the page"), one page each after the details: descs `_igClose/_igCloses`, keys `spec:elev:<i>~c<n>`, drawn by
+  `_drawInstallCloseupPage` (dispatched first; marks `_pdfFooterDrawn` so the sweep adds no footer; same capture zoom as
+  details). The page records `_igCloseGeo[pageKey]`; `_dsCloseupWire` (both spec branches of `_dsRenderCenter`) previews a
+  drag/wheel as a CSS transform on the picture (`.ds-closeup-pic` / the built `<img>`) and commits through the pure
+  `_igCloseAfter` (translate is NOT scaled: divide it by m). Panel `_igCloseupPanelInto` returns before the wall controls.
+  The floor plan key drops the set's own code from its letters (`_fpKeyEntries`), so ART.3 + ART.3A..I prints A–I.
 - **Measuring speed:** drive Chrome over CDP (`Profiler.start` around a click) against the real Ford project;
   self time in a big anonymous loop with cheap helpers means native DOM work (parsing, sync image loads).
 
