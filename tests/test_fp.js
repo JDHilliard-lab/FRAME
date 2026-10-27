@@ -1385,7 +1385,7 @@ const fs = require('fs');
       if (A.indexOf('function _dsElevGuidesInto') < 0) throw new Error('there is no guide control in Deck Studio');
       // It is offered on the page that SHOWS the guides - the install/breaker panel.
       const ig = A.indexOf('function _dsInstallGuideControls');
-      if (A.slice(ig, ig + 1400).indexOf('_dsElevGuidesInto(body, desc)') < 0) {
+      if (A.slice(ig, A.indexOf('const secLbl', ig)).indexOf('_dsElevGuidesInto(body, desc)') < 0) {   // landmark, not a char count
         throw new Error('the guide control is not on the install/breaker panel');
       }
       // The character is FIRST in the list, because it is the one that sends people back.
@@ -1451,7 +1451,8 @@ const fs = require('fs');
       const i = A.indexOf('async function _dsBuildPage');
       const body = A.slice(i, i + 3000);
       if (body.indexOf('_elevPrimeCaptures([_pei])') >= 0) throw new Error('silent is still not passed to the prime');
-      if (body.indexOf('_elevPrimeCaptures([_pei], { silent: !!silent })') < 0) {
+      // 19.80: the job may carry a zoom ({idx, z}) for a wall split across pages.
+      if (body.indexOf('_elevPrimeCaptures([') < 0 || body.indexOf('_pei)], { silent: !!silent })') < 0) {
         throw new Error('the prime does not follow the build-s own silence');
       }
       // The prime itself has always honoured the flag - it was only never given it.
