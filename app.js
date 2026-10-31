@@ -6,7 +6,7 @@
 // Update APP_VERSION on each release. APP_BUILD is derived from the URL (see
 // below) — the version pill turns orange on the dev site to make it obvious at a
 // glance which build you are looking at.
-const APP_VERSION = '19.86';
+const APP_VERSION = '19.99';
 const IDML_STYLE_SEED = [{"id":"sty_cover_title","name":"Cover Title","group":"Cover","font":"display","size":0.1111,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"upper","track":0.01},{"id":"sty_cover_title_centered","name":"Cover Title (Centered)","group":"Cover","font":"display","size":0.1111,"bold":true,"italic":false,"color":"#ffffff","align":"center","caps":"upper","track":0.01},{"id":"sty_cover_location","name":"Cover Location","group":"Cover","font":"serif","size":0.0222,"bold":false,"italic":false,"color":"#ffffff","align":"right","caps":"none","track":0.0},{"id":"sty_cover_project_code","name":"Cover Project Code","group":"Cover","font":"serif","size":0.0222,"bold":false,"italic":false,"color":"#ffffff","align":"right","caps":"none","track":0.0},{"id":"sty_toc_section_title","name":"TOC Section Title","group":"Table of Contents","font":"serif","size":0.0241,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.0},{"id":"sty_toc_entry","name":"TOC Entry","group":"Table of Contents","font":"serif","size":0.0185,"bold":false,"italic":false,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_section_heading","name":"Section Heading","group":"Header","font":"display","size":0.0556,"bold":true,"italic":false,"color":"#000000","align":"left","caps":"upper","track":0.01},{"id":"sty_header_one_xl","name":"Header One (XL)","group":"Header","font":"display","size":0.0444,"bold":true,"italic":false,"color":"#000000","align":"left","caps":"upper","track":0.01},{"id":"sty_paragraph_heading_right","name":"Paragraph Heading (Right)","group":"Header","font":"display","size":0.0333,"bold":true,"italic":false,"color":"#1a1a1a","align":"right","caps":"upper","track":0.01},{"id":"sty_body_copy_standard","name":"Body Copy (Standard)","group":"Body Copy","font":"serif","size":0.0148,"bold":false,"italic":false,"color":"#222222","align":"justify","caps":"none","track":0.0},{"id":"sty_body_copy_large_+_bold","name":"Body Copy (Large + Bold)","group":"Body Copy","font":"serif","size":0.0185,"bold":true,"italic":false,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_body_copy_primary","name":"Body Copy (Primary)","group":"Body Copy","font":"serif","size":0.0148,"bold":false,"italic":false,"color":"#222222","align":"justify","caps":"none","track":0.0},{"id":"sty_body_description","name":"Body Description","group":"Body Text","font":"serif","size":0.0167,"bold":false,"italic":false,"color":"#333333","align":"left","caps":"none","track":0.0},{"id":"sty_body_subheading","name":"Body Subheading","group":"Body Text","font":"serif","size":0.0204,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.0},{"id":"sty_spec_copy","name":"Spec Copy","group":"Spec Page","font":"serif","size":0.0148,"bold":false,"italic":false,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_spec_subject","name":"Spec Subject","group":"Spec Page","font":"serif","size":0.0148,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.01},{"id":"sty_spec_notes","name":"Spec Notes","group":"Spec Page","font":"serif","size":0.013,"bold":false,"italic":true,"color":"#939597","align":"left","caps":"none","track":0.005},{"id":"sty_spec_static_caption","name":"Spec Static Caption","group":"Spec Page","font":"serif","size":0.013,"bold":false,"italic":true,"color":"#999999","align":"left","caps":"none","track":0.0},{"id":"sty_image_code","name":"Image Code","group":"Captions","font":"serif","size":0.012,"bold":false,"italic":true,"color":"#7f7f7f","align":"right","caps":"none","track":0.01},{"id":"sty_caption_image_code","name":"Caption Image Code","group":"Captions","font":"serif","size":0.0111,"bold":false,"italic":false,"color":"#bfbfbf","align":"left","caps":"none","track":0.0},{"id":"sty_artist_name","name":"Artist Name","group":"Captions","font":"serif","size":0.0139,"bold":true,"italic":false,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_artwork_title","name":"Artwork Title","group":"Captions","font":"serif","size":0.013,"bold":false,"italic":true,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_thank_you_\u2014_name","name":"Thank You \u2014 Name","group":"Thank You","font":"display","size":0.0417,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"upper","track":0.0},{"id":"sty_thank_you_\u2014_role","name":"Thank You \u2014 Role","group":"Thank You","font":"serif","size":0.0148,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"none","track":0.0},{"id":"sty_thank_you_\u2014_contact","name":"Thank You \u2014 Contact","group":"Thank You","font":"serif","size":0.013,"bold":false,"italic":false,"color":"#ffffff","align":"left","caps":"none","track":0.0},{"id":"sty_subhead","name":"Subhead","group":"Subheadings","font":"display","size":0.0204,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"upper","track":0.035},{"id":"sty_section_subheading_left","name":"Section Subheading (Left)","group":"Subheadings","font":"display","size":0.0333,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"upper","track":0.01},{"id":"sty_section_subheading_right","name":"Section Subheading (Right)","group":"Subheadings","font":"display","size":0.0333,"bold":true,"italic":false,"color":"#1a1a1a","align":"right","caps":"upper","track":0.01},{"id":"sty_section_subheading_serif","name":"Section Subheading (Serif)","group":"Subheadings","font":"serif","size":0.0139,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.0},{"id":"sty_subheading_white,_center","name":"Subheading (White, Center)","group":"Subheadings","font":"serif","size":0.013,"bold":false,"italic":false,"color":"#ffffff","align":"center","caps":"none","track":0.0},{"id":"sty_quote_\u2014_druk","name":"Quote \u2014 Druk","group":"Quotes","font":"display","size":0.0694,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.025},{"id":"sty_quote_\u2014_druk_alt","name":"Quote \u2014 Druk (Alt)","group":"Quotes","font":"display","size":0.0444,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.0},{"id":"sty_quote_\u2014_serif","name":"Quote \u2014 Serif","group":"Quotes","font":"serif","size":0.0417,"bold":false,"italic":false,"color":"#ffffff","align":"left","caps":"none","track":0.0},{"id":"sty_quote_\u2014_serif_white,_cap","name":"Quote \u2014 Serif (White, Caps)","group":"Quotes","font":"display","size":0.0333,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"upper","track":0.01},{"id":"sty_display_keyword","name":"Display Keyword","group":"Keywords","font":"display","size":0.1111,"bold":true,"italic":false,"color":"#000000","align":"left","caps":"upper","track":0.01},{"id":"sty_keywords_full_page","name":"Keywords (Full Page)","group":"Keywords","font":"display","size":0.0556,"bold":true,"italic":false,"color":"#ffffff","align":"justify-all","caps":"none","track":0.02},{"id":"sty_brand_keyword","name":"Brand Keyword","group":"Keywords","font":"display","size":0.1852,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"upper","track":0.01},{"id":"sty_moodboard_keyword","name":"Moodboard Keyword","group":"Keywords","font":"display","size":0.0833,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"upper","track":0.0}];
 // The default fill for a placeholder shape, and the ONE definition of it. It was
 // written out nine times: the starter deck, the shape creator, the duplicate
@@ -177,6 +177,7 @@ function _syncNavBadges() {
         tab.title = (NAV_STEP_TIPS[v] || '') + (b ? ' ' + b.tip : '');
     });
     try { _syncNextStep(); } catch (e) {}
+    try { _dashBudgetSync(); } catch (e) {}
 }
 
 // Debounced off scheduleAutosave, the hook nearly every edit already calls.
@@ -530,6 +531,9 @@ const FRAME_TOUR = [
     { ch: 2, view: 'dashboard', target: '#dash-frame-visual', prep: () => switchView('dashboard'),
       title: 'Drop the artwork in',
       body: 'Drag an image file onto the preview to give the piece its artwork. The file name becomes its image code. Revised images later? Import > Bulk Images on this page swaps many at once by matching names.' },
+    { ch: 2, view: 'dashboard', target: ['#dashProdBtn', '.table-container'], prep: () => switchView('dashboard'),
+      title: 'Production and the budget',
+      body: 'This button opens Production: frame and mat samples, vendors and the production pack, prices and the budget, and what changed since the last issue. Once pieces are priced it shows the budget itself, and it moves as you change a size. A number on it means something needs a look.' },
     { ch: 2, view: 'dashboard', target: ['#dashPushSelector', '#dashRightPane'], prep: () => switchView('dashboard'),
       title: 'Push to Wall',
       body: 'Pick a wall here and press Send to hang the selected piece on it. You can also add pieces from the Elevation side, which is next.' },
@@ -12779,6 +12783,7 @@ function loadDashDataIntoControls(data) {
     updateDashVisualsFromDOM();
     // Surface any constraint warnings for this row immediately on load.
     updateDashboardWarnings();
+    try { _dashBudgetSync(data); } catch (e) {}
 }
 
 // Update table from a table input. The fourth arg (`fromTable`) lets the caller
@@ -13034,6 +13039,8 @@ function syncDashAndCalculate(opts) {
     }
 
     dashProjectData[dashSelectedRowIndex] = _assembledRow;
+    // the budget follows the size as it is typed (19.94), live pass included
+    if (!_bulkEditing) { try { _dashBudgetSync(_assembledRow); } catch (e) {} }
 
     if (opts && opts.live) {
         updateDashVisualsFromDOM();
@@ -13666,6 +13673,7 @@ function importDashCSV(e) {
             d.notes = cellOr(cols, 'Notes', '');
             d.prodNotes = cellOr(cols, 'Production Notes', '');
             d._csvCat = cellOr(cols, 'Category', '');
+            { const v = cellOr(cols, 'Vendor', '').trim(), su = cellOr(cols, 'Source URL', '').trim(); if (v) d.vendorName = v; if (su) d.sourceUrl = su; }
 
             newData.push(d);
         }
@@ -24186,6 +24194,10 @@ function _dsRunPreflight() {
             issues.push({ sev: 'warn', text: sg.keys.join(', ') + ' \u2014 hang ' + _num1(sg.gapIn) + '" apart on ' + wall + '. One set, ' + plan.label + '?', idx: null, set: sg, setPlan: plan, wall: { kind: 'wall', elevId: _elevId(sg.elev) } });
         });
     } catch (e) {}
+    // Frame and mat samples the client rejected, or not approved by IFS (19.87).
+    try { issues.push.apply(issues, _samplePreflight()); } catch (e) {}
+    // Duplicate image codes; TBDs, leftover options and a wrong version in an IFS (19.88).
+    try { issues.push.apply(issues, _readinessPreflight()); } catch (e) {}
     // Spelling \u2014 a separate pass, see _dsRunSpellCheck for what it does and doesn't do.
     try { issues.push.apply(issues, _dsRunSpellCheck()); } catch (e) {}
     return issues;
@@ -24305,6 +24317,13 @@ function _dsShowPreflight() {
                     wl.style.cssText = 'width:auto; height:22px; padding:0 10px; font-size:var(--fs-60);';
                     wl.onclick = () => { const mm = document.getElementById('_dsPreflightModal'); if (mm) mm.remove(); _jumpGo(it.wall); };
                     row.appendChild(wl);
+                }
+                if (it.prod) {
+                    const pd = document.createElement('button'); pd.textContent = 'Production'; pd.className = 'action-btn btn-secondary';
+                    pd.title = 'Open the Production window, where this is fixed';
+                    pd.style.cssText = 'width:auto; height:22px; padding:0 10px; font-size:var(--fs-60);';
+                    pd.onclick = () => { const mm = document.getElementById('_dsPreflightModal'); if (mm) mm.remove(); openProduction(it.prod.tab); };
+                    row.appendChild(pd);
                 }
                 if (it.go) {
                     const pc = document.createElement('button'); pc.textContent = 'Piece'; pc.className = 'action-btn btn-secondary';
@@ -27670,6 +27689,13 @@ document.addEventListener('keydown', (e) => {
     if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
     if (_fpLineStart) _fpLineStart = null; else _fpLineArmId = null;
     try { _fpLoupeHide(); _dsRenderCenter(); _dsRenderTools(); } catch (err) {}
+});
+// Esc puts the budget sketch down (19.98).
+document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape' || !_fpSketchOn) return;
+    const t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    try { _fpSketchToggle(false); } catch (err) {}
 });
 // What a line is called in its settings popup and in Layers. An elbow with no
 // waypoints (and no legacy pts) is a two-point zig-zag, not a multi-point path.
@@ -32575,7 +32601,7 @@ function _dsRenderCenterFloorplan(desc, c, w, hh) {
         // interaction keeps working, now at the true PDF position.
         const img = document.createElement('img');
         img.id = 'dsFpPlanImg'; img.src = lv.imageData; img.draggable = false;
-        img.style.cssText = 'display:block; width:100%; height:100%; opacity:0; user-select:none; -webkit-user-drag:none; cursor:' + ((_fpArmedId || _fpLineArmId) ? 'crosshair' : 'default') + ';';
+        img.style.cssText = 'display:block; width:100%; height:100%; opacity:0; user-select:none; -webkit-user-drag:none; cursor:' + ((_fpArmedId || _fpLineArmId || _fpSketchOn) ? 'crosshair' : 'default') + ';';
         img.onclick = _dsFpPlace;
         wrap.appendChild(img);
         // Wall-line overlay (SVG): every group's line at PDF stroke weight,
@@ -32591,7 +32617,7 @@ function _dsRenderCenterFloorplan(desc, c, w, hh) {
         _fpWallLinesPaint();
         // The loupe tracks whenever ANY placement tool is armed — dropping a pin on the
         // right side of a door matters as much as starting a line on the right wall.
-        if (_fpArmedId || _fpLineArmId) {
+        if (_fpArmedId || _fpLineArmId || _fpSketchOn) {
             img.onmousemove = _dsFpPointerMove;
             img.onmouseleave = _fpLoupeHide;
         } else {
@@ -32761,7 +32787,7 @@ function _fpLoupeHide() {
 // tracks, and a wall line in progress also updates its dashed preview.
 function _dsFpPointerMove(e) {
     if (_fpLineArmId && _fpLineStart) { _dsFpLineMove(e); return; }   // that path shows the loupe itself
-    if (_fpArmedId || _fpLineArmId) _fpLoupeShow(e);
+    if (_fpArmedId || _fpLineArmId || _fpSketchOn) _fpLoupeShow(e);
 }
 function _dsFpLineDown(e) {
     if (!_fpLineArmId) return;
@@ -32888,7 +32914,7 @@ function _fpWallLinesPaint() {
     const NS = 'http://www.w3.org/2000/svg';
     Array.from(svg.childNodes).forEach(n => { if (n.id !== 'dsFpLinePreview') svg.removeChild(n); });
     if (c.wrap) c.wrap.querySelectorAll('.fp-line-end').forEach(n => n.remove());
-    const armed = !!(_fpArmedId || _fpLineArmId);
+    const armed = !!(_fpArmedId || _fpLineArmId || _fpSketchOn);
     if (armed) _fpSelLine = null;
     if (_fpSelLine && _fpSelLine.lv !== _deckLvlOf(lv)) _fpSelLine = null;
     const mk = (s, attrs) => { const ln = document.createElementNS(NS, 'line'); ln.setAttribute('x1', s[0] * 100); ln.setAttribute('y1', s[1] * 100); ln.setAttribute('x2', s[2] * 100); ln.setAttribute('y2', s[3] * 100); Object.keys(attrs).forEach(k => ln.setAttribute(k, attrs[k])); ln.setAttribute('vector-effect', 'non-scaling-stroke'); return ln; };
@@ -33031,7 +33057,14 @@ function _dsFpNorm(e) {
     const r = img.getBoundingClientRect(); if (!r.width || !r.height) return null;
     return { x: Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)), y: Math.max(0, Math.min(1, (e.clientY - r.top) / r.height)) };
 }
+// 19.98: while sketching, a click on the plan is a new piece (the tool stays armed)
+function _dsFpSketchClick(e) {
+    const n = _dsFpNorm(e); if (!n) return;
+    _fpSketchDrop((_dsPages[_dsIndex] && _dsPages[_dsIndex].level) || 0, n.x, n.y);
+    _dsRefresh(); _dsRenderTools();
+}
 function _dsFpPlace(e) {
+    if (_fpSketchOn && !_fpArmedId && !_fpLineArmId) return _dsFpSketchClick(e);
     if (!_fpArmedId) { if (_fpSelLine) _fpLineSelect(null); return; }
     const n = _dsFpNorm(e); if (!n) return;
     const g = _fpFindGroup(_fpArmedId); if (!g) return;
@@ -33140,7 +33173,7 @@ function _dsFpRemove(key) {
     if (typeof scheduleAutosave === 'function') scheduleAutosave();
     _dsRefresh();
 }
-function _dsFpArm(key) { _fpArmedId = (_fpArmedId === key) ? null : key; _dsRenderTools(); _dsRenderCenter(); }
+function _dsFpArm(key) { _fpArmedId = (_fpArmedId === key) ? null : key; if (_fpArmedId) _fpSketchOn = false; _dsRenderTools(); _dsRenderCenter(); }
 function _dsFpSetCategory(key, cat) {
     const g = _fpFindGroup(key); if (!g) return;
     g.rows.forEach(r => { r.category = cat || ''; });
@@ -33609,6 +33642,8 @@ function openDashMenu(btn, which) {
             { label: 'Export Database', hint: 'CSV of every piece', onClick: () => exportDashCSV() },
             { label: 'Batch PNGs', hint: 'every piece plus the CSV, one ZIP', onClick: () => batchDownloadAllFrames() },
             { label: 'InDesign Script', hint: 'AutoFrameSpecs.jsx', onClick: () => downloadInDesignScript() },
+            { head: '' },
+            { label: 'Production pack…', hint: 'RFI and contact sheet per vendor, purchases', onClick: () => openProduction('vendors') },
         ],
     };
     if (!menus[which]) return null;
@@ -33801,6 +33836,7 @@ function _fpPanelItems(t, desc) {
     _returnBarInto(_rb, 'deck');
     t.appendChild(_rb);
     t.appendChild(_fpAddCodesBar(desc));
+    t.appendChild(_fpBudgetStrip());
 
     const groups = _fpGroups();
     if (!groups.length) {
@@ -33867,7 +33903,7 @@ function _fpPickLineStyle(g, lvl, v) {
             _fpSetWall(r2, lvl, { wallLine: one, wallPanels: parseInt(v, 10) || 1 });
         }
     });
-    _fpLineArmId = g.key; _fpArmedId = null; _fpLineStart = null;
+    _fpLineArmId = g.key; _fpArmedId = null; _fpLineStart = null; _fpSketchOn = false;
     if (typeof scheduleAutosave === 'function') scheduleAutosave();
     _dsRenderCenter(); _dsRenderRail(); _dsRenderTools();
 }
@@ -33901,6 +33937,73 @@ const FP_FRAME_SETS = [
     { n: 4, label: 'Quad' }, { n: 5, label: '5 set' }, { n: 7, label: '7 set' },
 ];
 let _fpAddType = null;     // last type picked, so a run of EGD codes needs one choice
+// ── THE BUDGET SKETCH (19.98) ──
+// The studio's budget estimate starts from a bare floor plan: put a piece on each focal
+// wall, give it a type and a standard size, and price it. Here that is the floor plan's own
+// add bar: a Size (the Budgeting guide's standard sizes, both ways round), an Area, and
+// SKETCH, which leaves the plan armed so every click mints a new piece of that type and
+// size where it lands (`_fpSketchDrop`: one undo per click). The pieces are ordinary rows,
+// priced by the rate card like any other, and the budget line under the bar reads the same
+// totals as the Production button (`_dashBudgetInfo`). All three choices are module state.
+const FP_SKETCH_SIZES = [[11, 14], [16, 20], [24, 36], [32, 36], [30, 40], [40, 50]];
+let _fpAddSize = '';          // '' = the default size, else 'WxH' in inches
+let _fpSketchOn = false;
+let _fpSketchArea = '';
+function _fpSketchToggle(on) {
+    _fpSketchOn = on == null ? !_fpSketchOn : !!on;
+    if (_fpSketchOn) { _fpArmedId = null; _fpLineArmId = null; _fpLineStart = null; }
+    else if (typeof _fpLoupeHide === 'function') _fpLoupeHide();
+    _dsRenderTools(); _dsRenderCenter();
+}
+// The bar's Size as row fields (in the dashboard's unit); nothing for a flat graphic, whose
+// size is the wall or the glass.
+function _fpSizeFields(cat) {
+    const m = /^(\d+(?:\.\d+)?)x(\d+(?:\.\d+)?)$/.exec(_fpAddSize || '');
+    if (!m || _isFlatGraphic(_catCodeInfo(cat).product)) return {};
+    const f = unitFactor('in', dashUnit);
+    return { extW: dashFmt(parseFloat(m[1]) * f), extH: dashFmt(parseFloat(m[2]) * f) };
+}
+// Mint one piece of the bar's type and size, pinned at (x, y) on plan `lvl`. Found again
+// by a marker, never by the returned code (the settle can renumber: see dashNewFromPhotos).
+function _fpSketchDrop(lvl, x, y) {
+    const cat = _fpAddType || ((_artCats().find(c => c && c.key) || {}).key) || '';
+    const mark = Object.assign({ _fpSketchNew: true }, _fpSizeFields(cat));
+    if (String(_fpSketchArea || '').trim()) mark.location = String(_fpSketchArea).trim();
+    _fpAddCodes(cat, 1, { quiet: true, mark: mark });
+    const r = dashProjectData.find(x => x && x._fpSketchNew);
+    if (!r) return null;
+    delete r._fpSketchNew;
+    _fpSetPin(r, lvl, x, y);
+    if (typeof renderDashTable === 'function') renderDashTable();
+    if (typeof populateDashPushSelector === 'function') populateDashPushSelector();
+    if (typeof pushHistory === 'function') pushHistory();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    return r.id;
+}
+// The budget line under the add bar: what the pieces sell for against the budget, or how
+// to get there (a rate card) when nothing is priced yet.
+function _fpBudgetStrip() {
+    const d = document.createElement('div'); d.id = 'fpBudgetStrip';
+    d.style.cssText = 'display:flex; gap:6px; align-items:center; flex-wrap:wrap; margin:-2px 0 8px; font-size:var(--fs-65); color:var(--text-muted);';
+    const t = _priceTotals();
+    const info = _dashBudgetInfo(null);
+    const txt = document.createElement('span'); txt.style.cssText = 'flex:1 1 auto; min-width:0;';
+    if (info) {
+        txt.textContent = 'Budget: ' + info.text + (t.unpriced.length ? ' · ' + t.unpriced.length + ' not priced' : '');
+        txt.title = info.tip;
+        if (info.over) txt.style.color = 'var(--warn)';
+        const areas = Object.keys(t.byArea);
+        if (areas.length > 1) txt.title += ' By area: ' + areas.map(a => a + ' ' + _money(t.byArea[a].sell)).join(', ') + '.';
+    } else txt.textContent = _rateCard() ? 'Nothing priced yet: the rate card has no rate for these products.' : 'No rate card yet: pieces price once it has rates.';
+    d.appendChild(txt);
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'action-btn btn-secondary';
+    b.style.cssText = 'flex:0 0 auto; width:auto; height:22px; padding:0 8px; font-size:var(--fs-60);';
+    b.textContent = info ? 'Prices' : 'Rate card…';
+    b.title = info ? 'Open Production, Pricing' : 'Base and per sq ft by product, plus add-ons';
+    b.onclick = () => { if (info) openProduction('pricing'); else openRateCard(); };
+    d.appendChild(b);
+    return d;
+}
 let _fpAddSet = 1;
 function _fpAddCodesBar(desc) {
     const bar = document.createElement('div');
@@ -33921,14 +34024,44 @@ function _fpAddCodesBar(desc) {
     add.style.cssText = 'flex:0 0 auto; width:auto; height:26px; padding:0 10px; font-size:var(--fs-65);';
     add.textContent = '+ Add code';
     add.onclick = () => {
-        const code = _fpAddCodes(tSel.value, 1);
+        _fpSketchOn = false;
+        const code = _fpAddCodes(tSel.value, 1, { mark: _fpSizeFields(tSel.value) });
         if (code) { _fpArmedId = code; _fpLineArmId = null; }
         _dsRefresh(); _dsRenderTools(); _dsRenderCenter();
         if (code) _toast('Added ' + code, (floorplanLevels.some(l => l && l.imageData) || floorplanImageData) ? 'Click the plan to pin it, or add the next one.' : 'Pin it once a plan image is in.');
     };
-    bar.appendChild(tSel); bar.appendChild(add);
-    return bar;
+    // 19.98: the size a new piece starts at, and Sketch (every plan click is a new piece)
+    const zSel = document.createElement('select'); zSel.id = 'fpAddSize';
+    zSel.title = 'Size for new pieces: the standard sizes from the budgeting guide (past 40 x 50 is oversize). Flat graphics keep their own.';
+    zSel.style.cssText = 'flex:1 1 0; min-width:0; ' + sty;
+    [['', 'Size']].concat(FP_SKETCH_SIZES.reduce((a, z) => a.concat([[z[0] + 'x' + z[1], z[0] + ' x ' + z[1]], [z[1] + 'x' + z[0], z[1] + ' x ' + z[0]]]), [])).forEach(([v, l]) => {
+        const o = document.createElement('option'); o.value = v; o.textContent = l; if (v === _fpAddSize) o.selected = true; zSel.appendChild(o);
+    });
+    zSel.onchange = () => { _fpAddSize = zSel.value; };
+    const sk = document.createElement('button'); sk.id = 'fpSketchBtn';
+    sk.className = 'action-btn btn-secondary' + (_fpSketchOn ? ' active' : '');
+    sk.style.cssText = 'flex:0 0 auto; width:auto; height:26px; padding:0 8px; font-size:var(--fs-65);';
+    sk.textContent = 'Sketch';
+    sk.title = _fpSketchOn ? 'Sketching: each click on the plan adds a piece of this type and size. Click to stop.' : 'Budget sketch: each click on the plan adds a piece of this type and size, priced from the rate card';
+    sk.onclick = () => _fpSketchToggle();
+    // two rows: type + Add code, then size + Sketch (the tools panel is ~250px wide)
+    bar.style.flexWrap = 'wrap';
+    const brk = document.createElement('div'); brk.style.cssText = 'flex:0 0 100%; height:0;';
+    bar.appendChild(tSel); bar.appendChild(add); bar.appendChild(brk); bar.appendChild(zSel); bar.appendChild(sk);
+    if (!_fpSketchOn) return bar;
+    // while sketching, an Area line: every new piece gets it as its location
+    const wrap = document.createElement('div');
+    wrap.appendChild(bar); bar.style.marginBottom = '4px';
+    const al = document.createElement('label'); al.style.cssText = 'display:flex; gap:5px; align-items:center; margin-bottom:8px; font-size:var(--fs-65); color:var(--text-muted);';
+    al.textContent = 'Area';
+    const ai = document.createElement('input'); ai.type = 'text'; ai.id = 'fpSketchArea'; ai.value = _fpSketchArea; ai.placeholder = 'e.g. Lobby';
+    ai.style.cssText = 'flex:1 1 60px; min-width:0; height:24px;';
+    ai.title = 'Location for the pieces you drop next, so the budget totals by area';
+    ai.oninput = () => { _fpSketchArea = ai.value; };
+    al.appendChild(ai); wrap.appendChild(al);
+    return wrap;
 }
+
 // Mint one placement: N dashboard rows sharing a code, typed and categorised. Returns the
 // placement code. Rows go to the END of the schedule (the dashboard's + Add inserts after
 // the selection, but from the floorplan there is no selection to be next to).
@@ -40513,6 +40646,8 @@ function _jumpEntries() {
     try {
         if (_catPlaces().length) out.push({ group: 'Views', title: 'Catalogue overview', sub: 'every placement and option', go: [{ kind: 'run', label: 'Open', run: openCatalogueOverview }], hay: 'catalogue overview options images missing' });
     } catch (e) {}
+    // 19.95: Production is a window, not a view, but it is reached from anywhere here.
+    PROD_TABS.forEach(t => out.push({ group: 'Views', title: 'Production: ' + t[1], sub: t[2], go: [{ kind: 'run', label: 'Open', run: () => openProduction(t[0]) }], hay: 'production ' + t[1] + ' ' + t[2] + (t[0] === 'pricing' ? ' budget quote excel salesforce' : t[0] === 'shipping' ? ' commercial invoice customs border hs code' : '') }));
     [['dashboard', '1  Frame Dashboard'], ['elevation', '2  Elevation'], ['deck', '3  Deck']].forEach(v => {
         out.push({ group: 'Views', title: v[1], sub: 'view', go: [{ kind: 'view', label: 'Open', view: v[0] }], hay: v[1] + ' view tab' });
     });
@@ -45931,7 +46066,9 @@ function buildSpecStrings(r, opts) {
 //   - batchDownloadAllFramesAsZip (CSV inside a ZIP)
 // The split exists so the ZIP path can capture the CSV bytes without going
 // through a synthetic <a> click.
-function buildDashCSVString() {
+function buildDashCSVString(opts) {
+    // opts.only(row): keep only these rows (the production pack's per-vendor RFI, 19.89).
+    const _only = (opts && typeof opts.only === 'function') ? opts.only : null;
     const g = (id) => document.getElementById(id).value; const u = ` (${dashUnit})`;
 
     // Helper: format a number for output, blank string for zero/missing.
@@ -46018,7 +46155,7 @@ function buildDashCSVString() {
         // Print Panels is the Illustrator artboard set for a split window-film
         // graphic: `panel:printW x printH` per panel, semicolon separated, RAW
         // INCHES like the columns above it. Blank for `full` output.
-        `Material,Print Output,Print Panels (in),Arrangement,Category\n`;
+        `Material,Print Output,Print Panels (in),Arrangement,Category,Vendor,Source URL\n`;
 
     // A catalogue mockup's slots define the arrangement and are not items anyone can
     // order - they carry no artwork and no image code. Computed once rather than per row.
@@ -46026,6 +46163,7 @@ function buildDashCSVString() {
 
     dashProjectData.forEach(r => {
         if (r && r.id && _catSlots[r.id]) return;
+        if (_only && !_only(r)) return;
         // Factor to convert this row's display values back to inches.
         // Used for the RAW columns at the end of the row so InDesign can
         // re-render in any output unit without unit-suffix parsing.
@@ -46191,7 +46329,9 @@ function buildDashCSVString() {
             _catLayoutTagForRow(r.id),
             // Category (18.28): the placement's type, by LABEL, so an import puts the row
             // back in its category instead of guessing. Trailing, for the same reason.
-            ((_artCats().find(c => c && c.key === (r.category || '')) || {}).label || '')
+            ((_artCats().find(c => c && c.key === (r.category || '')) || {}).label || ''),
+            // Who makes it, and where a purchase is bought (19.89). Trailing, by name.
+            _rowVendor(r), r.sourceUrl || ''
         ];
         csv += d.map(s => `"${String(s).replace(/"/g, '""')}"`).join(',') + '\n';
     });
@@ -49165,6 +49305,7 @@ const HELP_REFERENCE_DATA = [
             { title: 'Wallcovering and window film', body: `The size you type is the graphic. A 2" bleed is filled in for you (never over a number you typed). Window film can print as one file or <strong>split per panel</strong>, one file per pane of glass with bleed on every edge. See Context &amp; glass.` },
             { title: 'Bulk Edit', body: `Select several rows (Ctrl+click or Shift+click in the table), then <strong>Edit</strong> &gt; <strong>Bulk Edit…</strong>. Fields that differ across the rows are greyed out, and nothing changes until <strong>Apply to Selected</strong>.` },
             { title: 'Bulk Images', body: `In the Frame Dashboard, under <strong>Import</strong>. Choose revised image files named to match your pieces (by image code, item code or original file name) and each one replaces the matching piece's artwork.` },
+            { title: 'Production and the budget', body: `The <strong>Production</strong> button in the item toolbar opens one window with five tabs: <strong>Samples</strong> (every frame and mat in the deck and what the client approved), <strong>Vendors</strong> (who makes each piece, and the production pack), <strong>Pricing</strong> (cost, sell and allowance per piece, the budget, the rate card, Excel and Salesforce), <strong>Issues</strong> (what changed since the deck last went out) and <strong>Shipping</strong> (commercial invoices across the Canada and USA border, lines from the pieces). Once anything is priced or a budget is set, the button shows the budget itself: what the pieces sell for, what is left, and the selected piece against its allowance. It turns amber when either is passed and moves as you change a size. A number on it means something needs a look, and a click opens that tab. Ctrl+K finds each tab by name. On Pricing, <strong>RFQ</strong> and <strong>RFI</strong> write the 2026 quote template (the RFI has no prices and leaves purchases off), and <strong>Salesforce CSV</strong> writes the Quote Import Template. Sell is cost times 1.8731 plus the artist royalty (0% on an F image code, 10% on PEN, 5% otherwise), unless a Markup or a sell price is typed. The <strong>Rate card</strong> estimates a piece before a vendor quotes: base plus per square foot by product, plus add-ons (premium frame, non-glare glass, moisture sealant, oversize, a buffer) that apply by themselves from the frame code, the Glass field, the location and the size. For a first budget from a bare floor plan, use <strong>Sketch</strong> on the plan's add bar: pick a type and a <strong>Size</strong>, and every click drops a priced piece.` },
             { title: 'PNGs and CSV', body: `The download icon exports the selected row as a PNG. <strong>Export</strong> &gt; <strong>Batch PNGs</strong> exports every row plus the CSV in one ZIP. The CSV round-trips: export it for the InDesign script or a colleague, and import it back to carry on.` }
         ]
     },
@@ -49311,7 +49452,20 @@ const HELP_REFERENCE_DATA = [
             },
             {
                 title: `What's new`,
-                body: `<strong>19.86</strong> Groundwork for a deck-building assistant: FRAME can now be driven by a script (add items, hang them, set artwork, add and fill template pages, preview a page, build the PDF) through the same steps you use. Nothing changes on screen. Also fixed: + Add Item or + Add Wall with a new code, in a project with a gap in its numbering, could report a code that did not exist and leave the new piece off its wall.<br><br>\n<strong>19.85</strong> Install guide wall pages can add Close-up pages after the detail pages: full bleed, with the drawing running off every edge and no title, caption or footer. Select one and drag on the page to move the drawing, scroll to zoom; each close-up keeps its own view. The floor plan key prints a set whose code is also a piece (a wallcovering coded ART.3 with panels ART.3A to 3I) as A–I instead of listing the code among its letters.<br><br><strong>19.84</strong> Dashed lines on deck pages read as dashed: each one fits its dashes to its own printed length (at least three, starting and ending on a dash), so a short spacer leader no longer prints as a dot or disappears behind its tick. With no white boxes on, a page now cuts lines only under the numbers it shows, so a guide hidden on that page (Wall dimensions on a detail page) no longer leaves gaps in the leaders.<br><br><strong>19.83</strong> Install guide wall pages can add Zoomed detail pages after them: the wall at the full height of the safety guides, a section per page from left to right, with no title, subheading or installation notes. A new Outlines guide draws a line in the dimension colour round every frame and panel (never the wallcovering), so their edges read on a busy graphic; it can be hidden per page. The Layout choice on install pages is a dropdown, so every name reads.<br><br><strong>19.82</strong> A measure line with an end on a spacer (or a point on the graphic) now draws BOTH extension lines from the points you clicked, panel end included; frame to frame lines are unchanged. A spacer has a Dimension button that adds the measure line across its gap for you. Install and breaker pages have Show on this page ticks: hide the scale figure (the wall then draws bigger), wall dimensions, spacing, measure lines, free lines, hang guides and more on one page only.<br><br><strong>19.81</strong> A measure line drawn from a spacer (or a guide box) now starts its dashed leader at the point you clicked on it, the same as a point on the graphic, so pulling the number aside draws the leader right away instead of only once it leaves the spacer.<br><br><strong>19.80</strong> Wallcovering walls. A Spacer in the Lines menu: click an edge (a frame, a panel or a printed line in the graphic), then the side it goes on, and type its size; it moves with that edge, pieces snap to its far side and the measure tool snaps to it, so the gap can be called out. A selected dimension has a flip button (or press F) to put its number on the other side of its line. Under This wall on the Guides tab: Graphic strength fades the wallcovering on the wall and on its pages, and No white boxes behind numbers prints the numbers straight on the graphic with the lines cut where a number sits. Install and breaker pages have a Number size slider: smaller numbers against the same drawing, for a busy wall. An install page on Full width can print its wall across 2 or 3 pages (Pages), each part as big as the page allows with the numbers at their usual size and the cuts in gaps between pieces. A measure line to a point on the graphic now draws its dashed leader back to that point.<br><br><strong>19.79</strong> The measure tool and free lines snap to the <strong>graphic</strong>: near an edge in a wallcovering picture (the bottom of a printed year, the side of a shape) a point lands on it, shown by a magenta dot, and stays attached to the graphic. Near a frame or panel edge a point lands on that edge anywhere along it, not only at a corner, so a dimension from the printed 1938 down to the top of its panel is two clicks. Snapping reaches a few screen pixels (zoom in for finer work); Alt places a point exactly. New in Lines: <strong>Guide box</strong>, an empty to space things against, which frames snap to when dragged, as they now do to level lines and centre lines. Any free line can be <strong>Guide only</strong>: it shows on the wall and never prints.<br><br><strong>19.78</strong> Image codes never print a file extension. A code typed, pasted or imported as IMG_0012.jpg is stored as IMG_0012, and a project whose codes carry .jpg, .png, .tif and the like loses them when it opens. Dots inside a code (FFI.F.DSP 50.1) are kept.<br><br><strong>19.77</strong> Fix: on a wall with a wallcovering, the framed art and panels flashed off and dimensions were hard to grab. Pointing at the wallcovering highlighted it and the highlight lifted it over everything on the wall. A highlight now lifts a piece only within its own layer, and a wallcovering is locked on the wall: clicks go through it to the dimensions, the marquee and the wall (Alt+click still selects it).<br><br><strong>19.76</strong> A Full width page now keeps the whole drawing between the safety guides, dimensions past the end of the wall included (one ran off the page), and centres it in the height under the title with the Elevation caption under it.<br><br><strong>19.75</strong> Fix: in Install guide mode, settings made for <strong>This page only</strong> were never used: the panel saved them for the page and the page looked them up under a different name, so it kept the settings of all install pages. Breaker pages were not affected.<br><br><strong>19.74</strong> Linked images, as in InDesign. A picture dragged in from your files remembers that file (Chrome and Edge). Save over it from Illustrator or Photoshop and, when you come back to FRAME, a notice says it changed and offers <strong>Update</strong>, which puts the new version in at the same size, crop and position. <strong>Links</strong> (Frame Dashboard, Edit menu) lists every picture as Up to date, Modified, Missing, Needs access or Not watched, with Update, Update all and Relink. A wallcovering now keeps up to 3200 pixels (a framed print still 1200), and a PNG with real transparency, such as a didactic panel, stays a PNG instead of turning its clear areas black.<br><br><strong>19.73</strong> Fix: editing a piece on the Frame Dashboard erased its wall line on the floor plan, and its pins on any other plan. The form rebuilt the piece from its own fields on every keystroke and the plan fields were not among them; everything the form does not edit is now kept.<br><br><strong>19.72</strong> Install and breaker pages can be set up one page at a time. <strong>This page only</strong> (under Apply changes to) now stays picked for that page; before, it went back to All install pages after every change, so the second change reached every page. A page with its own settings says so and has <strong>Reset to all pages</strong>. New layout, <strong>Full width</strong>: the wall runs across the whole page inside the safety area, under the title, with the installation notes beside the title. Made for long walls such as a timeline; no legend or plan on that page.<br><br><strong>19.71</strong> Walls have <strong>layers</strong>: Wallcovering at the bottom, Framed art over it, and On top for didactic panels, labels and signage. The wall, the PDF and spec-page thumbnails all draw in that order, whatever order the pieces were added in. Once a wall has more than one layer the Art list is grouped by layer, top first, and clicking a letter moves that piece to another layer. New product: <strong>Didactic Panel</strong>, a flat panel (printed acrylic by default) with no bleed that sits on top; its sheet is subtitled DIDACTIC PANELS.<br><br><strong>19.70</strong> The baseboard can be turned off for one wall: untick <strong>Baseboard</strong> under This wall on the Guides tab (the height is still set once, in Elevation settings). A wallcovering sitting on the baseboard drops to the floor with it, keeping its size, and Fit to wall then runs floor to ceiling. The wall, its spec-page thumbnail and the install and breaker pages all follow the wall.<br><br><strong>19.69</strong> A wallcovering now prints behind the framed art hung over it on breaker, install and spec pages and in the SVG download, as it always did on the wall; before, a wallcovering added after its frames covered them (the drop shadows went under it too). On the wallcovering and window film sheet a long value, such as an image code that is a long file name, now stays right of its label: it shrinks a little, then wraps, and is never cut short.<br><br><strong>19.68</strong> Fixes from a read-through of a whole deck. On install and breaker pages, when the wall letters are not the pieces' own letters (a wall hung ART.9, ART.8B, ART.8A reads A, B, C), the letter legend adds an <strong>Item</strong> line naming each piece, so the installer cannot mix up the install page's A with the spec page's A; a set lettered by its own codes, or one piece alone, prints as before. A Group A/B/C page with one piece no longer prints a lone A over it. An image code longer than its frame now keeps to its own space under the frame (half the gap to each neighbour), setting a little smaller if it has to, instead of running into the next code or the spec column. A centre line through a credenza, counter or booth now breaks around the block's label instead of striking through the word, on screen and in the PDF. Generate PDF with the Install guide layout is about four times faster: each wall's frames are now drawn at the size they print instead of at full size and shrunk (on a 37-page deck, 4 minutes 40 seconds down to just over a minute, same look, same file size).<br><br><strong>19.67</strong> On Group A/B/C spec pages the elevation thumbnail fades every piece that is not on that page, as per-piece pages already did: ART.4 and ART.5 on one wall each show their own pieces at full strength and the other code faded, and a set split over two pages shows A\u2013F on the first page and G\u2013K on the second. Codes sharing a page show all of their pieces.<br><br><strong>19.66</strong> Per-piece spec pages use the same thumbnail size as Group A/B/C, so the floorplan and elevation look the same whichever layout you are in. The smaller row also leaves room for wider walls: a wall up to about three times as wide as it is tall now shows whole on a per-piece page, where before anything past about two to one was split. Only really long walls (a corridor) are still split, or shown smaller with Whole wall under This set.<br><br><strong>19.65</strong> A set chooses how a long wall shows in its spec-page thumbnails: under This set, <strong>Long wall</strong> is <strong>Split</strong> (the part of the wall with the set, at full height, with a break line) or <strong>Whole wall</strong> (the entire wall in the same space, smaller, on the same bottom line as the floorplan beside it). It applies to every page of that set, per piece or grouped.<br><br><strong>19.64</strong> Big sets read better. On the floor plan a set with more than three pieces lists its letters as a range, ART.1 | A\u2013K, instead of A / B / C / ... / K. A Group A/B/C set of four or more can be put over <strong>2 pages</strong> or <strong>3 pages</strong> under This set; each page keeps its own letters (A\u2013F, then G\u2013K, marked 1 OF 2 and 2 OF 2) and draws its pieces bigger. A set of more than 12 now splits by itself (a 13th piece used to be left off the page). On spec pages a wall too long for its thumbnail is shown in a few fixed sections, so every page of that wall shows the same pictures, the first pieces the left end and the later ones the right, and the cut is drawn with a break line, as on an architectural elevation.<br><br><strong>19.63</strong> Codes can share a page. On any spec page, <strong>Share a page with</strong> (under This set) puts another code on the same Group A/B/C page, with the codes on the same wall listed first: ART.4 and ART.5 at either end of a corridor print together as ART.4 / ART.5, each keeping its own code, with the letters A and B named under the title. A shared page lays the pieces <strong>Side by side</strong> at one size, close together, instead of as they hang on the wall (far apart and small); <strong>As hung</strong> is one click away, and any Group A/B/C set can be switched to side by side the same way. <strong>Separate pages again</strong> undoes it. Pages combined in an older version now print this way too.<br><br><strong>19.62</strong> Presentation layouts can be mixed. Select any spec page in Deck Studio and, under Presentation layout, <strong>This set</strong> chooses <strong>One page</strong> or <strong>Page per piece</strong> for that set alone, and <strong>Elevation breaker before this set</strong> adds or drops its breaker. A big salon hang can have its breaker and a spec page per piece while the rest of the deck stays on Group A/B/C, or a set can be grouped inside a Per piece deck. Picking the deck's own choice again puts the set back in step with it. Renumbering a set keeps its choices.<br><br><strong>19.61</strong> The Frame Recommendations page can be retitled. Select it in Deck Studio and type a new <strong>Heading</strong>, or pick Frame Recommendations, Specified Frames or Frame Schedule; the <strong>Subheading</strong> under it can be changed too, or cleared to print none. The new name shows in the page list and on the contents page.<br><br><strong>19.60</strong> On spec pages the elevation thumbnail is always the same height as the floorplan and frame corner beside it, in Per piece and Group A/B/C. A wide wall used to be shrunk to fit a fixed box, so it came out shorter than its neighbours; it now keeps the row height and draws wider instead. A wall too long for the space (a long corridor) is shown cropped around its piece, with the cut end of the wall left open, rather than shrunk to a sliver.<br><br><strong>19.59</strong> Picking a frame from the frame library no longer hangs. A frame not yet saved on this computer could take 30 to 60 seconds to appear after browsing, because the offline copy stopped to tidy itself up before handing the picture over; it now hands it over at once. Picking a second frame while the first is still loading no longer lets the first land on top, and a pick that takes more than a moment says Loading frame. The library of 4802 frames is indexed once instead of on every pick. A floater in a frame set picked on the floor plan is a Framed Canvas (Floater) straight away, with its inset, instead of showing as framed art until its picture loaded (or for good if it never did). The PDF now draws each framed piece at the size it prints rather than at full size first: on a 43-page deck the export went from 72 to 48 seconds, same file size, same look.<br><br><strong>19.58</strong> The first visit to a presentation layout is much faster. Page previews now draw each framed piece at the size it is shown instead of at full print size, and from a small copy of its picture: on a 52-page deck the first Per piece build went from about 33 seconds to 15, and Group A/B/C from 22 to 9, with no visible difference. The PDF is unchanged. And once the previews are built, if you pause for a few seconds FRAME quietly builds the other layouts too, so switching between Per piece and Group A/B/C for the first time is usually instant; it stops the moment you click, type or scroll. Install guide previews are prebuilt for walls already drawn for a breaker or an earlier visit; the rest still draw on the first visit.<br><br><strong>19.57</strong> The mat, backer and paper colour pickers on the Frame Dashboard no longer lag. While you drag the colour, only the frame preview updates; the item table and the walls catch up the moment you stop. On a 50-item project each step of the drag took about an eighth of a second, because the whole item table was rebuilt every time.<br><br><strong>19.56</strong> Switching between Per piece, Group A/B/C and Install guide is much faster. Going back to a layout you have already looked at is close to instant (on a 52-page deck it rebuilt every preview, 16 to 23 seconds; now about a second or less), and the pause on each click is down from about a second to a tenth. The first visit to a layout still builds its previews once. Page previews are also quicker to build: the pictures on them are no longer encoded and decoded again just for the screen, library frame images load once, and a full-size cover photo is shown from a small copy in the page list. The PDF is unchanged.<br><br><strong>19.55</strong> Floor plan wall lines are easier to place and can be moved afterwards. While drawing, a tip under the magnifier says what to do and that Shift keeps the line straight, and the magnifier shows the line as thick as it will print, as a square where it will land and as the line itself while you drag. With no tool armed, click a drawn line to select it: drag it to move it, drag either end to adjust it (Shift keeps it straight), nudge it with the arrow keys (Shift for 10 pixels), Delete to remove it, Esc to let go.<br><br><strong>19.54</strong> Fixed: All on, then All off (or My guides off), made My guides on bring back every guide instead of your own selection. Everything switched on by All on is no longer remembered as your selection; flip any single guide yourself and that becomes your selection again.<br><br><strong>19.53</strong> Layout guides have two switches. <strong>My guides off</strong> hides every guide and remembers which ones you had on (saved in the project); <strong>My guides on</strong> brings back exactly those, not the grid, letters or frame dimensions you never use. <strong>All on / All off</strong> still switches every guide. Lines drawn with the Lines tool (free lines, centre lines, centre between, level lines) are now a guide with their own <strong>Free lines</strong> button, so turning guides off hides them too.<br><br><strong>19.52</strong> On the floor plan Items list the category chip is a square the same height as the line and frames buttons, lined up top and bottom with them and evenly spaced.<br><br><strong>19.51</strong> On the floor plan Items list, a code with no category shows a <strong>?</strong> on its chip, so it is clear one still needs picking, and the column heading reads Category. The frame set picker has a <strong>Ford Salt Lake City</strong> section: ten hangs from that project as built (rows of three, pairs, the shelf of three and the stacked pair), each piece in its own frame, mat or float.<br><br><strong>19.50</strong> The page list's filter box and refresh button now stay on top while the pages scroll under them: a page's side + and - buttons used to slide over the refresh button and take the click, adding or removing a page by accident. Page previews no longer show through the filter bar either.<br><br><strong>19.49</strong> Deck Studio's tabs are icons: Project (folder), Pages and Templates beside the title, and Page, Templates and Layers over the right panel, the same glyphs as on the phone. Hover one for its name. The right panel's pinned settings now sit flush under those tabs, so nothing scrolls into view between them.<br><br><strong>19.48</strong> The Lines tool in the elevation dock opens a short menu of kinds. <strong>Centre line</strong>: one click on a frame, an object or the middle of the wall draws a dashed full-height line through its centre, labelled <strong>CL</strong> at the top like the wall's own. <strong>Centre between</strong>: click two things (two frames, a frame and a counter) and the CL lands exactly halfway between them. <strong>Level line</strong>: one click on a top, bottom or centre draws a dashed line across the wall through it, to line tops up. Clicks snap to centres and edges, and every one of these follows the art or object it was placed on when that moves. Change the label (CL ART.4, TOP OF FRAMES) in the box under the selected line. Also fixed: a selected line's settings box could print on the PDF if the line was still selected when the page was drawn.<br><br><strong>19.47</strong> Three tools for hangs that are not straightforward. <strong>Free lines</strong>: the new Line tool in the elevation dock (or <strong>L</strong>) draws a line at any angle, with an arrowhead at one end, both or neither, solid or dashed, and an optional label at its tail such as ALIGN TOP TO MULLION. Its ends stick to frames, context blocks and the wall, and it prints as a clean line in the PDF. <strong>Keep clear</strong>: the Context library has a Keep clear group (switch, thermostat, outlet, strobe, card reader, room sign and a free keep-clear zone), and any block can be marked <strong>Keep clear</strong> in its row. Keep-clear blocks are hatched; a frame covering one is outlined in red on the wall (not in the PDF), noted under the wall settings and listed in Preflight. <strong>Notes for one page</strong>: in Deck Studio, an install or breaker page's notes panel has a <strong>This page</strong> section where you can untick a deck note for that wall only and type a note that prints on that page and nowhere else.<br><br><strong>19.46</strong> Spec-page thumbnails stay one size on every page: a long wall used to draw its elevation short, and the frame corner, profile and floor plan beside it shrank to match. They now keep the full size and the long wall draws inside the same box. An install page whose wall has hang height turned off (ART.15 on its shelf) no longer blows the elevation up past the page and into the specs. Furniture drawings such as the lounge chair now show in the small elevation thumbnails (their lines were too fine to survive the shrink).<br><br><strong>19.45</strong> Art that is not hung to the hang height (on a shelf, over a booth, a counter or a credenza) no longer gets a 57" AFF line and an install note telling the installer to centre it at 57". In Elevations, the Guides tab has a <strong>This wall</strong> section: untick <strong>Hang height</strong> for that wall only and its hang line, AFF dimension and target go, and its install note says to work from the dimensions shown. Pick a context block there (or press <strong>CL</strong> on it in the Context tab) to run a dashed centre line through it, printed as <strong>CL CREDENZA</strong>; it replaces the wall centre line (tick <strong>Wall centre line</strong> to keep both), and the install note says to centre the art on it. Art dragged near a block's centre snaps to it. Spec-page elevation thumbnails now show the context blocks (credenzas, counters, booths) the breaker shows. On Group A/B/C spec pages the artwork lines up on the right with the elevation thumbnail below it.<br><br><strong>19.44</strong> One wall, one breaker: when several codes hang on the same wall (ART.4 and ART.5 at either end of a corridor) the deck prints the wall's elevation breaker once, titled with all of them, followed by each code's own spec pages, in Per-piece and Group A/B/C alike. Codes that hang within 12 inches of each other on one wall are flagged as a possible set: Preflight lists them, and the wall shows a quiet note with <strong>Make ART.12A, 12B, 12C</strong>, which joins them into one set and renumbers every code after them, with the floor plan, walls and pages following (Ctrl+Z undoes it), or <strong>Keep apart</strong> to stop asking. A wall named for its codes (ART.15A / 15B / 15C | Kitchenette) is renamed when they renumber. The Preflight buttons now turn amber for warnings and red for errors and show how many, so a glance tells you whether the deck is clean; nothing pops up while you work.<br><br><strong>19.43</strong> Turning an elevation guide on or off (spacing, wall dimensions, hang / CL, labels, measure lines, the person and the rest) no longer re-captures every wall. Each wall is captured once with every guide on, and each page shows only the guides that are on, cropped exactly as before, so a toggle just redraws the pages that show an elevation, with their old previews staying up until the new ones are ready. Switching EQ on or off, or changing how dimensions look, still updates the drawings.<br><br><strong>19.42</strong> Generate PDF no longer prints a page with the grey <em>Updating this elevation drawing</em> placeholder where the wall should be. The export now stops the rail's background elevation updates and waits for the elevation view before it starts, each page waits and tries again instead of giving up, and if a page still missed its drawing the PDF is built once more. If an elevation still will not draw after that, you are told which pages before anything is saved, and can cancel or save anyway.<br><br><strong>19.41</strong> On install pages the elevation's right wall now sits on the right safety guide on every page, with the Elevation caption ending exactly on that wall line, so the drawings no longer shift from page to page. A figure standing just past the right wall shrinks the drawing very slightly to keep the wall on the guide; one standing well past it keeps the drawing where it was (move the figure inside the wall to line it up).<br><br><strong>19.40</strong> Client logo set to <strong>Before text</strong> now sits between the page number and the project name (the page number stays at the margin). The White / As uploaded choice is gone: upload the logo dark and it turns white by itself on dark pages. On install pages the wall's floor now lines up exactly with the bottom of the floor plan beside it.<br><br><strong>19.39</strong> The elevation guides you turn on (spacing, measure lines, person, hang / CL and the rest) are saved in the project, so it reopens showing the dimensions you set up, on any computer. Page previews no longer all rebuild when nothing changed: pressing M for the measure tool or ticking an edge gap used to throw every preview away. Turning a guide on in the Elevations tab no longer flashes the wall or leaves you on a different one. Install pages for a wall with one piece no longer repeat its item code in grey under ELEVATION DETAIL. The client logo can print before or after the project line in the footer (Project tab, Footer and branding), and on dark pages a dark logo prints white, or as uploaded if its colours must stay. An SVG logo now prints in the PDF (it only showed on screen before).<br><br><strong>19.38</strong> A measure line drawn to a context block now really stays attached to it: the measure tool used to save the block's corner as a fixed point, so the line got no dashed connector to the block and did not follow it when the block moved. Lines already drawn that way are re-attached when the wall opens.<br><br><strong>19.37</strong> The scale figure prints in front of context blocks in PDFs and SVG exports, as it shows on screen (a whiteboard or base cabinets no longer cover it). A measure line drawn to a context block (a counter, a door) gets the dashed connector back to the block, the way one drawn to a frame does. On install and breaker pages the letter legend widens to fit a long image code on one line instead of dropping it under its label; it never goes narrower than the width you set, and stops before the drawing loses its share of the page.<br><br><strong>19.36</strong> A measure line can print <strong>EQ</strong> instead of its number: double-click the number to switch it (double-click again for the number back). When two measure lines on a wall read the same, a small * appears above each number; click it to mark them all EQ at once. Use it to say a piece is centred between two doors without quoting the quarter inch. On install pages the elevation is now as tall as the page allows whatever the length of the heading (a long wall name used to keep the drawing under the title at about two thirds of the size). On the floor plan page every | lines up down the list and a set reads <strong>ART.3 | A / B / C</strong> followed by its location.<br><br><strong>19.35</strong> iPhone: the open view's tab and the strip of tools above it are now one grey shape, so it is clear the bottom button opened that row. The camera is in the Items strip (the round button covered the list). The controller takes its own room above the bar instead of covering the panel, the next-step bar sits above the strip, and the keyboard shortcuts button is gone (a phone has no keyboard). The guided tour has its own phone version that walks the phone's controls, and Help > Start here has an <strong>On iPhone and iPad</strong> entry.<br><br><strong>19.34</strong> iPhone: every view has its colour (Deck blue, Items pink, Walls yellow, Controls grey) and the header wears the one you are on. Items and Walls get the same icon strip over the bottom bar as Deck: Add Item, Duplicate, Delete, Edit, Import and Export on Items; Art, Guides, Context and Glass on Walls. In Deck, Project, Pages and Templates each have a colour, and the tools that belong to the tab you are on light up in it while the rest grey out.<br><br><strong>19.33</strong> iPhone Deck: the bottom strip is icons (Project, Pages, Templates) with All pages, Preview and Preflight beside them, and the page toolbar fits one row: with something selected, its settings, front, back and delete take the page arrows' place (swipe still flips pages).<br><br><strong>19.32</strong> iPhone: on Deck, Project, Pages and Templates sit in a strip just above the bottom bar, with the deck menu (Generate PDF, Approval, Preflight) at its right end, instead of a menu up in the header. The empty band above the bottom bar is gone.<br><br><strong>19.31</strong> Frame sets are picked from pictures: the frames button on a floorplan item code opens a window of drawn arrangements (sets, salon hangs and the Ford Engineering Lab hangs), each to scale with its frames, mats and float mounts. The Ford hangs now come in their real mix of frames (oak, black woodgrain, black and gold, floaters); select the set and use Bulk Edit to change them all at once.<br><br><strong>19.30</strong> Fourteen salon hangs from the Ford Engineering Lab installation guide are now frame sets: on the floorplan Items list, click a code's frames button and pick from <strong>Salon hangs · Ford Engineering Lab</strong> (4 to 11 pieces, sized and spaced exactly as built). A saved project now keeps its document code, version and location (they print in every page footer), and reopens with its own include-page ticks and plan order rather than the previous project's.<br><br><strong>19.29</strong> iPhone: the top bar, dialogs, the frame browser and All pages no longer slide under the status bar (camera, clock and battery) in the home-screen app.<br><br><strong>19.28</strong> iPhone: the top bar now does more. On Walls it names the wall (tap to switch walls or add one), on an item it is the way back to the list, and on Deck a menu button beside the three dots holds Project, Pages, Templates, Generate PDF, Approval and Preflight, so each screen loses a row. The item preview no longer opens cropped and off-centre. Align and space opens as a sheet you can see in full. All pages is tighter, with the filter at the very top and a round X to close; the frame browser closes with the same X. In the frame library one vendor is open at a time, and tapping the open vendor closes it (on every device).<br><br><strong>19.27</strong> Frame FA-BW74-2003 (Framerica American Walnut): the vendor's PRODUCT HOLDER sticker is gone from its corner photo, and its frame no longer tiles as a row of dots (its swatch was a sliver of the moulding; it is now a long, seamless piece of the grain). Pieces already in that frame pick up the corrected look when the project opens, on their walls too; a swatch you uploaded yourself is never replaced.<br><br><strong>19.26</strong> FRAME now keeps a copy of itself on your device, so the home-screen app opens with no signal (a basement, a site with no reception) and opens faster everywhere; it still updates whenever there is signal. On iPhone: the round camera button on Items makes a new item straight from a photo (take one or pick several; each becomes its own item with the picture on it), and a sideways swipe across an empty part of a wall flips to the next wall, across a deck page to the next page. Swiping on a frame or a text box still moves it. Import has <strong>New items from photos</strong> on every device.<br><br><strong>19.25</strong> The frame browser builds a screenful of frames at a time and adds more as you scroll, so All frames opens straight away; on iPhone the frame swatches show the whole corner photo (they looked zoomed in). On iPhone, Deck Studio puts the page numbers, All pages and the tools in one row above the page, and the page area fits the page, leaving more room for the layout choices; the Presentation layout and breaker settings now scroll with the panel instead of covering the choices below them.<br><br><strong>19.24</strong> Pinch with two fingers on a wall to zoom it (and drag two fingers to move around); the rest of the app no longer zooms with it. On iPhone the controller is the <strong>Controls</strong> button in the bottom bar instead of a floating button; Deck Studio's Generate PDF and Approval are in its menu button; All pages shows each page as wide as the phone; the frame browser fills the screen three across (five sideways) with the frame lists behind the menu button and the filters behind Filters. On iPhone and iPad the Project tab no longer shows a page preview, and on iPhone it is one column.<br><br><strong>19.23</strong> FRAME on iPhone. Hold the phone upright to work: Deck, Items and Walls are tabs along the bottom, Save and undo stay in the header and everything else is under the three-dot menu. Items is a list; tap one to open its settings, and All items takes you back. Walls shows the wall chips, the wall, the tools and then the frames, with the wall settings below. Deck shows one page at a time with a page bar and All pages. Turn the phone sideways to look: on Walls and Deck the menus go and the wall or page fills the screen. The controller folds to a round button bottom-right.<br><br><strong>19.22</strong> The joystick has four arrows round its rim: tap one for exactly one nudge, hold it to keep nudging (Shift on for big steps). Delete now removes a selected dimension (tap its number or line first; it shows a dashed box and its number ringed), and leaves frames alone while a dimension is selected. On a touch screen dimension lines and their delete buttons are easier to hit. The letter legend is 200pt wide by default. Elevations in PDFs and exports are laid out at least as large as on a desktop screen, so a deck made on an iPad prints its dimensions the same size as one made on the desktop.<br><br><strong>19.21</strong> On an iPad, use Safari's Share button, then <strong>Add to Home Screen</strong>: FRAME opens from its icon as its own full-screen app with no Safari toolbar. In the elevation dock, <strong>Add artwork</strong> (the picture button) puts a photo in the selected frame from the photo library, the camera or Files; select several frames to add several pictures at once, in letter order. The frame browser always opens on All frames, and on a touch screen it no longer brings up the keyboard until you tap the search box.<br><br><strong>19.20</strong> iPad: the key bar is now a controller (bottom-left; drag its dotted grip to move it). Its <strong>joystick</strong> nudges whatever is selected: push the knob the way it should go, a light push steps slowly and a full push moves faster, with Shift on for big steps; one push undoes in one go. The keys can be <strong>tapped</strong> to stay on or <strong>held</strong> with one hand while the other hand drags. With Shift or Ctrl on, tapping rows in the dashboard table selects a range or adds to the selection. The dashboard item list and the elevation wall panel fold away with the tab on their edge; with the list folded the dashboard picture gets its own column beside the form, and on a touch screen the form is four tabs (Item, Frame, Mat, Notes) so each fits without scrolling.<br><br><strong>19.19</strong> More for iPad. On a touch screen a small key bar sits bottom-right: <strong>Shift</strong>, <strong>Ctrl</strong> and <strong>Alt</strong> stay on once tapped (lit) and apply to every drag and tap until tapped off, and <strong>Delete</strong> deletes the selection like the Delete key. A finger that lands just beside a small resize corner or dimension handle picks the handle up. The wall list beside an elevation folds away with the arrow at its top, giving the wall more room (on any computer). On a narrow screen the dashboard keeps the picture above the form instead of in its own column, so the item table keeps its width; the column comes back when there is room.<br><br><strong>19.18</strong> FRAME works with a finger on iPad: drag frames, context blocks, glass, dimension lines, deck page boxes and floorplan pins by touch. In a scrolling list (the wall rail, the frame list) a swipe scrolls and a short press and hold picks the item up. Double-tap does what double-click does. Buttons that only appeared on mouse hover now show on a touch screen.<br><br><strong>19.17</strong> On deck pages, a frame with no picture in it shows a light grey opening instead of a black one (the drop shadow under the frame was showing through). Downloaded SVG and PNG elevations keep the clear opening for InDesign.<br><br><strong>19.16</strong> Group dimensions step out past the spacing dimensions: the overall width line sits above the row of spacing numbers and the height line left of any beside the group, so the two never run through each other. Drag a group line and it moves out from there.<br><br><strong>19.15</strong> Spacing dimensions place themselves: a number too wide for its gap now moves its line above or below the group (left or right for a vertical gap) to the nearest spot clear of every frame, and in a tight stack it sits over its gap inside the column. Drag one and it stays where you put it; Reset dimension positions hands it back. A line pulled out of the group always puts its number on the outside, away from the dashed extension lines. A set of frames gets one group dimension: pressing Group again on the same frames selects the one already there (a different set on the same wall still gets its own). Click a group dimension's number to select it, then press Delete to remove it.<br><br><strong>19.14</strong> Drop an image from another window onto a page in Deck Studio and it becomes that page’s background (pan, zoom or remove it in Page appearance); image boxes and spec-page frames still take their own drops. The Thank You page has two new sliders: <strong>Move contacts up / down</strong> and <strong>Name size</strong>. A new project’s cover has a 1.5pt rule between the client name and the heading that turns white on a dark page, and the starter deck no longer includes a moodboard page.<br><br>
+                body: `<strong>19.99</strong> <b>Commercial invoices</b> for shipments between Canada and the USA, on a new <b>Shipping</b> tab in Production. Tick the pieces in the box (or add a vendor's pieces at once) and each becomes a line: description with its size and codes, HS code by product (originals 9701.21, prints framed or on canvas 4911.91, wallcovering 4814.90, window film 3919.90), quantity from the walls and value at cost or sell. Port of lading follows the route (Quebec to the USA by ground is Lacolle, Ontario is Windsor, back into Quebec is Champlain, into Ontario is Port Huron, any air is Montreal-Trudeau) unless you type one. Any line can be edited. Shippers and consignees saved to the address book, and the name you sign with, stay on this computer. Download PDF writes commercial_invoice_ followed by the invoice number.<br><br>
+<strong>19.98</strong> <b>Budget sketch</b> on the floor plan. The add bar has a <b>Size</b> (the standard sizes from the budgeting guide, 11 x 14 to 40 x 50, both ways round) and a <b>Sketch</b> button: while it is on, every click on the plan drops a new piece of the chosen type and size right there, and an <b>Area</b> field names where they go. The pieces are priced by the rate card as they land, and a budget line under the bar shows the total against the budget. Esc or Sketch again stops. + Add code takes the size too.<br><br>
+<strong>19.97</strong> The rate card has <b>add-ons</b>, from the studio's budgeting guide: premium frame (a Larson-Juhl or Universal Arquati moulding), non-glare glass (read off the Glass field, entered at 30x40 and scaled to each piece's area), moisture sealant (pieces in a bath, restroom, spa, pool or locker room, with a Sealant tick per piece on the Pricing tab), oversize (past 40x50) and a buffer percent on every estimate. Each one applies by itself from what the piece already says, and the Pricing tab lists what each piece took. Wallcovering and window film price per square foot alone: leave the base blank.<br><br>
+<strong>19.96</strong> Quotes come out in the company's own formats. On the Pricing tab, <b>RFQ</b> writes the 2026 quote template's front sheet (columns A to AN, the header, the mount formulas for art and image size, shipping and totals, file named YYMMDD_CLIENT_Project_RFQ.xlsx) and <b>RFI</b> writes the same sheet without prices, for vendors, leaving originals, commissions and found objects off. The production pack now carries each vendor's RFI in that layout too. <b>Salesforce CSV</b> now writes the Quote Import Template's 11 columns: vendor codes (Duggal DG00, Bruce White BW00 ...), markup as a plain number, no special characters. Prices follow the house formula: sell = cost x (1.8731 + the artist royalty), royalty 0% on an F image code, 10% on PEN, 5% otherwise, with a Royalty column for a piece the client owns. A Markup typed on the Pricing tab replaces the 1.8731, never the royalty, and the margin is after royalties.<br><br>
+<strong>19.95</strong> Production has its own button in the Frame Dashboard toolbar. It opens samples, vendors, prices and the budget, and issues in one place, and once anything is priced it shows the budget itself. A number on it counts what needs a look (a rejected sample still in use, a quote out of date) and a click opens that tab. Samples left the Edit menu and Prices &amp; budget left the Export menu; Production pack stays under Export. Ctrl+K finds each Production tab, Help has an entry, and the tour stops at the button.<br><br>
+<strong>19.94</strong> The price follows the size. Estimates are worked out from the rate card and each piece&#8217;s overall size every time, so shrinking an oversized frame moves the budget on that keystroke. A quote remembers the size it was for: resize the piece and the estimate for the new size stands in, flagged to re-quote, and going back to the quoted size brings the quote back. The Update estimates button is gone, since there is nothing left to update.<br><br>
+<strong>19.93</strong> The item toolbar shows the budget while you choose art: what the pieces sell for against the budget, how much is left, and the selected piece against its allowance. It turns amber when either is passed, appears once anything is priced or a budget is set, and a click opens Prices &amp; budget.<br><br>
+<strong>19.92</strong> Contact sheets in the production pack show each picture at its print file's shape with the piece's own crop (as the deck shows it), not the source image as it came. The Vendors and Issues tabs keep their dropdowns on one line.<br><br>
+<strong>19.91</strong> <strong>Prices &amp; budget</strong> (Frame Dashboard, Export menu, or the Pricing tab of the Production window). Each piece can carry a unit cost, a sell price (or cost times the project markup) and an allowance, with totals, margin, allowances, budget left and a total per area. Every price says where it came from and when: a price you type or import is a dated quote; an estimate comes from the <strong>Rate card</strong> (base plus per square foot by product, dated), and <strong>Update estimates</strong> refreshes estimates when rates change without touching a quote. Quotes older than 90 days are flagged. <strong>Export to Excel</strong> writes a real .xlsx with live formulas (lines, totals, budget left) and the rate card; edit it in Excel and <strong>Import prices</strong> reads it back by item code (an .xlsx or .csv, columns by name, so adding columns is fine). <strong>Salesforce CSV</strong> gives one quote line per piece for Salesforce's import. Prices never print in the deck, but they are saved in the project file, so think before sending the project file itself to a client.<br><br>
+<strong>19.90</strong> <strong>Issues</strong> (in the Production window). Each time the deck goes to the client or to production, <strong>Mark as issued</strong> (the label starts as the deck's version). FRAME keeps what every piece printed at that moment, and shows what has changed since any issue: pieces added or removed, and for each changed piece the field, what it was and what it is now (a new picture counts). Copy it into the client email, or download it as a spreadsheet; the production pack includes the changes since the latest issue.<br><br>
+<strong>19.89</strong> <strong>Production pack</strong> (Frame Dashboard, Export menu). Give each piece its vendor or seller on the new <strong>Vendors</strong> tab (or set every piece of one product at once), and a shop link for anything bought. <strong>Download production pack</strong> makes one ZIP: an RFI spreadsheet and a contact sheet PDF for each vendor with only that vendor's pieces, captioned image code_W x H at print size; a purchase tracker for sourced objects and originals (FAO, FCM, FSO codes), which never go on a vendor's RFI; and the sample request. The database CSV gains Vendor and Source URL columns at the end, and an import reads them back.<br><br>
+<strong>19.88</strong> <strong>Preflight checks an IFS before it goes out.</strong> At any stage it flags one image code used on two different pictures (a recoloured file saved under its old code). Once the deck's version says IFS, it also flags anything still reading TBD (image code, a spec line, the notes), a catalogue placement still showing more than one option, and a footer version that does not match the project file's name.<br><br>
+<strong>19.87</strong> <strong>Frame &amp; mat samples</strong> (Frame Dashboard, Edit menu) lists every frame and mat on the pieces in your deck, with the pieces that use each one. Record what the client said about each sample: Not sent, Sent, Approved or Rejected, with a note. A rejected frame or mat still on a piece shows as a Preflight error, and <strong>Replace</strong> puts its replacement on every piece and wall at once (Ctrl+Z undoes it). Once the deck's version says IFS, Preflight also warns about any sample not approved yet. The same window writes the sample request for your framer: the codes still to send, quantities for the sets and addresses you enter, ready to copy into an email.<br><br>
+<strong>19.86</strong> Groundwork for a deck-building assistant: FRAME can now be driven by a script (add items, hang them, set artwork, add and fill template pages, preview a page, build the PDF) through the same steps you use. Nothing changes on screen. Also fixed: + Add Item or + Add Wall with a new code, in a project with a gap in its numbering, could report a code that did not exist and leave the new piece off its wall.<br><br>\n<strong>19.85</strong> Install guide wall pages can add Close-up pages after the detail pages: full bleed, with the drawing running off every edge and no title, caption or footer. Select one and drag on the page to move the drawing, scroll to zoom; each close-up keeps its own view. The floor plan key prints a set whose code is also a piece (a wallcovering coded ART.3 with panels ART.3A to 3I) as A–I instead of listing the code among its letters.<br><br><strong>19.84</strong> Dashed lines on deck pages read as dashed: each one fits its dashes to its own printed length (at least three, starting and ending on a dash), so a short spacer leader no longer prints as a dot or disappears behind its tick. With no white boxes on, a page now cuts lines only under the numbers it shows, so a guide hidden on that page (Wall dimensions on a detail page) no longer leaves gaps in the leaders.<br><br><strong>19.83</strong> Install guide wall pages can add Zoomed detail pages after them: the wall at the full height of the safety guides, a section per page from left to right, with no title, subheading or installation notes. A new Outlines guide draws a line in the dimension colour round every frame and panel (never the wallcovering), so their edges read on a busy graphic; it can be hidden per page. The Layout choice on install pages is a dropdown, so every name reads.<br><br><strong>19.82</strong> A measure line with an end on a spacer (or a point on the graphic) now draws BOTH extension lines from the points you clicked, panel end included; frame to frame lines are unchanged. A spacer has a Dimension button that adds the measure line across its gap for you. Install and breaker pages have Show on this page ticks: hide the scale figure (the wall then draws bigger), wall dimensions, spacing, measure lines, free lines, hang guides and more on one page only.<br><br><strong>19.81</strong> A measure line drawn from a spacer (or a guide box) now starts its dashed leader at the point you clicked on it, the same as a point on the graphic, so pulling the number aside draws the leader right away instead of only once it leaves the spacer.<br><br><strong>19.80</strong> Wallcovering walls. A Spacer in the Lines menu: click an edge (a frame, a panel or a printed line in the graphic), then the side it goes on, and type its size; it moves with that edge, pieces snap to its far side and the measure tool snaps to it, so the gap can be called out. A selected dimension has a flip button (or press F) to put its number on the other side of its line. Under This wall on the Guides tab: Graphic strength fades the wallcovering on the wall and on its pages, and No white boxes behind numbers prints the numbers straight on the graphic with the lines cut where a number sits. Install and breaker pages have a Number size slider: smaller numbers against the same drawing, for a busy wall. An install page on Full width can print its wall across 2 or 3 pages (Pages), each part as big as the page allows with the numbers at their usual size and the cuts in gaps between pieces. A measure line to a point on the graphic now draws its dashed leader back to that point.<br><br><strong>19.79</strong> The measure tool and free lines snap to the <strong>graphic</strong>: near an edge in a wallcovering picture (the bottom of a printed year, the side of a shape) a point lands on it, shown by a magenta dot, and stays attached to the graphic. Near a frame or panel edge a point lands on that edge anywhere along it, not only at a corner, so a dimension from the printed 1938 down to the top of its panel is two clicks. Snapping reaches a few screen pixels (zoom in for finer work); Alt places a point exactly. New in Lines: <strong>Guide box</strong>, an empty to space things against, which frames snap to when dragged, as they now do to level lines and centre lines. Any free line can be <strong>Guide only</strong>: it shows on the wall and never prints.<br><br><strong>19.78</strong> Image codes never print a file extension. A code typed, pasted or imported as IMG_0012.jpg is stored as IMG_0012, and a project whose codes carry .jpg, .png, .tif and the like loses them when it opens. Dots inside a code (FFI.F.DSP 50.1) are kept.<br><br><strong>19.77</strong> Fix: on a wall with a wallcovering, the framed art and panels flashed off and dimensions were hard to grab. Pointing at the wallcovering highlighted it and the highlight lifted it over everything on the wall. A highlight now lifts a piece only within its own layer, and a wallcovering is locked on the wall: clicks go through it to the dimensions, the marquee and the wall (Alt+click still selects it).<br><br><strong>19.76</strong> A Full width page now keeps the whole drawing between the safety guides, dimensions past the end of the wall included (one ran off the page), and centres it in the height under the title with the Elevation caption under it.<br><br><strong>19.75</strong> Fix: in Install guide mode, settings made for <strong>This page only</strong> were never used: the panel saved them for the page and the page looked them up under a different name, so it kept the settings of all install pages. Breaker pages were not affected.<br><br><strong>19.74</strong> Linked images, as in InDesign. A picture dragged in from your files remembers that file (Chrome and Edge). Save over it from Illustrator or Photoshop and, when you come back to FRAME, a notice says it changed and offers <strong>Update</strong>, which puts the new version in at the same size, crop and position. <strong>Links</strong> (Frame Dashboard, Edit menu) lists every picture as Up to date, Modified, Missing, Needs access or Not watched, with Update, Update all and Relink. A wallcovering now keeps up to 3200 pixels (a framed print still 1200), and a PNG with real transparency, such as a didactic panel, stays a PNG instead of turning its clear areas black.<br><br><strong>19.73</strong> Fix: editing a piece on the Frame Dashboard erased its wall line on the floor plan, and its pins on any other plan. The form rebuilt the piece from its own fields on every keystroke and the plan fields were not among them; everything the form does not edit is now kept.<br><br><strong>19.72</strong> Install and breaker pages can be set up one page at a time. <strong>This page only</strong> (under Apply changes to) now stays picked for that page; before, it went back to All install pages after every change, so the second change reached every page. A page with its own settings says so and has <strong>Reset to all pages</strong>. New layout, <strong>Full width</strong>: the wall runs across the whole page inside the safety area, under the title, with the installation notes beside the title. Made for long walls such as a timeline; no legend or plan on that page.<br><br><strong>19.71</strong> Walls have <strong>layers</strong>: Wallcovering at the bottom, Framed art over it, and On top for didactic panels, labels and signage. The wall, the PDF and spec-page thumbnails all draw in that order, whatever order the pieces were added in. Once a wall has more than one layer the Art list is grouped by layer, top first, and clicking a letter moves that piece to another layer. New product: <strong>Didactic Panel</strong>, a flat panel (printed acrylic by default) with no bleed that sits on top; its sheet is subtitled DIDACTIC PANELS.<br><br><strong>19.70</strong> The baseboard can be turned off for one wall: untick <strong>Baseboard</strong> under This wall on the Guides tab (the height is still set once, in Elevation settings). A wallcovering sitting on the baseboard drops to the floor with it, keeping its size, and Fit to wall then runs floor to ceiling. The wall, its spec-page thumbnail and the install and breaker pages all follow the wall.<br><br><strong>19.69</strong> A wallcovering now prints behind the framed art hung over it on breaker, install and spec pages and in the SVG download, as it always did on the wall; before, a wallcovering added after its frames covered them (the drop shadows went under it too). On the wallcovering and window film sheet a long value, such as an image code that is a long file name, now stays right of its label: it shrinks a little, then wraps, and is never cut short.<br><br><strong>19.68</strong> Fixes from a read-through of a whole deck. On install and breaker pages, when the wall letters are not the pieces' own letters (a wall hung ART.9, ART.8B, ART.8A reads A, B, C), the letter legend adds an <strong>Item</strong> line naming each piece, so the installer cannot mix up the install page's A with the spec page's A; a set lettered by its own codes, or one piece alone, prints as before. A Group A/B/C page with one piece no longer prints a lone A over it. An image code longer than its frame now keeps to its own space under the frame (half the gap to each neighbour), setting a little smaller if it has to, instead of running into the next code or the spec column. A centre line through a credenza, counter or booth now breaks around the block's label instead of striking through the word, on screen and in the PDF. Generate PDF with the Install guide layout is about four times faster: each wall's frames are now drawn at the size they print instead of at full size and shrunk (on a 37-page deck, 4 minutes 40 seconds down to just over a minute, same look, same file size).<br><br><strong>19.67</strong> On Group A/B/C spec pages the elevation thumbnail fades every piece that is not on that page, as per-piece pages already did: ART.4 and ART.5 on one wall each show their own pieces at full strength and the other code faded, and a set split over two pages shows A\u2013F on the first page and G\u2013K on the second. Codes sharing a page show all of their pieces.<br><br><strong>19.66</strong> Per-piece spec pages use the same thumbnail size as Group A/B/C, so the floorplan and elevation look the same whichever layout you are in. The smaller row also leaves room for wider walls: a wall up to about three times as wide as it is tall now shows whole on a per-piece page, where before anything past about two to one was split. Only really long walls (a corridor) are still split, or shown smaller with Whole wall under This set.<br><br><strong>19.65</strong> A set chooses how a long wall shows in its spec-page thumbnails: under This set, <strong>Long wall</strong> is <strong>Split</strong> (the part of the wall with the set, at full height, with a break line) or <strong>Whole wall</strong> (the entire wall in the same space, smaller, on the same bottom line as the floorplan beside it). It applies to every page of that set, per piece or grouped.<br><br><strong>19.64</strong> Big sets read better. On the floor plan a set with more than three pieces lists its letters as a range, ART.1 | A\u2013K, instead of A / B / C / ... / K. A Group A/B/C set of four or more can be put over <strong>2 pages</strong> or <strong>3 pages</strong> under This set; each page keeps its own letters (A\u2013F, then G\u2013K, marked 1 OF 2 and 2 OF 2) and draws its pieces bigger. A set of more than 12 now splits by itself (a 13th piece used to be left off the page). On spec pages a wall too long for its thumbnail is shown in a few fixed sections, so every page of that wall shows the same pictures, the first pieces the left end and the later ones the right, and the cut is drawn with a break line, as on an architectural elevation.<br><br><strong>19.63</strong> Codes can share a page. On any spec page, <strong>Share a page with</strong> (under This set) puts another code on the same Group A/B/C page, with the codes on the same wall listed first: ART.4 and ART.5 at either end of a corridor print together as ART.4 / ART.5, each keeping its own code, with the letters A and B named under the title. A shared page lays the pieces <strong>Side by side</strong> at one size, close together, instead of as they hang on the wall (far apart and small); <strong>As hung</strong> is one click away, and any Group A/B/C set can be switched to side by side the same way. <strong>Separate pages again</strong> undoes it. Pages combined in an older version now print this way too.<br><br><strong>19.62</strong> Presentation layouts can be mixed. Select any spec page in Deck Studio and, under Presentation layout, <strong>This set</strong> chooses <strong>One page</strong> or <strong>Page per piece</strong> for that set alone, and <strong>Elevation breaker before this set</strong> adds or drops its breaker. A big salon hang can have its breaker and a spec page per piece while the rest of the deck stays on Group A/B/C, or a set can be grouped inside a Per piece deck. Picking the deck's own choice again puts the set back in step with it. Renumbering a set keeps its choices.<br><br><strong>19.61</strong> The Frame Recommendations page can be retitled. Select it in Deck Studio and type a new <strong>Heading</strong>, or pick Frame Recommendations, Specified Frames or Frame Schedule; the <strong>Subheading</strong> under it can be changed too, or cleared to print none. The new name shows in the page list and on the contents page.<br><br><strong>19.60</strong> On spec pages the elevation thumbnail is always the same height as the floorplan and frame corner beside it, in Per piece and Group A/B/C. A wide wall used to be shrunk to fit a fixed box, so it came out shorter than its neighbours; it now keeps the row height and draws wider instead. A wall too long for the space (a long corridor) is shown cropped around its piece, with the cut end of the wall left open, rather than shrunk to a sliver.<br><br><strong>19.59</strong> Picking a frame from the frame library no longer hangs. A frame not yet saved on this computer could take 30 to 60 seconds to appear after browsing, because the offline copy stopped to tidy itself up before handing the picture over; it now hands it over at once. Picking a second frame while the first is still loading no longer lets the first land on top, and a pick that takes more than a moment says Loading frame. The library of 4802 frames is indexed once instead of on every pick. A floater in a frame set picked on the floor plan is a Framed Canvas (Floater) straight away, with its inset, instead of showing as framed art until its picture loaded (or for good if it never did). The PDF now draws each framed piece at the size it prints rather than at full size first: on a 43-page deck the export went from 72 to 48 seconds, same file size, same look.<br><br><strong>19.58</strong> The first visit to a presentation layout is much faster. Page previews now draw each framed piece at the size it is shown instead of at full print size, and from a small copy of its picture: on a 52-page deck the first Per piece build went from about 33 seconds to 15, and Group A/B/C from 22 to 9, with no visible difference. The PDF is unchanged. And once the previews are built, if you pause for a few seconds FRAME quietly builds the other layouts too, so switching between Per piece and Group A/B/C for the first time is usually instant; it stops the moment you click, type or scroll. Install guide previews are prebuilt for walls already drawn for a breaker or an earlier visit; the rest still draw on the first visit.<br><br><strong>19.57</strong> The mat, backer and paper colour pickers on the Frame Dashboard no longer lag. While you drag the colour, only the frame preview updates; the item table and the walls catch up the moment you stop. On a 50-item project each step of the drag took about an eighth of a second, because the whole item table was rebuilt every time.<br><br><strong>19.56</strong> Switching between Per piece, Group A/B/C and Install guide is much faster. Going back to a layout you have already looked at is close to instant (on a 52-page deck it rebuilt every preview, 16 to 23 seconds; now about a second or less), and the pause on each click is down from about a second to a tenth. The first visit to a layout still builds its previews once. Page previews are also quicker to build: the pictures on them are no longer encoded and decoded again just for the screen, library frame images load once, and a full-size cover photo is shown from a small copy in the page list. The PDF is unchanged.<br><br><strong>19.55</strong> Floor plan wall lines are easier to place and can be moved afterwards. While drawing, a tip under the magnifier says what to do and that Shift keeps the line straight, and the magnifier shows the line as thick as it will print, as a square where it will land and as the line itself while you drag. With no tool armed, click a drawn line to select it: drag it to move it, drag either end to adjust it (Shift keeps it straight), nudge it with the arrow keys (Shift for 10 pixels), Delete to remove it, Esc to let go.<br><br><strong>19.54</strong> Fixed: All on, then All off (or My guides off), made My guides on bring back every guide instead of your own selection. Everything switched on by All on is no longer remembered as your selection; flip any single guide yourself and that becomes your selection again.<br><br><strong>19.53</strong> Layout guides have two switches. <strong>My guides off</strong> hides every guide and remembers which ones you had on (saved in the project); <strong>My guides on</strong> brings back exactly those, not the grid, letters or frame dimensions you never use. <strong>All on / All off</strong> still switches every guide. Lines drawn with the Lines tool (free lines, centre lines, centre between, level lines) are now a guide with their own <strong>Free lines</strong> button, so turning guides off hides them too.<br><br><strong>19.52</strong> On the floor plan Items list the category chip is a square the same height as the line and frames buttons, lined up top and bottom with them and evenly spaced.<br><br><strong>19.51</strong> On the floor plan Items list, a code with no category shows a <strong>?</strong> on its chip, so it is clear one still needs picking, and the column heading reads Category. The frame set picker has a <strong>Ford Salt Lake City</strong> section: ten hangs from that project as built (rows of three, pairs, the shelf of three and the stacked pair), each piece in its own frame, mat or float.<br><br><strong>19.50</strong> The page list's filter box and refresh button now stay on top while the pages scroll under them: a page's side + and - buttons used to slide over the refresh button and take the click, adding or removing a page by accident. Page previews no longer show through the filter bar either.<br><br><strong>19.49</strong> Deck Studio's tabs are icons: Project (folder), Pages and Templates beside the title, and Page, Templates and Layers over the right panel, the same glyphs as on the phone. Hover one for its name. The right panel's pinned settings now sit flush under those tabs, so nothing scrolls into view between them.<br><br><strong>19.48</strong> The Lines tool in the elevation dock opens a short menu of kinds. <strong>Centre line</strong>: one click on a frame, an object or the middle of the wall draws a dashed full-height line through its centre, labelled <strong>CL</strong> at the top like the wall's own. <strong>Centre between</strong>: click two things (two frames, a frame and a counter) and the CL lands exactly halfway between them. <strong>Level line</strong>: one click on a top, bottom or centre draws a dashed line across the wall through it, to line tops up. Clicks snap to centres and edges, and every one of these follows the art or object it was placed on when that moves. Change the label (CL ART.4, TOP OF FRAMES) in the box under the selected line. Also fixed: a selected line's settings box could print on the PDF if the line was still selected when the page was drawn.<br><br><strong>19.47</strong> Three tools for hangs that are not straightforward. <strong>Free lines</strong>: the new Line tool in the elevation dock (or <strong>L</strong>) draws a line at any angle, with an arrowhead at one end, both or neither, solid or dashed, and an optional label at its tail such as ALIGN TOP TO MULLION. Its ends stick to frames, context blocks and the wall, and it prints as a clean line in the PDF. <strong>Keep clear</strong>: the Context library has a Keep clear group (switch, thermostat, outlet, strobe, card reader, room sign and a free keep-clear zone), and any block can be marked <strong>Keep clear</strong> in its row. Keep-clear blocks are hatched; a frame covering one is outlined in red on the wall (not in the PDF), noted under the wall settings and listed in Preflight. <strong>Notes for one page</strong>: in Deck Studio, an install or breaker page's notes panel has a <strong>This page</strong> section where you can untick a deck note for that wall only and type a note that prints on that page and nowhere else.<br><br><strong>19.46</strong> Spec-page thumbnails stay one size on every page: a long wall used to draw its elevation short, and the frame corner, profile and floor plan beside it shrank to match. They now keep the full size and the long wall draws inside the same box. An install page whose wall has hang height turned off (ART.15 on its shelf) no longer blows the elevation up past the page and into the specs. Furniture drawings such as the lounge chair now show in the small elevation thumbnails (their lines were too fine to survive the shrink).<br><br><strong>19.45</strong> Art that is not hung to the hang height (on a shelf, over a booth, a counter or a credenza) no longer gets a 57" AFF line and an install note telling the installer to centre it at 57". In Elevations, the Guides tab has a <strong>This wall</strong> section: untick <strong>Hang height</strong> for that wall only and its hang line, AFF dimension and target go, and its install note says to work from the dimensions shown. Pick a context block there (or press <strong>CL</strong> on it in the Context tab) to run a dashed centre line through it, printed as <strong>CL CREDENZA</strong>; it replaces the wall centre line (tick <strong>Wall centre line</strong> to keep both), and the install note says to centre the art on it. Art dragged near a block's centre snaps to it. Spec-page elevation thumbnails now show the context blocks (credenzas, counters, booths) the breaker shows. On Group A/B/C spec pages the artwork lines up on the right with the elevation thumbnail below it.<br><br><strong>19.44</strong> One wall, one breaker: when several codes hang on the same wall (ART.4 and ART.5 at either end of a corridor) the deck prints the wall's elevation breaker once, titled with all of them, followed by each code's own spec pages, in Per-piece and Group A/B/C alike. Codes that hang within 12 inches of each other on one wall are flagged as a possible set: Preflight lists them, and the wall shows a quiet note with <strong>Make ART.12A, 12B, 12C</strong>, which joins them into one set and renumbers every code after them, with the floor plan, walls and pages following (Ctrl+Z undoes it), or <strong>Keep apart</strong> to stop asking. A wall named for its codes (ART.15A / 15B / 15C | Kitchenette) is renamed when they renumber. The Preflight buttons now turn amber for warnings and red for errors and show how many, so a glance tells you whether the deck is clean; nothing pops up while you work.<br><br><strong>19.43</strong> Turning an elevation guide on or off (spacing, wall dimensions, hang / CL, labels, measure lines, the person and the rest) no longer re-captures every wall. Each wall is captured once with every guide on, and each page shows only the guides that are on, cropped exactly as before, so a toggle just redraws the pages that show an elevation, with their old previews staying up until the new ones are ready. Switching EQ on or off, or changing how dimensions look, still updates the drawings.<br><br><strong>19.42</strong> Generate PDF no longer prints a page with the grey <em>Updating this elevation drawing</em> placeholder where the wall should be. The export now stops the rail's background elevation updates and waits for the elevation view before it starts, each page waits and tries again instead of giving up, and if a page still missed its drawing the PDF is built once more. If an elevation still will not draw after that, you are told which pages before anything is saved, and can cancel or save anyway.<br><br><strong>19.41</strong> On install pages the elevation's right wall now sits on the right safety guide on every page, with the Elevation caption ending exactly on that wall line, so the drawings no longer shift from page to page. A figure standing just past the right wall shrinks the drawing very slightly to keep the wall on the guide; one standing well past it keeps the drawing where it was (move the figure inside the wall to line it up).<br><br><strong>19.40</strong> Client logo set to <strong>Before text</strong> now sits between the page number and the project name (the page number stays at the margin). The White / As uploaded choice is gone: upload the logo dark and it turns white by itself on dark pages. On install pages the wall's floor now lines up exactly with the bottom of the floor plan beside it.<br><br><strong>19.39</strong> The elevation guides you turn on (spacing, measure lines, person, hang / CL and the rest) are saved in the project, so it reopens showing the dimensions you set up, on any computer. Page previews no longer all rebuild when nothing changed: pressing M for the measure tool or ticking an edge gap used to throw every preview away. Turning a guide on in the Elevations tab no longer flashes the wall or leaves you on a different one. Install pages for a wall with one piece no longer repeat its item code in grey under ELEVATION DETAIL. The client logo can print before or after the project line in the footer (Project tab, Footer and branding), and on dark pages a dark logo prints white, or as uploaded if its colours must stay. An SVG logo now prints in the PDF (it only showed on screen before).<br><br><strong>19.38</strong> A measure line drawn to a context block now really stays attached to it: the measure tool used to save the block's corner as a fixed point, so the line got no dashed connector to the block and did not follow it when the block moved. Lines already drawn that way are re-attached when the wall opens.<br><br><strong>19.37</strong> The scale figure prints in front of context blocks in PDFs and SVG exports, as it shows on screen (a whiteboard or base cabinets no longer cover it). A measure line drawn to a context block (a counter, a door) gets the dashed connector back to the block, the way one drawn to a frame does. On install and breaker pages the letter legend widens to fit a long image code on one line instead of dropping it under its label; it never goes narrower than the width you set, and stops before the drawing loses its share of the page.<br><br><strong>19.36</strong> A measure line can print <strong>EQ</strong> instead of its number: double-click the number to switch it (double-click again for the number back). When two measure lines on a wall read the same, a small * appears above each number; click it to mark them all EQ at once. Use it to say a piece is centred between two doors without quoting the quarter inch. On install pages the elevation is now as tall as the page allows whatever the length of the heading (a long wall name used to keep the drawing under the title at about two thirds of the size). On the floor plan page every | lines up down the list and a set reads <strong>ART.3 | A / B / C</strong> followed by its location.<br><br><strong>19.35</strong> iPhone: the open view's tab and the strip of tools above it are now one grey shape, so it is clear the bottom button opened that row. The camera is in the Items strip (the round button covered the list). The controller takes its own room above the bar instead of covering the panel, the next-step bar sits above the strip, and the keyboard shortcuts button is gone (a phone has no keyboard). The guided tour has its own phone version that walks the phone's controls, and Help > Start here has an <strong>On iPhone and iPad</strong> entry.<br><br><strong>19.34</strong> iPhone: every view has its colour (Deck blue, Items pink, Walls yellow, Controls grey) and the header wears the one you are on. Items and Walls get the same icon strip over the bottom bar as Deck: Add Item, Duplicate, Delete, Edit, Import and Export on Items; Art, Guides, Context and Glass on Walls. In Deck, Project, Pages and Templates each have a colour, and the tools that belong to the tab you are on light up in it while the rest grey out.<br><br><strong>19.33</strong> iPhone Deck: the bottom strip is icons (Project, Pages, Templates) with All pages, Preview and Preflight beside them, and the page toolbar fits one row: with something selected, its settings, front, back and delete take the page arrows' place (swipe still flips pages).<br><br><strong>19.32</strong> iPhone: on Deck, Project, Pages and Templates sit in a strip just above the bottom bar, with the deck menu (Generate PDF, Approval, Preflight) at its right end, instead of a menu up in the header. The empty band above the bottom bar is gone.<br><br><strong>19.31</strong> Frame sets are picked from pictures: the frames button on a floorplan item code opens a window of drawn arrangements (sets, salon hangs and the Ford Engineering Lab hangs), each to scale with its frames, mats and float mounts. The Ford hangs now come in their real mix of frames (oak, black woodgrain, black and gold, floaters); select the set and use Bulk Edit to change them all at once.<br><br><strong>19.30</strong> Fourteen salon hangs from the Ford Engineering Lab installation guide are now frame sets: on the floorplan Items list, click a code's frames button and pick from <strong>Salon hangs · Ford Engineering Lab</strong> (4 to 11 pieces, sized and spaced exactly as built). A saved project now keeps its document code, version and location (they print in every page footer), and reopens with its own include-page ticks and plan order rather than the previous project's.<br><br><strong>19.29</strong> iPhone: the top bar, dialogs, the frame browser and All pages no longer slide under the status bar (camera, clock and battery) in the home-screen app.<br><br><strong>19.28</strong> iPhone: the top bar now does more. On Walls it names the wall (tap to switch walls or add one), on an item it is the way back to the list, and on Deck a menu button beside the three dots holds Project, Pages, Templates, Generate PDF, Approval and Preflight, so each screen loses a row. The item preview no longer opens cropped and off-centre. Align and space opens as a sheet you can see in full. All pages is tighter, with the filter at the very top and a round X to close; the frame browser closes with the same X. In the frame library one vendor is open at a time, and tapping the open vendor closes it (on every device).<br><br><strong>19.27</strong> Frame FA-BW74-2003 (Framerica American Walnut): the vendor's PRODUCT HOLDER sticker is gone from its corner photo, and its frame no longer tiles as a row of dots (its swatch was a sliver of the moulding; it is now a long, seamless piece of the grain). Pieces already in that frame pick up the corrected look when the project opens, on their walls too; a swatch you uploaded yourself is never replaced.<br><br><strong>19.26</strong> FRAME now keeps a copy of itself on your device, so the home-screen app opens with no signal (a basement, a site with no reception) and opens faster everywhere; it still updates whenever there is signal. On iPhone: the round camera button on Items makes a new item straight from a photo (take one or pick several; each becomes its own item with the picture on it), and a sideways swipe across an empty part of a wall flips to the next wall, across a deck page to the next page. Swiping on a frame or a text box still moves it. Import has <strong>New items from photos</strong> on every device.<br><br><strong>19.25</strong> The frame browser builds a screenful of frames at a time and adds more as you scroll, so All frames opens straight away; on iPhone the frame swatches show the whole corner photo (they looked zoomed in). On iPhone, Deck Studio puts the page numbers, All pages and the tools in one row above the page, and the page area fits the page, leaving more room for the layout choices; the Presentation layout and breaker settings now scroll with the panel instead of covering the choices below them.<br><br><strong>19.24</strong> Pinch with two fingers on a wall to zoom it (and drag two fingers to move around); the rest of the app no longer zooms with it. On iPhone the controller is the <strong>Controls</strong> button in the bottom bar instead of a floating button; Deck Studio's Generate PDF and Approval are in its menu button; All pages shows each page as wide as the phone; the frame browser fills the screen three across (five sideways) with the frame lists behind the menu button and the filters behind Filters. On iPhone and iPad the Project tab no longer shows a page preview, and on iPhone it is one column.<br><br><strong>19.23</strong> FRAME on iPhone. Hold the phone upright to work: Deck, Items and Walls are tabs along the bottom, Save and undo stay in the header and everything else is under the three-dot menu. Items is a list; tap one to open its settings, and All items takes you back. Walls shows the wall chips, the wall, the tools and then the frames, with the wall settings below. Deck shows one page at a time with a page bar and All pages. Turn the phone sideways to look: on Walls and Deck the menus go and the wall or page fills the screen. The controller folds to a round button bottom-right.<br><br><strong>19.22</strong> The joystick has four arrows round its rim: tap one for exactly one nudge, hold it to keep nudging (Shift on for big steps). Delete now removes a selected dimension (tap its number or line first; it shows a dashed box and its number ringed), and leaves frames alone while a dimension is selected. On a touch screen dimension lines and their delete buttons are easier to hit. The letter legend is 200pt wide by default. Elevations in PDFs and exports are laid out at least as large as on a desktop screen, so a deck made on an iPad prints its dimensions the same size as one made on the desktop.<br><br><strong>19.21</strong> On an iPad, use Safari's Share button, then <strong>Add to Home Screen</strong>: FRAME opens from its icon as its own full-screen app with no Safari toolbar. In the elevation dock, <strong>Add artwork</strong> (the picture button) puts a photo in the selected frame from the photo library, the camera or Files; select several frames to add several pictures at once, in letter order. The frame browser always opens on All frames, and on a touch screen it no longer brings up the keyboard until you tap the search box.<br><br><strong>19.20</strong> iPad: the key bar is now a controller (bottom-left; drag its dotted grip to move it). Its <strong>joystick</strong> nudges whatever is selected: push the knob the way it should go, a light push steps slowly and a full push moves faster, with Shift on for big steps; one push undoes in one go. The keys can be <strong>tapped</strong> to stay on or <strong>held</strong> with one hand while the other hand drags. With Shift or Ctrl on, tapping rows in the dashboard table selects a range or adds to the selection. The dashboard item list and the elevation wall panel fold away with the tab on their edge; with the list folded the dashboard picture gets its own column beside the form, and on a touch screen the form is four tabs (Item, Frame, Mat, Notes) so each fits without scrolling.<br><br><strong>19.19</strong> More for iPad. On a touch screen a small key bar sits bottom-right: <strong>Shift</strong>, <strong>Ctrl</strong> and <strong>Alt</strong> stay on once tapped (lit) and apply to every drag and tap until tapped off, and <strong>Delete</strong> deletes the selection like the Delete key. A finger that lands just beside a small resize corner or dimension handle picks the handle up. The wall list beside an elevation folds away with the arrow at its top, giving the wall more room (on any computer). On a narrow screen the dashboard keeps the picture above the form instead of in its own column, so the item table keeps its width; the column comes back when there is room.<br><br><strong>19.18</strong> FRAME works with a finger on iPad: drag frames, context blocks, glass, dimension lines, deck page boxes and floorplan pins by touch. In a scrolling list (the wall rail, the frame list) a swipe scrolls and a short press and hold picks the item up. Double-tap does what double-click does. Buttons that only appeared on mouse hover now show on a touch screen.<br><br><strong>19.17</strong> On deck pages, a frame with no picture in it shows a light grey opening instead of a black one (the drop shadow under the frame was showing through). Downloaded SVG and PNG elevations keep the clear opening for InDesign.<br><br><strong>19.16</strong> Group dimensions step out past the spacing dimensions: the overall width line sits above the row of spacing numbers and the height line left of any beside the group, so the two never run through each other. Drag a group line and it moves out from there.<br><br><strong>19.15</strong> Spacing dimensions place themselves: a number too wide for its gap now moves its line above or below the group (left or right for a vertical gap) to the nearest spot clear of every frame, and in a tight stack it sits over its gap inside the column. Drag one and it stays where you put it; Reset dimension positions hands it back. A line pulled out of the group always puts its number on the outside, away from the dashed extension lines. A set of frames gets one group dimension: pressing Group again on the same frames selects the one already there (a different set on the same wall still gets its own). Click a group dimension's number to select it, then press Delete to remove it.<br><br><strong>19.14</strong> Drop an image from another window onto a page in Deck Studio and it becomes that page’s background (pan, zoom or remove it in Page appearance); image boxes and spec-page frames still take their own drops. The Thank You page has two new sliders: <strong>Move contacts up / down</strong> and <strong>Name size</strong>. A new project’s cover has a 1.5pt rule between the client name and the heading that turns white on a dark page, and the starter deck no longer includes a moodboard page.<br><br>
 <strong>19.13</strong> The Thank You page starts empty. Open <strong>Edit contacts</strong> and pick your team with <strong>+ From directory</strong> (the company directory, now updated), or type someone in. <strong>Save as my default</strong> keeps that team on this computer, and every new project you start begins with it; <strong>Use my default</strong> puts it back on an existing project. Older projects keep the people they already printed.<br><br>
 <strong>19.12</strong> A framed picture in the Frame Dashboard preview shows what you can do with it when you hover: <strong>Replace</strong> and <strong>Remove</strong> in its corner, and a note that you can drag to pan or drop another image on it to swap it.<br><br>\n<strong>19.11</strong> The frame button in the Frame Dashboard shows the frame's corner the way the frame browser does: the whole corner photo on white, with Change underneath.<br><br>\n<strong>19.10</strong> A tighter Frame Dashboard panel. The frame is a square picture button (click it to change the frame) with Frame Code and Color / Texture beside it, and the frame's colour, width and vendor on the Frame heading. Artwork is added from the preview: click the empty opening or drag a picture onto it. The upload row in the panel is gone; once a piece has artwork, its zoom, Reset, 1:1 and Remove sit in one row under the sizes.<br><br>\n<strong>19.09</strong> Frames come from the library. New items start in <strong>MICH-132-29</strong>, a black moulding with a three-quarter inch face, instead of a flat black colour. In the Frame Dashboard the Library / Color switch, the colour picker, Sync Folder and the swatch upload are gone: the frame is one card showing its corner, code, colour, width and vendor, and clicking it opens the frame browser. Picking a frame also fills Color / Texture from the catalogue (never over words you typed). A frame no vendor lists can still be added with <strong>Custom swatch…</strong> in the frame browser. Older projects with colour frames still open and print as before.<br><br>\n<strong>19.08</strong> An empty opening shows an add-image icon instead of its size, on the wall and in the Frame Dashboard preview. In the dashboard, click it to upload the artwork. The size is still in the dashboard fields and the dimension guides.<br><br>\n<strong>19.07</strong> Frame effects in Settings fits on one screen: the sample frame and the sliders sit side by side, and each slider's explanation is behind a <strong>?</strong> instead of a line of text under it.<br><br>\n<strong>19.06</strong> Deck Studio's Project tab is shorter. Project name, code, location and version sit together at the top, and units, rounding and frame effects are one line that says what they are, with <strong>Units&hellip;</strong> and <strong>Frame effects&hellip;</strong> buttons into Settings (the gear in the header), where they are changed. Fixed: the page preview on the Project tab now shows a page's background image, colour and text colour, like the Pages tab; a cover with a picture showed on white before, even after Refresh preview.<br><br>\n<strong>19.05</strong> Elevations get a tool bar beside the wall, like Deck Studio's: Select (V), Measure (M) and Context block (C), then Add frames, Sort A&ndash;Z, Align, Group dimension and Fit to wall, then Item codes and the keyboard shortcuts. The Art, Guides, Context and Glass tabs are bigger, with an icon and a count of what each holds. Frame shadows on the wall are now true to size (the drop shadow was drawn many inches wide), and the shadow inside the opening also falls on the artwork. Breaker and install pages cast the same drop shadow as spec pages when <strong>Also on deck pages</strong> is ticked in Frame effects.<br><br>
 <strong>19.04</strong> Deleting a wall asks about its pieces. When pieces hang on that wall and nowhere else, you choose <strong>Delete wall and pieces</strong> (they leave the Frame Dashboard and the presentation: the way to drop the options a client turned down) or <strong>Delete wall, keep pieces</strong> (as before: they stay in the Dashboard, and + Add Wall offers them to hang again). Pieces also shown on another wall are never deleted, and Ctrl+Z brings back the wall and its pieces together.<br><br><strong>19.03</strong> The frame you pick sets the product both ways. Picking a floater makes the item Framed Canvas (Floater), as before, and picking a regular moulding on a floater item now turns it back into Framed Art (it used to stay a floater, with its canvas inset and no mats). A floater counts by its lip width too, whatever its collection is called. Shadow boxes, frameless canvas, wallcovering and window film are left as you set them.<br><br><strong>19.02</strong> Floaters show their gap. The quarter inch between a floater's face and the canvas now draws as a dark slot instead of more moulding, on the Dashboard preview, the wall, PNG and SVG exports and spec pages, and the canvas casts its shadow into it. Settings, Frame effects has a new <strong>Floater gap</strong> slider for how dark it reads (the canvas used to borrow Frame onto mat). The three Cape Cod floaters (IM-310-715, 720 and 725) now carry their 5/8in face, so a new pick sets a 7/8in inset.<br><br><strong>19.01</strong> More frames turned round to face the right way: 46 Larson-Juhl floaters (Axom, Bauhaus II, Cranbrook, Eiffel, Gramercy, Metalia, Moderne, Olsen, Ravello, Shoji and Spencer II) now show the wall on the left and the floor along the bottom like every other floater, and Academie Silver 3in (LJ-733237) matches its gold and black siblings.<br><br><strong>19.00</strong> The frame browser has a <strong>Type</strong> filter: show only floaters, or only frames, across every vendor. Frame thumbnails are cropped consistently again: about 290 International Moulding and Framerica corners had kept far too much of the moulding and showed as thin slivers. Seven more mouldings that faced the wrong way (including IM-310-710) are turned round.<br><br><strong>18.99</strong> International Moulding and Framerica frames now face the same way as every other moulding: outer edge on the left, rabbet lip on the right. Many were mirror images, so the mockup drew the lip on the outside of the frame. The old Universal folder with two frames is gone; both are in Universal Arquati.<br><br><strong>18.98</strong> The frame library adds International Moulding (about 1,000 current mouldings in 153 collections, 37 of them floaters) and Framerica (336 mouldings in 91 finishes), each with its corner photo, sizes, colour family and, where the maker publishes one, its profile drawing. Deep shadowbox corners now show the frame face above the cut end instead of only raw wood.<br><br><strong>18.97</strong> More frame corners and profiles fit on one row of a group page before it wraps: the space between mouldings tightens first, then the pictures shrink, and only then does the strip go to two rows.<br><br><strong>18.96</strong> Frame corner photos all share one shape now. Thin Universal Arquati and Larson-Juhl mouldings showed as long skinny slivers in the frame browser and on spec pages; every corner is cropped to the same proportions as the Michelangelo ones, showing the cut end and a short run of the face.<br><br><strong>18.95</strong> The frame library adds Universal Arquati: about 1,050 current mouldings in 156 collections (Universal, Valucore and the Arquati lines), including 177 floaters, each with its corner photo, profile drawing, sizes, colour, profile type and style. Discontinued mouldings, fillets, liners and stretcher bars are left out.<br><br><strong>18.94</strong> Two spec page fixes. A picture dropped onto the dashboard preview or onto a frame on the wall kept the previous picture's proportions, so the dashboard and wall stretched it to fit while the spec page printed its true crop; every drop now records the new picture's size, and pieces affected before this correct themselves the next time they are shown. On a per-piece page, a long spec list (float-mounted paper adds four rows) now tightens its rows to stop above the frame corner and profile instead of running into them.<br><br><strong>18.93</strong> The Frame Recommendations page lays frames out on an even grid. With a count that does not divide by the columns (8 frames in 3 columns), the last column used to stretch its frames to fill the page; now every frame is the same size and the last column simply ends early.<br><br><strong>18.92</strong> The frame library adds Larson-Juhl: about 1,030 current mouldings in 156 collections, including 91 floaters, each with its corner photo, profile drawing, sizes, colour family, profile type and style. In the frame browser the Library now lists each vendor once (click it to open its collections), and there is a new <strong>Style</strong> filter (Contemporary, Modern, Classic and so on). Nielsen metal frames are left out because Larson-Juhl has no photos of them.<br><br><strong>18.91</strong> When a Group A/B/C page has too many mouldings for the frame corners and profiles to fit in one row beside the floorplan and elevation, they wrap into two rows in the same space, so the artwork, floorplan and elevation keep their size and place. Seven different mouldings now show every corner and profile.<br><br><strong>18.89</strong> On a Group A/B/C page with several mouldings, ticking Moulding profile no longer makes every frame corner disappear. The corners and profiles now shrink to fit beside the floorplan and elevation; if there is still not enough room, the profiles are left off and the corners kept, and a <strong>no room</strong> note appears beside Moulding profile under Show on page.<br><br><strong>18.88</strong> The frame library now has every Michelangelo collection that works as a frame in FRAME: Barnwood, Contemporary, Modern, Shadow Boxes and Traditional join Avant-Garde, Floaters and Ornate, about 1,240 mouldings in all, each with its corner photo, profile drawing, sizes, colour and profile name. Liners, fillets, rabbetless flat surfaces and stretchers are left out because they are not a frame on their own.<br><br><strong>18.87</strong> The frame library adds Michelangelo's ornate mouldings: all 59 current ones, each with its corner photo, profile drawing, sizes, colour and profile name. Their swatches repeat the ornament down the rail without a visible seam.<br><br><strong>18.86</strong> The frame library adds Michelangelo's floaters: 229 current floater frames for canvas, each with its corner photo, profile drawing, sizes and lip width. Picking one switches the item to Framed Canvas (Floater) and sets the inset from the lip, as before.<br><br><strong>18.85</strong> The frame library now has the whole Michelangelo Avant-Garde collection: 539 current mouldings, each with its corner photo, profile drawing, sizes, colour and profile name, so the frame browser can search and filter all of them.<br><br><strong>18.84</strong> Choosing a frame opens a frame browser: click the <strong>Frame</strong> box on the dashboard. Search by code, colour or profile, and filter by colour family, face width and profile shape, with the corner photo of each moulding. <strong>Project frames</strong> lists the frames already on an item plus a shortlist: star any frame to keep it handy for this project. Save frames you use together as a grouping under <strong>My groupings</strong>, and use <strong>Share with team</strong> to send one to whoever looks after the library, so it appears under <strong>Team groupings</strong> for everyone. The library also gains 109 Michelangelo Avant-Garde mouldings.<br><br><strong>18.83</strong> Copy and paste work between two FRAME tabs. In Deck Studio, copy boxes on a page in one project (Ctrl+C or Cmd+C) and paste them into a page in the other tab (Ctrl+V or Cmd+V): text, shapes, images and lines arrive in the same place on the page, images included.<br><br><strong>18.82</strong> Two projects can be open in two browser tabs at once without risking either one's unsaved work. Each tab now keeps its own backup (they used to share one, so a crash could bring back the other project). The start screen lists every unsaved backup by project name and age, with Continue and Delete; one that is still open in another tab is marked and not offered. Saving a project clears only that tab's backup. The newest five are kept, for a week.<br><br><strong>18.81</strong> Saved project files store each image once. An artwork used on its dashboard row and on wall frames, a shared swatch, and the first floor plan were each written in full every time they appeared; the file now keeps one copy and points to it, so files are smaller and open and save faster. Older project files open as before. Files saved from this version need this version or later.<br><br><strong>18.80</strong> PDFs build about three times faster and come out several times smaller (a 30-page test deck: 75 seconds and 49 MB before, about 22 seconds and 7 MB now), with pages that look the same. Every picture is now encoded at the size it prints at the chosen quality instead of the artwork's full resolution, each image is decoded once and reused, the wall elevations draw their frames and artwork at the size the drawing needs, and frame shadows and PNG floor plans are compressed instead of stored raw. Previews in Deck Studio get the same speed-up. The downloadable SVG keeps full resolution.<br><br><strong>18.79</strong> Contents page fixes. The template's own section lines (and, after applying the Contents template a second time, its placeholder boxes) were left on the page under the automatic ones, so lines doubled up and stayed with Rules off; they are cleared now, and applying the template again starts the page fresh. Introduction, Closing, a level and the other automatic sections can be renamed on the Contents panel. The name fields hold the real name, so you can add to it (Lobby before ART.1C) instead of retyping, and a renamed field has a reset arrow back to the automatic name.<br><br><strong>18.78</strong> Contents page: section titles stay on one line when they can, because the title column widens and the lines move over (only a title that still does not fit wraps). Pages after the last artwork (Thank You and so on) go under Closing instead of joining the last divider's section. On a dark background colour or gradient the contents sets itself in white with light rules, unless you picked a colour. The Contents panel adds Bold, Italic and All caps for titles, Bold and Italic for lines, a separate Numbers colour, Rules on or off with their colour, and Spacing: Grid (the template's rows) or Even.<br><br><strong>18.77</strong> On the Contents page, section titles are links too: to their divider, or to the first page listed under them. The Contents page panel sets the type of the section titles (Titles) and the lines (Lines) (font, size, colour), with Reset to template type to go back. A divider's section title can be renamed there like any line, and a renamed line or section has a <strong>Page</strong> button that writes the new name into that page's own heading, so the page and the contents match.<br><br><strong>18.76</strong> A Contents page too long for one page now continues on a second Contents page, added right after the first, at full type size, with nothing left off. A section too long for a column carries on with its title marked (continued). The extra page goes away by itself when the contents fits on one page again, and every page number after it updates.<br><br><strong>18.75</strong> The page rail numbers pages the way the PDF does, so a Frame Recommendations card that prints on two pages reads 7–8 and every page after it matches the Contents page. Typing a page number to move a page uses those numbers too. On the Contents page, artwork lines are named by where the pieces hang (Lobby: ART.1 – ART.5) and split where the location changes. Lines and section titles still reading as template placeholder text (Divider Page Heading, Section Heading, an untitled page) are marked in amber on the Contents panel and listed in Preflight.<br><br><strong>18.74</strong> Every line on the Contents page is a link. In the PDF it jumps to that page; in Deck Studio click a line to open that page.<br><br><strong>18.73</strong> Every page's panel in Deck Studio has an <strong>In contents</strong> tick while the deck has a Contents page, and layout pages also have <strong>Starts a section</strong>, so any page can head a section, not only dividers. A blank or untitled page you add now stays off the contents until you tick it in. Unticking a wall page or the first page of an Artwork line takes the whole line off. A wall whose name already starts with its code prints the name once.<br><br><strong>18.72</strong> Applying the Contents template to a page you already have now makes it a self-filling Contents page (it used to stay a Custom page showing the placeholder text). A page already set up that way fills itself in the next time you open the deck. Applying a Divider template to a page makes it a section start, the same as adding a new divider.<br><br><strong>18.71</strong> The Contents page writes itself. Add Contents (Full) or (Half) from the Templates tab and it lists the deck with real page numbers, in the template's look, and keeps up as you add, remove and reorder pages. A divider page starts a section, titled by its heading; with no dividers the sections are Introduction, one per floor level, and Closing. A run of spec pages is one Artwork line, and a wall page stands for the spec pages after it. On the Contents page's panel, untick a line to leave it out or type over it to rename it. A deck too long for the page sets smaller type. The PDF now prints this page as you see it (it used to print a plain list instead).<br><br><strong>18.70</strong> On a catalogue options sheet the Elevation thumbnail draws the frame solid, as the grey mockup, instead of faded. Salon and group options are unchanged. Also fixed: a selected page thumbnail in Deck Studio no longer shifts or crops its edges (the footer logo stayed in view only while the page was not selected).<br><br><strong>18.69</strong> Selecting a page in Deck Studio no longer flashes. Options sheets, cards, plan details, spec pages and floorplans used to blink to a blank page with just the title, in the middle and in the page rail, every time you clicked them. Now the page you last saw stays up until the fresh render is ready, and the rail keeps its thumbnail.<br><br><strong>18.68</strong> A selected page keeps its thumbnail in the page rail. Pages drawn as a picture (Timeline, Frame Recommendations, Contacts, floorplans, spec pages, plan details, options sheets) used to show their placeholder there, or go blank, until you picked another page.<br><br><strong>18.67</strong> The catalogue options sheet has an <strong>Options per page</strong> control in Deck Studio: Auto (which shows the number it picked) or 1 to 10, for every options sheet or just this placement, so you can try three or six on a page. A picked number is used exactly, the rest follow on the next page. Also fixed: a page drawn as a picture (options sheets, cards, plan details) no longer goes blank in the page rail while it is selected.<br><br><strong>18.66</strong> On the catalogue options sheet the frame corner, profile, floorplan and elevation now print at exactly the size and position they have on a per-piece spec page, because the sheet draws them with the same layout. The spec list fits between the title and those thumbnails and shrinks rather than running into them, and the mockups start clear of the whole left column.<br><br><strong>18.65</strong> The catalogue options sheet gets its own <strong>Show on page</strong> ticks in Deck Studio, like Group A/B/C: Frame corner, Moulding profile, Floorplan and Elevation, under the specs in the left column. Set them for every options sheet or just this placement. Frame corner and profile are on by default; the plan and wall are off because the breaker in front already carries them. Options pages also show a real preview in the page rail now instead of a placeholder.<br><br><strong>18.64</strong> Catalogue options of a <strong>single piece</strong> now print as an options sheet right after the breaker: the shared specs down the left, the framed mockups on the right coded ART.1.1, ART.1.2, ART.1.3 with each image code underneath, and the options' own spec pages are no longer printed. How many fit a page is automatic (about 1.8in across at the smallest, all at one scale); more than that splits evenly, and every page repeats the specs so a sheet pinned to a board still carries them. Untick <strong>All-options page</strong> to go back to one spec page per option. New options of a single piece are coded ART.1.1, no longer ART.1.1A.<br><br><strong>18.63</strong> In the Frame Dashboard the <strong>Img Code</strong> column widens to fit the longest code, so every code reads in full without scrolling inside the field. It refits as you type.<br><br>
@@ -59550,6 +59704,1864 @@ const FRAME_API = {
     loadProject(text) { return _readProjectText(typeof text === 'string' ? text : JSON.stringify(text)) ? { ok: true } : _apiErr('the project did not open'); },
 };
 window.FRAME_API = FRAME_API;
+
+// ── PRODUCTION (19.87): THE PROJECT AFTER THE DECK ─────────────────────────────
+// Read off Caesars (CANO, 2025): once IFS went out, the same item list was typed again
+// into an RFQ sheet, a quote, Salesforce, a per-vendor RFI, a sample request email and a
+// purchase tracker, and every mistake the PM caught at PO time was a copy mistake (a
+// frame the client had rejected still on two pages). The Production window works from
+// the rows FRAME already has: nothing in it is a second list. One window, one tab per
+// job (`PROD_TABS`), opened by openProduction(tab) from the dashboard menus.
+//
+// SAMPLES ARE APPROVED PER MOULDING. The frame and mat codes are DERIVED from the pieces
+// (_sampleItems, the same rows that earn a spec page); only the verdict is stored, in
+// editorialContent.samples[key] = {st, use, note, at}, key 'f:<code>' or 'm:<mat name>'.
+// One writer (setSampleStatus), which drops empty records and the field itself. A
+// rejection names its replacement and sampleReplace() swaps it onto every piece in one
+// undo entry, through the frame browser's own apply path. Preflight reads the verdicts.
+const SAMPLE_STATUS = [['', 'Not sent'], ['sent', 'Sent'], ['approved', 'Approved'], ['rejected', 'Rejected']];
+function _sampleKey(kind, code) { return kind + ':' + String(code || '').trim(); }
+function _sampleOf(kind, code) {
+    const m = editorialContent && editorialContent.samples;
+    return (m && m[_sampleKey(kind, code)]) || null;
+}
+function _sampleStatus(kind, code) { const s = _sampleOf(kind, code); return (s && s.st) || ''; }
+function _rowTakesFrameSample(r) {
+    const p = r && r.product;
+    return !!p && p !== 'Frameless Canvas (Wrapped)' && p !== 'Sourced Object' && !_isFlatGraphic(p);
+}
+// The mats a row actually prints, mirroring buildSpecStrings (Mat 1 / Mat 2 on framed art,
+// the backer on a float mount; none on a floater, frameless canvas or flat graphic).
+function _rowMatNames(r) {
+    if (!_rowTakesFrameSample(r) || r.product === 'Framed Canvas (Floater)') return [];
+    const out = [];
+    const name = (v) => String(v || '').trim();
+    if (r.useFloatMount === true) { if (name(r.sbBackerColorName)) out.push(name(r.sbBackerColorName)); return out; }
+    if (r.m1A !== false && name(r.m1ColorName)) out.push(name(r.m1ColorName));
+    if (r.m1A !== false && r.m2A && parseFloat(r.m2) > 0 && name(r.m2ColorName)) out.push(name(r.m2ColorName));
+    return out;
+}
+function _sampleItems() {
+    const by = {}, order = [];
+    const add = (kind, code, label, r, extra) => {
+        const k = _sampleKey(kind, code);
+        let it = by[k];
+        if (!it) { it = by[k] = Object.assign({ key: k, kind: kind, code: code, label: label, ids: [] }, extra || {}); order.push(it); }
+        if (r.id && it.ids.indexOf(r.id) < 0) it.ids.push(r.id);
+        if (!it.label && label) it.label = label;
+    };
+    _deckSpecRows().forEach(r => {
+        if (!_rowTakesFrameSample(r)) return;
+        const code = String(r.fCode || '').trim();
+        if (code) add('f', code, String(r.fColorName || '').trim(), r, { swatch: r.swatchDataUrl || '', hex: r.fColor || '' });
+        _rowMatNames(r).forEach(n => {
+            const hex = n === String(r.m1ColorName || '').trim() ? r.m1ColorHex : (n === String(r.m2ColorName || '').trim() ? r.m2ColorHex : r.sbBackerColorHex);
+            add('m', n, '', r, { hex: hex || '' });
+        });
+    });
+    order.forEach(it => { const s = _sampleOf(it.kind, it.code); it.st = (s && s.st) || ''; it.use = (s && s.use) || ''; it.note = (s && s.note) || ''; it.at = (s && s.at) || ''; });
+    return order.sort((a, b) => (a.kind === b.kind ? 0 : (a.kind === 'f' ? -1 : 1)) || a.code.localeCompare(b.code, undefined, { numeric: true }));
+}
+function _todayIso() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+function setSampleStatus(kind, code, patch, quiet) {
+    const ec = editorialContent;
+    const k = _sampleKey(kind, code);
+    const m = ec.samples || {};
+    const rec = Object.assign({}, m[k] || {}, patch || {});
+    if (patch && 'st' in patch && patch.st !== ((m[k] || {}).st || '')) rec.at = patch.st ? _todayIso() : '';
+    if (rec.st !== 'rejected') delete rec.use;
+    Object.keys(rec).forEach(f => { if (rec[f] === '' || rec[f] == null) delete rec[f]; });
+    if (Object.keys(rec).length) m[k] = rec; else delete m[k];
+    if (Object.keys(m).length) ec.samples = m; else delete ec.samples;
+    if (!quiet) pushHistory();
+}
+// Swap a rejected frame (or mat) for its replacement on every piece that uses it. A
+// library code goes through applySwatchToRow (catalogue width, product, swatch); a code
+// not in the library is written as typed. Elevation copies follow, one undo entry.
+function sampleReplace(kind, code, newCode) {
+    code = String(code || '').trim(); newCode = String(newCode || '').trim();
+    if (!code || !newCode || code === newCode) return 0;
+    const rows = _deckSpecRows().filter(r => kind === 'f'
+        ? (_rowTakesFrameSample(r) && String(r.fCode || '').trim() === code)
+        : _rowMatNames(r).indexOf(code) >= 0);
+    if (!rows.length) return 0;
+    let pend = [];
+    if (kind === 'f') {
+        let rec = null; try { rec = _fbByCode()[_fbNorm(newCode)]; } catch (e) {}
+        if (rec) pend = _salonFrameDress(rows, rows.map(() => ({ f: newCode })));
+        else rows.forEach(r => { r.fCode = newCode; });
+    } else {
+        rows.forEach(r => {
+            ['m1ColorName', 'm2ColorName', 'sbBackerColorName'].forEach(f => { if (String(r[f] || '').trim() === code) r[f] = newCode; });
+        });
+    }
+    rows.forEach(r => { const i = dashProjectData.indexOf(r); if (i >= 0) { try { pushUpdatesToElevations(i); } catch (e) {} } });
+    setSampleStatus(kind, code, { st: 'rejected', use: newCode }, true);
+    try { _invalidateFramesCache(); } catch (e) {}
+    pushHistory();
+    if (pend.length) _salonFrameDressLater(pend);
+    try { renderDashTable(); } catch (e) {}
+    return rows.length;
+}
+// The email to the framer: every code still to be sent, the quantity being sets x
+// recipients, and where each set goes. Plain text, so it pastes into anything.
+function _sampleRequestText(opts) {
+    const o = opts || {};
+    const sets = Math.max(1, parseInt(o.sets != null ? o.sets : (editorialContent.sampleSets || 1), 10) || 1);
+    const to = String(o.to != null ? o.to : (editorialContent.sampleTo || '')).trim();
+    const blocks = to ? to.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean) : [];
+    const qty = sets * Math.max(1, blocks.length);
+    const items = _sampleItems().filter(it => o.all ? it.st !== 'rejected' : !it.st);
+    const NL = '\n';
+    const line = (it) => '    ' + it.code + (it.label ? ', ' + it.label : '') + NL + '        QTY: ' + qty;
+    const fr = items.filter(it => it.kind === 'f'), mt = items.filter(it => it.kind === 'm');
+    let t = '';
+    if (fr.length) t += 'FRAME SAMPLES' + NL + fr.map(line).join(NL) + NL + NL;
+    if (mt.length) t += 'MAT SAMPLES' + NL + mt.map(line).join(NL) + NL + NL;
+    if (blocks.length) t += sets + ' set' + (sets === 1 ? '' : 's') + ' of frame & mat samples to each of:' + NL + NL + blocks.map((b, i) => (i + 1) + '.' + NL + b).join(NL + NL) + NL;
+    return { text: t.trim(), count: items.length, items: items };
+}
+// IFS is the stage where nothing may be pending. Read off the footer version the deck
+// already prints (Project tab), so there is no second "stage" setting to forget.
+function _deckIsIFS() {
+    let v = ''; try { v = _deckFooterMeta().version || ''; } catch (e) {}
+    return /\bIFS\b|issued for spec/i.test(v);
+}
+function _samplePreflight() {
+    const out = [];
+    const ifs = _deckIsIFS();
+    const prod = { tab: 'samples' };
+    const items = _sampleItems();
+    items.forEach(it => {
+        if (it.st !== 'rejected') return;
+        const what = it.kind === 'f' ? 'frame' : 'mat';
+        out.push({ sev: 'err', text: it.code + ' — ' + what + ' rejected by the client, still on ' + it.ids.join(', ') + (it.use ? ' (replace with ' + it.use + ')' : ''), idx: null, prod: prod });
+    });
+    if (ifs) {
+        const open = items.filter(it => it.st !== 'approved' && it.st !== 'rejected');
+        if (open.length) out.push({ sev: 'warn', text: open.length + ' frame/mat sample' + (open.length === 1 ? '' : 's') + ' not approved yet in an IFS: ' + open.map(it => it.code).join(', '), idx: null, prod: prod });
+    }
+    return out;
+}
+
+// ── IFS READINESS (19.88) ──────────────────────────────────────────────────────
+// The rest of what the Caesars PM caught by reading the IFS line by line at PO time.
+// Always: one image code on two DIFFERENT pictures (a recolour saved under the old code;
+// production prints whichever file it finds). The same picture in two placements is fine.
+// In an IFS only (_deckIsIFS): "TBD" left in a printed spec value, the image code or the
+// notes; a catalogue placement still offering more than one option; a footer version that
+// disagrees with the project file's name (V5 footers went out on V7 pages).
+function _readinessPreflight() {
+    const out = [];
+    const ifs = _deckIsIFS();
+    const rows = _deckSpecRows();
+    const by = {}, order = [];
+    rows.forEach(r => {
+        const k = _imgCodeKey(r), sig = _artSig(r);
+        if (!k || !sig) return;
+        let g = by[k]; if (!g) { g = by[k] = { code: String(r.imageCode).trim(), sigs: {}, ids: [] }; order.push(g); }
+        g.sigs[sig] = true;
+        if (r.id) g.ids.push(r.id);
+    });
+    order.forEach(g => {
+        if (Object.keys(g.sigs).length < 2) return;
+        out.push({ sev: 'err', text: g.code + ' — one image code on different pictures (' + g.ids.join(', ') + '). Give the changed picture its own code.', idx: null, go: { kind: 'piece', label: 'Piece', rowId: g.ids[0] } });
+    });
+    if (!ifs) return out;
+    const TBD = /\bTBD\b/i;
+    rows.forEach(r => {
+        if (!r || !r.id) return;
+        const bad = [];
+        const ic = String(r.imageCode || '').trim();
+        if (!ic || TBD.test(ic)) bad.push('Image code');
+        try { (buildSpecStrings(r).lines || []).forEach(l => { if (l && TBD.test(String(l.value || ''))) bad.push(l.label); }); } catch (e) {}
+        if (TBD.test(String(r.notes || ''))) bad.push('Notes');
+        if (bad.length) out.push({ sev: 'err', text: r.id + ' — still TBD in an IFS: ' + bad.join(', '), idx: null, go: { kind: 'piece', label: 'Piece', rowId: r.id } });
+    });
+    try {
+        _catPlaces().forEach(place => {
+            const n = _catTree(place).reduce((a, t) => a + t.opts.length, 0);
+            if (n > 1) out.push({ sev: 'warn', text: place + ' — still shows ' + n + ' options in an IFS. Delete the ones the client did not choose.', idx: null });
+        });
+    } catch (e) {}
+    try {
+        const fn = (_projectFileHandle && _projectFileHandle.name) || '';
+        const fv = /\bV(\d+)/i.exec(_deckFooterMeta().version || '');
+        const nv = /(?:^|[ ._-])V(\d+)(?=[ ._-]|$)/i.exec(fn.replace(/\.[a-z0-9]+$/i, ''));
+        if (fv && nv && fv[1] !== nv[1]) out.push({ sev: 'warn', text: 'The footer says V' + fv[1] + ' but the project file is V' + nv[1] + ' (' + fn + '). Update the version on the Project tab.', idx: null });
+    } catch (e) {}
+    return out;
+}
+
+// ── VENDORS AND THE PRODUCTION PACK (19.89) ────────────────────────────────────
+// Caesars went to two vendors (Bruce White framed, Duggal prints and acrylic) and the
+// PM split the RFI by hand, hiding the sourced objects and originals, then the
+// production designer made a contact sheet per vendor. Here a piece carries its vendor
+// (`r.vendorName`, and `r.sourceUrl` for something bought), and one download builds the
+// whole pack from the rows: an RFI CSV per vendor (buildDashCSVString's own columns,
+// filtered), a contact sheet PDF per vendor, the purchase tracker and the sample
+// request. Purchases (_rowIsPurchase: a sourced object, or an FAO / FCM / FSO code) are
+// never sent to a print vendor; they go on the tracker.
+// The suggestions are the Vendor list Farmboy's Asana projects use; anything typed is fine.
+const VENDOR_SUGGEST = ['Bruce White Gallery', 'Duggal', 'Northwood', 'Colorific', 'Epic', 'LT Artistic', 'Rainier', 'Tectonics', 'The Framing Depot', 'Thomas Printworks', 'Ben Skinner', 'Artstall', 'Denbigh', 'WestKey', 'Quarterhorse', 'Kyle Bunting', 'Outdoor Image', 'Desi'];
+function _rowVendor(r) { return String((r && r.vendorName) || '').trim(); }
+function _rowIsPurchase(r) {
+    if (!r) return false;
+    if (r.product === 'Sourced Object') return true;
+    if (/^(FAO|FCM|FSO|FSL)[._-]/i.test(String(r.imageCode || '').trim())) return true;
+    return /original|commission|sourced/i.test(String(r.artType || ''));
+}
+function _vendorNames() {
+    const seen = {}, out = [];
+    const add = (n) => { n = String(n || '').trim(); if (n && !seen[n.toLowerCase()]) { seen[n.toLowerCase()] = 1; out.push(n); } };
+    _deckSpecRows().forEach(r => add(_rowVendor(r)));
+    VENDOR_SUGGEST.forEach(add);
+    return out;
+}
+// One writer for both fields; ids so a sync that replaced the row objects is harmless.
+function setRowsProduction(ids, patch) {
+    const want = {}; (ids || []).forEach(id => { want[id] = 1; });
+    let n = 0;
+    dashProjectData.forEach(r => {
+        if (!r || !want[r.id]) return;
+        Object.keys(patch).forEach(k => {
+            const v = String(patch[k] == null ? '' : patch[k]).trim();
+            if (v) r[k] = v; else delete r[k];
+        });
+        n++;
+    });
+    if (n) pushHistory();
+    return n;
+}
+function _prodPackPlan() {
+    const rows = _deckSpecRows().filter(r => r && r.id);
+    const by = {}, vendors = [], unassigned = [], purchases = [];
+    rows.forEach(r => {
+        if (_rowIsPurchase(r)) { purchases.push(r); return; }
+        const v = _rowVendor(r);
+        if (!v) { unassigned.push(r); return; }
+        const k = v.toLowerCase();
+        if (!by[k]) { by[k] = { name: v, rows: [] }; vendors.push(by[k]); }
+        by[k].rows.push(r);
+    });
+    vendors.sort((a, b) => a.name.localeCompare(b.name));
+    return { vendors: vendors, unassigned: unassigned, purchases: purchases };
+}
+// File-name safe, keeps dots (image codes and versions carry them).
+function _prodSafe(s) { return String(s || '').trim().replace(/[\\/:*?"<>|]+/g, '-').replace(/\s+/g, '-') || 'x'; }
+function _prodStamp() { const d = new Date(); return String(d.getFullYear()).slice(2) + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0'); }
+function _prodProjectTag() {
+    let code = ''; try { code = _deckFooterMeta().code || ''; } catch (e) {}
+    const el = document.getElementById('g_projName');
+    return _prodSafe(code || (el && el.value) || 'Project');
+}
+// The production designer's convention: <image code>_<W>x<H>, the PRINT size in the
+// project unit, no extension.
+function _contactSheetCaption(r) {
+    const sz = _rowOpeningAndPrint(r);
+    const code = String(r.imageCode || '').trim() || String(r.id || '');
+    return code + '_' + _fmtUnitNum(sz.printW, dashUnit) + 'x' + _fmtUnitNum(sz.printH, dashUnit);
+}
+function _purchaseTrackerCSV(rows) {
+    const q = (s) => '"' + String(s == null ? '' : s).replace(/"/g, '""') + '"';
+    const u = ' (' + dashUnit + ')';
+    let csv = ['Item Code', 'Image Code', 'Product', 'Art Type', 'Location', 'Qty', 'Overall Width' + u, 'Overall Height' + u, 'Vendor / Seller', 'Source URL', 'Unit Price', 'Shipping', 'Lead Time', 'Order Date', 'Tracking', 'Notes'].map(q).join(',') + '\n';
+    rows.forEach(r => {
+        csv += [r.id, r.imageCode, r.product, r.artType, r.location, r.qty, r.extW, r.extH, _rowVendor(r), r.sourceUrl || '', '', '', '', '', '', r.prodNotes || ''].map(q).join(',') + '\n';
+    });
+    return csv;
+}
+// A grid of every piece going to one vendor, captioned the way the print files are
+// named. Pictures are shrunk to what a 4-across sheet needs before they go in.
+async function _contactSheetPdf(rows, title) {
+    const JP = (window.jspdf && window.jspdf.jsPDF) || (typeof jsPDF !== 'undefined' ? jsPDF : null);
+    if (!JP) throw new Error('PDF library not loaded');
+    const doc = new JP({ orientation: 'landscape', unit: 'pt', format: 'letter' });
+    const PW = doc.internal.pageSize.getWidth(), PH = doc.internal.pageSize.getHeight();
+    const M = 36, COLS = 4, ROWS = 3, HEAD = 34, CAP = 26, GAP = 14;
+    const cw = (PW - M * 2 - GAP * (COLS - 1)) / COLS, ch = (PH - M * 2 - HEAD - GAP * (ROWS - 1)) / ROWS;
+    const per = COLS * ROWS, pages = Math.max(1, Math.ceil(rows.length / per));
+    for (let p = 0; p < pages; p++) {
+        if (p) doc.addPage();
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(12); doc.setTextColor(20, 20, 20);
+        doc.text(title, M, M + 12);
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(120, 120, 120);
+        doc.text(rows.length + ' piece' + (rows.length === 1 ? '' : 's') + '  ·  ' + _todayIso() + '  ·  page ' + (p + 1) + ' of ' + pages, PW - M, M + 12, { align: 'right' });
+        for (let i = 0; i < per; i++) {
+            const r = rows[p * per + i]; if (!r) break;
+            const x = M + (i % COLS) * (cw + GAP), y = M + HEAD + Math.floor(i / COLS) * (ch + GAP);
+            const bw = cw, bh = ch - CAP;
+            doc.setDrawColor(225, 225, 225); doc.setLineWidth(0.5); doc.rect(x, y, bw, bh);
+            if (r.artworkUrl) {
+                try {
+                    const img = await _loadImg(r.artworkUrl);
+                    const iw = img.naturalWidth || img.width, ih = img.naturalHeight || img.height;
+                    if (iw && ih) {
+                        // The print file's shape with the piece's own crop (computeArtDrawRect,
+                        // the one crop for every renderer), not the source picture as it came.
+                        const sz = _rowOpeningAndPrint(r);
+                        const pa = (sz.printW > 0 && sz.printH > 0) ? sz.printW / sz.printH : iw / ih;
+                        const s = Math.min(bw / pa, bh);
+                        const dw = pa * s, dh = s;
+                        const px = Math.max(1, Math.round(dw * 2.5)), py = Math.max(1, Math.round(dh * 2.5));
+                        const cnv = document.createElement('canvas'); cnv.width = px; cnv.height = py;
+                        const g = cnv.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, px, py);
+                        const cr = computeArtDrawRect(px, py, iw / ih, r.artZoom, r.artPanX, r.artPanY);
+                        g.drawImage(img, cr.dx, cr.dy, cr.dw, cr.dh);
+                        doc.addImage(cnv.toDataURL('image/jpeg', 0.85), 'JPEG', x + (bw - dw) / 2, y + (bh - dh) / 2, dw, dh);
+                    }
+                } catch (e) {}
+            } else {
+                doc.setFontSize(8); doc.setTextColor(170, 170, 170); doc.text('no artwork', x + bw / 2, y + bh / 2, { align: 'center' });
+            }
+            doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5); doc.setTextColor(20, 20, 20);
+            doc.text(doc.splitTextToSize(_contactSheetCaption(r), bw)[0], x, y + bh + 11);
+            doc.setFont('helvetica', 'normal'); doc.setFontSize(7); doc.setTextColor(110, 110, 110);
+            doc.text(doc.splitTextToSize(String(r.id || '') + '  ·  ' + String(r.product || '') + (r.location ? '  ·  ' + r.location : ''), bw)[0], x, y + bh + 21);
+        }
+    }
+    return doc;
+}
+// Every file of the pack, as [{name, kind, data}] (string data for CSV/text, a jsPDF doc
+// for PDFs), so the plan can be checked without a canvas and the ZIP is one loop.
+async function _prodPackFiles(opts) {
+    const o = opts || {};
+    const plan = _prodPackPlan();
+    const tag = _prodStamp() + '.' + _prodProjectTag();
+    const files = [];
+    plan.vendors.forEach(v => {
+        const ids = {}; v.rows.forEach(r => { ids[r.id] = 1; });
+        files.push({ name: tag + '.RFI.' + _prodSafe(v.name) + '.csv', kind: 'csv', data: buildDashCSVString({ only: r => !!ids[r.id] }) });
+    });
+    // 19.96: each vendor's pieces again in the quote template's RFI layout
+    if (typeof JSZip !== 'undefined') for (const v of plan.vendors) {
+        const ids = {}; v.rows.forEach(r => { ids[r.id] = 1; });
+        const only = r => !!ids[r.id];
+        if (_rfqRows('rfi', only).length) files.push({ name: _rfqFileName('rfi').replace(/_RFI\.xlsx$/, '_' + _prodSafe(v.name) + '_RFI.xlsx'), kind: 'xlsx', data: await _xlsxBlob([_rfqSheet('rfi', only)], 'arraybuffer') });
+    }
+    if (plan.unassigned.length) {
+        const ids = {}; plan.unassigned.forEach(r => { ids[r.id] = 1; });
+        files.push({ name: tag + '.RFI.NO-VENDOR.csv', kind: 'csv', data: buildDashCSVString({ only: r => !!ids[r.id] }) });
+    }
+    if (plan.purchases.length) files.push({ name: tag + '.Purchases.csv', kind: 'csv', data: _purchaseTrackerCSV(plan.purchases) });
+    // What changed since the last issue (19.90): the vendors' spec updates.
+    const iss = editorialContent.issues || [];
+    if (iss.length) files.push({ name: tag + '.Changes-since-' + _prodSafe(iss[iss.length - 1].label) + '.csv', kind: 'csv', data: _issueDiffCSV(iss[iss.length - 1]) });
+    const sr = _sampleRequestText();
+    if (sr.count) files.push({ name: tag + '.Sample-request.txt', kind: 'txt', data: sr.text });
+    if (!o.noPdf) {
+        for (const v of plan.vendors) files.push({ name: tag + '.ContactSheet.' + _prodSafe(v.name) + '.pdf', kind: 'pdf', data: await _contactSheetPdf(v.rows, _prodProjectTag() + '  ·  ' + v.name) });
+    }
+    return files;
+}
+async function downloadProductionPack() {
+    if (typeof JSZip === 'undefined') { showInfoModal('Production pack', 'The ZIP library did not load. Reload FRAME and try again.'); return; }
+    const plan = _prodPackPlan();
+    if (!plan.vendors.length && !plan.unassigned.length && !plan.purchases.length) { _toast('Nothing to send', 'There are no pieces in the deck yet.'); return; }
+    let files;
+    try { files = await _prodPackFiles(); }
+    catch (e) { showInfoModal('Production pack', 'The pack could not be built: ' + _esc(e && e.message || e)); return; }
+    const zip = new JSZip();
+    files.forEach(f => zip.file(f.name, f.kind === 'pdf' ? f.data.output('arraybuffer') : f.data));
+    const blob = await zip.generateAsync({ type: 'blob' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+    a.download = _prodStamp() + '.' + _prodProjectTag() + '.Production-pack.zip'; a.click();
+    setTimeout(() => { try { URL.revokeObjectURL(a.href); } catch (e) {} }, 4000);
+    if (plan.unassigned.length) _toast('Some pieces have no vendor', plan.unassigned.map(r => r.id).join(', ') + ' went into RFI.NO-VENDOR.csv.');
+}
+function _prodVendorsInto(body) {
+    const rows = _deckSpecRows().filter(r => r && r.id);
+    const intro = document.createElement('div'); intro.style.cssText = 'font-size:var(--fs-70); color:var(--text-muted); margin-bottom:10px;';
+    intro.textContent = 'Who makes each piece. Sourced objects and originals (FAO, FCM, FSO codes) are purchases: they go on the purchase tracker, never on a vendor’s RFI. The production pack builds an RFI and a contact sheet for every vendor.';
+    body.appendChild(intro);
+    if (!rows.length) return;
+    const dl = document.createElement('datalist'); dl.id = 'prodVendorList';
+    _vendorNames().forEach(n => { const o = document.createElement('option'); o.value = n; const c = _vendorCode(n); if (c) o.label = n + '  ' + c; dl.appendChild(o); });
+    body.appendChild(dl);
+    // Bulk: every piece of one product to one vendor.
+    const bulk = document.createElement('div'); bulk.style.cssText = 'display:flex; gap:6px; align-items:center; flex-wrap:wrap; margin-bottom:10px; font-size:var(--fs-70);';
+    const prods = []; rows.forEach(r => { if (!_rowIsPurchase(r) && prods.indexOf(r.product) < 0) prods.push(r.product); });
+    bulk.appendChild(document.createTextNode('Every'));
+    const ps = document.createElement('select'); ps.id = 'prodBulkProduct'; ps.style.cssText = 'height:26px; width:auto; flex:none;';
+    prods.forEach(p => { const o = document.createElement('option'); o.value = p; o.textContent = p; ps.appendChild(o); });
+    bulk.appendChild(ps);
+    bulk.appendChild(document.createTextNode('goes to'));
+    const vi = document.createElement('input'); vi.type = 'text'; vi.id = 'prodBulkVendor'; vi.setAttribute('list', 'prodVendorList'); vi.style.cssText = 'width:170px; height:24px;';
+    bulk.appendChild(vi);
+    bulk.appendChild(_prodBtn('Set', () => {
+        const ids = rows.filter(r => !_rowIsPurchase(r) && r.product === ps.value).map(r => r.id);
+        if (setRowsProduction(ids, { vendorName: vi.value })) _prodShow();
+    }, true));
+    if (prods.length) body.appendChild(bulk);
+    const tbl = document.createElement('table'); tbl.id = 'prodVendorTable';
+    tbl.style.cssText = 'width:100%; border-collapse:collapse; font-size:var(--fs-70);';
+    tbl.innerHTML = '<thead><tr style="text-align:left; color:var(--text-muted);"><th style="padding:4px;">Code</th><th style="padding:4px;">Image code</th><th style="padding:4px;">Product</th><th style="padding:4px;">Vendor / seller</th><th style="padding:4px;">Source URL</th></tr></thead>';
+    const tb = document.createElement('tbody'); tbl.appendChild(tb);
+    rows.forEach(r => {
+        const tr = document.createElement('tr'); tr.setAttribute('data-prod-row', r.id);
+        tr.style.cssText = 'border-top:1px solid var(--border-color);';
+        const td = () => { const c = document.createElement('td'); c.style.cssText = 'padding:4px; vertical-align:middle;'; tr.appendChild(c); return c; };
+        td().innerHTML = '<b>' + _esc(r.id) + '</b>';
+        td().textContent = r.imageCode || '';
+        const pc = td(); pc.textContent = r.product || '';
+        if (_rowIsPurchase(r)) pc.innerHTML += ' <span style="color:var(--warn); font-size:var(--fs-60);">PURCHASE</span>';
+        const vin = document.createElement('input'); vin.type = 'text'; vin.value = _rowVendor(r); vin.setAttribute('list', 'prodVendorList');
+        vin.style.cssText = 'width:160px; height:24px;';
+        vin.onchange = () => setRowsProduction([r.id], { vendorName: vin.value });
+        td().appendChild(vin);
+        const sin = document.createElement('input'); sin.type = 'text'; sin.value = r.sourceUrl || ''; sin.placeholder = _rowIsPurchase(r) ? 'shop link' : '';
+        sin.style.cssText = 'width:100%; min-width:140px; height:24px;';
+        sin.onchange = () => setRowsProduction([r.id], { sourceUrl: sin.value });
+        td().appendChild(sin);
+        tb.appendChild(tr);
+    });
+    body.appendChild(tbl);
+    const plan = _prodPackPlan();
+    const foot = document.createElement('div'); foot.style.cssText = 'margin-top:14px; padding-top:12px; border-top:1px solid var(--border-color); display:flex; gap:10px; align-items:center; flex-wrap:wrap; font-size:var(--fs-70);';
+    foot.appendChild(_prodBtn('Download production pack', () => downloadProductionPack(), false, 'One ZIP: an RFI CSV and a contact sheet PDF per vendor, the purchase tracker and the sample request'));
+    const sum = document.createElement('span'); sum.id = 'prodPackSummary'; sum.style.color = 'var(--text-muted)';
+    sum.textContent = plan.vendors.map(v => v.name + ' ' + v.rows.length).join(', ')
+        + (plan.purchases.length ? (plan.vendors.length ? ' · ' : '') + plan.purchases.length + ' purchase' + (plan.purchases.length === 1 ? '' : 's') : '')
+        + (plan.unassigned.length ? ' · ' + plan.unassigned.length + ' with no vendor' : '');
+    foot.appendChild(sum);
+    body.appendChild(foot);
+}
+
+// ── WHAT WENT OUT, AND WHAT CHANGED SINCE (19.90) ──────────────────────────────
+// Caesars was issued as IFS, IFS.2 and an October IFS, and each time someone asked "any
+// spec updates for Bruce's pieces?" by hand. Mark as issued keeps a small record of what
+// each piece PRINTED (the spec page's own lines, image code, product, qty, vendor and a
+// picture signature, never the picture) in editorialContent.issues; the diff compares any
+// issue with the project now. Text only, capped at ISSUE_KEEP, so it costs nothing to carry.
+const ISSUE_KEEP = 12;
+function _issueRowRecord(r) {
+    const rec = { 'Image code': String(r.imageCode || '').trim(), 'Product': r.product || '', 'Location': r.location || '', 'Qty': String(r.qty == null ? '' : r.qty), 'Vendor': _rowVendor(r) };
+    try {
+        const s = buildSpecStrings(r);
+        if (s.application) rec['Application'] = s.application;
+        (s.lines || []).forEach(l => { if (l && l.label) rec[l.label] = String(l.value == null ? '' : l.value); });
+    } catch (e) {}
+    const sig = _artSig(r); if (sig) rec['Artwork'] = sig;
+    return rec;
+}
+function _issueSnapshot() {
+    const out = {};
+    _deckSpecRows().forEach(r => { if (r && r.id) out[r.id] = _issueRowRecord(r); });
+    return out;
+}
+function markIssued(label) {
+    const ec = editorialContent;
+    let v = ''; try { v = _deckFooterMeta().version || ''; } catch (e) {}
+    const list = (ec.issues || []).slice();
+    const rec = { label: String(label || v || ('Issue ' + (list.length + 1))).trim(), at: _todayIso(), rows: _issueSnapshot() };
+    list.push(rec);
+    while (list.length > ISSUE_KEEP) list.shift();
+    ec.issues = list;
+    pushHistory();
+    return rec;
+}
+function deleteIssue(i) {
+    const list = (editorialContent.issues || []).slice();
+    if (!list[i]) return;
+    list.splice(i, 1);
+    if (list.length) editorialContent.issues = list; else delete editorialContent.issues;
+    pushHistory();
+}
+// {added, removed, changed: [{id, fields: [{label, was, now}]}]} between an issue and now.
+function _issueDiff(issue) {
+    const was = (issue && issue.rows) || {}, now = _issueSnapshot();
+    const added = Object.keys(now).filter(id => !was[id]);
+    const removed = Object.keys(was).filter(id => !now[id]);
+    const changed = [];
+    Object.keys(now).forEach(id => {
+        const a = was[id], b = now[id]; if (!a) return;
+        const fields = [];
+        const keys = Object.keys(a); Object.keys(b).forEach(k => { if (keys.indexOf(k) < 0) keys.push(k); });
+        keys.forEach(k => {
+            const x = a[k] == null ? '' : a[k], y = b[k] == null ? '' : b[k];
+            if (x === y) return;
+            if (k === 'Artwork') fields.push({ label: 'Artwork', was: x ? 'picture' : '', now: y ? 'new picture' : 'removed' });
+            else fields.push({ label: k, was: x, now: y });
+        });
+        if (fields.length) changed.push({ id: id, fields: fields });
+    });
+    const byCode = (p, q) => String(p.id || p).localeCompare(String(q.id || q), undefined, { numeric: true });
+    return { added: added.sort(byCode), removed: removed.sort(byCode), changed: changed.sort(byCode) };
+}
+function _issueDiffText(issue) {
+    const d = _issueDiff(issue);
+    const NL = '\n';
+    if (!d.added.length && !d.removed.length && !d.changed.length) return 'No changes since ' + issue.label + ' (' + issue.at + ').';
+    let t = 'Changes since ' + issue.label + ' (' + issue.at + ')' + NL;
+    if (d.added.length) t += NL + 'ADDED' + NL + d.added.map(id => '    ' + id).join(NL) + NL;
+    if (d.removed.length) t += NL + 'REMOVED' + NL + d.removed.map(id => '    ' + id).join(NL) + NL;
+    if (d.changed.length) t += NL + 'CHANGED' + NL + d.changed.map(c => '    ' + c.id + NL + c.fields.map(f => '        ' + f.label + ': ' + (f.was || '(blank)') + '  →  ' + (f.now || '(blank)')).join(NL)).join(NL) + NL;
+    return t.trim();
+}
+function _issueDiffCSV(issue) {
+    const d = _issueDiff(issue);
+    const q = (s) => '"' + String(s == null ? '' : s).replace(/"/g, '""') + '"';
+    const vend = {}; _deckSpecRows().forEach(r => { if (r && r.id) vend[r.id] = _rowVendor(r); });
+    let csv = ['Item Code', 'Change', 'Field', 'Was', 'Now', 'Vendor'].map(q).join(',') + '\n';
+    d.added.forEach(id => { csv += [id, 'Added', '', '', '', vend[id] || ''].map(q).join(',') + '\n'; });
+    d.removed.forEach(id => { csv += [id, 'Removed', '', '', '', ((issue.rows || {})[id] || {}).Vendor || ''].map(q).join(',') + '\n'; });
+    d.changed.forEach(c => c.fields.forEach(f => { csv += [c.id, 'Changed', f.label, f.was, f.now, vend[c.id] || ''].map(q).join(',') + '\n'; }));
+    return csv;
+}
+function _prodIssuesInto(body) {
+    const list = editorialContent.issues || [];
+    const intro = document.createElement('div'); intro.style.cssText = 'font-size:var(--fs-70); color:var(--text-muted); margin-bottom:10px;';
+    intro.textContent = 'Mark the deck as issued each time it goes to the client or to production. FRAME keeps what every piece printed then, and lists what has changed since: for the client email, the vendors’ spec updates, and the next RFI.';
+    body.appendChild(intro);
+    const top = document.createElement('div'); top.style.cssText = 'display:flex; gap:6px; align-items:center; flex-wrap:wrap; margin-bottom:12px; font-size:var(--fs-70);';
+    const lab = document.createElement('input'); lab.type = 'text'; lab.id = 'issueLabel'; lab.style.cssText = 'width:200px; height:24px;';
+    try { lab.value = _deckFooterMeta().version || ''; } catch (e) {}
+    lab.placeholder = 'e.g. V7 IFS';
+    top.appendChild(lab);
+    top.appendChild(_prodBtn('Mark as issued', () => { const r = markIssued(lab.value); _toast('Marked as issued', r.label + ', ' + Object.keys(r.rows).length + ' pieces.'); _prodShow(); }, false, 'Record what every piece prints right now'));
+    body.appendChild(top);
+    if (!list.length) return;
+    let pick = Math.min(list.length - 1, Math.max(0, _prodIssuePick == null ? list.length - 1 : _prodIssuePick));
+    const row = document.createElement('div'); row.style.cssText = 'display:flex; gap:6px; align-items:center; flex-wrap:wrap; font-size:var(--fs-70);';
+    row.appendChild(document.createTextNode('Changes since'));
+    const sel = document.createElement('select'); sel.id = 'issuePick'; sel.style.cssText = 'height:26px; width:auto; flex:none;';
+    list.forEach((it, i) => { const o = document.createElement('option'); o.value = String(i); o.textContent = it.label + ' · ' + it.at + ' · ' + Object.keys(it.rows || {}).length + ' pieces'; sel.appendChild(o); });
+    sel.value = String(pick);
+    sel.onchange = () => { _prodIssuePick = parseInt(sel.value, 10); _prodShow(); };
+    row.appendChild(sel);
+    const issue = list[pick];
+    row.appendChild(_prodBtn('Copy', () => { _dsCopyText(_issueDiffText(issue), pre); _toast('Changes copied', ''); }, true));
+    row.appendChild(_prodBtn('Download CSV', () => {
+        const b = new Blob([_issueDiffCSV(issue)], { type: 'text/csv;charset=utf-8;' });
+        const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = _prodStamp() + '.' + _prodProjectTag() + '.Changes-since-' + _prodSafe(issue.label) + '.csv'; a.click();
+    }, true));
+    row.appendChild(_prodBtn('Delete this record', () => _confirmDestroy({
+        title: 'Delete the record of ' + issue.label + '?', body: 'Only FRAME’s record of what was issued goes; the deck is not touched.',
+        confirm: 'Delete', undoable: true, onConfirm: () => { deleteIssue(pick); _prodIssuePick = null; _prodShow(); }
+    }), true));
+    body.appendChild(row);
+    const pre = document.createElement('textarea'); pre.id = 'issueDiffText'; pre.readOnly = true; pre.rows = 14;
+    pre.style.cssText = 'width:100%; margin-top:8px; font-family:monospace; font-size:var(--fs-65); resize:vertical;';
+    pre.value = _issueDiffText(issue);
+    body.appendChild(pre);
+}
+let _prodIssuePick = null;
+
+// ── PRICES AND THE BUDGET (19.91) ──────────────────────────────────────────────
+// Caesars' budget lived in an Excel the designers were linked to; the quote was the same
+// sheet with markups, then Salesforce. Here a piece carries its price, and every price
+// says where it came from and when, because prices move:
+//   r.unitCost  vendor cost per unit       r.costSrc 'quote' | 'estimate'    r.costAt date
+//   r.unitSell  sell per unit, only when set by hand (else cost x markup)
+//   r.allowance budget per unit (the PM's allowance for the placement)
+// An ESTIMATE comes from the project's dated rate card (pricing.rates); "Update
+// estimates" refreshes every estimate when rates change and NEVER touches a quote. A quote
+// older than PRICE_STALE_DAYS is flagged. Excel is the exchange both ways (.xlsx with live
+// formulas out, .xlsx or .csv in, matched by item code), and a quote-lines CSV goes to
+// Salesforce's import. Prices never reach a deck page; they do travel in the project file.
+const PRICE_STALE_DAYS = 90;
+const PRICE_FIELDS = ['unitCost', 'costSrc', 'costAt', 'unitSell', 'allowance', 'priceFor', 'royalty', 'sealant'];
+// 19.96: THE HOUSE FORMULA, from the 2026 quote template. Revenue markup = 87.31% + the
+// artist royalty, and unit price = cost x (1 + markup). Royalty follows the image code (an F
+// code is Farmboy's own: 0%; PEN 10%; anything else 5%) unless the piece says otherwise
+// (`r.royalty`, a fraction; a client who owns an image outright). A markup typed on the
+// Pricing tab replaces the 1.8731, never the royalty.
+const HOUSE_MARKUP = 1.8731;
+function _rowRoyaltyAuto(r) {
+    const c = String((r && r.imageCode) || '').trim().toUpperCase();
+    if (/^PEN([._\-\s]|$)/.test(c)) return 0.10;
+    if (/^F/.test(c)) return 0;
+    return 0.05;
+}
+function _rowRoyalty(r) {
+    const n = _priceNum(r && r.royalty);
+    return n != null && n >= 0 && n < 1 ? n : _rowRoyaltyAuto(r);
+}
+// 19.94: THE PRICE FOLLOWS THE SIZE. An estimate is never a stored number: it is worked out
+// from the rate card and the piece's size every time it is read, so shrinking an oversized
+// frame moves the budget at once. A quote (or a typed sell) remembers the overall size it
+// was for (`priceFor`, inches, to a sixteenth); resize the piece and, when the rate card
+// covers it, the estimate for the NEW size stands in and the piece is flagged to re-quote.
+// With no rate card the quote stays, flagged.
+function _priceSizeKey(r) {
+    const k = unitFactor(dashUnit, 'in');
+    const q = (v) => Math.round((parseFloat(v) || 0) * k * 16) / 16;
+    return q(r.extW) + 'x' + q(r.extH);
+}
+function _priceSizeLabel(key) { return String(key || '').replace('x', ' x ') + ' in'; }
+function _pricing() { return (editorialContent && editorialContent.pricing) || {}; }
+function _pricingSet(patch, quiet) {
+    const p = Object.assign({}, _pricing(), patch || {});
+    Object.keys(p).forEach(k => { if (p[k] === '' || p[k] == null) delete p[k]; });
+    if (Object.keys(p).length) editorialContent.pricing = p; else delete editorialContent.pricing;
+    if (!quiet) pushHistory();
+}
+function _priceNum(v) { const n = parseFloat(String(v == null ? '' : v).replace(/[$,\s]/g, '')); return isFinite(n) ? n : null; }
+function _priceMarkup() {
+    const n = _priceNum(_pricing().markup);
+    return n != null && n > 0 ? n : HOUSE_MARKUP;
+}
+// What a catalogue option bills: nothing (it is a choice, not an order). A piece not yet on
+// a wall still prices as one, or the budget would read zero until the walls are drawn.
+function _priceQty(r) {
+    if (_catOptionRowIds()[r.id]) return 0;
+    const q = parseInt(r.qty, 10);
+    return q > 0 ? q : 1;
+}
+function _priceRow(r) {
+    const roy = _rowRoyalty(r), allow = _priceNum(r.allowance), mk = _priceMarkup() + roy;
+    let cost = _priceNum(r.unitCost), hand = _priceNum(r.unitSell), src = r.costSrc || '', at = r.costAt || '';
+    const est = _estimateCost(r);
+    const resized = !!(r.priceFor && (r.costSrc === 'quote' || hand != null) && r.priceFor !== _priceSizeKey(r));
+    if (src !== 'quote' || (resized && est != null)) {
+        // an estimate is always today's size on today's rate card; a resized quote yields to it
+        if (est != null) { cost = est; src = 'estimate'; const rc = _rateCard(); at = (rc && rc.asOf) || ''; }
+        if (resized && est != null) hand = null;
+    }
+    const sell = hand != null ? hand : (cost != null ? Math.round(cost * mk * 100) / 100 : null);
+    const qty = _priceQty(r);
+    let age = null;
+    if (src === 'quote' && at) { const t = Date.parse(at); if (isFinite(t)) age = Math.floor((Date.now() - t) / 86400000); }
+    return { cost: cost, sell: sell, allow: allow, qty: qty, markup: mk, royalty: roy, hand: hand != null, src: src, at: at, age: age, stale: age != null && age > PRICE_STALE_DAYS,
+        resized: resized, quotedFor: resized ? r.priceFor : '',
+        lineCost: cost != null ? cost * qty : 0, lineSell: sell != null ? sell * qty : 0, lineAllow: allow != null ? allow * qty : 0, over: allow != null && sell != null && sell > allow };
+}
+function _priceTotals() {
+    const rows = _deckSpecRows().filter(r => r && r.id);
+    const t = { cost: 0, sell: 0, allow: 0, royalty: 0, priced: 0, unpriced: [], stale: [], over: [], resized: [], byArea: {} };
+    rows.forEach(r => {
+        const p = _priceRow(r);
+        if (!p.qty) return;
+        t.cost += p.lineCost; t.sell += p.lineSell; t.allow += p.lineAllow; t.royalty += p.lineSell * p.royalty;
+        if (p.sell == null) t.unpriced.push(r.id); else t.priced++;
+        if (p.stale) t.stale.push(r.id);
+        if (p.over) t.over.push(r.id);
+        if (p.resized) t.resized.push(r.id);
+        const a = String(r.location || '').trim() || '(no location)';
+        const ar = t.byArea[a] || (t.byArea[a] = { qty: 0, sell: 0, allow: 0 });
+        ar.qty += p.qty; ar.sell += p.lineSell; ar.allow += p.lineAllow;
+    });
+    const b = _priceNum(_pricing().budget);
+    // the template's Margin Check: what is left after cost AND the artists' royalties
+    t.budget = b; t.margin = t.sell > 0 ? (t.sell - t.cost - t.royalty) / t.sell : null;
+    return t;
+}
+function _money(n) {
+    if (n == null || !isFinite(n)) return '';
+    const cur = _pricing().currency || 'USD';
+    try { return new Intl.NumberFormat('en-US', { style: 'currency', currency: cur, maximumFractionDigits: 0 }).format(n); }
+    catch (e) { return '$' + Math.round(n).toLocaleString('en-US'); }
+}
+// ONE writer for a piece's price fields. A cost typed or imported is a QUOTE (dated today
+// unless a date came with it); `src: 'estimate'` is only the rate card's.
+function setRowPrice(id, patch, quiet) {
+    const r = dashProjectData.find(x => x && x.id === id); if (!r) return false;
+    const p = Object.assign({}, patch);
+    if ('unitCost' in p) {
+        const n = _priceNum(p.unitCost);
+        if (n == null) { delete r.unitCost; delete r.costSrc; delete r.costAt; }
+        else { r.unitCost = n; r.costSrc = p.costSrc || 'quote'; r.costAt = p.costAt || _todayIso(); }
+    }
+    ['unitSell', 'allowance'].forEach(k => { if (k in p) { const n = _priceNum(p[k]); if (n == null) delete r[k]; else r[k] = n; } });
+    // royalty: typed as 5, 5% or 0.05; blank (or the image code's own rate) stores nothing
+    if ('royalty' in p) {
+        let n = _priceNum(p.royalty);
+        if (n != null && (n >= 1 || /%/.test(String(p.royalty)))) n = n / 100;
+        if (n == null || n < 0 || n >= 1 || Math.abs(n - _rowRoyaltyAuto(r)) < 1e-9) delete r.royalty; else r.royalty = Math.round(n * 10000) / 10000;
+    }
+    // sealant (19.97): true/false, stored only when it differs from the location's answer
+    if ('sealant' in p) { if (p.sealant == null || !!p.sealant === _rowSealantAuto(r)) delete r.sealant; else r.sealant = !!p.sealant; }
+    // what size this price was for (19.94): set by a quote or a typed sell, cleared with both
+    if ((('unitCost' in p) && r.costSrc === 'quote') || (('unitSell' in p) && r.unitSell != null)) r.priceFor = _priceSizeKey(r);
+    if (r.costSrc !== 'quote' && r.unitSell == null) delete r.priceFor;
+    if (!quiet) pushHistory();
+    return true;
+}
+// ── THE RATE CARD: an estimate before any vendor has quoted ──
+// Per product: a base price plus a price per square foot of the OVERALL size, and two
+// adders that change what a framer charges (float mount, a second mat). Dated, so an
+// estimate says which rates it came from. The studio's numbers are typed in once (or
+// imported) and can be kept on this computer as "my rate card" for the next project.
+// Never in the repository: the site is public.
+const RATE_CARD_KEY = 'frame_rate_card';
+function _rateCard() { return _pricing().rates || null; }
+function _rateFor(r) {
+    const rc = _rateCard(); if (!rc || !rc.list) return null;
+    return rc.list.find(x => x && x.product === r.product) || null;
+}
+// 19.97: THE ADD-ONS (from the studio's Budgeting & Estimating guide), one set for every
+// product, on the card as `rates.addons`. Each is worked out from what the piece already
+// says, never ticked by hand (sealant aside): a premium moulding is its frame code's maker
+// (`PREMIUM_FRAME_RE`: Larson-Juhl, Universal Arquati), non-glare is read off the Glass
+// field, oversize is past 40x50 either way round, sealant follows a humid location (a
+// piece can say otherwise: `r.sealant`, stored only when it differs). Non-glare is quoted
+// "on a 30x40", so it scales with the piece's area. `buffer` is a percent on the whole
+// estimate ("always add a buffer"). No amounts in the code: the site is public.
+const ADDON_KEYS = ['premiumFrame', 'nonGlare', 'sealant', 'oversize', 'buffer'];
+const PREMIUM_FRAME_RE = /^(LJ|UA)-/i;
+const NON_GLARE_RE = /non[\s-]*glare|anti[\s-]*(glare|reflect)|museum|optium|\bAR\b/i;
+const HUMID_LOC_RE = /bath|rest\s*room|wash\s*room|powder|shower|\bspa\b|pool|locker|sauna|steam|humid/i;
+const OVERSIZE_IN = [40, 50];
+const NON_GLARE_REF_SQFT = 30 * 40 / 144;
+function _rowSqFt(r) {
+    const k = unitFactor(dashUnit, 'in');
+    return Math.max(0, (parseFloat(r.extW) || 0) * k) * Math.max(0, (parseFloat(r.extH) || 0) * k) / 144;
+}
+function _rowFramed(r) { return !_isFlatGraphic(r.product) && r.product !== 'Frameless Canvas (Wrapped)' && r.product !== 'Sourced Object'; }
+function _rowSealantAuto(r) { return !_isFlatGraphic(r.product) && HUMID_LOC_RE.test(String(r.location || '')); }
+function _rowSealant(r) { return typeof r.sealant === 'boolean' ? r.sealant : _rowSealantAuto(r); }
+function _rowAddons(r) {
+    const k = unitFactor(dashUnit, 'in');
+    const w = (parseFloat(r.extW) || 0) * k, h = (parseFloat(r.extH) || 0) * k;
+    const out = [];
+    if (_rowFramed(r) && PREMIUM_FRAME_RE.test(String(r.fCode || '').trim())) out.push('premiumFrame');
+    if (_rowFramed(r) && !/canvas/i.test(r.product || '') && NON_GLARE_RE.test(String(r.glass || ''))) out.push('nonGlare');
+    if (_rowSealant(r)) out.push('sealant');
+    if (!_isFlatGraphic(r.product) && (Math.min(w, h) > OVERSIZE_IN[0] || Math.max(w, h) > OVERSIZE_IN[1])) out.push('oversize');
+    return out;
+}
+const ADDON_LABEL = { premiumFrame: 'Premium frame', nonGlare: 'Non-glare', sealant: 'Sealant', oversize: 'Oversize' };
+function _estimateCost(r) {
+    const rate = _rateFor(r); if (!rate) return null;
+    const sqft = _rowSqFt(r);
+    let c = (_priceNum(rate.base) || 0) + (_priceNum(rate.perSqFt) || 0) * sqft;
+    if (r.useFloatMount === true) c += _priceNum(rate.floatMount) || 0;
+    if (r.m1A !== false && r.m2A && parseFloat(r.m2) > 0 && !r.useFloatMount) c += _priceNum(rate.doubleMat) || 0;
+    const ad = (_rateCard() || {}).addons || {};
+    _rowAddons(r).forEach(a => {
+        const n = _priceNum(ad[a]); if (n == null) return;
+        c += a === 'nonGlare' ? n * sqft / NON_GLARE_REF_SQFT : n;
+    });
+    const buf = _priceNum(ad.buffer);
+    if (buf != null && buf > 0 && c > 0) c *= 1 + buf / 100;
+    return c > 0 ? Math.round(c * 100) / 100 : null;
+}
+// Refresh every ESTIMATE (and fill pieces with no price) from the rate card. Quotes stay.
+function updateEstimates() {
+    const rc = _rateCard(); if (!rc) return 0;
+    let n = 0;
+    _deckSpecRows().forEach(r => {
+        if (!r || !r.id || r.costSrc === 'quote') return;
+        const c = _estimateCost(r); if (c == null) return;
+        r.unitCost = c; r.costSrc = 'estimate'; r.costAt = rc.asOf || _todayIso(); n++;
+    });
+    if (n) pushHistory();
+    return n;
+}
+function setRateCard(list, asOf, addons) {
+    const clean = (list || []).filter(x => x && x.product).map(x => {
+        const o = { product: x.product };
+        ['base', 'perSqFt', 'floatMount', 'doubleMat'].forEach(k => { const n = _priceNum(x[k]); if (n != null) o[k] = n; });
+        return o;
+    });
+    // addons: undefined keeps the card's own; an object replaces them
+    const src = addons === undefined ? ((_rateCard() || {}).addons || {}) : (addons || {});
+    const ad = {};
+    ADDON_KEYS.forEach(k => { const n = _priceNum(src[k]); if (n != null && n >= 0) ad[k] = n; });
+    const has = Object.keys(ad).length;
+    const rc = (clean.length || has) ? { asOf: asOf || _todayIso(), list: clean } : null;
+    if (rc && has) rc.addons = ad;
+    _pricingSet({ rates: rc });
+}
+function _rateCardSaveLocal() { try { localStorage.setItem(RATE_CARD_KEY, JSON.stringify(_rateCard())); return true; } catch (e) { return false; } }
+function _rateCardLoadLocal() { try { const v = JSON.parse(localStorage.getItem(RATE_CARD_KEY) || 'null'); return v && v.list ? v : null; } catch (e) { return null; } }
+
+// ── EXCEL (.xlsx), written and read with the vendored JSZip ──
+function _xlsxCol(i) { let s = ''; i++; while (i > 0) { const m = (i - 1) % 26; s = String.fromCharCode(65 + m) + s; i = Math.floor((i - 1) / 26); } return s; }
+function _xmlEsc(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])).replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g, ''); }
+// sheets: [{name, rows: [[cell]], widths: [n], freeze: rows}]; a cell is a string, a number,
+// null, or {f: 'formula', v: cached number, money: bool} / {v: number, money: bool} /
+// {s: string, bold: bool}. 19.96 grid styles for the RFQ: `border` (with money / pct),
+// `head` (bordered, bold, grey, wrapped), `title`, `pct`; a styled cell with no value is
+// written empty so the grid keeps its lines.
+async function _xlsxBlob(sheets, type) {
+    const zip = new JSZip();
+    const ws = sheets.map((sh, si) => {
+        let x = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">';
+        const fz = sh.freeze || 1;
+        x += '<sheetViews><sheetView workbookViewId="0"><pane ySplit="' + fz + '" topLeftCell="A' + (fz + 1) + '" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews>';
+        if (sh.widths) x += '<cols>' + sh.widths.map((w, i) => '<col min="' + (i + 1) + '" max="' + (i + 1) + '" width="' + w + '" customWidth="1"/>').join('') + '</cols>';
+        x += '<sheetData>';
+        sh.rows.forEach((row, ri) => {
+            x += '<row r="' + (ri + 1) + '">';
+            row.forEach((c, ci) => {
+                if (c == null || c === '') return;
+                const ref = _xlsxCol(ci) + (ri + 1);
+                const o = (typeof c === 'object') ? c : (typeof c === 'number' ? { v: c } : { s: c });
+                const sn = o.title ? 7 : o.head ? 5 : o.border ? (o.money ? 4 : o.pct ? 6 : 3) : o.bold ? 1 : o.money ? 2 : o.pct ? 8 : 0;
+                const st = sn ? ' s="' + sn + '"' : '';
+                if (o.f != null) x += '<c r="' + ref + '"' + st + '><f>' + _xmlEsc(o.f) + '</f>' + (o.v != null && isFinite(o.v) ? '<v>' + o.v + '</v>' : '') + '</c>';
+                else if (o.v != null && isFinite(o.v)) x += '<c r="' + ref + '"' + st + '><v>' + o.v + '</v></c>';
+                else if (o.s != null && o.s !== '') x += '<c r="' + ref + '" t="inlineStr"' + st + '><is><t xml:space="preserve">' + _xmlEsc(o.s) + '</t></is></c>';
+                else if (sn) x += '<c r="' + ref + '"' + st + '/>';
+            });
+            x += '</row>';
+        });
+        x += '</sheetData></worksheet>';
+        zip.file('xl/worksheets/sheet' + (si + 1) + '.xml', x);
+        return sh;
+    });
+    zip.file('[Content_Types].xml', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>'
+        + ws.map((s, i) => '<Override PartName="/xl/worksheets/sheet' + (i + 1) + '.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>').join('') + '</Types>');
+    zip.file('_rels/.rels', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>');
+    zip.file('xl/workbook.xml', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>'
+        + ws.map((s, i) => '<sheet name="' + _xmlEsc(String(s.name).slice(0, 31)) + '" sheetId="' + (i + 1) + '" r:id="rId' + (i + 1) + '"/>').join('') + '</sheets><calcPr fullCalcOnLoad="1"/></workbook>');
+    zip.file('xl/_rels/workbook.xml.rels', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+        + ws.map((s, i) => '<Relationship Id="rId' + (i + 1) + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet' + (i + 1) + '.xml"/>').join('')
+        + '<Relationship Id="rId' + (ws.length + 1) + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>');
+    zip.file('xl/styles.xml', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><numFmts count="1"><numFmt numFmtId="164" formatCode="&quot;$&quot;#,##0.00"/></numFmts><fonts count="3"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="18"/><name val="Calibri"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFE7E6E6"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border><left style="thin"><color auto="1"/></left><right style="thin"><color auto="1"/></right><top style="thin"><color auto="1"/></top><bottom style="thin"><color auto="1"/></bottom><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="9"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/><xf numFmtId="164" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/><xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment vertical="center" wrapText="1"/></xf><xf numFmtId="164" fontId="0" fillId="0" borderId="1" xfId="0" applyNumberFormat="1" applyBorder="1" applyAlignment="1"><alignment vertical="center"/></xf><xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf><xf numFmtId="10" fontId="0" fillId="0" borderId="1" xfId="0" applyNumberFormat="1" applyBorder="1" applyAlignment="1"><alignment vertical="center"/></xf><xf numFmtId="0" fontId="2" fillId="0" borderId="0" xfId="0" applyFont="1"/><xf numFmtId="10" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>');
+    return zip.generateAsync({ type: type || 'blob', mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+}
+// The first sheet of an .xlsx as an array of rows of strings (numbers as their text).
+async function _xlsxReadRows(buf) {
+    const zip = await JSZip.loadAsync(buf);
+    const P = new DOMParser();
+    const xml = async (p) => { const f = zip.file(p); return f ? P.parseFromString(await f.async('string'), 'application/xml') : null; };
+    const all = (doc, tag) => doc ? Array.prototype.slice.call(doc.getElementsByTagNameNS('*', tag)) : [];
+    const wb = await xml('xl/workbook.xml');
+    const first = all(wb, 'sheet')[0];
+    let target = 'worksheets/sheet1.xml';
+    if (first) {
+        const rid = first.getAttribute('r:id') || first.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships', 'id');
+        const rel = all(await xml('xl/_rels/workbook.xml.rels'), 'Relationship').find(x => x.getAttribute('Id') === rid);
+        if (rel) target = rel.getAttribute('Target').replace(/^\/?xl\//, '');
+    }
+    const ss = all(await xml('xl/sharedStrings.xml'), 'si').map(si => all(si, 't').map(t => t.textContent).join(''));
+    const sh = await xml('xl/' + target.replace(/^\//, ''));
+    if (!sh) throw new Error('no worksheet in this file');
+    const colIdx = (ref) => { const m = /^([A-Z]+)/.exec(ref || ''); if (!m) return -1; let n = 0; for (const ch of m[1]) n = n * 26 + (ch.charCodeAt(0) - 64); return n - 1; };
+    return all(sh, 'row').map(row => {
+        const out = [];
+        all(row, 'c').forEach((c, k) => {
+            const i = c.getAttribute('r') ? colIdx(c.getAttribute('r')) : k;
+            const t = c.getAttribute('t');
+            const v = all(c, 'v')[0];
+            let val = '';
+            if (t === 's') val = v ? (ss[parseInt(v.textContent, 10)] || '') : '';
+            else if (t === 'inlineStr') val = all(c, 't').map(x => x.textContent).join('');
+            else val = v ? v.textContent : '';
+            out[i] = val;
+        });
+        for (let i = 0; i < out.length; i++) if (out[i] == null) out[i] = '';
+        return out;
+    });
+}
+function _csvRows(text) {
+    const rows = []; let row = [], cur = '', q = false;
+    for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        if (q) { if (ch === '"') { if (text[i + 1] === '"') { cur += '"'; i++; } else q = false; } else cur += ch; }
+        else if (ch === '"') q = true;
+        else if (ch === ',') { row.push(cur); cur = ''; }
+        else if (ch === '\n' || ch === '\r') { if (ch === '\r' && text[i + 1] === '\n') i++; row.push(cur); rows.push(row); row = []; cur = ''; }
+        else cur += ch;
+    }
+    if (cur !== '' || row.length) { row.push(cur); rows.push(row); }
+    return rows;
+}
+// The quote workbook. Columns are named so an import reads them back by NAME (moving or
+// adding columns in Excel is fine); totals and lines are formulas, so Excel stays live.
+const QUOTE_COLS = ['Item Code', 'Image Code', 'Product', 'Location', 'Description', 'Vendor', 'Qty', 'Unit Cost', 'Cost Source', 'Cost Date', 'Markup', 'Unit Sell', 'Line Sell', 'Allowance', 'Line Allowance', 'Over / Under'];
+function _quoteDescription(r) {
+    const k = unitFactor(dashUnit, 'in');
+    const parts = [];
+    try { const s = buildSpecStrings(r); if (s.application) parts.push(s.application); const fc = (s.lines || []).find(l => l.label === 'Frame Code'); if (fc) parts.push(fc.value); } catch (e) {}
+    parts.push(_fmtUnitNum((parseFloat(r.extW) || 0) * k, 'in') + '" x ' + _fmtUnitNum((parseFloat(r.extH) || 0) * k, 'in') + '" overall');
+    if (r.imageCode) parts.push(String(r.imageCode).trim());
+    return parts.join(', ');
+}
+function _quoteSheetRows() {
+    const rows = _deckSpecRows().filter(r => r && r.id && _priceQty(r));
+    const C = (name) => _xlsxCol(QUOTE_COLS.indexOf(name));
+    const out = [QUOTE_COLS.map(h => ({ s: h, bold: true }))];
+    rows.forEach((r, i) => {
+        const n = i + 2, p = _priceRow(r);
+        out.push([r.id, String(r.imageCode || ''), r.product || '', r.location || '', _quoteDescription(r), _rowVendor(r), p.qty,
+            p.cost != null ? { v: p.cost, money: true } : null, p.src, p.at, p.markup,
+            p.hand ? { v: p.sell, money: true } : { f: 'IF(' + C('Unit Cost') + n + '="","",' + C('Unit Cost') + n + '*' + C('Markup') + n + ')', money: true },
+            { f: 'IF(' + C('Unit Sell') + n + '="","",' + C('Unit Sell') + n + '*' + C('Qty') + n + ')', money: true },
+            p.allow != null ? { v: p.allow, money: true } : null,
+            { f: 'IF(' + C('Allowance') + n + '="","",' + C('Allowance') + n + '*' + C('Qty') + n + ')', money: true },
+            { f: 'IF(OR(' + C('Allowance') + n + '="",' + C('Unit Sell') + n + '=""),"",' + C('Line Allowance') + n + '-' + C('Line Sell') + n + ')', money: true }]);
+    });
+    const last = rows.length + 1, t = last + 2;
+    const sum = (name) => ({ f: 'SUM(' + C(name) + '2:' + C(name) + last + ')', money: true });
+    const tot = QUOTE_COLS.map(() => null);
+    tot[0] = { s: 'TOTAL', bold: true };
+    tot[QUOTE_COLS.indexOf('Qty')] = { f: 'SUM(' + C('Qty') + '2:' + C('Qty') + last + ')' };
+    tot[QUOTE_COLS.indexOf('Line Sell')] = sum('Line Sell');
+    tot[QUOTE_COLS.indexOf('Line Allowance')] = sum('Line Allowance');
+    tot[QUOTE_COLS.indexOf('Over / Under')] = sum('Over / Under');
+    out.push([]); out.push(tot);
+    const b = _priceNum(_pricing().budget);
+    if (b != null) { const br = QUOTE_COLS.map(() => null); br[0] = { s: 'BUDGET', bold: true }; br[QUOTE_COLS.indexOf('Line Sell')] = { v: b, money: true }; out.push(br);
+        const lr = QUOTE_COLS.map(() => null); lr[0] = { s: 'LEFT IN BUDGET', bold: true }; lr[QUOTE_COLS.indexOf('Line Sell')] = { f: C('Line Sell') + (t + 1) + '-' + C('Line Sell') + t, money: true }; out.push(lr); }
+    return out;
+}
+async function exportQuoteXlsx() {
+    if (typeof JSZip === 'undefined') { showInfoModal('Excel', 'The ZIP library did not load. Reload FRAME and try again.'); return; }
+    const blob = await _xlsxBlob(_quoteSheets());
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = _prodStamp() + '.' + _prodProjectTag() + '.Quote.xlsx'; a.click();
+    setTimeout(() => { try { URL.revokeObjectURL(a.href); } catch (e) {} }, 4000);
+}
+function _quoteSheets() {
+    const rates = _rateCard();
+    const sheets = [{ name: 'Quote', rows: _quoteSheetRows(), widths: [11, 20, 22, 18, 60, 20, 6, 12, 11, 11, 8, 12, 13, 12, 14, 13] }];
+    if (rates) sheets.push({ name: 'Rate card', rows: [[{ s: 'Product', bold: true }, { s: 'Base', bold: true }, { s: 'Per sq ft', bold: true }, { s: 'Float mount', bold: true }, { s: 'Double mat', bold: true }, { s: 'As of ' + (rates.asOf || ''), bold: true }]]
+        .concat(rates.list.map(x => [x.product, x.base != null ? { v: x.base, money: true } : null, x.perSqFt != null ? { v: x.perSqFt, money: true } : null, x.floatMount != null ? { v: x.floatMount, money: true } : null, x.doubleMat != null ? { v: x.doubleMat, money: true } : null]))
+            .concat(rates.addons ? [[], [{ s: 'Add-ons, per piece', bold: true }]].concat(ADDON_KEYS.filter(k => rates.addons[k] != null).map(k => [k === 'buffer' ? 'Buffer %' : ADDON_LABEL[k] + (k === 'nonGlare' ? ' (at 30x40)' : k === 'oversize' ? ' (past 40x50)' : ''), k === 'buffer' ? rates.addons[k] : { v: rates.addons[k], money: true }])) : []), widths: [26, 10, 10, 12, 12, 16] });
+    return sheets;
+}
+// ── SALESFORCE AND THE RFQ / RFI (19.96) ──
+// Two Claude projects the team ran by hand turned FRAME's specs back into spreadsheets: one
+// copied a quote into Salesforce's Quote Import Template, the other rebuilt the 2026 quote
+// template (RFQ, and the RFI without prices) from the spec PDF. Both are written from the
+// rows here, in those files' own columns.
+// Vendor codes: the "Vendor codes" sheet of the SF Import Template. A name matches on any
+// of its spellings (lower case, punctuation ignored); anything else goes out as typed.
+const VENDOR_CODES = [
+    { name: 'Artistic Framing', code: 'LT00', alias: ['lt artistic', 'lt', 'artistic framing', 'lt artistic framing'] },
+    { name: 'Colorific Imaging', code: 'CC00', alias: ['colorific', 'colorific imaging'] },
+    { name: 'Duggal', code: 'DG00', alias: ['duggal', 'duggal visual solutions'] },
+    { name: 'Rainier', code: 'RR00', alias: ['rainier'] },
+    { name: 'Bruce White Gallery', code: 'BW00', alias: ['bruce white', 'bruce white gallery', 'poster graphics'] },
+    { name: 'Outdoor Image', code: 'OI00', alias: ['outdoor image'] },
+    { name: 'Epic Art', code: 'EA00', alias: ['epic', 'epic art', 'epic art decor'] },
+    { name: 'Tectonics', code: 'TT00', alias: ['tectonics'] },
+    { name: 'Northwood', code: 'NW00', alias: ['northwood'] }
+];
+function _vendorCode(name) {
+    const k = String(name || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+    if (!k) return '';
+    if (/^[a-z]{2}\d{2}$/.test(k.replace(/\s/g, ''))) return k.replace(/\s/g, '').toUpperCase();
+    const v = VENDOR_CODES.find(x => x.alias.indexOf(k) >= 0 || x.name.toLowerCase() === k);
+    return v ? v.code : '';
+}
+// An image code as the vendor and Salesforce see it: never an extension.
+function _rfqImageCode(r) {
+    return String((r && r.imageCode) || '').trim().replace(/\.(jpe?g|png|tiff?|gif|bmp|pdf|eps|psd|webp)$/i, '');
+}
+// The import tool's rules: no special characters but "/", single spaces, nothing trailing.
+function _sfClean(s) {
+    return String(s == null ? '' : s).replace(/["“”]/g, ' in ').replace(/[^A-Za-z0-9 .\/\-]+/g, ' ').replace(/\s+/g, ' ').trim();
+}
+const SF_IMPORT_COLS = ['Product Code', 'Quantity', 'Unit Cost', 'Revenue Markup', 'Item Code', 'Location', 'Image Code / Title', 'OAD Height', 'OAD Width', 'Custom Notes', 'Vendor'];
+// Product Code is the art type's Salesforce code where the image code names one (FAO, FCM,
+// FSO ...); a print's product is chosen in Salesforce, so it is left blank rather than guessed.
+const SF_ART_TYPE_CODES = ['FAO', 'FCM', 'FSO', 'FSL', 'FSU', 'FST'];
+function _sfProductCode(r) {
+    const m = /^([A-Z]{3})[._\-]/.exec(_rfqImageCode(r).toUpperCase());
+    return m && SF_ART_TYPE_CODES.indexOf(m[1]) >= 0 ? m[1] : '';
+}
+function _inNum(v) { return Math.round((parseFloat(v) || 0) * unitFactor(dashUnit, 'in') * 1000) / 1000; }
+function _salesforceLinesCSV() {
+    const q = (s) => '"' + String(s == null ? '' : s).replace(/"/g, '""') + '"';
+    let csv = SF_IMPORT_COLS.map(q).join(',') + '\n';
+    _deckSpecRows().filter(r => r && r.id && _priceQty(r)).forEach(r => {
+        const p = _priceRow(r);
+        // a percentage as a plain number (145, never %145): the import tool cannot read "%"
+        const mk = (p.cost > 0 && p.sell != null) ? String(Math.round((p.sell / p.cost - 1) * 10000) / 100) : '';
+        const notes = [_quoteDescription(r), String(r.prodNotes || '').trim()].filter(Boolean).join('. ');
+        const v = _rowVendor(r);
+        csv += [_sfProductCode(r), p.qty, p.cost != null ? p.cost.toFixed(2) : '', mk, _sfClean(r.id), _sfClean(r.location), _sfClean(_rfqImageCode(r) || r.artworkTitle),
+            _inNum(r.extH), _inNum(r.extW), _sfClean(notes), _vendorCode(v) || _sfClean(v)].map(q).join(',') + '\n';
+    });
+    return csv;
+}
+// ── The RFQ / RFI workbook: the 2026 quote template's front sheet, columns A to AN ──
+// Sizes are inches. Art and image size (J to M) are the template's own formula for the
+// piece's mount wherever that formula gives FRAME's number, so the sheet stays live; where
+// FRAME knows better (a second mat, a float mount's paper margin, a bleed other than the
+// template's), the number is written instead. Pricing (AH to AN) is the house formula; an
+// RFI drops it and the purchases (originals, commissions, found objects), which no print
+// vendor makes.
+const RFQ_COLS = ['Level', 'Formula Note', 'Qty', 'Item Code', 'Product', 'Location', 'Image Code', 'OAD W', 'OAD H', 'Art Size W', 'Art Size H', 'Image Size W', 'Image Size H',
+    'Canvas Stretcher Depth', 'Canvas Image Wrap', 'Mat Code / Color', 'Mat Top', 'Mat Right', 'Mat Bottom', 'Mat Left', 'Glass', 'Paper Type', 'Paper Size W', 'Paper Size H', 'White Border',
+    'Frame Code / Color', 'Frame Width', 'Frame Height', 'Security Hardware', 'Substrate', 'Mount', 'Notes', 'Vendor',
+    'Vendor Unit Cost', 'Extended Cost', 'Artist Royalty', 'Revenue Markup', 'Margin Check', 'Unit Price (USD)', 'Extended Total (USD)'];
+function _rfqMount(r) {
+    if (_isFlatGraphic(r.product)) return 'egd';
+    if (r.product === 'Didactic Panel') return 'dibond';
+    if (r.product === 'Sourced Object') return 'object';
+    if (r.product === 'Framed Canvas (Floater)' || r.product === 'Frameless Canvas (Wrapped)') return 'canvas';
+    if (r.useFloatMount === true) return (parseFloat(r.sbPaperBorder) || 0) > 0 ? 'float_white' : 'float';
+    return 'standard';
+}
+const RFQ_MOUNT_LABEL = { standard: 'Standard Mount', float: 'Float Mount', float_white: 'Float w White Border', canvas: 'Canvas', egd: 'EGD', dibond: 'Printed Panel Product', object: 'Sourced Object' };
+function _rfqRows(docType, only) {
+    const rfi = docType === 'rfi';
+    return _deckSpecRows().filter(r => r && r.id && _priceQty(r) && !(rfi && _rowIsPurchase(r)) && (!only || only(r)));
+}
+function _rfqSheet(docType, only) {
+    const rfi = docType === 'rfi';
+    const last = rfi ? 33 : 40; // AG (Vendor) on an RFI, AN on an RFQ
+    const g = (id) => { const el = document.getElementById(id); return el ? String(el.value || '').trim() : ''; };
+    const cur = (_pricing().currency || 'USD').toUpperCase();
+    const B = (v) => (v && typeof v === 'object') ? Object.assign({ border: true }, v) : (v == null || v === '' ? { border: true } : (typeof v === 'number' ? { v: v, border: true } : { s: String(v), border: true }));
+    const out = [];
+    const row = () => { const a = []; out.push(a); return a; };
+    // Header, rows 1 to 8.
+    const h1 = row(); h1[2] = { s: rfi ? 'RFI' : 'QUOTE', title: true };
+    const hdr = [['PROJECT', g('g_projName')], ['DESCRIPTION', rfi ? 'Request for Information' : (g('g_desc') && g('g_desc') !== 'Production Specs' ? g('g_desc') : 'Quotation')],
+        ['DATE', g('g_date') || _todayIso()], ['ISSUED BY', g('g_issued') && g('g_issued') !== 'Studio' ? g('g_issued') : 'Farmboy Fine Arts'],
+        ['CLIENT', g('g_client')], ['ATTN', g('g_attn')], ['EST. DELIVERY', g('g_delivery')]];
+    const notes = rfi ? [] : (cur === 'CAD'
+        ? ['Leadtime - Roll Out: 6-8 weeks production', 'Leadtime - MUR: 3-4 weeks production & delivery', 'Product Origin CAD', 'All prices in CAD', 'Quote valid for 45 days', 'Payment Terms: 50% Deposit / 50% CBD']
+        : ['Leadtime - Roll Out: 6-8 weeks production', 'Leadtime - MUR: 3-4 weeks production & delivery', 'Product Origin USA', 'All prices in ' + cur, 'Payment Terms: Due Upon Receipt']);
+    hdr.forEach((pair, i) => { const a = row(); a[3] = { s: pair[0], bold: true }; a[4] = pair[1]; if (notes[i]) a[29] = notes[i]; });
+    // Row 9: the column titles.
+    const h9 = row(); RFQ_COLS.slice(0, last).forEach((t, i) => { h9[i] = { s: rfi ? t.replace(' (USD)', '') : t.replace('(USD)', '(' + cur + ')'), head: true }; });
+    const rows = _rfqRows(docType, only);
+    const multi = (typeof levels !== 'undefined' && levels && levels.length > 1);
+    const near = (a, b) => Math.abs(a - b) < 0.001;
+    rows.forEach((r, i) => {
+        const n = 10 + i, a = row(), p = _priceRow(r), sz = _rowOpeningAndPrint(r), mt = _rfqMount(r);
+        const k = unitFactor(dashUnit, 'in'), I = (v) => Math.round((parseFloat(v) || 0) * k * 1000) / 1000;
+        const H = I(r.extW), V = I(r.extH), oW = I(sz.openW), oH = I(sz.openH), pW = I(sz.printW), pH = I(sz.printH);
+        const flat = mt === 'egd' || mt === 'dibond' || mt === 'object';
+        const canvas = mt === 'canvas', framed = r.product !== 'Frameless Canvas (Wrapped)' && !flat;
+        const floatM = mt === 'float' || mt === 'float_white';
+        const matsOn = !flat && !canvas && !floatM && r.m1A !== false;
+        const fw = framed ? I(r.fW) : 0;
+        const mT = matsOn ? I(r.m1T) : floatM ? I(r.sbPaperMargin) : 0, mR = matsOn ? I(r.m1R) : floatM ? I(r.sbPaperMargin) : 0;
+        const mB = matsOn ? I(r.m1B) : floatM ? I(r.sbPaperMargin) : 0, mL = matsOn ? I(r.m1L) : floatM ? I(r.sbPaperMargin) : 0;
+        const wb = mt === 'float_white' ? I(r.sbPaperBorder) : 0;
+        const cd = canvas ? I(r.canvasDepth) : 0;
+        const wrap = r.product === 'Frameless Canvas (Wrapped)' ? I(r.canvasWrap) : (canvas ? cd + 0.5 : 0);
+        // the template's formula where it agrees with FRAME, else FRAME's number
+        const F = (f, tv, fv) => B(near(tv, fv) ? { f: f, v: fv } : { v: fv });
+        let J, K, L, M;
+        if (mt === 'egd') { J = F('H' + n, H, oW); K = F('I' + n, V, oH); L = F('H' + n + '+4', H + 4, pW); M = F('I' + n + '+4', V + 4, pH); }
+        else if (mt === 'dibond') { J = B(oW); K = B(oH); L = F('J' + n + '+0.125*2', oW + 0.25, pW); M = F('I' + n + '+0.125*2', V + 0.25, pH); }
+        else if (mt === 'object') { J = B(oW); K = B(oH); L = B(pW); M = B(pH); }
+        else if (canvas) {
+            const tj = H - 2 * fw - 0.5, tk = V - 2 * fw - 0.5;
+            J = F('H' + n + '-2*AA' + n + '-2*0.25', tj, oW); K = F('I' + n + '-2*AA' + n + '-2*0.25', tk, oH);
+            L = F('J' + n + '+O' + n + '*2', oW + wrap * 2, pW); M = F('K' + n + '+O' + n + '*2', oH + wrap * 2, pH);
+        } else {
+            const tj = H - 2 * fw - mL - mR - wb * 2, tk = V - 2 * fw - mB - mT - wb * 2, wbF = wb ? '-Y' + n + '*2' : '';
+            J = F('H' + n + '-2*AA' + n + '-T' + n + '-R' + n + wbF, tj, oW); K = F('I' + n + '-2*AA' + n + '-S' + n + '-Q' + n + wbF, tk, oH);
+            const bl = mt === 'standard' ? 0.5 : 0;
+            L = F(bl ? 'J' + n + '+0.5' : 'J' + n, oW + bl, pW); M = F(bl ? 'K' + n + '+0.5' : 'K' + n, oH + bl, pH);
+        }
+        let lvName = '';
+        if (multi) { const lv = levels[_deckLvlOf(r.level)]; lvName = (lv && lv.name) || ''; }
+        const vName = _rowVendor(r);
+        a.push(B(lvName), B(RFQ_MOUNT_LABEL[mt]), B(p.qty), B(r.id), B(r.product || ''), B(r.location || ''), B(_rfqImageCode(r)), B(H), B(V), J, K, L, M,
+            B(cd), canvas && r.product !== 'Frameless Canvas (Wrapped)' ? B({ f: 'N' + n + '+0.5', v: cd + 0.5 }) : B(wrap),
+            B(matsOn ? (r.m1ColorName || '') : (floatM ? (r.sbBackerColorName || '') : (flat ? 0 : ''))), B(mT), B(mR), B(mB), B(mL),
+            B(canvas || flat || !framed ? 'N/A' : (r.glass || '')), B(flat ? '' : (r.paperType || '')), B(), B(), B(wb || ''),
+            B(framed ? (String(r.fCode || '').trim() || 'TBD') : 'N/A'), B(fw), B(framed ? I(r.fHeight) : 0),
+            B(mt === 'egd' ? 'N/A' : (r.hardware || '')), B(flat ? (r.material || '') : canvas ? 'Canvas' : (r.paperType || '')),
+            B(mt === 'egd' ? '' : (r.mount || RFQ_MOUNT_LABEL[mt])), B(String(r.prodNotes || '').trim()), B(vName));
+        if (!rfi) {
+            const mk = p.markup - 1; // the revenue markup over cost, royalty included
+            a.push(B(p.cost != null ? { v: p.cost, money: true } : { money: true }),
+                B({ f: 'C' + n + '*AH' + n, v: p.cost != null ? p.cost * p.qty : 0, money: true }),
+                B({ v: p.royalty, pct: true }),
+                B({ f: Math.round((mk - p.royalty) * 10000) / 100 + '%+AJ' + n, v: Math.round(mk * 10000) / 10000, pct: true }),
+                B({ f: 'IFERROR(((AM' + n + '-AH' + n + ')/AM' + n + ')-AJ' + n + ',"")', v: (p.sell && p.cost != null) ? (p.sell - p.cost) / p.sell - p.royalty : undefined, pct: true }),
+                p.hand ? B({ v: p.sell, money: true }) : B({ f: 'AK' + n + '*AH' + n + '+AH' + n, v: p.sell != null ? p.sell : 0, money: true }),
+                B({ f: 'AM' + n + '*C' + n, v: p.sell != null ? p.sell * p.qty : 0, money: true }));
+        }
+    });
+    const lastRow = 9 + rows.length, t = lastRow + 1;
+    const sumC = rows.reduce((s, r) => s + _priceQty(r), 0);
+    const tr = row(); tr[1] = { s: 'Total Pieces', bold: true }; tr[2] = { f: 'SUM(C10:C' + lastRow + ')', v: sumC, bold: true };
+    if (!rfi) {
+        const art = rows.reduce((s, r) => s + _priceRow(r).lineSell, 0), cost = rows.reduce((s, r) => s + _priceRow(r).lineCost, 0);
+        tr[33] = { s: 'Total Costs', bold: true }; tr[34] = { f: 'SUM(AI10:AI' + lastRow + ')', v: cost, money: true };
+        tr[38] = { s: 'Artwork Total', bold: true }; tr[39] = { f: 'SUM(AN10:AN' + lastRow + ')', v: art, money: true };
+        const sh = row(); sh[38] = { s: 'Shipping Estimate', bold: true }; sh[39] = { f: 'AN' + t + '*0.2', v: art * 0.2, money: true };
+        const sb = row(); sb[38] = { s: 'Subtotal', bold: true }; sb[39] = { f: 'SUM(AN' + t + ':AN' + (t + 1) + ')', v: art * 1.2, money: true };
+        const gt = row(); gt[38] = { s: 'TOTAL', bold: true }; gt[39] = { f: 'SUM(AN' + (t + 2) + ':AN' + (t + 2) + ')', v: art * 1.2, money: true };
+        const nt = row(); nt[38] = '*All amounts shown in ' + cur;
+    }
+    const widths = [10, 16, 6, 12, 20, 18, 20, 8, 8, 9, 9, 9, 9, 10, 10, 16, 7, 7, 7, 7, 14, 16, 9, 9, 9, 18, 9, 9, 18, 18, 18, 30, 18, 12, 12, 9, 10, 10, 13, 15];
+    return { name: rfi ? 'RFI' : 'QUOTE', rows: out, widths: widths.slice(0, last), freeze: 9 };
+}
+// YYMMDD_CLIENT_ProjectName_RFQ.xlsx: the client is the deck's document code when there is
+// one (the four-letter client code), else the client name.
+function _rfqFileName(docType) {
+    const g = (id) => { const el = document.getElementById(id); return el ? String(el.value || '').trim() : ''; };
+    const safe = (s) => String(s || '').replace(/[^A-Za-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+    let code = ''; try { code = _deckFooterMeta().code || ''; } catch (e) {}
+    const client = safe(code || g('g_client')) || 'CLIENT', proj = safe(g('g_projName')) || 'Project';
+    return _prodStamp() + '_' + client + '_' + proj + '_' + (docType === 'rfi' ? 'RFI' : 'RFQ') + '.xlsx';
+}
+async function exportRfqXlsx(docType) {
+    if (typeof JSZip === 'undefined') { showInfoModal('Excel', 'The ZIP library did not load. Reload FRAME and try again.'); return; }
+    if (!_rfqRows(docType).length) { _toast('Nothing to send', docType === 'rfi' ? 'No pieces a print vendor makes are in the deck yet.' : 'There are no pieces in the deck yet.'); return; }
+    const blob = await _xlsxBlob([_rfqSheet(docType)]);
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = _rfqFileName(docType); a.click();
+    setTimeout(() => { try { URL.revokeObjectURL(a.href); } catch (e) {} }, 4000);
+}
+// Read a sheet back: find the header row holding "Item Code", read the price columns by
+// name, write through setRowPrice. Qty is never read (it comes from the walls).
+const PRICE_IMPORT_COLS = {
+    unitCost: ['unit cost', 'cost', 'vendor cost'],
+    unitSell: ['unit sell', 'unit price', 'sell', 'sales price', 'sell price'],
+    allowance: ['allowance', 'budget', 'unit allowance'],
+    costAt: ['cost date', 'quote date', 'date quoted'],
+    costSrc: ['cost source', 'source'],
+    vendorName: ['vendor', 'vendor / seller']
+};
+function _priceImportRows(rows) {
+    const norm = (s) => String(s || '').trim().toLowerCase().replace(/\s+/g, ' ');
+    const hi = rows.findIndex(r => r && r.some(c => norm(c) === 'item code'));
+    if (hi < 0) return { error: 'No "Item Code" column found.' };
+    const head = rows[hi].map(norm);
+    const col = {}; Object.keys(PRICE_IMPORT_COLS).forEach(k => { col[k] = head.findIndex(h => PRICE_IMPORT_COLS[k].indexOf(h) >= 0); });
+    // A computed column (Line Sell) is never an input; Unit Sell is read only when it was
+    // typed, so a formula's cached value of cost x markup is not frozen into a hand price.
+    const ci = head.indexOf('item code');
+    const byId = {}; dashProjectData.forEach(r => { if (r && r.id) byId[String(r.id).toLowerCase()] = r; });
+    const res = { updated: [], unknown: [] };
+    rows.slice(hi + 1).forEach(row => {
+        const id = String((row && row[ci]) || '').trim(); if (!id || /^(total|budget|left in budget)$/i.test(id)) return;
+        const r = byId[id.toLowerCase()]; if (!r) { res.unknown.push(id); return; }
+        const cell = (k) => col[k] >= 0 ? String(row[col[k]] == null ? '' : row[col[k]]).trim() : undefined;
+        const patch = {};
+        const cost = cell('unitCost');
+        if (cost !== undefined && _priceNum(cost) !== _priceRow(r).cost) {
+            patch.unitCost = cost;
+            const src = cell('costSrc'); patch.costSrc = (src === 'estimate' || src === 'quote') ? src : 'quote';
+            const at = cell('costAt'); if (at) patch.costAt = /^\d+(\.\d+)?$/.test(at) ? _excelDate(parseFloat(at)) : at;
+        }
+        const sell = cell('unitSell');
+        if (sell !== undefined) {
+            const mk = _priceMarkup() + _rowRoyalty(r), c = _priceNum(cost !== undefined ? cost : _priceRow(r).cost), s = _priceNum(sell);
+            const derived = (c != null && s != null && Math.abs(s - Math.round(c * mk * 100) / 100) < 0.005);
+            if (!derived && s !== _priceNum(r.unitSell)) patch.unitSell = sell;
+        }
+        const al = cell('allowance'); if (al !== undefined && _priceNum(al) !== _priceNum(r.allowance)) patch.allowance = al;
+        const v = cell('vendorName');
+        const changed = Object.keys(patch).length || (v !== undefined && v && v !== _rowVendor(r));
+        if (!changed) return;
+        setRowPrice(r.id, patch, true);
+        if (v !== undefined && v && v !== _rowVendor(r)) r.vendorName = v;
+        res.updated.push(r.id);
+    });
+    if (res.updated.length) pushHistory();
+    return res;
+}
+function _excelDate(n) { const d = new Date(Math.round((n - 25569) * 86400000)); return d.toISOString().slice(0, 10); }
+async function importPricesFile(file) {
+    let rows;
+    try {
+        if (/\.xlsx$/i.test(file.name)) rows = await _xlsxReadRows(await file.arrayBuffer());
+        else rows = _csvRows(await file.text());
+    } catch (e) { showInfoModal('Import prices', 'That file could not be read: ' + _esc(e && e.message || e) + '. Save it from Excel as .xlsx or .csv and try again.'); return null; }
+    const res = _priceImportRows(rows);
+    if (res.error) { showInfoModal('Import prices', res.error + ' Export a quote from FRAME first: its columns are the ones FRAME reads back.'); return res; }
+    showInfoModal('Prices imported', res.updated.length + ' piece' + (res.updated.length === 1 ? '' : 's') + ' updated.'
+        + (res.unknown.length ? '<br><br>Not in this project (left alone): ' + _esc(res.unknown.join(', ')) : '') + '<br><br>Ctrl+Z undoes the import.');
+    try { _prodShow(); } catch (e) {}
+    return res;
+}
+// ── THE PRODUCTION BUTTON IS THE BUDGET (19.93, 19.95) ──
+// Art is chosen on the dashboard, so that is where the money shows. ONE button in the item
+// toolbar (#dashProdBtn) is the way into Production (it replaced the Edit and Export menu
+// entries for samples and prices, which nobody looked for there) and its own readout:
+// "Production" until something is priced or a budget is set, then sell against the budget
+// and the selected piece against its allowance, amber when either is passed. A count says
+// what needs attention (a rejected sample still in use, a quote out of date for its size or
+// its age), and the click opens the tab it is about. Screen only: never reaches a deck page.
+function _dashBudgetInfo(sel) {
+    const t = _priceTotals();
+    if (!t.priced && t.budget == null) return null;
+    let text = _money(t.sell), tip = 'Sell total ' + _money(t.sell) + ' (' + t.priced + ' priced';
+    tip += t.unpriced.length ? ', ' + t.unpriced.length + ' not priced yet)' : ')';
+    const over = t.budget != null && t.sell > t.budget;
+    if (t.budget != null) {
+        const left = t.budget - t.sell;
+        text += ' of ' + _money(t.budget) + ' · ' + _money(Math.abs(left)) + (left >= 0 ? ' left' : ' over');
+        tip += '. Budget ' + _money(t.budget) + '.';
+    } else { text += ' sell'; tip += '. No budget set.'; }
+    let pieceOver = false;
+    if (sel && sel.id && _deckSpecRows().indexOf(sel) >= 0) {
+        const p = _priceRow(sel);
+        if (p.sell != null || p.allow != null) {
+            text += ' · ' + sel.id + ' ' + (p.sell != null ? _money(p.sell) : 'not priced') + (p.allow != null ? ' / ' + _money(p.allow) : '');
+            tip += ' ' + sel.id + ': ' + (p.sell != null ? 'sells at ' + _money(p.sell) : 'not priced') + (p.allow != null ? ', allowance ' + _money(p.allow) : '') + (p.over ? ', OVER its allowance' : '') + '.';
+            pieceOver = p.over;
+        }
+    }
+    if (t.over.length) tip += ' ' + t.over.length + (t.over.length === 1 ? ' piece is' : ' pieces are') + ' over allowance.';
+    if (t.resized.length) tip += ' ' + t.resized.length + ' resized since quoted (' + t.resized.join(', ') + '): re-quote.';
+    return { text: text, tip: tip, over: over || pieceOver };
+}
+// What needs a look, and which tab it is on: samples first (a rejected moulding still on a
+// piece is the costliest mistake), then prices out of date for their size or age.
+function _dashProdAttention() {
+    let samples = []; try { samples = _samplePreflight(); } catch (e) {}
+    let t = { resized: [], stale: [] }; try { t = _priceTotals(); } catch (e) {}
+    const n = samples.length + t.resized.length + t.stale.length;
+    const lines = samples.map(i => i.text);
+    if (t.resized.length) lines.push(t.resized.length + ' resized since quoted: re-quote');
+    if (t.stale.length) lines.push(t.stale.length + ' quote' + (t.stale.length === 1 ? '' : 's') + ' over ' + PRICE_STALE_DAYS + ' days old');
+    return { n: n, tab: samples.length ? 'samples' : 'pricing', lines: lines };
+}
+function _dashBudgetSync(sel) {
+    const el = document.getElementById('dashProdBtn'); if (!el) return;
+    if (sel === undefined) sel = dashProjectData[dashSelectedRowIndex];
+    let info = null; try { info = _dashBudgetInfo(sel); } catch (e) {}
+    const att = _dashProdAttention();
+    const lab = el.querySelector('.prod-btn-label'), bad = el.querySelector('.prod-btn-badge');
+    if (lab) lab.textContent = info ? info.text : 'Production';
+    if (bad) { bad.textContent = att.n ? String(att.n) : ''; bad.style.display = att.n ? '' : 'none'; }
+    el.setAttribute('data-tab', att.n ? att.tab : 'pricing');
+    el.title = 'Production: samples, vendors and the production pack, prices and budget, issues.'
+        + (info ? ' ' + info.tip : ' Nothing priced yet.')
+        + (att.n ? ' Needs a look: ' + att.lines.join('; ') + '.' : '');
+    if (info && info.over) el.setAttribute('data-over', '1'); else el.removeAttribute('data-over');
+}
+function _prodPricingInto(body) {
+    const pr = _pricing();
+    const intro = document.createElement('div'); intro.style.cssText = 'font-size:var(--fs-70); color:var(--text-muted); margin-bottom:10px;';
+    intro.textContent = 'What each piece costs and sells for. A price typed or imported is a quote, dated, for the size the piece was then. Estimates come from the rate card and follow each piece’s size as you change it; a quoted piece that is resized is estimated at its new size and flagged to re-quote. Prices never print in the deck, but they are saved in the project file.';
+    body.appendChild(intro);
+    // Settings line.
+    const set = document.createElement('div'); set.style.cssText = 'display:flex; gap:10px; align-items:center; flex-wrap:wrap; font-size:var(--fs-70); margin-bottom:10px;';
+    const num = (id, label, val, w, onSet, tip) => {
+        const l = document.createElement('label'); l.style.cssText = 'display:flex; gap:4px; align-items:center;'; l.textContent = label; if (tip) l.title = tip;
+        const i = document.createElement('input'); i.type = 'text'; i.id = id; i.value = val == null ? '' : val; i.style.cssText = 'width:' + w + 'px; height:24px;';
+        i.onchange = () => { onSet(i.value); _prodShow(); };
+        l.appendChild(i); set.appendChild(l); return i;
+    };
+    const mkIn = num('priceMarkup', 'Markup ×', pr.markup != null ? pr.markup : '', 60, v => _pricingSet({ markup: _priceNum(v) }), 'Sell = cost × (markup + the artist royalty), unless a sell price is typed. Blank is the house markup, ' + HOUSE_MARKUP + ' (87.31%), from the 2026 quote template.');
+    mkIn.placeholder = String(HOUSE_MARKUP);
+    num('priceBudget', 'Budget', pr.budget != null ? pr.budget : '', 90, v => _pricingSet({ budget: _priceNum(v) }), 'The client’s total budget for the project');
+    num('priceCurrency', 'Currency', pr.currency || 'USD', 50, v => _pricingSet({ currency: String(v || '').trim().toUpperCase() || null }));
+    body.appendChild(set);
+    // Totals.
+    const t = _priceTotals();
+    const tot = document.createElement('div'); tot.id = 'priceTotals'; tot.style.cssText = 'display:flex; gap:18px; flex-wrap:wrap; padding:10px 12px; border:1px solid var(--border-color); border-radius:var(--r-6); margin-bottom:10px; font-size:var(--fs-75);';
+    const stat = (label, val, warn) => { const d = document.createElement('div'); d.innerHTML = '<div style="color:var(--text-muted); font-size:var(--fs-60); text-transform:uppercase; letter-spacing:0.4px;">' + label + '</div><div style="font-weight:700;' + (warn ? ' color:var(--warn);' : '') + '">' + val + '</div>'; tot.appendChild(d); };
+    stat('Sell', _money(t.sell));
+    stat('Cost', _money(t.cost));
+    stat('Margin', t.margin == null ? '' : Math.round(t.margin * 100) + '%');
+    if (t.allow) stat('Allowances', _money(t.allow), t.sell > t.allow);
+    if (t.budget != null) stat(t.sell > t.budget ? 'Over budget' : 'Left in budget', _money(Math.abs(t.budget - t.sell)), t.sell > t.budget);
+    if (t.unpriced.length) stat('Not priced', t.unpriced.length + ' piece' + (t.unpriced.length === 1 ? '' : 's'), true);
+    if (t.stale.length) stat('Quotes over ' + PRICE_STALE_DAYS + ' days', String(t.stale.length), true);
+    if (t.resized.length) stat('Resized since quoted', String(t.resized.length), true);
+    body.appendChild(tot);
+    // Tools.
+    const tools = document.createElement('div'); tools.style.cssText = 'display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px;';
+    tools.appendChild(_prodBtn('Export to Excel', () => exportQuoteXlsx(), false, 'A .xlsx with live formulas: the quote, totals, budget and the rate card'));
+    tools.appendChild(_prodBtn('Import prices…', () => {
+        const f = document.createElement('input'); f.type = 'file'; f.accept = '.xlsx,.csv';
+        f.onchange = () => { if (f.files && f.files[0]) importPricesFile(f.files[0]); };
+        f.click();
+    }, true, 'Read Unit Cost, Unit Sell, Allowance and Vendor back from an .xlsx or .csv, matched by Item Code'));
+    tools.appendChild(_prodBtn('RFQ', () => exportRfqXlsx('rfq'), true, 'The quote in the 2026 quote template’s layout (.xlsx): every spec column, the house markup and royalty, shipping and totals'));
+    tools.appendChild(_prodBtn('RFI', () => exportRfqXlsx('rfi'), true, 'The same sheet with no prices, for vendors; originals, commissions and found objects are left off'));
+    tools.appendChild(_prodBtn('Salesforce CSV', () => {
+        const b = new Blob([_salesforceLinesCSV()], { type: 'text/csv;charset=utf-8;' });
+        const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = _prodStamp() + '_' + _prodProjectTag() + '_SF_Import.csv'; a.click();
+    }, true, 'The Salesforce Quote Import Template’s 11 columns, ready for the import tool: vendor codes, markup as a plain number, no special characters'));
+    tools.appendChild(_prodBtn('Rate card…', () => openRateCard(), true, 'Estimate prices before a vendor quotes'));
+    // 19.94: no Update estimates button. Estimates are worked out from the size on every read.
+    body.appendChild(tools);
+    // By area.
+    const areas = Object.keys(t.byArea);
+    if (areas.length > 1) {
+        const at = document.createElement('div'); at.style.cssText = 'font-size:var(--fs-70); color:var(--text-muted); margin-bottom:8px;';
+        at.textContent = 'By area: ' + areas.map(a => a + ' ' + _money(t.byArea[a].sell) + (t.byArea[a].allow ? ' (allowance ' + _money(t.byArea[a].allow) + ')' : '')).join('  ·  ');
+        body.appendChild(at);
+    }
+    const rows = _deckSpecRows().filter(r => r && r.id);
+    if (!rows.length) return;
+    const tbl = document.createElement('table'); tbl.id = 'priceTable';
+    tbl.style.cssText = 'width:100%; border-collapse:collapse; font-size:var(--fs-70);';
+    tbl.innerHTML = '<thead><tr style="text-align:left; color:var(--text-muted);"><th style="padding:4px;">Code</th><th style="padding:4px;">Product</th><th style="padding:4px;">Vendor</th><th style="padding:4px;">Qty</th><th style="padding:4px;">Unit cost</th><th style="padding:4px;">Source</th><th style="padding:4px;" title="Artist royalty: an F image code 0%, PEN 10%, anything else 5%. Type a rate for a piece the client owns outright.">Royalty</th><th style="padding:4px;" title="Rate card add-ons this piece takes in its estimate. Sealant follows the location; tick to change it.">Add-ons</th><th style="padding:4px;">Unit sell</th><th style="padding:4px;">Line</th><th style="padding:4px;">Allowance</th></tr></thead>';
+    const tb = document.createElement('tbody'); tbl.appendChild(tb);
+    rows.forEach(r => {
+        const p = _priceRow(r);
+        const tr = document.createElement('tr'); tr.setAttribute('data-price-row', r.id); tr.style.cssText = 'border-top:1px solid var(--border-color);';
+        const td = () => { const c = document.createElement('td'); c.style.cssText = 'padding:4px; vertical-align:middle;'; tr.appendChild(c); return c; };
+        const inp = (val, ph, onSet, tip) => { const i = document.createElement('input'); i.type = 'text'; i.value = val == null ? '' : val; i.placeholder = ph || ''; if (tip) i.title = tip; i.style.cssText = 'width:80px; height:24px;'; i.onchange = () => { onSet(i.value); _prodShow(); }; return i; };
+        td().innerHTML = '<b>' + _esc(r.id) + '</b>';
+        td().textContent = r.product || '';
+        td().textContent = _rowVendor(r);
+        td().textContent = p.qty ? String(p.qty) : 'option';
+        td().appendChild(inp(p.cost, '', v => setRowPrice(r.id, { unitCost: v })));
+        const sc = td();
+        sc.textContent = p.src ? (p.src === 'quote' ? 'Quote' : 'Estimate') + (p.at ? ' ' + p.at : '') : '';
+        if (p.stale) { sc.style.color = 'var(--warn)'; sc.title = 'This quote is ' + p.age + ' days old'; }
+        if (p.resized) {
+            sc.style.color = 'var(--warn)';
+            sc.textContent = (p.src === 'estimate' ? 'Estimate, re-quote' : 'Quote, resized');
+            sc.title = 'Priced at ' + _priceSizeLabel(p.quotedFor) + '; the piece is now ' + _priceSizeLabel(_priceSizeKey(r)) + '. ' + (p.src === 'estimate' ? 'The rate card estimate for the new size is used until it is re-quoted.' : 'No rate card covers it, so the old quote is still counted.');
+        }
+        const ry = inp(r.royalty != null ? Math.round(r.royalty * 10000) / 100 + '%' : '', Math.round(_rowRoyaltyAuto(r) * 100) + '%', v => setRowPrice(r.id, { royalty: v }), 'Blank follows the image code');
+        ry.style.width = '48px'; td().appendChild(ry);
+        // 19.97: the add-ons the estimate takes; sealant is the one a piece can change
+        const adc = td(); adc.style.whiteSpace = 'nowrap';
+        if (!_isFlatGraphic(r.product)) {
+            const sl = document.createElement('label'); sl.style.cssText = 'display:inline-flex; gap:3px; align-items:center; margin-right:6px;'; sl.title = 'Moisture sealant. ' + (_rowSealantAuto(r) ? 'On because the location reads as humid.' : 'Off: the location does not read as humid.');
+            const cb = document.createElement('input'); cb.type = 'checkbox'; cb.setAttribute('data-sealant', r.id); cb.checked = _rowSealant(r);
+            cb.onchange = () => { setRowPrice(r.id, { sealant: cb.checked }); _prodShow(); };
+            sl.appendChild(cb); sl.appendChild(document.createTextNode('Sealant')); adc.appendChild(sl);
+        }
+        const others = _rowAddons(r).filter(a => a !== 'sealant').map(a => ADDON_LABEL[a]);
+        if (others.length) { const sp = document.createElement('span'); sp.style.color = 'var(--text-muted)'; sp.textContent = others.join(', '); adc.appendChild(sp); }
+        td().appendChild(inp(p.hand ? p.sell : '', p.sell != null ? _money(p.sell) : '', v => setRowPrice(r.id, { unitSell: v }), 'Leave blank for cost × (markup + royalty)'));
+        td().textContent = p.sell != null ? _money(p.lineSell) : '';
+        const ac = td(); ac.appendChild(inp(p.allow, '', v => setRowPrice(r.id, { allowance: v })));
+        if (p.over) { ac.title = 'Sells over its allowance'; ac.firstChild.style.borderColor = 'var(--warn)'; }
+        tb.appendChild(tr);
+    });
+    body.appendChild(tbl);
+}
+// The rate card editor: one line per product in the project (and any already on the card).
+function openRateCard() {
+    let m = document.getElementById('rateCardModal'); if (m) m.remove();
+    m = document.createElement('div'); m.id = 'rateCardModal';
+    m.className = 'frame-modal fm-nested'; m.style.display = 'flex';
+    const card = document.createElement('div');
+    card.style.cssText = 'background:var(--bg-panel); border:1px solid var(--border-color); border-radius:var(--r-8); box-shadow:0 15px 35px rgba(0,0,0,0.4); width:640px; max-width:94vw; max-height:88vh; overflow:auto; padding:18px; display:flex; flex-direction:column; gap:10px; font-size:var(--fs-70);';
+    const rc = _rateCard() || _rateCardLoadLocal() || { list: [] };
+    card.innerHTML = '<h3 style="margin:0; font-size:var(--fs-95); color:var(--text-strong);">Rate card</h3><div style="color:var(--text-muted);">Estimate = base + per sq ft of the overall size, plus the adders and add-ons. A wallcovering or window film is per sq ft alone (leave its base blank). Used only for pieces no vendor has quoted. Date it, so every estimate says which rates it came from.</div>';
+    const prods = FRAME_PRODUCTS.slice();
+    const tbl = document.createElement('table'); tbl.id = 'rateCardTable'; tbl.style.cssText = 'border-collapse:collapse; width:100%;';
+    tbl.innerHTML = '<thead><tr style="text-align:left; color:var(--text-muted);"><th>Product</th><th>Base</th><th>Per sq ft</th><th>Float mount</th><th>Double mat</th></tr></thead>';
+    const tb = document.createElement('tbody'); tbl.appendChild(tb);
+    prods.forEach(pn => {
+        const cur = (rc.list || []).find(x => x.product === pn) || {};
+        const tr = document.createElement('tr'); tr.setAttribute('data-rate', pn);
+        tr.innerHTML = '<td style="padding:3px 4px;">' + _esc(pn) + '</td>' + ['base', 'perSqFt', 'floatMount', 'doubleMat'].map(k => '<td style="padding:3px 4px;"><input type="text" data-k="' + k + '" value="' + (cur[k] != null ? cur[k] : '') + '" style="width:70px; height:24px;"></td>').join('');
+        tb.appendChild(tr);
+    });
+    card.appendChild(tbl);
+    // 19.97: the add-ons, one set for every product; each applies only where the piece says so
+    const ad = rc.addons || {};
+    const adBox = document.createElement('div'); adBox.id = 'rateCardAddons'; adBox.style.cssText = 'display:flex; flex-direction:column; gap:4px;';
+    adBox.innerHTML = '<div style="font-weight:700; color:var(--text-strong); margin-top:4px;">Add-ons, per piece</div>';
+    [['premiumFrame', 'Premium frame', 'Added when the frame code is a Larson-Juhl (LJ-) or Universal Arquati (UA-) moulding'],
+     ['nonGlare', 'Non-glare glass, at 30x40', 'Added when the Glass field says non-glare, anti-reflective or museum; scaled by the piece’s area against a 30 x 40'],
+     ['sealant', 'Moisture sealant', 'Added when the location reads as humid (bath, restroom, spa, pool, shower, locker); a piece can be switched on the Pricing tab'],
+     ['oversize', 'Oversize, past 40x50', 'Added when the overall size is bigger than 40 x 50 either way round'],
+     ['buffer', 'Buffer %', 'A percentage on top of every estimate']].forEach(([k, label, tip]) => {
+        const l = document.createElement('label'); l.style.cssText = 'display:flex; gap:6px; align-items:center;'; l.title = tip;
+        const t = document.createElement('span'); t.textContent = label; t.style.cssText = 'width:170px;';
+        const i = document.createElement('input'); i.type = 'text'; i.setAttribute('data-addon', k); i.value = ad[k] != null ? ad[k] : ''; i.style.cssText = 'width:70px; height:24px;';
+        l.appendChild(t); l.appendChild(i); adBox.appendChild(l);
+    });
+    card.appendChild(adBox);
+    const readAddons = () => { const o = {}; adBox.querySelectorAll('input[data-addon]').forEach(i => { o[i.getAttribute('data-addon')] = i.value; }); return o; };
+    const dateRow = document.createElement('label'); dateRow.style.cssText = 'display:flex; gap:6px; align-items:center;'; dateRow.textContent = 'Rates as of';
+    const di = document.createElement('input'); di.type = 'date'; di.id = 'rateCardAsOf'; di.value = rc.asOf || _todayIso(); dateRow.appendChild(di); card.appendChild(dateRow);
+    const read = () => Array.prototype.map.call(tb.querySelectorAll('tr[data-rate]'), tr => {
+        const o = { product: tr.getAttribute('data-rate') };
+        tr.querySelectorAll('input[data-k]').forEach(i => { o[i.getAttribute('data-k')] = i.value; });
+        return o;
+    }).filter(o => ['base', 'perSqFt', 'floatMount', 'doubleMat'].some(k => _priceNum(o[k]) != null));
+    const foot = document.createElement('div'); foot.style.cssText = 'display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;';
+    const saveLocal = _prodBtn('Keep as my rate card', () => { setRateCard(read(), di.value, readAddons()); _rateCardSaveLocal(); _toast('Rate card kept', 'New projects on this computer can start from it.'); }, true, 'Save these rates on this computer for your next projects');
+    const cancel = _prodBtn('Cancel', () => m.remove(), true); cancel.setAttribute('data-modal-close', '');
+    const ok = _prodBtn('Save', () => { setRateCard(read(), di.value, readAddons()); m.remove(); _prodShow(); if (document.getElementById('fpBudgetStrip')) _dsRenderTools(); }, false);
+    foot.appendChild(saveLocal); foot.appendChild(cancel); foot.appendChild(ok);
+    card.appendChild(foot);
+    m.appendChild(card); document.body.appendChild(m);
+}
+
+// ── COMMERCIAL INVOICES (19.99) ──────────────────────────────────────────────
+// Cross-border shipments, Canada and the USA, from the team's Commercial Invoice
+// Assistant: the lines were typed again from the deck for every crossing. Here an invoice
+// is a record in the project (`editorialContent.shipments`, one writer `setShipment`) that
+// names its pieces by row id; each line is DERIVED from the piece (description, size, HS
+// code, quantity, value) unless the line says otherwise (`sh.lines[rowId]`, only the
+// fields typed). Port of lading follows the route (`_shipPort`, Talia's table) unless
+// typed. Parties and the signer are kept on THIS COMPUTER (`SHIP_BOOK_KEY`,
+// `SHIP_SIGNER_KEY`), never in the code: the site is public, and tax ids are private.
+const SHIP_BOOK_KEY = 'frame_ship_book';
+const SHIP_SIGNER_KEY = 'frame_ship_signer';
+const SHIP_PARTY_FIELDS = ['name', 'addr', 'country', 'phone', 'tax'];
+const SHIP_FIELDS = ['no', 'date', 'mode', 'terms', 'awb', 'kg', 'freight', 'insurance', 'currency', 'value', 'signer', 'port', 'ship', 'cons', 'rows', 'lines'];
+// HS codes, six digits (the shared international part; a broker adds the country's own
+// digits). Reproductions, framed or on canvas, are printed pictures (4911.91); originals are
+// paintings and drawings (9701.21, not over 100 years old). Blank = fill in by hand.
+const SHIP_HS = {
+    original: '9701.21',
+    'Framed Art': '4911.91', 'Framed Art (Shadow Box)': '4911.91', 'Framed Canvas (Floater)': '4911.91', 'Frameless Canvas (Wrapped)': '4911.91',
+    'Wallcovering (EGD)': '4814.90', 'Window Film (WF)': '3919.90'
+};
+const SHIP_DESC = {
+    'Framed Art': 'Framed art print', 'Framed Art (Shadow Box)': 'Framed art in shadow box', 'Framed Canvas (Floater)': 'Framed print on canvas',
+    'Frameless Canvas (Wrapped)': 'Print on canvas, wrapped on stretcher', 'Wallcovering (EGD)': 'Printed wallcovering', 'Window Film (WF)': 'Printed window film, self-adhesive',
+    'Didactic Panel': 'Printed interpretive panel', 'Sourced Object': 'Decorative object'
+};
+function _shipList() { return (editorialContent && editorialContent.shipments) || []; }
+function _shipById(id) { return _shipList().find(s => s && s.id === id) || null; }
+function _shipIsOriginal(r) { return r && r.product !== 'Sourced Object' && (/^(FAO|FCM)[._-]/i.test(String(r.imageCode || '').trim()) || /original|commission/i.test(String(r.artType || ''))); }
+function _shipHs(r) { return _shipIsOriginal(r) ? SHIP_HS.original : (SHIP_HS[r.product] || ''); }
+function _shipDesc(r) {
+    let d = _shipIsOriginal(r) ? 'Original artwork' : (SHIP_DESC[r.product] || 'Framed art print');
+    const at = String(r.artType || '').trim();
+    if (_shipIsOriginal(r) && at && !/^original( artwork)?$/i.test(at)) d += ', ' + at;
+    const w = _inNum(r.extW), h = _inNum(r.extH);
+    if (w > 0 && h > 0) d += ', ' + w + '"W x ' + h + '"H';
+    const code = _rfqImageCode(r);
+    return d + ' (' + r.id + (code ? ' / ' + code : '') + ')';
+}
+// Country and province/state from a party's own fields: the country field, else the
+// address. Only what the port table needs: CA or US, and QC / ON on the Canadian side.
+function _shipWhere(p) {
+    const c = String((p && p.country) || '').trim(), a = String((p && p.addr) || '');
+    let country = /^(ca|can|canada)$/i.test(c) ? 'CA' : /^(us|usa|u\.s\.a\.|united states( of america)?)$/i.test(c) ? 'US' : '';
+    if (!country) country = /canada/i.test(a) ? 'CA' : /\b(usa|united states)\b/i.test(a) ? 'US' : '';
+    let prov = '';
+    if (/\b(QC|Qu[eé]bec)\b|montr[eé]al/i.test(a)) prov = 'QC';
+    else if (/\b(ON|Ontario)\b|toronto/i.test(a)) prov = 'ON';
+    if (!country && prov) country = 'CA';
+    return { country: country, prov: prov };
+}
+// Talia's route table. A typed port wins; an unknown route is blank, never a guess.
+function _shipPortAuto(sh) {
+    if (!sh) return '';
+    if (sh.mode === 'air') return 'Montreal-Trudeau (YUL)';
+    const f = _shipWhere(sh.ship), t = _shipWhere(sh.cons);
+    if (f.country === 'CA' && t.country === 'US') return f.prov === 'QC' ? 'Lacolle, QC' : f.prov === 'ON' ? 'Windsor, ON' : '';
+    if (f.country === 'US' && t.country === 'CA') return t.prov === 'QC' ? 'Champlain, NY' : t.prov === 'ON' ? 'Port Huron, MI' : '';
+    return '';
+}
+function _shipPort(sh) { return String((sh && sh.port) || '').trim() || _shipPortAuto(sh); }
+function _shipCountryName(p) { const w = _shipWhere(p); return w.country === 'CA' ? 'Canada' : w.country === 'US' ? 'USA' : String((p && p.country) || '').trim(); }
+// One line per piece: derived, then the line's own typed fields on top.
+function _shipLines(sh) {
+    const rows = (sh.rows || []).map(id => (dashProjectData || []).find(r => r && r.id === id)).filter(Boolean);
+    return rows.map(r => {
+        const o = (sh.lines && sh.lines[r.id]) || {};
+        const p = _priceRow(r);
+        const val = sh.value === 'sell' ? p.sell : p.cost;
+        const qty = _priceNum(o.qty) != null ? _priceNum(o.qty) : (_priceQty(r) || 1);
+        const unit = _priceNum(o.unit) != null ? _priceNum(o.unit) : (val != null ? Math.round(val * 100) / 100 : null);
+        return { id: r.id, desc: o.desc != null ? o.desc : _shipDesc(r), hs: o.hs != null ? o.hs : _shipHs(r), origin: o.origin != null ? o.origin : _shipCountryName(sh.ship),
+            qty: qty, uom: o.uom || 'PCS', unit: unit, total: unit != null ? Math.round(unit * qty * 100) / 100 : null };
+    });
+}
+function _shipTotals(sh) {
+    const lines = _shipLines(sh);
+    const goods = lines.reduce((a, l) => a + (l.total || 0), 0);
+    const fr = _priceNum(sh.freight), ins = _priceNum(sh.insurance);
+    return { lines: lines, goods: Math.round(goods * 100) / 100, freight: fr, insurance: ins, total: Math.round((goods + (fr || 0) + (ins || 0)) * 100) / 100, missing: lines.filter(l => l.unit == null || !l.hs).map(l => l.id) };
+}
+// cur '' = a bare number (the invoice's lines: the currency is stated once, in its box)
+function _shipMoney(n, cur) { return n == null || !isFinite(n) ? '' : (Math.round(n * 100) / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + (cur === '' ? '' : ' ' + (cur || 'USD')); }
+function _shipLoadBook() { try { const v = JSON.parse(localStorage.getItem(SHIP_BOOK_KEY) || '[]'); return Array.isArray(v) ? v.filter(p => p && p.name) : []; } catch (e) { return []; } }
+function _shipSaveParty(p) {
+    if (!p || !String(p.name || '').trim()) return false;
+    const book = _shipLoadBook().filter(x => String(x.name).trim().toLowerCase() !== String(p.name).trim().toLowerCase());
+    const o = {}; SHIP_PARTY_FIELDS.forEach(k => { if (String(p[k] || '').trim()) o[k] = String(p[k]).trim(); });
+    book.push(o); book.sort((a, b) => a.name.localeCompare(b.name));
+    try { localStorage.setItem(SHIP_BOOK_KEY, JSON.stringify(book)); return true; } catch (e) { return false; }
+}
+function _shipSigner() { try { return localStorage.getItem(SHIP_SIGNER_KEY) || ''; } catch (e) { return ''; } }
+// A new invoice: numbered, dated today, DAP by ground, in the project's currency, valued at
+// cost, signed by whoever signed last on this computer.
+function newShipment(rows) {
+    const list = _shipList().slice();
+    const id = 'sh' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    const sh = { id: id, no: '', date: _todayIso(), mode: 'ground', terms: 'DAP', currency: _pricing().currency || 'USD', value: 'cost', signer: _shipSigner(), ship: {}, cons: {}, rows: (rows || []).slice(), lines: {} };
+    list.push(sh);
+    editorialContent.shipments = list;
+    pushHistory();
+    return id;
+}
+// ONE writer. A party or a line patch merges; `lines[id] = null` (or a field set to '' on
+// a line) goes back to the derived value. Empty parties and lines are pruned.
+function setShipment(id, patch, quiet) {
+    const sh = _shipById(id); if (!sh) return false;
+    Object.keys(patch || {}).forEach(k => {
+        if (SHIP_FIELDS.indexOf(k) < 0) return;
+        const v = patch[k];
+        if (k === 'ship' || k === 'cons') {
+            const p = Object.assign({}, sh[k] || {});
+            Object.keys(v || {}).forEach(f => { if (SHIP_PARTY_FIELDS.indexOf(f) < 0) return; const s = String(v[f] == null ? '' : v[f]); if (s.trim()) p[f] = s; else delete p[f]; });
+            sh[k] = p;
+        } else if (k === 'lines') {
+            const L = Object.assign({}, sh.lines || {});
+            Object.keys(v || {}).forEach(rid => {
+                if (v[rid] == null) { delete L[rid]; return; }
+                const o = Object.assign({}, L[rid] || {});
+                Object.keys(v[rid]).forEach(f => { const s = v[rid][f]; if (s == null || String(s).trim() === '') delete o[f]; else o[f] = String(s); });
+                if (Object.keys(o).length) L[rid] = o; else delete L[rid];
+            });
+            sh.lines = L;
+        } else if (k === 'rows') {
+            sh.rows = (v || []).filter((x, i, a) => x && a.indexOf(x) === i);
+            Object.keys(sh.lines || {}).forEach(rid => { if (sh.rows.indexOf(rid) < 0) delete sh.lines[rid]; });
+        } else if (v == null || String(v).trim() === '') delete sh[k];
+        else sh[k] = String(v);
+    });
+    if (patch && patch.signer != null) { try { localStorage.setItem(SHIP_SIGNER_KEY, String(patch.signer)); } catch (e) {} }
+    if (!quiet) pushHistory();
+    return true;
+}
+function deleteShipment(id) {
+    const list = _shipList().filter(s => s && s.id !== id);
+    if (list.length) editorialContent.shipments = list; else delete editorialContent.shipments;
+    pushHistory();
+}
+function _shipFileName(sh) { return 'commercial_invoice_' + (String(sh.no || '').trim() ? _prodSafe(sh.no) : _prodStamp()) + '.pdf'; }
+// The invoice as a PDF: shipper and consignee, the shipment facts, a line per piece with its
+// HS code and origin, totals, and the declaration signed and dated.
+function _commercialInvoicePdf(sh) {
+    const JP = (window.jspdf && window.jspdf.jsPDF) || (typeof jsPDF !== 'undefined' ? jsPDF : null);
+    if (!JP) throw new Error('PDF library not loaded');
+    const doc = new JP({ orientation: 'portrait', unit: 'pt', format: 'letter' });
+    const PW = doc.internal.pageSize.getWidth(), PH = doc.internal.pageSize.getHeight(), M = 40, W = PW - M * 2;
+    const cur = sh.currency || 'USD', T = _shipTotals(sh);
+    const ink = () => doc.setTextColor(20, 20, 20), mute = () => doc.setTextColor(110, 110, 110);
+    const font = (b, s) => { doc.setFont('helvetica', b ? 'bold' : 'normal'); doc.setFontSize(s); };
+    font(true, 18); ink(); doc.text('COMMERCIAL INVOICE', M, M + 14);
+    font(false, 9); mute(); doc.text('Invoice ' + (sh.no || '') + '   ' + (sh.date || ''), PW - M, M + 14, { align: 'right' });
+    let y = M + 34;
+    const party = (label, p, x, w) => {
+        font(true, 7.5); mute(); doc.text(label, x, y);
+        font(true, 9.5); ink();
+        let yy = y + 13;
+        doc.text(doc.splitTextToSize(String(p.name || ''), w), x, yy); yy += 12;
+        font(false, 8.5);
+        const lines = doc.splitTextToSize(String(p.addr || '').replace(/\r/g, ''), w);
+        doc.text(lines, x, yy); yy += lines.length * 10.5;
+        const extra = [_shipCountryName(p), p.phone ? 'Tel ' + p.phone : '', p.tax ? 'Tax ID / EIN ' + p.tax : ''].filter(Boolean);
+        extra.forEach(t => { doc.text(t, x, yy); yy += 10.5; });
+        return yy;
+    };
+    const half = (W - 20) / 2;
+    const yEnd = Math.max(party('SHIPPER / EXPORTER', sh.ship || {}, M, half), party('CONSIGNEE', sh.cons || {}, M + half + 20, half));
+    y = yEnd + 8;
+    doc.setDrawColor(200, 200, 200); doc.setLineWidth(0.5); doc.line(M, y, PW - M, y); y += 16;
+    const facts = [['Invoice number', sh.no], ['Invoice date', sh.date], ['AWB / tracking', sh.awb], ['Incoterms', sh.terms || 'DAP'],
+        ['Mode', sh.mode === 'air' ? 'Air' : 'Ground'], ['Port of lading', _shipPort(sh)], ['Country of export', _shipCountryName(sh.ship)], ['Country of destination', _shipCountryName(sh.cons)],
+        ['Gross weight', sh.kg ? sh.kg + ' kg' : ''], ['Currency', cur]];
+    const fw = W / 4;
+    facts.forEach((f, i) => {
+        const x = M + (i % 4) * fw, yy = y + Math.floor(i / 4) * 26;
+        font(true, 7); mute(); doc.text(f[0].toUpperCase(), x, yy);
+        font(false, 9); ink(); doc.text(String(f[1] || ''), x, yy + 11);
+    });
+    y += Math.ceil(facts.length / 4) * 26 + 6;
+    // the lines
+    const cols = [['Description of goods', 0, 'left'], ['HS code', 250, 'left'], ['Origin', 300, 'left'], ['Qty', 358, 'right'], ['UOM', 366, 'left'], ['Unit value', 450, 'right'], ['Total', W, 'right']];
+    const head = () => {
+        doc.setFillColor(242, 242, 242); doc.rect(M, y - 9, W, 14, 'F');
+        font(true, 7.5); ink(); cols.forEach(c => doc.text(c[0], M + c[1], y, c[2] === 'right' ? { align: 'right' } : undefined));
+        y += 14;
+    };
+    head();
+    T.lines.forEach(l => {
+        font(false, 8.5);
+        const dl = doc.splitTextToSize(String(l.desc || ''), 240);
+        const h = Math.max(1, dl.length) * 10.5 + 4;
+        if (y + h > PH - 170) { doc.addPage(); y = M + 10; head(); font(false, 8.5); }
+        ink(); doc.text(dl, M, y);
+        doc.text(String(l.hs || ''), M + 250, y); doc.text(String(l.origin || ''), M + 300, y);
+        doc.text(String(l.qty), M + 358, y, { align: 'right' }); doc.text(String(l.uom || ''), M + 366, y);
+        doc.text(l.unit != null ? _shipMoney(l.unit, '') : '', M + 450, y, { align: 'right' });
+        doc.text(l.total != null ? _shipMoney(l.total, '') : '', PW - M, y, { align: 'right' });
+        y += h;
+        doc.setDrawColor(230, 230, 230); doc.line(M, y - 7, PW - M, y - 7);
+    });
+    y += 6;
+    const tot = (label, v, bold) => { font(bold, bold ? 10 : 8.5); ink(); doc.text(label, M + 360, y); doc.text(v == null ? '' : _shipMoney(v, cur), PW - M, y, { align: 'right' }); y += bold ? 16 : 13; };
+    tot('Total value of goods', T.goods);
+    tot('Freight', T.freight);
+    tot('Insurance', T.insurance);
+    tot('Invoice total', T.total, true);
+    font(false, 8.5); mute();
+    doc.text('Total pieces: ' + T.lines.reduce((a, l) => a + (Number(l.qty) || 0), 0), M, y - 16);
+    y = Math.max(y + 18, PH - 130);
+    font(false, 8.5); ink();
+    doc.text('I declare that all the information contained in this invoice is true and correct.', M, y);
+    y += 34;
+    doc.setDrawColor(120, 120, 120); doc.line(M, y, M + 220, y); doc.line(M + 260, y, M + 400, y);
+    font(true, 9); doc.text(String(sh.signer || ''), M, y - 6);
+    font(false, 9); doc.text(_todayIso(), M + 260, y - 6);
+    font(false, 7); mute(); doc.text('Name and signature', M, y + 10); doc.text('Date', M + 260, y + 10);
+    return doc;
+}
+function downloadCommercialInvoice(id) {
+    const sh = _shipById(id); if (!sh) return;
+    let doc;
+    try { doc = _commercialInvoicePdf(sh); } catch (e) { showInfoModal('Commercial invoice', 'The PDF could not be made: ' + e.message); return; }
+    doc.save(_shipFileName(sh));
+}
+let _prodShipPick = null;
+function _prodShippingInto(body) {
+    const list = _shipList();
+    const intro = document.createElement('div'); intro.style.cssText = 'font-size:var(--fs-70); color:var(--text-muted); margin-bottom:10px;';
+    intro.textContent = 'Commercial invoices for shipments between Canada and the USA. Pick the pieces in the box and the lines write themselves: description, size, HS code, quantity and value. Port of lading follows the route. Shippers and consignees you save are kept on this computer.';
+    body.appendChild(intro);
+    const top = document.createElement('div'); top.style.cssText = 'display:flex; gap:6px; align-items:center; flex-wrap:wrap; margin-bottom:12px; font-size:var(--fs-70);';
+    if (list.length) {
+        const sel = document.createElement('select'); sel.id = 'shipPick'; sel.style.cssText = 'height:26px; width:auto; flex:none;';
+        list.forEach(s => { const o = document.createElement('option'); o.value = s.id; o.textContent = (s.no || 'No number') + ' · ' + (s.date || '') + ' · ' + (s.cons && s.cons.name ? s.cons.name : 'no consignee') + ' · ' + (s.rows || []).length + ' pieces'; sel.appendChild(o); });
+        if (!_shipById(_prodShipPick)) _prodShipPick = list[list.length - 1].id;
+        sel.value = _prodShipPick;
+        sel.onchange = () => { _prodShipPick = sel.value; _prodShow(); };
+        top.appendChild(sel);
+    }
+    top.appendChild(_prodBtn('New commercial invoice', () => { _prodShipPick = newShipment([]); _prodShow(); }, !!list.length, 'Start an invoice; pick its pieces below'));
+    body.appendChild(top);
+    const sh = _shipById(_prodShipPick);
+    if (!sh) return;
+    const set = (patch) => { setShipment(sh.id, patch); _prodShow(); };
+    const sty = 'height:24px; font-size:var(--fs-70);';
+    const field = (host, label, val, onSet, opts) => {
+        const l = document.createElement('label'); l.style.cssText = 'display:flex; flex-direction:column; gap:2px; font-size:var(--fs-60); color:var(--text-muted); min-width:0;' + ((opts && opts.grow) ? ' flex:1 1 ' + opts.grow + 'px;' : ' flex:0 0 auto;');
+        l.appendChild(document.createTextNode(label));
+        let i;
+        if (opts && opts.options) {
+            i = document.createElement('select'); i.style.cssText = sty + ' width:auto;';
+            opts.options.forEach(([v, t]) => { const o = document.createElement('option'); o.value = v; o.textContent = t; i.appendChild(o); });
+        } else if (opts && opts.area) { i = document.createElement('textarea'); i.rows = 3; i.style.cssText = 'font-size:var(--fs-70); resize:vertical; width:100%;'; }
+        else { i = document.createElement('input'); i.type = (opts && opts.type) || 'text'; i.style.cssText = sty + ' width:' + ((opts && opts.w) || 110) + 'px;' + ((opts && opts.grow) ? ' width:100%;' : ''); }
+        i.value = val == null ? '' : val;
+        if (opts && opts.ph) i.placeholder = opts.ph;
+        if (opts && opts.id) i.id = opts.id;
+        i.onchange = () => onSet(i.value);
+        l.appendChild(i); host.appendChild(l); return i;
+    };
+    const row = () => { const d = document.createElement('div'); d.style.cssText = 'display:flex; gap:8px; flex-wrap:wrap; align-items:flex-end; margin-bottom:8px;'; body.appendChild(d); return d; };
+    // the shipment
+    let r1 = row();
+    field(r1, 'Invoice number', sh.no, v => set({ no: v }), { ph: 'e.g. PO-02133', id: 'shipNo' });
+    field(r1, 'Date', sh.date, v => set({ date: v }), { type: 'date', w: 130 });
+    field(r1, 'Mode', sh.mode || 'ground', v => set({ mode: v }), { options: [['ground', 'Ground'], ['air', 'Air']], id: 'shipMode' });
+    field(r1, 'Incoterms', sh.terms || 'DAP', v => set({ terms: v }), { w: 60 });
+    field(r1, 'AWB / tracking', sh.awb, v => set({ awb: v }), { w: 130 });
+    field(r1, 'Port of lading', sh.port, v => set({ port: v }), { w: 170, ph: _shipPortAuto(sh) || 'say the route', id: 'shipPort' });
+    let r2 = row();
+    field(r2, 'Gross weight (kg)', sh.kg, v => set({ kg: _priceNum(v) }), { w: 80 });
+    field(r2, 'Freight', sh.freight, v => set({ freight: _priceNum(v) }), { w: 80 });
+    field(r2, 'Insurance', sh.insurance, v => set({ insurance: _priceNum(v) }), { w: 80 });
+    field(r2, 'Currency', sh.currency || 'USD', v => set({ currency: String(v || '').trim().toUpperCase() }), { w: 50 });
+    field(r2, 'Value at', sh.value || 'cost', v => set({ value: v }), { options: [['cost', 'Cost (what we pay)'], ['sell', 'Sell (what the client pays)']], id: 'shipValue' });
+    field(r2, 'Signed by', sh.signer, v => set({ signer: v }), { w: 150, id: 'shipSigner' });
+    // the parties, each with the address book
+    const book = _shipLoadBook();
+    const pr = row(); pr.style.alignItems = 'stretch';
+    [['ship', 'Shipper / exporter'], ['cons', 'Consignee']].forEach(([k, label]) => {
+        const p = sh[k] || {};
+        const box = document.createElement('div'); box.setAttribute('data-ship-party', k);
+        box.style.cssText = 'flex:1 1 300px; min-width:0; border:1px solid var(--border-color); border-radius:var(--r-6); padding:8px; display:flex; flex-direction:column; gap:6px;';
+        const hd = document.createElement('div'); hd.style.cssText = 'display:flex; gap:6px; align-items:center; flex-wrap:wrap;';
+        const t = document.createElement('b'); t.textContent = label; t.style.cssText = 'font-size:var(--fs-70); flex:1 1 auto;'; hd.appendChild(t);
+        if (book.length) {
+            const pick = document.createElement('select'); pick.style.cssText = 'height:24px; width:auto; flex:none; font-size:var(--fs-65);';
+            pick.innerHTML = '<option value="">Address book…</option>' + book.map((b, i) => '<option value="' + i + '">' + _esc(b.name) + '</option>').join('');
+            pick.onchange = () => { const b = book[parseInt(pick.value, 10)]; if (!b) return; const o = {}; SHIP_PARTY_FIELDS.forEach(f => { o[f] = b[f] || ''; }); set({ [k]: o }); };
+            hd.appendChild(pick);
+        }
+        hd.appendChild(_prodBtn('Save', () => { if (_shipSaveParty(p)) { _toast('Saved to the address book', p.name + ', on this computer.'); _prodShow(); } else _toast('Give it a name first', ''); }, true, 'Keep this party on this computer for the next invoice'));
+        box.appendChild(hd);
+        const a = document.createElement('div'); a.style.cssText = 'display:flex; gap:6px; flex-wrap:wrap;';
+        field(a, 'Name', p.name, v => set({ [k]: { name: v } }), { grow: 200 });
+        field(a, 'Country', p.country, v => set({ [k]: { country: v } }), { w: 80, ph: 'Canada / USA' });
+        box.appendChild(a);
+        field(box, 'Address', p.addr, v => set({ [k]: { addr: v } }), { area: true });
+        const c = document.createElement('div'); c.style.cssText = 'display:flex; gap:6px; flex-wrap:wrap;';
+        field(c, 'Phone', p.phone, v => set({ [k]: { phone: v } }), { w: 120 });
+        field(c, 'Tax ID / EIN', p.tax, v => set({ [k]: { tax: v } }), { w: 140 });
+        box.appendChild(c);
+        pr.appendChild(box);
+    });
+    // the pieces: tick what is in the box; a vendor picks all of theirs
+    const rows = _deckSpecRows().filter(r => r && r.id);
+    const pk = row();
+    const lab = document.createElement('b'); lab.textContent = 'Pieces in the box'; lab.style.cssText = 'font-size:var(--fs-70);'; pk.appendChild(lab);
+    const vendors = _vendorNames().filter(v => rows.some(r => _rowVendor(r) === v));
+    if (vendors.length) {
+        const vs = document.createElement('select'); vs.style.cssText = 'height:24px; width:auto; flex:none; font-size:var(--fs-65);';
+        vs.innerHTML = '<option value="">Add a vendor’s pieces…</option>' + vendors.map(v => '<option>' + _esc(v) + '</option>').join('');
+        vs.onchange = () => { if (!vs.value) return; set({ rows: (sh.rows || []).concat(rows.filter(r => _rowVendor(r) === vs.value).map(r => r.id)) }); };
+        pk.appendChild(vs);
+    }
+    pk.appendChild(_prodBtn('All', () => set({ rows: rows.map(r => r.id) }), true));
+    pk.appendChild(_prodBtn('None', () => set({ rows: [] }), true));
+    const ticks = document.createElement('div'); ticks.id = 'shipPieces'; ticks.style.cssText = 'display:flex; flex-wrap:wrap; gap:4px 12px; font-size:var(--fs-65); margin-bottom:10px; max-height:110px; overflow:auto;';
+    rows.forEach(r => {
+        const l = document.createElement('label'); l.style.cssText = 'display:inline-flex; gap:3px; align-items:center;'; l.title = (r.product || '') + (_rowVendor(r) ? ' · ' + _rowVendor(r) : '');
+        const cb = document.createElement('input'); cb.type = 'checkbox'; cb.setAttribute('data-ship-row', r.id); cb.checked = (sh.rows || []).indexOf(r.id) >= 0;
+        cb.onchange = () => set({ rows: cb.checked ? (sh.rows || []).concat([r.id]) : (sh.rows || []).filter(x => x !== r.id) });
+        l.appendChild(cb); l.appendChild(document.createTextNode(r.id)); ticks.appendChild(l);
+    });
+    body.appendChild(ticks);
+    // the lines, editable; a typed field sticks, blank goes back to the piece's own
+    const T = _shipTotals(sh);
+    if (T.lines.length) {
+        const tbl = document.createElement('table'); tbl.id = 'shipLines'; tbl.style.cssText = 'width:100%; border-collapse:collapse; font-size:var(--fs-65); margin-bottom:8px;';
+        tbl.innerHTML = '<thead><tr style="text-align:left; color:var(--text-muted);"><th style="padding:3px;">Description</th><th style="padding:3px;" title="Six digits, the international part: a broker adds the country’s own. Originals 9701.21, prints framed or on canvas 4911.91, wallcovering 4814.90, window film 3919.90.">HS code</th><th style="padding:3px;">Origin</th><th style="padding:3px;">Qty</th><th style="padding:3px;">Unit value</th><th style="padding:3px; text-align:right;">Total</th></tr></thead>';
+        const tb = document.createElement('tbody'); tbl.appendChild(tb);
+        T.lines.forEach(l => {
+            const tr = document.createElement('tr'); tr.setAttribute('data-ship-line', l.id); tr.style.borderTop = '1px solid var(--border-color)';
+            const cell = (val, k, w, warn) => {
+                const td = document.createElement('td'); td.style.padding = '3px';
+                const i = document.createElement('input'); i.type = 'text'; i.value = val == null ? '' : val; i.setAttribute('data-k', k);
+                i.style.cssText = 'height:22px; font-size:var(--fs-65); width:' + w + ';' + (warn ? ' border-color:var(--warn);' : '');
+                i.onchange = () => set({ lines: { [l.id]: { [k]: i.value } } });
+                td.appendChild(i); tr.appendChild(td);
+            };
+            cell(l.desc, 'desc', '100%'); cell(l.hs, 'hs', '70px', !l.hs); cell(l.origin, 'origin', '70px'); cell(l.qty, 'qty', '40px'); cell(l.unit, 'unit', '80px', l.unit == null);
+            const tt = document.createElement('td'); tt.style.cssText = 'padding:3px; text-align:right; white-space:nowrap;'; tt.textContent = l.total != null ? _shipMoney(l.total, sh.currency) : ''; tr.appendChild(tt);
+            tb.appendChild(tr);
+        });
+        body.appendChild(tbl);
+    }
+    const foot = row(); foot.style.alignItems = 'center';
+    const sum = document.createElement('div'); sum.id = 'shipTotal'; sum.style.cssText = 'flex:1 1 auto; font-size:var(--fs-70);';
+    sum.textContent = T.lines.length ? T.lines.length + ' line' + (T.lines.length === 1 ? '' : 's') + ' · goods ' + _shipMoney(T.goods, sh.currency) + ' · total ' + _shipMoney(T.total, sh.currency) + (T.missing.length ? ' · ' + T.missing.length + ' without a value or HS code (' + T.missing.join(', ') + ')' : '') : 'Tick the pieces in the box.';
+    if (T.missing.length) sum.style.color = 'var(--warn)';
+    foot.appendChild(sum);
+    foot.appendChild(_prodBtn('Delete invoice', () => _confirmDestroy({ title: 'Delete this commercial invoice?', body: 'Only the invoice goes; the pieces are not touched.', confirm: 'Delete', undoable: true, onConfirm: () => { deleteShipment(sh.id); _prodShipPick = null; _prodShow(); } }), true));
+    foot.appendChild(_prodBtn('Download PDF', () => downloadCommercialInvoice(sh.id), false, 'commercial_invoice_<number>.pdf'));
+}
+
+const PROD_TABS = [
+    ['samples', 'Samples', 'Frame and mat samples: what to order, and what the client approved'],
+    ['vendors', 'Vendors', 'Who makes each piece, and the production pack: RFIs, contact sheets, purchases'],
+    ['pricing', 'Pricing', 'Costs, sell prices, allowances and the budget; Excel and Salesforce'],
+    ['issues', 'Issues', 'What went out at each issue, and what has changed since'],
+    ['shipping', 'Shipping', 'Commercial invoices for shipments between Canada and the USA']
+];
+let _prodTab = 'samples';
+function openProduction(tab) {
+    if (tab && PROD_TABS.some(t => t[0] === tab)) _prodTab = tab;
+    let m = document.getElementById('productionModal'); if (m) m.remove();
+    m = document.createElement('div'); m.id = 'productionModal';
+    m.className = 'frame-modal'; m.setAttribute('data-modal-backdrop', '');
+    m.style.display = 'flex';
+    const card = document.createElement('div');
+    card.style.cssText = 'background:var(--bg-panel); border:1px solid var(--border-color); border-radius:var(--r-8); box-shadow:0 15px 35px rgba(0,0,0,0.4); width:920px; max-width:95vw; max-height:90vh; overflow:auto; padding:20px; display:flex; flex-direction:column; gap:12px;';
+    card.innerHTML = '<div><h3 style="margin:0 0 4px; font-size:var(--fs-105); color:var(--text-strong);">Production</h3>'
+        + '<div style="font-size:var(--fs-70); color:var(--text-muted);">Everything after the deck, worked from the pieces already in this project.</div></div>';
+    const tabs = document.createElement('div'); tabs.id = 'productionTabs'; tabs.className = 'frame-tabs';
+    PROD_TABS.forEach(([k, label, tip]) => {
+        const b = document.createElement('button'); b.type = 'button'; b.className = 'frame-tab'; b.textContent = label; b.title = tip;
+        b.setAttribute('data-prod-tab', k);
+        b.onclick = () => { _prodTab = k; _prodShow(); };
+        tabs.appendChild(b);
+    });
+    card.appendChild(tabs);
+    const body = document.createElement('div'); body.id = 'productionBody';
+    card.appendChild(body);
+    const foot = document.createElement('div'); foot.style.cssText = 'display:flex; gap:8px; justify-content:flex-end;';
+    const done = document.createElement('button'); done.className = 'action-btn'; done.style.cssText = 'width:auto; height:32px; padding:0 18px;'; done.textContent = 'Done';
+    done.setAttribute('data-modal-close', ''); done.onclick = () => m.remove();
+    foot.appendChild(done); card.appendChild(foot);
+    m.appendChild(card);
+    document.body.appendChild(m);
+    _prodShow();
+}
+function _prodShow() {
+    const body = document.getElementById('productionBody'); if (!body) return;
+    document.querySelectorAll('#productionTabs [data-prod-tab]').forEach(b => b.classList.toggle('active', b.getAttribute('data-prod-tab') === _prodTab));
+    body.innerHTML = '';
+    const fn = { samples: _prodSamplesInto, vendors: _prodVendorsInto, pricing: _prodPricingInto, issues: _prodIssuesInto, shipping: _prodShippingInto }[_prodTab];
+    if (fn) fn(body);
+}
+function _prodBtn(label, onClick, secondary, tip) {
+    const b = document.createElement('button'); b.type = 'button';
+    b.className = 'action-btn' + (secondary ? ' btn-secondary' : '');
+    b.style.cssText = 'width:auto; height:26px; padding:0 12px; font-size:var(--fs-70); flex:none;';
+    b.textContent = label; if (tip) b.title = tip;
+    b.onclick = onClick;
+    return b;
+}
+function _prodSamplesInto(body) {
+    const items = _sampleItems();
+    const intro = document.createElement('div'); intro.style.cssText = 'font-size:var(--fs-70); color:var(--text-muted); margin-bottom:10px;';
+    intro.textContent = items.length
+        ? 'Every frame and mat on a piece in this deck. Record what the client said about each sample; a rejected one is flagged in Preflight until it is replaced, and Replace swaps it on every piece.'
+        : 'No frames or mats on any piece yet.';
+    body.appendChild(intro);
+    if (!items.length) return;
+    const tbl = document.createElement('table'); tbl.id = 'sampleTable';
+    tbl.style.cssText = 'width:100%; border-collapse:collapse; font-size:var(--fs-70);';
+    tbl.innerHTML = '<thead><tr style="text-align:left; color:var(--text-muted);"><th style="padding:4px;"></th><th style="padding:4px;">Code</th><th style="padding:4px;">Used on</th><th style="padding:4px;">Client</th><th style="padding:4px;">Replace with</th><th style="padding:4px;">Note</th></tr></thead>';
+    const tb = document.createElement('tbody'); tbl.appendChild(tb);
+    items.forEach(it => {
+        const tr = document.createElement('tr'); tr.setAttribute('data-sample', it.key);
+        tr.style.cssText = 'border-top:1px solid var(--border-color);';
+        const td = () => { const c = document.createElement('td'); c.style.cssText = 'padding:5px 4px; vertical-align:middle;'; tr.appendChild(c); return c; };
+        const sw = td();
+        const chip = document.createElement('div');
+        chip.style.cssText = 'width:22px; height:22px; border-radius:var(--r-4); border:1px solid var(--border-color); background:' + (it.hex || '#ccc') + ' center/cover no-repeat;';
+        if (it.swatch) chip.style.backgroundImage = 'url("' + it.swatch + '")';
+        sw.appendChild(chip);
+        const cd = td(); cd.innerHTML = '<b>' + _esc(it.code) + '</b>' + (it.label ? '<div style="color:var(--text-muted);">' + _esc(it.label) + '</div>' : '') + '<div style="color:var(--text-muted);">' + (it.kind === 'f' ? 'Frame' : 'Mat') + '</div>';
+        const us = td(); us.textContent = it.ids.join(', '); us.style.maxWidth = '200px';
+        const stc = td();
+        const sel = document.createElement('select'); sel.style.cssText = 'height:26px; width:auto;';
+        SAMPLE_STATUS.forEach(([v, l]) => { const o = document.createElement('option'); o.value = v; o.textContent = l; sel.appendChild(o); });
+        sel.value = it.st;
+        sel.onchange = () => { setSampleStatus(it.kind, it.code, { st: sel.value }); _prodShow(); };
+        stc.appendChild(sel);
+        if (it.at) { const d = document.createElement('div'); d.style.cssText = 'color:var(--text-muted); font-size:var(--fs-60);'; d.textContent = it.at; stc.appendChild(d); }
+        const rp = td();
+        if (it.st === 'rejected') {
+            const wrap = document.createElement('div'); wrap.style.cssText = 'display:flex; gap:4px; align-items:center; flex-wrap:wrap;';
+            const inp = document.createElement('input'); inp.type = 'text'; inp.value = it.use; inp.placeholder = it.kind === 'f' ? 'e.g. MICH 145-10' : 'mat name';
+            inp.style.cssText = 'width:120px; height:24px;';
+            inp.onchange = () => setSampleStatus(it.kind, it.code, { use: inp.value.trim() });
+            wrap.appendChild(inp);
+            wrap.appendChild(_prodBtn('Replace', () => {
+                const n = sampleReplace(it.kind, it.code, inp.value);
+                if (n) _toast('Replaced on ' + n + ' piece' + (n === 1 ? '' : 's'), it.code + ' is now ' + inp.value.trim() + '. Ctrl+Z undoes it.');
+                _prodShow();
+            }, false, 'Put this code on every piece that uses ' + it.code));
+            rp.appendChild(wrap);
+        }
+        const nt = td();
+        const ni = document.createElement('input'); ni.type = 'text'; ni.value = it.note; ni.placeholder = 'client comment';
+        ni.style.cssText = 'width:100%; min-width:120px; height:24px;';
+        ni.onchange = () => setSampleStatus(it.kind, it.code, { note: ni.value.trim() });
+        nt.appendChild(ni);
+        tb.appendChild(tr);
+    });
+    body.appendChild(tbl);
+    // The request to the framer.
+    const req = document.createElement('div'); req.style.cssText = 'margin-top:14px; padding-top:12px; border-top:1px solid var(--border-color); display:flex; gap:12px; flex-wrap:wrap;';
+    const left = document.createElement('div'); left.style.cssText = 'flex:1 1 300px; min-width:0; display:flex; flex-direction:column; gap:6px;';
+    left.innerHTML = '<div style="font-size:var(--fs-65); font-weight:700; text-transform:uppercase; letter-spacing:0.4px;">Sample request</div>';
+    const setsRow = document.createElement('label'); setsRow.style.cssText = 'font-size:var(--fs-70); display:flex; gap:6px; align-items:center;';
+    setsRow.textContent = 'Sets per recipient';
+    const setsIn = document.createElement('input'); setsIn.type = 'number'; setsIn.min = '1'; setsIn.id = 'sampleSets'; setsIn.value = editorialContent.sampleSets || 1; setsIn.style.cssText = 'width:56px; height:24px;';
+    setsRow.appendChild(setsIn); left.appendChild(setsRow);
+    const toIn = document.createElement('textarea'); toIn.id = 'sampleTo'; toIn.rows = 6; toIn.value = editorialContent.sampleTo || '';
+    toIn.placeholder = 'Ship to (one address per block, blank line between)';
+    toIn.style.cssText = 'width:100%; font-size:var(--fs-70); resize:vertical;';
+    left.appendChild(toIn);
+    const right = document.createElement('div'); right.style.cssText = 'flex:1 1 300px; min-width:0; display:flex; flex-direction:column; gap:6px;';
+    const pre = document.createElement('textarea'); pre.id = 'sampleRequestText'; pre.readOnly = true; pre.rows = 10;
+    pre.style.cssText = 'width:100%; font-family:monospace; font-size:var(--fs-65); resize:vertical;';
+    right.appendChild(pre);
+    const btns = document.createElement('div'); btns.style.cssText = 'display:flex; gap:6px; flex-wrap:wrap;';
+    const refresh = () => { const r = _sampleRequestText(); pre.value = r.text || 'Every sample has been sent.'; return r; };
+    const save = () => {
+        const s = Math.max(1, parseInt(setsIn.value, 10) || 1), t = toIn.value;
+        if (s === (editorialContent.sampleSets || 1) && t === (editorialContent.sampleTo || '')) return;
+        if (s > 1) editorialContent.sampleSets = s; else delete editorialContent.sampleSets;
+        if (t.trim()) editorialContent.sampleTo = t; else delete editorialContent.sampleTo;
+        pushHistory();
+    };
+    setsIn.onchange = () => { save(); refresh(); };
+    toIn.onchange = () => { save(); refresh(); };
+    btns.appendChild(_prodBtn('Copy request', () => { save(); refresh(); _dsCopyText(pre.value, pre); _toast('Sample request copied', 'Paste it into the email to your framer.'); }, false));
+    btns.appendChild(_prodBtn('Mark these as sent', () => {
+        save(); const r = refresh(); if (!r.count) return;
+        r.items.forEach(it => setSampleStatus(it.kind, it.code, { st: 'sent' }, true));
+        pushHistory(); _prodShow();
+    }, true, 'Set every sample in this request to Sent, with today’s date'));
+    right.appendChild(btns);
+    req.appendChild(left); req.appendChild(right);
+    body.appendChild(req);
+    refresh();
+}
 
 // BOOT UP THE ENGINE
 initMasterApp();

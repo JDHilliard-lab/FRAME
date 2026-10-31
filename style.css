@@ -3567,3 +3567,7 @@ html.phone .frame-tour .tour-card { left: 8px !important; right: 8px !important;
 #wall.dim-knock .arch-label-new,
 #wall.dim-knock .mark-label,
 #wall.dim-knock .hang-dim-num { background: transparent !important; }
+
+/* 19.93/19.95: the Production button, showing the budget, turns amber past the budget or the selected piece’s allowance. */
+.dash-prod-btn { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.dash-prod-btn[data-over] { color: var(--warn); border-color: var(--warn); }
