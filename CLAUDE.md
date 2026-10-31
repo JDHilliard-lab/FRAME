@@ -2337,6 +2337,73 @@ run but passes alone is usually load timing: rerun before chasing it.
   (decode an image before the intake, which answers a bad file with a modal and no callback). `returnPdf` skips
   the save AND the missing-walls question. New pages default to the END of the deck. `test_frame_api` (jsdom);
   canvas, images and the real PDF need headless Chrome.
+- **PRODUCTION IS ONE WINDOW WORKING FROM THE ROWS (19.87, `openProduction(tab)`, `PROD_TABS`, `_prodShow`).**
+  Everything after the deck (samples, vendors, pricing, issues) reads `_deckSpecRows()`; never a second item list.
+  **Samples:** codes are DERIVED (`_sampleItems`: `fCode` on rows `_rowTakesFrameSample`, mats via `_rowMatNames`
+  mirroring `buildSpecStrings`); only the verdict is stored, `editorialContent.samples['f:'|'m:' + code] = {st, use,
+  note, at}`, one writer `setSampleStatus` (prunes empties). `sampleReplace` swaps through `_salonFrameDress` (library)
+  or the typed code, pushes to wall copies, ONE undo. Preflight (`_samplePreflight`): rejected and still used = err;
+  IFS (`_deckIsIFS`, read off the footer version, no stage setting) and not approved = warn. Issues carry `prod`.
+- **IFS READINESS (19.88, `_readinessPreflight`).** Always: one `_imgCodeKey` on two `_artSig`s (reuse those two,
+  never a new signature). IFS only: TBD in image code / `buildSpecStrings` values / notes, a catalogue placement with
+  more than one option, footer `V<n>` vs the project file name's `V<n>`.
+- **VENDORS AND THE PACK (19.89, `r.vendorName`, `r.sourceUrl`, `setRowsProduction`, `_prodPackPlan`,
+  `_prodPackFiles`, `downloadProductionPack`).** Row fields outside the form survive sync (it copies unknown keys).
+  `_rowIsPurchase` (Sourced Object, FAO/FCM/FSO/FSL code, original/commission/sourced art type) NEVER goes on an RFI.
+  A per-vendor RFI is `buildDashCSVString({only})`, never a second CSV writer. `Vendor,Source URL` trail `Category`.
+  Contact sheet caption `_contactSheetCaption` = image code + `_WxH` at PRINT size, project unit, no extension.
+- **ISSUES (19.90, `markIssued`, `_issueSnapshot`, `_issueDiff`, `editorialContent.issues`, max `ISSUE_KEEP`).** A
+  record is TEXT ONLY: `buildSpecStrings` lines + image code, product, location, qty, vendor and `_artSig` (never a
+  data URL; tested). Keyed by row id, so a renumber reads as removed + added. The pack adds the latest diff.
+- **PRICES (19.91, `setRowPrice`, `_priceRow`, `_priceTotals`, `editorialContent.pricing` = {markup, budget,
+  currency, rates}).** Row fields `unitCost` + `costSrc` ('quote'|'estimate') + `costAt`, `unitSell` (only when typed),
+  `allowance`. A typed or imported cost is a dated QUOTE; `updateEstimates` refreshes only estimates (tested: a quote
+  survives). Qty = walls, a piece on no wall prices as 1, a catalogue option as 0. Prices NEVER in deck renderers
+  (test reads `buildSpecStrings`, `_deckMockHTML`, `_drawDeckPage`). Rate card is per project + localStorage
+  `RATE_CARD_KEY`, never the repo (the site is public). Excel: `_xlsxBlob` (inlineStr, formulas, styles incl. a Normal
+  cellStyle or openpyxl warns) and `_xlsxReadRows` (shared strings, columns by `r` ref); import reads columns BY NAME
+  (`PRICE_IMPORT_COLS`), never Qty, and does not freeze a cached `cost x markup` Unit Sell into a hand price.
+  Salesforce gets a CSV (`_salesforceLinesCSV`); no API (static site, no tokens).
+- **THE PRODUCTION BUTTON IS THE BUDGET (19.93, 19.95, `#dashProdBtn`, `_dashBudgetInfo`, `_dashBudgetSync`,
+  `_dashProdAttention`).** The ONE way into Production from the dashboard (samples and prices are NOT in the Edit /
+  Export menus; Production pack stays in Export; Ctrl+K lists the four tabs). Reads Production until priced, then built from `_priceTotals` / `_priceRow` (never its own sums): sell vs budget and the selected
+  piece vs its allowance, `data-over` amber; `.prod-btn-badge` counts samples preflight + resized + stale quotes,
+  `data-tab` = the tab that count is about. The toolbar test pins SEVEN buttons. Refreshed by `_syncNavBadges` (every edit) and `loadDashDataIntoControls`
+  (selection). Screen only.
+- **THE PRICE FOLLOWS THE SIZE (19.94, `_priceRow`, `_priceSizeKey`, `r.priceFor`).** An estimate is NEVER a
+  stored number: `_priceRow` works it out from the rate card and the current size on every read (a stored legacy
+  estimate is used only when the card no longer covers the product). A quote or a typed sell records `priceFor`
+  (overall size in inches to a sixteenth, `setRowPrice`); resized, the new size's estimate stands in (typed sell
+  ignored) and the piece is flagged `resized` (Pricing tab, chip tip); back at the quoted size the quote returns; no
+  rate card = quote kept, flagged. `syncDashAndCalculate` calls `_dashBudgetSync` on every keystroke (live pass too).
+  Import compares against `_priceRow(r).cost`, or a round-tripped estimate becomes a quote. No Update estimates button.
+- **THE COMPANY'S OWN SHEETS (19.96, `_rfqSheet(docType, only)`, `_salesforceLinesCSV`, `_rowRoyalty`, `HOUSE_MARKUP`,
+  `VENDOR_CODES` / `_vendorCode`).** From the team's Claude projects (RFQ/RFI Generator, RFQ -> Import Template). Sell =
+  cost x (markup + royalty): markup is typed or `HOUSE_MARKUP` 1.8731 (template AK = 87.31% + AJ), royalty F 0 / PEN 0.10 /
+  else 0.05 or `r.royalty` (stored only when it differs). Margin is AFTER royalties. RFQ = template front sheet, rows 1-8
+  header, row 9 titles (`RFQ_COLS`, A to AN), data from row 10, `freeze: 9`; J to M are the template's mount formula ONLY
+  where it equals `_rowOpeningAndPrint` (else FRAME's number). RFI = A to AG, no purchases, Total Pieces only. SF CSV is the
+  Import Template's 11 columns (H before W, markup a plain number, `_sfClean`). Product Code only for an art-type prefix
+  (unknown mapping for prints: ask before guessing). `_xlsxBlob` cells take `border` / `head` / `title` / `pct` and a cached `v`
+  beside `f`. Test fixtures that are not about royalty use F image codes.
+- **RATE CARD ADD-ONS (19.97, `rates.addons`, `ADDON_KEYS`, `_rowAddons`, `_estimateCost`).** One set for every
+  product, each DERIVED from the piece: premium frame by code (`PREMIUM_FRAME_RE`, LJ- / UA-), non-glare off the Glass
+  field (`NON_GLARE_RE`; entered at 30x40, scaled by area), sealant from a humid location (`HUMID_LOC_RE`; `r.sealant`
+  stored only when it differs, the Pricing tab's tick), oversize past 40x50 either way, `buffer` % on the whole estimate.
+  Never on a flat graphic (per sq ft alone). `setRateCard(list, asOf, addons)`: undefined KEEPS the card's add-ons.
+  No amounts in the code (public site).
+- **THE BUDGET SKETCH (19.98, `_fpSketchOn`, `_fpSketchDrop`, `_dsFpSketchClick`, `_fpSizeFields`, `_fpBudgetStrip`,
+  `FP_SKETCH_SIZES`).** The floor plan add bar has a Size (standard sizes both ways round; never on a flat graphic) and
+  Sketch: while on, every plan click mints a piece of the bar's type and size pinned there, ONE undo per click (mint
+  `quiet`, found by the `_fpSketchNew` marker, never by the returned code). Stays armed until Esc, Sketch again, or
+  arming a code/line; it counts as armed for crosshair, loupe and line deselect. Budget line reads `_dashBudgetInfo`.
+  The bar WRAPS to two rows (the tools panel is ~250px; one row squeezed the type picker to 12px).
+- **COMMERCIAL INVOICES (19.99, Production > Shipping, `editorialContent.shipments`, one writer `setShipment`,
+  `_shipLines`, `_shipPort`, `_commercialInvoicePdf`).** An invoice names its pieces by row id; every line is DERIVED
+  (`_shipDesc`, `_shipHs` from `SHIP_HS`, qty `_priceQty`, value cost or sell via `_priceRow`) under the line's own
+  typed fields (`sh.lines[id]`, blank deletes; unticking a piece drops its override). Port = typed, else Talia's route
+  table, else BLANK (never a guess). Address book and signer are localStorage (`SHIP_BOOK_KEY`, `SHIP_SIGNER_KEY`):
+  no names or tax ids in the code. Lines print bare numbers; the currency is stated once.
 - **Measuring speed:** drive Chrome over CDP (`Profiler.start` around a click) against the real Ford project;
   self time in a big anonymous loop with cheap helpers means native DOM work (parsing, sync image loads).
 
