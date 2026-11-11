@@ -828,8 +828,10 @@ const path = require('path');
       // Institutional Furniture CAD Drawings." One uniform stroke reads as hand-drawn
       // however accurate the geometry underneath is — the weight hierarchy is the single
       // thing that separates a spec drawing from a sketch.
-      if (!(CTX_LW_OBJ > CTX_LW_DET && CTX_LW_DET > CTX_LW_FINE)) {
-        throw new Error('the three weights are not a hierarchy: ' + [CTX_LW_OBJ, CTX_LW_DET, CTX_LW_FINE].join('/'));
+      // CHANGED (20.21): ONE weight. "Keep the lineweight all the same, no tapering",
+      // with an IKEA-style reference. The hierarchy below is retired on that request.
+      if (!(CTX_LW_OBJ === CTX_LW_DET && CTX_LW_DET === CTX_LW_FINE)) {
+        throw new Error('the context weights differ again: ' + [CTX_LW_OBJ, CTX_LW_DET, CTX_LW_FINE].join('/'));
       }
       // Mitre joins and butt caps. Rounded joins on a heavy outline is most of what made
       // these look hand-drawn.
@@ -843,12 +845,12 @@ const path = require('path');
         throw new Error('the wrapper weight is not the detail line');
       }
       // THIN. This line work sits behind the artwork and must never compete with it.
-      if (CTX_LW_OBJ > 1) throw new Error('the object line is back to a heavy weight: ' + CTX_LW_OBJ);
+      // CHANGED (20.22): one BOLD stroke, to the designer's reference sheet. The old 6px
+      // complaint was a scaling bug (fixed below), not the weight; still capped.
+      if (CTX_LW_OBJ > 1.5) throw new Error('the object line is back to a heavy weight: ' + CTX_LW_OBJ);
       // Every drawn asset actually USES the hierarchy — at least two weights. A single
       // weight throughout is the thing being fixed here, so one is a regression.
       CONTEXT_PRESETS.filter(p => p.svg).forEach(p => {
-        const weights = new Set((p.svg.match(/stroke-width="([\\d.]+)"/g) || []));
-        if (weights.size < 2) throw new Error(p.key + ' is drawn at a single line weight');
         // …and the heaviest weight present is the object line, i.e. the outer profile is
         // never lighter than the detail inside it.
         if (p.svg.indexOf('stroke-width="' + CTX_LW_OBJ + '"') < 0) {
@@ -863,19 +865,23 @@ const path = require('path');
       if (van.svg.indexOf('stroke-dasharray') < 0) throw new Error('the concealed bowl is not drawn as a hidden line');
       const adaVan = CONTEXT_PRESETS.find(p => p.key === 'vanity-ada');
       if (adaVan.svg.indexOf('stroke-dasharray') >= 0) throw new Error('the ADA bowl is dashed, but open knee space makes it visible');
-      // Construction detail: a door is a jamb + leaf + three hinges + a lever, not a
-      // rectangle with a dot on it. Counted rather than eyeballed so the detail cannot
-      // quietly be simplified away again.
+      // CHANGED (20.22): the designer's reference doors are frame + leaf + lever, no
+      // hinges, so the three-hinge count is retired. The frame and leaf stay.
       const door = CONTEXT_PRESETS.find(p => p.key === 'door-guest');
-      const hinges = (door.svg.match(/<rect x="2" y="[\\d.]+" width="0.7"/g) || []).length;
-      if (hinges !== 3) throw new Error('the door does not carry three butt hinges, got ' + hinges);
+      if (door.svg.indexOf('<rect data-o="1" x="0" y="0" width="36" height="84"') < 0 || door.svg.indexOf('x="2" y="2" width="32"') < 0) {
+        throw new Error('the door lost its frame or its leaf');
+      }
       // The lever sits at a real 36in AFF on an 84in leaf, so cy is 84 - 36 = 48.
       if (door.svg.indexOf('cy="48"') < 0) throw new Error('the door lever is not at 36in AFF');
       const ada = CONTEXT_PRESETS.find(p => p.key === 'door-ada-bath');
       if (ada.svg.indexOf('cy="46"') < 0) throw new Error('the ADA lever is not at 34in AFF on an 80in leaf');
       // Casework carries a toe kick — the detail that most says "millwork" in elevation.
       const cred = CONTEXT_PRESETS.find(p => p.key === 'credenza');
-      if (cred.svg.indexOf('M2.5 24 h67 v6 h-67 z') < 0) throw new Error('the credenza lost its toe kick');
+      // CHANGED (20.22): the reference credenza stands on legs, not a toe kick.
+      // CHANGED (20.24): it is the designer's drawing now; a leg is a solid rect reaching the floor.
+      let _legs = 0;
+      cred.svg.replace(/<rect x="[-0-9.]+" y="([-0-9.]+)" width="([-0-9.]+)" height="([-0-9.]+)" data-o="1"/g, (m, y, w, h) => { if (+w < 3 && Math.abs(+y + +h - cred.h) < 0.05) _legs++; return m; });
+      if (_legs < 2) throw new Error('the credenza lost its legs');
     });
 
     __check('EXACT ASK: the side view carries DIMENSIONS, not just a different drawing', () => {
@@ -1030,11 +1036,12 @@ const path = require('path');
       ['bed-queen', 'bed-king', 'bed-full'].forEach(k => {
         // Pillow domes are cubic curves on the mattress deck — a bed drawn only with
         // rects and straight lines is the version that had none.
-        if ((g(k).svg.match(/ C[\\d.]/g) || []).length < 1) throw new Error(k + ' has no pillow profile');
+        // 20.22: pillows are soft opaque cushions with a seam (a Q curve), not domes.
+        if ((g(k).svg.split(' Q').length - 1) < 2) throw new Error(k + ' has no pillows');
         if (!_ctxHasSide(g(k))) throw new Error(k + ' has no side view');
       });
       // A bathroom category with the fixtures a hospitality bath actually carries.
-      if (!CONTEXT_LIBRARY.some(c => c.cat === 'Bath')) throw new Error('there is no Bath category');
+      if (!CONTEXT_LIBRARY.some(c => c.cat === 'Bathroom')) throw new Error('there is no Bathroom category');
       ['vanity-ada', 'vanity-60', 'lav-wall', 'toilet-ada', 'toilet-tank', 'tub', 'shower',
        'grab-36', 'grab-42', 'towel-bar'].forEach(k => {
         if (!g(k)) throw new Error('missing bath item ' + k);
@@ -1056,7 +1063,7 @@ const path = require('path');
       // diagonal line segments and curves, which a box drawing has none of.
       ['chair', 'lounge', 'sofa'].forEach(k => {
         const s = g(k).svg;
-        if ((s.match(/[LC] ?-?[\\d.]/g) || []).length < 4) throw new Error(k + ' is still drawn as plain boxes');
+        if ((s.match(/[LCQ] ?-?[\\d.]/g) || []).length < 4) throw new Error(k + ' is still drawn as plain boxes');
         if (!_ctxHasSide(g(k))) throw new Error(k + ' has no side view');
       });
     });
@@ -1101,6 +1108,56 @@ const path = require('path');
       if (tail.indexOf('_ctxArtSvg(artP, _ctxInkHex()') < 0) throw new Error('the export does not emit the art');
       if (!(tail.indexOf('_ctxFillOps(') < tail.indexOf('_ctxArtSvg(artP'))) {
         throw new Error('the export draws the art UNDER the surface hint, unlike the screen');
+      }
+    });
+
+    __check('EXACT REPORT: a drawing fills its own shape, not a box (20.20)', () => {
+      // "is it possible to only fill in the shapes of the drawings, right now when I drop
+      // in the drawings they come in with a box fill, like the chair." The white now
+      // comes from the drawing's closed shapes; the wall shows between the casters.
+      seed();
+      addContextBlock('task-chair');
+      drawElevAll();
+      const el = document.getElementById('context-layer').querySelector('.ctx-block');
+      // jsdom drops a shorthand it cannot fully parse from the serialised style, so the
+      // parsed colour is read; a white box would read as rgb(255, 255, 255).
+      const bg = el.style.backgroundColor || '';
+      if (bg && bg !== 'transparent' && bg !== 'rgba(0, 0, 0, 0)') {
+        throw new Error('the chair block still paints a white box: ' + bg);
+      }
+      const body = el.querySelector('.ctx-body');
+      if (!body) throw new Error('the chair has no body of its own');
+      const kids = Array.from(el.children);
+      if (!(kids.indexOf(body) < kids.indexOf(el.querySelector('.ctx-art')))) throw new Error('the body is drawn over the lines');
+      const bsvg = body.innerHTML;
+      if (bsvg.indexOf('fill="' + CONTEXT_FILL + '"') < 0 || bsvg.indexOf('stroke="none"') < 0) {
+        throw new Error('the body is not a stroke-less white fill');
+      }
+      // A Keep clear block IS its box (the zone), and a plain Box has no drawing.
+      seed();
+      addContextBlock('kc-thermostat'); addContextBlock('rect');
+      drawElevAll();
+      document.getElementById('context-layer').querySelectorAll('.ctx-block').forEach(b2 => {
+        if (b2.querySelector('.ctx-body')) throw new Error('a ' + b2.dataset.ctxShape + ' / keep-clear block lost its box');
+        if (b2.style.backgroundColor === 'transparent') throw new Error('a keep-clear or plain block went clear');
+      });
+      // A hidden (dashed) line must not punch a dashed hole in the body, and an open
+      // curve stays a line: the faucet's gooseneck became a white fin when filled.
+      const kit = CONTEXT_PRESETS.find(p => p.key === 'kitchenette');
+      const kb = _ctxBodyGroup(kit);
+      if (kb.indexOf('stroke-dasharray') >= 0) throw new Error('the body kept a dash pattern');
+      if (kb.indexOf('fill="none" d="M35.4 54') < 0) throw new Error('the kitchenette faucet is filled');
+      const ped = CONTEXT_PRESETS.find(p => p.key === 'lav-pedestal');
+      if (ped.svg.indexOf('fill="none" d="M10 4') < 0) throw new Error('the sink faucet is filled');
+      // Every renderer follows: the export emits the body (not a box) for these blocks,
+      // the canvas thumbnail skips its box fill, and the export's baseboard breaks where
+      // the drawing is solid, not across the whole box.
+      const xi = S.indexOf("if (artOk && ctxEl.querySelector('.ctx-body'))");
+      if (xi < 0 || S.slice(xi, xi + 300).indexOf('_ctxBodySvg(artP)') < 0) throw new Error('the export still paints a box behind the art');
+      if (S.indexOf('if (!_ctxBodyOn(b, art)) x.fillRect(') < 0) throw new Error('the canvas thumbnail still paints a box');
+      const bi = S.indexOf("const bbEl = wall.querySelector('#baseboard-line');");
+      if (bi < 0 || S.slice(bi, S.indexOf('Image-code captions beneath frames', bi)).indexOf('_ctxBodySpansAt(') < 0) {
+        throw new Error('the baseboard gap ignores the drawing');
       }
     });
 
@@ -1202,10 +1259,8 @@ const path = require('path');
       // Guestrooms, lobbies, corridors, elevator lobbies — the elevations this tool is
       // pointed at. A library is only worth having if the numbers are right.
       const cats = CONTEXT_LIBRARY.map(c => c.cat);
-      ['Openings', 'Millwork', 'Furniture', 'Fixtures', 'Basic'].forEach(c => {
-        if (cats.indexOf(c) < 0) throw new Error('missing category ' + c);
-      });
-      ['Beds', 'Doors'].forEach(c => {
+      // CHANGED (20.22): the palette follows the designer's catalogue groups.
+      ['Guestroom', 'Bathroom', 'Toilets', 'Office', 'Glass', 'Doors', 'Chairs', 'Decor', 'Keep clear', 'Basic'].forEach(c => {
         if (cats.indexOf(c) < 0) throw new Error('missing category ' + c);
       });
       ['door-guest', 'door-ada-bath', 'door-closet', 'bed-queen', 'bed-king', 'bed-full',
@@ -1259,7 +1314,7 @@ const path = require('path');
       if (g('credenza').fill !== 'plain') throw new Error('a credenza ships with a hatch again');
       // An unknown key resolves to the plain Box WITHOUT recursing forever.
       if (_ctxPreset('nope').key !== 'rect') throw new Error('an unknown key did not fall back to Box');
-      if (_ctxCatOf('credenza') !== 'Millwork') throw new Error('category lookup is wrong');
+      if (_ctxCatOf('credenza') !== 'Office') throw new Error('category lookup is wrong');
       if (_ctxCatOf('nope') !== CONTEXT_LIBRARY[0].cat) throw new Error('an unknown key has no category');
     });
 
@@ -1526,7 +1581,9 @@ const path = require('path');
       if (!bed.hatch) throw new Error('the bed declares no wood region');
       // The region is the PLINTH ONLY — it must not reach up into the mattress, whose
       // slab occupies y 0..10.
-      if (/M4 19/.test(bed.hatch) === false) throw new Error('the bed wood region is not its plinth: ' + bed.hatch);
+      // CHANGED (20.21): the wood is the upholstered BASE (starting at 14in down, under
+      // the duvet, which is opaque and hides the grain above its hem).
+      if (bed.hatch.indexOf('y="17.86"') < 0) throw new Error('the bed wood region is not its base: ' + bed.hatch);
       if (bed.hatch.indexOf('height="24"') >= 0 || /h60/.test(bed.hatch)) {
         throw new Error('the bed wood region covers the whole block again');
       }
@@ -1782,51 +1839,77 @@ const path = require('path');
     });
 
     // ── The traced bed drawings (16.82) ─────────────────────────────────────
-    __check('EXACT REPORT: the traced beds are joined-up line work, not a field of stubs', () => {
-      // "The drawings of beds looked a little janky, you made it sound like you could
-      // connect the lines better." They came out of an exploded CAD export as ~109k
-      // one-segment paths; the first stitcher stopped dead at every junction and joined
-      // only on an exact quantised match, so the drawings arrived as short fragments with
-      // trace dust around them and hairpin spikes where a chain doubled back on itself.
-      // NB: this whole block is a template literal, so every backslash has to be doubled
-      // — \\s written singly collapses to a plain 's' and the split silently stops
-      // separating coordinates, which turns every run into nonsense and reads as dust.
-      const parse = (d) => d.split('M').filter(Boolean).map(s => {
-        const n = s.trim().split(/[L\\s]+/).filter(Boolean).map(Number);
-        const p = []; for (let k = 0; k + 1 < n.length; k += 2) p.push([n[k], n[k + 1]]);
-        return p;
-      });
-      const plen = (r) => { let L = 0; for (let i = 1; i < r.length; i++) L += Math.hypot(r[i][0] - r[i-1][0], r[i][1] - r[i-1][1]); return L; };
+    __check('EXACT REPORT: the bed styles are drawn smooth, not traced (20.19)', () => {
+      // "The drawings should be smooth not jagged or lines ending suddenly, almost like
+      // ikea install guides." CHANGED in 20.19: the five styles were traced from an
+      // exploded CAD sheet (hundreds of stitched L-segments, and Platform was really two
+      // singles and a nightstand). They are now hand-drawn: a few outlines each, with
+      // real curves. The old stub/dust/hairpin checks measured the tracer and no longer
+      // apply; what must still hold is below.
       if (BED_STYLE_VARIANTS.length !== 5) throw new Error('the bed style set changed size');
+      // Keys and proportions are what a saved bed stores and sizes by, so a redraw must
+      // not move them or every styled bed in an old project changes height.
+      const want = { b67: 26.9, b71: 48.9, b72: 62, b74: 50.7, b75: 41.9 };
       BED_STYLE_VARIANTS.forEach(v => {
-        const runs = [];
-        (v.svg.match(/ d="([^"]*)"/g) || []).forEach(m => parse(m.slice(4, -1)).forEach(r => runs.push(r)));
-        if (runs.length < 10) throw new Error(v.key + ' has almost no geometry left');
-        // DUST: a run under 0.9 units on a drawing normalised to 100 wide is a leftover
-        // stub, and at hairline weight it reads as fuzz around the drawing. Wingback and
-        // Low profile were two thirds dust before this.
-        const dust = runs.filter(r => plen(r) < 0.9).length;
-        if (dust > 2) throw new Error(v.key + ' still carries ' + dust + ' dust runs');
-        // HAIRPINS: a near-reversal over a SHORT spur is a stitching fault, never drawing.
-        // Long reversals are left alone — the V between two pillows is a real one.
-        let spikes = 0;
-        runs.forEach(r => {
-          for (let i = 1; i < r.length - 1; i++) {
-            const v1 = [r[i][0]-r[i-1][0], r[i][1]-r[i-1][1]], v2 = [r[i+1][0]-r[i][0], r[i+1][1]-r[i][1]];
-            const l1 = Math.hypot(v1[0], v1[1]), l2 = Math.hypot(v2[0], v2[1]);
-            if (l1 < 1e-9 || l2 < 1e-9) continue;
-            if ((v1[0]*v2[0] + v1[1]*v2[1]) / (l1 * l2) < Math.cos(150 * Math.PI / 180) && Math.min(l1, l2) < 6) spikes++;
-          }
-        });
-        if (spikes) throw new Error(v.key + ' still has ' + spikes + ' short hairpin spikes');
-        // The weight hierarchy is what stops traced art reading flatter than the
-        // hand-drawn assets beside it — object line, detail, fine, as three nested
-        // <g stroke-width> groups. "Simplify the drawing" is exactly the change that
-        // would quietly collapse these onto one weight.
-        const ws = (v.svg.match(/stroke-width="([\\d.]+)"/g) || []).map(m => parseFloat(m.split('"')[1]));
-        if (new Set(ws).size < 3) throw new Error(v.key + ' lost its line-weight hierarchy: ' + ws.join('/'));
-        if (!(ws[0] > ws[1] && ws[1] > ws[2])) throw new Error(v.key + ' weights are not heaviest-first: ' + ws.join('/'));
+        if (!(v.key in want)) throw new Error('unknown bed style key ' + v.key);
+        if (v.w !== 100 || v.h !== want[v.key]) throw new Error(v.key + ' changed proportion: ' + v.w + 'x' + v.h);
+        const ds = (v.svg.match(/ d="[^"]*"/g) || []).join(' ');
+        // Smooth: pillows and upholstery are curves, never chains of short lines.
+        if (ds.indexOf('C') < 0 && ds.indexOf('Q') < 0) throw new Error(v.key + ' has no curves');
+        // Few strokes: a traced drawing ran to hundreds of L commands.
+        const cmds = ds.split('').filter(c => 'MLHVCQAZ'.indexOf(c) >= 0).length;
+        if (cmds > 120) throw new Error(v.key + ' is ' + cmds + ' path commands; it reads as traced');
+        if (ds.split('L').length - 1 > 12) throw new Error(v.key + ' is built from short line segments again');
+        // One weight (20.21), and the pillows OVERLAP: the front ones are opaque so the
+        // sham behind is hidden, not drawn through (the "turtle shell" look had none).
+        const ws = (v.svg.match(/stroke-width="([0-9.]+)"/g) || []).map(m => parseFloat(m.split('"')[1]));
+        if (new Set(ws).size !== 1) throw new Error(v.key + ' mixes line weights: ' + ws.join('/'));
+        if ((v.svg.split('data-o="1"').length - 1) < 5) throw new Error(v.key + ' has no opaque pillows and duvet');
+        // The marker becomes a real white fill only in the RENDERED art (the source keeps
+        // no literal fills); without it every pillow line shows through the one in front.
+        const drawn = _ctxArtSvg(v, null, 1);
+        if (drawn.indexOf('data-o=') >= 0 || drawn.indexOf('fill="' + CONTEXT_FILL + '"') < 0) {
+          throw new Error(v.key + ' draws its opaque shapes see-through');
+        }
       });
+    });
+
+    __check('the library covers guestrooms, offices, bathrooms and life safety (20.19)', () => {
+      // "We would need guestroom content, office content, fixtures, bathroom, toilets."
+      const cat = (c) => (CONTEXT_LIBRARY.find(g => g.cat === c) || { items: [] }).items.map(p => p.key);
+      // 20.22: the catalogue's groups and its blocks (Hospitality_Elevation_Context_Block_Library).
+      const need = {
+        Guestroom: ['bed-king', 'bed-queen', 'bed-full', 'bed-twin', 'gr-king-set', 'gr-queen-pair', 'nightstand',
+                    'gr-desk', 'gr-media', 'gr-wardrobe-wall', 'wardrobe', 'minibar', 'luggage', 'sofa', 'bench', 'tv-65', 'tv-75'],
+        Bathroom: ['ba-vanity-mirror', 'ba-vanity-single', 'ba-vanity-double', 'ba-shower-glass', 'ba-shower-niche',
+                   'ba-tub-free', 'tub', 'ba-towel-hooks', 'ba-accessories', 'towel-disp', 'hand-dryer', 'soap', 'tp-holder', 'robe-hook', 'towel-ring', 'mirror-lit'],
+        Toilets: ['toilet-tank', 'toilet-wall', 'urinal', 'fx-ada-toilet', 'fx-lav-basin', 'flush-plate', 'lav-pedestal', 'stall', 'fountain'],
+        Office: ['of-workstation', 'of-desk-storage', 'credenza', 'of-meeting', 'whiteboard', 'of-file-3', 'bookcase', 'reception',
+                 'off-desk', 'workstation', 'monitor', 'conf-table', 'file-lateral', 'cab-storage', 'kitchenette', 'fridge'],
+        Glass: ['gl-fixed', 'gl-door', 'gl-double', 'gl-frameless', 'gl-framed', 'gl-slide', 'window', 'window-full'],
+        Doors: ['door-guest', 'dr-double', 'dr-pocket', 'dr-barn', 'dr-glass', 'dr-accessible', 'door-ada-bath', 'door-closet', 'elevator'],
+        Chairs: ['task-chair', 'ch-dining', 'lounge', 'ch-bar', 'armchair', 'ch-banquette', 'chair', 'desk-chair'],
+        Decor: ['picture-light', 'pendant', 'clock', 'planter', 'sconce', 'lamp-table', 'mirror'],
+        'Keep clear': ['kc-pull', 'kc-extinguisher', 'kc-exit', 'kc-grille', 'kc-access'],
+      };
+      Object.keys(need).forEach(c => need[c].forEach(k => {
+        if (cat(c).indexOf(k) < 0) throw new Error(k + ' is not in ' + c);
+      }));
+      // Everything in Keep clear is a keep-clear block, or the hatch and Preflight miss it.
+      CONTEXT_LIBRARY.find(g => g.cat === 'Keep clear').items.forEach(p => {
+        if (p.avoid !== true) throw new Error(p.key + ' sits in Keep clear but is not marked avoid');
+      });
+      // Every device now DRAWS (the zone is the one deliberate box): a bare rectangle
+      // labelled Switch told an installer less than a switch plate does.
+      CONTEXT_PRESETS.filter(p => /^kc-/.test(p.key) && p.key !== 'kc-zone').forEach(p => {
+        if (!p.svg) throw new Error(p.key + ' has no drawing');
+      });
+      ['thermostat', 'outlet'].forEach(k => { if (!CONTEXT_PRESETS.find(p => p.key === k).svg) throw new Error(k + ' has no drawing'); });
+      // Life-safety heights the install guide is planned against.
+      const g = (k) => CONTEXT_PRESETS.find(p => p.key === k);
+      if (g('kc-extinguisher').aff + g('kc-extinguisher').h !== 48) throw new Error('the extinguisher cabinet top is not at 48in');
+      if (g('kc-pull').aff !== 48 || g('kc-pull').affMode !== 'center') throw new Error('the pull station is not at 48in');
+      if (g('kitchenette').h !== 90) throw new Error('the kitchenette uppers do not reach 90in');
     });
 
     __check('the tracer keeps corners and refuses only reversals', () => {

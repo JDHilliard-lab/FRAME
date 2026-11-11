@@ -6,7 +6,7 @@
 // Update APP_VERSION on each release. APP_BUILD is derived from the URL (see
 // below) — the version pill turns orange on the dev site to make it obvious at a
 // glance which build you are looking at.
-const APP_VERSION = '19.99';
+const APP_VERSION = '20.45';
 const IDML_STYLE_SEED = [{"id":"sty_cover_title","name":"Cover Title","group":"Cover","font":"display","size":0.1111,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"upper","track":0.01},{"id":"sty_cover_title_centered","name":"Cover Title (Centered)","group":"Cover","font":"display","size":0.1111,"bold":true,"italic":false,"color":"#ffffff","align":"center","caps":"upper","track":0.01},{"id":"sty_cover_location","name":"Cover Location","group":"Cover","font":"serif","size":0.0222,"bold":false,"italic":false,"color":"#ffffff","align":"right","caps":"none","track":0.0},{"id":"sty_cover_project_code","name":"Cover Project Code","group":"Cover","font":"serif","size":0.0222,"bold":false,"italic":false,"color":"#ffffff","align":"right","caps":"none","track":0.0},{"id":"sty_toc_section_title","name":"TOC Section Title","group":"Table of Contents","font":"serif","size":0.0241,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.0},{"id":"sty_toc_entry","name":"TOC Entry","group":"Table of Contents","font":"serif","size":0.0185,"bold":false,"italic":false,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_section_heading","name":"Section Heading","group":"Header","font":"display","size":0.0556,"bold":true,"italic":false,"color":"#000000","align":"left","caps":"upper","track":0.01},{"id":"sty_header_one_xl","name":"Header One (XL)","group":"Header","font":"display","size":0.0444,"bold":true,"italic":false,"color":"#000000","align":"left","caps":"upper","track":0.01},{"id":"sty_paragraph_heading_right","name":"Paragraph Heading (Right)","group":"Header","font":"display","size":0.0333,"bold":true,"italic":false,"color":"#1a1a1a","align":"right","caps":"upper","track":0.01},{"id":"sty_body_copy_standard","name":"Body Copy (Standard)","group":"Body Copy","font":"serif","size":0.0148,"bold":false,"italic":false,"color":"#222222","align":"justify","caps":"none","track":0.0},{"id":"sty_body_copy_large_+_bold","name":"Body Copy (Large + Bold)","group":"Body Copy","font":"serif","size":0.0185,"bold":true,"italic":false,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_body_copy_primary","name":"Body Copy (Primary)","group":"Body Copy","font":"serif","size":0.0148,"bold":false,"italic":false,"color":"#222222","align":"justify","caps":"none","track":0.0},{"id":"sty_body_description","name":"Body Description","group":"Body Text","font":"serif","size":0.0167,"bold":false,"italic":false,"color":"#333333","align":"left","caps":"none","track":0.0},{"id":"sty_body_subheading","name":"Body Subheading","group":"Body Text","font":"serif","size":0.0204,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.0},{"id":"sty_spec_copy","name":"Spec Copy","group":"Spec Page","font":"serif","size":0.0148,"bold":false,"italic":false,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_spec_subject","name":"Spec Subject","group":"Spec Page","font":"serif","size":0.0148,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.01},{"id":"sty_spec_notes","name":"Spec Notes","group":"Spec Page","font":"serif","size":0.013,"bold":false,"italic":true,"color":"#939597","align":"left","caps":"none","track":0.005},{"id":"sty_spec_static_caption","name":"Spec Static Caption","group":"Spec Page","font":"serif","size":0.013,"bold":false,"italic":true,"color":"#999999","align":"left","caps":"none","track":0.0},{"id":"sty_image_code","name":"Image Code","group":"Captions","font":"serif","size":0.012,"bold":false,"italic":true,"color":"#7f7f7f","align":"right","caps":"none","track":0.01},{"id":"sty_caption_image_code","name":"Caption Image Code","group":"Captions","font":"serif","size":0.0111,"bold":false,"italic":false,"color":"#bfbfbf","align":"left","caps":"none","track":0.0},{"id":"sty_artist_name","name":"Artist Name","group":"Captions","font":"serif","size":0.0139,"bold":true,"italic":false,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_artwork_title","name":"Artwork Title","group":"Captions","font":"serif","size":0.013,"bold":false,"italic":true,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_thank_you_\u2014_name","name":"Thank You \u2014 Name","group":"Thank You","font":"display","size":0.0417,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"upper","track":0.0},{"id":"sty_thank_you_\u2014_role","name":"Thank You \u2014 Role","group":"Thank You","font":"serif","size":0.0148,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"none","track":0.0},{"id":"sty_thank_you_\u2014_contact","name":"Thank You \u2014 Contact","group":"Thank You","font":"serif","size":0.013,"bold":false,"italic":false,"color":"#ffffff","align":"left","caps":"none","track":0.0},{"id":"sty_subhead","name":"Subhead","group":"Subheadings","font":"display","size":0.0204,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"upper","track":0.035},{"id":"sty_section_subheading_left","name":"Section Subheading (Left)","group":"Subheadings","font":"display","size":0.0333,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"upper","track":0.01},{"id":"sty_section_subheading_right","name":"Section Subheading (Right)","group":"Subheadings","font":"display","size":0.0333,"bold":true,"italic":false,"color":"#1a1a1a","align":"right","caps":"upper","track":0.01},{"id":"sty_section_subheading_serif","name":"Section Subheading (Serif)","group":"Subheadings","font":"serif","size":0.0139,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.0},{"id":"sty_subheading_white,_center","name":"Subheading (White, Center)","group":"Subheadings","font":"serif","size":0.013,"bold":false,"italic":false,"color":"#ffffff","align":"center","caps":"none","track":0.0},{"id":"sty_quote_\u2014_druk","name":"Quote \u2014 Druk","group":"Quotes","font":"display","size":0.0694,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.025},{"id":"sty_quote_\u2014_druk_alt","name":"Quote \u2014 Druk (Alt)","group":"Quotes","font":"display","size":0.0444,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.0},{"id":"sty_quote_\u2014_serif","name":"Quote \u2014 Serif","group":"Quotes","font":"serif","size":0.0417,"bold":false,"italic":false,"color":"#ffffff","align":"left","caps":"none","track":0.0},{"id":"sty_quote_\u2014_serif_white,_cap","name":"Quote \u2014 Serif (White, Caps)","group":"Quotes","font":"display","size":0.0333,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"upper","track":0.01},{"id":"sty_display_keyword","name":"Display Keyword","group":"Keywords","font":"display","size":0.1111,"bold":true,"italic":false,"color":"#000000","align":"left","caps":"upper","track":0.01},{"id":"sty_keywords_full_page","name":"Keywords (Full Page)","group":"Keywords","font":"display","size":0.0556,"bold":true,"italic":false,"color":"#ffffff","align":"justify-all","caps":"none","track":0.02},{"id":"sty_brand_keyword","name":"Brand Keyword","group":"Keywords","font":"display","size":0.1852,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"upper","track":0.01},{"id":"sty_moodboard_keyword","name":"Moodboard Keyword","group":"Keywords","font":"display","size":0.0833,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"upper","track":0.0}];
 // The default fill for a placeholder shape, and the ONE definition of it. It was
 // written out nine times: the starter deck, the shape creator, the duplicate
@@ -69,7 +69,7 @@ function _checkBuildPairing() {
                 + String.fromCharCode(10) + String.fromCharCode(10)
                 + 'Reload with Ctrl+Shift+R (Cmd+Shift+R on a Mac) before carrying on. Save your work first if you have any.');
         }
-        try { console.warn('FRAME build mismatch: index.html ' + want + ' vs app.js ' + APP_VERSION); } catch (e) {}
+        try { console.warn('Farmhand build mismatch: index.html ' + want + ' vs app.js ' + APP_VERSION); } catch (e) {}
         return false;
     } catch (e) { return true; }
 }
@@ -233,22 +233,33 @@ function _projectIsFresh() {
     if ((floorplanLevels || []).some(l => l && l.imageData) || floorplanImageData) return false;
     return true;
 }
-// The FRAME logo as inline SVG, one shape per part, so it can come together.
-// The two logo files are the same six shapes in two fills; currentColor covers both
-// themes. Mark first, then F R A M E, each carrying its index for the stagger.
+// The FARMHAND logo as inline SVG, one shape per part, so it can come together (20.43,
+// from logo/farmhand-dark-logo.svg). There is ONE drawing: currentColor gives the dark
+// and light themes, so no second (white) file is needed. Mark first, then
+// F A R M H A N D, each carrying its index for the stagger.
 const FRAME_LOGO_PARTS = [
-    'M0 19.23 0 57.23 22.86 57.23 22.86 0 0 19.23Z',
-    'M57.15 .43 62.67 6.32 62.67 51.51 57.15 57.25 80.69 57.25 75.17 51.52 75.17 30.8 92.22 30.8 92.22 27.03 75.17 27.03 75.17 4.14 91.01 4.14 98.27 10.62 98.27 .42 57.15 .43Z',
-    'M150.88,13.84c0-9.97-8.46-13.42-22.56-13.42h-20.97l5.51,5.89v45.21l-5.51,5.72h22.2l-5.31-5.72v-20.4h4.63l15.18,26.12h12.96l-17.07-28.6c7.38-2.36,10.95-7.71,10.95-14.8M135.98,24.72c-2.39,1.83-5.75,2.63-10.04,2.63h-1.7s0-23.25,0-23.25h3.23c8.05,0,12.33,1.8,12.33,10.95,0,4.98-1.43,7.84-3.83,9.67',
-    'M193.48.42h-12l3.08,7.97-15.35,41.57-.53,1.43-4.93,5.86h13.54l-4.6-5.47.61-1.64,4.23-11.47h18.94l4.93,12.52-5.09,6.05h22.16l-4.98-5.91L193.48.42ZM178.92,34.9l7.78-21.06,8.29,21.06h-16.06Z',
-    'M297.52 57.25 292.62 51.48 285.2 6.81 289.97 .5 275.67 .49 261.7 40.85 247.21 .5 232.48 .5 236.9 6.9 230.45 51.48 225.43 57.25 239.28 57.25 234.29 51.48 239.44 16.36 255.09 57.25 259.72 57.25 274.94 14.58 280.65 51.48 276.41 57.25 297.52 57.25Z',
-    'M338.78 4.14 346.03 10.62 346.03 .42 304.92 .43 310.43 6.32 310.43 51.36 304.92 57.25 346.03 57.26 346.03 47.06 338.78 53.54 322.93 53.54 322.93 51.52 322.93 30.8 339.98 30.8 339.98 30.65 339.98 27.03 339.98 26.88 322.93 26.88 322.93 4.14 338.78 4.14Z'
+    'M0 34.06 0 98.91 39.01 98.91 39.01 1.25 0 34.06Z',
+    'M105.73,0h71.56v17.71l-12.61-11.2h-27.63v39.82h29.62v6.52h-29.62v36.14l9.64,9.92h-40.95l9.49-10.06V10.2L105.73,0Z',
+    'M280.17,88.57l8.64,10.34h-38.54l8.79-10.49-8.5-21.82h-33.02l-7.37,19.98-1.13,2.83,8.08,9.49h-23.52l8.5-10.2.99-2.55,26.64-72.27-5.38-13.89h20.97l34.86,88.57ZM247.86,59.94l-14.31-36.56-13.6,36.56h27.92Z',
+    'M361.79,49.03l29.76,49.88h-22.67l-26.36-45.49h-8.08v35.57l9.21,9.92h-38.54l9.49-9.92V10.2l-9.49-10.2h36.42c24.66,0,39.25,5.95,39.25,23.38,0,12.33-6.09,21.54-18.99,25.65ZM361.51,25.51c0-16.01-7.37-19.13-21.4-19.13h-5.67v40.53h2.98c7.51,0,13.32-1.42,17.43-4.68,4.25-3.12,6.66-8.08,6.66-16.72Z',
+    'M496.56,98.91l7.37-10.06-9.92-64.19-26.5,74.25h-8.08l-27.21-71.14-9.07,61.08,8.79,10.06h-24.09l8.64-10.06,11.34-77.66-7.79-11.05h25.65l25.22,70.14L495.28.14h24.8l-8.22,10.91,12.9,77.8,8.5,10.06h-36.7Z',
+    'M559.19,88.85V9.92l-9.5-9.92h39.54l-9.64,9.92v36.42h46.91V9.92l-9.5-9.92h39.54l-9.64,9.92v78.93l9.64,10.06h-39.54l9.5-10.06v-35.99h-46.91v35.99l9.64,10.06h-39.54l9.5-10.06Z',
+    'M759.57,88.57l8.64,10.34h-38.54l8.79-10.49-8.5-21.82h-33.02l-7.37,19.98-1.13,2.83,8.08,9.49h-23.52l8.5-10.2.99-2.55,26.64-72.27-5.38-13.89h20.97l34.86,88.57ZM727.26,59.94l-14.31-36.56-13.6,36.56h27.92Z',
+    'M794,88.85V9.92l-9.5-9.92h33.02l41.24,85.03V9.92l-9.64-9.92h25.93l-9.64,9.92v88.99h-23.38l-41.24-85.02v74.96l9.49,10.06h-25.79l9.5-10.06Z',
+    'M900.99,88.85V9.92l-9.5-9.92h50.73c25.08,0,40.39,18.71,40.39,49.46s-15.3,49.46-40.39,49.46h-50.73l9.5-10.06ZM942.23,92.39c11.76,0,18.99-16.3,18.99-42.94s-7.23-42.94-18.99-42.94h-20.83v85.88h20.83Z'
 ];
+const FRAME_LOGO_VIEWBOX = '0 0 982.62 98.91';
 function _frameLogoSvg(cls) {
-    return '<svg class="' + (cls || '') + '" viewBox="0 0 346.03 57.26" role="img" aria-label="FRAME">'
+    return '<svg class="' + (cls || '') + '" viewBox="' + FRAME_LOGO_VIEWBOX + '" role="img" aria-label="Farmhand">'
         + FRAME_LOGO_PARTS.map((d, k) => '<path class="' + (k === 0 ? 'fl-mark' : 'fl-l') + '" style="--i:' + (k - 1) + '" d="' + d + '"/>').join('')
         + '</svg>';
 }
+// The header logo is the same drawing (20.43), filled in at load: the script tags sit at
+// the end of <body>, so #navLogo already exists. Its colour is --text-strong.
+function _navLogoFill() {
+    try { const h = document.getElementById('navLogo'); if (h && !h.firstChild) h.innerHTML = _frameLogoSvg('nav-logo-svg'); } catch (e) {}
+}
+_navLogoFill();
 // The file the last project was opened from or saved to, by NAME only. The handle
 // itself is session-only on purpose (see _projectFileHandle), so this cannot reopen
 // anything; it tells you which file to pick.
@@ -273,7 +284,10 @@ async function openStartScreen() {
     ov.className = 'frame-modal fm-over start-screen';
     ov.style.display = 'flex';
     const wrap = document.createElement('div'); wrap.className = 'ss-wrap';
-    wrap.innerHTML = _frameLogoSvg('ss-logo') + '<div class="ss-tag">Presentation builder</div>';
+    // The quote fades in above the logo while it comes together (20.43).
+    wrap.innerHTML = '<figure class="ss-quote"><blockquote>\u201cMany hands make light work\u201d</blockquote>'
+        + '<figcaption>\u2013 Thomas Gordon Towers</figcaption></figure>'
+        + _frameLogoSvg('ss-logo') + '<div class="ss-tag">Presentation builder</div>';
     const body = document.createElement('div'); body.className = 'ss-body';
     const cards = document.createElement('div'); cards.className = 'ss-cards';
     const card = (title, text, icon) => {
@@ -296,7 +310,7 @@ async function openStartScreen() {
     nw.onclick = () => _startScreenNewForm(body, cards, peek);
     cards.appendChild(nw); if (!first) first = nw;
     let last = ''; try { last = localStorage.getItem(LAST_FILE_KEY) || ''; } catch (e) {}
-    const op = card('Open project', last ? ('Last file: ' + last) : 'A .json project file saved from FRAME.',
+    const op = card('Open project', last ? ('Last file: ' + last) : 'A .json project file saved from Farmhand.',
         '<svg class="svg-icon" viewBox="0 0 24 24"><path d="M3 7h6l2 2h10v10H3z"/></svg>');
     op.onclick = () => { if (typeof openMasterProject === 'function') openMasterProject(); };
     cards.appendChild(op);
@@ -304,7 +318,10 @@ async function openStartScreen() {
     // The tour runs over the app behind this screen and brings you back here when it
     // ends, so the choice between Continue, New and Open is still yours to make.
     const tl = document.createElement('button'); tl.type = 'button'; tl.className = 'ss-tour';
-    tl.textContent = 'New to FRAME? Take the guided tour';
+    // 20.45: a button, not a quiet link, with a play mark and a ring that pulses a few
+    // times once the screen settles, so a first-timer sees where to start.
+    tl.innerHTML = '<svg class="svg-icon ss-tour-ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M10 8.5v7l5.5-3.5z"/></svg><span></span>';
+    tl.querySelector('span').textContent = 'New to Farmhand? Take the guided tour';
     tl.onclick = () => { _startScreenClose(); startTour({ onEnd: () => { openStartScreen(); } }); };
     body.appendChild(tl);
     if (others.length) body.appendChild(_startScreenOthers(others));
@@ -511,8 +528,8 @@ function _tourDeckPage(kinds) {
 }
 function _tourParentOf(id) { const el = document.getElementById(id); return el ? el.parentElement : null; }
 const FRAME_TOUR = [
-    { ch: 0, title: 'Welcome to FRAME',
-      body: 'FRAME turns a list of artwork into a client presentation: spec pages, wall elevations, floor plans and the PDF. This tour walks the job in the order a deck is built. It only looks around, so it cannot change your project. Use the arrow keys or the buttons, and Esc to leave at any point.' },
+    { ch: 0, title: 'Welcome to Farmhand',
+      body: 'Farmhand turns a list of artwork into a client presentation: spec pages, wall elevations, floor plans and the PDF. This tour walks the job in the order a deck is built. It only looks around, so it cannot change your project. Use the arrow keys or the buttons, and Esc to leave at any point.' },
     { ch: 0, target: '#nav-tabs-fixed', prep: () => switchView('dashboard'),
       title: 'Three views, numbered in work order',
       body: '1 Deck is where a project starts (the floorplan Items list) and ends (the presentation itself), 2 Frame Dashboard is where pieces are specced, and 3 Elevation is where they hang on walls. The little counters on Elevation and Deck tell you what is still left: pieces not on a wall, and pieces not pinned on the plan.' },
@@ -547,14 +564,17 @@ const FRAME_TOUR = [
       title: 'Hang the work',
       body: 'Drag frames into place; they snap to the grid and to each other. Hold Shift for fine moves, Ctrl+click to select several, Ctrl+G to group. Dimensions are live: drag a line to move it, drag its number to slide it, and press M to draw your own measure line.' },
     { ch: 3, view: 'elevation', target: ['#elev-sec-wall', '#wallW'], prep: () => _tourElevTab('art'),
-      title: 'Wall size and wall type',
-      body: 'Set the real wall width and height first, so every dimension is true. ART WALL is the default. EGD WALL turns the wall into a wallcovering surface, and WF WALL builds a window for film and opens the Glass tab.' },
+      title: 'Wall size',
+      body: 'Set the real wall width and height first, so every dimension is true. They stay above the tabs, so they are there whichever tab is open.' },
+    { ch: 3, view: 'elevation', target: '[data-elevtabpane="wall"]', prep: () => _tourElevTab('wall'),
+      title: 'The Wall tab',
+      body: 'Everything about the wall itself. Wall type: ART WALL is the default, EGD WALL makes it a wallcovering surface, WF WALL builds a window for film. Then the client’s elevation (trace over it, or Show in deck to print it), Elevation required while it has not arrived, the wall finish and the paint. Each is per wall; All walls sets every wall at once.' },
     { ch: 3, view: 'elevation', target: '#elev-sec-layout', prep: () => _tourElevTab('guides'),
       title: 'Layout guides',
       body: 'These switch on the overlays: letters, outside and spacing dimensions, the scale figure, centre and hang lines. They are shared by every wall, and the breaker pages in the deck print the same ones, so set them once the way you want the drawings to read.' },
     { ch: 3, view: 'elevation', target: '.elev-tabs', prep: () => _tourElevTab('art'),
       title: 'Context and Glass',
-      body: 'Context is the room: trace the client’s elevation behind the wall, and drop in doors, beds, TVs and millwork at standard sizes so you can see what the art has to clear. Glass is window panels for film. Both are optional.' },
+      body: 'Context is the room: drop in doors, beds, TVs and millwork at standard sizes so you can see what the art has to clear. Glass is window panels for film. Both are optional.' },
     { ch: 4, view: 'deck', target: ['.fp-upload-slot', '#dsCenter'], prep: () => _dsGoFloorplanItems(),
       title: 'Upload the floor plan',
       body: 'Back in the Deck, the floorplan page. While it has no plan, Upload floor plan sits right in the middle of the page. A project with several floors gets a plan per level from the panel’s Plan tab.' },
@@ -597,7 +617,7 @@ const FRAME_TOUR = [
 // the wall rail and the deck rail, which a phone hides; this one walks the phone's own
 // controls. Same rules: read-only, prep only navigates, a missing target centres the card.
 const FRAME_TOUR_PHONE = [
-    { ch: 0, title: 'FRAME on your phone',
+    { ch: 0, title: 'Farmhand on your phone',
       body: 'The phone is for the moments away from the desk: snap a piece, check a wall, flip through the deck. Hold it upright to work and turn it sideways to look at a wall or a page full screen. This tour only looks around, so it cannot change your project.' },
     { ch: 0, target: '#phoneTabBar', prep: () => switchView('dashboard'),
       title: 'Three views, three colours',
@@ -1105,8 +1125,11 @@ const FLAT_GRAPHIC_ART_TYPE = {
 // bigger bleed than a framed print: 2" every edge on both wallcovering and window
 // film. INCHES — converted into the project unit when written onto a row.
 const FLAT_GRAPHIC_BLEED_IN = 2;
-// A didactic panel is cut to its finished size: no bleed (19.71). INCHES.
-function _flatBleedIn(product) { return product === 'Didactic Panel' ? 0 : FLAT_GRAPHIC_BLEED_IN; }
+// A didactic panel is printed acrylic, dibond or PVC: 0.125" every edge, the quote template's
+// Product Spec References (20.16; it was 0 from 19.71, which no vendor RFI agreed with: Ford
+// China's acrylic panels are 47.99" art, 48.24" image). INCHES.
+const PRINTED_PANEL_BLEED_IN = 0.125;
+function _flatBleedIn(product) { return product === 'Didactic Panel' ? PRINTED_PANEL_BLEED_IN : FLAT_GRAPHIC_BLEED_IN; }
 // ── The un-designed placeholder ────────────────────────────────────────────
 // A flat graphic with no artwork yet is the NORMAL state for a long stretch of a
 // project: the wall is measured and specced well before the pattern exists. A faint
@@ -1627,7 +1650,7 @@ const dashDefaultData = {
     printOutput: "full",
     fColorName: "", fHeight: 0, rabbetDepth: 0,
     paperType: "Fine Art Paper",
-    bleed: 0.25, canvasDepth: "", canvasWrap: "", floaterInset: 0.75,
+    bleed: 0.25, canvasDepth: "", canvasWrap: "", canvasSides: "", floaterInset: 0.75,
     // Float Mount fields. useFloatMount controls whether the row uses Mat Controls
     // or Float Mount as its inner-area treatment. Defaults to false (mats).
     // The Shadow Box product auto-flips this to true on selection. The fields
@@ -1943,7 +1966,13 @@ function _fpNumbers() {
 // Set-pieces (ART.005-A, -B, -C, -D) share one group → one pin labelled "05".
 function _artGroupKey(code) {
     const c = (code == null ? '' : String(code)).trim();
-    const stripped = c.replace(/[-_\s]*[A-Za-z]\d*$/, '');   // drop a trailing piece suffix (-A, -B1…)
+    // Drop ONE trailing piece letter (-A, -B1; ART-1AA is arrangement A, piece A). 20.13: the
+    // letter follows the placement NUMBER (ART.1A, 1B.L3.ART-01A, ART-1AA) or a separator
+    // (ART.1.A); a single letter after a letter-only name is part of the name. Ford Hub's
+    // existing-inventory placements 1B.L3.ART-EA ... -EG, seven walls across a floor, keyed
+    // as one set "1B.L3.ART-E".
+    const m = c.match(/^(.*\d[A-Za-z]?)[-_.\s]*[A-Za-z]\d*$/) || c.match(/^(.*?)[-_.\s]+[A-Za-z]\d*$/);
+    const stripped = m ? m[1] : c;
     // AND THE SEPARATOR THE SUFFIX HUNG OFF. A dot-style code (ART.1.A) left 'ART.1.'
     // behind, which printed as the page title "ART.1." and, once catalogue options
     // started being minted from the key, produced 'ART.1..2A'. Hyphen-style codes never
@@ -2212,7 +2241,32 @@ function _fpGroups(level) {
         if (uw && Array.isArray(uw.wallLines) && uw.wallLines.length && !g.wallLines) { g.wallLines = uw.wallLines; g.wallPanels = 'custom'; }
         if (!g.location && r.location) g.location = r.location;
     });
-    return order.map(k => map[k]);
+    return _fpShortPinNums(order.map(k => map[k]));
+}
+// 20.18: A PIN HOLDS TWO DIGITS. A client's own codes run long (Fairmont's ART-1001): the pin
+// printed "1001" and spilled out of its circle. A number past two digits shows its last two
+// (ART-1001 -> 01) while those stay unique and are not 00; otherwise the long ones are numbered
+// 01, 02 ... in code order, around the numbers short codes already use. The code itself is
+// unchanged, and the plan key beside the pins still names it (01 | ART-1001). `fullNum` keeps
+// the original. Dotted numbers (3.26) are left alone. Same answer whichever plan is drawn:
+// every group is in the list, pinned here or not.
+function _fpShortPinNums(groups) {
+    const long = groups.filter(g => /^\d{3,}$/.test(String(g.num || '')));
+    if (!long.length) return groups;
+    const used = {};
+    groups.forEach(g => { if (long.indexOf(g) < 0) used[String(g.num)] = true; });
+    const tail = long.map(g => String(g.num).slice(-2));
+    const seen = {};
+    const ok = tail.every(t => { if (t === '00' || used[t] || seen[t]) return false; seen[t] = true; return true; });
+    if (ok) { long.forEach((g, i) => { g.fullNum = g.num; g.num = tail[i]; }); return groups; }
+    const sorted = long.slice().sort((a, b) => _codeNatCmp(a.key, b.key));
+    let n = 1;
+    sorted.forEach(g => {
+        while (n < 100 && used[String(n).padStart(2, '0')]) n++;
+        if (n >= 100) return;
+        g.fullNum = g.num; g.num = String(n).padStart(2, '0'); used[g.num] = true; n++;
+    });
+    return groups;
 }
 function _fpFindGroup(key) { return _fpGroups().find(g => g.key === key); }
 
@@ -3145,7 +3199,7 @@ function exportStudioDefaults() {
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'studio-defaults.json';
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
     setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-    if (typeof showInfoModal === 'function') showInfoModal('Studio defaults exported', 'Commit studio-defaults.json to the repo root (the folder with index.html). After that, anyone opening FRAME gets these templates and default contacts automatically.');
+    if (typeof showInfoModal === 'function') showInfoModal('Studio defaults exported', 'Commit studio-defaults.json to the repo root (the folder with index.html). After that, anyone opening Farmhand gets these templates and default contacts automatically.');
 }
 function _mbFillImage(i) {
     const input = document.createElement('input'); input.type = 'file'; input.accept = 'image/*';
@@ -3781,7 +3835,7 @@ function _elevCaptureSignature() {
         // they're megabytes of base64, and length is enough to spot a swap.
         // Per-wall notes (19.47) print beside the drawing, never in it: not a capture input.
         parts.push(JSON.stringify(typeof elevations !== 'undefined' ? elevations : [], (k, v) =>
-            (k === 'wallNote' || k === 'notesOff') ? undefined
+            (k === 'wallNote' || k === 'notesOff' || k === 'installSeq' || k === 'typGapIn') ? undefined
             : (typeof v === 'string' && v.length > 256) ? ('#' + v.length) : v));
         // Drawing inputs that live outside the elevations array. Hang height and
         // baseboard come from the stored INCHES, not their inputs: the input value
@@ -5361,7 +5415,7 @@ function _askRestoreAutosave(timeStr, projName) {
         if (typeof showConfirmModal !== 'function') { resolve(null); return; }
         const NL = String.fromCharCode(10);
         showConfirmModal('Restore unsaved work?',
-            'FRAME found work from ' + timeStr + ' that was never saved to a file:' + NL + NL
+            'Farmhand found work from ' + timeStr + ' that was never saved to a file:' + NL + NL
             + '“' + projName + '”' + NL + NL
             + 'Restore it, or discard it for good?',
             'Restore', 'Discard',
@@ -6454,6 +6508,7 @@ function syncLayoutGuideButtonStates() {
                 ? 'Window film sits on the glass, so this wall does not need EGD mode. Switch only if a wallcovering should fill it.'
                 : 'Framed art hangs on the wall. Switch to EGD only if a wallcovering should fill this wall.');
     }
+    _wallFinishSync();
 }
 
 
@@ -7529,6 +7584,236 @@ function _syncHeaderForView() {
     try { _phoneSyncTabs(); } catch (e) {}
 }
 // The Save menu: the two ways to save that are not Ctrl+S, and the version history.
+// ── IMAGES IN THIS PROJECT, AND PACKAGE (20.37) ─────────────────────────────
+// Like InDesign's Links panel and File > Package: every picture the project carries, what
+// it is, where it is used and whether it can be exported, and one zip with the project
+// file and every picture in folders. Designers asked for it after dropping client
+// elevations in and losing track of which drawing was which.
+// The list is READ OFF THE SAVED PROJECT (_projectPayload), so it can never disagree with
+// what a Save writes: one walk, every string that is an image, named by where it sits.
+// The same picture in several places (an artwork on its row and on two walls) is ONE
+// entry with several uses, exactly as the project file pools it (18.81).
+// Status: a data: image is IN THE FILE and always exports; a web or library address is
+// LINKED and exports if it can be fetched; a blob: address lived only in one browser
+// session and is NOT SAVED; an item naming an artwork file with no picture is MISSING.
+// Images are exported AS STORED: some are reduced on the way in (page backgrounds,
+// 18.38), so the pixel size is shown and a package is not a substitute for the originals.
+const IMG_KINDS = [
+    ['clientElev', 'Client elevations'], ['artwork', 'Artwork'], ['plan', 'Floorplans'],
+    ['page', 'Deck Studio images'], ['pagebg', 'Page backgrounds'], ['deck', 'Other deck images'],
+    ['swatch', 'Frame swatches'], ['other', 'Other']
+];
+function _imgKindRank(k) { const i = IMG_KINDS.findIndex(x => x[0] === k); return i < 0 ? 99 : i; }
+function _imgExt(src) {
+    const m = /^data:image\/([a-z0-9.+-]+)/i.exec(String(src || ''));
+    let e = m ? m[1].toLowerCase() : ((/\.([a-z0-9]{2,5})(?:[?#]|$)/i.exec(String(src || '')) || [])[1] || 'png').toLowerCase();
+    if (e === 'jpeg') e = 'jpg'; if (e === 'svg+xml') e = 'svg';
+    return e;
+}
+function _imgBytes(src) {
+    const s0 = String(src || ''); if (s0.indexOf('data:') !== 0) return 0;
+    const i = s0.indexOf(','); return i < 0 ? 0 : Math.floor((s0.length - i - 1) * 3 / 4);
+}
+function _imgStatus(src) {
+    const s0 = String(src || '');
+    if (!s0) return { ok: false, key: 'missing', label: 'Missing: no picture in the file' };
+    if (s0.indexOf('data:') === 0) return { ok: true, key: 'in', label: 'In the file' };
+    if (s0.indexOf('blob:') === 0) return { ok: false, key: 'blob', label: 'Not saved: only in this browser session' };
+    return { ok: null, key: 'linked', label: 'Linked: exports if it can be downloaded' };
+}
+function _looksLikeImage(key, v) {
+    if (typeof v !== 'string' || !v) return false;
+    if (/^data:image\//i.test(v)) return true;
+    if (!/(src|url|image|img|photo|swatch|logo|background|bg|picture)/i.test(String(key || ''))) return false;
+    return /^blob:/i.test(v) || (/^(https?:|\.?\/?library\/|\/)/i.test(v) && /\.(png|jpe?g|webp|gif|svg|tiff?)(?:[?#]|$)/i.test(v));
+}
+// A page key as a person reads it: spec:elevgrp:L3.ART.S16-01 is the wall page of that set.
+function _imgPageLabel(key) {
+    const k = String(key || '');
+    let m;
+    if ((m = /^spec:elevgrp:(.+)$/.exec(k))) return 'Wall page ' + m[1];
+    if ((m = /^spec:elev:(\d+)/.exec(k))) { const e = (typeof elevations !== 'undefined' && elevations[+m[1]]) || null; return 'Wall page ' + (e ? e.name : ('#' + (+m[1] + 1))); }
+    if ((m = /^ig:(.+)$/.exec(k))) return 'Install page ' + m[1];
+    if ((m = /^spec:(.+)$/.exec(k))) return 'Spec page ' + m[1];
+    if ((m = /^fixed:(.+)$/.exec(k))) return 'Page ' + m[1].charAt(0).toUpperCase() + m[1].slice(1);
+    if ((m = /^floorplan:(\d+)/.exec(k))) return 'Floorplan page ' + (+m[1] + 1);
+    if (/^layout:/.test(k)) { try { const i = (typeof _dsPages !== 'undefined' ? _dsPages : []).findIndex(d => _deckPageKey(d) === k); if (i >= 0) return 'Page ' + (i + 1); } catch (e) {} return 'Custom page'; }
+    return 'Page ' + k;
+}
+function _projectImages() {
+    const p = _projectPayload();
+    const rows = p.dashProjectData || [], walls = p.elevations || [];
+    const rowById = {}; rows.forEach(r => { if (r && r.id != null) rowById[r.id] = r; });
+    const byKey = new Map(), out = [];
+    const nameOf = (o) => (o && (o.fileName || o.imageName || o.name || o.artworkFile)) || '';
+    const code = (r) => { const c = r && String(r.imageCode || '').trim(); return (c && !/^tbd$/i.test(c)) ? c : ''; };
+    const add = (src, info) => {
+        let e = byKey.get(src);
+        if (!e) {
+            e = { src: src, kind: info.kind, name: info.name || '', code: info.code || '', uses: [], status: _imgStatus(src), ext: _imgExt(src), bytes: _imgBytes(src) };
+            byKey.set(src, e); out.push(e);
+        } else {
+            if (_imgKindRank(info.kind) < _imgKindRank(e.kind)) e.kind = info.kind;
+            if (!e.name && info.name) e.name = info.name;
+            if (!e.code && info.code) e.code = info.code;
+        }
+        if (info.use && e.uses.indexOf(info.use) < 0) e.uses.push(info.use);
+    };
+    const classify = (path, parent, key) => {
+        const top = path[0];
+        if (top === 'dashProjectData') {
+            const r = rows[path[1]] || {};
+            if (/swatch/i.test(key)) return { kind: 'swatch', name: r.fCode || '', use: 'Frame on ' + r.id };
+            return { kind: 'artwork', code: code(r), name: r.artworkFile || '', use: 'Item ' + r.id };
+        }
+        if (top === 'elevations') {
+            const e = walls[path[1]] || {}, wn = 'Wall ' + (e.name || ('#' + (path[1] + 1)));
+            if (path[2] === 'underlay') return { kind: 'clientElev', name: (e.underlay && e.underlay.name) || '', use: wn };
+            if (path[2] === 'frames') {
+                const f = (e.frames || [])[path[3]] || {}, r = rowById[f.id];
+                if (/swatch/i.test(key)) return { kind: 'swatch', name: f.fCode || (r && r.fCode) || '', use: 'Frame on ' + f.id };
+                return { kind: 'artwork', code: code(r) || code(f), name: (r && r.artworkFile) || f.artworkFile || '', use: wn };
+            }
+            return { kind: 'other', name: nameOf(parent), use: wn };
+        }
+        if (top === 'floorplanImage') return { kind: 'plan', name: p.floorplanImageName || '', use: 'Plan ' + (((p.floorplanLevels || [])[0] || {}).name || 'Level 1') };
+        if (top === 'floorplanLevels') { const l = (p.floorplanLevels || [])[path[1]] || {}; return { kind: 'plan', name: l.imageName || '', use: 'Plan ' + (l.name || ('Level ' + (path[1] + 1))) }; }
+        if (top === 'editorial') {
+            if (path[1] === 'annotations') return { kind: 'page', name: nameOf(parent), use: _imgPageLabel(path[2]) };
+            if (path.some(x => /theme|background|pagebg/i.test(String(x)))) return { kind: 'pagebg', name: nameOf(parent), use: 'Background ' + (path[2] != null ? path[2] : '') };
+            return { kind: 'deck', name: nameOf(parent), use: path.slice(1, 3).join(' ') };
+        }
+        return { kind: 'other', name: nameOf(parent), use: path.slice(0, 2).join(' ') };
+    };
+    const walk = (v, path, parent, key) => {
+        if (typeof v === 'string') { if (_looksLikeImage(key, v)) add(v, classify(path, parent, key)); return; }
+        if (!v || typeof v !== 'object') return;
+        if (Array.isArray(v)) { for (let i = 0; i < v.length; i++) walk(v[i], path.concat(i), v, key); return; }
+        for (const k in v) walk(v[k], path.concat(k), v, k);
+    };
+    walk(p, [], null, '');
+    // An item that names an artwork file but carries no picture: listed, so it is not lost.
+    rows.forEach(r => {
+        if (!r || !String(r.artworkFile || '').trim()) return;
+        if (r.artworkUrl) return;
+        out.push({ src: '', kind: 'artwork', name: r.artworkFile, code: code(r), uses: ['Item ' + r.id], status: _imgStatus(''), ext: _imgExt(r.artworkFile), bytes: 0 });
+    });
+    out.sort((a, b) => (_imgKindRank(a.kind) - _imgKindRank(b.kind)) || String(a.code || a.name || a.uses[0] || '').localeCompare(String(b.code || b.name || b.uses[0] || ''), undefined, { numeric: true }));
+    return out;
+}
+// File names inside a package: a folder per kind, the image code or name, unique.
+function _imgSafe(s0) { return String(s0 || '').replace(/[\\/:*?"<>|\u0000-\u001f]+/g, '-').replace(/\s+/g, ' ').trim().slice(0, 90); }
+function _packagePaths(list) {
+    const used = {};
+    return list.map(e => {
+        const ki = _imgKindRank(e.kind), folder = String(ki + 1).padStart(2, '0') + ' ' + ((IMG_KINDS[ki] || [0, 'Other'])[1]);
+        const nm = _imgSafe(String(e.name || '').replace(/\.[A-Za-z0-9]{1,5}$/, ''));   // its own extension is added below
+        let base = _imgSafe(e.code) || nm || _imgSafe(e.uses[0] || 'image') || 'image';
+        if (e.code && nm && nm !== base) base = base + ' - ' + nm;
+        let n = folder + '/' + base + '.' + e.ext, k = 2;
+        while (used[n.toLowerCase()]) n = folder + '/' + base + ' (' + (k++) + ').' + e.ext;
+        used[n.toLowerCase()] = 1;
+        return n;
+    });
+}
+function _imgFmtBytes(b) { return !b ? '' : b < 1048576 ? Math.max(1, Math.round(b / 1024)) + ' KB' : (b / 1048576).toFixed(1) + ' MB'; }
+function openImagesModal() {
+    const old = document.getElementById('imagesModal'); if (old) old.remove();
+    const list = _projectImages();
+    const ov = document.createElement('div'); ov.id = 'imagesModal';
+    ov.className = 'frame-modal fm-nested'; ov.setAttribute('data-modal-backdrop', ''); ov.style.display = 'flex';
+    const card = document.createElement('div');
+    card.style.cssText = 'background:var(--bg-panel,#1d1d20); border:1px solid var(--border-color); border-radius:var(--r-10); width:820px; max-width:96vw; max-height:88vh; display:flex; flex-direction:column; overflow:hidden;';
+    const nIn = list.filter(e => e.status.ok === true).length, nBad = list.filter(e => e.status.ok === false).length, nLink = list.length - nIn - nBad;
+    const total = list.reduce((a, e) => a + (e.bytes || 0), 0);
+    card.innerHTML = '<div style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:16px 18px; border-bottom:1px solid var(--border-color);">'
+        + '<div><div style="font-size:var(--fs-95); font-weight:700; color:var(--text-main);">Images in this project</div>'
+        + '<div data-img-summary style="font-size:var(--fs-65); color:var(--text-muted); margin-top:3px;">' + list.length + ' images · ' + nIn + ' in the file' + (nLink ? ' · ' + nLink + ' linked' : '') + (nBad ? ' · <span style="color:var(--warn,#e0a030);">' + nBad + ' cannot be exported</span>' : '') + (total ? ' · ' + _imgFmtBytes(total) : '') + '</div></div>'
+        + '<div style="display:flex; gap:8px; align-items:center;"><button class="action-btn" data-img-package style="width:auto; padding:0 14px; font-size:var(--fs-75);" title="Download one zip: the project file, every image in a folder per kind, and a list of what is in it">Package…</button>'
+        + '<button data-modal-close data-img-close style="border:none; background:none; color:var(--text-muted); font-size:var(--fs-120); cursor:pointer; line-height:1;">×</button></div></div>';
+    const body = document.createElement('div'); body.style.cssText = 'padding:10px 18px 16px; overflow:auto;';
+    if (!list.length) body.innerHTML = '<div style="font-size:var(--fs-75); color:var(--text-muted); padding:12px 0;">No images in this project yet.</div>';
+    const paths = _packagePaths(list);
+    IMG_KINDS.forEach(([k, label]) => {
+        const items = list.map((e, i) => [e, i]).filter(([e]) => e.kind === k);
+        if (!items.length) return;
+        const hd = document.createElement('div');
+        hd.style.cssText = 'font-size:var(--fs-65); font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:var(--text-muted); margin:12px 0 6px;';
+        hd.textContent = label + ' (' + items.length + ')';
+        body.appendChild(hd);
+        items.forEach(([e, i]) => {
+            const row = document.createElement('div'); row.setAttribute('data-img-row', k);
+            row.style.cssText = 'display:grid; grid-template-columns:44px minmax(0,1fr) auto auto; gap:10px; align-items:center; padding:6px 0; border-top:1px solid var(--border-color);';
+            const th = document.createElement('div');
+            th.style.cssText = 'width:44px; height:34px; border-radius:var(--r-4); background:var(--bg-input,#2a2a2e) center/contain no-repeat;' + (e.src && e.status.ok !== false ? ' background-image:url("' + String(e.src).replace(/"/g, '%22') + '");' : '');
+            const t = document.createElement('div'); t.style.cssText = 'min-width:0;';
+            const title = e.code ? (e.code + (e.name && e.name !== e.code ? ' · ' + e.name : '')) : (e.name || '(no name)');
+            t.innerHTML = '<div style="font-size:var(--fs-75); font-weight:600; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="' + _esc(title) + '">' + _esc(title) + '</div>'
+                + '<div style="font-size:var(--fs-60); color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="' + _esc(e.uses.join(', ')) + '">' + _esc(e.uses.join(', ')) + '</div>';
+            const st = document.createElement('div'); st.setAttribute('data-img-status', e.status.key);
+            st.style.cssText = 'font-size:var(--fs-60); text-align:right; white-space:nowrap; color:' + (e.status.ok === true ? 'var(--text-muted)' : e.status.ok === false ? 'var(--warn,#e0a030)' : 'var(--text-main)') + ';';
+            st.innerHTML = _esc(e.status.label) + '<br><span style="color:var(--text-muted);">' + _esc(e.ext.toUpperCase()) + (e.bytes ? ' · ' + _imgFmtBytes(e.bytes) : '') + '<span data-img-px></span></span>';
+            if (e.src && e.status.ok !== false) { try { const im = new Image(); im.onload = () => { const sp = st.querySelector('[data-img-px]'); if (sp) sp.textContent = ' · ' + im.naturalWidth + '×' + im.naturalHeight + ' px'; }; im.src = e.src; } catch (er) {} }
+            const dl = document.createElement('button'); dl.className = 'gz-btn'; dl.textContent = 'Save';
+            dl.title = e.status.ok === false ? 'Nothing to save: ' + e.status.label : 'Download this image as ' + paths[i].split('/').pop();
+            dl.disabled = e.status.ok === false;
+            dl.onclick = () => _imgDownloadOne(e, paths[i].split('/').pop());
+            row.appendChild(th); row.appendChild(t); row.appendChild(st); row.appendChild(dl);
+            body.appendChild(row);
+        });
+    });
+    card.appendChild(body); ov.appendChild(card); document.body.appendChild(ov);
+    card.querySelector('[data-img-close]').onclick = () => ov.remove();
+    card.querySelector('[data-img-package]').onclick = () => packageProject();
+}
+async function _imgBlob(e) {
+    if (!e.src || e.status.ok === false) return null;
+    try { const r = await fetch(e.src); if (!r.ok) return null; return await r.blob(); } catch (er) { return null; }
+}
+async function _imgDownloadOne(e, fileName) {
+    const b = await _imgBlob(e);
+    if (!b) { showInfoModal('Could not save the image', 'This image could not be downloaded (' + e.status.label.toLowerCase() + ').'); return; }
+    const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = fileName; a.click();
+    setTimeout(() => { try { URL.revokeObjectURL(a.href); } catch (er) {} }, 4000);
+}
+// The package: <project>.json (what Save writes), every image in "NN Kind/" folders, and
+// "Package contents.txt" saying what each file is, where it is used, and what could not be
+// included and why. Returns { blob, fileName, files, skipped } (also used by the tests).
+async function packageProject(opts) {
+    opts = opts || {};
+    if (typeof JSZip === 'undefined') { showInfoModal('Package', 'The zip library did not load. Refresh the page and try again.'); return null; }
+    const list = _projectImages(), paths = _packagePaths(list);
+    const zip = new JSZip();
+    const projFile = _projectSuggestedName();
+    const base = projFile.replace(/\.json$/i, '');
+    zip.file(base + '/' + projFile, _projectFileText(_projectPayload()));
+    const lines = ['Package of ' + base, 'Made by Farmhand ' + APP_VERSION + ' on ' + new Date().toLocaleString(), '', 'Project file: ' + projFile, ''];
+    const files = [], skipped = [];
+    for (let i = 0; i < list.length; i++) {
+        const e = list[i];
+        const b = await _imgBlob(e);
+        if (!b) { skipped.push({ e: e, why: e.status.ok === false ? e.status.label : 'Linked image could not be downloaded' }); continue; }
+        zip.file(base + '/' + paths[i], await b.arrayBuffer(), { binary: true, compression: 'STORE' });   // bytes, not the Blob: accepted everywhere
+        files.push(paths[i]);
+        lines.push(paths[i]);
+        lines.push('    ' + (e.code ? 'Image code ' + e.code + '. ' : '') + (e.name ? 'Name ' + e.name + '. ' : '') + 'Used on: ' + e.uses.join(', '));
+    }
+    if (skipped.length) {
+        lines.push('', 'NOT INCLUDED (' + skipped.length + ')');
+        skipped.forEach(x => lines.push('  ' + (x.e.code || x.e.name || x.e.uses[0] || 'image') + ': ' + x.why + '. Used on: ' + x.e.uses.join(', ')));
+    }
+    lines.push('', 'Images are as stored in the project. Some are reduced when added (page backgrounds), so keep the originals for print.');
+    zip.file(base + '/Package contents.txt', lines.join('\n') + '\n');
+    const blob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } });
+    const fileName = base + ' Package.zip';
+    if (!opts.noDownload) {
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = fileName; a.click();
+        setTimeout(() => { try { URL.revokeObjectURL(a.href); } catch (er) {} }, 8000);
+        if (skipped.length) showInfoModal('Package saved, with gaps', fileName + ' is in your Downloads with ' + files.length + ' images. ' + skipped.length + ' could not be included; Package contents.txt lists them and why.');
+        else _toast('Package saved', fileName + ': the project file and ' + files.length + ' images.');
+    }
+    return { blob: blob, fileName: fileName, files: files, skipped: skipped, contents: lines.join('\n') };
+}
 function openSaveMenu() {
     _dsPopup('saveMenu', 'saveMenuBtn', (menu) => {
         menu.style.width = '280px'; menu.style.padding = '6px';
@@ -7536,6 +7821,9 @@ function openSaveMenu() {
         _dsFlyItem(menu, { label: 'Save As\u2026', kbd: 'Ctrl+Shift+S', hint: 'A copy somewhere else, and switch to it', icon: '<path d="M5 3h11l3 3v15H5z"/><path d="M12 10v7M8.5 13.5 12 17l3.5-3.5"/>', run: () => saveMasterProjectAs() });
         _dsFlySep(menu);
         _dsFlyItem(menu, { label: 'Versions\u2026', hint: 'Named snapshots to compare and restore', icon: '<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/>', run: () => openVersionsModal() });
+        _dsFlySep(menu);
+        _dsFlyItem(menu, { label: 'Images\u2026', hint: 'Every image in the project, and whether it exports', icon: '<rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-9 8"/>', run: () => openImagesModal() });
+        _dsFlyItem(menu, { label: 'Package\u2026', hint: 'One zip: the project file and every image', icon: '<path d="M3 7l9-4 9 4v10l-9 4-9-4z"/><path d="M3 7l9 4 9-4M12 11v10"/>', run: () => packageProject() });
     });
 }
 function renderNavTabs() {
@@ -8087,7 +8375,7 @@ function addNewElevationTab() {
         if (!ans) return null;
         let wall = null;
         if (ans.kind === 'hang') wall = _placementHang(ans.key);
-        else if (ans.kind === 'new') wall = _placementMint(ans.cat, ans.set, true).wall;
+        else if (ans.kind === 'new') wall = _placementMint(ans.cat, ans.set, true, ans.ctx).wall;
         const idx = wall ? elevations.indexOf(wall) : -1;
         if (idx < 0) return null;
         renderNavTabs(); populateDashPushSelector(); switchView('elevation', idx);
@@ -8262,7 +8550,7 @@ function _fsaAvailable() {
 }
 
 const PROJECT_FILE_TYPES = [{
-    description: 'FRAME project',
+    description: 'Farmhand project',
     accept: { 'application/json': ['.json'] },
 }];
 
@@ -8295,8 +8583,8 @@ function _setProjectFile(handle, name) {
 function _syncProjectFileUI() {
     try {
         document.title = _projectFileName
-            ? ('FRAME - ' + _projectFileName)
-            : 'FRAME - Integrated Workspace';
+            ? ('Farmhand - ' + _projectFileName)
+            : 'Farmhand';
     } catch (e) {}
     try {
         const btn = _saveProjectButton();
@@ -8446,7 +8734,7 @@ async function _fsaSave(text, saveAs) {
         if (err && err.name === 'AbortError') return 'cancelled';
         try {
             showInfoModal('Could not write the file',
-                'FRAME could not save to that location: ' + ((err && err.message) || 'unknown error') + '.'
+                'Farmhand could not save to that location: ' + ((err && err.message) || 'unknown error') + '.'
                 + String.fromCharCode(10) + String.fromCharCode(10)
                 + 'A copy is being downloaded instead so the work is not stuck in this tab.');
         } catch (e) {}
@@ -8664,9 +8952,9 @@ function _readProjectText(text) {
         } else {
             // A failure, so it takes the modal rather than a toast, and says what
             // was wrong with the file rather than only that something was.
-            showInfoModal('Not a FRAME project',
-                'That file is valid JSON but it is not a FRAME project - it carries no "master-studio" type. '
-                + 'Open a .json that FRAME saved, or start a new project.');
+            showInfoModal('Not a Farmhand project',
+                'That file is valid JSON but it is not a Farmhand project - it carries no "master-studio" type. '
+                + 'Open a .json that Farmhand saved, or start a new project.');
             return false;
         }
 
@@ -8698,7 +8986,7 @@ function _readProjectText(text) {
         if (typeof markClean === 'function') markClean();
         if (typeof clearAutosave === 'function') clearAutosave();
         if (data._unitAutoFixed && typeof showInfoModal === 'function') {
-            showInfoModal('Units auto-corrected', 'This project was labeled "' + data._unitAutoFixed.from + '" but its measurements looked like "' + data._unitAutoFixed.to + '" (for example, a 108-unit-tall wall). FRAME corrected the unit to ' + data._unitAutoFixed.to + ' so the elevation, person, and hang heights scale correctly. Save the project to keep the fix.');
+            showInfoModal('Units auto-corrected', 'This project was labeled "' + data._unitAutoFixed.from + '" but its measurements looked like "' + data._unitAutoFixed.to + '" (for example, a 108-unit-tall wall). Farmhand corrected the unit to ' + data._unitAutoFixed.to + ' so the elevation, person, and hang heights scale correctly. Save the project to keep the fix.');
         }
         try { _startScreenClose(); } catch (e) {}
         return true;
@@ -8722,6 +9010,82 @@ function loadMasterProject(event) {
     };
     reader.readAsText(file); event.target.value = '';
 }
+
+// DRAG A PROJECT FILE ONTO THE WINDOW TO OPEN IT (20.39). Before this, a .json dropped
+// on FRAME made the browser navigate to the raw file, which threw the open project
+// away. Listened for on the window in the CAPTURE phase, and only for a drag carrying
+// a .json: an image drop zone underneath would otherwise take it and complain that it
+// is not a picture. Every other drag (images, pages, rows) goes by untouched.
+// The handle is asked for DURING the drop (it is gone after the first await), so in
+// Chrome a dropped project is bound like one from Open Project and Save writes back to
+// it; where there is no handle it opens unbound, like the <input> path.
+function _dragHasJson(e) {
+    const dt = e && e.dataTransfer; if (!dt) return false;
+    if (Array.from(dt.types || []).indexOf('Files') < 0) return false;
+    const items = Array.from(dt.items || []).filter(it => it && it.kind === 'file');
+    // During dragover only the MIME type is visible, never the name. A blank type is NOT
+    // taken as JSON: a dragged folder (the library drop zone) has a blank type too.
+    if (items.length) return items.some(it => it.type === 'application/json');
+    return Array.from(dt.files || []).some(f => /\.json$/i.test(f.name || ''));
+}
+function _dropJsonFile(e) {
+    const dt = e && e.dataTransfer; if (!dt) return null;
+    const items = Array.from(dt.items || []);
+    for (const it of items) {
+        if (!it || it.kind !== 'file') continue;
+        const f = it.getAsFile && it.getAsFile();
+        if (!f || !/\.json$/i.test(f.name || '')) continue;
+        let hp = null;
+        try { if (typeof it.getAsFileSystemHandle === 'function') hp = Promise.resolve(it.getAsFileSystemHandle()).catch(() => null); } catch (err) { hp = null; }
+        return { file: f, handle: hp };
+    }
+    const f = Array.from(dt.files || []).find(ff => /\.json$/i.test(ff.name || ''));
+    return f ? { file: f, handle: null } : null;
+}
+function _projectDropHint(on) {
+    let h = document.getElementById('projectDropHint');
+    if (!on) { if (h) h.remove(); return; }
+    if (h) return;
+    h = document.createElement('div'); h.id = 'projectDropHint'; h.className = 'project-drop-hint';
+    h.innerHTML = '<div class="pdh-box"><strong>Drop to open project</strong><span>A .json project file saved from Farmhand</span></div>';
+    document.body.appendChild(h);
+}
+let _projectDropHintTimer = null;
+function _openDroppedProject(picked) {
+    const file = picked.file;
+    _confirmDiscardUnsaved(async () => {
+        let handle = null;
+        try { handle = picked.handle ? await picked.handle : null; } catch (err) { handle = null; }
+        if (handle && handle.kind && handle.kind !== 'file') handle = null;
+        let text;
+        try { text = await file.text(); }
+        catch (err) { try { showInfoModal('Could not open that file', ((err && err.message) || 'The file could not be read') + '.'); } catch (e) {} return; }
+        if (_readProjectText(text)) _setProjectFile(handle, file.name);
+    });
+}
+function _wireProjectFileDrop() {
+    if (typeof window === 'undefined' || window._projectDropWired) return;
+    window._projectDropWired = true;
+    const over = (e) => {
+        if (!_dragHasJson(e)) return;
+        e.preventDefault(); e.stopPropagation();
+        try { e.dataTransfer.dropEffect = 'copy'; } catch (_) {}
+        _projectDropHint(true);
+        // No reliable dragleave for the window: the hint goes when the drags stop coming.
+        clearTimeout(_projectDropHintTimer);
+        _projectDropHintTimer = setTimeout(() => _projectDropHint(false), 150);
+    };
+    window.addEventListener('dragenter', over, true);
+    window.addEventListener('dragover', over, true);
+    window.addEventListener('drop', (e) => {
+        _projectDropHint(false);
+        const picked = _dropJsonFile(e);
+        if (!picked) return;
+        e.preventDefault(); e.stopPropagation();
+        _openDroppedProject(picked);
+    }, true);
+}
+_wireProjectFileDrop();
 
 // =========================================================================
 // THE BRIDGE: DROPDOWN BULK CHECKBOXES & DASHBOARD PUSH
@@ -9140,6 +9504,12 @@ function _glazingScheduleForFrame(elev, frame, bleedIn, mode) {
 //   • exportElevPNG rasterises the live DOM through html2canvas, which knows nothing
 //     about either list, so it hides '#underlay-layer' outright.
 // Get any one of those wrong and the tracing guide ships to the client.
+// THE ONE EXCEPTION (20.31): `underlay.inDeck`. Designers were taking FRAME's frames into
+// InDesign only to put them over the client's elevation, because the client's drawing IS
+// the page a client expects ("this wall, as drawn by your architect, with the art on it").
+// A wall switched to Show in deck draws its client elevation BEHIND the frames, at full
+// strength, CLIPPED TO THE WALL (so an unaligned drawing still cannot resize the artboard:
+// the bounds list above is unchanged). Off by default; the editor's fade is for tracing only.
 // OPAQUE WHITE, and this is the one thing about context blocks that is load-bearing
 // beyond how they look. Context is still LINE WORK — no tone, no grey tint, hairlines
 // only, which is why this is white and not a shade — but a block is an OBJECT IN THE
@@ -9342,7 +9712,12 @@ function _ctxResize(b, driver, value) {
 // be readable without any of it reading as heavy, because this line work sits behind the
 // artwork and must never compete with it. 0.9 is a crisp hairline, 0.45 is a whisper —
 // that spread is enough to tell a profile from a reveal and no more.
-const CTX_LW_OBJ = 0.9, CTX_LW_DET = 0.6, CTX_LW_FINE = 0.45;
+// ONE WEIGHT (20.21). The designer's reference is an IKEA-style drawing: every line the
+// same weight, nothing tapering. The three names stay (the art is authored in _O/_D/_F
+// groups and the hidden line keeps its dash), but they are equal; the old 0.9/0.6/0.45
+// hierarchy is gone on request.
+// 20.23: one THIN even stroke, to the designer's product-elevation reference.
+const CTX_LW_OBJ = 0.8, CTX_LW_DET = 0.8, CTX_LW_FINE = 0.8;
 const _O = '<g stroke-width="' + CTX_LW_OBJ + '">';
 const _D = '<g stroke-width="' + CTX_LW_DET + '">';
 const _F = '<g stroke-width="' + CTX_LW_FINE + '">';
@@ -9353,588 +9728,491 @@ const _G = '</g>';
 // headboard wall you see the bed's WIDTH by its 24in mattress height; the 80in length
 // runs into the room and is plan data. Storing the length as `h` would draw a bed
 // taller than the door beside it, so it is kept in `lengthIn` and labelled.
-// ── BED STYLE VARIANTS ────────────────────────────────────────────────────
-// Traced from a cad-blocks.net frontal-elevation sheet: 109,088 exploded path
-// segments with no grouping, no text and a single stroke class. They were found by
-// clustering path bounding boxes, simplified (collinear merge + hairline drop, ~5x
-// fewer segments), and normalised so each drawing is 100 units WIDE — the width is
-// then whatever bed size the block is, and the height follows the aspect.
-//
-// The source carries no line weights at all, so the hierarchy is INFERRED from run
-// length: the longest 10% become the object line, the next 35% detail, the rest
-// fine. A guess, but a defensible one on an exploded CAD block, and it stops these
-// reading flatter than the hand-drawn assets beside them.
-//
-// Front view only — the source sheet is frontal elevation, so turning a bed to its
-// side falls back to the hand-drawn side drawing rather than inventing one.
+// <ctx-library generated by tools/ctx-art.js: edit THERE, then node tools/ctx-art.js --write>
+// Bed styles: keys and 100-wide aspects are FIXED (a saved bed sizes by them).
 const BED_STYLE_VARIANTS = [
     { key: 'b67', name: 'Platform', w: 100, h: 26.9,
-      svg: _O + '<path d="M40.2 11.9L40.4 12.1L40.7 12.2L60.0 12.2L60.4 11.9M60.4 11.7L60.0 11.5L40.7 11.5L40.2 11.7M60.0 22.8L40.7 22.8M72.3 11.9L89.1 11.9L90.1 11.7L90.8 11.2L91.0 10.5L91.0 5.9L90.7 5.3L90.0 4.8L89.1 4.5L72.2 4.5L71.3 4.7L70.6 5.2L70.3 5.9L70.4 10.5L70.6 11.2L71.3 11.7L72.3 11.8M100.0 13.1L100.0 26.9L100.0 13.1L99.7 12.2L98.9 11.6L62.8 11.6L62.1 11.8L61.6 12.6L61.5 13.1M100.0 0.0L100.0 13.1L100.0 0.0L61.5 0.0L61.5 26.9L61.5 0.0M0.0 0.0L0.0 26.9L0.0 0.0L38.5 0.0L38.5 13.1L38.5 0.0M10.8 11.9L27.6 11.9L28.6 11.7L29.3 11.2L29.5 10.5L29.5 5.9L29.3 5.3L28.5 4.8L27.6 4.5L10.7 4.5L9.8 4.7L9.1 5.2L8.8 5.9L8.9 10.5L9.1 11.2L9.8 11.7L10.8 11.8M38.5 13.1L38.5 26.9L38.5 13.1L38.2 12.2L37.5 11.6L1.3 11.6L0.6 11.8L0.1 12.6L0.0 13.1"/>' + _G
-           + _D + '<path d="M2.9 24.8L4.4 16.0M5.3 21.7L5.7 13.2M8.6 25.5L9.5 20.7L9.6 16.7M64.4 24.8L65.9 16.0M66.8 21.7L67.2 13.2M31.5 20.0L28.8 15.1M36.8 20.4L36.6 13.9M37.9 23.5L38.0 19.9L38.2 18.5L37.5 14.1M17.7 24.8L13.1 24.9L11.1 25.2M28.3 23.6L26.6 20.2L26.2 18.8M25.1 22.7L25.5 21.9L25.8 17.6M17.8 25.5L18.4 24.7L18.7 23.5L19.1 20.3L19.3 15.8M32.1 13.6L28.5 13.2L29.0 12.1M59.5 17.5L41.2 17.5M59.5 22.5L41.2 22.5M79.2 24.8L74.6 24.9L72.6 25.2M70.1 25.5L71.0 20.7L71.1 16.7M92.9 20.0L90.3 15.1M98.3 20.4L98.1 13.9M99.3 23.5L99.4 19.9L99.7 18.5L99.0 14.1M89.8 23.6L88.2 20.2L87.7 18.8M86.6 22.7L87.0 21.9L87.3 17.6M79.3 25.5L79.9 24.7L80.2 23.5L80.6 20.3L80.7 15.8M13.9 25.8L12.8 24.8L11.6 24.2L10.9 24.1L9.7 24.4L9.4 25.6M35.3 25.5L34.9 14.0M33.0 25.7L31.3 14.9M75.4 25.8L74.3 24.8L73.1 24.2L72.4 24.1L71.2 24.4L70.9 25.6M96.8 25.5L96.4 14.0M94.5 25.7L92.7 14.9M28.1 23.4L25.8 22.2L24.6 22.8L23.7 25.0L21.6 25.5L20.7 24.9L18.4 24.7M41.2 12.5L59.5 12.5L59.5 12.5M41.2 17.9L59.5 17.9L59.5 17.9M89.5 23.4L87.3 22.2L86.1 22.8L85.2 25.0L83.1 25.5L82.2 24.9L79.9 24.7"/>' + _G
-           + _F + '<path d="M11.9 6.1L10.5 5.4M11.4 6.6L10.5 5.6L9.5 5.1M11.0 10.1L10.3 10.7M1.4 23.6L0.4 21.7M9.4 24.3L9.4 23.1M11.1 25.3L10.5 24.7L9.9 23.7L10.1 21.1M9.4 20.5L9.6 15.9M7.9 10.2L6.4 10.6M8.4 9.7L7.3 9.8L5.8 11.1L4.6 11.6M9.5 13.6L9.3 12.0M12.0 10.3L11.1 10.3L9.5 11.4M69.4 10.2L67.9 10.6M69.8 9.7L68.8 9.8L67.3 11.1L66.2 11.6M62.8 23.6L61.9 21.7M12.3 25.2L13.9 25.1M13.5 24.9L13.4 24.3L13.4 22.2M12.3 25.3L10.6 24.8M13.7 25.0L12.3 25.2M28.9 24.9L28.1 24.3M13.4 19.4L13.6 17.4M25.9 7.1L28.0 5.3L28.7 4.9M32.1 13.2L31.9 12.6L30.4 12.0M26.3 9.9L28.9 11.1M30.2 12.6L29.4 12.2M28.8 14.1L28.3 12.6M36.7 13.9L36.7 12.6L36.2 12.1M18.1 13.9L18.2 13.2L18.7 12.2M50.9 18.6L49.2 18.6M49.2 19.3L50.9 19.3M50.9 13.5L49.2 13.5M49.2 14.1L50.9 14.1M73.8 25.2L75.4 25.1M75.0 24.9L74.8 24.3L74.9 22.2M70.8 24.3L70.9 23.1M73.8 25.3L72.1 24.8M72.6 25.3L72.0 24.7L71.4 23.7L71.5 21.1M75.2 25.0L73.8 25.2M74.8 19.4L75.1 17.4M70.9 20.5L71.1 15.9M79.6 13.9L80.2 12.2M70.9 13.6L70.7 12.0M72.5 10.1L71.8 10.7M73.5 10.3L72.6 10.3L71.0 11.4M90.4 24.9L89.5 24.3M93.7 13.2L93.4 12.6L91.9 12.0M93.5 13.6L90.0 13.2L90.5 12.1M87.8 9.9L90.4 11.1M90.3 14.1L89.8 12.6M98.2 13.9L98.1 12.6L97.7 12.1M87.4 7.1L89.5 5.3L90.2 4.9M73.4 6.1L72.0 5.4M72.9 6.6L72.1 5.6L70.9 5.1M70.9 24.8L70.1 25.5L67.8 25.2M10.6 25.5L9.5 24.9M9.3 24.9L13.7 25.7M9.4 24.8L8.7 25.5L6.3 25.2M31.3 25.5L28.9 25.0M72.1 25.5L70.9 24.9M70.8 24.9L75.2 25.7M92.8 25.5L90.4 25.0M11.1 25.2L12.3 25.3M72.6 25.2L73.8 25.3"/>' + _G },
+      svg: _O + '<rect data-o="1" x="6.67" y="22.9" width="86.67" height="4"/><rect data-o="1" x="1" y="19.57" width="98" height="3.33" rx="0.18"/><path data-o="1" d="M7.5 -7.98 Q16 -4.65 24.5 -7.98 Q23.98 1.47 24.5 10.9 H7.5 Q8.02 1.47 7.5 -7.98 Z"/><path data-o="1" d="M75.5 -7.98 Q84 -4.65 92.5 -7.98 Q91.98 1.47 92.5 10.9 H75.5 Q76.02 1.47 75.5 -7.98 Z"/><path data-o="1" d="M20.33 -6.98 Q34.83 -3.77 49.33 -6.98 Q48.47 1.97 49.33 10.9 H20.33 Q21.2 1.97 20.33 -6.98 Z"/><path data-o="1" d="M50.67 -6.98 Q65.17 -3.77 79.67 -6.98 Q78.8 1.97 79.67 10.9 H50.67 Q51.53 1.97 50.67 -6.98 Z"/><path data-o="1" d="M1.67 11.9 Q2 8.57 5 8.57 H95 Q98 8.57 98.33 11.9 C99 17.13 100.8 21.75 102 25.08 Q102 26.58 99.33 25.75 C97.67 25.08 97.33 23.47 96.67 22.13 H3.33 C2.67 23.47 2.33 25.08 0.67 25.75 Q-2 26.58 -2 25.08 C-0.8 21.75 1 17.13 1.67 11.9 Z"/><path fill="none" d="M2.67 11.02 Q50 11.85 97.33 11.02"/><path fill="none" d="M4 13.18 H96"/><path fill="none" d="M4 13.18 V22.13"/><path fill="none" d="M96 13.18 V22.13"/>' + _G },
     { key: 'b71', name: 'Panel', w: 100, h: 48.9,
-      svg: _O + '<path d="M0.2 48.7L0.7 47.9L1.4 47.2L2.8 46.6L3.8 46.7L4.8 47.0L6.1 46.4L7.5 46.4L9.7 47.3L11.2 47.4L12.7 47.1L14.6 45.8L16.3 45.2L18.1 45.2L19.9 45.8L19.6 45.1L19.1 44.5L33.3 45.7L47.5 46.2L54.6 46.2L60.8 45.5L70.1 45.1L79.3 45.5L87.1 46.3L89.3 46.2L91.9 45.6L94.1 45.5M6.3 7.4L6.7 5.1L7.8 3.0L9.4 1.4L10.3 0.8L12.6 0.1L89.2 0.1L90.3 0.4L92.3 1.4L94.0 3.0L95.0 5.1L95.4 7.4L95.4 25.1L95.4 7.4M14.1 23.2L24.0 23.6L31.1 24.6L37.0 23.7L44.6 23.3L63.1 23.5L67.4 23.9L71.3 24.6L74.6 24.0L78.9 23.6L88.1 23.2"/>' + _G
-           + _D + '<path d="M89.7 24.9L91.6 24.8L92.7 25.0L94.7 25.7L96.3 27.1L97.0 27.9L97.8 29.9L99.3 40.0L100.0 48.9L97.8 46.8L96.2 45.9L95.0 45.5M11.0 25.7L12.1 35.9L12.3 46.1M32.0 28.9L34.1 32.0L36.6 37.0L38.4 42.2L39.3 45.8M0.0 48.1L0.4 44.0L1.4 38.0L3.1 32.1L4.5 28.3M29.9 28.9L31.9 32.0L34.4 36.9L36.2 42.1L37.1 45.6M69.1 45.1L68.5 36.4L68.5 27.7M43.9 9.1L45.0 8.2L46.1 6.4L46.7 4.3L46.7 2.9L41.8 3.4L36.9 3.6L34.5 3.5L30.2 2.8L27.2 2.7L24.3 2.9L19.2 3.8L17.8 3.6L16.5 3.1L17.1 5.8M18.0 8.2L17.1 6.9L17.2 9.7L16.8 12.4L17.1 12.1L17.1 15.4L16.5 21.2L17.8 21.0L19.8 20.3L21.5 19.2L22.5 18.2M16.0 23.5L16.7 22.6L18.1 21.3L20.8 19.9L26.1 18.6L28.8 18.2L34.3 17.9L39.7 18.1L45.1 19.0L47.7 19.7L51.2 20.0L55.5 19.6L61.3 18.3L63.9 18.0L69.0 17.7L74.1 17.9L79.2 18.7L82.2 19.5L83.1 20.1L84.3 21.2L85.3 23.1M78.7 5.9L79.7 4.9L81.4 3.8L83.3 3.1L84.7 2.9L84.7 5.1L84.2 7.3L84.0 14.1L84.2 17.6L84.7 21.0L84.1 20.9M40.6 5.9L41.6 4.9L43.4 3.8L45.3 3.1L46.7 2.9L46.0 7.8L46.0 12.8L45.7 12.5L45.5 12.0L45.7 11.6L46.0 11.3L46.0 15.3L46.4 19.2M84.2 9.5L83.9 8.9L83.8 8.2L84.2 7.3L84.7 2.9L82.9 3.4L81.1 3.6L75.8 2.5L72.9 2.4L68.5 2.9L65.6 3.7L63.4 3.8L58.9 3.6L54.5 3.1L54.9 4.9L55.2 7.7L55.1 10.5L54.8 12.4L55.1 12.2L55.0 17.8"/>' + _G
-           + _F + '<path d="M3.8 29.3L4.2 28.1L4.9 27.1L6.3 25.9L7.5 25.3L11.7 24.3L18.3 23.5M5.0 46.9L4.7 40.0M3.3 46.6L3.0 43.5L3.0 38.8L3.5 34.1L4.0 31.0M16.2 30.8L17.8 33.5L19.6 37.8L20.5 42.5L20.5 45.6M67.5 45.1L66.9 41.9L66.8 37.0L67.7 32.1L68.8 29.0M92.6 45.4L92.6 42.3L93.4 37.8L95.0 33.5L96.6 30.8M77.6 30.2L79.5 33.0L81.9 37.5L83.5 42.4L84.1 45.7M16.6 5.4L16.5 3.1L17.2 3.2L19.8 4.0L21.5 5.2L22.5 6.1M8.5 14.7L13.8 14.7M8.5 15.4L13.8 15.4M19.0 20.9L16.5 21.2L16.4 20.5L16.6 19.1L17.3 17.1L18.2 15.9L19.2 14.9M57.3 9.4L56.2 8.4L55.1 6.6L54.5 4.5L54.5 3.1L55.9 3.3L57.8 4.0L59.6 5.2L60.5 6.1M84.0 23.5L90.6 24.3L94.2 25.1M54.5 20.0L54.7 18.8L55.3 17.2L56.4 15.7L57.3 14.9M43.9 14.7L44.8 15.4L45.8 16.8L46.4 18.3L46.7 19.4M93.2 15.4L88.0 15.4M93.2 14.7L88.0 14.7M81.9 14.7L83.5 16.3L84.4 18.2L84.7 19.5L84.7 21.0L84.0 20.9M18.3 23.5L14.1 23.2M88.1 23.2L84.0 23.5"/>' + _G },
+      svg: _O + '<rect data-o="1" x="1.67" y="0" width="96.67" height="38.9" rx="0.18"/><path fill="none" d="M3.67 38.9 V2 H96.33 V38.9"/><rect data-o="1" x="5.33" y="4.78" width="4" height="2.33"/><rect data-o="1" x="5.33" y="7.12" width="4" height="7" rx="0.18"/><path fill="none" d="M5.33 10.12 H9.33"/><rect data-o="1" x="90.67" y="4.78" width="4" height="2.33"/><rect data-o="1" x="90.67" y="7.12" width="4" height="7" rx="0.18"/><path fill="none" d="M90.67 10.12 H94.67"/><rect data-o="1" x="2.67" y="44.9" width="7" height="4"/><rect data-o="1" x="90.33" y="44.9" width="7" height="4"/><rect data-o="1" x="1" y="38.4" width="98" height="6.5" rx="0.18"/><path data-o="1" d="M7.5 7.07 Q16 10.4 24.5 7.07 Q23.98 16.65 24.5 26.23 H7.5 Q8.02 16.65 7.5 7.07 Z"/><path data-o="1" d="M75.5 7.07 Q84 10.4 92.5 7.07 Q91.98 16.65 92.5 26.23 H75.5 Q76.02 16.65 75.5 7.07 Z"/><path data-o="1" d="M20.33 8.07 Q34.83 11.33 49.33 8.07 Q48.47 17.15 49.33 26.23 H20.33 Q21.2 17.15 20.33 8.07 Z"/><path data-o="1" d="M50.67 8.07 Q65.17 11.33 79.67 8.07 Q78.8 17.15 79.67 26.23 H50.67 Q51.53 17.15 50.67 8.07 Z"/><path data-o="1" d="M1.67 27.23 Q2 23.9 5 23.9 H95 Q98 23.9 98.33 27.23 C99 33.4 100.8 39.1 102 42.43 Q102 43.93 99.33 43.1 C97.67 42.43 97.33 39.73 96.67 38.4 H3.33 C2.67 39.73 2.33 42.43 0.67 43.1 Q-2 43.93 -2 42.43 C-0.8 39.1 1 33.4 1.67 27.23 Z"/><path fill="none" d="M2.67 26.52 Q50 27.35 97.33 26.52"/><path fill="none" d="M4 28.83 H96"/><path fill="none" d="M4 28.83 V38.4"/><path fill="none" d="M96 28.83 V38.4"/>' + _G },
     { key: 'b72', name: 'Tall upholstered', w: 100, h: 62,
-      svg: _O + '<path d="M0.2 61.7L0.7 60.9L1.4 60.2L2.8 59.7L3.8 59.7L4.8 60.0L6.1 59.5L7.4 59.4L9.6 60.3L11.2 60.5L12.8 60.1L14.6 58.9L16.3 58.3L18.1 58.3L19.9 58.9L19.6 58.1L19.1 57.5L33.2 58.7L47.5 59.2L54.6 59.2L60.8 58.5L67.0 58.1L76.3 58.3L87.1 59.4L89.3 59.2L92.2 58.6L94.1 58.5M7.2 32.8L8.2 31.6L9.9 30.1L11.8 28.9L13.3 28.3L19.9 26.7L23.3 26.2L30.1 25.7L36.9 26.1L43.7 27.2L47.0 28.1L51.3 28.4L56.6 28.0L64.0 26.4L67.1 25.9L73.5 25.5L79.9 25.8L86.3 26.8L90.0 27.8L91.2 28.5L92.6 29.9L93.4 31.0L93.9 32.3M95.4 0.0L95.4 32.6L95.4 0.0L6.3 0.0"/>' + _G
-           + _D + '<path d="M77.6 37.7L79.6 41.7L81.9 47.9L83.5 54.3L84.1 58.7M0.0 61.2L0.6 53.4L1.4 48.3L3.1 40.7L4.5 35.7M16.2 38.3L17.8 42.1L19.6 48.2L20.3 52.3L20.5 58.6M67.5 58.2L66.9 53.8L66.8 47.3L67.7 40.8L68.8 36.5M9.8 13.7L8.7 12.0L8.7 15.5L8.2 18.9L8.7 18.6L8.7 22.7L8.4 26.4L7.8 30.0L11.1 29.5M8.0 10.2L7.8 7.3L9.5 8.0L11.4 8.2L17.7 7.1L21.3 6.9L25.0 7.0L30.4 7.8L33.5 7.9L39.6 7.7L45.7 7.0L45.6 8.8L45.0 11.4L43.5 13.6L42.2 14.8M38.1 10.8L39.4 9.6L41.5 8.2L43.9 7.3L45.7 7.0L44.8 13.2L44.8 19.4L44.4 19.0L44.2 18.3L44.7 17.6L44.8 22.5L45.3 27.5M92.4 29.6L93.2 29.7L92.6 25.4L92.3 21.0L92.6 15.3L92.5 12.5L93.1 9.8L93.2 7.0L91.0 7.7L88.7 7.9L87.5 7.8L85.7 7.3L82.1 6.6L78.4 6.4L74.7 6.7L72.9 7.1L69.3 8.1L66.5 8.2L61.0 8.0L55.4 7.3L56.0 9.6L56.3 13.1L56.2 16.6L55.8 18.9L56.2 18.6L56.0 25.8M89.8 32.4L91.6 32.3L92.7 32.4L94.7 33.2L96.3 34.5L96.9 35.4L97.8 37.4L99.3 50.2L100.0 62.0L97.8 59.8L96.2 58.9L95.0 58.5M14.1 30.7L24.0 31.1L28.3 31.6L31.1 32.1L37.0 31.2L45.5 30.7L63.1 31.0L67.4 31.4L71.3 32.0L78.3 31.1L88.1 30.7"/>' + _G
-           + _F + '<path d="M84.0 31.0L90.2 31.6L94.2 32.6M3.8 36.7L4.2 35.6L4.9 34.5L6.4 33.3L7.5 32.8L12.1 31.6L18.3 31.0M3.3 59.6L3.0 54.9L3.0 51.8L3.5 47.1L4.0 44.0M11.0 38.7L12.1 48.9L12.3 59.2M5.0 59.9L4.7 53.0M32.0 41.9L34.1 45.0L36.6 50.0L37.9 53.5L39.3 58.9M29.9 41.9L31.9 45.0L34.4 49.9L36.3 55.1L37.1 58.7M69.1 58.1L68.5 49.4L68.5 40.7M15.4 26.2L14.2 27.4L12.0 28.8L9.6 29.7L7.8 30.0L7.8 28.1L8.5 25.6L10.0 23.3L11.3 22.1M15.4 11.1L14.2 9.9L12.0 8.4L9.6 7.6L7.8 7.3L8.6 10.7M42.2 21.8L43.2 22.7L44.5 24.4L45.3 26.3L45.6 27.6M58.9 15.2L57.5 13.9L56.1 11.7L55.4 9.1L55.4 7.3L57.1 7.6L59.6 8.5L61.7 9.9L62.9 11.1M55.4 28.4L55.6 26.9L56.4 24.9L57.7 23.1L58.9 22.1M92.6 58.4L92.8 52.2L93.4 48.1L95.0 42.1L96.6 38.3M85.6 10.8L86.9 9.6L89.0 8.2L91.4 7.3L93.2 7.0L92.5 12.5L92.0 13.6L92.1 14.5L92.6 15.3M89.7 21.8L91.6 23.7L92.8 26.1L93.2 27.8L93.2 29.7L92.3 29.5M88.1 30.7L84.0 31.0M18.3 31.0L14.1 30.7"/>' + _G },
+      svg: _O + '<path data-o="1" d="M1.67 52 V10 Q1.67 0 11.67 0 H88.33 Q98.33 0 98.33 10 V52 Z"/><path fill="none" d="M15.48 3.33 V52"/><path fill="none" d="M29.28 3.33 V52"/><path fill="none" d="M43.1 3.33 V52"/><path fill="none" d="M56.9 3.33 V52"/><path fill="none" d="M70.72 3.33 V52"/><path fill="none" d="M84.52 3.33 V52"/><rect data-o="1" x="2.67" y="58" width="7" height="4"/><rect data-o="1" x="90.33" y="58" width="7" height="4"/><rect data-o="1" x="1" y="51.5" width="98" height="6.5" rx="0.18"/><path data-o="1" d="M7.5 20.17 Q16 23.5 24.5 20.17 Q23.98 29.75 24.5 39.33 H7.5 Q8.02 29.75 7.5 20.17 Z"/><path data-o="1" d="M75.5 20.17 Q84 23.5 92.5 20.17 Q91.98 29.75 92.5 39.33 H75.5 Q76.02 29.75 75.5 20.17 Z"/><path data-o="1" d="M20.33 21.17 Q34.83 24.43 49.33 21.17 Q48.47 30.25 49.33 39.33 H20.33 Q21.2 30.25 20.33 21.17 Z"/><path data-o="1" d="M50.67 21.17 Q65.17 24.43 79.67 21.17 Q78.8 30.25 79.67 39.33 H50.67 Q51.53 30.25 50.67 21.17 Z"/><path data-o="1" d="M1.67 40.33 Q2 37 5 37 H95 Q98 37 98.33 40.33 C99 46.5 100.8 52.2 102 55.53 Q102 57.03 99.33 56.2 C97.67 55.53 97.33 52.83 96.67 51.5 H3.33 C2.67 52.83 2.33 55.53 0.67 56.2 Q-2 57.03 -2 55.53 C-0.8 52.2 1 46.5 1.67 40.33 Z"/><path fill="none" d="M2.67 39.62 Q50 40.45 97.33 39.62"/><path fill="none" d="M4 41.93 H96"/><path fill="none" d="M4 41.93 V51.5"/><path fill="none" d="M96 41.93 V51.5"/>' + _G },
     { key: 'b74', name: 'Wingback', w: 100, h: 50.7,
-      svg: _O + '<path d="M4.4 0.0L4.4 18.2L4.4 0.0L95.6 0.0L95.6 18.2L95.6 0.0M91.6 4.0L91.6 22.7L91.6 4.0L8.4 4.0L8.4 22.7L8.4 4.0M93.6 50.1L93.9 49.0L94.8 48.2L95.2 47.6L95.2 46.4L4.8 46.4L4.7 47.1L4.9 47.8L6.1 49.0L6.5 50.4L7.1 50.7L92.9 50.7L93.4 50.5L93.6 50.1L6.4 50.1"/>' + _G
-           + _D + '<path d="M21.3 12.8L20.9 10.5L18.5 10.3L17.8 10.0L19.0 9.0L24.6 8.5L44.4 9.7L48.7 9.5L50.8 18.8M78.8 12.8L79.3 10.5L81.6 10.3L82.3 10.0L81.1 9.0L75.6 8.5L56.3 9.7L52.0 9.5L50.3 16.7M50.3 23.8L70.2 22.5L75.3 23.2L78.5 22.5L81.1 23.9L78.8 18.3M50.8 22.3L50.5 23.8L37.2 22.5L24.8 23.2L21.6 22.5L19.0 23.9L21.4 18.3L21.9 18.2L22.4 18.4M5.5 31.4L5.8 29.7L7.1 27.7L8.9 26.1L10.4 25.5L51.4 25.1M0.0 46.8L0.4 46.4L1.1 44.0L1.2 31.7L2.0 29.8L4.8 25.8L5.6 24.0L6.3 23.5L7.6 22.9L13.0 21.4L15.4 21.0L17.9 21.4L19.1 20.5L20.7 20.3M48.5 31.4L48.0 30.1L47.9 28.1L48.5 26.2L49.2 25.1L89.6 25.5L93.2 26.0L96.0 26.9L98.0 29.8L98.8 31.7L98.9 44.0L99.7 45.7L100.0 46.8M96.0 26.9L95.1 25.6L94.4 24.0L93.8 23.5L92.7 23.1L88.4 21.7L85.3 21.0L82.1 21.4L80.9 20.5L80.4 20.3L79.3 20.3M89.5 44.2L91.7 43.9L92.8 43.9L95.0 44.3L97.0 45.2L98.8 46.5L99.6 47.3L100.0 47.4M0.4 47.3L2.0 46.2L3.9 45.8L96.1 45.8L98.0 46.2L99.6 47.3"/>' + _G
-           + _F + '<path d="M21.1 18.8L22.3 19.0L23.3 19.6M23.1 13.8L21.3 14.4M8.3 30.2L8.9 28.0L10.3 26.3M26.8 9.1L27.4 10.2L28.1 12.0L28.3 13.9L28.2 15.2M70.7 12.3L67.4 11.4L64.2 9.8M0.0 47.4L0.4 47.3L1.2 46.5L3.0 45.2L5.0 44.3L7.2 43.9L8.3 43.9L10.5 44.2M46.0 27.8L46.7 25.1M55.8 25.1L57.4 25.6L59.4 26.9L60.8 28.9L61.3 30.5M42.2 14.6L41.4 12.0L41.1 9.4M64.9 13.0L65.3 10.9L66.4 9.0M77.2 20.7L77.6 19.4L78.5 18.4M89.6 25.5L91.1 26.1L93.0 27.7L94.2 29.7L94.6 31.4M89.7 26.3L91.1 28.0L91.7 30.2M77.0 18.7L77.7 18.1L78.5 17.7M78.7 13.9L77.7 14.1L77.2 13.4M67.5 11.8L67.4 10.3L67.9 8.8M10.4 25.5L6.8 26.0L4.0 26.9M4.8 46.2L4.6 45.9L3.9 45.8"/>' + _G },
+      svg: _O + '<path data-o="1" d="M1.67 40.7 V16.35 Q1.67 13.02 5 13.02 H11.33 V3.33 Q11.33 0 14.67 0 H85.33 Q88.67 0 88.67 3.33 V13.02 H95 Q98.33 13.02 98.33 16.35 V40.7 Z"/><path fill="none" d="M11.33 13.02 V40.7"/><path fill="none" d="M88.67 13.02 V40.7"/><circle cx="21" cy="5" r="0.58"/><circle cx="40.33" cy="5" r="0.58"/><circle cx="59.67" cy="5" r="0.58"/><circle cx="79" cy="5" r="0.58"/><circle cx="26.8" cy="12.77" r="0.58"/><circle cx="42.27" cy="12.77" r="0.58"/><circle cx="57.73" cy="12.77" r="0.58"/><circle cx="73.2" cy="12.77" r="0.58"/><rect data-o="1" x="2.67" y="46.7" width="7" height="4"/><rect data-o="1" x="90.33" y="46.7" width="7" height="4"/><rect data-o="1" x="1" y="40.2" width="98" height="6.5" rx="0.18"/><path data-o="1" d="M7.5 8.87 Q16 12.2 24.5 8.87 Q23.98 18.45 24.5 28.03 H7.5 Q8.02 18.45 7.5 8.87 Z"/><path data-o="1" d="M75.5 8.87 Q84 12.2 92.5 8.87 Q91.98 18.45 92.5 28.03 H75.5 Q76.02 18.45 75.5 8.87 Z"/><path data-o="1" d="M20.33 9.87 Q34.83 13.13 49.33 9.87 Q48.47 18.95 49.33 28.03 H20.33 Q21.2 18.95 20.33 9.87 Z"/><path data-o="1" d="M50.67 9.87 Q65.17 13.13 79.67 9.87 Q78.8 18.95 79.67 28.03 H50.67 Q51.53 18.95 50.67 9.87 Z"/><path data-o="1" d="M1.67 29.03 Q2 25.7 5 25.7 H95 Q98 25.7 98.33 29.03 C99 35.2 100.8 40.9 102 44.23 Q102 45.73 99.33 44.9 C97.67 44.23 97.33 41.53 96.67 40.2 H3.33 C2.67 41.53 2.33 44.23 0.67 44.9 Q-2 45.73 -2 44.23 C-0.8 40.9 1 35.2 1.67 29.03 Z"/><path fill="none" d="M2.67 28.32 Q50 29.15 97.33 28.32"/><path fill="none" d="M4 30.63 H96"/><path fill="none" d="M4 30.63 V40.2"/><path fill="none" d="M96 30.63 V40.2"/>' + _G },
     { key: 'b75', name: 'Low profile', w: 100, h: 41.9,
-      svg: _O + '<path d="M100.0 25.9L23.8 25.9L23.8 37.1L23.8 25.9M100.0 37.1L23.8 37.1M100.0 26.2L23.8 26.2M100.0 0.0L100.0 41.9L100.0 0.0L23.8 0.0M23.8 0.7L100.0 0.7"/>' + _G
-           + _D + '<path d="M69.9 16.1L68.8 15.2L67.7 13.5L67.2 11.5L67.2 10.1L68.5 10.3L70.4 11.0L72.1 12.1L73.0 13.0M82.1 13.3L83.1 12.3L84.7 11.2L86.6 10.5L87.9 10.3L87.9 11.5L87.7 12.9L86.5 15.2M25.3 22.1L25.4 21.4L25.9 20.5L26.9 19.9L27.6 19.8L96.2 19.8L97.6 20.2L98.4 21.4L98.6 22.1M7.2 25.9L16.7 25.9M7.2 33.9L16.7 33.9M1.0 23.0L22.9 23.0M0.0 21.9L23.8 21.9M22.9 30.9L1.0 30.9M22.6 39.8L1.2 39.8M23.8 38.6L0.0 38.6M0.0 22.8L0.0 41.9L0.0 22.8L23.8 22.8M87.4 13.0L87.9 10.3L86.6 10.9L85.2 11.0L81.8 10.2L79.9 10.0L78.0 10.1L75.3 10.7L73.7 10.8L70.4 10.6L67.2 10.1L67.8 12.9L67.8 15.8L68.1 15.9L68.3 15.7L68.2 15.5L67.9 15.5L67.8 17.6L67.5 19.7M58.8 18.2L58.6 16.0L58.9 16.1L59.2 15.9L58.9 14.8L58.9 13.2L59.2 11.6L59.7 10.6L54.0 11.1L46.5 11.3L40.8 11.1L38.0 10.4L37.9 12.6L38.3 14.8M90.6 26.2L93.3 22.9L96.2 19.8L97.0 22.9L96.9 26.2M53.7 13.7L54.7 12.7L56.4 11.6L58.3 10.9L59.7 10.6L59.5 11.6L58.8 12.8L57.6 13.6L56.7 13.9M38.3 14.8L38.0 10.4L39.3 10.6L41.1 11.4L42.7 12.5L43.6 13.5M1.0 38.3L1.0 30.9L1.0 38.3L22.9 38.3L22.9 30.9L22.9 38.3M1.0 30.6L1.0 23.0L1.0 30.6L22.9 30.6L22.9 23.0L22.9 30.6"/>' + _G
-           + _F + '<path d="M30.1 26.2L28.4 23.2L27.6 19.8M0.0 41.9L1.2 41.9L1.2 41.9M26.3 26.2L27.6 19.8M16.0 25.6L7.2 25.6M13.4 25.7L8.1 25.8M16.0 33.6L7.2 33.6M13.4 33.7L8.1 33.8M8.6 33.6L13.4 33.6M67.2 19.8L67.4 18.7L68.1 17.1L69.0 15.7L69.9 14.9M62.9 22.7L62.0 21.5L61.8 20.0M61.9 24.2L61.6 22.1L61.8 20.0M61.8 19.8L61.6 21.5L60.8 23.1M38.2 19.7L37.6 19.8L37.6 18.6L37.9 17.5L38.8 16.2L40.2 15.2M56.7 15.4L57.5 16.1L58.5 17.3L59.1 18.7L59.3 19.8M95.2 41.9L100.0 41.9M88.3 25.3L88.3 24.1L88.7 22.3L89.5 20.7L90.3 19.8M85.5 19.4L87.9 19.8L87.9 19.2L87.8 18.0L87.0 16.5L86.2 15.7L85.3 15.1M87.9 19.3L86.7 19.4L84.8 19.2L83.1 18.5L82.1 17.8M87.9 19.8L87.3 17.4L87.2 15.7L87.5 15.7L87.6 15.4L87.3 14.7L87.3 14.0M22.6 41.9L28.6 41.9L28.6 41.9M16.7 25.6L15.2 25.6M16.7 33.6L15.2 33.6M8.1 25.4L8.6 25.4L8.6 25.5L8.1 25.5M8.6 25.8L13.3 25.8M8.6 25.6L13.4 25.6M8.1 33.4L8.6 33.4L8.6 33.4L8.1 33.4M8.6 33.8L13.3 33.8M15.7 33.4L15.2 33.4L15.2 33.4L15.7 33.4M15.7 25.4L15.2 25.4L15.2 25.5L15.7 25.5M38.3 14.7L38.1 17.3L37.6 19.8L38.2 19.7"/>' + _G },
+      svg: _O + '<rect data-o="1" x="1.67" y="0" width="96.67" height="31.9" rx="0.73"/><path fill="none" d="M1.67 8.93 H98.33"/><path fill="none" d="M1.67 17.87 H98.33"/><rect data-o="1" x="2.67" y="37.9" width="7" height="4"/><rect data-o="1" x="90.33" y="37.9" width="7" height="4"/><rect data-o="1" x="1" y="31.4" width="98" height="6.5" rx="0.18"/><path data-o="1" d="M7.5 0.07 Q16 3.4 24.5 0.07 Q23.98 9.65 24.5 19.23 H7.5 Q8.02 9.65 7.5 0.07 Z"/><path data-o="1" d="M75.5 0.07 Q84 3.4 92.5 0.07 Q91.98 9.65 92.5 19.23 H75.5 Q76.02 9.65 75.5 0.07 Z"/><path data-o="1" d="M20.33 1.07 Q34.83 4.33 49.33 1.07 Q48.47 10.15 49.33 19.23 H20.33 Q21.2 10.15 20.33 1.07 Z"/><path data-o="1" d="M50.67 1.07 Q65.17 4.33 79.67 1.07 Q78.8 10.15 79.67 19.23 H50.67 Q51.53 10.15 50.67 1.07 Z"/><path data-o="1" d="M1.67 20.23 Q2 16.9 5 16.9 H95 Q98 16.9 98.33 20.23 C99 26.4 100.8 32.1 102 35.43 Q102 36.93 99.33 36.1 C97.67 35.43 97.33 32.73 96.67 31.4 H3.33 C2.67 32.73 2.33 35.43 0.67 36.1 Q-2 36.93 -2 35.43 C-0.8 32.1 1 26.4 1.67 20.23 Z"/><path fill="none" d="M2.67 19.52 Q50 20.35 97.33 19.52"/><path fill="none" d="M4 21.83 H96"/><path fill="none" d="M4 21.83 V31.4"/><path fill="none" d="M96 21.83 V31.4"/>' + _G },
 ];
 const CONTEXT_LIBRARY = [
-    // A bed is drawn at its HEAD END, which is the face you see on a headboard wall:
-    // mattress, foundation, plinth base with a toe recess. Layered the way a bed
-    // actually builds up, with the mattress tape edge as a fine line — the pillow
-    // profile that used to be here was the single thing making these read as sketches,
-    // and a pillow does not appear on a spec elevation.
-    // FRONT is the head/foot end — the face you see on a headboard wall — at the spec'd
-    // 60/76/54in width by the 24in mattress height, with pillows indicated on the deck.
-    // SIDE is the bed running along the wall: its real 80in (75in full) length, and 36in
-    // tall because the headboard and pillow rise above the mattress. That is exactly why
-    // a view toggle carries dimensions and not just artwork.
-    { cat: 'Beds', items: [
-        { key: 'bed-queen', name: 'Queen bed', w: 60, h: 24, lengthIn: 80, aff: 0, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'Queen Bed',
-          variants: BED_STYLE_VARIANTS,
-          svg: _O + '<rect x="0" y="0" width="60" height="10" rx="0.6"/>'
-                  + '<rect x="0.5" y="10" width="59" height="9"/>'
-                  + '<path d="M4 19 h52 v5 h-52 z"/>' + _G
-             + _D + '<path d="M7 4.6 C7.9 1.7999999999999998 10.3 1.2999999999999998 14.5 1.2999999999999998 C18.7 1.2999999999999998 21.1 1.7999999999999998 22 4.6 Z"/>'
-                  + '<path d="M38 4.6 C38.9 1.7999999999999998 41.3 1.2999999999999998 45.5 1.2999999999999998 C49.7 1.2999999999999998 52.1 1.7999999999999998 53 4.6 Z"/>' + _G
-             + _F + '<path d="M0 6.4 h60"/><path d="M0.5 13.8 h59"/>' + _G,
-          hatch: '<path d="M4 19 h52 v5 h-52 Z"/>',
-          side: { w: 80, h: 36,
-            svg: _O + '<rect x="0" y="0" width="4" height="36"/>'
-                    + '<rect x="4" y="12" width="76" height="10" rx="0.6"/>'
-                    + '<rect x="4" y="22" width="76" height="9"/>'
-                    + '<path d="M8 31 h68 v5 h-68 z"/>' + _G
-               // Propped against the headboard: a WEDGE, thick at the board and tapering
-               // to the deck, not a symmetric dome. Two of them overlapping, with a seam
-               // on the front one — a single arc is what read as a mushroom.
-               + _D + '<path d="M4.6 12 C4.4 7.4 6.6 4.9 11.4 4.6 C17 4.3 20.6 6.6 21.6 12 Z"/>'
-                    + '<path d="M21 12 C21.2 8.6 23.2 6.9 27 6.8 C31.4 6.7 34 8.6 34.6 12 Z"/>' + _G
-               + _F + '<path d="M6.6 6.2 C10.4 5.2 16.4 5.4 19.6 7.4"/>' + _G
-               + _F + '<path d="M4 18.4 h76"/><path d="M4 26.8 h76"/>'
-                    + '<path d="M40 14.5 L78 14.5"/>' + _G,
-            hatch: '<path d="M0 0 h4 v36 h-4 Z"/><path d="M8 31 h68 v5 h-68 Z"/>' } },
-        { key: 'bed-king', name: 'King bed', w: 76, h: 24, lengthIn: 80, aff: 0, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'King Bed',
-          variants: BED_STYLE_VARIANTS,
-          svg: _O + '<rect x="0" y="0" width="76" height="10" rx="0.6"/>'
-                  + '<rect x="0.5" y="10" width="75" height="9"/>'
-                  + '<path d="M5 19 h66 v5 h-66 z"/>' + _G
-             + _D + '<path d="M8 4.6 C9.14 1.7999999999999998 12.18 1.2999999999999998 17.5 1.2999999999999998 C22.82 1.2999999999999998 25.86 1.7999999999999998 27 4.6 Z"/>'
-                  + '<path d="M49 4.6 C50.14 1.7999999999999998 53.18 1.2999999999999998 58.5 1.2999999999999998 C63.82 1.2999999999999998 66.86 1.7999999999999998 68 4.6 Z"/>' + _G
-             + _F + '<path d="M0 6.4 h76"/><path d="M0.5 13.8 h75"/>' + _G,
-          hatch: '<path d="M5 19 h66 v5 h-66 Z"/>',
-          side: { w: 80, h: 36,
-            svg: _O + '<rect x="0" y="0" width="4" height="36"/>'
-                    + '<rect x="4" y="12" width="76" height="10" rx="0.6"/>'
-                    + '<rect x="4" y="22" width="76" height="9"/>'
-                    + '<path d="M8 31 h68 v5 h-68 z"/>' + _G
-               // Propped against the headboard: a WEDGE, thick at the board and tapering
-               // to the deck, not a symmetric dome. Two of them overlapping, with a seam
-               // on the front one — a single arc is what read as a mushroom.
-               + _D + '<path d="M4.6 12 C4.4 7.4 6.6 4.9 11.4 4.6 C17 4.3 20.6 6.6 21.6 12 Z"/>'
-                    + '<path d="M21 12 C21.2 8.6 23.2 6.9 27 6.8 C31.4 6.7 34 8.6 34.6 12 Z"/>' + _G
-               + _F + '<path d="M6.6 6.2 C10.4 5.2 16.4 5.4 19.6 7.4"/>' + _G
-               + _F + '<path d="M4 18.4 h76"/><path d="M4 26.8 h76"/>'
-                    + '<path d="M40 14.5 L78 14.5"/>' + _G,
-            hatch: '<path d="M0 0 h4 v36 h-4 Z"/><path d="M8 31 h68 v5 h-68 Z"/>' } },
-        { key: 'bed-full', name: 'Double / full', w: 54, h: 24, lengthIn: 75, aff: 0, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'Full Bed',
-          variants: BED_STYLE_VARIANTS,
-          svg: _O + '<rect x="0" y="0" width="54" height="10" rx="0.6"/>'
-                  + '<rect x="0.5" y="10" width="53" height="9"/>'
-                  + '<path d="M4 19 h46 v5 h-46 z"/>' + _G
-             + _D + '<path d="M6 4.6 C6.84 1.7999999999999998 9.08 1.2999999999999998 13 1.2999999999999998 C16.92 1.2999999999999998 19.16 1.7999999999999998 20 4.6 Z"/>'
-                  + '<path d="M34 4.6 C34.84 1.7999999999999998 37.08 1.2999999999999998 41 1.2999999999999998 C44.92 1.2999999999999998 47.16 1.7999999999999998 48 4.6 Z"/>' + _G
-             + _F + '<path d="M0 6.4 h54"/><path d="M0.5 13.8 h53"/>' + _G,
-          hatch: '<path d="M4 19 h46 v5 h-46 Z"/>',
-          side: { w: 75, h: 36,
-            svg: _O + '<rect x="0" y="0" width="4" height="36"/>'
-                    + '<rect x="4" y="12" width="71" height="10" rx="0.6"/>'
-                    + '<rect x="4" y="22" width="71" height="9"/>'
-                    + '<path d="M8 31 h63 v5 h-63 z"/>' + _G
-               + _D + '<path d="M4.6 12 C4.4 7.4 6.6 4.9 11 4.6 C16.4 4.3 19.8 6.6 20.8 12 Z"/>'
-                    + '<path d="M6.6 6.2 C10 5.2 15.6 5.4 18.6 7.4"/>' + _G
-               + _F + '<path d="M4 18.4 h71"/><path d="M4 26.8 h71"/>'
-                    + '<path d="M36 14.5 L73 14.5"/>' + _G,
-            hatch: '<path d="M0 0 h4 v36 h-4 Z"/><path d="M8 31 h63 v5 h-63 Z"/>' } },
-    ] },
-    // Doors carry the detail a door schedule expects: a 2in jamb, the leaf inside it,
-    // THREE butt hinges at their real AFF heights, a lever at 36in (34in on the ADA
-    // door) with a proper 2.75in backset, and a floor undercut. The hinge and lever
-    // heights are computed from the leaf height — cy is (h - AFF) — so they stay true
-    // if a size is ever corrected.
-    { cat: 'Doors', items: [
-        { key: 'door-guest', name: 'Guestroom entry', w: 36, h: 84, aff: 0, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'Guestroom Door',
-          svg: _O + '<rect x="0" y="0" width="36" height="84"/>'
-                  + '<rect x="2" y="2" width="32" height="82"/>' + _G
-             + _D + '<circle cx="31.25" cy="48" r="1.15"/><path d="M31.25 48 h-4.4"/>' + _G
-             + _F + '<rect x="2" y="7.75" width="0.7" height="4.5"/>'
-                  + '<rect x="2" y="39.75" width="0.7" height="4.5"/>'
-                  + '<rect x="2" y="71.75" width="0.7" height="4.5"/>'
-                  + '<path d="M2 83.25 h32"/>' + _G,
-          hatch: '<rect x="2" y="2" width="32" height="82"/>' },
-        { key: 'door-ada-bath', name: 'ADA bathroom', w: 36, h: 80, aff: 0, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'ADA Bathroom Door',
-          // A LEVER, not a knob: ADA requires hardware operable without grasping or
-          // twisting, and that is the one visual difference from the entry door.
-          svg: _O + '<rect x="0" y="0" width="36" height="80"/>'
-                  + '<rect x="2" y="2" width="32" height="78"/>' + _G
-             + _D + '<circle cx="31.25" cy="46" r="1.15"/><path d="M31.25 46 h-5.2"/>' + _G
-             + _F + '<rect x="2" y="7.75" width="0.7" height="4.5"/>'
-                  + '<rect x="2" y="37.75" width="0.7" height="4.5"/>'
-                  + '<rect x="2" y="67.75" width="0.7" height="4.5"/>'
-                  + '<path d="M2 79.25 h32"/>' + _G,
-          hatch: '<rect x="2" y="2" width="32" height="78"/>' },
-        { key: 'door-closet', name: 'Closet double', w: 72, h: 80, aff: 0, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'Closet Doors',
-          // Bi-parting leaves with a 2in meeting stile, hinges on the OUTER edges and
-          // pulls at the centre — the way a closet pair actually swings.
-          svg: _O + '<rect x="0" y="0" width="72" height="80"/>'
-                  + '<rect x="2" y="2" width="33" height="78"/><rect x="37" y="2" width="33" height="78"/>' + _G
-             + _D + '<path d="M33 38 v6 M39 38 v6"/>' + _G
-             + _F + '<rect x="2" y="9.75" width="0.7" height="4.5"/><rect x="2" y="65.75" width="0.7" height="4.5"/>'
-                  + '<rect x="69.3" y="9.75" width="0.7" height="4.5"/><rect x="69.3" y="65.75" width="0.7" height="4.5"/>'
-                  + '<path d="M2 79.25 h33 M37 79.25 h33"/>' + _G,
-          hatch: '<rect x="2" y="2" width="33" height="78"/><rect x="37" y="2" width="33" height="78"/>' },
-    ] },
-    { cat: 'Fixtures', items: [
-        { key: 'tv-55', name: 'TV 55"', w: 48.5, h: 28, aff: 60, affMode: 'center',
-          shape: 'tv', fill: 'plain', label: 'TV',
-          // 48.5in is the WIDTH of a 55in-diagonal panel. The diagonal is the marketing
-          // number; the width is what decides whether art fits beside it.
-          svg: _O + '<rect x="0" y="0" width="48.5" height="28" rx="0.4"/>' + _G
-             + _D + '<rect x="0.9" y="0.9" width="46.7" height="24.5"/>' + _G
-             + _F + '<path d="M0.9 25.4 h46.7"/><path d="M22.5 26.7 h3.5"/>' + _G,
-          // Edge-on: a wall-mounted panel is ~4in off the wall including its bracket.
-          // Worth having, because that projection is what a passing shoulder hits.
-          side: { w: 4, h: 28,
-            svg: _O + '<rect x="0" y="0" width="4" height="28" rx="0.3"/>' + _G
-               + _D + '<path d="M1.4 9 h1.2 v10 h-1.2 z"/>' + _G
-               + _F + '<path d="M0 1 h4 M0 27 h4"/>' + _G } },
-        { key: 'sconce', name: 'Wall sconce', w: 5, h: 10, aff: 60, affMode: 'center',
-          shape: 'rect', fill: 'plain', label: '',
-          svg: _O + '<path d="M1.55 3 L3.45 3 L4.6 10 L0.4 10 Z"/>' + _G
-             + _D + '<rect x="1.7" y="0" width="1.6" height="3"/>' + _G
-             + _F + '<path d="M0.62 8.7 h3.76"/>' + _G,
-          side: { w: 7, h: 10,
-            svg: _O + '<path d="M0 0 h1.2 v10 h-1.2 z"/>'
-                    + '<path d="M2.4 3 L4.2 3 L7 10 L1.2 10 Z"/>' + _G
-               + _D + '<path d="M1.2 4 h1.6"/>' + _G } },
-        { key: 'lamp-table', name: 'Table lamp', w: 14, h: 26, aff: 25, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: '',
-          // Sits ON the nightstand, so its default AFF is the 25in nightstand top rather
-          // than the floor — the kind of number a library is for.
-          svg: _O + '<path d="M3.2 0 L10.8 0 L14 11 L0 11 Z"/>'
-                  + '<path d="M4.6 22 h4.8 v4 h-4.8 z"/>' + _G
-             + _D + '<path d="M6.4 11 v11 M7.6 11 v11"/>' + _G
-             + _F + '<path d="M0.4 10 h13.2"/><path d="M4.6 24 h4.8"/>' + _G },
-        { key: 'lamp-floor', name: 'Floor lamp', w: 16, h: 60, aff: 0, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: '',
-          svg: _O + '<path d="M4 0 L12 0 L16 13 L0 13 Z"/>'
-                  + '<path d="M5 57 h6 v3 h-6 z"/>' + _G
-             + _D + '<path d="M7.5 13 v44 M8.5 13 v44"/>' + _G
-             + _F + '<path d="M0.4 11.8 h15.2"/>' + _G },
-        { key: 'mirror', name: 'Mirror', w: 36, h: 48, aff: 36, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'Mirror',
-          // Frame, glass reveal, and the single diagonal that means "mirror" on an
-          // interior elevation.
-          svg: _O + '<rect x="0" y="0" width="36" height="48"/>' + _G
-             + _D + '<rect x="1.5" y="1.5" width="33" height="45"/>' + _G
-             + _F + '<path d="M4 43.5 L15 12"/><path d="M10 43.5 L21 12"/>' + _G,
-          hatch: '<rect x="1.5" y="1.5" width="33" height="45"/>' },
-        { key: 'mirror-rd', name: 'Round mirror', w: 36, h: 36, aff: null, affMode: 'center',
-          shape: 'ellipse', fill: 'plain', label: 'Mirror',
-          svg: _O + '<circle cx="18" cy="18" r="17.6"/>' + _G
-             + _D + '<circle cx="18" cy="18" r="16"/>' + _G
-             + _F + '<path d="M7 27 L17 8"/><path d="M13 29 L23 10"/>' + _G },
-        { key: 'thermostat', name: 'Thermostat', w: 5, h: 5, aff: 54, affMode: 'center',
-          shape: 'rect', fill: 'plain', label: '' },
-        { key: 'outlet', name: 'Outlet', w: 3, h: 5, aff: 15, affMode: 'center',
-          shape: 'rect', fill: 'plain', label: '' },
-    ] },
-    // Hospitality bathrooms are drawn as often as the room itself, and the fixtures are
-    // the part a generic box says nothing useful about. Everything here is at its real
-    // ADA / code height: a 34in counter, an 18in comfort-height seat, grab bars at 34in,
-    // a towel bar at 48in.
-    { cat: 'Bath', items: [
-        { key: 'vanity-ada', name: 'ADA vanity', w: 48, h: 34, aff: 0, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'ADA Vanity',
-          // Open knee space is the whole point of an ADA vanity, so this is a counter and
-          // apron over a void — no cabinet. With the front open the BOWL IS VISIBLE, so
-          // it is drawn as a real object line rather than a hidden dash: an undermount
-          // basin with its rim, and the P-trap and angle stops a plumbing elevation
-          // carries. The faucet sits above the counter and is therefore outside this box.
-          svg: _O + '<rect x="0" y="0" width="48" height="2"/>'
-                  + '<rect x="0" y="2" width="48" height="3.5"/>'
-                  + '<path d="M14.5 5.5 v2.6 a9.5 5.6 0 0 0 19 0 v-2.6"/>' + _G
-             + _D + '<path d="M24 13.6 v2.2 a2.1 2.1 0 1 0 4.2 0 v-2.2"/>'
-                  + '<path d="M28.2 15.7 h6"/>' + _G
-             + _F + '<path d="M0 0.8 h48"/><path d="M16.5 5.5 v2.2 a7.5 4.2 0 0 0 15 0 v-2.2"/>'
-                  + '<circle cx="24" cy="9.2" r="0.7"/>'
-                  + '<circle cx="17" cy="20" r="0.9"/><circle cx="31" cy="20" r="0.9"/>'
-                  + '<path d="M17 19.1 v-2.4 M31 19.1 v-2.4"/>'
-                  + '<path d="M0 34 h48"/>' + _G,
-          side: { w: 22, h: 34,
-            svg: _O + '<rect x="0" y="0" width="22" height="2"/>'
-                    + '<rect x="0" y="2" width="22" height="3.5"/>'
-                    + '<path d="M3 5.5 v2.6 a8 5.6 0 0 0 16 0 v-2.6"/>' + _G
-               + _D + '<path d="M11 13.6 v2.2 a2.1 2.1 0 1 0 4.2 0 v-2.2"/>' + _G
-               + _F + '<path d="M0 0.8 h22"/><path d="M0 34 h22"/>' + _G } },
-        { key: 'vanity-60', name: 'Vanity 60"', w: 60, h: 34, aff: 0, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'Vanity',
-          // The closed-cabinet version: counter, two doors on a consistent reveal, pulls
-          // and a recessed toe kick. The bowl is HIDDEN behind the cabinet front, which
-          // is the one place the dashed convention belongs on this item.
-          svg: _O + '<rect x="0" y="0" width="60" height="2"/>'
-                  + '<path d="M0 2 h60 v26 h-60 z"/>'
-                  + '<path d="M2.5 28 h55 v6 h-55 z"/>' + _G
-             + _D + '<rect x="1" y="3" width="28.5" height="24"/>'
-                  + '<rect x="30.5" y="3" width="28.5" height="24"/>' + _G
-             + _H + '<path d="M20 2 v2.4 a10 5 0 0 0 20 0 v-2.4"/>' + _G
-             + _F + '<path d="M0 0.8 h60"/><path d="M11 6 h8 M41 6 h8"/>' + _G },
-        { key: 'lav-wall', name: 'Wall lav', w: 20, h: 22, aff: 12, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'Lavatory',
-          // A wall-hung basin: rim at 34in AFF (12 + 22), bowl, trap. Its own item
-          // because a bathroom without a vanity still has a sink.
-          svg: _O + '<path d="M0 0 h20 v3 h-20 z"/>'
-                  + '<path d="M1.5 3 v3.4 a8.5 6.5 0 0 0 17 0 v-3.4"/>' + _G
-             + _D + '<path d="M8.4 12.6 v3.4 a1.9 1.9 0 1 0 3.8 0 v-3.4"/>'
-                  + '<path d="M12.2 16 h5.6"/>' + _G
-             + _F + '<path d="M3.5 3 v2.8 a6.5 4.6 0 0 0 13 0 v-2.8"/>'
-                  + '<circle cx="10" cy="7.6" r="0.65"/><path d="M0 1 h20"/>' + _G },
-        { key: 'toilet-ada', name: 'ADA toilet', w: 15, h: 18, aff: 0, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'ADA Toilet',
-          // 18in is to the TOP OF SEAT, the ADA comfort height — so the box stops at the
-          // seat and any tank above it is outside this bounding box.
-          // Front elevation of a floor-mount bowl. The shape that makes it read: a seat
-          // with a visible lid overhang, a bowl that is WIDEST at the rim and pulls in
-          // to a narrow waist, then flares out again to a foot on the floor. The old
-          // version tapered straight down, which is why it looked like nothing in
-          // particular.
-          svg: _O + '<path d="M0.6 0 h13.8 a0.7 0.7 0 0 1 0 1.7 h-13.8 a0.7 0.7 0 0 1 0 -1.7 z"/>'
-                  + '<path d="M1.5 1.7 C1.5 5.2 2.6 7.6 4.3 9.5 C5.2 10.5 5.6 11.6 5.6 12.8'
-                  + ' L5.6 15.4 C5.6 16.1 5.2 16.5 4.6 16.8 L4 17.2 L4 18 L11 18 L11 17.2'
-                  + ' L10.4 16.8 C9.8 16.5 9.4 16.1 9.4 15.4 L9.4 12.8 C9.4 11.6 9.8 10.5 10.7 9.5'
-                  + ' C12.4 7.6 13.5 5.2 13.5 1.7 Z"/>' + _G
-             + _D + '<path d="M4 17.2 h7"/>' + _G
-             + _F + '<path d="M0.6 0.9 h13.8"/>'
-                  + '<path d="M3.2 5.6 C5.5 6.6 9.5 6.6 11.8 5.6"/>' + _G,
-          side: { w: 28, h: 18,
-            svg: _O + '<path d="M0 0 h11 v1.6 h-11 z"/>'
-                    + '<path d="M0 1.6 v14 a3 3 0 0 0 3 2.4 h6 a3 3 0 0 0 3 -2.4 v-14"/>' + _G
-               + _D + '<path d="M11 1.6 C16 2.5 22 4 24.5 7 C26.5 9.5 26.5 13 24 15.5"/>'
-                    + '<path d="M12 18 h13"/>' + _G
-               + _F + '<path d="M0 1 h11"/>' + _G } },
-        { key: 'toilet-tank', name: 'Toilet + tank', w: 20, h: 30, aff: 0, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'Toilet',
-          // Two-piece: the tank sits behind and above the seat, so the box runs to the
-          // 30in tank lid rather than to the 18in seat.
-          svg: _O + '<rect x="1" y="0" width="18" height="12" rx="0.5"/>'
-                  + '<rect x="2.5" y="12" width="15" height="1.6" rx="0.6"/>'
-                  + '<path d="M3.7 13.6 L4.1 19 C4.6 22 6.8 23.2 7.2 25.4 L6.5 28.4'
-                  + ' L5.6 30 L14.4 30 L13.5 28.4 L12.8 25.4 C13.2 23.2 15.4 22 15.9 19 L16.3 13.6"/>' + _G
-             + _D + '<path d="M1 2.2 h18"/>' + _G
-             + _F + '<circle cx="4.6" cy="4.4" r="0.8"/><path d="M6.5 28.4 h7"/>' + _G },
-        { key: 'tub', name: 'Bathtub', w: 60, h: 20, aff: 0, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'Tub',
-          // Apron-front tub: the rolled rim, the apron face and the recessed base.
-          svg: _O + '<path d="M0 0 h60 v20 h-60 z"/>' + _G
-             + _D + '<path d="M0 2.6 h60"/><path d="M1.5 18 h57"/>' + _G
-             + _F + '<path d="M0 1.2 h60"/><path d="M52 6 v8"/>' + _G },
-        { key: 'shower', name: 'Shower', w: 36, h: 80, aff: 0, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'Shower',
-          svg: _O + '<rect x="0" y="0" width="36" height="80"/>'
-                  + '<path d="M0 76 h36 v4 h-36 z"/>' + _G
-             + _D + '<rect x="1.5" y="1.5" width="33" height="74.5"/>'
-                  + '<path d="M19 1.5 v74.5"/>' + _G
-             + _F + '<path d="M16 36 v8"/>'
-                  + '<path d="M27 4 v3"/><path d="M23.5 7 h7"/>'
-                  + '<path d="M24.5 7 v1.6 M27 7 v1.6 M29.5 7 v1.6"/>' + _G },
-        { key: 'grab-36', name: 'Grab bar 36"', w: 36, h: 1.5, aff: 34, affMode: 'bottom',
-          shape: 'shelf', fill: 'plain', label: 'Grab Bar',
-          svg: _O + '<rect x="0" y="0" width="36" height="1.5" rx="0.75"/>' + _G
-             + _F + '<path d="M2.2 0 v1.5 M33.8 0 v1.5"/>' + _G },
-        { key: 'grab-42', name: 'Grab bar 42"', w: 42, h: 1.5, aff: 34, affMode: 'bottom',
-          shape: 'shelf', fill: 'plain', label: 'Grab Bar',
-          svg: _O + '<rect x="0" y="0" width="42" height="1.5" rx="0.75"/>' + _G
-             + _F + '<path d="M2.2 0 v1.5 M39.8 0 v1.5"/>' + _G },
-        { key: 'towel-bar', name: 'Towel bar', w: 24, h: 4, aff: 48, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: '',
-          svg: _O + '<path d="M0 0 h1.6 v4 h-1.6 z"/><path d="M22.4 0 h1.6 v4 h-1.6 z"/>' + _G
-             + _D + '<path d="M1.6 1.2 h20.8"/>' + _G },
-    ] },
-    { cat: 'Openings', items: [
-        { key: 'window', name: 'Window', w: 48, h: 48, aff: 36, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'Window',
-          // Frame, sash, meeting rail and muntins — the sash inset is what stops this
-          // reading as a plain square.
-          svg: _O + '<rect x="0" y="0" width="48" height="48"/>' + _G
-             + _D + '<rect x="2" y="2" width="44" height="44"/>' + _G
-             + _F + '<path d="M24 2 v44"/><path d="M2 24 h44"/>'
-                  + '<path d="M0 45.5 h48"/>' + _G,
-          hatch: '<rect x="2" y="2" width="44" height="44"/>' },
-        { key: 'window-full', name: 'Full-height', w: 72, h: 96, aff: 4, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'Window',
-          svg: _O + '<rect x="0" y="0" width="72" height="96"/>' + _G
-             + _D + '<path d="M24 0 v96 M48 0 v96"/>' + _G
-             + _F + '<rect x="1.5" y="1.5" width="21" height="93"/>'
-                  + '<rect x="25.5" y="1.5" width="21" height="93"/>'
-                  + '<rect x="49.5" y="1.5" width="21" height="93"/>' + _G,
-          hatch: '<rect x="1.5" y="1.5" width="21" height="93"/><rect x="25.5" y="1.5" width="21" height="93"/><rect x="49.5" y="1.5" width="21" height="93"/>' },
-        { key: 'door-slide', name: 'Sliding door', w: 60, h: 80, aff: 0, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'Sliding Door',
-          svg: _O + '<rect x="0" y="0" width="60" height="80"/>'
-                  + '<rect x="1.5" y="1.5" width="28" height="77"/>'
-                  + '<rect x="30.5" y="1.5" width="28" height="77"/>' + _G
-             + _D + '<path d="M27 37 v6 M33 37 v6"/>' + _G
-             + _F + '<path d="M1.5 76 h57"/>' + _G },
-        { key: 'elevator', name: 'Elevator', w: 42, h: 84, aff: 0, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'Elevator',
-          // Centre-opening two-leaf car doors with a sill — the pair of panel lines is
-          // what distinguishes an elevator from a plain opening in elevation.
-          svg: _O + '<rect x="0" y="0" width="42" height="84"/>'
-                  + '<rect x="2" y="2" width="38" height="82"/>' + _G
-             + _D + '<path d="M21 2 v82"/>' + _G
-             + _F + '<path d="M11 2 v82 M31 2 v82"/><path d="M2 81.5 h38"/>' + _G },
-        { key: 'niche', name: 'Niche', w: 36, h: 48, aff: 30, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'Niche' },
-    ] },
-    { cat: 'Millwork', items: [
-        // A shelf keeps the `shelf` primitive rather than getting line art: at 1.5in
-        // deep there is nothing to draw but the slab, and the primitive already strikes
-        // its top edge heavy — which IS the shelf plane art gets measured from.
-        { key: 'shelf', name: 'Shelf', w: 48, h: 1.5, aff: 48, affMode: 'bottom',
-          shape: 'shelf', fill: 'plain', label: 'Shelf' },
-        { key: 'shelf-long', name: 'Long shelf', w: 96, h: 1.5, aff: 48, affMode: 'bottom',
-          shape: 'shelf', fill: 'plain', label: 'Shelf' },
-        { key: 'credenza', name: 'Credenza', w: 72, h: 30, aff: 0, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'Credenza',
-          // Casework, drawn as casework: a top slab with an edge reveal, three door
-          // faces on consistent 1in reveals, bar pulls, and a recessed toe kick. The
-          // toe kick is the detail that most says "millwork" in elevation.
-          svg: _O + '<rect x="0" y="0" width="72" height="1.6"/>'
-                  + '<path d="M0 1.6 h72 v22.4 h-72 z"/>'
-                  + '<path d="M2.5 24 h67 v6 h-67 z"/>' + _G
-             + _D + '<rect x="1" y="2.6" width="22.6" height="20.4"/>'
-                  + '<rect x="24.7" y="2.6" width="22.6" height="20.4"/>'
-                  + '<rect x="48.4" y="2.6" width="22.6" height="20.4"/>' + _G
-             + _F + '<path d="M8.3 5.6 h8 M32 5.6 h8 M55.7 5.6 h8"/>' + _G,
-          hatch: '<rect x="0" y="0" width="72" height="24"/>',
-          side: { w: 20, h: 30,
-            svg: _O + '<rect x="0" y="0" width="20" height="1.6"/>'
-                    + '<path d="M0 1.6 h20 v22.4 h-20 z"/>'
-                    + '<path d="M1.5 24 h17 v6 h-17 z"/>' + _G
-               + _F + '<path d="M0 4.5 h20"/>' + _G } },
-        { key: 'desk', name: 'Desk', w: 48, h: 30, aff: 0, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'Desk',
-          svg: _O + '<rect x="0" y="0" width="48" height="1.6"/>'
-                  + '<rect x="0" y="1.6" width="2.2" height="28.4"/>'
-                  + '<rect x="45.8" y="1.6" width="2.2" height="28.4"/>' + _G
-             + _D + '<rect x="6" y="4" width="36" height="9"/>' + _G
-             + _F + '<path d="M0 30 h48"/>' + _G,
-          side: { w: 24, h: 30,
-            svg: _O + '<rect x="0" y="0" width="24" height="1.6"/>'
-                    + '<rect x="1" y="1.6" width="2.2" height="28.4"/>'
-                    + '<rect x="20.8" y="1.6" width="2.2" height="28.4"/>' + _G
-               + _F + '<path d="M0 30 h24"/>' + _G } },
-        { key: 'console', name: 'Console', w: 60, h: 32, aff: 0, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'Console',
-          svg: _O + '<rect x="0" y="0" width="60" height="1.6"/>'
-                  + '<rect x="2" y="1.6" width="2" height="30.4"/>'
-                  + '<rect x="56" y="1.6" width="2" height="30.4"/>' + _G
-             + _D + '<rect x="4" y="1.6" width="52" height="6"/>' + _G
-             + _F + '<path d="M26 5 h8"/>' + _G },
-        { key: 'headboard', name: 'Headboard', w: 78, h: 48, aff: 24, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'Headboard',
-          // Upholstered panel headboard: outer frame, an inset panel, and vertical
-          // channel tufting — the standard hospitality detail.
-          svg: _O + '<rect x="0" y="0" width="78" height="48"/>' + _G
-             + _D + '<rect x="2" y="2" width="74" height="44"/>' + _G
-             + _F + '<path d="M17 2 v44 M32 2 v44 M47 2 v44 M62 2 v44"/>' + _G },
-        { key: 'wainscot', name: 'Wainscot', w: 120, h: 36, aff: 0, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'Wainscot' },
-        { key: 'handrail', name: 'Handrail', w: 120, h: 2, aff: 34, affMode: 'bottom',
-          shape: 'shelf', fill: 'plain', label: 'Handrail' },
-        { key: 'reception', name: 'Reception', w: 120, h: 42, aff: 0, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'Reception Desk',
-          // Transaction counter over a lower work surface: the 42in top, the 34in ADA
-          // section at one end, a reveal band and a toe kick.
-          svg: _O + '<rect x="0" y="0" width="120" height="1.8"/>'
-                  + '<path d="M0 1.8 h120 v34.2 h-120 z"/>'
-                  + '<path d="M3 36 h114 v6 h-114 z"/>' + _G
-             + _D + '<rect x="0" y="8" width="120" height="1.2"/>'
-                  + '<path d="M78 8 v28 M78 8 h42"/>' + _G
-             + _F + '<path d="M0 4.5 h120"/><path d="M26 9.2 v26.8 M52 9.2 v26.8"/>' + _G },
-    ] },
-    { cat: 'Furniture', items: [
-        { key: 'nightstand', name: 'Nightstand', w: 24, h: 25, aff: 0, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'Nightstand',
-          svg: _O + '<rect x="0" y="0" width="24" height="1.3"/>'
-                  + '<path d="M0 1.3 h24 v19.7 h-24 z"/>'
-                  + '<path d="M1.5 21 h21 v4 h-21 z"/>' + _G
-             + _D + '<rect x="1" y="2.3" width="22" height="8.4"/>'
-                  + '<rect x="1" y="11.6" width="22" height="8.4"/>' + _G
-             + _F + '<path d="M9 6.5 h6 M9 15.8 h6"/>' + _G,
-          hatch: '<rect x="0" y="0" width="24" height="21"/>',
+    { cat: 'Guestroom', items: [
+        { key: 'gr-king-set', name: 'King bed + nightstands', w: 126, h: 54, aff: 0, affMode: 'bottom', ref: 'GR-001', shape: 'rect', fill: 'plain', label: 'King Bed',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="21.66" y="0.06" width="82.69" height="53.94" rx="0.24" data-o="1"/><rect x="23.63" y="2.02" width="78.75" height="31.5" rx="0.16" data-o="1"/><rect x="25.99" y="8.32" width="2.76" height="6.69" rx="0.32" data-o="1"/><rect x="26.58" y="9.51" width="1.58" height="2.36" rx="0.16" data-o="1"/><rect x="97.26" y="8.32" width="2.76" height="6.69" rx="0.32" data-o="1"/><rect x="97.85" y="9.51" width="1.58" height="2.36" rx="0.16" data-o="1"/><path d="M26.48 31.1Q37.19 32.52 47.9 31.1Q49.16 24.86 48.02 18.63Q37.19 16.92 26.36 18.63Q25.22 24.86 26.48 31.1Z" data-o="1"/><path d="M78.1 31.1Q88.81 32.52 99.52 31.1Q100.78 24.86 99.64 18.63Q88.81 16.92 77.98 18.63Q76.84 24.86 78.1 31.1Z" data-o="1"/><path d="M41.23 31.24Q51.59 32.42 61.94 31.24Q63.16 26.04 62.06 20.85Q51.59 19.43 41.12 20.85Q40.02 26.04 41.23 31.24Z" data-o="1"/><path d="M64.06 31.24Q74.41 32.42 84.77 31.24Q85.98 26.04 84.88 20.85Q74.41 19.43 63.95 20.85Q62.84 26.04 64.06 31.24Z" data-o="1"/><rect x="27.37" y="49.28" width="2.76" height="4.72" data-o="1"/><rect x="95.88" y="49.28" width="2.76" height="4.72" data-o="1"/><rect x="25.4" y="40.61" width="75.21" height="9.06" data-o="1"/><path d="M25.79 28.41L100.21 28.41Q102.18 28.41 102.18 30.38L102.89 40.61Q103.04 43.37 100.21 43.37L25.79 43.37Q22.96 43.37 23.11 40.61L23.82 30.38Q23.82 28.41 25.79 28.41Z" data-o="1"/><line x1="24.22" y1="31.75" x2="101.78" y2="31.75"/><rect x="0" y="30.38" width="21.66" height="1.18" rx="0.16" data-o="1"/><rect x="0.59" y="31.56" width="20.48" height="18.11" data-o="1"/><rect x="1.18" y="49.67" width="1.58" height="4.33" data-o="1"/><rect x="18.9" y="49.67" width="1.58" height="4.33" data-o="1"/><rect x="1.38" y="32.34" width="18.9" height="6.3" rx="0.12" data-o="1"/><rect x="8.47" y="35.34" width="4.72" height="0.55" rx="0.28" data-o="1"/><line x1="0.59" y1="42.19" x2="21.07" y2="42.19"/><rect x="104.34" y="30.38" width="21.66" height="1.18" rx="0.16" data-o="1"/><rect x="104.93" y="31.56" width="20.48" height="18.11" data-o="1"/><rect x="105.53" y="49.67" width="1.58" height="4.33" data-o="1"/><rect x="123.24" y="49.67" width="1.58" height="4.33" data-o="1"/><rect x="105.72" y="32.34" width="18.9" height="6.3" rx="0.12" data-o="1"/><rect x="112.81" y="35.34" width="4.72" height="0.55" rx="0.28" data-o="1"/><line x1="104.93" y1="42.19" x2="125.41" y2="42.19"/></g>' + _G,
+          side: { w: 84, h: 54,
+            svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0" y="2.12" width="3.03" height="51.88" rx="0.23" data-o="1"/><path d="M4.19 32.04Q13.44 33.29 22.7 32.04Q23.78 26.54 22.8 21.04Q13.44 19.54 4.09 21.04Q3.11 26.54 4.19 32.04Z" data-o="1"/><rect x="5.3" y="49.46" width="2.65" height="4.54" data-o="1"/><rect x="77.64" y="49.46" width="2.65" height="4.54" data-o="1"/><rect x="3.41" y="41.12" width="78.39" height="8.71" data-o="1"/><path d="M3.03 29.38L81.42 29.38Q83.32 29.38 83.32 31.28L84 41.12Q84.15 43.77 81.42 43.77L3.03 43.77Z" data-o="1"/><line x1="27.65" y1="29.38" x2="27.65" y2="43.77"/><line x1="3.03" y1="32.6" x2="27.65" y2="32.6"/><rect x="3.79" y="31.28" width="17.04" height="1.14" rx="0.15" data-o="1"/><rect x="4.36" y="32.41" width="15.91" height="17.42" data-o="1"/><rect x="4.92" y="49.83" width="1.51" height="4.17" data-o="1"/><rect x="18.18" y="49.83" width="1.51" height="4.17" data-o="1"/><line x1="4.36" y1="42.64" x2="20.26" y2="42.64"/></g>' + _G } },
+        { key: 'hc-gr-002', name: 'Queen bed', w: 102.4, h: 53.9, aff: 0, affMode: 'bottom', ref: 'GR-002', shape: 'rect', fill: 'plain', label: 'Queen Bed',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0.05" y="0" width="102.29" height="53.9" rx="0.24" data-o="1"/><rect x="2.02" y="1.97" width="98.36" height="31.47" rx="0.16" data-o="1"/><rect x="4.38" y="8.26" width="2.75" height="6.69" rx="0.31" data-o="1"/><rect x="4.97" y="9.44" width="1.57" height="2.36" rx="0.16" data-o="1"/><rect x="95.26" y="8.26" width="2.75" height="6.69" rx="0.31" data-o="1"/><rect x="95.85" y="9.44" width="1.57" height="2.36" rx="0.16" data-o="1"/><path d="M22.63 31.02Q31.06 32.43 39.49 31.02Q40.48 24.79 39.58 18.55Q31.06 16.85 22.53 18.55Q21.64 24.79 22.63 31.02Z" data-o="1"/><path d="M62.91 31.02Q71.34 32.43 79.77 31.02Q80.76 24.79 79.87 18.55Q71.34 16.85 62.82 18.55Q61.92 24.79 62.91 31.02Z" data-o="1"/><path d="M33.98 31.16Q42.14 32.34 50.29 31.16Q51.24 25.97 50.37 20.77Q42.14 19.36 33.9 20.77Q33.03 25.97 33.98 31.16Z" data-o="1"/><path d="M52.11 31.16Q60.26 32.34 68.42 31.16Q69.37 25.97 68.5 20.77Q60.26 19.36 52.03 20.77Q51.16 25.97 52.11 31.16Z" data-o="1"/><rect x="23.66" y="49.18" width="2.75" height="4.72" data-o="1"/><rect x="75.99" y="49.18" width="2.75" height="4.72" data-o="1"/><rect x="21.69" y="40.52" width="59.01" height="9.05" data-o="1"/><path d="M22.09 28.33L80.31 28.33Q82.28 28.33 82.28 30.29L82.99 40.52Q83.15 43.28 80.31 43.28L22.09 43.28Q19.25 43.28 19.41 40.52L20.12 30.29Q20.12 28.33 22.09 28.33Z" data-o="1"/><line x1="20.51" y1="31.67" x2="81.89" y2="31.67"/></g>' + _G,
+          side: { w: 85.4, h: 53.9,
+            svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0.05" y="0" width="3.15" height="53.9" rx="0.24" data-o="1"/><path d="M4.4 31.09Q14.02 32.39 23.63 31.09Q24.76 25.38 23.74 19.66Q14.02 18.11 4.3 19.66Q3.28 25.38 4.4 31.09Z" data-o="1"/><rect x="5.56" y="49.18" width="2.75" height="4.72" data-o="1"/><rect x="78.74" y="49.18" width="2.75" height="4.72" data-o="1"/><rect x="3.59" y="40.52" width="79.47" height="9.05" data-o="1"/><path d="M3.2 28.33L82.67 28.33Q84.64 28.33 84.64 30.29L85.35 40.52Q85.51 43.28 82.67 43.28L3.2 43.28Z" data-o="1"/><line x1="28.77" y1="28.33" x2="28.77" y2="43.28"/><line x1="3.2" y1="31.67" x2="28.77" y2="31.67"/></g>' + _G } },
+        { key: 'hc-gr-003', name: 'Twin bed', w: 63, h: 49.2, aff: 0, affMode: 'bottom', ref: 'GR-003', shape: 'rect', fill: 'plain', label: 'Twin Bed',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0.01" y="0" width="43.3" height="49.2" rx="0.24" data-o="1"/><rect x="1.98" y="1.97" width="39.36" height="26.76" rx="0.16" data-o="1"/><path d="M7.01 26.45Q21.66 27.63 36.31 26.45Q38.03 21.25 36.47 16.06Q21.66 14.64 6.85 16.06Q5.29 21.25 7.01 26.45Z" data-o="1"/><rect x="4.54" y="44.48" width="2.76" height="4.72" data-o="1"/><rect x="36.03" y="44.48" width="2.76" height="4.72" data-o="1"/><rect x="2.57" y="35.82" width="38.18" height="9.05" data-o="1"/><path d="M2.96 23.62L40.36 23.62Q42.32 23.62 42.32 25.58L43.03 35.82Q43.19 38.57 40.36 38.57L2.96 38.57Q0.13 38.57 0.29 35.82L1 25.58Q1 23.62 2.96 23.62Z" data-o="1"/><line x1="1.39" y1="26.96" x2="41.93" y2="26.96"/><rect x="43.31" y="25.58" width="19.68" height="1.18" rx="0.16" data-o="1"/><rect x="43.9" y="26.76" width="18.5" height="18.11" data-o="1"/><rect x="44.49" y="44.87" width="1.57" height="4.33" data-o="1"/><rect x="60.23" y="44.87" width="1.57" height="4.33" data-o="1"/><rect x="44.69" y="27.55" width="16.92" height="6.3" rx="0.12" data-o="1"/><rect x="50.79" y="30.54" width="4.72" height="0.55" rx="0.28" data-o="1"/><line x1="43.9" y1="37.39" x2="62.4" y2="37.39"/></g>' + _G,
+          side: { w: 83.4, h: 49.2,
+            svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0.02" y="0" width="3.15" height="49.2" rx="0.24" data-o="1"/><path d="M4.37 26.38Q13.99 27.68 23.61 26.38Q24.74 20.66 23.71 14.95Q13.99 13.39 4.27 14.95Q3.25 20.66 4.37 26.38Z" data-o="1"/><rect x="5.53" y="44.48" width="2.76" height="4.72" data-o="1"/><rect x="76.77" y="44.48" width="2.76" height="4.72" data-o="1"/><rect x="3.56" y="35.82" width="77.54" height="9.05" data-o="1"/><path d="M3.17 23.62L80.71 23.62Q82.67 23.62 82.67 25.58L83.38 35.82Q83.54 38.57 80.71 38.57L3.17 38.57Z" data-o="1"/><line x1="28.75" y1="23.62" x2="28.75" y2="38.57"/><line x1="3.17" y1="26.96" x2="28.75" y2="26.96"/></g>' + _G } },
+        { key: 'hc-gr-004', name: 'Double queen beds', w: 240, h: 53.9, aff: 0, affMode: 'bottom', ref: 'GR-004', shape: 'rect', fill: 'plain', label: 'Queen Beds',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0.08" y="30.29" width="23.61" height="1.18" rx="0.16" data-o="1"/><rect x="0.67" y="31.47" width="22.43" height="18.1" data-o="1"/><rect x="1.26" y="49.57" width="1.57" height="4.33" data-o="1"/><rect x="20.93" y="49.57" width="1.57" height="4.33" data-o="1"/><rect x="1.46" y="32.26" width="20.85" height="6.29" rx="0.12" data-o="1"/><rect x="9.52" y="35.25" width="4.72" height="0.55" rx="0.28" data-o="1"/><line x1="0.67" y1="42.1" x2="23.1" y2="42.1"/><rect x="32.5" y="0" width="66.88" height="53.9" rx="0.24" data-o="1"/><rect x="34.47" y="1.97" width="62.95" height="31.47" rx="0.16" data-o="1"/><rect x="36.83" y="8.26" width="2.75" height="6.69" rx="0.31" data-o="1"/><rect x="37.42" y="9.44" width="1.57" height="2.36" rx="0.16" data-o="1"/><rect x="92.3" y="8.26" width="2.75" height="6.69" rx="0.31" data-o="1"/><rect x="92.89" y="9.44" width="1.57" height="2.36" rx="0.16" data-o="1"/><path d="M37.37 31.02Q45.8 32.43 54.23 31.02Q55.22 24.79 54.32 18.55Q45.8 16.85 37.28 18.55Q36.38 24.79 37.37 31.02Z" data-o="1"/><path d="M77.66 31.02Q86.09 32.43 94.52 31.02Q95.51 24.79 94.61 18.55Q86.09 16.85 77.56 18.55Q76.67 24.79 77.66 31.02Z" data-o="1"/><path d="M48.73 31.16Q56.88 32.34 65.03 31.16Q65.98 25.97 65.12 20.77Q56.88 19.36 48.64 20.77Q47.77 25.97 48.73 31.16Z" data-o="1"/><path d="M66.86 31.16Q75.01 32.34 83.16 31.16Q84.11 25.97 83.25 20.77Q75.01 19.36 66.77 20.77Q65.9 25.97 66.86 31.16Z" data-o="1"/><rect x="38.4" y="49.18" width="2.75" height="4.72" data-o="1"/><rect x="90.73" y="49.18" width="2.75" height="4.72" data-o="1"/><rect x="36.44" y="40.52" width="59.01" height="9.05" data-o="1"/><path d="M36.83 28.33L95.06 28.33Q97.02 28.33 97.02 30.29L97.73 40.52Q97.89 43.28 95.06 43.28L36.83 43.28Q34 43.28 34.15 40.52L34.86 30.29Q34.86 28.33 36.83 28.33Z" data-o="1"/><line x1="35.26" y1="31.67" x2="96.63" y2="31.67"/><rect x="108.2" y="30.29" width="23.61" height="1.18" rx="0.16" data-o="1"/><rect x="108.79" y="31.47" width="22.43" height="18.1" data-o="1"/><rect x="109.38" y="49.57" width="1.57" height="4.33" data-o="1"/><rect x="129.05" y="49.57" width="1.57" height="4.33" data-o="1"/><rect x="109.57" y="32.26" width="20.85" height="6.29" rx="0.12" data-o="1"/><rect x="117.64" y="35.25" width="4.72" height="0.55" rx="0.28" data-o="1"/><line x1="108.79" y1="42.1" x2="131.21" y2="42.1"/><rect x="140.62" y="0" width="66.88" height="53.9" rx="0.24" data-o="1"/><rect x="142.58" y="1.97" width="62.95" height="31.47" rx="0.16" data-o="1"/><rect x="144.94" y="8.26" width="2.75" height="6.69" rx="0.31" data-o="1"/><rect x="145.53" y="9.44" width="1.57" height="2.36" rx="0.16" data-o="1"/><rect x="200.42" y="8.26" width="2.75" height="6.69" rx="0.31" data-o="1"/><rect x="201.01" y="9.44" width="1.57" height="2.36" rx="0.16" data-o="1"/><path d="M145.48 31.02Q153.91 32.43 162.34 31.02Q163.33 24.79 162.44 18.55Q153.91 16.85 145.39 18.55Q144.49 24.79 145.48 31.02Z" data-o="1"/><path d="M185.77 31.02Q194.2 32.43 202.63 31.02Q203.62 24.79 202.72 18.55Q194.2 16.85 185.68 18.55Q184.78 24.79 185.77 31.02Z" data-o="1"/><path d="M156.84 31.16Q164.99 32.34 173.14 31.16Q174.1 25.97 173.23 20.77Q164.99 19.36 156.75 20.77Q155.89 25.97 156.84 31.16Z" data-o="1"/><path d="M174.97 31.16Q183.12 32.34 191.27 31.16Q192.23 25.97 191.36 20.77Q183.12 19.36 174.88 20.77Q174.02 25.97 174.97 31.16Z" data-o="1"/><rect x="146.52" y="49.18" width="2.75" height="4.72" data-o="1"/><rect x="198.84" y="49.18" width="2.75" height="4.72" data-o="1"/><rect x="144.55" y="40.52" width="59.01" height="9.05" data-o="1"/><path d="M144.94 28.33L203.17 28.33Q205.14 28.33 205.14 30.29L205.85 40.52Q206 43.28 203.17 43.28L144.94 43.28Q142.11 43.28 142.27 40.52L142.98 30.29Q142.98 28.33 144.94 28.33Z" data-o="1"/><line x1="143.37" y1="31.67" x2="204.74" y2="31.67"/><rect x="216.31" y="30.29" width="23.61" height="1.18" rx="0.16" data-o="1"/><rect x="216.9" y="31.47" width="22.43" height="18.1" data-o="1"/><rect x="217.49" y="49.57" width="1.57" height="4.33" data-o="1"/><rect x="237.16" y="49.57" width="1.57" height="4.33" data-o="1"/><rect x="217.69" y="32.26" width="20.85" height="6.29" rx="0.12" data-o="1"/><rect x="225.75" y="35.25" width="4.72" height="0.55" rx="0.28" data-o="1"/><line x1="216.9" y1="42.1" x2="239.33" y2="42.1"/></g>' + _G },
+        { key: 'hc-gr-005', name: 'Headboard', w: 82.7, h: 55.1, aff: 0, affMode: 'bottom', ref: 'GR-005', shape: 'rect', fill: 'plain', label: 'Headboard',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0.02" y="0" width="82.65" height="55.1" rx="1.18" data-o="1"/><rect x="1.6" y="1.57" width="79.5" height="51.95" rx="0.79" data-o="1"/><line x1="9.55" y1="53.53" x2="9.55" y2="1.57"/><line x1="17.5" y1="53.53" x2="17.5" y2="1.57"/><line x1="25.45" y1="53.53" x2="25.45" y2="1.57"/><line x1="33.4" y1="53.53" x2="33.4" y2="1.57"/><line x1="41.35" y1="53.53" x2="41.35" y2="1.57"/><line x1="49.3" y1="53.53" x2="49.3" y2="1.57"/><line x1="57.25" y1="53.53" x2="57.25" y2="1.57"/><line x1="65.2" y1="53.53" x2="65.2" y2="1.57"/><line x1="73.15" y1="53.53" x2="73.15" y2="1.57"/></g>' + _G,
+          side: { w: 4.7, h: 55.1,
+            svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0" y="16.33" width="1.18" height="3.53" data-o="1"/><rect x="1.18" y="0.27" width="3.53" height="54.83" rx="0.94" data-o="1"/><line x1="2.35" y1="53.53" x2="2.35" y2="1.83"/></g>' + _G } },
+        { key: 'nightstand', name: 'Nightstand', w: 24, h: 25, aff: 0, affMode: 'bottom', ref: 'GR-006', shape: 'rect', fill: 'plain', label: 'Nightstand',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0.54" y="0" width="22.92" height="1.25" rx="0.17" data-o="1"/><rect x="1.17" y="1.25" width="21.67" height="19.17" data-o="1"/><rect x="1.79" y="20.42" width="1.67" height="4.58" data-o="1"/><rect x="20.54" y="20.42" width="1.67" height="4.58" data-o="1"/><rect x="2" y="2.08" width="20" height="6.67" rx="0.13" data-o="1"/><rect x="9.5" y="5.25" width="5" height="0.58" rx="0.29" data-o="1"/><line x1="1.17" y1="12.5" x2="22.83" y2="12.5"/></g>' + _G,
           side: { w: 18, h: 25,
-            svg: _O + '<rect x="0" y="0" width="18" height="1.3"/>'
-                    + '<path d="M0 1.3 h18 v19.7 h-18 z"/>'
-                    + '<path d="M1.2 21 h15.6 v4 h-15.6 z"/>' + _G
-               + _F + '<path d="M0 11.2 h18"/>' + _G } },
-        { key: 'dresser', name: 'Dresser', w: 60, h: 32, aff: 0, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'Dresser',
-          svg: _O + '<rect x="0" y="0" width="60" height="1.6"/>'
-                  + '<path d="M0 1.6 h60 v24.4 h-60 z"/>'
-                  + '<path d="M2 26 h56 v6 h-56 z"/>' + _G
-             + _D + '<rect x="1" y="2.6" width="58" height="7.4"/>'
-                  + '<rect x="1" y="10.8" width="58" height="7.4"/>'
-                  + '<rect x="1" y="19" width="58" height="6"/>' + _G
-             + _F + '<path d="M25 6.3 h10 M25 14.5 h10 M25 22 h10"/>' + _G,
-          hatch: '<rect x="0" y="0" width="60" height="26"/>',
+            svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0" y="1" width="18" height="1.2" rx="0.16" data-o="1"/><rect x="0.6" y="2.2" width="16.8" height="18.4" data-o="1"/><rect x="1.2" y="20.6" width="1.6" height="4.4" data-o="1"/><rect x="15.2" y="20.6" width="1.6" height="4.4" data-o="1"/><line x1="0.6" y1="13" x2="17.4" y2="13"/></g>' + _G } },
+        { key: 'hc-gr-007', name: 'Desk + chair', w: 60, h: 30, aff: 0, affMode: 'bottom', ref: 'GR-007', shape: 'rect', fill: 'plain', label: 'Desk',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="1.18" y="1.18" width="1.57" height="28.82" data-o="1"/><rect x="57.24" y="1.18" width="1.57" height="28.82" data-o="1"/><rect x="2.76" y="1.18" width="54.49" height="3.62" data-o="1"/><rect x="20.16" y="1.57" width="19.69" height="2.76" rx="0.12" data-o="1"/><rect x="27.64" y="2.68" width="4.72" height="0.55" rx="0.28" data-o="1"/><rect x="0" y="0" width="60" height="1.18" rx="0.16" data-o="1"/><rect x="21.54" y="13.07" width="1.38" height="16.93" data-o="1"/><rect x="37.09" y="13.07" width="1.38" height="16.93" data-o="1"/><rect x="21.14" y="1.26" width="17.72" height="11.81" rx="1.97" data-o="1"/><rect x="20.35" y="11.1" width="19.29" height="2.76" rx="0.98" data-o="1"/></g>' + _G },
+        { key: 'gr-media', name: 'TV + console', w: 72, h: 66, aff: 0, affMode: 'bottom', ref: 'GR-008', shape: 'rect', fill: 'plain', label: 'Media Wall',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="2.36" y="60.88" width="1.97" height="5.12" data-o="1"/><rect x="67.67" y="60.88" width="1.97" height="5.12" data-o="1"/><rect x="0" y="42.38" width="72" height="18.9" rx="0.24" data-o="1"/><rect x="1.02" y="43.17" width="17.13" height="17.32" rx="0.12" data-o="1"/><rect x="16.42" y="44.74" width="0.79" height="4.33" rx="0.39" data-o="1"/><rect x="18.63" y="43.17" width="17.13" height="17.32" rx="0.12" data-o="1"/><rect x="19.57" y="44.74" width="0.79" height="4.33" rx="0.39" data-o="1"/><rect x="36.24" y="43.17" width="17.13" height="17.32" rx="0.12" data-o="1"/><rect x="51.64" y="44.74" width="0.79" height="4.33" rx="0.39" data-o="1"/><rect x="53.84" y="43.17" width="17.13" height="17.32" rx="0.12" data-o="1"/><rect x="54.79" y="44.74" width="0.79" height="4.33" rx="0.39" data-o="1"/><rect x="7.46" y="0.02" width="57.08" height="32.67" rx="0.31" data-o="1"/><rect x="8.25" y="0.81" width="55.51" height="31.1" rx="0.12" data-o="1"/></g>' + _G },
+        { key: 'gr-wardrobe-wall', name: 'Wardrobe wall', w: 96, h: 90, aff: 0, affMode: 'bottom', ref: 'GR-009', shape: 'rect', fill: 'plain', label: 'Wardrobe',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0.78" y="0.72" width="95.22" height="89.28" rx="0.12" data-o="1"/><line x1="0.78" y1="86.09" x2="96" y2="86.09"/><line x1="0.78" y1="3.45" x2="96" y2="3.45"/><line x1="32.13" y1="86.09" x2="32.13" y2="3.45"/><line x1="32.91" y1="86.09" x2="32.91" y2="3.45"/><line x1="63.87" y1="86.09" x2="63.87" y2="3.45"/><line x1="64.65" y1="86.09" x2="64.65" y2="3.45"/><rect x="1.56" y="14.82" width="30.18" height="0.98" data-o="1"/><rect x="1.95" y="18.14" width="29.79" height="0.78" rx="0.39" data-o="1"/><path d="M7.42 18.53Q7.42 20.09 6.44 20.28" fill="none"/><polygon points="7.42,21.26 0,25.95 14.84,25.95" fill="none"/><circle cx="7.42" cy="20.79" r="0.47" fill="none"/><path d="M16.4 18.53Q16.4 20.09 15.43 20.28" fill="none"/><polygon points="16.4,21.26 8.98,25.95 23.82,25.95" fill="none"/><circle cx="16.4" cy="20.79" r="0.47" fill="none"/><path d="M25.39 18.53Q25.39 20.09 24.41 20.28" fill="none"/><polygon points="25.39,21.26 17.97,25.95 32.81,25.95" fill="none"/><circle cx="25.39" cy="20.79" r="0.47" fill="none"/><rect x="1.56" y="71.45" width="30.18" height="0.98" data-o="1"/><rect x="33.5" y="4.04" width="14.31" height="81.47" rx="0.12" data-o="1"/><rect x="45.85" y="35.32" width="0.78" height="15.62" rx="0.39" data-o="1"/><rect x="48.98" y="4.04" width="14.31" height="81.47" rx="0.12" data-o="1"/><rect x="50.15" y="35.32" width="0.78" height="15.62" rx="0.39" data-o="1"/><rect x="65.04" y="30.44" width="30.18" height="0.98" data-o="1"/><rect x="65.04" y="16.77" width="30.18" height="0.98" data-o="1"/><rect x="65.24" y="71.25" width="29.79" height="14.06" rx="0.12" data-o="1"/><rect x="77.01" y="74.46" width="6.25" height="0.7" rx="0.35" data-o="1"/><rect x="65.24" y="56.41" width="29.79" height="14.06" rx="0.12" data-o="1"/><rect x="77.01" y="59.61" width="6.25" height="0.7" rx="0.35" data-o="1"/><rect x="65.24" y="41.57" width="29.79" height="14.06" rx="0.12" data-o="1"/><rect x="77.01" y="44.77" width="6.25" height="0.7" rx="0.35" data-o="1"/><rect x="65.24" y="32.98" width="29.79" height="7.81" rx="0.12" data-o="1"/></g>' + _G },
+        { key: 'hc-gr-010', name: 'Luggage bench', w: 47.2, h: 19.7, aff: 0, affMode: 'bottom', ref: 'GR-010', shape: 'rect', fill: 'plain', label: 'Luggage Bench',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="1.18" y="2.39" width="1.97" height="17.31" data-o="1"/><rect x="44.05" y="2.39" width="1.97" height="17.31" data-o="1"/><rect x="3.15" y="13.8" width="40.91" height="1.18" data-o="1"/><rect x="0" y="0.03" width="47.2" height="2.36" rx="0.24" data-o="1"/><line x1="0.39" y1="1.21" x2="46.81" y2="1.21"/></g>' + _G,
+          side: { w: 16.9, h: 19.7,
+            svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0.79" y="2.41" width="1.97" height="17.29" data-o="1"/><rect x="14.15" y="2.41" width="1.97" height="17.29" data-o="1"/><rect x="2.75" y="13.8" width="11.4" height="1.18" data-o="1"/><rect x="0" y="1.82" width="16.9" height="1.18" data-o="1"/><rect x="0" y="0.05" width="3.07" height="1.77" rx="0.24" data-o="1"/><rect x="3.46" y="0.05" width="3.07" height="1.77" rx="0.24" data-o="1"/><rect x="6.92" y="0.05" width="3.07" height="1.77" rx="0.24" data-o="1"/><rect x="10.38" y="0.05" width="3.07" height="1.77" rx="0.24" data-o="1"/><rect x="13.83" y="0.05" width="3.07" height="1.77" rx="0.24" data-o="1"/></g>' + _G } },
+        { key: 'hc-gr-011', name: 'Lounge chair', w: 33.5, h: 35.4, aff: 0, affMode: 'bottom', ref: 'GR-011', shape: 'rect', fill: 'plain', label: 'Lounge Chair',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><polygon points="1.61,35.4 3.77,35.4 3.97,30.68 1.41,30.68" data-o="1"/><polygon points="29.73,35.4 31.89,35.4 32.09,30.68 29.53,30.68" data-o="1"/><rect x="4.36" y="0" width="24.78" height="20.45" rx="2.36" data-o="1"/><rect x="0.03" y="11.01" width="6.69" height="19.67" rx="2.36" data-o="1"/><rect x="26.78" y="11.01" width="6.69" height="19.67" rx="2.36" data-o="1"/><rect x="6.72" y="20.06" width="20.06" height="10.62" data-o="1"/><rect x="6.72" y="15.93" width="20.06" height="4.52" rx="1.18" data-o="1"/></g>' + _G,
+          side: { w: 31.5, h: 35.4,
+            svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><path d="M21.26 13.37L24.01 1.18Q24.21 0 25.58 0L30.3 0Q31.48 0 31.48 1.18L31.48 13.37Z" data-o="1"/><polygon points="1.59,35.4 3.75,35.4 3.95,30.68 1.39,30.68" data-o="1"/><polygon points="27.75,35.4 29.91,35.4 30.11,30.68 27.55,30.68" data-o="1"/><rect x="0.02" y="11.01" width="31.47" height="19.67" rx="2.36" data-o="1"/><line x1="1.59" y1="13.77" x2="29.91" y2="13.77"/></g>' + _G } },
+        { key: 'hc-gr-012', name: 'Sofa / sleeper sofa', w: 82.7, h: 35.4, aff: 0, affMode: 'bottom', ref: 'GR-012', shape: 'rect', fill: 'plain', label: 'Sofa',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><polygon points="1.62,35.4 3.79,35.4 3.98,30.68 1.43,30.68" data-o="1"/><polygon points="78.91,35.4 81.08,35.4 81.27,30.68 78.72,30.68" data-o="1"/><rect x="4.77" y="0" width="73.16" height="20.45" rx="1.97" data-o="1"/><rect x="7.44" y="1.57" width="22.18" height="14.16" rx="1.97" data-o="1"/><rect x="30.26" y="1.57" width="22.18" height="14.16" rx="1.97" data-o="1"/><rect x="53.07" y="1.57" width="22.18" height="14.16" rx="1.97" data-o="1"/><rect x="0.05" y="11.01" width="7.08" height="19.67" rx="2.36" data-o="1"/><rect x="75.57" y="11.01" width="7.08" height="19.67" rx="2.36" data-o="1"/><rect x="7.13" y="20.06" width="68.44" height="10.62" data-o="1"/><rect x="7.13" y="15.73" width="22.81" height="4.72" rx="1.18" data-o="1"/><rect x="29.94" y="15.73" width="22.81" height="4.72" rx="1.18" data-o="1"/><rect x="52.76" y="15.73" width="22.81" height="4.72" rx="1.18" data-o="1"/></g>' + _G,
+          side: { w: 37.4, h: 35.4,
+            svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><path d="M27.16 13.37L29.91 1.18Q30.11 0 31.48 0L36.2 0Q37.38 0 37.38 1.18L37.38 13.37Z" data-o="1"/><polygon points="1.59,35.4 3.75,35.4 3.95,30.68 1.39,30.68" data-o="1"/><polygon points="33.65,35.4 35.81,35.4 36.01,30.68 33.45,30.68" data-o="1"/><rect x="0.02" y="11.01" width="37.37" height="19.67" rx="2.36" data-o="1"/><line x1="1.59" y1="13.77" x2="35.81" y2="13.77"/></g>' + _G } },
+        { key: 'bed-king', name: 'King bed', w: 76, h: 24, lengthIn: 80, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'King Bed',
+          variants: BED_STYLE_VARIANTS,
+          svg: _O + '<rect data-o="1" x="1.6" y="21.66" width="4.2" height="2.34"/><rect data-o="1" x="70.2" y="21.66" width="4.2" height="2.34"/><rect data-o="1" x="0.6" y="17.87" width="74.8" height="3.8" rx="0.11"/><path data-o="1" d="M5.7 -0.7 Q12.16 1.3 18.62 -0.7 Q18.23 5.05 18.62 10.8 H5.7 Q6.09 5.05 5.7 -0.7 Z"/><path data-o="1" d="M57.38 -0.7 Q63.84 1.3 70.3 -0.7 Q69.91 5.05 70.3 10.8 H57.38 Q57.77 5.05 57.38 -0.7 Z"/><path data-o="1" d="M15.56 -0.1 Q26.58 1.86 37.6 -0.1 Q37 5.35 37.6 10.8 H15.56 Q16.16 5.35 15.56 -0.1 Z"/><path data-o="1" d="M38.4 -0.1 Q49.42 1.86 60.44 -0.1 Q59.84 5.35 60.44 10.8 H38.4 Q39 5.35 38.4 -0.1 Z"/><path data-o="1" d="M1 11.4 Q1.2 9.4 3 9.4 H73 Q74.8 9.4 75 11.4 C75.4 14.87 76.48 18.22 77.2 20.22 Q77.2 21.12 75.6 20.62 C74.6 20.22 74.4 18.67 74 17.87 H2 C1.6 18.67 1.4 20.22 0.4 20.62 Q-1.2 21.12 -1.2 20.22 C-0.48 18.22 0.6 14.87 1 11.4 Z"/><path fill="none" d="M1.6 10.92 Q38 11.42 74.4 10.92"/><path fill="none" d="M2.4 12.28 H73.6"/><path fill="none" d="M2.4 12.28 V17.87"/><path fill="none" d="M73.6 12.28 V17.87"/>' + _G,
+          hatch: '<rect x="0.6" y="17.86" width="74.8" height="3.8"/>',
+          side: { w: 80, h: 36,
+            svg: _O + '<rect data-o="1" x="8" y="34.8" width="2.6" height="1.2" rx="0.17"/><rect data-o="1" x="70" y="34.8" width="2.6" height="1.2" rx="0.17"/><rect data-o="1" x="4" y="30.6" width="75.4" height="4.2" rx="0.55"/><path data-o="1" d="M4 32.4 V16.1 Q4 14.5 5.6 14.5 H76 Q80 14.5 80 18.5 V29.4 Q80 32.4 77 32.4 Z"/><path fill="none" d="M4 18.7 H79.6"/><path data-o="1" transform="rotate(-14 12 14.9)" d="M7 -0.1 H10 Q12 -0.1 12 1.9 V12.9 Q12 14.9 10 14.9 H7 Q5 14.9 5 12.9 V1.9 Q5 -0.1 7 -0.1 Z"/><path data-o="1" transform="rotate(-18 17.5 14.9)" d="M12.5 2.4 H15.5 Q17.5 2.4 17.5 4.4 V12.9 Q17.5 14.9 15.5 14.9 H12.5 Q10.5 14.9 10.5 12.9 V4.4 Q10.5 2.4 12.5 2.4 Z"/><path data-o="1" d="M48 13.9 H62.4 Q63.4 13.9 63.4 15.5 V29.6 Q63.4 30.6 62.4 30.6 H48 Q47 30.6 47 29.6 V15.5 Q47 13.9 48 13.9 Z"/><path fill="none" d="M54.48 14.3 V30.2"/><path fill="none" d="M58.08 14.3 V30.2"/><path data-o="1" d="M0 36 V2 Q0 0 2 0 Q4 0 4 2 V36 Z"/>' + _G,
+            hatch: '<rect x="0" y="0" width="4" height="36"/><rect x="4" y="30.6" width="75.4" height="4.2"/>' } },
+        { key: 'bed-full', name: 'Double / full', w: 54, h: 24, lengthIn: 75, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Full Bed',
+          variants: BED_STYLE_VARIANTS,
+          svg: _O + '<rect data-o="1" x="1.6" y="21.66" width="3.78" height="2.34"/><rect data-o="1" x="48.62" y="21.66" width="3.78" height="2.34"/><rect data-o="1" x="0.6" y="17.87" width="52.8" height="3.8" rx="0.11"/><path data-o="1" d="M4.05 -0.7 Q8.64 1.3 13.23 -0.7 Q12.95 5.05 13.23 10.8 H4.05 Q4.33 5.05 4.05 -0.7 Z"/><path data-o="1" d="M40.77 -0.7 Q45.36 1.3 49.95 -0.7 Q49.67 5.05 49.95 10.8 H40.77 Q41.05 5.05 40.77 -0.7 Z"/><path data-o="1" d="M10.94 -0.1 Q18.77 1.86 26.6 -0.1 Q26.13 5.35 26.6 10.8 H10.94 Q11.41 5.35 10.94 -0.1 Z"/><path data-o="1" d="M27.4 -0.1 Q35.23 1.86 43.06 -0.1 Q42.59 5.35 43.06 10.8 H27.4 Q27.87 5.35 27.4 -0.1 Z"/><path data-o="1" d="M1 11.4 Q1.2 9.4 3 9.4 H51 Q52.8 9.4 53 11.4 C53.4 14.87 54.43 18.22 55.08 20.22 Q55.08 21.12 53.6 20.62 C52.6 20.22 52.4 18.67 52 17.87 H2 C1.6 18.67 1.4 20.22 0.4 20.62 Q-1.08 21.12 -1.08 20.22 C-0.43 18.22 0.6 14.87 1 11.4 Z"/><path fill="none" d="M1.6 10.92 Q27 11.42 52.4 10.92"/><path fill="none" d="M2.4 12.28 H51.6"/><path fill="none" d="M2.4 12.28 V17.87"/><path fill="none" d="M51.6 12.28 V17.87"/>' + _G,
+          hatch: '<rect x="0.6" y="17.86" width="52.8" height="3.8"/>',
+          side: { w: 75, h: 36,
+            svg: _O + '<rect data-o="1" x="8" y="34.8" width="2.6" height="1.2" rx="0.17"/><rect data-o="1" x="65" y="34.8" width="2.6" height="1.2" rx="0.17"/><rect data-o="1" x="4" y="30.6" width="70.4" height="4.2" rx="0.55"/><path data-o="1" d="M4 32.4 V16.1 Q4 14.5 5.6 14.5 H71 Q75 14.5 75 18.5 V29.4 Q75 32.4 72 32.4 Z"/><path fill="none" d="M4 18.7 H74.6"/><path data-o="1" transform="rotate(-14 12 14.9)" d="M7 -0.1 H10 Q12 -0.1 12 1.9 V12.9 Q12 14.9 10 14.9 H7 Q5 14.9 5 12.9 V1.9 Q5 -0.1 7 -0.1 Z"/><path data-o="1" transform="rotate(-18 17.5 14.9)" d="M12.5 2.4 H15.5 Q17.5 2.4 17.5 4.4 V12.9 Q17.5 14.9 15.5 14.9 H12.5 Q10.5 14.9 10.5 12.9 V4.4 Q10.5 2.4 12.5 2.4 Z"/><path data-o="1" d="M45 13.9 H58.5 Q59.5 13.9 59.5 15.5 V29.6 Q59.5 30.6 58.5 30.6 H45 Q44 30.6 44 29.6 V15.5 Q44 13.9 45 13.9 Z"/><path fill="none" d="M51.08 14.3 V30.2"/><path fill="none" d="M54.45 14.3 V30.2"/><path data-o="1" d="M0 36 V2 Q0 0 2 0 Q4 0 4 2 V36 Z"/>' + _G,
+            hatch: '<rect x="0" y="0" width="4" height="36"/><rect x="4" y="30.6" width="70.4" height="4.2"/>' } },
+        { key: 'dresser', name: 'Dresser', w: 60, h: 32, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Dresser',
+          svg: _O + '<rect data-o="1" x="2" y="30" width="2" height="2" rx="0.17"/><rect data-o="1" x="56" y="30" width="2" height="2" rx="0.17"/><rect data-o="1" x="0" y="0" width="60" height="30" rx="0.28"/><path fill="none" d="M0 1.4 H60"/><path fill="none" d="M1 10.93 H59"/><path fill="none" d="M1 20.47 H59"/><rect x="27" y="5.82" width="6" height="0.7" rx="0.19"/><rect x="27" y="15.35" width="6" height="0.7" rx="0.19"/><rect x="27" y="24.88" width="6" height="0.7" rx="0.19"/>' + _G,
+          hatch: '<rect x="0" y="0" width="60" height="30"/>',
           side: { w: 20, h: 32,
-            svg: _O + '<rect x="0" y="0" width="20" height="1.6"/>'
-                    + '<path d="M0 1.6 h20 v24.4 h-20 z"/>'
-                    + '<path d="M1.5 26 h17 v6 h-17 z"/>' + _G
-               + _F + '<path d="M0 10 h20 M0 18.2 h20"/>' + _G } },
-        // Seating is where "blocky" showed most, because a chair genuinely is not a stack
-        // of rectangles. What fixes it: TAPERED legs (converging lines, not parallel
-        // bars), a curved crest rail, an arm drawn as a profile rather than a box, and
-        // cushion seams. All still orthographic — this is a spec elevation, not a
-        // perspective sketch.
-        { key: 'chair', name: 'Side chair', w: 22, h: 34, aff: 0, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'Side Chair',
-          svg: _O + '<path d="M3.4 2.4 C3.4 0.6 5 0 7.4 0 h7.2 C17 0 18.6 0.6 18.6 2.4"/>'
-                  + '<path d="M3.4 2.4 L4.2 16"/><path d="M18.6 2.4 L17.8 16"/>'
-                  + '<path d="M1 16 h20 v2.2 h-20 z"/>'
-                  + '<path d="M2.6 18.2 L3.9 34"/><path d="M19.4 18.2 L18.1 34"/>' + _G
-             + _D + '<path d="M4.6 4.6 C7 3.4 15 3.4 17.4 4.6 L17.9 14 C15.5 12.9 6.5 12.9 4.1 14 Z"/>' + _G
-             + _F + '<path d="M1 18.2 h20"/><path d="M3.3 27 h15.4"/>'
-                  + '<path d="M4.35 9.3 C7 8.3 15 8.3 17.65 9.3"/>' + _G,
-          side: { w: 24, h: 34,
-            svg: _O + '<path d="M20.6 2.4 C20.6 0.6 22 0 23 0"/>'
-                    + '<path d="M20.6 2.4 L19.6 16"/>'
-                    + '<path d="M2 16 h20 v2.2 h-20 z"/>'
-                    + '<path d="M3.2 18.2 L2 34"/><path d="M20.2 18.2 L21.4 34"/>' + _G
-               + _D + '<path d="M19.6 4 C17.5 5.4 17.5 12.6 19.3 14"/>' + _G
-               + _F + '<path d="M2 18.2 h20"/><path d="M2.8 27 h18"/>' + _G } },
-        { key: 'lounge', name: 'Lounge chair', w: 32, h: 30, aff: 0, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'Lounge Chair',
-          svg: _O + '<path d="M4 0 h24 a2.4 2.4 0 0 1 2.4 2.4 v11.6 h-28.8 v-11.6 A2.4 2.4 0 0 1 4 0 z"/>'
-                  + '<path d="M0 7.6 h3.6 v13.4 h-3.6 z"/><path d="M28.4 7.6 h3.6 v13.4 h-3.6 z"/>'
-                  + '<path d="M3.6 14 h24.8 v7 h-24.8 z"/>'
-                  + '<path d="M5 21 L4 30"/><path d="M27 21 L28 30"/>' + _G
-             + _D + '<path d="M5.4 1.6 C10 0.9 22 0.9 26.6 1.6 L26.2 12.4 C21.8 11.7 10.2 11.7 5.8 12.4 Z"/>' + _G
-             + _F + '<path d="M3.6 19.4 h24.8"/><path d="M16 14 v5.4"/>'
-                  + '<path d="M0.6 8.6 h2.6 M28.8 8.6 h2.6"/>' + _G,
-          side: { w: 34, h: 30,
-            svg: _O + '<path d="M28 0 h3.6 a2.4 2.4 0 0 1 2.4 2.4 v18.6 h-6 z"/>'
-                    + '<path d="M2 7.6 h26 v13.4 h-26 z"/>'
-                    + '<path d="M3 21 L1.6 30"/><path d="M30 21 L31.4 30"/>' + _G
-               + _D + '<path d="M28 2 C25.6 6 25.6 16 28 20"/>'
-                    + '<path d="M3.4 8.8 C10 8 22 8 27 8.8 L27 19 C22 18.2 10 18.2 3.4 19 Z"/>' + _G
-               + _F + '<path d="M2 19.4 h26"/>' + _G } },
-        { key: 'sofa', name: 'Sofa', w: 84, h: 32, aff: 0, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'Sofa',
-          // Rolled arms drawn as profiles, two back cushions, three seat cushions with
-          // welt seams, a base rail and tapered legs.
-          svg: _O + '<path d="M7 0 h70 a2.6 2.6 0 0 1 2.6 2.6 v10.4 h-75.2 v-10.4 A2.6 2.6 0 0 1 7 0 z"/>'
-                  + '<path d="M0 5.4 a4.4 4.4 0 0 1 4.4 -4.4 v20.6 h-4.4 z"/>'
-                  + '<path d="M84 5.4 a4.4 4.4 0 0 0 -4.4 -4.4 v20.6 h4.4 z"/>'
-                  + '<path d="M4.4 13 h75.2 v8.6 h-75.2 z"/>'
-                  + '<path d="M4.4 21.6 h75.2 v4.4 h-75.2 z"/>'
-                  + '<path d="M9 26 L7.6 32"/><path d="M75 26 L76.4 32"/>' + _G
-             + _D + '<path d="M6.4 1.8 C20 1 64 1 77.6 1.8 L77.2 11.6 C63.6 10.8 20.4 10.8 6.8 11.6 Z"/>'
-                  + '<path d="M42 1.2 v10.6"/>' + _G
-             + _F + '<path d="M29.5 13 v8.6 M54.5 13 v8.6"/><path d="M4.4 19.8 h75.2"/>'
-                  + '<path d="M0.8 6 a3.6 3.6 0 0 1 3.6 -3.6"/>'
-                  + '<path d="M83.2 6 a3.6 3.6 0 0 0 -3.6 -3.6"/>' + _G,
-          side: { w: 36, h: 32,
-            svg: _O + '<path d="M30 1 a4.4 4.4 0 0 1 4.4 4.4 v20.6 h-4.4 z"/>'
-                    + '<path d="M2 5.4 h28 v16.2 h-28 z"/>'
-                    + '<path d="M2 21.6 h32.4 v4.4 h-32.4 z"/>'
-                    + '<path d="M4 26 L2.6 32"/><path d="M32 26 L33.4 32"/>' + _G
-               + _D + '<path d="M30 2.4 C27 7 27 17 30 21.4"/>'
-                    + '<path d="M3.4 6.6 C12 5.8 25 5.8 29 6.6 L29 19.8 C25 19 12 19 3.4 19.8 Z"/>' + _G
-               + _F + '<path d="M2 19.8 h28"/>' + _G } },
-        { key: 'ottoman', name: 'Ottoman', w: 24, h: 18, aff: 0, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'Ottoman',
-          svg: _O + '<path d="M0 0 h24 v12.4 h-24 z"/>'
-                  + '<path d="M3 12.4 L1.8 18"/><path d="M21 12.4 L22.2 18"/>' + _G
-             + _D + '<path d="M1.6 1.4 C7 0.7 17 0.7 22.4 1.4 L22 10.4 C16.6 9.7 7.4 9.7 2 10.4 Z"/>' + _G
-             + _F + '<path d="M0 11.2 h24"/>' + _G },
-        { key: 'table', name: 'Table', w: 48, h: 30, aff: 0, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'Table',
-          svg: _O + '<rect x="0" y="0" width="48" height="1.6"/>'
-                  + '<rect x="3.5" y="1.6" width="2" height="28.4"/>'
-                  + '<rect x="42.5" y="1.6" width="2" height="28.4"/>' + _G
-             + _D + '<rect x="3.5" y="1.6" width="41" height="3.2"/>' + _G,
+            svg: _O + '<rect data-o="1" x="1.4" y="30" width="2" height="2" rx="0.17"/><rect data-o="1" x="16.6" y="30" width="2" height="2" rx="0.17"/><rect data-o="1" x="0" y="0" width="20" height="30" rx="0.28"/><path fill="none" d="M0 1.4 H20"/>' + _G } },
+        { key: 'desk', name: 'Writing desk', w: 48, h: 30, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Desk',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="48" height="1.6" rx="0.22"/><rect data-o="1" x="1" y="1.6" width="1.6" height="28.4"/><rect data-o="1" x="45.4" y="1.6" width="1.6" height="28.4"/><rect x="4" y="1.6" width="40" height="4.2" rx="0.17"/><rect x="21" y="3.35" width="6" height="0.7" rx="0.19"/>' + _G,
+          side: { w: 24, h: 30,
+            svg: _O + '<rect data-o="1" x="0" y="0" width="24" height="1.6" rx="0.22"/><rect data-o="1" x="1" y="1.6" width="1.6" height="28.4"/><rect data-o="1" x="21.4" y="1.6" width="1.6" height="28.4"/>' + _G } },
+        { key: 'console', name: 'Console', w: 60, h: 32, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Console',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="60" height="1.6" rx="0.22"/><rect data-o="1" x="1.5" y="1.6" width="1.6" height="30.4"/><rect data-o="1" x="56.9" y="1.6" width="1.6" height="30.4"/><rect x="3.1" y="1.6" width="53.8" height="5"/><path fill="none" d="M3.1 22 H56.9"/><rect x="27" y="3.75" width="6" height="0.7" rx="0.19"/>' + _G },
+        { key: 'tv-55', name: 'TV 55"', w: 48.5, h: 28, aff: 60, affMode: 'center', shape: 'tv', fill: 'plain', label: 'TV',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="48.5" height="28" rx="0.33"/><rect x="1" y="1" width="46.5" height="25"/><path fill="none" d="M22.5 26.6 H26"/>' + _G,
+          side: { w: 4, h: 28,
+            svg: _O + '<rect data-o="1" x="0" y="0" width="4" height="28" rx="0.33"/><rect x="1.4" y="9" width="1.2" height="10" rx="0.17"/>' + _G } },
+        { key: 'tv-65', name: 'TV 65"', w: 56.7, h: 32.2, aff: 60, affMode: 'center', shape: 'tv', fill: 'plain', label: 'TV',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="56.7" height="32.2" rx="0.33"/><rect x="1" y="1" width="54.7" height="29.2"/><path fill="none" d="M26.6 30.8 H30.1"/>' + _G,
+          side: { w: 4, h: 32.2,
+            svg: _O + '<rect data-o="1" x="0" y="0" width="4" height="32.2" rx="0.33"/><rect x="1.4" y="10.6" width="1.2" height="11" rx="0.17"/>' + _G } },
+        { key: 'tv-75', name: 'TV 75"', w: 65.4, h: 37.2, aff: 60, affMode: 'center', shape: 'tv', fill: 'plain', label: 'TV',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="65.4" height="37.2" rx="0.33"/><rect x="1" y="1" width="63.4" height="34.2"/><path fill="none" d="M30.95 35.8 H34.45"/>' + _G,
+          side: { w: 4, h: 37.2,
+            svg: _O + '<rect data-o="1" x="0" y="0" width="4" height="37.2" rx="0.33"/><rect x="1.4" y="12.6" width="1.2" height="12" rx="0.17"/>' + _G } },
+        { key: 'wardrobe', name: 'Wardrobe', w: 40, h: 84, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Wardrobe',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="40" height="84" rx="0.22"/><path fill="none" d="M0 1.6 H40"/><path fill="none" d="M0 80.5 H40"/><path fill="none" d="M20 1.6 V80.5"/><rect x="17.65" y="37" width="0.7" height="10" rx="0.19"/><rect x="21.65" y="37" width="0.7" height="10" rx="0.19"/>' + _G,
+          hatch: '<rect x="0" y="1.6" width="40" height="78.9"/>' },
+        { key: 'minibar', name: 'Minibar cabinet', w: 30, h: 36, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Minibar',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="30" height="33" rx="0.22"/><path fill="none" d="M0 1.6 H30"/><path fill="none" d="M16 1.6 V33"/><path fill="none" d="M16 17.3 H30"/><rect x="14.05" y="7" width="0.7" height="6" rx="0.19"/><rect x="20.5" y="9.15" width="5" height="0.7" rx="0.19"/><rect x="20.5" y="24.65" width="5" height="0.7" rx="0.19"/><rect data-o="1" x="2" y="33" width="26" height="3"/>' + _G,
+          hatch: '<rect x="16" y="1.6" width="14" height="31.4"/>' },
+        { key: 'bench', name: 'Upholstered bench', w: 48, h: 18, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Bench',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="48" height="5" rx="0.88"/><path fill="none" d="M1 2.4 H47"/><rect data-o="1" x="2" y="5" width="1.6" height="13"/><rect data-o="1" x="44.4" y="5" width="1.6" height="13"/><path fill="none" d="M3.6 13.5 H44.4"/>' + _G },
+        { key: 'ottoman', name: 'Ottoman', w: 24, h: 18, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Ottoman',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="24" height="15" rx="1.32"/><path fill="none" d="M1 3.6 H23"/><rect data-o="1" x="2" y="15" width="2" height="3" rx="0.17"/><rect data-o="1" x="20" y="15" width="2" height="3" rx="0.17"/>' + _G },
+        { key: 'side-table', name: 'Side table', w: 22, h: 24, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Side Table',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="22" height="1.6" rx="0.22"/><rect data-o="1" x="10.2" y="1.6" width="1.6" height="21"/><rect data-o="1" x="5" y="22.6" width="12" height="1.4" rx="0.22"/>' + _G },
+        { key: 'table', name: 'Table', w: 48, h: 30, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Table',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="48" height="1.8" rx="0.22"/><rect data-o="1" x="2" y="1.8" width="1.8" height="28.2"/><rect data-o="1" x="44.2" y="1.8" width="1.8" height="28.2"/><path fill="none" d="M3.8 5 H44.2"/>' + _G,
           side: { w: 30, h: 30,
-            svg: _O + '<rect x="0" y="0" width="30" height="1.6"/>'
-                    + '<rect x="3" y="1.6" width="2" height="28.4"/>'
-                    + '<rect x="25" y="1.6" width="2" height="28.4"/>' + _G
-               + _D + '<rect x="3" y="1.6" width="24" height="3.2"/>' + _G } },
-        { key: 'side-table', name: 'Side table', w: 22, h: 24, aff: 0, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'Side Table',
-          svg: _O + '<rect x="0" y="0" width="22" height="1.4"/>'
-                  + '<rect x="2" y="1.4" width="1.8" height="22.6"/>'
-                  + '<rect x="18.2" y="1.4" width="1.8" height="22.6"/>' + _G
-             + _D + '<rect x="2" y="1.4" width="18" height="2.6"/>' + _G
-             + _F + '<path d="M3.8 19 h14.4"/>' + _G },
-        { key: 'luggage', name: 'Luggage bench', w: 40, h: 20, aff: 0, affMode: 'bottom',
-          shape: 'rect', fill: 'plain', label: 'Luggage Bench',
-          svg: _O + '<rect x="0" y="0" width="40" height="3.4"/>'
-                  + '<rect x="2.5" y="3.4" width="1.8" height="16.6"/>'
-                  + '<rect x="35.7" y="3.4" width="1.8" height="16.6"/>' + _G
-             + _D + '<rect x="2.5" y="3.4" width="35" height="2.4"/>' + _G
-             + _F + '<path d="M4.3 15 h31.4"/>' + _G },
+            svg: _O + '<rect data-o="1" x="0" y="0" width="30" height="1.8" rx="0.22"/><rect data-o="1" x="2" y="1.8" width="1.8" height="28.2"/><rect data-o="1" x="26.2" y="1.8" width="1.8" height="28.2"/><path fill="none" d="M3.8 5 H26.2"/>' + _G } },
+        { key: 'mirror-floor', name: 'Floor mirror', w: 24, h: 68, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Mirror',
+          svg: _O + '<path data-o="1" d="M0 68 V12 C0 5 5.4 0 12 0 C18.6 0 24 5 24 12 V68 Z"/><path fill="none" d="M2 68 V12.4 C2 6.6 6.6 2 12 2 C17.4 2 22 6.6 22 12.4 V68"/><path fill="none" d="M6 56 L13 24"/><path fill="none" d="M10.5 56 L17.5 24"/>' + _G },
+        { key: 'coat-stand', name: 'Coat stand', w: 20, h: 68, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: '',
+          svg: _O + '<path fill="none" d="M10 62 L2 68"/><path fill="none" d="M10 62 L18 68"/><rect data-o="1" x="9.3" y="3" width="1.4" height="61" rx="0.28"/><circle data-o="1" cx="10" cy="2.2" r="1.2"/><path fill="none" d="M9.3 8 C6 8 4 7 3.4 4.6"/><path fill="none" d="M10.7 8 C14 8 16 7 16.6 4.6"/><path fill="none" d="M9.3 13 C7 13 5.6 12.4 5 10.6"/><path fill="none" d="M10.7 13 C13 13 14.4 12.4 15 10.6"/>' + _G },
+        { key: 'bed-queen', name: 'Queen bed', w: 60, h: 24, lengthIn: 80, aff: 0, affMode: 'bottom', hidden: true, shape: 'rect', fill: 'plain', label: 'Queen Bed',
+          variants: BED_STYLE_VARIANTS,
+          svg: _O + '<rect data-o="1" x="1.6" y="21.66" width="4.2" height="2.34"/><rect data-o="1" x="54.2" y="21.66" width="4.2" height="2.34"/><rect data-o="1" x="0.6" y="17.87" width="58.8" height="3.8" rx="0.11"/><path data-o="1" d="M4.5 -0.7 Q9.6 1.3 14.7 -0.7 Q14.39 5.05 14.7 10.8 H4.5 Q4.81 5.05 4.5 -0.7 Z"/><path data-o="1" d="M45.3 -0.7 Q50.4 1.3 55.5 -0.7 Q55.19 5.05 55.5 10.8 H45.3 Q45.61 5.05 45.3 -0.7 Z"/><path data-o="1" d="M12.2 -0.1 Q20.9 1.86 29.6 -0.1 Q29.08 5.35 29.6 10.8 H12.2 Q12.72 5.35 12.2 -0.1 Z"/><path data-o="1" d="M30.4 -0.1 Q39.1 1.86 47.8 -0.1 Q47.28 5.35 47.8 10.8 H30.4 Q30.92 5.35 30.4 -0.1 Z"/><path data-o="1" d="M1 11.4 Q1.2 9.4 3 9.4 H57 Q58.8 9.4 59 11.4 C59.4 14.87 60.48 18.22 61.2 20.22 Q61.2 21.12 59.6 20.62 C58.6 20.22 58.4 18.67 58 17.87 H2 C1.6 18.67 1.4 20.22 0.4 20.62 Q-1.2 21.12 -1.2 20.22 C-0.48 18.22 0.6 14.87 1 11.4 Z"/><path fill="none" d="M1.6 10.92 Q30 11.42 58.4 10.92"/><path fill="none" d="M2.4 12.28 H57.6"/><path fill="none" d="M2.4 12.28 V17.87"/><path fill="none" d="M57.6 12.28 V17.87"/>' + _G,
+          hatch: '<rect x="0.6" y="17.86" width="58.8" height="3.8"/>',
+          side: { w: 80, h: 36,
+            svg: _O + '<rect data-o="1" x="8" y="34.8" width="2.6" height="1.2" rx="0.17"/><rect data-o="1" x="70" y="34.8" width="2.6" height="1.2" rx="0.17"/><rect data-o="1" x="4" y="30.6" width="75.4" height="4.2" rx="0.55"/><path data-o="1" d="M4 32.4 V16.1 Q4 14.5 5.6 14.5 H76 Q80 14.5 80 18.5 V29.4 Q80 32.4 77 32.4 Z"/><path fill="none" d="M4 18.7 H79.6"/><path data-o="1" transform="rotate(-14 12 14.9)" d="M7 -0.1 H10 Q12 -0.1 12 1.9 V12.9 Q12 14.9 10 14.9 H7 Q5 14.9 5 12.9 V1.9 Q5 -0.1 7 -0.1 Z"/><path data-o="1" transform="rotate(-18 17.5 14.9)" d="M12.5 2.4 H15.5 Q17.5 2.4 17.5 4.4 V12.9 Q17.5 14.9 15.5 14.9 H12.5 Q10.5 14.9 10.5 12.9 V4.4 Q10.5 2.4 12.5 2.4 Z"/><path data-o="1" d="M48 13.9 H62.4 Q63.4 13.9 63.4 15.5 V29.6 Q63.4 30.6 62.4 30.6 H48 Q47 30.6 47 29.6 V15.5 Q47 13.9 48 13.9 Z"/><path fill="none" d="M54.48 14.3 V30.2"/><path fill="none" d="M58.08 14.3 V30.2"/><path data-o="1" d="M0 36 V2 Q0 0 2 0 Q4 0 4 2 V36 Z"/>' + _G,
+            hatch: '<rect x="0" y="0" width="4" height="36"/><rect x="4" y="30.6" width="75.4" height="4.2"/>' } },
+        { key: 'bed-twin', name: 'Twin bed', w: 39, h: 24, lengthIn: 75, aff: 0, affMode: 'bottom', hidden: true, shape: 'rect', fill: 'plain', label: 'Twin Bed',
+          variants: BED_STYLE_VARIANTS,
+          svg: _O + '<rect data-o="1" x="1.6" y="21.66" width="2.73" height="2.34"/><rect data-o="1" x="34.67" y="21.66" width="2.73" height="2.34"/><rect data-o="1" x="0.6" y="17.87" width="37.8" height="3.8" rx="0.11"/><path data-o="1" d="M4.28 0.8 Q11.69 2.6 19.1 0.8 Q18.66 5.8 19.1 10.8 H4.28 Q4.72 5.8 4.28 0.8 Z"/><path data-o="1" d="M19.9 0.8 Q27.31 2.6 34.72 0.8 Q34.28 5.8 34.72 10.8 H19.9 Q20.34 5.8 19.9 0.8 Z"/><path data-o="1" d="M1 11.4 Q1.2 9.4 3 9.4 H36 Q37.8 9.4 38 11.4 C38.4 14.87 39.31 18.22 39.78 20.22 Q39.78 21.12 38.6 20.62 C37.6 20.22 37.4 18.67 37 17.87 H2 C1.6 18.67 1.4 20.22 0.4 20.62 Q-0.78 21.12 -0.78 20.22 C-0.31 18.22 0.6 14.87 1 11.4 Z"/><path fill="none" d="M1.6 10.92 Q19.5 11.42 37.4 10.92"/><path fill="none" d="M2.4 12.28 H36.6"/><path fill="none" d="M2.4 12.28 V17.87"/><path fill="none" d="M36.6 12.28 V17.87"/>' + _G,
+          side: { w: 75, h: 36,
+            svg: _O + '<rect data-o="1" x="8" y="34.8" width="2.6" height="1.2" rx="0.17"/><rect data-o="1" x="65" y="34.8" width="2.6" height="1.2" rx="0.17"/><rect data-o="1" x="4" y="30.6" width="70.4" height="4.2" rx="0.55"/><path data-o="1" d="M4 32.4 V16.1 Q4 14.5 5.6 14.5 H71 Q75 14.5 75 18.5 V29.4 Q75 32.4 72 32.4 Z"/><path fill="none" d="M4 18.7 H74.6"/><path data-o="1" transform="rotate(-14 12 14.9)" d="M7 -0.1 H10 Q12 -0.1 12 1.9 V12.9 Q12 14.9 10 14.9 H7 Q5 14.9 5 12.9 V1.9 Q5 -0.1 7 -0.1 Z"/><path data-o="1" transform="rotate(-18 17.5 14.9)" d="M12.5 2.4 H15.5 Q17.5 2.4 17.5 4.4 V12.9 Q17.5 14.9 15.5 14.9 H12.5 Q10.5 14.9 10.5 12.9 V4.4 Q10.5 2.4 12.5 2.4 Z"/><path data-o="1" d="M45 13.9 H58.5 Q59.5 13.9 59.5 15.5 V29.6 Q59.5 30.6 58.5 30.6 H45 Q44 30.6 44 29.6 V15.5 Q44 13.9 45 13.9 Z"/><path fill="none" d="M51.08 14.3 V30.2"/><path fill="none" d="M54.45 14.3 V30.2"/><path data-o="1" d="M0 36 V2 Q0 0 2 0 Q4 0 4 2 V36 Z"/>' + _G } },
+        { key: 'gr-queen-pair', name: 'Double queen beds', w: 172, h: 50, aff: 0, affMode: 'bottom', hidden: true, shape: 'rect', fill: 'plain', label: 'Queen Beds',
+          svg: _O + '<rect data-o="1" x="1" y="8" width="62" height="36" rx="0.11"/><path fill="none" d="M2.2 44 V9.2 H61.8 V44"/><rect data-o="1" x="1.6" y="46.6" width="4.2" height="3.4"/><rect data-o="1" x="58.2" y="46.6" width="4.2" height="3.4"/><rect data-o="1" x="0.6" y="41.2" width="62.8" height="5.4" rx="0.11"/><path data-o="1" d="M4.8 15.4 Q10.24 17.4 15.68 15.4 Q15.35 21.15 15.68 26.9 H4.8 Q5.13 21.15 4.8 15.4 Z"/><path data-o="1" d="M48.32 15.4 Q53.76 17.4 59.2 15.4 Q58.87 21.15 59.2 26.9 H48.32 Q48.65 21.15 48.32 15.4 Z"/><path data-o="1" d="M13.04 16 Q22.32 17.96 31.6 16 Q31.04 21.45 31.6 26.9 H13.04 Q13.6 21.45 13.04 16 Z"/><path data-o="1" d="M32.4 16 Q41.68 17.96 50.96 16 Q50.4 21.45 50.96 26.9 H32.4 Q32.96 21.45 32.4 16 Z"/><path data-o="1" d="M1 27.5 Q1.2 25.5 3 25.5 H61 Q62.8 25.5 63 27.5 C63.4 38.2 64.48 42.55 65.2 44.55 Q65.2 45.45 63.6 44.95 C62.6 44.55 62.4 42 62 41.2 H2 C1.6 42 1.4 44.55 0.4 44.95 Q-1.2 45.45 -1.2 44.55 C-0.48 42.55 0.6 38.2 1 27.5 Z"/><path fill="none" d="M1.6 27.1 Q32 27.6 62.4 27.1"/><path fill="none" d="M2.4 28.7 H61.6"/><path fill="none" d="M2.4 28.7 V41.2"/><path fill="none" d="M61.6 28.7 V41.2"/><rect data-o="1" x="75.4" y="48.4" width="1.6" height="1.6" rx="0.17"/><rect data-o="1" x="95" y="48.4" width="1.6" height="1.6" rx="0.17"/><rect data-o="1" x="74" y="26" width="24" height="22.4" rx="0.28"/><path fill="none" d="M74 27.4 H98"/><path fill="none" d="M75 37.9 H97"/><rect x="84" y="32.3" width="4" height="0.7" rx="0.19"/><rect x="84" y="42.8" width="4" height="0.7" rx="0.19"/><rect data-o="1" x="83.4" y="23.8" width="5.2" height="2.2" rx="0.33"/><path fill="none" d="M86 23.8 V9.5"/><path data-o="1" d="M82 0 H90 L92.6 9.5 H79.4 Z"/><rect data-o="1" x="109" y="8" width="62" height="36" rx="0.11"/><path fill="none" d="M110.2 44 V9.2 H169.8 V44"/><rect data-o="1" x="109.6" y="46.6" width="4.2" height="3.4"/><rect data-o="1" x="166.2" y="46.6" width="4.2" height="3.4"/><rect data-o="1" x="108.6" y="41.2" width="62.8" height="5.4" rx="0.11"/><path data-o="1" d="M112.8 15.4 Q118.24 17.4 123.68 15.4 Q123.35 21.15 123.68 26.9 H112.8 Q113.13 21.15 112.8 15.4 Z"/><path data-o="1" d="M156.32 15.4 Q161.76 17.4 167.2 15.4 Q166.87 21.15 167.2 26.9 H156.32 Q156.65 21.15 156.32 15.4 Z"/><path data-o="1" d="M121.04 16 Q130.32 17.96 139.6 16 Q139.04 21.45 139.6 26.9 H121.04 Q121.6 21.45 121.04 16 Z"/><path data-o="1" d="M140.4 16 Q149.68 17.96 158.96 16 Q158.4 21.45 158.96 26.9 H140.4 Q140.96 21.45 140.4 16 Z"/><path data-o="1" d="M109 27.5 Q109.2 25.5 111 25.5 H169 Q170.8 25.5 171 27.5 C171.4 38.2 172.48 42.55 173.2 44.55 Q173.2 45.45 171.6 44.95 C170.6 44.55 170.4 42 170 41.2 H110 C109.6 42 109.4 44.55 108.4 44.95 Q106.8 45.45 106.8 44.55 C107.52 42.55 108.6 38.2 109 27.5 Z"/><path fill="none" d="M109.6 27.1 Q140 27.6 170.4 27.1"/><path fill="none" d="M110.4 28.7 H169.6"/><path fill="none" d="M110.4 28.7 V41.2"/><path fill="none" d="M169.6 28.7 V41.2"/>' + _G },
+        { key: 'headboard', name: 'Headboard', w: 78, h: 48, aff: 24, affMode: 'bottom', hidden: true, shape: 'rect', fill: 'plain', label: 'Headboard',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="78" height="48" rx="0.44"/><rect x="3" y="3" width="72" height="42" rx="0.28"/>' + _G },
+        { key: 'gr-desk', name: 'Desk + chair', w: 60, h: 40, aff: 0, affMode: 'bottom', hidden: true, shape: 'rect', fill: 'plain', label: 'Desk',
+          svg: _O + '<rect data-o="1" x="0" y="10" width="60" height="1.6" rx="0.22"/><rect data-o="1" x="1.2" y="11.6" width="1.6" height="28.4"/><rect data-o="1" x="40" y="11.6" width="18.8" height="28.4" rx="0.17"/><path fill="none" d="M40 21.07 H58.8"/><path fill="none" d="M40 30.53 H58.8"/><rect x="46.9" y="15.98" width="5" height="0.7" rx="0.19"/><rect x="46.9" y="25.45" width="5" height="0.7" rx="0.19"/><rect x="46.9" y="34.92" width="5" height="0.7" rx="0.19"/><circle data-o="1" cx="10.6" cy="38.7" r="1.3"/><circle data-o="1" cx="21" cy="38.8" r="1.2"/><circle data-o="1" cx="31.4" cy="38.7" r="1.3"/><path data-o="1" d="M19.6 32.6 H22.4 L32.6 36.2 V37.2 H9.4 V36.2 Z"/><rect data-o="1" x="20" y="24.5" width="2" height="8.2"/><rect data-o="1" x="9.4" y="20.4" width="23.2" height="4.2" rx="1.1"/><rect data-o="1" x="12.2" y="0" width="17.6" height="19.4" rx="1.76"/><path fill="none" d="M11.4 22.4 V15 H8.6"/><path fill="none" d="M30.6 22.4 V15 H33.4"/>' + _G },
+        { key: 'luggage', name: 'Luggage bench', w: 40, h: 20, aff: 0, affMode: 'bottom', hidden: true, shape: 'rect', fill: 'plain', label: 'Luggage Bench',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="40" height="2" rx="0.33"/><rect data-o="1" x="1.5" y="2" width="1.6" height="18"/><rect data-o="1" x="36.9" y="2" width="1.6" height="18"/><path fill="none" d="M3.1 14 H36.9"/><path fill="none" d="M10 0 V2"/><path fill="none" d="M20 0 V2"/><path fill="none" d="M30 0 V2"/>' + _G,
+          side: { w: 20, h: 20,
+            svg: _O + '<rect data-o="1" x="0" y="0" width="20" height="2" rx="0.33"/><rect data-o="1" x="1.5" y="2" width="1.6" height="18"/><rect data-o="1" x="16.9" y="2" width="1.6" height="18"/><path fill="none" d="M3.1 14 H16.9"/>' + _G } },
+        { key: 'sofa', name: 'Sofa', w: 84, h: 32, aff: 0, affMode: 'bottom', hidden: true, shape: 'rect', fill: 'plain', label: 'Sofa',
+          svg: _O + '<rect data-o="1" x="4" y="29" width="2" height="3" rx="0.17"/><rect data-o="1" x="78" y="29" width="2" height="3" rx="0.17"/><path data-o="1" d="M5 18 V5.6 Q5 2 8.6 2 H75.4 Q79 2 79 5.6 V18 Z"/><path data-o="1" d="M0 29 V13 Q0 9 4 9 Q8 9 8 13 V29 Z"/><path data-o="1" d="M76 29 V13 Q76 9 80 9 Q84 9 84 13 V29 Z"/><rect data-o="1" x="7" y="17" width="70" height="12" rx="0.88"/><path fill="none" d="M42 17 V24.5"/><path fill="none" d="M7 24.5 H77"/><path fill="none" d="M42 3.5 V17"/>' + _G,
+          side: { w: 36, h: 32,
+            svg: _O + '<rect data-o="1" x="3" y="29" width="2" height="3" rx="0.17"/><rect data-o="1" x="31" y="29" width="2" height="3" rx="0.17"/><path data-o="1" d="M0 29 V6 Q0 0 6 0 H9 Q12 0 12 6 V17 H33 Q36 17 36 20 V29 Z"/><path fill="none" d="M0 24.5 H36"/><path fill="none" d="M12 17 Q11 22 12 24.5"/>' + _G } },
     ] },
-    // KEEP CLEAR (19.47): things art must not cover. `avoid: true` makes a new block a
-    // keep-clear zone (hatched; a frame over one is flagged on the wall and in Preflight).
-    // Sizes are typical North American cover plates and devices; AFF centres per ADA reach.
+    { cat: 'Bathroom', items: [
+        { key: 'ba-vanity-mirror', name: 'Vanity + mirror', w: 60, h: 84, aff: 0, affMode: 'bottom', ref: 'BA-001', shape: 'rect', fill: 'plain', label: 'Vanity',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="2.76" y="79.28" width="54.48" height="4.72" data-o="1"/><rect x="0.6" y="51.72" width="58.81" height="27.55" data-o="1"/><rect x="1.07" y="52.31" width="18.66" height="26.37" rx="0.12" data-o="1"/><rect x="17.44" y="52.51" width="0.79" height="4.72" rx="0.39" data-o="1"/><rect x="20.67" y="52.31" width="18.66" height="26.37" rx="0.12" data-o="1"/><rect x="22.17" y="52.51" width="0.79" height="4.72" rx="0.39" data-o="1"/><rect x="40.27" y="52.31" width="18.66" height="26.37" rx="0.12" data-o="1"/><rect x="56.65" y="52.51" width="0.79" height="4.72" rx="0.39" data-o="1"/><rect x="0.01" y="50.54" width="59.99" height="1.18" rx="0.16" data-o="1"/><rect x="28.9" y="49.44" width="2.2" height="1.1" rx="0.24" data-o="1"/><rect x="29.41" y="40.39" width="1.18" height="9.05" rx="0.47" data-o="1"/><rect x="29.13" y="40.03" width="1.73" height="0.87" rx="0.31" data-o="1"/><rect x="21.97" y="49.52" width="1.89" height="1.02" rx="0.24" data-o="1"/><rect x="22.56" y="47.35" width="0.71" height="2.16" rx="0.16" data-o="1"/><rect x="21.42" y="46.76" width="2.99" height="0.63" rx="0.31" data-o="1"/><rect x="36.14" y="49.52" width="1.89" height="1.02" rx="0.24" data-o="1"/><rect x="36.73" y="47.35" width="0.71" height="2.16" rx="0.16" data-o="1"/><rect x="35.59" y="46.76" width="2.99" height="0.63" rx="0.31" data-o="1"/><rect x="8.35" y="0" width="43.3" height="38.73" rx="0.24" data-o="1"/><rect x="9.33" y="0.98" width="41.33" height="36.76" rx="0.12" data-o="1"/><rect x="1.27" y="16.69" width="3.15" height="4.33" rx="0.24" data-o="1"/><rect x="1.66" y="11.18" width="2.36" height="15.75" rx="1.18" data-o="1"/><rect x="55.59" y="16.69" width="3.15" height="4.33" rx="0.24" data-o="1"/><rect x="55.98" y="11.18" width="2.36" height="15.75" rx="1.18" data-o="1"/></g>' + _G },
+        { key: 'hc-ba-002', name: 'Single basin vanity', w: 35.4, h: 44, aff: 0, affMode: 'bottom', ref: 'BA-002', shape: 'rect', fill: 'plain', label: 'Vanity',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="2.75" y="39.28" width="29.89" height="4.72" data-o="1"/><rect x="0.59" y="11.75" width="34.22" height="27.53" data-o="1"/><rect x="1.06" y="12.34" width="16.17" height="26.35" rx="0.12" data-o="1"/><rect x="14.95" y="12.53" width="0.79" height="4.72" rx="0.39" data-o="1"/><rect x="18.17" y="12.34" width="16.17" height="26.35" rx="0.12" data-o="1"/><rect x="19.67" y="12.53" width="0.79" height="4.72" rx="0.39" data-o="1"/><rect x="0" y="10.57" width="35.4" height="1.18" rx="0.16" data-o="1"/><rect x="16.6" y="9.47" width="2.2" height="1.1" rx="0.24" data-o="1"/><rect x="17.11" y="0.42" width="1.18" height="9.05" rx="0.47" data-o="1"/><rect x="16.83" y="0.06" width="1.73" height="0.87" rx="0.31" data-o="1"/><rect x="9.68" y="9.54" width="1.89" height="1.02" rx="0.24" data-o="1"/><rect x="10.27" y="7.38" width="0.71" height="2.16" rx="0.16" data-o="1"/><rect x="9.13" y="6.79" width="2.99" height="0.63" rx="0.31" data-o="1"/><rect x="23.84" y="9.54" width="1.89" height="1.02" rx="0.24" data-o="1"/><rect x="24.43" y="7.38" width="0.71" height="2.16" rx="0.16" data-o="1"/><rect x="23.29" y="6.79" width="2.99" height="0.63" rx="0.31" data-o="1"/></g>' + _G,
+          side: { w: 21.7, h: 44.9,
+            svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0.02" y="40.17" width="18.91" height="4.73" data-o="1"/><rect x="0.02" y="12.6" width="21.07" height="27.57" data-o="1"/><line x1="0.81" y1="17.72" x2="21.09" y2="17.72"/><rect x="0.02" y="11.42" width="21.66" height="1.18" rx="0.16" data-o="1"/><rect x="17.35" y="10.32" width="2.36" height="1.1" rx="0.24" data-o="1"/><path d="M17.94 10.32L17.94 3.54Q17.94 0 14.39 0L12.62 0L12.62 1.18L14.39 1.18Q19.12 1.18 19.12 3.54L19.12 10.32Z" data-o="1"/><rect x="19.12" y="6.07" width="2.36" height="0.63" rx="0.32" data-o="1"/></g>' + _G } },
+        { key: 'hc-ba-003', name: 'Double basin vanity', w: 70.9, h: 44, aff: 0, affMode: 'bottom', ref: 'BA-003', shape: 'rect', fill: 'plain', label: 'Vanity',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="2.76" y="39.27" width="65.39" height="4.73" data-o="1"/><rect x="0.59" y="11.7" width="69.72" height="27.57" data-o="1"/><rect x="1.06" y="12.29" width="16.48" height="26.39" rx="0.12" data-o="1"/><rect x="15.26" y="12.49" width="0.79" height="4.73" rx="0.39" data-o="1"/><rect x="18.49" y="12.29" width="16.48" height="26.39" rx="0.12" data-o="1"/><rect x="19.99" y="12.49" width="0.79" height="4.73" rx="0.39" data-o="1"/><rect x="35.92" y="12.29" width="16.48" height="26.39" rx="0.12" data-o="1"/><rect x="50.12" y="12.49" width="0.79" height="4.73" rx="0.39" data-o="1"/><rect x="53.35" y="12.29" width="16.48" height="26.39" rx="0.12" data-o="1"/><rect x="54.85" y="12.49" width="0.79" height="4.73" rx="0.39" data-o="1"/><rect x="0" y="10.52" width="70.9" height="1.18" rx="0.16" data-o="1"/><rect x="16.62" y="9.42" width="2.21" height="1.1" rx="0.24" data-o="1"/><rect x="17.13" y="0.36" width="1.18" height="9.06" rx="0.47" data-o="1"/><rect x="16.86" y="0" width="1.73" height="0.87" rx="0.32" data-o="1"/><rect x="9.69" y="9.5" width="1.89" height="1.02" rx="0.24" data-o="1"/><rect x="10.28" y="7.33" width="0.71" height="2.17" rx="0.16" data-o="1"/><rect x="9.14" y="6.74" width="2.99" height="0.63" rx="0.32" data-o="1"/><rect x="23.87" y="9.5" width="1.89" height="1.02" rx="0.24" data-o="1"/><rect x="24.46" y="7.33" width="0.71" height="2.17" rx="0.16" data-o="1"/><rect x="23.32" y="6.74" width="2.99" height="0.63" rx="0.32" data-o="1"/><rect x="52.07" y="9.42" width="2.21" height="1.1" rx="0.24" data-o="1"/><rect x="52.58" y="0.36" width="1.18" height="9.06" rx="0.47" data-o="1"/><rect x="52.31" y="0" width="1.73" height="0.87" rx="0.32" data-o="1"/><rect x="45.14" y="9.5" width="1.89" height="1.02" rx="0.24" data-o="1"/><rect x="45.73" y="7.33" width="0.71" height="2.17" rx="0.16" data-o="1"/><rect x="44.59" y="6.74" width="2.99" height="0.63" rx="0.32" data-o="1"/><rect x="59.32" y="9.5" width="1.89" height="1.02" rx="0.24" data-o="1"/><rect x="59.91" y="7.33" width="0.71" height="2.17" rx="0.16" data-o="1"/><rect x="58.77" y="6.74" width="2.99" height="0.63" rx="0.32" data-o="1"/></g>' + _G },
+        { key: 'ba-shower-glass', name: 'Glass shower', w: 60, h: 84, aff: 0, affMode: 'bottom', ref: 'BA-004', shape: 'rect', fill: 'plain', label: 'Shower',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="41.34" y="0.93" width="0.98" height="6.69" data-o="1"/><rect x="36.61" y="7.62" width="10.24" height="0.98" rx="0.39" data-o="1"/><circle cx="41.81" cy="38.72" r="3.54" data-o="1"/><rect x="41.81" y="38.33" width="4.72" height="0.79" rx="0.39" data-o="1"/><rect x="0" y="80.06" width="60" height="3.94" rx="0.16" data-o="1"/><rect x="1.18" y="0.93" width="23.62" height="79.13" rx="0.12" fill="none"/><line x1="4.02" y1="10.85" x2="9.21" y2="5.65"/><line x1="4.02" y1="14.63" x2="12.99" y2="5.65"/><rect x="0.59" y="69.43" width="1.18" height="2.76" rx="0.16" data-o="1"/><rect x="0.59" y="6.44" width="1.18" height="2.76" rx="0.16" data-o="1"/><rect x="25.59" y="0.93" width="33.23" height="79.13" rx="0.12" fill="none"/><line x1="29.58" y1="12.96" x2="36.89" y2="5.65"/><line x1="29.58" y1="18.28" x2="42.2" y2="5.65"/><rect x="58.07" y="63.53" width="1.57" height="4.72" rx="0.2" data-o="1"/><rect x="58.07" y="10.38" width="1.57" height="4.72" rx="0.2" data-o="1"/><rect x="28.35" y="34" width="1.02" height="16.54" rx="0.51" data-o="1"/><rect x="27.56" y="48.96" width="1.18" height="0.79" data-o="1"/><rect x="27.56" y="34.79" width="1.18" height="0.79" data-o="1"/></g>' + _G,
+          hatch: '<rect x="1.18" y="0.93" width="23.62" height="79.13" rx="0.12"/><rect x="25.59" y="0.93" width="33.23" height="79.13" rx="0.12"/>' },
+        { key: 'hc-ba-005', name: 'Shower niche + fixtures', w: 26, h: 44.3, aff: 34, affMode: 'bottom', ref: 'BA-005', shape: 'rect', fill: 'plain', label: 'Shower',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="13.77" y="0.05" width="1.57" height="5.9" data-o="1"/><rect x="8.65" y="5.95" width="11.8" height="0.98" rx="0.39" data-o="1"/><rect x="0" y="13.03" width="10.23" height="24.39" rx="0.16" data-o="1"/><rect x="0.79" y="13.82" width="8.65" height="22.81" rx="0.08" data-o="1"/><line x1="0.79" y1="25.62" x2="9.44" y2="25.62"/><circle cx="14.55" cy="39.38" r="3.74" data-o="1"/><circle cx="14.55" cy="39.38" r="1.57" data-o="1"/><rect x="14.55" y="38.99" width="4.72" height="0.79" rx="0.39" data-o="1"/><circle cx="14.55" cy="30.73" r="1.77" data-o="1"/><rect x="14.16" y="27.98" width="0.79" height="2.75" rx="0.24" data-o="1"/><rect x="24.39" y="10.28" width="1.02" height="29.89" rx="0.51" data-o="1"/><rect x="23.92" y="38.6" width="1.97" height="1.57" rx="0.24" data-o="1"/><rect x="23.92" y="10.28" width="1.97" height="1.57" rx="0.24" data-o="1"/><path d="M24.9 24.44C22.03 31.52 18.88 48.04 24.9 43.32" fill="none"/><circle cx="24.9" cy="43.32" r="0.98" data-o="1"/><rect x="23.8" y="15.78" width="2.2" height="8.65" rx="1.02" data-o="1"/></g>' + _G },
+        { key: 'ba-tub-free', name: 'Freestanding tub', w: 72, h: 28, aff: 0, affMode: 'bottom', ref: 'BA-006', shape: 'rect', fill: 'plain', label: 'Tub',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><path d="M1.17 4.33Q-0.02 0 4.32 0L67.68 0Q72.01 0 70.83 4.33L65.32 24.46Q64.53 28 60.99 28L11.01 28Q7.47 28 6.68 24.46Z" data-o="1"/><line x1="1.56" y1="2.36" x2="70.44" y2="2.36"/></g>' + _G,
+          side: { w: 32, h: 28,
+            svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><path d="M1.43 4.33Q0.25 0 4.58 0L27.42 0Q31.75 0 30.57 4.33L27.42 24.46Q26.63 28 23.09 28L8.91 28Q5.37 28 4.58 24.46Z" data-o="1"/><line x1="1.82" y1="2.36" x2="30.18" y2="2.36"/></g>' + _G } },
+        { key: 'tub', name: 'Built-in tub', w: 60, h: 20, aff: 0, affMode: 'bottom', ref: 'BA-007', shape: 'rect', fill: 'plain', label: 'Tub',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="1.67" y="1.33" width="56.67" height="18.67" rx="0.1" data-o="1"/><rect x="3.67" y="3.33" width="52.67" height="14.67" rx="0.13" data-o="1"/><rect x="1.33" y="0" width="57.33" height="1.33" rx="0.2" data-o="1"/></g>' + _G },
+        { key: 'hc-ba-008', name: 'Towel bar + hooks', w: 34.3, h: 4.6, aff: 48, affMode: 'bottom', ref: 'BA-008', shape: 'rect', fill: 'plain', label: '',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0.97" y="1.64" width="21.83" height="1.01" rx="0.51" data-o="1"/><rect x="0.19" y="0.58" width="1.56" height="3.12" rx="0.7" data-o="1"/><rect x="22.02" y="0.58" width="1.56" height="3.12" rx="0.7" data-o="1"/><circle cx="28.26" cy="1.17" r="1.17" data-o="1"/><rect x="27.83" y="0.97" width="0.86" height="2.92" rx="0.43" data-o="1"/><circle cx="28.26" cy="3.9" r="0.7" data-o="1"/><circle cx="32.94" cy="1.17" r="1.17" data-o="1"/><rect x="32.51" y="0.97" width="0.86" height="2.92" rx="0.43" data-o="1"/><circle cx="32.94" cy="3.9" r="0.7" data-o="1"/></g>' + _G },
+        { key: 'hc-ba-009', name: 'Bathroom accessories', w: 23.6, h: 10.2, aff: 48, affMode: 'bottom', ref: 'BA-009', shape: 'rect', fill: 'plain', label: '',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0.03" y="0.78" width="1.18" height="2.75" rx="0.24" data-o="1"/><rect x="5.92" y="0.78" width="1.18" height="2.75" rx="0.24" data-o="1"/><rect x="1.21" y="2.55" width="4.71" height="4.9" rx="0.39" data-o="1"/><rect x="1.6" y="7.06" width="3.92" height="3.14" fill="none"/><rect x="0.42" y="1.84" width="6.28" height="0.71" rx="0.35" data-o="1"/><circle cx="11.8" cy="2.35" r="1.26" data-o="1"/><rect x="11.37" y="2.16" width="0.86" height="3.73" rx="0.43" data-o="1"/><circle cx="11.8" cy="5.88" r="0.71" data-o="1"/><rect x="15.33" y="3.33" width="0.78" height="1.96" rx="0.16" data-o="1"/><rect x="22.39" y="3.33" width="0.78" height="1.96" rx="0.16" data-o="1"/><rect x="16.9" y="0.59" width="2.35" height="2.75" rx="0.39" data-o="1"/><rect x="17.49" y="0" width="1.18" height="0.59" rx="0.16" data-o="1"/><rect x="20.04" y="1.37" width="1.96" height="1.96" rx="0.31" data-o="1"/><rect x="14.94" y="3.33" width="8.63" height="0.59" rx="0.16" data-o="1"/></g>' + _G },
+        { key: 'vanity-60', name: 'Vanity 60"', w: 60, h: 34, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Vanity',
+          svg: _O + '<rect data-o="1" x="0.6" y="1.4" width="1.2" height="32.6"/><rect data-o="1" x="58.2" y="1.4" width="1.2" height="32.6"/><rect data-o="1" x="1.8" y="29.4" width="56.4" height="1"/><rect data-o="1" x="1.8" y="1.4" width="56.4" height="20"/><rect x="2.8" y="2.4" width="54.4" height="18"/><path fill="none" d="M30 2.4 V20.4"/><rect x="14.8" y="2.4" width="3.2" height="1.2"/><rect x="42" y="2.4" width="3.2" height="1.2"/><rect data-o="1" x="0" y="0" width="60" height="1.4"/>' + _G
+              + _H + '<path fill="none" d="M22 1.4 V4.4 Q22 7.4 25 7.4 H35 Q38 7.4 38 4.4 V1.4"/>' + _G },
+        { key: 'vanity-ada', name: 'ADA vanity', w: 48, h: 34, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'ADA Vanity',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="48" height="2" rx="0.22"/><rect data-o="1" x="0.5" y="2" width="1.8" height="32"/><rect data-o="1" x="45.7" y="2" width="1.8" height="32"/><path fill="none" d="M14 2 v2 a10 6 0 0 0 20 0 v-2"/><path fill="none" d="M20 9.6 a4 2.4 0 0 0 8 0"/><circle cx="24" cy="8.8" r="0.7"/><path fill="none" d="M24 10 V14 Q24 16 26 16 H30"/>' + _G,
+          side: { w: 22, h: 34,
+            svg: _O + '<rect data-o="1" x="0" y="0" width="22" height="2" rx="0.22"/><rect data-o="1" x="0.5" y="2" width="1.8" height="32"/><path fill="none" d="M4 2 V5 Q4 9 8.6 9 H11 Q14 9 14 5 V2"/>' + _G } },
+        { key: 'shower', name: 'Shower', w: 36, h: 80, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Shower',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="36" height="80" rx="0.22"/><rect x="1.6" y="1.6" width="32.8" height="74.4"/><rect data-o="1" x="0" y="76" width="36" height="4"/><path fill="none" d="M19 1.6 V76"/><rect x="16.25" y="35" width="0.7" height="10" rx="0.19"/><path fill="none" d="M28 6 V4 H24"/><rect x="21.6" y="6" width="6.8" height="1.2" rx="0.33"/>' + _G },
+        { key: 'mirror-lit', name: 'Lighted mirror', w: 30, h: 40, aff: 40, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Mirror',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="30" height="40" rx="2.2"/><rect x="2" y="2" width="26" height="36" rx="1.43"/><path fill="none" d="M7 31 L14 10"/><path fill="none" d="M11 31 L18 10"/>' + _G,
+          hatch: '<rect x="2" y="2" width="26" height="36"/>' },
+        { key: 'grab-36', name: 'Grab bar 36"', w: 36, h: 1.5, aff: 34, affMode: 'bottom', shape: 'shelf', fill: 'plain', label: 'Grab Bar',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="3" height="1.5" rx="0.33"/><rect data-o="1" x="33" y="0" width="3" height="1.5" rx="0.33"/><rect data-o="1" x="3" y="0.25" width="30" height="1" rx="0.28"/>' + _G },
+        { key: 'grab-42', name: 'Grab bar 42"', w: 42, h: 1.5, aff: 34, affMode: 'bottom', shape: 'shelf', fill: 'plain', label: 'Grab Bar',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="3" height="1.5" rx="0.33"/><rect data-o="1" x="39" y="0" width="3" height="1.5" rx="0.33"/><rect data-o="1" x="3" y="0.25" width="36" height="1" rx="0.28"/>' + _G },
+        { key: 'towel-bar', name: 'Towel bar', w: 24, h: 4, aff: 48, affMode: 'bottom', shape: 'rect', fill: 'plain', label: '',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="2.4" height="4" rx="0.55"/><rect data-o="1" x="21.6" y="0" width="2.4" height="4" rx="0.55"/><rect data-o="1" x="2.4" y="1.4" width="19.2" height="1.2" rx="0.33"/>' + _G },
+        { key: 'towel-ring', name: 'Towel ring', w: 7, h: 9, aff: 48, affMode: 'bottom', shape: 'rect', fill: 'plain', label: '',
+          svg: _O + '<rect data-o="1" x="2.4" y="0" width="2.2" height="1.6" rx="0.28"/><path fill="none" d="M3.5 1.6 V2.3"/><circle cx="3.5" cy="5.6" r="3.2"/>' + _G },
+        { key: 'robe-hook', name: 'Robe hook', w: 2, h: 3, aff: 66, affMode: 'center', shape: 'rect', fill: 'plain', label: '',
+          svg: _O + '<circle data-o="1" cx="1" cy="0.7" r="0.6"/><path fill="none" d="M1 1.3 V2 Q1 2.9 1.9 2.5"/>' + _G },
+        { key: 'towel-disp', name: 'Paper towel dispenser', w: 11, h: 15, aff: 40, affMode: 'bottom', shape: 'rect', fill: 'plain', label: '',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="11" height="15" rx="0.66"/><path fill="none" d="M2.4 12.6 H8.6"/><rect x="4" y="5" width="3" height="3" rx="0.28"/>' + _G },
+        { key: 'hand-dryer', name: 'Hand dryer', w: 10, h: 12, aff: 40, affMode: 'bottom', shape: 'rect', fill: 'plain', label: '',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="10" height="10" rx="0.88"/><path data-o="1" d="M3.5 10 H6.5 L6 12 H4 Z"/><path fill="none" d="M4.4 6.4 H5.6"/>' + _G },
+        { key: 'soap', name: 'Soap dispenser', w: 4, h: 7, aff: 42, affMode: 'bottom', shape: 'rect', fill: 'plain', label: '',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="4" height="7" rx="0.44"/><rect x="1" y="1.6" width="2" height="2.6" rx="0.17"/><path fill="none" d="M0.8 5.2 H3.2"/>' + _G },
+        { key: 'tp-holder', name: 'Toilet paper (double)', w: 12, h: 5, aff: 22, affMode: 'center', shape: 'rect', fill: 'plain', label: '',
+          svg: _O + '<circle data-o="1" cx="2.5" cy="2.5" r="2.4"/><circle data-o="1" cx="9.5" cy="2.5" r="2.4"/><circle cx="2.5" cy="2.5" r="0.7"/><circle cx="9.5" cy="2.5" r="0.7"/><path fill="none" d="M4.9 2.5 H7.1"/>' + _G },
+        { key: 'ba-vanity-single', name: 'Single vanity', w: 36, h: 34, aff: 0, affMode: 'bottom', hidden: true, shape: 'rect', fill: 'plain', label: 'Vanity',
+          svg: _O + '<rect data-o="1" x="0.6" y="1.4" width="1.2" height="32.6"/><rect data-o="1" x="34.2" y="1.4" width="1.2" height="32.6"/><rect data-o="1" x="1.8" y="29.4" width="32.4" height="1"/><rect data-o="1" x="1.8" y="1.4" width="32.4" height="20"/><rect x="2.8" y="2.4" width="30.4" height="18"/><path fill="none" d="M18 2.4 V20.4"/><rect x="8.8" y="2.4" width="3.2" height="1.2"/><rect x="24" y="2.4" width="3.2" height="1.2"/><rect data-o="1" x="0" y="0" width="36" height="1.4"/>' + _G
+              + _H + '<path fill="none" d="M10 1.4 V4.4 Q10 7.4 13 7.4 H23 Q26 7.4 26 4.4 V1.4"/>' + _G,
+          side: { w: 22, h: 34,
+            svg: _O + '<rect data-o="1" x="0.6" y="1.4" width="1.2" height="32.6"/><rect data-o="1" x="20.2" y="1.4" width="1.2" height="32.6"/><rect data-o="1" x="1.8" y="29.4" width="18.4" height="1"/><rect data-o="1" x="1.8" y="1.4" width="18.4" height="20"/><rect x="2.8" y="2.4" width="16.4" height="18"/><rect x="9.4" y="2.4" width="3.2" height="1.2"/><rect data-o="1" x="0" y="0" width="22" height="1.4"/>' + _G } },
+        { key: 'ba-vanity-double', name: 'Double vanity', w: 72, h: 34, aff: 0, affMode: 'bottom', hidden: true, shape: 'rect', fill: 'plain', label: 'Vanity',
+          svg: _O + '<rect data-o="1" x="0.6" y="1.4" width="1.2" height="32.6"/><rect data-o="1" x="70.2" y="1.4" width="1.2" height="32.6"/><rect data-o="1" x="1.8" y="29.4" width="68.4" height="1"/><rect data-o="1" x="1.8" y="1.4" width="68.4" height="20"/><rect x="2.8" y="2.4" width="66.4" height="18"/><path fill="none" d="M19.4 2.4 V20.4"/><path fill="none" d="M36 2.4 V20.4"/><path fill="none" d="M52.6 2.4 V20.4"/><rect x="9.5" y="2.4" width="3.2" height="1.2"/><rect x="26.1" y="2.4" width="3.2" height="1.2"/><rect x="42.7" y="2.4" width="3.2" height="1.2"/><rect x="59.3" y="2.4" width="3.2" height="1.2"/><rect data-o="1" x="0" y="0" width="72" height="1.4"/>' + _G
+              + _H + '<path fill="none" d="M10 1.4 V4.4 Q10 7.4 13 7.4 H23 Q26 7.4 26 4.4 V1.4"/><path fill="none" d="M46 1.4 V4.4 Q46 7.4 49 7.4 H59 Q62 7.4 62 4.4 V1.4"/>' + _G },
+        { key: 'ba-shower-niche', name: 'Shower niche + fixtures', w: 36, h: 84, aff: 0, affMode: 'bottom', hidden: true, shape: 'rect', fill: 'plain', label: 'Shower',
+          svg: _O + '<rect x="0" y="0" width="36" height="84" rx="0.17"/><path fill="none" d="M0 80 H36"/><rect x="22" y="26" width="10" height="14" rx="0.28"/><path fill="none" d="M22 33 H32"/><rect x="24" y="29.4" width="2.2" height="3.6" rx="0.28"/><rect x="27.4" y="28.6" width="2.4" height="4.4" rx="0.28"/><path fill="none" d="M12 18 V8 Q12 5.6 9.6 5.6 H8"/><rect x="3.6" y="5.6" width="6.8" height="1.4" rx="0.39"/><circle cx="12" cy="36" r="2.2"/><circle cx="12" cy="36" r="0.6"/><path fill="none" d="M12 38.2 V50"/><rect x="10.6" y="50" width="2.8" height="5" rx="0.66"/>' + _G },
+        { key: 'ba-towel-hooks', name: 'Towel bar + hooks', w: 36, h: 6, aff: 48, affMode: 'bottom', hidden: true, shape: 'rect', fill: 'plain', label: '',
+          svg: _O + '<rect data-o="1" x="0" y="1" width="2.4" height="4" rx="0.55"/><rect data-o="1" x="21.6" y="1" width="2.4" height="4" rx="0.55"/><rect data-o="1" x="2.4" y="2.4" width="19.2" height="1.2" rx="0.33"/><circle data-o="1" cx="29" cy="1.4" r="1"/><path fill="none" d="M29 2.4 V4.4 Q29 5.6 30.2 5"/><circle data-o="1" cx="34" cy="1.4" r="1"/><path fill="none" d="M34 2.4 V4.4 Q34 5.6 35.2 5"/>' + _G },
+        { key: 'ba-accessories', name: 'Shelf + toiletries', w: 24, h: 12, aff: 48, affMode: 'bottom', hidden: true, shape: 'rect', fill: 'plain', label: '',
+          svg: _O + '<rect data-o="1" x="2" y="4" width="3" height="7" rx="0.44"/><rect data-o="1" x="2.8" y="2.4" width="1.4" height="1.6" rx="0.17"/><rect data-o="1" x="6.4" y="5.6" width="3.2" height="5.4" rx="0.44"/><rect data-o="1" x="7.4" y="3.6" width="1.2" height="2" rx="0.17"/><path data-o="1" d="M12 7 H17 L16.4 11 H12.6 Z"/><rect data-o="1" x="18.6" y="8.4" width="4" height="2.6" rx="0.66"/><rect data-o="1" x="0" y="11" width="24" height="1" rx="0.17"/>' + _G },
+    ] },
+    { cat: 'Toilets', items: [
+        { key: 'hc-fx-001', name: 'Floor-mounted toilet', w: 15.7, h: 31.5, aff: 0, affMode: 'bottom', ref: 'FX-001', shape: 'rect', fill: 'plain', label: 'Toilet',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><path d="M1.96 18.55Q2.36 23.65 4.71 25.61L4.32 31.5L11.38 31.5L10.99 25.61Q13.35 23.65 13.74 18.55Z" data-o="1"/><rect x="1.57" y="16.59" width="12.56" height="1.96" rx="0.98" data-o="1"/><rect x="1.18" y="15.41" width="13.35" height="1.18" rx="0.59" data-o="1"/><rect x="0.2" y="1.28" width="15.31" height="13.35" rx="0.79" data-o="1"/><rect x="0" y="0.1" width="15.7" height="1.18" rx="0.39" data-o="1"/><circle cx="1.96" cy="3.75" r="0.55" data-o="1"/><rect x="1.96" y="3.44" width="2.75" height="0.59" rx="0.27" data-o="1"/></g>' + _G,
+          side: { w: 27.1, h: 31.5,
+            svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0" y="1.19" width="7.87" height="13.38" rx="0.59" data-o="1"/><rect x="0" y="0.01" width="8.46" height="1.18" rx="0.39" data-o="1"/><path d="M5.9 16.15L25.59 16.15Q27.56 16.15 26.97 18.12Q25.59 23.63 20.47 25.2L18.9 31.5L7.87 31.5L7.48 23.63L5.9 19.69Z" data-o="1"/><rect x="5.51" y="15.16" width="21.26" height="0.98" rx="0.47" data-o="1"/><rect x="5.9" y="13.98" width="3.15" height="1.18" rx="0.31" data-o="1"/></g>' + _G } },
+        { key: 'hc-fx-002', name: 'Wall-hung toilet', w: 14.2, h: 14.6, aff: 3, affMode: 'bottom', ref: 'FX-002', shape: 'rect', fill: 'plain', label: 'Toilet',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><path d="M0.39 1.19Q0.79 8.68 4.73 13.42Q7.1 15.78 9.47 13.42Q13.41 8.68 13.81 1.19Z" data-o="1"/><rect x="0" y="0.01" width="14.2" height="1.18" rx="0.59" data-o="1"/></g>' + _G,
+          side: { w: 21.7, h: 15.1,
+            svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><path d="M0 2.12L20.45 2.12Q22.02 2.12 21.63 4.09Q20.45 10.38 14.94 13.53L0 15.1Z" data-o="1"/><rect x="1.18" y="1.02" width="20.05" height="1.1" rx="0.47" data-o="1"/><rect x="1.57" y="0.04" width="3.15" height="0.98" rx="0.31" data-o="1"/></g>' + _G } },
+        { key: 'hc-fx-003', name: 'Urinal', w: 15.7, h: 27.6, aff: 13, affMode: 'bottom', ref: 'FX-003', shape: 'rect', fill: 'plain', label: 'Urinal',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><path d="M1.57 0.13L14.13 0.13Q15.7 0.13 15.7 2.48L14.92 19.75Q14.13 26.03 7.85 27.6Q1.57 26.03 0.79 19.75L0 2.48Q0 0.13 1.57 0.13Z" data-o="1"/><path d="M3.14 4.84L12.56 4.84L11.78 18.97Q10.99 23.68 7.85 24.46Q4.71 23.68 3.93 18.97Z" fill="none"/><circle cx="7.85" cy="21.71" r="0.98" fill="none"/></g>' + _G,
+          side: { w: 13.1, h: 27.6,
+            svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><path d="M0 0L8.68 0Q10.25 0 10.65 2.37L13.01 17.35Q13.6 22.87 10.25 26.02L0 27.6Z" data-o="1"/><line x1="9.46" y1="3.94" x2="11.83" y2="17.74"/></g>' + _G } },
+        { key: 'hc-fx-004', name: 'Accessible toilet + grab bars', w: 41.5, h: 34.6, aff: 0, affMode: 'bottom', ref: 'FX-004', shape: 'rect', fill: 'plain', label: 'Toilet',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0.01" y="0" width="0.59" height="3.15" data-o="1"/><circle cx="1.58" cy="1.57" r="0.75" data-o="1"/><rect x="6.1" y="0.83" width="35.39" height="1.49" rx="0.75" data-o="1"/><circle cx="7.87" cy="1.57" r="1.49" data-o="1"/><circle cx="39.72" cy="1.57" r="1.49" data-o="1"/><path d="M12 21.63Q12.39 26.74 14.75 28.7L14.36 34.6L21.44 34.6L21.04 28.7Q23.4 26.74 23.8 21.63Z" data-o="1"/><rect x="11.61" y="19.66" width="12.58" height="1.97" rx="0.98" data-o="1"/><rect x="11.22" y="18.48" width="13.37" height="1.18" rx="0.59" data-o="1"/><rect x="10.23" y="4.33" width="15.33" height="13.37" rx="0.79" data-o="1"/><rect x="10.04" y="3.15" width="15.73" height="1.18" rx="0.39" data-o="1"/><circle cx="12" cy="6.8" r="0.55" data-o="1"/><rect x="12" y="6.49" width="2.75" height="0.59" rx="0.28" data-o="1"/></g>' + _G,
+          side: { w: 53.9, h: 34.6,
+            svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0.02" y="0" width="0.59" height="3.15" data-o="1"/><circle cx="1.59" cy="1.57" r="0.75" data-o="1"/><rect x="11.81" y="0.83" width="42.07" height="1.49" rx="0.75" data-o="1"/><circle cx="13.58" cy="1.57" r="1.49" data-o="1"/><circle cx="52.11" cy="1.57" r="1.49" data-o="1"/><rect x="0.02" y="4.33" width="7.86" height="13.37" rx="0.59" data-o="1"/><rect x="0.02" y="3.15" width="8.45" height="1.18" rx="0.39" data-o="1"/><path d="M5.91 19.27L25.57 19.27Q27.54 19.27 26.95 21.23Q25.57 26.74 20.46 28.31L18.89 34.6L7.88 34.6L7.49 26.74L5.91 22.8Z" data-o="1"/><rect x="5.52" y="18.28" width="21.23" height="0.98" rx="0.47" data-o="1"/><rect x="5.91" y="17.1" width="3.15" height="1.18" rx="0.31" data-o="1"/></g>' + _G } },
+        { key: 'hc-fx-005', name: 'Lavatory basin', w: 23.6, h: 14.4, aff: 26, affMode: 'bottom', ref: 'FX-005', shape: 'rect', fill: 'plain', label: 'Basin',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><path d="M0 6.53L23.6 6.53L23.6 7.71Q23.21 12.83 18.88 14.4L4.72 14.4Q0.39 12.83 0 7.71Z" data-o="1"/><line x1="0.2" y1="7.71" x2="23.4" y2="7.71"/><rect x="10.7" y="5.55" width="2.2" height="0.98" rx="0.24" data-o="1"/><rect x="11.21" y="0.04" width="1.18" height="5.51" rx="0.47" data-o="1"/><rect x="12.39" y="1.26" width="2.75" height="0.55" rx="0.28" data-o="1"/></g>' + _G,
+          side: { w: 17.7, h: 19.3,
+            svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><path d="M0 11.43L17.7 11.43L17.7 12.61Q17.31 16.94 13.37 18.51L0 19.3Z" data-o="1"/><rect x="2.36" y="10.33" width="2.36" height="1.1" rx="0.24" data-o="1"/><path d="M4.13 10.33L4.13 3.57Q4.13 0.03 7.67 0.03L9.44 0.03L9.44 1.21L7.67 1.21Q2.95 1.21 2.95 3.57L2.95 10.33Z" data-o="1"/><rect x="0.59" y="6.08" width="2.36" height="0.63" rx="0.31" data-o="1"/></g>' + _G } },
+        { key: 'toilet-ada', name: 'ADA toilet', w: 15, h: 18, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'ADA Toilet',
+          svg: _O + '<rect data-o="1" x="0.5" y="0" width="14" height="2" rx="0.5"/><path data-o="1" d="M1.4 2 H13.6 C13.4 7.6 11 10.6 10.4 13 L11.6 18 H3.4 L4.6 13 C4 10.6 1.6 7.6 1.4 2 Z"/>' + _G,
+          side: { w: 28, h: 18,
+            svg: _O + '<path data-o="1" d="M0 0 H23 Q26 0 26 2 C26 7 22 10 17 11 L16 18 H6 L5.4 10 C2 9 0 6 0 2 Z"/><path fill="none" d="M0 2 H26"/>' + _G } },
+        { key: 'flush-plate', name: 'Flush plate', w: 9, h: 6, aff: 40, affMode: 'bottom', shape: 'rect', fill: 'plain', label: '',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="9" height="6" rx="0.44"/><rect x="1" y="1" width="3.3" height="4" rx="0.33"/><rect x="4.7" y="1" width="3.3" height="4" rx="0.33"/>' + _G },
+        { key: 'lav-wall', name: 'Wall lav', w: 20, h: 22, aff: 12, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Lavatory',
+          svg: _O + '<rect data-o="1" x="0" y="6" width="20" height="2" rx="0.33"/><path data-o="1" d="M1 8 H19 C18.6 12.6 15 15 10 15 C5 15 1.4 12.6 1 8 Z"/><path fill="none" d="M8.6 6 V3 Q8.6 1 10.6 1 H12.6 V2"/><path fill="none" d="M10 15 V19 Q10 21 12 21 H14"/>' + _G },
+        { key: 'lav-pedestal', name: 'Pedestal sink', w: 22, h: 38, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Sink',
+          svg: _O + '<path fill="none" d="M10 4 V1.8 Q10 0.4 11.6 0.4 H13.6 V1.4"/><rect x="9" y="3.4" width="3" height="0.6" rx="0.11"/><path data-o="1" d="M0.8 4 H21.2 Q22 4 22 4.8 V6 C22 10.6 18 13 11 13 C4 13 0 10.6 0 6 V4.8 Q0 4 0.8 4 Z"/><path data-o="1" d="M8 13 C8.6 20 8.2 30 6.6 38 H15.4 C13.8 30 13.4 20 14 13"/><path fill="none" d="M0 6 H22"/>' + _G },
+        { key: 'stall', name: 'Toilet stall', w: 36, h: 70, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Stall',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="36" height="1.5" rx="0.17"/><rect data-o="1" x="0" y="1.5" width="4" height="68.5" rx="0.17"/><rect data-o="1" x="32" y="1.5" width="4" height="68.5" rx="0.17"/><rect data-o="1" x="4.5" y="1.5" width="27" height="56.5" rx="0.28"/><path fill="none" d="M0 66 H4"/><path fill="none" d="M32 66 H36"/><rect x="28" y="28" width="2.5" height="3" rx="0.22"/><rect x="28.4" y="24" width="1.7" height="2" rx="0.17"/>' + _G },
+        { key: 'fountain', name: 'Drinking fountain', w: 19, h: 18, aff: 27, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Fountain',
+          svg: _O + '<path data-o="1" d="M1 0 H18 Q19 0 19 1 V7 C19 12.4 15 18 9.5 18 C4 18 0 12.4 0 7 V1 Q0 0 1 0 Z"/><path fill="none" d="M0 2.4 H19"/><path fill="none" d="M6 10.4 H13"/><path fill="none" d="M8.8 2.4 V1.2 H10.2 V2.4"/>' + _G },
+        { key: 'toilet-tank', name: 'Floor-mounted toilet', w: 20, h: 30, aff: 0, affMode: 'bottom', hidden: true, shape: 'rect', fill: 'plain', label: 'Toilet',
+          svg: _O + '<rect data-o="1" x="1" y="0" width="18" height="11.4" rx="0.44"/><path fill="none" d="M1 1.4 H19"/><circle cx="3.4" cy="3.6" r="0.5"/><path fill="none" d="M3.9 3.6 H6.2"/><rect data-o="1" x="1.4" y="11.6" width="17.2" height="1.9" rx="0.5"/><path data-o="1" d="M2 13.5 H18 C18.4 17 16.8 19.4 14.8 20.2 L15.4 30 H4.6 L5.2 20.2 C3.2 19.4 1.6 17 2 13.5 Z"/><path fill="none" d="M5.2 20.2 Q10 20.8 14.8 20.2"/>' + _G,
+          side: { w: 28, h: 30,
+            svg: _O + '<rect data-o="1" x="0" y="0" width="8" height="11.4" rx="0.44"/><path data-o="1" d="M0 11.6 H24 Q26 11.6 26 13.6 C26 18.4 22 21.6 17 22.6 L16 30 H6 L5.4 21.6 C2 20.6 0 17.6 0 13.6 Z"/><path fill="none" d="M0 13.6 H26"/>' + _G } },
+        { key: 'toilet-wall', name: 'Wall-hung toilet', w: 15, h: 11, aff: 8, affMode: 'bottom', hidden: true, shape: 'rect', fill: 'plain', label: 'Toilet',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="15" height="2.2" rx="0.5"/><path data-o="1" d="M0.6 2.2 H14.4 C14.2 6 12 9.4 10 11 H5 C3 9.4 0.8 6 0.6 2.2 Z"/>' + _G,
+          side: { w: 22, h: 11,
+            svg: _O + '<path data-o="1" d="M0 0 H19.6 Q22 0 22 2.2 C22 6.4 17 10.4 9 11 H0 Z"/><path fill="none" d="M0 2.2 H22"/>' + _G } },
+        { key: 'urinal', name: 'Urinal', w: 18, h: 26, aff: 13, affMode: 'bottom', hidden: true, shape: 'rect', fill: 'plain', label: 'Urinal',
+          svg: _O + '<path data-o="1" d="M3 0 H15 Q18 0 18 3 V16 C18 21.4 15.4 26 9 26 C2.6 26 0 21.4 0 16 V3 Q0 0 3 0 Z"/><path d="M3.4 8 Q9 6 14.6 8 V16.6 C14.6 20.4 12.4 22.6 9 22.6 C5.6 22.6 3.4 20.4 3.4 16.6 Z"/><rect x="7.6" y="2.4" width="2.8" height="1.8" rx="0.28"/>' + _G,
+          side: { w: 14, h: 26,
+            svg: _O + '<path data-o="1" d="M0 0 H6 Q14 2 14 14 C14 22 10 26 4 26 H0 Z"/><path fill="none" d="M0 8 Q7 9 9 16 Q8.4 21 4 22.6 H0"/>' + _G } },
+        { key: 'fx-ada-toilet', name: 'Accessible toilet + grab bar', w: 60, h: 36, aff: 0, affMode: 'bottom', hidden: true, shape: 'rect', fill: 'plain', label: 'Toilet',
+          svg: _O + '<rect data-o="1" x="8" y="1.2" width="36" height="1.5" rx="0.41"/><rect data-o="1" x="6" y="0" width="3" height="3.6" rx="0.44"/><rect data-o="1" x="43" y="0" width="3" height="3.6" rx="0.44"/><rect data-o="1" x="9" y="6" width="18" height="11.4" rx="0.44"/><path fill="none" d="M9 7.4 H27"/><circle cx="11.4" cy="9.6" r="0.5"/><path fill="none" d="M11.9 9.6 H14.2"/><rect data-o="1" x="9.4" y="17.6" width="17.2" height="1.9" rx="0.5"/><path data-o="1" d="M10 19.5 H26 C26.4 23 24.8 25.4 22.8 26.2 L23.4 36 H12.6 L13.2 26.2 C11.2 25.4 9.6 23 10 19.5 Z"/><path fill="none" d="M13.2 26.2 Q18 26.8 22.8 26.2"/><circle data-o="1" cx="37" cy="14" r="2.4"/><circle cx="37" cy="14" r="0.7"/>' + _G },
+        { key: 'fx-lav-basin', name: 'Vessel basin', w: 24, h: 10, aff: 34, affMode: 'bottom', hidden: true, shape: 'rect', fill: 'plain', label: 'Basin',
+          svg: _O + '<path data-o="1" d="M2 4 H22 C21.4 7.6 18 10 12 10 C6 10 2.6 7.6 2 4 Z"/><path fill="none" d="M5 2.8 V1.4 Q5 0 6.4 0 H9 V0.8"/><rect x="4" y="2.8" width="2" height="1.2" rx="0.17"/>' + _G },
+    ] },
+    { cat: 'Office', items: [
+        { key: 'of-workstation', name: 'Workstation + task chair', w: 72, h: 42, aff: 0, affMode: 'bottom', ref: 'OF-001', shape: 'rect', fill: 'plain', label: 'Workstation',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="2.38" y="2.34" width="67.24" height="12.15" rx="0.45" data-o="1"/><rect x="3.12" y="3.08" width="65.75" height="10.67" rx="0.22" data-o="1"/><rect x="3.5" y="15.61" width="1.86" height="26.39" data-o="1"/><rect x="66.65" y="15.61" width="1.86" height="26.39" data-o="1"/><rect x="5.35" y="15.61" width="61.29" height="14.12" data-o="1"/><rect x="2.01" y="14.5" width="67.98" height="1.12" rx="0.15" data-o="1"/><rect x="42.62" y="11.89" width="1.64" height="2.6" data-o="1"/><rect x="38.97" y="13.98" width="8.92" height="0.52" rx="0.22" data-o="1"/><rect x="33.03" y="0" width="20.81" height="12.27" rx="0.3" data-o="1"/><rect x="33.58" y="0.56" width="19.7" height="11.15" rx="0.11" data-o="1"/><rect x="16.67" y="13.83" width="15.61" height="0.67" rx="0.22" data-o="1"/><circle cx="18.16" cy="40.44" r="0.97" data-o="1"/><circle cx="30.05" cy="40.44" r="0.97" data-o="1"/><polygon points="23.36,36.42 12.58,39.21 12.77,39.96 23.36,37.54" data-o="1"/><polygon points="24.85,36.42 35.63,39.21 35.44,39.96 24.85,37.54" data-o="1"/><polygon points="23.55,37.54 24.66,37.54 24.55,39.7 23.66,39.7" data-o="1"/><circle cx="12.77" cy="40.81" r="1.12" data-o="1"/><circle cx="35.44" cy="40.81" r="1.12" data-o="1"/><circle cx="24.11" cy="40.81" r="1.12" data-o="1"/><rect x="22.43" y="36.05" width="3.35" height="1.67" rx="0.37" data-o="1"/><rect x="23.29" y="27.5" width="1.64" height="8.55" data-o="1"/><rect x="18.53" y="26.02" width="11.15" height="1.49" rx="0.3" data-o="1"/><rect x="22.62" y="18.21" width="2.97" height="5.2" data-o="1"/><rect x="15.93" y="1.12" width="16.35" height="17.84" rx="2.6" data-o="1"/><line x1="17.42" y1="13.75" x2="30.8" y2="13.75"/><rect x="12.77" y="17.47" width="1.12" height="7.06" data-o="1"/><rect x="11.65" y="16.69" width="3.35" height="0.97" rx="0.48" data-o="1"/><rect x="34.33" y="17.47" width="1.12" height="7.06" data-o="1"/><rect x="33.21" y="16.69" width="3.35" height="0.97" rx="0.48" data-o="1"/><rect x="13.14" y="23.71" width="21.93" height="0.82" rx="0.22" data-o="1"/><rect x="14.81" y="23.04" width="18.58" height="2.97" rx="1.49" data-o="1"/></g>' + _G },
+        { key: 'of-desk-storage', name: 'Desk + storage', w: 72, h: 30, aff: 0, affMode: 'bottom', ref: 'OF-002', shape: 'rect', fill: 'plain', label: 'Desk',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="18.8" y="1.2" width="34.4" height="14.8" data-o="1"/><rect x="0.8" y="1.2" width="18" height="28.8" data-o="1"/><line x1="0.8" y1="27.2" x2="18.8" y2="27.2"/><rect x="1.28" y="1.6" width="17.04" height="6" rx="0.12" data-o="1"/><rect x="7.4" y="3.44" width="4.8" height="0.56" rx="0.28" data-o="1"/><rect x="1.28" y="8" width="17.04" height="6" rx="0.12" data-o="1"/><rect x="7.4" y="9.84" width="4.8" height="0.56" rx="0.28" data-o="1"/><rect x="1.28" y="14.4" width="17.04" height="12.4" rx="0.12" data-o="1"/><rect x="7.4" y="16.24" width="4.8" height="0.56" rx="0.28" data-o="1"/><rect x="53.2" y="1.2" width="18" height="28.8" data-o="1"/><line x1="53.2" y1="27.2" x2="71.2" y2="27.2"/><rect x="53.68" y="1.6" width="17.04" height="6" rx="0.12" data-o="1"/><rect x="59.8" y="3.44" width="4.8" height="0.56" rx="0.28" data-o="1"/><rect x="53.68" y="8" width="17.04" height="6" rx="0.12" data-o="1"/><rect x="59.8" y="9.84" width="4.8" height="0.56" rx="0.28" data-o="1"/><rect x="53.68" y="14.4" width="17.04" height="12.4" rx="0.12" data-o="1"/><rect x="59.8" y="16.24" width="4.8" height="0.56" rx="0.28" data-o="1"/><rect x="0" y="0" width="72" height="1.2" rx="0.16" data-o="1"/></g>' + _G },
+        { key: 'credenza', name: 'Credenza', w: 72, h: 30, aff: 0, affMode: 'bottom', ref: 'OF-003', shape: 'rect', fill: 'plain', label: 'Credenza',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="2.36" y="25.67" width="1.57" height="4.33" data-o="1"/><rect x="68.06" y="25.67" width="1.57" height="4.33" data-o="1"/><rect x="0.79" y="1.18" width="70.43" height="24.88" data-o="1"/><rect x="1.1" y="1.85" width="16.97" height="23.62" rx="0.12" data-o="1"/><rect x="16.42" y="3.23" width="0.79" height="7.09" rx="0.39" data-o="1"/><rect x="18.71" y="1.85" width="16.97" height="23.62" rx="0.12" data-o="1"/><rect x="19.57" y="3.23" width="0.79" height="7.09" rx="0.39" data-o="1"/><rect x="36.31" y="1.85" width="16.97" height="23.62" rx="0.12" data-o="1"/><rect x="51.64" y="3.23" width="0.79" height="7.09" rx="0.39" data-o="1"/><rect x="53.92" y="1.85" width="16.97" height="23.62" rx="0.12" data-o="1"/><rect x="54.79" y="3.23" width="0.79" height="7.09" rx="0.39" data-o="1"/><rect x="0" y="0" width="72" height="1.18" rx="0.16" data-o="1"/></g>' + _G,
+          side: { w: 20, h: 30,
+            svg: _O + '<rect data-o="1" x="2" y="26" width="2" height="4" rx="0.17"/><rect data-o="1" x="16" y="26" width="2" height="4" rx="0.17"/><rect data-o="1" x="0" y="0" width="20" height="26" rx="0.28"/><path fill="none" d="M0 1.6 H20"/>' + _G } },
+        { key: 'hc-of-004', name: 'Meeting table + chairs', w: 96, h: 34.6, aff: 0, affMode: 'bottom', ref: 'OF-004', shape: 'rect', fill: 'plain', label: 'Meeting Table',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="15.6" y="17.69" width="1.38" height="16.91" data-o="1"/><rect x="31.13" y="17.69" width="1.38" height="16.91" data-o="1"/><rect x="15.21" y="0" width="17.69" height="17.3" rx="1.97" data-o="1"/><rect x="14.42" y="15.73" width="19.27" height="2.75" rx="0.98" data-o="1"/><rect x="39.55" y="17.69" width="1.38" height="16.91" data-o="1"/><rect x="55.08" y="17.69" width="1.38" height="16.91" data-o="1"/><rect x="39.15" y="0" width="17.69" height="17.3" rx="1.97" data-o="1"/><rect x="38.37" y="15.73" width="19.27" height="2.75" rx="0.98" data-o="1"/><rect x="63.49" y="17.69" width="1.38" height="16.91" data-o="1"/><rect x="79.02" y="17.69" width="1.38" height="16.91" data-o="1"/><rect x="63.1" y="0" width="17.69" height="17.3" rx="1.97" data-o="1"/><rect x="62.31" y="15.73" width="19.27" height="2.75" rx="0.98" data-o="1"/><rect x="13.05" y="32.63" width="14.94" height="1.97" rx="0.39" data-o="1"/><rect x="18.94" y="6.68" width="3.15" height="25.95" data-o="1"/><rect x="68.01" y="32.63" width="14.94" height="1.97" rx="0.39" data-o="1"/><rect x="73.91" y="6.68" width="3.15" height="25.95" data-o="1"/><rect x="0.07" y="5.5" width="95.86" height="1.18" rx="0.16" data-o="1"/></g>' + _G },
+        { key: 'whiteboard', name: 'Whiteboard', w: 72, h: 48, aff: 36, affMode: 'bottom', ref: 'OF-005', shape: 'rect', fill: 'plain', label: 'Whiteboard',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0" y="0" width="72" height="46" rx="0.4" data-o="1"/><rect x="1" y="1" width="70" height="44" rx="0.12" data-o="1"/><rect x="10" y="46" width="52" height="2" rx="0.32" data-o="1"/><rect x="16.8" y="45.2" width="4.4" height="0.8" rx="0.4" data-o="1"/><rect x="22.4" y="45.2" width="4.4" height="0.8" rx="0.4" data-o="1"/><rect x="28" y="45.2" width="4.4" height="0.8" rx="0.4" data-o="1"/><rect x="52" y="44.4" width="6" height="1.6" rx="0.24" data-o="1"/></g>' + _G },
+        { key: 'hc-of-006', name: 'File cabinet', w: 35.4, h: 43.3, aff: 0, affMode: 'bottom', ref: 'OF-006', shape: 'rect', fill: 'plain', label: 'File',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0" y="0.03" width="35.4" height="43.27" rx="0.16" data-o="1"/><line x1="0" y1="40.94" x2="35.4" y2="40.94"/><rect x="0.59" y="27.57" width="34.22" height="12.98" rx="0.12" data-o="1"/><rect x="14.95" y="29.93" width="5.51" height="0.79" rx="0.39" data-o="1"/><rect x="16.13" y="31.34" width="3.15" height="1.34" rx="0.12" data-o="1"/><rect x="0.59" y="14.19" width="34.22" height="12.98" rx="0.12" data-o="1"/><rect x="14.95" y="16.55" width="5.51" height="0.79" rx="0.39" data-o="1"/><rect x="16.13" y="17.97" width="3.15" height="1.34" rx="0.12" data-o="1"/><rect x="0.59" y="0.82" width="34.22" height="12.98" rx="0.12" data-o="1"/><rect x="14.95" y="3.18" width="5.51" height="0.79" rx="0.39" data-o="1"/><rect x="16.13" y="4.6" width="3.15" height="1.34" rx="0.12" data-o="1"/><circle cx="33.04" cy="1.61" r="0.59" data-o="1"/></g>' + _G },
+        { key: 'bookcase', name: 'Bookcase', w: 36, h: 72, aff: 0, affMode: 'bottom', ref: 'OF-007', shape: 'rect', fill: 'plain', label: 'Bookcase',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0.86" y="0" width="34.29" height="72" rx="0.1" data-o="1"/><line x1="1.71" y1="69.26" x2="1.71" y2="0.86"/><line x1="34.29" y1="69.26" x2="34.29" y2="0.86"/><line x1="1.71" y1="69.26" x2="34.29" y2="69.26"/><line x1="1.71" y1="0.86" x2="34.29" y2="0.86"/><rect x="1.71" y="54.72" width="32.57" height="0.86" data-o="1"/><rect x="1.71" y="41.04" width="32.57" height="0.86" data-o="1"/><rect x="1.71" y="27.36" width="32.57" height="0.86" data-o="1"/><rect x="1.71" y="13.68" width="32.57" height="0.86" data-o="1"/><rect x="2.91" y="58.97" width="1.37" height="10.29" rx="0.07" data-o="1"/><rect x="4.42" y="59.66" width="1.89" height="9.6" rx="0.07" data-o="1"/><rect x="6.45" y="58.29" width="1.2" height="10.97" rx="0.07" data-o="1"/><rect x="7.78" y="59.31" width="2.06" height="9.94" rx="0.07" data-o="1"/><rect x="9.98" y="58.63" width="1.54" height="10.63" rx="0.07" data-o="1"/><rect x="11.66" y="60.34" width="1.71" height="8.91" rx="0.07" data-o="1"/><polygon points="13.85,69.26 15.39,69.26 20.71,60 19.17,59.49" data-o="1"/><rect x="2.91" y="46.49" width="2.4" height="8.23" rx="0.07" data-o="1"/><rect x="5.45" y="47.18" width="2.4" height="7.54" rx="0.07" data-o="1"/><rect x="7.99" y="46.15" width="3.09" height="8.57" rx="0.07" data-o="1"/><rect x="2.91" y="17.42" width="1.37" height="9.94" rx="0.07" data-o="1"/><rect x="4.42" y="18.1" width="1.37" height="9.26" rx="0.07" data-o="1"/><rect x="5.93" y="17.07" width="1.89" height="10.29" rx="0.07" data-o="1"/><rect x="7.95" y="17.76" width="1.2" height="9.6" rx="0.07" data-o="1"/><rect x="9.29" y="17.07" width="1.54" height="10.29" rx="0.07" data-o="1"/><rect x="10.97" y="18.45" width="1.37" height="8.91" rx="0.07" data-o="1"/><rect x="12.48" y="17.42" width="2.06" height="9.94" rx="0.07" data-o="1"/><rect x="14.67" y="16.73" width="1.71" height="10.63" rx="0.07" data-o="1"/><rect x="22.11" y="35.55" width="7.54" height="5.49" rx="0.14" data-o="1"/><path d="M7.03 41.04Q6.34 34.87 9.43 34.18Q12.51 34.87 11.83 41.04" data-o="1"/></g>' + _G },
+        { key: 'hc-of-008', name: 'Reception desk', w: 94.5, h: 43.3, aff: 0, affMode: 'bottom', ref: 'OF-008', shape: 'rect', fill: 'plain', label: 'Reception Desk',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="3.16" y="40.15" width="88.17" height="3.15" data-o="1"/><rect x="0.8" y="1.57" width="58.26" height="38.58" data-o="1"/><rect x="59.06" y="10.23" width="34.64" height="29.92" data-o="1"/><line x1="20.09" y1="40.15" x2="20.09" y2="1.57"/><line x1="39.38" y1="40.15" x2="39.38" y2="1.57"/><line x1="0.8" y1="31.49" x2="59.06" y2="31.49"/><line x1="59.06" y1="31.49" x2="93.7" y2="31.49"/><rect x="58.27" y="9.05" width="36.21" height="1.18" rx="0.16" data-o="1"/><rect x="0.01" y="0" width="60.23" height="1.57" rx="0.16" data-o="1"/></g>' + _G },
+        { key: 'workstation', name: 'Workstation + screen', w: 60, h: 48, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Workstation',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="60" height="18" rx="0.44"/><rect x="1.6" y="1.6" width="56.8" height="16.4" rx="0.17"/><rect data-o="1" x="20" y="4" width="20" height="11.6" rx="0.28"/><rect data-o="1" x="29" y="15.6" width="2" height="2.4"/><rect data-o="1" x="0" y="18" width="60" height="1.6" rx="0.22"/><rect data-o="1" x="1" y="19.6" width="1.8" height="28.4"/><rect data-o="1" x="57.2" y="19.6" width="1.8" height="28.4"/><rect x="2.8" y="19.6" width="54.4" height="11"/>' + _G },
+        { key: 'off-desk', name: 'Office desk', w: 60, h: 30, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Desk',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="60" height="1.6" rx="0.22"/><rect data-o="1" x="1" y="1.6" width="1.8" height="28.4"/><rect data-o="1" x="41" y="1.6" width="18" height="28.4" rx="0.17"/><rect x="2.8" y="1.6" width="38.2" height="12"/><path fill="none" d="M41 11.07 H59"/><path fill="none" d="M41 20.53 H59"/><rect x="47.5" y="5.98" width="5" height="0.7" rx="0.19"/><rect x="47.5" y="15.45" width="5" height="0.7" rx="0.19"/><rect x="47.5" y="24.92" width="5" height="0.7" rx="0.19"/>' + _G,
+          side: { w: 30, h: 30,
+            svg: _O + '<rect data-o="1" x="0" y="0" width="30" height="1.6" rx="0.22"/><rect data-o="1" x="1" y="1.6" width="28" height="28.4" rx="0.17"/>' + _G } },
+        { key: 'conf-table', name: 'Conference table', w: 96, h: 30, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Table',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="96" height="2" rx="0.33"/><path data-o="1" d="M18 2 H30 L32 30 H16 Z M66 2 H78 L80 30 H64 Z"/>' + _G
+              + _H + '<rect x="36" y="2.4" width="24" height="3.6"/>' + _G },
+        { key: 'monitor', name: 'Monitor', w: 24, h: 17, aff: 29.5, affMode: 'bottom', shape: 'rect', fill: 'plain', label: '',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="24" height="14.2" rx="0.33"/><rect x="0.9" y="0.9" width="22.2" height="11.8"/><rect data-o="1" x="11" y="14.2" width="2" height="2.1"/><rect data-o="1" x="7" y="16.3" width="10" height="0.7" rx="0.17"/>' + _G },
+        { key: 'file-lateral', name: 'Lateral file', w: 36, h: 28, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'File',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="36" height="28" rx="0.28"/><path fill="none" d="M1 14 H35"/><rect x="13.5" y="4.65" width="9" height="0.7" rx="0.19"/><rect x="13.5" y="18.65" width="9" height="0.7" rx="0.19"/>' + _G },
+        { key: 'cab-storage', name: 'Storage cabinet', w: 36, h: 72, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Cabinet',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="36" height="72" rx="0.28"/><path fill="none" d="M0 1.6 H36"/><path fill="none" d="M0 69 H36"/><path fill="none" d="M18 1.6 V69"/><rect x="15.25" y="32" width="0.7" height="6" rx="0.19"/><rect x="20.05" y="32" width="0.7" height="6" rx="0.19"/>' + _G,
+          hatch: '<rect x="0" y="1.6" width="36" height="67.4"/>' },
+        { key: 'kitchenette', name: 'Kitchenette', w: 96, h: 90, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Kitchenette',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="96" height="36" rx="0.22"/><path fill="none" d="M24 0 V36"/><path fill="none" d="M48 0 V36"/><path fill="none" d="M72 0 V36"/><rect x="21.25" y="29" width="0.7" height="4" rx="0.19"/><rect x="26.05" y="29" width="0.7" height="4" rx="0.19"/><rect x="69.25" y="29" width="0.7" height="4" rx="0.19"/><rect x="74.05" y="29" width="0.7" height="4" rx="0.19"/><path fill="none" d="M35.4 54 V48 Q35.4 45 38.4 45 Q41 45 41 48 V49.2"/><rect x="34" y="53.2" width="3.4" height="0.8" rx="0.11"/><rect data-o="1" x="0" y="54" width="96" height="1.6" rx="0.22"/><rect data-o="1" x="0.6" y="55.6" width="94.8" height="30.4" rx="0.17"/><rect data-o="1" x="2" y="86" width="92" height="4"/><path fill="none" d="M24 55.6 V86"/><path fill="none" d="M36 55.6 V86"/><path fill="none" d="M48 55.6 V86"/><path fill="none" d="M72 55.6 V86"/><path fill="none" d="M84 55.6 V86"/><path fill="none" d="M0.6 65.6 H24"/><path fill="none" d="M0.6 75.6 H24"/><rect x="9.5" y="60.25" width="5" height="0.7" rx="0.19"/><rect x="9.5" y="70.25" width="5" height="0.7" rx="0.19"/><rect x="9.5" y="80.25" width="5" height="0.7" rx="0.19"/><rect x="33.25" y="58.5" width="0.7" height="5" rx="0.19"/><rect x="38.05" y="58.5" width="0.7" height="5" rx="0.19"/><rect x="53" y="58.05" width="14" height="0.7" rx="0.19"/><rect x="81.25" y="58.5" width="0.7" height="5" rx="0.19"/><rect x="86.05" y="58.5" width="0.7" height="5" rx="0.19"/>' + _G
+              + _H + '<path fill="none" d="M27 55.6 V61 Q27 63 29 63 H43 Q45 63 45 61 V55.6"/>' + _G },
+        { key: 'fridge', name: 'Refrigerator', w: 36, h: 70, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Fridge',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="36" height="68" rx="0.55"/><rect data-o="1" x="1.5" y="68" width="33" height="2" rx="0.17"/><path fill="none" d="M18 0 V42"/><path fill="none" d="M0 42 H36"/><rect x="15.85" y="9" width="0.7" height="24" rx="0.19"/><rect x="19.45" y="9" width="0.7" height="24" rx="0.19"/><rect x="10" y="45.25" width="16" height="0.7" rx="0.19"/><rect x="5" y="14" width="7" height="10" rx="0.33"/>' + _G },
+        { key: 'of-meeting', name: 'Meeting table + chairs', w: 120, h: 36, aff: 0, affMode: 'bottom', hidden: true, shape: 'rect', fill: 'plain', label: 'Meeting Table',
+          svg: _O + '<rect data-o="1" x="36" y="0" width="18" height="10" rx="1.32"/><rect data-o="1" x="66" y="0" width="18" height="10" rx="1.32"/><rect data-o="1" x="18" y="7" width="84" height="1.8" rx="0.33"/><rect data-o="1" x="33" y="8.8" width="2" height="27.2"/><rect data-o="1" x="85" y="8.8" width="2" height="27.2"/><rect data-o="1" x="27" y="34.6" width="14" height="1.4" rx="0.22"/><rect data-o="1" x="79" y="34.6" width="14" height="1.4" rx="0.22"/><circle data-o="1" cx="2" cy="34.8" r="1.2"/><circle data-o="1" cx="17" cy="34.8" r="1.2"/><path fill="none" d="M2 33 L9.5 30 L17 33"/><rect data-o="1" x="8.6" y="21" width="1.8" height="9"/><path data-o="1" d="M3 17.4 H17 Q18 17.4 18 18.6 V20 H3 Z"/><path data-o="1" d="M2.4 19 L0.6 1 Q0.6 0 1.8 0 H3 Q4 0 4 1 L4.8 17.4"/><path fill="none" d="M6 17.4 V12 H13"/><circle data-o="1" cx="118" cy="34.8" r="1.2"/><circle data-o="1" cx="103" cy="34.8" r="1.2"/><path fill="none" d="M118 33 L110.5 30 L103 33"/><rect data-o="1" x="109.6" y="21" width="1.8" height="9"/><path data-o="1" d="M117 17.4 H103 Q102 17.4 102 18.6 V20 H117 Z"/><path data-o="1" d="M117.6 19 L119.4 1 Q119.4 0 118.2 0 H117 Q116 0 116 1 L115.2 17.4"/><path fill="none" d="M114 17.4 V12 H107"/>' + _G },
+        { key: 'of-file-3', name: 'Lateral file, 3 drawer', w: 36, h: 40, aff: 0, affMode: 'bottom', hidden: true, shape: 'rect', fill: 'plain', label: 'File',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="36" height="40" rx="0.28"/><path fill="none" d="M1 13.3 H35"/><path fill="none" d="M1 26.6 H35"/><rect x="13.5" y="4.25" width="9" height="0.7" rx="0.19"/><rect x="13.5" y="17.55" width="9" height="0.7" rx="0.19"/><rect x="13.5" y="30.85" width="9" height="0.7" rx="0.19"/>' + _G },
+        { key: 'reception', name: 'Reception desk', w: 120, h: 42, aff: 0, affMode: 'bottom', hidden: true, shape: 'rect', fill: 'plain', label: 'Reception Desk',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="120" height="2" rx="0.33"/><rect data-o="1" x="1" y="2" width="118" height="38" rx="0.28"/><path fill="none" d="M1 10 H119"/><rect data-o="1" x="2" y="40" width="116" height="2"/>' + _G },
+    ] },
+    { cat: 'Glass', items: [
+        { key: 'gl-fixed', name: 'Full-height fixed glass', w: 120, h: 108, aff: 0, affMode: 'bottom', ref: 'GL-001', shape: 'rect', fill: 'plain', label: 'Glass',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0.94" y="0" width="118.12" height="1.97" data-o="1"/><rect x="0.94" y="106.03" width="118.12" height="1.97" data-o="1"/><rect x="0.94" y="1.97" width="39.18" height="104.06" fill="none"/><line x1="5.62" y1="15.27" x2="14.19" y2="6.69"/><line x1="5.62" y1="21.51" x2="20.43" y2="6.69"/><rect x="40.51" y="1.97" width="38.98" height="104.06" fill="none"/><line x1="45.19" y1="15.27" x2="53.76" y2="6.69"/><line x1="45.19" y1="21.51" x2="60" y2="6.69"/><rect x="79.88" y="1.97" width="39.18" height="104.06" fill="none"/><line x1="84.56" y1="15.27" x2="93.14" y2="6.69"/><line x1="84.56" y1="21.51" x2="99.37" y2="6.69"/></g>' + _G,
+          hatch: '<rect x="0.94" y="1.97" width="39.18" height="104.06"/><rect x="40.51" y="1.97" width="38.98" height="104.06"/><rect x="79.88" y="1.97" width="39.18" height="104.06"/>' },
+        { key: 'gl-door', name: 'Glass partition + door', w: 185, h: 108, aff: 0, affMode: 'bottom', ref: 'GL-002', shape: 'rect', fill: 'plain', label: 'Glass Partition',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0" y="0.01" width="185" height="107.99" fill="none"/><rect x="1.97" y="1.98" width="32.48" height="104.06" fill="none"/><line x1="5.87" y1="13.85" x2="13.01" y2="6.7"/><line x1="5.87" y1="19.04" x2="18.21" y2="6.7"/><rect x="36.42" y="1.98" width="34.45" height="104.06" fill="none"/><line x1="40.55" y1="14.28" x2="48.13" y2="6.7"/><line x1="40.55" y1="19.79" x2="53.64" y2="6.7"/><rect x="72.83" y="23.98" width="35.98" height="82.05" fill="none"/><line x1="77.15" y1="36.63" x2="85.07" y2="28.71"/><line x1="77.15" y1="42.38" x2="90.83" y2="28.71"/><rect x="72.83" y="1.98" width="35.98" height="20.04" fill="none"/><line x1="77.15" y1="8.79" x2="81.56" y2="4.38"/><line x1="77.15" y1="12" x2="84.77" y2="4.38"/><rect x="110.79" y="1.98" width="35.63" height="104.06" fill="none"/><line x1="115.06" y1="14.54" x2="122.9" y2="6.7"/><line x1="115.06" y1="20.24" x2="128.6" y2="6.7"/><rect x="148.39" y="1.98" width="34.65" height="104.06" fill="none"/><line x1="152.54" y1="14.32" x2="160.17" y2="6.7"/><line x1="152.54" y1="19.87" x2="165.71" y2="6.7"/><rect x="72.83" y="23.98" width="35.98" height="84.02" fill="none"/><rect x="76.77" y="27.92" width="28.11" height="71.42" fill="none"/><line x1="80.15" y1="38.83" x2="86.33" y2="32.65"/><line x1="80.15" y1="43.33" x2="90.83" y2="32.65"/><rect x="106.46" y="52.88" width="1.02" height="23.62" rx="0.51" data-o="1"/><rect x="105.67" y="74.93" width="0.79" height="0.79" data-o="1"/><rect x="105.67" y="53.67" width="0.79" height="0.79" data-o="1"/><rect x="72.56" y="94.61" width="0.55" height="4.33" rx="0.12" data-o="1"/><rect x="72.56" y="62.33" width="0.55" height="4.33" rx="0.12" data-o="1"/><rect x="72.56" y="30.83" width="0.55" height="4.33" rx="0.12" data-o="1"/></g>' + _G,
+          hatch: '<rect x="0" y="0.01" width="185" height="107.99"/><rect x="1.97" y="1.98" width="32.48" height="104.06"/><rect x="36.42" y="1.98" width="34.45" height="104.06"/><rect x="72.83" y="23.98" width="35.98" height="82.05"/><rect x="72.83" y="1.98" width="35.98" height="20.04"/><rect x="110.79" y="1.98" width="35.63" height="104.06"/><rect x="148.39" y="1.98" width="34.65" height="104.06"/><rect x="72.83" y="23.98" width="35.98" height="84.02"/><rect x="76.77" y="27.92" width="28.11" height="71.42"/>' },
+        { key: 'gl-double', name: 'Double glass doors + sidelights', w: 185, h: 108, aff: 0, affMode: 'bottom', ref: 'GL-003', shape: 'rect', fill: 'plain', label: 'Glass Doors',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0" y="0.01" width="185" height="107.99" fill="none"/><rect x="1.97" y="1.98" width="52.56" height="104.06" fill="none"/><line x1="6.69" y1="15.36" x2="15.35" y2="6.7"/><line x1="6.69" y1="21.66" x2="21.65" y2="6.7"/><rect x="56.5" y="23.98" width="72.01" height="82.05" fill="none"/><line x1="61.22" y1="37.37" x2="69.88" y2="28.71"/><line x1="61.22" y1="43.67" x2="76.18" y2="28.71"/><rect x="56.5" y="1.98" width="72.01" height="20.04" fill="none"/><line x1="61.22" y1="8.79" x2="65.63" y2="4.38"/><line x1="61.22" y1="12" x2="68.83" y2="4.38"/><rect x="130.47" y="1.98" width="52.56" height="104.06" fill="none"/><line x1="135.2" y1="15.36" x2="143.86" y2="6.7"/><line x1="135.2" y1="21.66" x2="150.16" y2="6.7"/><rect x="56.5" y="23.98" width="36" height="84.02" fill="none"/><rect x="60.43" y="27.92" width="28.13" height="71.42" fill="none"/><line x1="63.81" y1="38.83" x2="70" y2="32.65"/><line x1="63.81" y1="43.33" x2="74.5" y2="32.65"/><rect x="90.14" y="52.88" width="1.02" height="23.62" rx="0.51" data-o="1"/><rect x="89.35" y="74.93" width="0.79" height="0.79" data-o="1"/><rect x="89.35" y="53.67" width="0.79" height="0.79" data-o="1"/><rect x="92.5" y="23.98" width="36" height="84.02" fill="none"/><rect x="96.44" y="27.92" width="28.13" height="71.42" fill="none"/><line x1="99.81" y1="38.83" x2="106" y2="32.65"/><line x1="99.81" y1="43.33" x2="110.5" y2="32.65"/><rect x="93.88" y="52.88" width="1.02" height="23.62" rx="0.51" data-o="1"/><rect x="93.09" y="74.93" width="0.79" height="0.79" data-o="1"/><rect x="93.09" y="53.67" width="0.79" height="0.79" data-o="1"/><rect x="94.9" y="74.93" width="0.79" height="0.79" data-o="1"/><rect x="94.9" y="53.67" width="0.79" height="0.79" data-o="1"/><rect x="56.22" y="94.61" width="0.55" height="4.33" rx="0.12" data-o="1"/><rect x="128.23" y="94.61" width="0.55" height="4.33" rx="0.12" data-o="1"/><rect x="56.22" y="62.33" width="0.55" height="4.33" rx="0.12" data-o="1"/><rect x="128.23" y="62.33" width="0.55" height="4.33" rx="0.12" data-o="1"/><rect x="56.22" y="30.83" width="0.55" height="4.33" rx="0.12" data-o="1"/><rect x="128.23" y="30.83" width="0.55" height="4.33" rx="0.12" data-o="1"/></g>' + _G,
+          hatch: '<rect x="0" y="0.01" width="185" height="107.99"/><rect x="1.97" y="1.98" width="52.56" height="104.06"/><rect x="56.5" y="23.98" width="72.01" height="82.05"/><rect x="56.5" y="1.98" width="72.01" height="20.04"/><rect x="130.47" y="1.98" width="52.56" height="104.06"/><rect x="56.5" y="23.98" width="36" height="84.02"/><rect x="60.43" y="27.92" width="28.13" height="71.42"/><rect x="92.5" y="23.98" width="36" height="84.02"/><rect x="96.44" y="27.92" width="28.13" height="71.42"/>' },
+        { key: 'gl-frameless', name: 'Frameless glass partition', w: 144, h: 108, aff: 0, affMode: 'bottom', ref: 'GL-004', shape: 'rect', fill: 'plain', label: 'Glass',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="1.13" y="0" width="141.74" height="1.18" data-o="1"/><rect x="1.13" y="106.82" width="141.74" height="1.18" data-o="1"/><rect x="1.13" y="1.18" width="35.28" height="105.64" fill="none"/><line x1="5.36" y1="13.67" x2="13.12" y2="5.91"/><line x1="5.36" y1="19.31" x2="18.77" y2="5.91"/><rect x="36.72" y="1.18" width="35.12" height="105.64" fill="none"/><line x1="40.93" y1="13.63" x2="48.66" y2="5.91"/><line x1="40.93" y1="19.25" x2="54.28" y2="5.91"/><rect x="72.16" y="1.18" width="35.12" height="105.64" fill="none"/><line x1="76.37" y1="13.63" x2="84.1" y2="5.91"/><line x1="76.37" y1="19.25" x2="89.72" y2="5.91"/><rect x="107.59" y="1.18" width="35.28" height="105.64" fill="none"/><line x1="111.83" y1="13.67" x2="119.59" y2="5.91"/><line x1="111.83" y1="19.31" x2="125.23" y2="5.91"/></g>' + _G,
+          hatch: '<rect x="1.13" y="1.18" width="35.28" height="105.64"/><rect x="36.72" y="1.18" width="35.12" height="105.64"/><rect x="72.16" y="1.18" width="35.12" height="105.64"/><rect x="107.59" y="1.18" width="35.28" height="105.64"/>' },
+        { key: 'gl-framed', name: 'Framed glass partition', w: 144, h: 108, aff: 0, affMode: 'bottom', ref: 'GL-005', shape: 'rect', fill: 'plain', label: 'Glass',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="1.13" y="0" width="141.74" height="108" fill="none"/><rect x="3.1" y="69.61" width="44.29" height="36.42" fill="none"/><line x1="7.82" y1="81.99" x2="15.83" y2="73.98"/><line x1="7.82" y1="87.82" x2="21.66" y2="73.98"/><rect x="3.1" y="1.97" width="44.29" height="65.67" fill="none"/><line x1="7.82" y1="15.36" x2="16.48" y2="6.69"/><line x1="7.82" y1="21.66" x2="22.78" y2="6.69"/><rect x="49.36" y="69.61" width="45.28" height="36.42" fill="none"/><line x1="54.09" y1="81.99" x2="62.1" y2="73.98"/><line x1="54.09" y1="87.82" x2="67.92" y2="73.98"/><rect x="49.36" y="1.97" width="45.28" height="65.67" fill="none"/><line x1="54.09" y1="15.36" x2="62.75" y2="6.69"/><line x1="54.09" y1="21.66" x2="69.05" y2="6.69"/><rect x="96.61" y="69.61" width="44.29" height="36.42" fill="none"/><line x1="101.33" y1="81.99" x2="109.35" y2="73.98"/><line x1="101.33" y1="87.82" x2="115.17" y2="73.98"/><rect x="96.61" y="1.97" width="44.29" height="65.67" fill="none"/><line x1="101.33" y1="15.36" x2="109.99" y2="6.69"/><line x1="101.33" y1="21.66" x2="116.29" y2="6.69"/></g>' + _G,
+          hatch: '<rect x="1.13" y="0" width="141.74" height="108"/><rect x="3.1" y="69.61" width="44.29" height="36.42"/><rect x="3.1" y="1.97" width="44.29" height="65.67"/><rect x="49.36" y="69.61" width="45.28" height="36.42"/><rect x="49.36" y="1.97" width="45.28" height="65.67"/><rect x="96.61" y="69.61" width="44.29" height="36.42"/><rect x="96.61" y="1.97" width="44.29" height="65.67"/>' },
+        { key: 'gl-slide', name: 'Glass sliding door', w: 96, h: 108, aff: 0, affMode: 'bottom', ref: 'GL-006', shape: 'rect', fill: 'plain', label: 'Sliding Door',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="1.92" y="8.43" width="46.08" height="98.42" rx="0.12" fill="none"/><line x1="6.53" y1="21.48" x2="14.98" y2="13.04"/><line x1="6.53" y1="27.63" x2="21.12" y2="13.04"/><rect x="46.08" y="8.43" width="48" height="99.57" rx="0.12" data-o="1"/><line x1="50.69" y1="21.48" x2="59.14" y2="13.04"/><line x1="50.69" y1="27.63" x2="65.28" y2="13.04"/><rect x="48.77" y="53.47" width="1.15" height="19.97" rx="0.58" data-o="1"/><rect x="51.07" y="7.28" width="1.54" height="3.07" rx="0.23" data-o="1"/><rect x="87.94" y="7.28" width="1.54" height="3.07" rx="0.23" data-o="1"/><rect x="0" y="2.67" width="96" height="4.61" rx="0.23" data-o="1"/></g>' + _G,
+          hatch: '<rect x="1.92" y="8.43" width="46.08" height="98.42" rx="0.12"/>' },
+        { key: 'window', name: 'Window', w: 48, h: 48, aff: 36, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Window',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="48" height="48" rx="0.17"/><rect x="2" y="2" width="44" height="44"/><path fill="none" d="M24 2 V46"/><rect data-o="1" x="-1" y="46" width="50" height="2" rx="0.17"/>' + _G,
+          hatch: '<rect x="2" y="2" width="44" height="44"/>' },
+        { key: 'window-full', name: 'Full-height window', w: 72, h: 96, aff: 4, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Window',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="72" height="96" rx="0.17"/><rect x="2" y="2" width="68" height="92"/><path fill="none" d="M36 2 V94"/><path fill="none" d="M2 72 H70"/>' + _G,
+          hatch: '<rect x="2" y="2" width="68" height="92"/>' },
+    ] },
+    { cat: 'Doors', items: [
+        { key: 'hc-dr-001', name: 'Single hinged door', w: 41.5, h: 86.8, aff: 0, affMode: 'bottom', ref: 'DR-001', shape: 'rect', fill: 'plain', label: 'Door',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0" y="0.02" width="41.5" height="86.78" rx="0.12" data-o="1"/><rect x="2.76" y="2.78" width="35.99" height="84.02" data-o="1"/><rect x="38.47" y="73.41" width="0.55" height="4.33" rx="0.12" data-o="1"/><rect x="38.47" y="41.13" width="0.55" height="4.33" rx="0.12" data-o="1"/><rect x="38.47" y="9.63" width="0.55" height="4.33" rx="0.12" data-o="1"/><circle cx="5.71" cy="47.43" r="1.18" data-o="1"/><rect x="5.71" y="47.07" width="5.51" height="0.71" rx="0.35" data-o="1"/><circle cx="5.71" cy="47.43" r="1.18" data-o="1"/></g>' + _G },
+        { key: 'dr-double', name: 'Double doors', w: 72, h: 84, aff: 0, affMode: 'bottom', ref: 'DR-002', shape: 'rect', fill: 'plain', label: 'Doors',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0" y="3.41" width="72" height="80.59" rx="0.11" data-o="1"/><rect x="2.56" y="5.97" width="66.88" height="78.03" data-o="1"/><line x1="36" y1="84" x2="36" y2="5.97"/><rect x="2.3" y="71.57" width="0.51" height="4.02" rx="0.11" data-o="1"/><rect x="2.3" y="41.58" width="0.51" height="4.02" rx="0.11" data-o="1"/><rect x="2.3" y="12.33" width="0.51" height="4.02" rx="0.11" data-o="1"/><circle cx="33.26" cy="47.43" r="1.1" data-o="1"/><rect x="28.14" y="47.1" width="5.12" height="0.66" rx="0.33" data-o="1"/><circle cx="33.26" cy="47.43" r="1.1" data-o="1"/><rect x="69.18" y="71.57" width="0.51" height="4.02" rx="0.11" data-o="1"/><rect x="69.18" y="41.58" width="0.51" height="4.02" rx="0.11" data-o="1"/><rect x="69.18" y="12.33" width="0.51" height="4.02" rx="0.11" data-o="1"/><circle cx="38.74" cy="47.43" r="1.1" data-o="1"/><rect x="38.74" y="47.1" width="5.12" height="0.66" rx="0.33" data-o="1"/><circle cx="38.74" cy="47.43" r="1.1" data-o="1"/></g>' + _G },
+        { key: 'hc-dr-003', name: 'Pocket door', w: 41.5, h: 86.8, aff: 0, affMode: 'bottom', ref: 'DR-003', shape: 'rect', fill: 'plain', label: 'Pocket Door',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0" y="0.02" width="41.5" height="86.78" rx="0.12" data-o="1"/><rect x="2.76" y="2.78" width="35.99" height="84.02" data-o="1"/><rect x="4.33" y="43.49" width="1.97" height="6.3" rx="0.24" data-o="1"/><rect x="35.2" y="43.49" width="2.36" height="6.3" rx="0.98" data-o="1"/><rect x="35.67" y="44.08" width="1.42" height="5.12" rx="0.63" data-o="1"/></g>' + _G },
+        { key: 'hc-dr-004', name: 'Sliding barn door', w: 83.9, h: 90.1, aff: 0, affMode: 'bottom', ref: 'DR-004', shape: 'rect', fill: 'plain', label: 'Barn Door',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0.6" y="1.1" width="82.7" height="1.58" rx="0.24" data-o="1"/><rect x="0.01" y="0.71" width="1.18" height="2.36" rx="0.24" data-o="1"/><rect x="82.71" y="0.71" width="1.18" height="2.36" rx="0.24" data-o="1"/><rect x="45.89" y="1.1" width="1.58" height="6.3" rx="0.24" data-o="1"/><circle cx="46.68" cy="1.89" r="1.89" data-o="1"/><rect x="75.82" y="1.1" width="1.58" height="6.3" rx="0.24" data-o="1"/><circle cx="76.6" cy="1.89" r="1.89" data-o="1"/><rect x="41.95" y="3.47" width="39.38" height="86.63" rx="0.12" data-o="1"/><line x1="49.83" y1="90.1" x2="49.83" y2="3.47"/><line x1="57.7" y1="90.1" x2="57.7" y2="3.47"/><line x1="65.58" y1="90.1" x2="65.58" y2="3.47"/><line x1="73.45" y1="90.1" x2="73.45" y2="3.47"/><rect x="45.1" y="40.88" width="1.18" height="16.54" rx="0.59" data-o="1"/><rect x="46.28" y="55.84" width="0.79" height="0.79" data-o="1"/><rect x="46.28" y="41.66" width="0.79" height="0.79" data-o="1"/></g>' + _G },
+        { key: 'hc-dr-005', name: 'Glass door', w: 39.9, h: 86, aff: 0, affMode: 'bottom', ref: 'DR-005', shape: 'rect', fill: 'plain', label: 'Glass Door',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0" y="0.06" width="39.9" height="85.94" rx="0.12" data-o="1"/><rect x="1.97" y="2.03" width="35.97" height="83.97" fill="none"/><rect x="5.9" y="5.96" width="28.1" height="71.38" fill="none"/><line x1="9.27" y1="16.87" x2="15.46" y2="10.69"/><line x1="9.27" y1="21.36" x2="19.95" y2="10.69"/><rect x="3.34" y="30.91" width="1.02" height="23.61" rx="0.51" data-o="1"/><rect x="2.56" y="52.95" width="0.79" height="0.79" data-o="1"/><rect x="2.56" y="31.7" width="0.79" height="0.79" data-o="1"/><rect x="4.37" y="52.95" width="0.79" height="0.79" data-o="1"/><rect x="4.37" y="31.7" width="0.79" height="0.79" data-o="1"/><rect x="37.66" y="72.62" width="0.55" height="4.33" rx="0.12" data-o="1"/><rect x="37.66" y="40.36" width="0.55" height="4.33" rx="0.12" data-o="1"/><rect x="37.66" y="8.88" width="0.55" height="4.33" rx="0.12" data-o="1"/></g>' + _G,
+          hatch: '<rect x="1.97" y="2.03" width="35.97" height="83.97"/><rect x="5.9" y="5.96" width="28.1" height="71.38"/>' },
+        { key: 'hc-dr-006', name: 'Accessible door', w: 41.5, h: 86.8, aff: 0, affMode: 'bottom', ref: 'DR-006', shape: 'rect', fill: 'plain', label: 'Door',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0" y="0.02" width="41.5" height="86.78" rx="0.12" data-o="1"/><rect x="2.76" y="2.78" width="35.99" height="84.02" data-o="1"/><rect x="3.94" y="76.96" width="33.63" height="9.84" data-o="1"/><rect x="8.27" y="19.08" width="4.33" height="24.41" data-o="1"/><rect x="8.86" y="19.67" width="3.15" height="23.23" fill="none"/><line x1="9.24" y1="23.15" x2="9.93" y2="22.46"/><line x1="9.24" y1="23.65" x2="10.43" y2="22.46"/><rect x="38.47" y="73.41" width="0.55" height="4.33" rx="0.12" data-o="1"/><rect x="38.47" y="41.13" width="0.55" height="4.33" rx="0.12" data-o="1"/><rect x="38.47" y="9.63" width="0.55" height="4.33" rx="0.12" data-o="1"/><circle cx="5.71" cy="47.43" r="1.18" data-o="1"/><rect x="5.71" y="47.07" width="5.51" height="0.71" rx="0.35" data-o="1"/><circle cx="5.71" cy="47.43" r="1.18" data-o="1"/></g>' + _G },
+        { key: 'door-ada-bath', name: 'ADA bathroom', w: 36, h: 80, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'ADA Bathroom Door',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="36" height="80"/><path fill="none" d="M1 80 V1 H35 V80"/><rect x="2" y="2" width="32" height="78"/><rect x="33.4" y="12" width="0.6" height="3.6"/><rect x="33.4" y="58" width="0.6" height="3.6"/><circle cx="6" cy="46" r="0.75"/><rect x="6" y="45.65" width="4.2" height="0.7" rx="0.19"/>' + _G,
+          hatch: '<rect x="2" y="2" width="32" height="78"/>' },
+        { key: 'door-closet', name: 'Closet double', w: 72, h: 80, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Closet Doors',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="72" height="80"/><path fill="none" d="M1 80 V1 H71 V80"/><rect x="2" y="2" width="34" height="78"/><rect x="36" y="2" width="34" height="78"/><rect x="33.05" y="40" width="0.7" height="8" rx="0.19"/><rect x="38.25" y="40" width="0.7" height="8" rx="0.19"/>' + _G,
+          hatch: '<rect x="2" y="2" width="68" height="78"/>' },
+        { key: 'door-slide', name: 'Sliding patio door', w: 60, h: 80, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Sliding Door',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="60" height="80" rx="0.17"/><rect x="2" y="2" width="28" height="76"/><rect x="30" y="2" width="28" height="76"/><rect x="4" y="4" width="24" height="72"/><rect x="32" y="4" width="24" height="72"/><rect x="26.05" y="38" width="0.7" height="8" rx="0.19"/><rect x="33.25" y="38" width="0.7" height="8" rx="0.19"/>' + _G },
+        { key: 'elevator', name: 'Elevator', w: 42, h: 84, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Elevator',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="42" height="84" rx="0.17"/><rect x="2" y="2" width="38" height="82" rx="0.11"/><path fill="none" d="M21 2 V84"/>' + _G },
+        { key: 'niche', name: 'Niche', w: 36, h: 48, aff: 30, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Niche',
+          svg: _O + '<rect x="0" y="0" width="36" height="48" rx="0.17"/><rect x="2" y="2" width="32" height="44" rx="0.11"/><path fill="none" d="M0 46 H36"/>' + _G },
+        { key: 'door-guest', name: 'Guestroom entry', w: 36, h: 84, aff: 0, affMode: 'bottom', hidden: true, shape: 'rect', fill: 'plain', label: 'Guestroom Door',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="36" height="84"/><path fill="none" d="M1 84 V1 H35 V84"/><rect x="2" y="2" width="32" height="82"/><rect x="33.4" y="12" width="0.6" height="3.6"/><rect x="33.4" y="62" width="0.6" height="3.6"/><circle cx="6" cy="48" r="0.75"/><rect x="6" y="47.65" width="4.2" height="0.7" rx="0.19"/><rect x="4.4" y="52.6" width="4.4" height="2.2" rx="0.28"/>' + _G,
+          hatch: '<rect x="2" y="2" width="32" height="82"/>' },
+        { key: 'dr-accessible', name: 'Accessible door', w: 36, h: 84, aff: 0, affMode: 'bottom', hidden: true, shape: 'rect', fill: 'plain', label: 'Door',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="36" height="84"/><path fill="none" d="M1 84 V1 H35 V84"/><rect x="2" y="2" width="32" height="82"/><rect x="33.4" y="12" width="0.6" height="3.6"/><rect x="33.4" y="62" width="0.6" height="3.6"/><circle cx="6" cy="50" r="0.75"/><rect x="6" y="49.65" width="4.2" height="0.7" rx="0.19"/><rect x="3.6" y="74" width="28.8" height="8.6"/><rect x="14" y="14" width="8" height="20"/>' + _G,
+          hatch: '<rect x="2" y="2" width="32" height="82"/>' },
+        { key: 'dr-pocket', name: 'Pocket door', w: 36, h: 84, aff: 0, affMode: 'bottom', hidden: true, shape: 'rect', fill: 'plain', label: 'Pocket Door',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="36" height="84"/><path fill="none" d="M1 84 V1 H35 V84"/><rect x="2" y="2" width="32" height="82"/><rect x="31" y="40" width="1.6" height="6" rx="0.22"/><rect x="4.4" y="44" width="2.6" height="4" rx="0.33"/>' + _G
+              + _H + '<path fill="none" d="M0 3.4 H36"/>' + _G },
+        { key: 'dr-barn', name: 'Sliding barn door', w: 40, h: 87, aff: 0, affMode: 'bottom', hidden: true, shape: 'rect', fill: 'plain', label: 'Barn Door',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="40" height="1.6" rx="0.33"/><circle data-o="1" cx="8" cy="3.4" r="1.6"/><circle data-o="1" cx="32" cy="3.4" r="1.6"/><path fill="none" d="M8 3.4 V6"/><path fill="none" d="M32 3.4 V6"/><rect data-o="1" x="1" y="6" width="38" height="80" rx="0.22"/><rect x="3.6" y="8.6" width="32.8" height="74.8"/><path fill="none" d="M3.6 83.4 L36.4 8.6"/><rect x="5.85" y="40" width="0.7" height="12" rx="0.19"/><path fill="none" d="M14 86.6 H26"/>' + _G },
+        { key: 'dr-glass', name: 'Glass door', w: 36, h: 84, aff: 0, affMode: 'bottom', hidden: true, shape: 'rect', fill: 'plain', label: 'Glass Door',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="36" height="84"/><path fill="none" d="M1 84 V1 H35 V84"/><rect x="2" y="2" width="32" height="82"/><rect x="33.4" y="12" width="0.6" height="3.6"/><rect x="33.4" y="62" width="0.6" height="3.6"/><rect x="5" y="5" width="26" height="72"/><rect x="7.65" y="35" width="0.7" height="22" rx="0.19"/>' + _G,
+          hatch: '<rect x="5" y="5" width="26" height="72"/>' },
+    ] },
+    { cat: 'Chairs', items: [
+        { key: 'task-chair', name: 'Task chair', w: 26, h: 40, aff: 0, affMode: 'bottom', ref: 'CH-001', shape: 'rect', fill: 'plain', label: 'Chair',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><circle cx="7.17" cy="38.54" r="0.95" data-o="1"/><circle cx="18.83" cy="38.54" r="0.95" data-o="1"/><polygon points="12.27,34.61 1.71,37.34 1.89,38.07 12.27,35.7" data-o="1"/><polygon points="13.73,34.61 24.29,37.34 24.11,38.07 13.73,35.7" data-o="1"/><polygon points="12.45,35.7 13.55,35.7 13.44,37.81 12.56,37.81" data-o="1"/><circle cx="1.89" cy="38.91" r="1.09" data-o="1"/><circle cx="24.11" cy="38.91" r="1.09" data-o="1"/><circle cx="13" cy="38.91" r="1.09" data-o="1"/><rect x="11.36" y="34.24" width="3.28" height="1.64" rx="0.36" data-o="1"/><rect x="12.2" y="25.87" width="1.6" height="8.38" data-o="1"/><rect x="7.54" y="24.41" width="10.93" height="1.46" rx="0.29" data-o="1"/><rect x="11.54" y="16.76" width="2.91" height="5.1" data-o="1"/><rect x="4.99" y="0" width="16.03" height="17.49" rx="2.55" data-o="1"/><line x1="6.44" y1="12.39" x2="19.56" y2="12.39"/><rect x="1.89" y="16.03" width="1.09" height="6.92" data-o="1"/><rect x="0.8" y="15.26" width="3.28" height="0.95" rx="0.47" data-o="1"/><rect x="23.02" y="16.03" width="1.09" height="6.92" data-o="1"/><rect x="21.93" y="15.26" width="3.28" height="0.95" rx="0.47" data-o="1"/><rect x="2.25" y="22.15" width="21.49" height="0.8" rx="0.22" data-o="1"/><rect x="3.89" y="21.49" width="18.21" height="2.91" rx="1.46" data-o="1"/></g>' + _G,
+          side: { w: 26.4, h: 43.2,
+            svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><polygon points="12.61,37.38 1,40.33 1.2,41.11 12.61,38.56" data-o="1"/><polygon points="13.79,37.38 25.4,40.33 25.2,41.11 13.79,38.56" data-o="1"/><circle cx="1.2" cy="42.02" r="1.18" data-o="1"/><circle cx="25.2" cy="42.02" r="1.18" data-o="1"/><rect x="11.43" y="36.98" width="3.54" height="1.77" rx="0.39" data-o="1"/><rect x="12.33" y="27.93" width="1.73" height="9.05" data-o="1"/><rect x="8.48" y="26.36" width="10.23" height="1.57" rx="0.31" data-o="1"/><polygon points="19.1,24.79 21.46,24.79 23.04,18.1 20.87,18.1" data-o="1"/><path d="M20.28 19.67Q22.64 11.02 21.07 1.57Q21.07 0 22.64 0L24.02 0Q25 0 25 1.57Q25.79 11.02 23.43 19.67Z" data-o="1"/><rect x="3.36" y="23.21" width="18.49" height="3.15" rx="1.57" data-o="1"/><rect x="12.81" y="17.31" width="1.18" height="6.3" data-o="1"/><rect x="7.3" y="16.49" width="10.62" height="1.02" rx="0.51" data-o="1"/></g>' + _G } },
+        { key: 'hc-ch-002', name: 'Dining chair', w: 18.1, h: 33.5, aff: 0, affMode: 'bottom', ref: 'CH-002', shape: 'rect', fill: 'plain', label: 'Chair',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0.39" y="16.97" width="1.38" height="16.53" data-o="1"/><rect x="16.33" y="16.97" width="1.38" height="16.53" data-o="1"/><rect x="0.98" y="0.05" width="16.13" height="15.74" rx="1.57" data-o="1"/><line x1="2.36" y1="11.47" x2="15.74" y2="11.47"/><rect x="0" y="14.42" width="18.1" height="2.75" rx="0.87" data-o="1"/></g>' + _G,
+          side: { w: 18.5, h: 33.5,
+            svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0.39" y="16.97" width="1.38" height="16.53" data-o="1"/><polygon points="15.55,33.5 16.93,33.5 16.53,16.97 15.15,16.97" data-o="1"/><polygon points="14.96,14.61 16.53,14.61 18.5,0.04 16.93,0.04" data-o="1"/><rect x="0" y="14.41" width="18.11" height="2.76" rx="0.87" data-o="1"/></g>' + _G } },
+        { key: 'hc-ch-003', name: 'Lounge chair', w: 33.5, h: 35.4, aff: 0, affMode: 'bottom', ref: 'CH-003', shape: 'rect', fill: 'plain', label: 'Lounge Chair',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="0.82" y="11.41" width="1.77" height="23.99" data-o="1"/><rect x="30.91" y="11.41" width="1.77" height="23.99" data-o="1"/><rect x="2.59" y="31.07" width="28.32" height="1.18" data-o="1"/><rect x="2.59" y="22.42" width="28.32" height="1.97" data-o="1"/><rect x="4.36" y="0" width="24.78" height="18.88" rx="1.18" data-o="1"/><rect x="2.79" y="18.09" width="27.93" height="4.33" rx="0.98" data-o="1"/><rect x="0.03" y="10.62" width="3.93" height="1.18" rx="0.47" data-o="1"/><rect x="29.53" y="10.62" width="3.93" height="1.18" rx="0.47" data-o="1"/></g>' + _G,
+          side: { w: 30.8, h: 35.3,
+            svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><polygon points="23.22,35.3 24.8,35.3 30.7,1.45 29.13,1.45" data-o="1"/><path d="M20.07 18.77L26.37 1.06Q26.77 -0.12 27.95 0.07L29.91 0.47Q31.1 0.74 30.7 1.84L24.8 19.16Z" data-o="1"/><rect x="1.18" y="11.29" width="1.77" height="24.01" data-o="1"/><rect x="1.97" y="22.31" width="23.62" height="1.97" data-o="1"/><rect x="1.97" y="30.97" width="22.04" height="1.18" data-o="1"/><rect x="1.97" y="17.98" width="22.44" height="4.33" rx="0.98" data-o="1"/><rect x="0" y="10.5" width="26.77" height="1.18" rx="0.47" data-o="1"/></g>' + _G } },
+        { key: 'hc-ch-004', name: 'Bar stool', w: 16.1, h: 43.3, aff: 0, affMode: 'bottom', ref: 'CH-004', shape: 'rect', fill: 'plain', label: 'Stool',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><polygon points="0.79,43.3 2.16,43.3 3.73,15.03 2.55,15.03" data-o="1"/><polygon points="15.31,43.3 13.94,43.3 12.37,15.03 13.55,15.03" data-o="1"/><rect x="1.57" y="30.93" width="12.96" height="0.98" rx="0.47" data-o="1"/><rect x="2.36" y="7.17" width="0.98" height="5.5" data-o="1"/><rect x="12.76" y="7.17" width="0.98" height="5.5" data-o="1"/><rect x="1.18" y="0.1" width="13.74" height="7.85" rx="1.57" data-o="1"/><rect x="0" y="12.67" width="16.1" height="2.36" rx="0.98" data-o="1"/></g>' + _G,
+          side: { w: 17.3, h: 43.3,
+            svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><polygon points="0.79,43.3 2.16,43.3 3.73,15.01 2.55,15.01" data-o="1"/><polygon points="15.32,43.3 13.95,43.3 12.38,15.01 13.56,15.01" data-o="1"/><rect x="1.57" y="30.92" width="12.97" height="0.98" rx="0.47" data-o="1"/><polygon points="12.18,12.65 13.36,12.65 16.11,0.08 14.93,0.08" data-o="1"/><path d="M13.95 8.72L15.32 8.72L17.29 0.47Q17.37 0.08 16.9 0.08L15.91 0.08Z" data-o="1"/><rect x="0" y="12.65" width="16.11" height="2.36" rx="0.98" data-o="1"/></g>' + _G } },
+        { key: 'hc-ch-005', name: 'Armchair', w: 29.5, h: 33.5, aff: 0, affMode: 'bottom', ref: 'CH-005', shape: 'rect', fill: 'plain', label: 'Chair',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="1.18" y="29.57" width="1.77" height="3.93" data-o="1"/><rect x="26.55" y="29.57" width="1.77" height="3.93" data-o="1"/><rect x="3.54" y="0.07" width="22.42" height="17.7" rx="1.97" data-o="1"/><rect x="0" y="9.11" width="5.11" height="20.45" rx="1.18" data-o="1"/><rect x="24.39" y="9.11" width="5.11" height="20.45" rx="1.18" data-o="1"/><rect x="5.11" y="17.77" width="19.27" height="11.8" data-o="1"/><rect x="5.11" y="13.83" width="19.27" height="3.93" rx="0.98" data-o="1"/></g>' + _G,
+          side: { w: 30.7, h: 33.5,
+            svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><path d="M20.47 11.46L23.22 1.23Q23.62 0.04 24.8 0.04L29.52 0.04Q30.7 0.04 30.7 1.23L30.7 11.46Z" data-o="1"/><rect x="1.18" y="29.56" width="1.77" height="3.94" data-o="1"/><rect x="27.75" y="29.56" width="1.77" height="3.94" data-o="1"/><rect x="0" y="9.1" width="30.7" height="20.47" rx="1.18" data-o="1"/></g>' + _G } },
+        { key: 'ch-banquette', name: 'Banquette', w: 72, h: 36, aff: 0, affMode: 'bottom', ref: 'CH-006', shape: 'rect', fill: 'plain', label: 'Banquette',
+          svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="3.2" y="32.8" width="65.6" height="3.2" data-o="1"/><rect x="1.2" y="20.8" width="69.6" height="12" data-o="1"/><rect x="0" y="0" width="72" height="18" rx="1.2" data-o="1"/><line x1="9" y1="16.8" x2="9" y2="1.2"/><line x1="18" y1="16.8" x2="18" y2="1.2"/><line x1="27" y1="16.8" x2="27" y2="1.2"/><line x1="36" y1="16.8" x2="36" y2="1.2"/><line x1="45" y1="16.8" x2="45" y2="1.2"/><line x1="54" y1="16.8" x2="54" y2="1.2"/><line x1="63" y1="16.8" x2="63" y2="1.2"/><rect x="0" y="17.2" width="72" height="3.6" rx="0.8" data-o="1"/></g>' + _G,
+          side: { w: 24, h: 36,
+            svg: _O + '<g stroke-linecap="round" stroke-linejoin="round"><rect x="2.95" y="33.05" width="19.2" height="2.95" data-o="1"/><rect x="1.11" y="21.97" width="22.89" height="11.08" data-o="1"/><path d="M16.25 19.38L18.46 3.88Q18.65 2.77 19.75 2.77L24 2.77L24 19.38Z" data-o="1"/><rect x="0" y="18.65" width="22.15" height="3.32" rx="0.74" data-o="1"/></g>' + _G } },
+        { key: 'chair', name: 'Side chair', w: 22, h: 34, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Side Chair',
+          svg: _O + '<path fill="none" d="M3 20 L2 34"/><path fill="none" d="M19 20 L20 34"/><rect data-o="1" x="1" y="17" width="20" height="3.6" rx="0.88"/><path data-o="1" d="M3.4 17 V4 Q3.4 0.6 7 0.6 H15 Q18.6 0.6 18.6 4 V17 Z"/>' + _G,
+          side: { w: 24, h: 34,
+            svg: _O + '<path fill="none" d="M3 20 L1.6 34"/><path fill="none" d="M20 20 L21.4 34"/><rect data-o="1" x="1" y="17" width="21" height="3.6" rx="0.88"/><path data-o="1" d="M19 17 L21 1.6 Q21.2 0.4 22.4 0.6 Q23.4 1 23.2 2.2 L21.8 17 Z"/>' + _G } },
+        { key: 'desk-chair', name: 'Desk chair', w: 20, h: 33, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Chair',
+          svg: _O + '<path fill="none" d="M2.6 19 L2 33"/><path fill="none" d="M17.4 19 L18 33"/><path fill="none" d="M2.4 27 H17.6"/><rect data-o="1" x="0.6" y="15.5" width="18.8" height="3.5" rx="0.77"/><path data-o="1" d="M3 15.5 V3 Q3 0 6 0 H14 Q17 0 17 3 V15.5 Z"/><rect x="5" y="2" width="10" height="11" rx="0.77"/>' + _G },
+        { key: 'ch-dining', name: 'Dining chair', w: 20, h: 34, aff: 0, affMode: 'bottom', hidden: true, shape: 'rect', fill: 'plain', label: 'Chair',
+          svg: _O + '<path fill="none" d="M3 20 L2.4 34"/><path fill="none" d="M17 20 L17.6 34"/><rect data-o="1" x="0.6" y="17.4" width="18.8" height="3.2" rx="0.77"/><path data-o="1" d="M2.6 17.4 C2.6 10 2.8 3.4 5 1.6 Q6.4 0.6 10 0.6 Q13.6 0.6 15 1.6 C17.2 3.4 17.4 10 17.4 17.4 Z"/>' + _G,
+          side: { w: 22, h: 34,
+            svg: _O + '<path fill="none" d="M3 20 L1.8 34"/><path fill="none" d="M19 20 L20.2 34"/><rect data-o="1" x="0.6" y="17.4" width="20.8" height="3.2" rx="0.77"/><path data-o="1" d="M17.6 17.4 C18.4 11 19.4 5 20.4 1.6 Q20.8 0.4 21.6 0.8 Q22.2 1.2 22 2.4 L20.8 17.4 Z"/>' + _G } },
+        { key: 'lounge', name: 'Lounge chair', w: 32, h: 30, aff: 0, affMode: 'bottom', hidden: true, shape: 'rect', fill: 'plain', label: 'Lounge Chair',
+          svg: _O + '<path data-o="1" d="M3 17.5 V1.2 Q3 0 4.4 0 Q16 -0.5 27.6 0 Q29 0 29 1.2 V17.5 Z"/><path data-o="1" d="M2.4 22.4 V18.4 Q2.4 17 3.8 17 Q16 16.6 28.2 17 Q29.6 17 29.6 18.4 V22.4 Z"/><rect data-o="1" x="2.4" y="22.4" width="27.2" height="1.6"/><path fill="none" d="M2.4 25.6 H29.6"/><rect data-o="1" x="0" y="12" width="2.4" height="18"/><path fill="none" d="M0.8 30 V13.4 H1.6 V30"/><rect data-o="1" x="-0.4" y="11.2" width="3.2" height="1.6" rx="0.11"/><rect data-o="1" x="29.6" y="12" width="2.4" height="18"/><path fill="none" d="M30.4 30 V13.4 H31.2 V30"/><rect data-o="1" x="29.2" y="11.2" width="3.2" height="1.6" rx="0.11"/>' + _G,
+          side: { w: 34, h: 30,
+            svg: _O + '<rect data-o="1" x="25" y="0" width="7" height="22" rx="0.88"/><rect data-o="1" x="2" y="17" width="26" height="5.4" rx="0.55"/><rect data-o="1" x="0" y="11.2" width="34" height="1.6" rx="0.11"/><rect data-o="1" x="1" y="12.8" width="2.4" height="17.2"/><rect data-o="1" x="30.6" y="12.8" width="2.4" height="17.2"/><path fill="none" d="M3.4 25.6 H30.6"/>' + _G } },
+        { key: 'armchair', name: 'Club chair', w: 34, h: 32, aff: 0, affMode: 'bottom', hidden: true, shape: 'rect', fill: 'plain', label: 'Chair',
+          svg: _O + '<rect data-o="1" x="4" y="29" width="1.6" height="3" rx="0.17"/><rect data-o="1" x="28.4" y="29" width="1.6" height="3" rx="0.17"/><path data-o="1" d="M6 17 V3 Q6 0 9 0 H25 Q28 0 28 3 V17 Z"/><rect data-o="1" x="0" y="11" width="7" height="18" rx="1.87"/><rect data-o="1" x="27" y="11" width="7" height="18" rx="1.87"/><rect data-o="1" x="6" y="17" width="22" height="12" rx="0.88"/><path fill="none" d="M6 22.4 H28"/>' + _G },
+        { key: 'ch-bar', name: 'Bar stool', w: 18, h: 43, aff: 0, affMode: 'bottom', hidden: true, shape: 'rect', fill: 'plain', label: 'Stool',
+          svg: _O + '<path fill="none" d="M3 17 L2 43"/><path fill="none" d="M15 17 L16 43"/><path fill="none" d="M2.4 31 H15.6"/><rect data-o="1" x="0" y="13" width="18" height="4" rx="0.88"/><path data-o="1" d="M2 13 V3 Q2 0 5 0 H13 Q16 0 16 3 V13 Z"/><rect x="4" y="2.4" width="10" height="8" rx="0.66"/>' + _G,
+          side: { w: 18, h: 43,
+            svg: _O + '<path fill="none" d="M3 17 L2 43"/><path fill="none" d="M15 17 L16 43"/><path fill="none" d="M2.4 31 H15.6"/><rect data-o="1" x="0" y="13" width="18" height="4" rx="0.88"/><path data-o="1" d="M14 13 L15 1.6 Q15.2 0.4 16.4 0.6 Q17.4 1 17.2 2.2 L16.6 13 Z"/>' + _G } },
+    ] },
+    { cat: 'Decor', items: [
+        { key: 'sconce', name: 'Wall sconce', w: 5, h: 10, aff: 60, affMode: 'center', shape: 'rect', fill: 'plain', label: '',
+          svg: _O + '<rect data-o="1" x="1.7" y="0" width="1.6" height="3" rx="0.22"/><path data-o="1" d="M1.55 3 H3.45 L4.6 10 H0.4 Z"/>' + _G,
+          side: { w: 7, h: 10,
+            svg: _O + '<rect data-o="1" x="0" y="0" width="1.2" height="10" rx="0.17"/><path fill="none" d="M1.2 4 H2.8"/><path data-o="1" d="M2.4 3 H4.2 L7 10 H1.2 Z"/>' + _G } },
+        { key: 'lamp-table', name: 'Table lamp', w: 14, h: 26, aff: 25, affMode: 'bottom', shape: 'rect', fill: 'plain', label: '',
+          svg: _O + '<rect data-o="1" x="4.4" y="23.8" width="5.2" height="2.2" rx="0.33"/><path fill="none" d="M7 23.8 V9.5"/><path data-o="1" d="M3 0 H11 L13.6 9.5 H0.4 Z"/>' + _G },
+        { key: 'lamp-floor', name: 'Floor lamp', w: 16, h: 60, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: '',
+          svg: _O + '<rect data-o="1" x="3.5" y="58.4" width="9" height="1.6" rx="0.33"/><path fill="none" d="M8 12 V58.4"/><path data-o="1" d="M3 0 H13 L16 12 H0 Z"/>' + _G },
+        { key: 'pendant', name: 'Pendant', w: 14, h: 30, aff: 66, affMode: 'bottom', shape: 'rect', fill: 'plain', label: '',
+          svg: _O + '<path fill="none" d="M7 0 V17"/><rect data-o="1" x="6.2" y="16.6" width="1.6" height="1.6" rx="0.17"/><path data-o="1" d="M0 30 C0 22.6 3 18 7 18 C11 18 14 22.6 14 30 Z"/>' + _G },
+        { key: 'picture-light', name: 'Picture light', w: 24, h: 7.4, aff: 82, affMode: 'bottom', shape: 'rect', fill: 'plain', label: '',
+          svg: _O + '<rect data-o="1" x="10" y="0" width="4" height="2.4" rx="0.28"/><path fill="none" d="M12 2.4 V4.6"/><rect data-o="1" x="0" y="4.6" width="24" height="2.8" rx="0.77"/>' + _G },
+        { key: 'mirror', name: 'Mirror', w: 36, h: 48, aff: 36, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Mirror',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="36" height="48" rx="0.33"/><rect x="1.6" y="1.6" width="32.8" height="44.8" rx="0.11"/><path fill="none" d="M5 42 L14 14"/><path fill="none" d="M10 42 L19 14"/>' + _G,
+          hatch: '<rect x="1.6" y="1.6" width="32.8" height="44.8"/>' },
+        { key: 'mirror-rd', name: 'Round mirror', w: 36, h: 36, aff: null, affMode: 'center', shape: 'ellipse', fill: 'plain', label: 'Mirror',
+          svg: _O + '<circle data-o="1" cx="18" cy="18" r="17.6"/><circle cx="18" cy="18" r="16"/><path fill="none" d="M9 26 L17 9"/><path fill="none" d="M14 28 L22 11"/>' + _G },
+        { key: 'clock', name: 'Wall clock', w: 12, h: 12, aff: 84, affMode: 'center', shape: 'ellipse', fill: 'plain', label: '',
+          svg: _O + '<circle data-o="1" cx="6" cy="6" r="5.8"/><circle cx="6" cy="6" r="5"/><path fill="none" d="M6 6 V2.6 M6 6 L8.4 7.4"/>' + _G },
+        { key: 'planter', name: 'Planter', w: 24, h: 54, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Plant',
+          svg: _O + '<path data-o="1" d="M12 33.48 C7.98 20.59 -2.06 12.39 -8.09 10.04 C-6.08 19.42 3.96 28.79 12 33.48 Z"/><path data-o="1" d="M12 33.48 C16.15 21.33 26.53 13.59 32.76 11.38 C30.68 20.22 20.3 29.06 12 33.48 Z"/><path data-o="1" d="M12 33.48 C11.33 15.07 9.66 3.35 8.65 0 C8.99 13.39 10.66 26.78 12 33.48 Z"/><path data-o="1" d="M12 33.48 C14.01 16.91 19.03 6.36 22.04 3.35 C21.04 15.4 16.02 27.45 12 33.48 Z"/><path data-o="1" d="M12 33.48 C9.19 15.99 2.16 4.85 -2.06 1.67 C-0.66 14.4 6.38 27.12 12 33.48 Z"/><path data-o="1" d="M2.77 33.48 H21.23 L19.39 54 H4.61 Z"/>' + _G },
+        { key: 'thermostat', name: 'Thermostat', w: 5, h: 5, aff: 54, affMode: 'center', shape: 'rect', fill: 'plain', label: '',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="5" height="5" rx="0.44"/><rect x="1.1" y="1.1" width="2.8" height="1.5" rx="0.11"/><path fill="none" d="M1.6 3.7 H2.2"/><path fill="none" d="M2.8 3.7 H3.4"/>' + _G },
+        { key: 'outlet', name: 'Outlet', w: 3, h: 5, aff: 15, affMode: 'center', shape: 'rect', fill: 'plain', label: '',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="3" height="5" rx="0.22"/><rect x="0.9" y="0.9" width="1.2" height="1.2" rx="0.22"/><rect x="0.9" y="2.9" width="1.2" height="1.2" rx="0.22"/>' + _G },
+    ] },
     { cat: 'Keep clear', items: [
-        { key: 'kc-switch', name: 'Light switch', w: 3, h: 5, aff: 48, affMode: 'center', avoid: true,
-          shape: 'rect', fill: 'plain', label: 'Switch' },
-        { key: 'kc-thermostat', name: 'Thermostat', w: 5, h: 5, aff: 48, affMode: 'center', avoid: true,
-          shape: 'rect', fill: 'plain', label: 'Thermostat' },
-        { key: 'kc-outlet', name: 'Outlet', w: 3, h: 5, aff: 18, affMode: 'center', avoid: true,
-          shape: 'rect', fill: 'plain', label: 'Outlet' },
-        { key: 'kc-alarm', name: 'Fire alarm strobe', w: 6, h: 6, aff: 80, affMode: 'bottom', avoid: true,
-          shape: 'rect', fill: 'plain', label: 'Strobe' },
-        { key: 'kc-reader', name: 'Card reader', w: 4, h: 6, aff: 42, affMode: 'center', avoid: true,
-          shape: 'rect', fill: 'plain', label: 'Reader' },
-        { key: 'kc-sign', name: 'Room sign', w: 8, h: 8, aff: 60, affMode: 'center', avoid: true,
-          shape: 'rect', fill: 'plain', label: 'Sign' },
-        { key: 'kc-zone', name: 'Keep-clear zone', w: 24, h: 24, aff: null, affMode: 'center', freeform: true, avoid: true,
-          shape: 'rect', fill: 'plain', label: 'Keep clear' },
+        { key: 'kc-switch', name: 'Light switch', w: 3, h: 5, aff: 48, affMode: 'center', avoid: true, shape: 'rect', fill: 'plain', label: 'Switch',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="3" height="5" rx="0.22"/><rect x="1.05" y="1.4" width="0.9" height="2.2" rx="0.11"/>' + _G },
+        { key: 'kc-thermostat', name: 'Thermostat', w: 5, h: 5, aff: 48, affMode: 'center', avoid: true, shape: 'rect', fill: 'plain', label: 'Thermostat',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="5" height="5" rx="0.44"/><rect x="1.1" y="1.1" width="2.8" height="1.5" rx="0.11"/><path fill="none" d="M1.6 3.7 H2.2"/><path fill="none" d="M2.8 3.7 H3.4"/>' + _G },
+        { key: 'kc-outlet', name: 'Outlet', w: 3, h: 5, aff: 18, affMode: 'center', avoid: true, shape: 'rect', fill: 'plain', label: 'Outlet',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="3" height="5" rx="0.22"/><rect x="0.9" y="0.9" width="1.2" height="1.2" rx="0.22"/><rect x="0.9" y="2.9" width="1.2" height="1.2" rx="0.22"/>' + _G },
+        { key: 'kc-alarm', name: 'Fire alarm strobe', w: 6, h: 6, aff: 80, affMode: 'bottom', avoid: true, shape: 'rect', fill: 'plain', label: 'Strobe',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="6" height="6" rx="0.33"/><rect x="1.5" y="3.4" width="3" height="1.7" rx="0.22"/><path fill="none" d="M1.5 1.3 H4.5"/><path fill="none" d="M1.5 2.2 H4.5"/>' + _G },
+        { key: 'kc-reader', name: 'Card reader', w: 4, h: 6, aff: 42, affMode: 'center', avoid: true, shape: 'rect', fill: 'plain', label: 'Reader',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="4" height="6" rx="0.28"/><rect x="1" y="2.4" width="2" height="2.6" rx="0.17"/><circle cx="2" cy="1.2" r="0.35"/>' + _G },
+        { key: 'kc-sign', name: 'Room sign', w: 8, h: 8, aff: 60, affMode: 'center', avoid: true, shape: 'rect', fill: 'plain', label: 'Sign',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="8" height="8" rx="0.22"/><path fill="none" d="M2 3 H6"/><path fill="none" d="M2.6 4.6 H5.4"/><circle cx="3" cy="6.2" r="0.2"/><circle cx="4" cy="6.2" r="0.2"/><circle cx="5" cy="6.2" r="0.2"/>' + _G },
+        { key: 'kc-zone', name: 'Keep-clear zone', w: 24, h: 24, aff: null, affMode: 'center', freeform: true, avoid: true, shape: 'rect', fill: 'plain', label: 'Keep clear' },
+        { key: 'kc-pull', name: 'Fire alarm pull', w: 4, h: 5.5, aff: 48, affMode: 'center', avoid: true, shape: 'rect', fill: 'plain', label: 'Pull',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="4" height="5.5" rx="0.22"/><rect x="1" y="2.6" width="2" height="1.1" rx="0.17"/><path fill="none" d="M1.2 1.1 H2.8"/>' + _G },
+        { key: 'kc-extinguisher', name: 'Extinguisher cabinet', w: 12, h: 27, aff: 21, affMode: 'bottom', avoid: true, shape: 'rect', fill: 'plain', label: 'FEC',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="12" height="27" rx="0.22"/><rect x="1" y="1" width="10" height="25"/><path d="M3.6 23 V9 Q3.6 6 6 6 Q8.4 6 8.4 9 V23 Q8.4 24 7.4 24 H4.6 Q3.6 24 3.6 23 Z"/><path fill="none" d="M5.4 6 V4.6 H6.6 V6 M4.8 4.6 H8.2"/><path fill="none" d="M8.4 9 C10.2 10.6 10.2 18 8.4 20"/>' + _G },
+        { key: 'kc-exit', name: 'Exit sign', w: 13, h: 8.5, aff: 86, affMode: 'bottom', avoid: true, shape: 'rect', fill: 'plain', label: '',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="13" height="8.5" rx="0.28"/><path fill="none" d="M4.6 2.6 V5.9 M4.6 2.6 H6 M4.6 4.25 H5.7 M4.6 5.9 H6"/><path fill="none" d="M6.6 2.6 L8.2 5.9 M8.2 2.6 L6.6 5.9 M8.9 2.6 V5.9 M9.6 2.6 H11.2 M10.4 2.6 V5.9"/><path fill="none" d="M3.4 3 L2 4.25 L3.4 5.5"/>' + _G },
+        { key: 'kc-grille', name: 'Return grille', w: 24, h: 12, aff: 84, affMode: 'bottom', avoid: true, shape: 'rect', fill: 'plain', label: '',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="24" height="12" rx="0.17"/><rect x="1.2" y="1.2" width="21.6" height="9.6"/><path fill="none" d="M1.2 2.4 H22.8"/><path fill="none" d="M1.2 3.6 H22.8"/><path fill="none" d="M1.2 4.8 H22.8"/><path fill="none" d="M1.2 6 H22.8"/><path fill="none" d="M1.2 7.2 H22.8"/><path fill="none" d="M1.2 8.4 H22.8"/><path fill="none" d="M1.2 9.6 H22.8"/>' + _G },
+        { key: 'kc-access', name: 'Access panel', w: 12, h: 12, aff: null, affMode: 'center', avoid: true, shape: 'rect', fill: 'plain', label: '',
+          svg: _O + '<rect data-o="1" x="0" y="0" width="12" height="12" rx="0.11"/><rect x="0.8" y="0.8" width="10.4" height="10.4"/><circle cx="9.6" cy="6" r="0.45"/>' + _G },
     ] },
     { cat: 'Basic', items: [
-        // FREEFORM: these have no catalogue size worth placing, so a click does nothing
-        // and a drag is the only way to make one. That keeps the tool forgiving about a
-        // stray click exactly where a stray click is likely — you reach for Box when you
-        // are tracing something the library does not have.
-        { key: 'rect', name: 'Box', w: 36, h: 36, aff: null, affMode: 'center', freeform: true,
-          shape: 'rect', fill: 'plain', label: '' },
-        { key: 'circle', name: 'Circle', w: 24, h: 24, aff: null, affMode: 'center', freeform: true,
-          shape: 'ellipse', fill: 'plain', label: '' },
-        { key: 'wood', name: 'Wood panel', w: 48, h: 96, aff: 0, affMode: 'bottom',
-          shape: 'rect', fill: 'wood', label: '' },
-        { key: 'glass', name: 'Glass panel', w: 48, h: 96, aff: 0, affMode: 'bottom',
-          shape: 'rect', fill: 'glass', label: '' },
+        { key: 'rect', name: 'Box', w: 36, h: 36, aff: null, affMode: 'center', freeform: true, shape: 'rect', fill: 'plain', label: '' },
+        { key: 'circle', name: 'Circle', w: 24, h: 24, aff: null, affMode: 'center', freeform: true, shape: 'ellipse', fill: 'plain', label: '' },
+        { key: 'shelf', name: 'Shelf', w: 48, h: 1.5, aff: 48, affMode: 'bottom', shape: 'shelf', fill: 'plain', label: 'Shelf' },
+        { key: 'shelf-long', name: 'Long shelf', w: 96, h: 1.5, aff: 48, affMode: 'bottom', shape: 'shelf', fill: 'plain', label: 'Shelf' },
+        { key: 'wainscot', name: 'Wainscot', w: 120, h: 36, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'plain', label: 'Wainscot' },
+        { key: 'handrail', name: 'Handrail', w: 120, h: 2, aff: 34, affMode: 'bottom', shape: 'shelf', fill: 'plain', label: 'Handrail' },
+        { key: 'wood', name: 'Wood panel', w: 48, h: 96, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'wood', label: '' },
+        { key: 'glass', name: 'Glass panel', w: 48, h: 96, aff: 0, affMode: 'bottom', shape: 'rect', fill: 'glass', label: '' },
     ] },
 ];
+// </ctx-library>
 // The wrapper that applies the drawing convention ONCE. preserveAspectRatio="none" so
 // the art fills whatever box the block has been resized to — paired with
 // vector-effect="non-scaling-stroke", which is what stops a stretched block from also
@@ -9961,7 +10239,10 @@ function _ctxArtSvg(p, inkAttr, pxScale) {
     const conv = (v) => (parseFloat(v) / s).toFixed(4);
     // Both stroke-width and stroke-dasharray are in the same authored px space, so both
     // convert — a dash run left unscaled turns a hidden line into a solid one.
+    // data-o="1" marks a shape OPAQUE (20.21): filled white in drawing order, so a front
+    // pillow hides the sham behind it. The marker keeps the source free of literal fills.
     const body = p.svg
+        .replace(/ data-o="1"/g, ' fill="' + CONTEXT_FILL + '"')
         .replace(/stroke-width="([\d.]+)"/g, (m, w) => 'stroke-width="' + conv(w) + '"')
         .replace(/stroke-dasharray="([\d.]+) ([\d.]+)"/g,
                  (m, a, b) => 'stroke-dasharray="' + conv(a) + ' ' + conv(b) + '"');
@@ -9973,6 +10254,52 @@ function _ctxArtSvg(p, inkAttr, pxScale) {
         + '<g fill="none" stroke="' + (inkAttr || 'currentColor') + '" stroke-width="' + conv(CTX_LW_DET) + '"'
         + ' stroke-linejoin="miter" stroke-linecap="butt" stroke-miterlimit="4">'
         + body + '</g></svg>';
+}
+// THE BODY FOLLOWS THE DRAWING (20.20). A block used to be an opaque white BOX, so a
+// task chair hid the wall between its casters and a kitchenette hid its backsplash. The
+// white now comes from the drawing itself: every closed shape in the art is filled,
+// stroke off, UNDER the lines. Open strokes (chair legs, a modesty-panel edge drawn as
+// a line) have no area and cover nothing, which is the point: you see the wall there.
+// A Keep clear block keeps its full box, because there the box IS the zone.
+// An OPEN CURVE would be filled across its chord (a faucet's gooseneck became a white
+// fin), so a stroke that must stay line-only carries fill="none" in the art.
+// ONE builder for screen, export and canvas; the dash pattern is stripped (a body has
+// no stroke, and a dashed hidden line must not punch a dashed hole in it).
+function _ctxBodyOn(b, art) { return !!(art && art.svg) && !_ctxAvoid(b); }
+function _ctxBodyGroup(p, fill) {
+    if (!p || !p.svg) return '';
+    return '<g fill="' + (fill || CONTEXT_FILL) + '" stroke="none">'
+        + p.svg.replace(/ stroke-dasharray="[^"]*"/g, '') + '</g>';
+}
+function _ctxBodySvg(p, fill) {
+    if (!p || !p.svg) return '';
+    return '<svg viewBox="0 0 ' + p.w + ' ' + p.h + '" preserveAspectRatio="none"'
+        + ' xmlns="http://www.w3.org/2000/svg">' + _ctxBodyGroup(p, fill) + '</svg>';
+}
+// Where the body crosses a horizontal line, as [from, to] fractions of the block width,
+// read off a rasterised body (the art is curves; solving them per item is not worth it).
+// null = cannot tell (no canvas, e.g. a test harness): the caller falls back to the box.
+async function _ctxBodySpansAt(p, yFrac) {
+    try {
+        if (typeof document === 'undefined' || !p || !p.svg) return null;
+        const W = 400, H = Math.max(8, Math.min(1600, Math.round(W * p.h / (p.w || 1))));
+        const c = document.createElement('canvas'); c.width = W; c.height = H;
+        const x = c.getContext && c.getContext('2d');
+        if (!x || !x.getImageData) return null;
+        const svg = _ctxBodySvg(p, '#000').replace('<svg ', '<svg width="' + W + '" height="' + H + '" ');
+        const img = await _loadImgRaw('data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg));
+        if (!img) return null;
+        x.drawImage(img, 0, 0, W, H);
+        const row = Math.max(0, Math.min(H - 1, Math.round(yFrac * H)));
+        const d = x.getImageData(0, row, W, 1).data;
+        const out = []; let s0 = -1;
+        for (let i = 0; i <= W; i++) {
+            const on = i < W && d[i * 4 + 3] > 64;
+            if (on && s0 < 0) s0 = i;
+            if (!on && s0 >= 0) { out.push([s0 / W, i / W]); s0 = -1; }
+        }
+        return out;
+    } catch (e) { return null; }
 }
 // The elevation box a preset places at, converted into the project unit. ONE definition,
 // because click-to-place, double-click-to-add and the palette tooltip all have to agree
@@ -10042,6 +10369,68 @@ function _elevUnderlay(elev) {
 // The stored opacity, defaulted and clamped. Kept away from 0 and 1: a 0 underlay is
 // indistinguishable from no underlay (so "nothing happened" is the report), and a 1
 // one is indistinguishable from real drawing content.
+// 20.31: true when this wall's client elevation prints in the deck and the exports.
+function _underlayInDeck(elev) {
+    const u = _elevUnderlay(elev);
+    return !!(u && u.inDeck === true);
+}
+// The SVG for a deck underlay: the image at its drawn place, clipped to the wall box.
+// Rects are in the export's SVG coordinates ({x, y, w, h}). Returns [] when there is
+// nothing to draw. A clip id per wall, so several walls in one document never share one.
+function _underlayDeckSvg(elev, imgRect, wallRect, key) {
+    const u = _elevUnderlay(elev);
+    if (!u || u.inDeck !== true || !imgRect || !wallRect) return [];
+    if (!(imgRect.w > 0) || !(imgRect.h > 0) || !(wallRect.w > 0) || !(wallRect.h > 0)) return [];
+    const id = 'ulclip-' + String(key == null ? 'w' : key).replace(/[^A-Za-z0-9_-]/g, '_');
+    const f = (v) => (+v).toFixed(1);
+    return [
+        `<clipPath id="${id}"><rect x="${f(wallRect.x)}" y="${f(wallRect.y)}" width="${f(wallRect.w)}" height="${f(wallRect.h)}"/></clipPath>`,
+        `<image x="${f(imgRect.x)}" y="${f(imgRect.y)}" width="${f(imgRect.w)}" height="${f(imgRect.h)}" preserveAspectRatio="none" clip-path="url(#${id})" xlink:href="${String(u.src).replace(/"/g, '%22')}"/>`
+    ];
+}
+// The decoded client elevation for a canvas renderer (20.36, the spec-page thumbnail). One
+// decode per image, reused across every page that shows the wall. Resolves null when the
+// image cannot load, and after a few seconds at worst, so a broken drawing can never hang
+// a deck build.
+const _ulImgCache = new Map();
+function _underlayImage(src) {
+    if (!src) return Promise.resolve(null);
+    if (_ulImgCache.has(src)) return _ulImgCache.get(src);
+    const p = new Promise(res => {
+        let done = false; const fin = (v) => { if (!done) { done = true; res(v); } };
+        try { const im = new Image(); im.onload = () => fin(im); im.onerror = () => fin(null); im.src = src; } catch (e) { fin(null); }
+        setTimeout(() => fin(null), 4000);
+    }).then(im => { if (!im) _ulImgCache.delete(src); return im; });
+    if (_ulImgCache.size > 24) _ulImgCache.delete(_ulImgCache.keys().next().value);
+    _ulImgCache.set(src, p);
+    return p;
+}
+function setUnderlayName(v) {
+    const u = _elevUnderlay(elevations[currentElevIndex]);
+    if (!u) return;
+    const n = String(v || '').trim();
+    if (n) u.name = n; else delete u.name;
+    if (typeof pushHistory === 'function') pushHistory();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+}
+function _ulOfferClearRequired(elev) {
+    if (!elev || elev.elevRequired !== true || typeof showConfirmModal !== 'function') return;
+    showConfirmModal('Untick Elevation required?',
+        'This wall is marked Elevation required, and you have just added its client elevation. Untick it so its pages stop printing ELEVATION REQUIRED?',
+        'Untick', 'Keep it', () => {
+            delete elev.elevRequired;
+            _wallSettingChanged();
+        });
+}
+function setUnderlayInDeck(on) {
+    const u = _elevUnderlay(elevations[currentElevIndex]);
+    if (!u) return;
+    if (on) u.inDeck = true; else delete u.inDeck;
+    if (typeof pushHistory === 'function') pushHistory();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    renderUnderlayControls();
+    try { _dsRefresh(); } catch (e) {}
+}
 function _underlayOpacity(u) {
     const v = parseFloat(u && u.opacity);
     if (!isFinite(v)) return UNDERLAY_DEFAULT_OPACITY;
@@ -10161,6 +10550,255 @@ function _clampFlatToWall(elev, frame) {
 // button did nothing at all, which read as "once a wall is EGD or WF it is stuck that
 // way". ART is the plain wall underneath both: clicking it turns EGD off and, if the
 // wall has glass, offers to take the glass away too.
+// ── WALL FINISH (20.25) ─────────────────────────────────────────────────────
+// What the wall is and its colour: Ford's Level 03 review (Nov 2026) asked for "wall types
+// on each elevation page... drywall, painted, wood, what wood colour" to make frame
+// decisions. NOT the wall MODE above (ART / EGD / WF says what goes ON the wall); this is
+// the wall itself. Two plain fields on the elevation, both optional, so an older file
+// opens unchanged and a blank wall prints nothing.
+const WALL_FINISHES = ['Painted drywall', 'Wood', 'Wallcovering', 'Glass', 'Concrete', 'Stone', 'Tile', 'Brick', 'Metal', 'Acoustic panel'];
+// The line the wall page prints: "WALL: WOOD · BLUE WD-11". A note with no material still
+// prints (a spec code alone is useful); neither prints nothing.
+function _wallFinishText(elev) {
+    if (!elev) return '';
+    const m = String(elev.wallFinish || '').trim(), n = String(elev.wallFinishNote || '').trim();
+    const t = [m, n].filter(Boolean).join(' \u00b7 ');
+    return t ? ('WALL: ' + t).toUpperCase() : '';
+}
+// PRINT THE WALL FINISH LINE? (20.40, per wall 20.41) Two levels, the way every page
+// option should work: a DECK default (`editorialContent.wallFinishPrint === false` is off;
+// absent is on, so older files print as before) and a per-wall choice
+// (`elev.wallFinishPrint`, true or false, absent = follow the deck). "All walls" sets the
+// deck default AND clears every wall's own choice, so it really is every wall. Off never
+// touches a wall's finish or code, so turning it back on loses nothing.
+function _wallFinishDeckPrints() { return !(typeof editorialContent !== 'undefined' && editorialContent && editorialContent.wallFinishPrint === false); }
+function _wallFinishPrints(elev) {
+    if (elev && typeof elev.wallFinishPrint === 'boolean') return elev.wallFinishPrint;
+    return _wallFinishDeckPrints();
+}
+function _wallSettingChanged() {
+    if (typeof pushHistory === 'function') pushHistory();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    try { _wallFinishSync(); } catch (e) {}
+    try { if (typeof _dsClearBuiltAll === 'function') _dsClearBuiltAll(); if (typeof _dsRefresh === 'function') _dsRefresh(); } catch (e) {}
+}
+// Every wall at once: the deck default, and no wall keeps a choice of its own.
+function _setWallFinishPrints(on) {
+    if (typeof editorialContent === 'undefined' || !editorialContent) return;
+    if (on) delete editorialContent.wallFinishPrint; else editorialContent.wallFinishPrint = false;
+    (elevations || []).forEach(e => { if (e) delete e.wallFinishPrint; });
+    _wallSettingChanged();
+}
+// One wall (the open one, or the one a Deck Studio page is for). Matching the deck default
+// stores nothing, so a later All walls is not fighting leftovers.
+function _setWallFinishPrintsWall(on, elev) {
+    const e = elev || elevations[currentElevIndex];
+    if (!e) return;
+    if (!!on === _wallFinishDeckPrints()) delete e.wallFinishPrint; else e.wallFinishPrint = !!on;
+    _wallSettingChanged();
+}
+// ELEVATION REQUIRED and SHOW IN DECK for every wall (20.41). Both stay per wall; these
+// are the "change a bunch at once" shortcuts. Required is only MARKED on walls with no
+// client elevation (a wall that has its drawing does not need the stamp).
+function _setElevRequiredAll(on) {
+    (elevations || []).forEach(e => {
+        if (!e) return;
+        if (!on) { delete e.elevRequired; return; }
+        if (!_elevUnderlay(e)) e.elevRequired = true;
+    });
+    _wallSettingChanged();
+}
+function _setUnderlayInDeckAll(on) {
+    (elevations || []).forEach(e => { const u = _elevUnderlay(e); if (!u) return; if (on) u.inDeck = true; else delete u.inDeck; });
+    _wallSettingChanged();
+    try { renderUnderlayControls(); } catch (e) {}
+}
+function _wallAllMenu(anchor, kind) {
+    const walls = (elevations || []).filter(Boolean);
+    const withUl = walls.filter(e => _elevUnderlay(e)).length;
+    const n = (k) => k + (k === 1 ? ' wall' : ' walls');
+    let items = [];
+    if (kind === 'finish') items = [
+        { label: 'Print on every wall', hint: n(walls.length), onClick: () => _setWallFinishPrints(true) },
+        { label: 'Hide on every wall', hint: 'keeps what each says', onClick: () => _setWallFinishPrints(false) },
+    ];
+    else if (kind === 'required') items = [
+        { label: 'Mark every wall with no client elevation', hint: n(walls.length - withUl), onClick: () => _setElevRequiredAll(true) },
+        { label: 'Clear on every wall', hint: n(walls.filter(e => e.elevRequired === true).length), onClick: () => _setElevRequiredAll(false) },
+    ];
+    else if (kind === 'indeck') items = [
+        { label: 'Show in deck on every wall', hint: n(withUl) + ' with one', onClick: () => _setUnderlayInDeckAll(true) },
+        { label: 'Tracing guide only on every wall', hint: n(withUl), onClick: () => _setUnderlayInDeckAll(false) },
+    ];
+    if (items.length && typeof _frameMenu === 'function') _frameMenu(anchor, items);
+}
+// The same pair on a Deck Studio wall page: this page's wall, and All walls.
+function _wallFinishPrintToggle(desc) {
+    const idx = desc ? (desc._elevIdx != null ? desc._elevIdx : (desc.elev && desc.elev._idx)) : null;
+    const elev = (idx != null && elevations[idx]) ? elevations[idx] : null;
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex; align-items:center; gap:6px; font-size:var(--fs-60); color:var(--text-main); margin-top:5px; padding-top:5px; border-top:1px dashed var(--border-color);';
+    const lab = document.createElement('label');
+    lab.style.cssText = 'display:flex; align-items:center; gap:6px; cursor:pointer;';
+    const cb = document.createElement('input'); cb.type = 'checkbox'; cb.setAttribute('data-wf-print', ''); cb.style.cssText = 'flex:0 0 auto;';
+    cb.checked = _wallFinishPrints(elev);
+    cb.onchange = () => { if (elev) _setWallFinishPrintsWall(cb.checked, elev); else _setWallFinishPrints(cb.checked); };
+    lab.appendChild(cb); lab.appendChild(document.createTextNode('Print wall finish'));
+    row.appendChild(lab);
+    if (typeof _dsHelpDot === 'function') row.appendChild(_dsHelpDot('The WALL: line under ELEVATION DETAIL (for example WALL: WOOD · WD-1), set per wall on the Elevation tab’s Wall tab. The tick is for this wall’s pages; All walls sets every wall at once. What each wall says is kept.'));
+    const all = document.createElement('button'); all.type = 'button'; all.className = 'wall-all-btn'; all.setAttribute('data-wf-all', '');
+    all.innerHTML = 'All walls &#9662;';
+    all.onclick = () => _wallAllMenu(all, 'finish');
+    row.appendChild(all);
+    return row;
+}
+function _wallFinishSync() {
+    const sel = document.getElementById('wallFinish'), note = document.getElementById('wallFinishNote');
+    const elev = (typeof elevations !== 'undefined') ? elevations[currentElevIndex] : null;
+    const wfp = document.getElementById('wallFinishPrint'); if (wfp) wfp.checked = _wallFinishPrints(elev);
+    if (sel) {
+        const cur = (elev && elev.wallFinish) || '';
+        // A finish typed into an older or hand-edited file still shows rather than reading as blank.
+        const opts = [''].concat(WALL_FINISHES, (cur && WALL_FINISHES.indexOf(cur) < 0) ? [cur] : []);
+        if (sel.options.length !== opts.length || Array.from(sel.options).some((o, i) => o.value !== opts[i])) {
+            sel.innerHTML = '';
+            opts.forEach(v => { const o = document.createElement('option'); o.value = v; o.textContent = v || 'Not set'; sel.appendChild(o); });
+        }
+        sel.value = cur;
+    }
+    if (note && document.activeElement !== note) note.value = (elev && elev.wallFinishNote) || '';
+    const col = document.getElementById('wallColor');
+    const wc = _wallColor(elev);
+    if (col && document.activeElement !== col) col.value = wc || '#ffffff';
+    const onList = !!wc && WALL_PAINT_FAMILIES.some(f => f.colors.indexOf(wc) >= 0);
+    if (col) {
+        col.title = (wc && !onList) ? ('Wall colour ' + wc.toUpperCase() + ' (prints on this wall\'s pages)') : 'Any other colour';
+        col.style.boxShadow = (wc && !onList) ? '0 0 0 2px var(--ui-active)' : '';
+    }
+    const none = document.getElementById('wallColorNone');
+    if (none) none.style.borderColor = wc ? 'var(--border-color)' : 'var(--ui-active)';
+    const sw = document.getElementById('wallColorSwatches');
+    if (sw && typeof _frameSwatchesInto === 'function') {
+        _frameSwatchesInto(sw, wc, (hex) => { setElevWallColor(hex); if (typeof pushHistory === 'function') pushHistory(); }, { families: WALL_PAINT_FAMILIES, size: 18 });
+        const rowEl = sw.firstElementChild; if (rowEl) { rowEl.style.marginBottom = '0'; rowEl.style.flexWrap = 'nowrap'; }
+    }
+    const rq = document.getElementById('elevRequired'), rqn = document.getElementById('elevRequiredNote');
+    if (rq) rq.checked = !!(elev && elev.elevRequired === true);
+    if (rqn) { if (document.activeElement !== rqn) rqn.value = (elev && elev.elevRequiredNote) || ''; rqn.style.display = (rq && rq.checked) ? '' : 'none'; }
+}
+function setElevWallFinish() {
+    const elev = elevations[currentElevIndex];
+    if (!elev) return;
+    const sel = document.getElementById('wallFinish'), note = document.getElementById('wallFinishNote');
+    const m = sel ? sel.value : '', n = note ? note.value.trim() : '';
+    if (m) elev.wallFinish = m; else delete elev.wallFinish;
+    if (n) elev.wallFinishNote = n; else delete elev.wallFinishNote;
+    scheduleAutosave();
+}
+// ── WALL COLOUR (20.32) ─────────────────────────────────────────────────────
+// The wall painted its real colour, so the deck page shows art against the wall it hangs
+// on (designers were recolouring FRAME's walls in InDesign). `elev.wallColor`, '#rrggbb',
+// optional and deleted when cleared, so an older file opens with the usual grey editor wall
+// and a white printed wall. One reader for every place that paints a wall: the editor
+// (#wall), the SVG export (a filled rect first in the back layer, under the underlay),
+// the PNG export, and the spec-page thumbnail canvas.
+// The paint row's dots: whites to charcoal, a navy, two woods. The wheel covers the rest.
+const WALL_PAINT_FAMILIES = [{ name: 'Wall', colors: ['#ffffff', '#f2efe8', '#dcdad5', '#b9b8b2', '#a89f91', '#4a4a4a', '#1f2a44', '#c8a27a', '#6b4a32'] }];
+// Where the paint stops: the top of the baseboard, as a fraction of the wall height from the
+// floor (0 = no baseboard, paint to the floor). The baseboard is trim, not wall (20.35).
+function _wallPaintBaseFrac(elev) {
+    try {
+        const bb = getBaseboardHeight(elev), H = parseFloat(elev && elev.wallH);
+        return (bb > 0 && H > 0 && bb < H) ? bb / H : 0;
+    } catch (e) { return 0; }
+}
+function _wallColor(elev) {
+    const c = elev && elev.wallColor;
+    return (typeof c === 'string' && /^#[0-9a-f]{6}$/i.test(c)) ? c.toLowerCase() : '';
+}
+// A layer, first in #wall so everything else draws over it, from the top of the wall down to
+// the top of the baseboard. The wall's own background stays what it was (the editor grey,
+// transparent in an export), so the baseboard band below reads unpainted (20.35).
+function _wallColorPaint() {
+    const wall = document.getElementById('wall');
+    if (!wall) return;
+    const elev = (typeof elevations !== 'undefined') ? elevations[currentElevIndex] : null;
+    const wc = _wallColor(elev);
+    let p = document.getElementById('wall-paint');
+    if (!wc) { if (p) p.remove(); return; }
+    if (!p) { p = document.createElement('div'); p.id = 'wall-paint'; p.setAttribute('aria-hidden', 'true'); }
+    if (wall.firstChild !== p) wall.insertBefore(p, wall.firstChild);
+    p.style.cssText = 'position:absolute; left:0; top:0; right:0; height:' + ((1 - _wallPaintBaseFrac(elev)) * 100).toFixed(4) + '%; background:' + wc + '; pointer-events:none;';
+}
+function setElevWallColor(v) {
+    const elev = elevations[currentElevIndex];
+    if (!elev) return;
+    const c = String(v || '').trim();
+    if (/^#[0-9a-f]{6}$/i.test(c)) elev.wallColor = c.toLowerCase(); else delete elev.wallColor;
+    _wallColorPaint();
+    _wallFinishSync();
+    scheduleAutosave();
+    try { _dsRefresh(); } catch (e) {}
+}
+// ── ELEVATION REQUIRED (20.33) ──────────────────────────────────────────────
+// When the client has not sent an elevation for a wall, the designer builds the page from
+// the plan and says so on it: red, top right, "ELEVATION REQUIRED" over one line of what is
+// unknown ("Artwork size to be confirmed"). The studio's wording, not "No elevation
+// provided": it asks for the drawing rather than blaming the client. Designers were adding
+// it in InDesign. `elev.elevRequired` (true) and `elev.elevRequiredNote` (the second line;
+// blank = the default) live on the WALL, and the stamp is COMPUTED per page, never stored
+// in editorialContent.annotations: switch it off and every page is clean again, and a
+// recode or a renamed wall cannot strand a stamp on the wrong page.
+// Which pages: the wall's own pages (spec:elevgrp:<set>, spec:elev:<i>, ig:<name>) and the
+// spec page of every set hanging on it (spec:<set code>). One resolver, _elevReqWallForKey,
+// used by both the PDF pass (_drawAnnotations) and the Deck Studio overlay (_dsRenderAnnots).
+const ELEV_REQ_TITLE = 'ELEVATION REQUIRED';
+const ELEV_REQ_NOTE = 'Artwork size to be confirmed';
+function _elevReqWallForKey(key) {
+    const k = String(key || '');
+    const walls = (typeof elevations !== 'undefined' && Array.isArray(elevations)) ? elevations : [];
+    if (!walls.some(e => e && e.elevRequired === true)) return null;
+    const base = (v) => String(v).split('~')[0];
+    const holds = (e, code) => !!(e && Array.isArray(e.frames) && e.frames.some(f => f && f.id != null && (String(f.id) === code || _artGroupKey(f.id) === code)));
+    let m;
+    if ((m = /^spec:elev:(\d+)/.exec(k))) return walls[+m[1]] || null;
+    if (k.indexOf('spec:elevgrp:') === 0) { const g = base(k.slice(13)); return walls.find(e => holds(e, g)) || null; }
+    if (k.indexOf('ig:') === 0) { const n = k.slice(3); return walls.find(e => e && e.name === n) || null; }
+    if (k.indexOf('spec:') === 0) { const c = base(k.slice(5)); return c ? (walls.find(e => holds(e, c)) || null) : null; }
+    return null;
+}
+// The stamp as two ordinary note annotations, so it prints and previews exactly like a
+// stamp added by hand. None when the page already carries the words (a hand-made stamp wins).
+function _elevReqStamps(key) {
+    const e = _elevReqWallForKey(key);
+    if (!e || e.elevRequired !== true) return [];
+    const own = (typeof editorialContent !== 'undefined' && editorialContent && editorialContent.annotations && editorialContent.annotations[key]) || [];
+    if (own.some(a => a && !a.hidden && /elevation required/i.test(String(a.text || '')))) return [];
+    const note = String(e.elevRequiredNote || '').trim() || ELEV_REQ_NOTE;
+    const ink = (typeof _DS_STAMP_INK !== 'undefined') ? _DS_STAMP_INK : '#e00000';
+    // WHERE: top right on a spec page, as the studio places it. A WALL page's drawing runs to
+    // the top of the page (the stamp sat on the overall dimension line), so there it goes in
+    // the left column. NOT straight under the WALL: line (20.33 put it there): an install page
+    // prints its size legend there and the stamp sat on it (20.34). Low in the column, just
+    // above where the plan thumbnail starts, clear of a long legend and of the title.
+    const wallPage = /^(spec:elevgrp:|spec:elev:|ig:)/.test(String(key || ''));
+    const x = wallPage ? 0.0236 : 0.48, y = wallPage ? 0.545 : 0.05, al = wallPage ? 'left' : 'right', w = wallPage ? 0.24 : 0.46;
+    return [
+        { type: 'note', text: ELEV_REQ_TITLE, x: x, y: y, w: w, size: 0.034, color: ink, font: 'display', bold: true, italic: false, align: al, _auto: 'elevReq' },
+        { type: 'note', text: note, x: x, y: y + 0.043, w: w, size: 0.019, color: ink, font: 'serif', bold: false, italic: false, align: al, _auto: 'elevReq' }
+    ];
+}
+function setElevRequired() {
+    const elev = elevations[currentElevIndex];
+    if (!elev) return;
+    const cb = document.getElementById('elevRequired'), note = document.getElementById('elevRequiredNote');
+    if (cb && cb.checked) elev.elevRequired = true; else delete elev.elevRequired;
+    const n = note ? note.value.trim() : '';
+    if (n && n !== ELEV_REQ_NOTE) elev.elevRequiredNote = n; else delete elev.elevRequiredNote;
+    _wallFinishSync();
+    scheduleAutosave();
+    try { _dsRefresh(); } catch (e) {}
+}
 function setElevWallMode(mode) {
     const elev = elevations[currentElevIndex];
     if (!elev) return;
@@ -10652,7 +11290,7 @@ const CAT_SPEC_FIELDS = CAT_SLOT_FIELDS.filter(k => k !== 'x' && k !== 'y');
 // asking for it is the better evidence: the group dimensions and custom lines ARE the
 // layout work, and a mockup whose measurements do not reach its own options means doing
 // that work once per option. The layer toggles still decide what prints.
-const CAT_WALL_FIELDS = ['wallW', 'wallH', 'egdWall'];
+const CAT_WALL_FIELDS = ['wallW', 'wallH', 'egdWall', 'wallFinish', 'wallFinishNote', 'wallFinishPrint', 'wallColor', 'elevRequired', 'elevRequiredNote'];
 const CAT_WALL_DEEP = ['personPos', 'contextBlocks', 'glazing', 'groupDims', 'customLines', 'marks'];
 // A row-level mirror as well: the PLAN PIN belongs to the placement. A dealership hangs
 // ONE piece in that spot and picks which image goes in it, so pinning the mockup's slot
@@ -11939,23 +12577,123 @@ const dashFmt = (num) => {
 // THE CODE SCHEME: PREFIX.N (ART.1, EGD.1, WF.1), a set's pieces lettered on the end
 // (ART.4A, ART.4B). Numbers count per prefix. A project already written with padded
 // codes (ART.001) keeps its padding, so a new code sorts beside the old ones.
+// THE PROJECT'S OWN CODE STYLE (20.05). Clients number placements their way (ART-01,
+// ART_1, ART 03) and every document must agree; a new piece in an ART-01 project was
+// minted ART.3 in the house style, which is how a FRAME install guide printed ART.1 beside
+// a client's ART-01 on the crate list. The separator and zero padding most codes of this
+// prefix use win (ties to the house '.'); the number counts across every style.
 function _codeNumsFor(prefix) {
-    const re = new RegExp('^' + prefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\.(\\d+)');
+    const re = new RegExp('^' + prefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '([.\\-_ ]?)(\\d+)');
     let max = 0, padded = false;
+    const styles = {};
     dashProjectData.forEach(d => {
         const m = re.exec(String((d && d.id) || ''));
         if (!m) return;
-        const n = parseInt(m[1], 10);
+        const n = parseInt(m[2], 10);
         if (!isNaN(n) && n > max) max = n;
-        if (m[1].length > 1 && m[1].charAt(0) === '0') padded = true;
+        const pad = (m[2].length > 1 && m[2].charAt(0) === '0') ? m[2].length : 0;
+        if (pad) padded = true;
+        const k = m[1] + '|' + pad;
+        styles[k] = (styles[k] || 0) + 1;
     });
-    return { max: max, padded: padded };
+    let sep = '.', width = 0, best = 0;
+    Object.keys(styles).forEach(k => {
+        const c = styles[k], s = k.split('|')[0];
+        if (c > best || (c === best && s === '.')) { best = c; sep = s; width = parseInt(k.split('|')[1], 10) || 0; }
+    });
+    return { max: max, padded: padded, sep: sep, width: width };
 }
-function _nextPlacementCode(prefix) {
+// ── THE PROJECT'S CODE PATTERN (20.30) ───────────────────────────────────────────
+// Some clients track art against their architectural drawings: L3.ART.S16-10A is
+// level 3, art, sector 16, placement 10, piece A. Designers built those codes by hand in
+// InDesign because FRAME only minted ART.n. A project now names its pattern once:
+//   {type}  the category's prefix (ART, EGD, WF, or the project's own, e.g. GLA)
+//   {level} the plan level's code (Level 03 -> L3; set per level)
+//   {zone}  the piece's Sector field (any word the client uses)
+//   {n} {nn} {nnn}  the placement number, padded to that many digits
+// and every new code follows it. The piece letter goes on the end as always. Blank is the
+// house ART.1. A code the pattern cannot fill (no sector given yet) falls back to the house
+// code rather than mint L3.ART.S-01.
+const CODE_PATTERN_PRESETS = [
+    { v: '', label: 'ART.1 (house)' },
+    { v: '{type}-{nn}', label: 'ART-01' },
+    { v: '{level}.{type}-{nn}', label: 'L3.ART-01 (level)' },
+    { v: '{level}.{type}.S{zone}-{nn}', label: 'L3.ART.S16-01 (level, sector)' },
+];
+function _codePattern() { return String((editorialContent && editorialContent.codePattern) || '').trim(); }
+function _codeZoneLabel() { return String((editorialContent && editorialContent.codeZoneLabel) || '').trim() || 'Sector'; }
+function _codePatternNeeds(pat) {
+    const p = pat == null ? _codePattern() : pat;
+    return { level: p.indexOf('{level}') >= 0, zone: p.indexOf('{zone}') >= 0, type: p.indexOf('{type}') >= 0 };
+}
+// A plan level's code: its own `code`, else the number in its name (Level 03 -> L3), else
+// the first letters of the name (Mezzanine -> MEZ), else L and its position.
+function _levelCode(li) {
+    const i = (typeof li === 'number' && li >= 0) ? li : 0;
+    const L = (typeof floorplanLevels !== 'undefined' && floorplanLevels) ? floorplanLevels[i] : null;
+    if (L && String(L.code || '').trim()) return String(L.code).trim();
+    const nm = String((L && L.name) || '').trim();
+    const m = /(\d+)/.exec(nm);
+    if (m) return 'L' + parseInt(m[1], 10);
+    const w = nm.replace(/^level\s*/i, '').replace(/[^A-Za-z0-9]/g, '');
+    return w ? w.slice(0, 3).toUpperCase() : 'L' + (i + 1);
+}
+function _codePatternParts(pat) {
+    const m = /\{(n+)\}/.exec(pat || '');
+    if (!m) return null;
+    return { before: pat.slice(0, m.index), width: m[1].length > 1 ? m[1].length : 0, after: pat.slice(m.index + m[0].length) };
+}
+// Fill the tokens; null when one the template uses is blank.
+function _codePatternFill(tpl, ctx) {
+    let missing = false;
+    const out = String(tpl || '').replace(/\{(type|level|zone)\}/g, (_, k) => {
+        const v = String(ctx[k] == null ? '' : ctx[k]).trim();
+        if (!v) missing = true;
+        return v;
+    });
+    return missing ? null : out;
+}
+// ctx: { level: plan index, zone: sector text }. Unset level reads the selected piece's.
+function _codeCtxResolve(prefix, ctx) {
+    const c = ctx || {};
+    let li = c.level;
+    if (typeof li !== 'number') {
+        const sel = (typeof dashSelectedRowIndex === 'number' && dashProjectData) ? dashProjectData[dashSelectedRowIndex] : null;
+        li = (sel && typeof sel.level === 'number') ? sel.level : 0;
+    }
+    return { type: prefix || 'ART', level: _levelCode(li), zone: String(c.zone == null ? '' : c.zone).trim() };
+}
+// The next code in the project's pattern, or null (no pattern, or a token it needs is blank).
+// The number counts on its own stem: L3.ART.S16-10 is followed by L3.ART.S16-11 whatever
+// Sector 24 is up to.
+function _nextPatternCode(prefix, ctx) {
+    const pp = _codePatternParts(_codePattern());
+    if (!pp) return null;
+    const c = _codeCtxResolve(prefix, ctx);
+    const stem = _codePatternFill(pp.before, c), tail = _codePatternFill(pp.after, c);
+    if (stem == null || tail == null) return null;
+    let n = 0;
+    const keys = {};
+    (dashProjectData || []).forEach(d => {
+        const k = d && d.id ? _artGroupKey(d.id) : '';
+        if (!k) return;
+        keys[k] = true;
+        if (k.indexOf(stem) !== 0 || k.length < stem.length + tail.length) return;
+        if (tail && k.slice(k.length - tail.length) !== tail) return;
+        const mid = k.slice(stem.length, k.length - tail.length);
+        if (/^\d+$/.test(mid)) n = Math.max(n, parseInt(mid, 10));
+    });
+    let code;
+    do { n++; code = stem + (pp.width ? String(n).padStart(pp.width, '0') : String(n)) + tail; } while (keys[code]);
+    return code;
+}
+function _nextPlacementCode(prefix, ctx) {
+    const pc = _nextPatternCode(prefix || 'ART', ctx);
+    if (pc) return pc;
     const p = prefix || 'ART';
     const info = _codeNumsFor(p);
     let n = info.max + 1;
-    const fmt = (k) => p + '.' + (info.padded ? String(k).padStart(3, '0') : String(k));
+    const fmt = (k) => p + info.sep + (info.width ? String(k).padStart(info.width, '0') : String(k));
     // Never hand back a code something already owns (a typed-in ART.7B owns ART.7).
     while (dashProjectData.some(d => d && _artGroupKey(d.id) === fmt(n))) n++;
     return fmt(n);
@@ -12345,7 +13083,7 @@ const BULK_FIELD_ELEMENTS = {
     m1ColorName: ['m1_color'], m1ColorHex: ['m1_colorHex'],
     m2: ['m2'], m2ColorName: ['m2_color'], m2ColorHex: ['m2_colorHex'],
     glass: ['m_glass'], hardware: ['m_hardware'], mount: ['m_mount'],
-    backing: ['m_backing'], notes: ['m_notes'], prodNotes: ['m_prodNotes'],
+    backing: ['m_backing'], notes: ['m_notes'], prodNotes: ['m_prodNotes'], weightLbs: ['m_weight'], zone: ['m_zone'],
     canvasDepth: ['canvasDepth'], canvasWrap: ['canvasWrap'], floaterInset: ['floaterInset'],
     bleed: ['m_bleed'],
     // Flat graphics: substrate. Bulk-editable like any other production field —
@@ -12636,7 +13374,7 @@ function addDashRow() {
         if (!ans) return null;
         let id = null;
         if (ans.kind === 'grow') { const ids = _placementGrow(ans.key, ans.count); id = ids && ids[0]; }
-        else if (ans.kind === 'new') { const code = _placementMint(ans.cat, ans.set, false).code; const r = dashProjectData.find(x => x && _artGroupKey(x.id) === code); id = r && r.id; }
+        else if (ans.kind === 'new') { const code = _placementMint(ans.cat, ans.set, false, ans.ctx).code; const r = dashProjectData.find(x => x && _artGroupKey(x.id) === code); id = r && r.id; }
         const i = id ? dashProjectData.findIndex(r => r && r.id === id) : -1;
         if (i < 0) return null;
         dashSelectedRowIndex = i;
@@ -12647,14 +13385,49 @@ function addDashRow() {
 }
 
 // A duplicate is a new placement of the SAME type: duplicating EGD.1 gave ART.n.
+// 20.29: a client's structured code names its type INSIDE it (L3.ART.S16-10A, 1B.L3.EGD-04):
+// the type is the token that is a known prefix, never the level in front ("L3" minted L3.1).
 function _codePrefixOfRow(r) {
-    const m = /^([A-Za-z][A-Za-z0-9]*)\./.exec(String((r && r.id) || ''));
-    return m ? m[1] : _catCodeInfo((r && r.category) || '').prefix;
+    const id = String((r && r.id) || '');
+    if (_codeSortParts(id)) {
+        const m = /^([A-Za-z][A-Za-z0-9]*)\./.exec(id);
+        if (m) return m[1];
+    } else {
+        let known = [];
+        try { known = _codePrefixOrder(); } catch (e) {}
+        const hit = id.split(/[.\-_ ]+/).find(t => t && known.indexOf(t.toUpperCase()) >= 0);
+        if (hit) return hit.toUpperCase();
+    }
+    return _catCodeInfo((r && r.category) || '').prefix;
+}
+// A DUPLICATE OF A CLIENT'S CODE IS THE NEXT PLACEMENT IN THAT CODE (20.29). L3.ART.S16-10A
+// duplicates to L3.ART.S16-11 (the highest number on that stem plus one, its padding kept),
+// not ART.40. A house code (ART.12) and a code with no trailing number return null, and the
+// caller mints by prefix as before.
+function _nextCodeLike(id) {
+    const s = String(id || '').trim();
+    if (!s || _codeSortParts(s)) return null;
+    const key = _artGroupKey(s);
+    const m = /^(.*?[^\d])(\d+)$/.exec(key || '');
+    if (!m) return null;
+    const stem = m[1], width = m[2].length;
+    let n = parseInt(m[2], 10);
+    (dashProjectData || []).forEach(d => {
+        const k = d && d.id ? _artGroupKey(d.id) : '';
+        if (k && k.indexOf(stem) === 0 && /^\d+$/.test(k.slice(stem.length))) n = Math.max(n, parseInt(k.slice(stem.length), 10));
+    });
+    const taken = (c) => (dashProjectData || []).some(d => d && _artGroupKey(d.id) === c);
+    let c;
+    do { n++; c = stem + String(n).padStart(width, '0'); } while (taken(c));
+    return c;
+}
+function _duplicateCodeFor(row) {
+    return _nextCodeLike(row && row.id) || _nextPlacementCode(_codePrefixOfRow(row));
 }
 
 function duplicateDashRow() {
     const newRow = JSON.parse(JSON.stringify(dashProjectData[dashSelectedRowIndex])); 
-    newRow.id = _nextPlacementCode(_codePrefixOfRow(newRow)); 
+    newRow.id = _duplicateCodeFor(newRow); 
     newRow.qty = 0; 
     // Insert right after the source row so the dupe lands visually next to
     // its original. (Was previously pushing to the end of the array, which
@@ -12701,7 +13474,7 @@ function deleteDashRow() {
 function loadDashDataIntoControls(data) {
     const setVal = (id, val) => { const el = document.getElementById(id); if(el) el.value = val; };
     setVal('m_itemCode', data.id); setVal('m_imageCode', data.imageCode); _fillLevelSelect(data); setVal('m_qty', data.qty);
-    setVal('m_product', data.product); setVal('m_location', data.location); setVal('m_bleed', dashFmt(data.bleed)); setVal('canvasDepth', dashFmt(data.canvasDepth)); setVal('canvasWrap', dashFmt(data.canvasWrap)); setVal('floaterInset', dashFmt(data.floaterInset !== undefined ? data.floaterInset : 0.75));
+    setVal('m_product', data.product); setVal('m_location', data.location); setVal('m_bleed', dashFmt(data.bleed)); setVal('canvasDepth', dashFmt(data.canvasDepth)); setVal('canvasWrap', dashFmt(data.canvasWrap)); setVal('m_canvasSides', data.canvasSides || ''); setVal('floaterInset', dashFmt(data.floaterInset !== undefined ? data.floaterInset : 0.75));
     // Phase A: artwork attribution + frame profile depth + paper type.
     // All optional — defaulted to '' / 0 for older saved rows that don't have them yet.
     setVal('m_artist', data.artist !== undefined ? data.artist : '');
@@ -12739,6 +13512,8 @@ function loadDashDataIntoControls(data) {
     setVal('m1_color', data.m1ColorName); setVal('m1_colorHex', data.m1ColorHex || '#ffffff');
     setVal('m2_color', data.m2ColorName); setVal('m2_colorHex', data.m2ColorHex || '#ffffff');
     setVal('m_glass', data.glass); setVal('m_hardware', data.hardware); setVal('m_mount', data.mount); setVal('m_backing', data.backing); setVal('m_notes', data.notes); setVal('m_prodNotes', data.prodNotes);
+    setVal('m_weight', (+data.weightLbs > 0) ? data.weightLbs : '');   // 20.28
+    setVal('m_zone', data.zone || '');   // 20.30
 
     const m1On = data.m1A !== false;
     document.getElementById('m1Toggle').classList.toggle('active', m1On); document.getElementById('m1Toggle').innerText = m1On ? 'ON' : 'OFF';
@@ -12794,14 +13569,14 @@ function loadDashDataIntoControls(data) {
 // place. Form-side and other callers leave fromTable undefined → full re-render.
 function dashHtIn(idx, field, val, fromTable) {
     let row = dashProjectData[idx];
-    if(['qty','extW','extH','fW','fHeight','m1T','m1R','m1B','m1L','m2','m_bleed','canvasDepth','canvasWrap'].includes(field)) val = parseFloat(val) || 0;
+    if(['qty','extW','extH','fW','fHeight','m1T','m1R','m1B','m1L','m2','m_bleed','canvasDepth','canvasWrap','weightLbs'].includes(field)) val = parseFloat(val) || 0;
     if (field === 'level') val = _deckLvlOf(val);   // a 0-based plan index, never text (18.13)
     if (field === 'imageCode') val = _imgCodeClean(val);   // 19.78
     if (field === 'id') { const oldId = row.id; elevations.forEach(elev => { elev.frames.forEach(f => { if (f.id === oldId) f.id = val; }); }); }
     row[field] = val;
 
     if (idx === dashSelectedRowIndex) {
-        const map = { 'id':'m_itemCode', 'imageCode':'m_imageCode', 'level':'m_level', 'qty':'m_qty', 'location':'m_location', 'extW':'extW', 'extH':'extH', 'fCode':'m_fCode', 'fW':'fW', 'fHeight':'fHeight', 'canvasDepth':'canvasDepth', 'canvasWrap':'canvasWrap', 'm1ColorName':'m1_color', 'm1ColorHex':'m1_colorHex', 'm2ColorName':'m2_color', 'm2ColorHex':'m2_colorHex', 'm1T':'m1T', 'm1R':'m1R', 'm1B':'m1B', 'm1L':'m1L', 'm2':'m2', 'glass':'m_glass', 'hardware':'m_hardware', 'backing':'m_backing', 'mount':'m_mount', 'notes':'m_notes', 'prodNotes':'m_prodNotes' };
+        const map = { 'id':'m_itemCode', 'imageCode':'m_imageCode', 'level':'m_level', 'qty':'m_qty', 'location':'m_location', 'extW':'extW', 'extH':'extH', 'fCode':'m_fCode', 'fW':'fW', 'fHeight':'fHeight', 'canvasDepth':'canvasDepth', 'canvasWrap':'canvasWrap', 'm1ColorName':'m1_color', 'm1ColorHex':'m1_colorHex', 'm2ColorName':'m2_color', 'm2ColorHex':'m2_colorHex', 'm1T':'m1T', 'm1R':'m1R', 'm1B':'m1B', 'm1L':'m1L', 'm2':'m2', 'glass':'m_glass', 'hardware':'m_hardware', 'backing':'m_backing', 'mount':'m_mount', 'notes':'m_notes', 'prodNotes':'m_prodNotes', 'weightLbs':'m_weight' };
         if(map[field] && document.getElementById(map[field])) document.getElementById(map[field]).value = field.includes('Color') ? val : dashFmt(row[field]);
         if(field === 'product') { document.getElementById('m_product').value = row.product; handleDashProductChange(false); }
         updateDashVisualsFromDOM();
@@ -12847,6 +13622,92 @@ function dashHtIn(idx, field, val, fromTable) {
 // Takes a plain object, so the DOM-driven caller can pass its assembled values
 // instead of a stored row. Lengths come out in whatever unit went in; nothing
 // here converts.
+// ── HOW A CANVAS'S SIDES ARE MADE (20.17) ───────────────────────────────────────────
+// The picture is cropped to the canvas FACE everywhere (computeArtDrawRect, unchanged). The
+// wrap round the stretcher is one of three things, chosen up front so nobody builds a wrap
+// in Photoshop that a crop would have given for free:
+//   image   the picture runs round the sides: the part just outside the face crop is used
+//   mirror  the printer mirrors the edge (no extra picture needed)
+//   extend  production extends the picture (content-aware fill) before print
+// '' = not decided yet. Stored as `canvasSides` on the row.
+const CANVAS_SIDES = { image: 'Picture wraps', mirror: 'Mirror the edge', extend: 'Extend in production' };
+// The wrap, in the row's unit. Floater: typed, else stretcher depth + 0.5" (the quote
+// template's "Image Wrap = Stretcher Depth + .5"). Frameless: typed (studio convention).
+function _canvasWrapOf(r) {
+    r = r || {};
+    const w = parseFloat(r.canvasWrap) || 0;
+    if (r.product === 'Frameless Canvas (Wrapped)') return w;
+    if (r.product !== 'Framed Canvas (Floater)') return 0;
+    if (w > 0) return w;
+    const d = parseFloat(r.canvasDepth) || 0;
+    return d > 0 ? d + 0.5 * unitFactor('in', dashUnit) : 0;
+}
+// For 'image': how much picture the crop leaves outside the face on each side, and which
+// sides have less than the wrap. Row units.
+function _canvasSidesInfo(r) {
+    if (!r || (r.product !== 'Framed Canvas (Floater)' && r.product !== 'Frameless Canvas (Wrapped)')) return null;
+    const out = { mode: r.canvasSides || '', wrap: _canvasWrapOf(r), spare: null, short: [] };
+    if (out.mode !== 'image' || !(out.wrap > 0) || !r.artworkUrl) return out;
+    const ar = (r.artworkW > 0 && r.artworkH > 0) ? r.artworkW / r.artworkH : 0;
+    const sz = _rowOpeningAndPrint(r);
+    if (!ar || !(sz.openW > 0) || !(sz.openH > 0)) return out;
+    const g = computeArtDrawRect(sz.openW, sz.openH, ar, r.artZoom, r.artPanX, r.artPanY);
+    out.spare = { left: -g.dx, right: g.dw + g.dx - sz.openW, top: -g.dy, bottom: g.dh + g.dy - sz.openH };
+    ['left', 'right', 'top', 'bottom'].forEach(k => { if (out.spare[k] < out.wrap - 1e-3) out.short.push(k); });
+    return out;
+}
+// The crop nearest the current one that leaves a full wrap of picture on every side: zoom
+// in only as far as needed, then slide the picture so each side has its wrap.
+function _canvasRoomCrop(r) {
+    const info = _canvasSidesInfo(r);
+    if (!info || !info.spare) return null;
+    const sz = _rowOpeningAndPrint(r), W = sz.openW, H = sz.openH, w = info.wrap, ar = r.artworkW / r.artworkH;
+    const g1 = computeArtDrawRect(W, H, ar, 1, 0, 0);
+    const zoom = Math.max(parseFloat(r.artZoom) || 1, (W + 2 * w) / g1.dw, (H + 2 * w) / g1.dh);
+    const dw = g1.dw * zoom, dh = g1.dh * zoom;
+    let dx = (W - dw) / 2 + (parseFloat(r.artPanX) || 0) * W, dy = (H - dh) / 2 + (parseFloat(r.artPanY) || 0) * H;
+    dx = Math.min(-w, Math.max(W + w - dw, dx)); dy = Math.min(-w, Math.max(H + w - dh, dy));
+    const r4 = (v) => Math.round(v * 10000) / 10000;
+    return { zoom: Math.ceil(zoom * 10000) / 10000, panX: r4((dx - (W - dw) / 2) / W), panY: r4((dy - (H - dh) / 2) / H) };
+}
+function canvasSidesMakeRoom() {
+    const row = _artCropRow(); if (!row) return;
+    const c = _canvasRoomCrop(row); if (!c) return;
+    row.artZoom = c.zoom; row.artPanX = c.panX; row.artPanY = c.panY;
+    _syncArtCropControls();
+    syncDashAndCalculate();
+}
+// One line for the vendor (RFQ / RFI Notes), in inches like the rest of the sheet.
+function _canvasSidesNote(r) {
+    const info = _canvasSidesInfo(r);
+    if (!info || !info.mode || !(info.wrap > 0)) return '';
+    const w = _fmtUnitNum(info.wrap * unitFactor(dashUnit, 'in'), 'in') + '"';
+    return info.mode === 'image' ? 'Image wrap ' + w + ': the picture runs round the sides (in the file)'
+        : info.mode === 'mirror' ? 'Mirror wrap ' + w + ': mirror the edge round the sides'
+        : 'Image wrap ' + w + ': the picture is extended round the sides before print';
+}
+function _canvasSidesRowShow(on) { const el = document.getElementById('canvasSidesRow'); if (el) el.style.display = on ? 'block' : 'none'; }
+function _canvasSidesNotePaint(r) {
+    const el = document.getElementById('canvasSidesNote'); if (!el) return;
+    const info = _canvasSidesInfo(r);
+    // A floater's wrap follows its stretcher until one is typed: show that as the hint, not a 0.
+    const wrapEl = document.getElementById('canvasWrap');
+    if (wrapEl && r && r.product === 'Framed Canvas (Floater)') {
+        if (!(parseFloat(r.canvasWrap) > 0) && document.activeElement !== wrapEl) wrapEl.value = '';
+        wrapEl.placeholder = info && info.wrap > 0 ? dashFmt(info.wrap) : '';
+    } else if (wrapEl) wrapEl.placeholder = '';
+    if (!info) { el.innerHTML = ''; return; }
+    const f = (v) => _fmtUnitNum(v, dashUnit) + ' ' + dashUnit, w = f(info.wrap);
+    let t;
+    if (!info.mode) t = 'How are the sides made? Decide before you place the picture: crop into it, mirror the edge, or extend it in production.';
+    else if (info.mode === 'mirror') t = 'The printer mirrors ' + w + ' of the edge round the sides. Nothing extra to prepare.';
+    else if (info.mode === 'extend') t = 'Production extends the picture ' + w + ' all round before print (content-aware fill). Picking “Picture wraps” and cropping in saves that work.';
+    else if (!r.artworkUrl) t = 'Leave ' + w + ' of picture outside the face on every side. The dashboard shows that band once the picture is in.';
+    else if (!info.spare) t = 'The sides take ' + w + ' of the picture round the face.';
+    else if (info.short.length) t = 'Not enough picture on the ' + info.short.join(', ') + ' for the ' + w + ' sides (red stripes). <button type="button" class="action-btn btn-secondary" style="width:auto; height:22px; padding:0 8px;" onclick="canvasSidesMakeRoom()" title="Zoom in just enough, keeping your crop as close as it can">Make room</button>';
+    else t = 'The picture covers the ' + w + ' sides.';
+    el.innerHTML = t;
+}
 function _rowOpeningAndPrint(r) {
     r = r || {};
     const n = (v) => parseFloat(v) || 0;
@@ -12874,18 +13735,22 @@ function _rowOpeningAndPrint(r) {
     else if (isFL || flat) { openW = extW; openH = extH; }
     else if (useFM) { openW = extW - fW * 2 - sbPM * 2 - sbPB * 2; openH = extH - fW * 2 - sbPM * 2 - sbPB * 2; }
     else { openW = extW - fW * 2 - mL - mR - m2v * 2; openH = extH - fW * 2 - mT - mB - m2v * 2; }
+    // 20.11: frame and mats wider than the overall leave no opening; say so (Preflight).
+    const short = (extW > 0 && extH > 0 && (openW <= 0 || openH <= 0));
     openW = Math.max(0, openW); openH = Math.max(0, openH);
 
     let printW, printH;
-    // A floater's swatch already carries its wrap, so no extra margin.
-    if (isC) { printW = openW; printH = openH; }
+    // A floater's canvas wraps round its stretcher like any canvas: art + 2 x wrap, the wrap
+    // being stretcher depth + 0.5" unless one is typed (20.17; it was the art size alone, so
+    // the RFI's image size had no wrap: Ford China's 28.5" art is a 32.5" image).
+    if (isC) { const wrap = _canvasWrapOf(r); printW = openW + wrap * 2; printH = openH + wrap * 2; }
     // A wrapped canvas needs enough image to fold around the stretcher bars.
     else if (isFL) { const wrap = n(r.canvasWrap); printW = openW + wrap * 2; printH = openH + wrap * 2; }
     // Everything printed on paper or vinyl — including flat graphics — needs
     // trim bleed. This is where a flat graphic parts company with isFL.
     else { const bl = n(r.bleed); printW = openW + bl * 2; printH = openH + bl * 2; }
 
-    return { openW: openW, openH: openH, printW: printW, printH: printH };
+    return { openW: openW, openH: openH, printW: printW, printH: printH, short: short };
 }
 // Update only the calculated (display-only) cells of a table row.
 // Called from dashHtIn when the change came from a table input — avoids the
@@ -12988,7 +13853,7 @@ function syncDashAndCalculate(opts) {
         rabbetDepth: getVal('rabbetDepth') || 0,
         fColorName: getStr('m_fColorName') || '',
         paperType: getStr('m_paperType') || '',
-        bleed: getVal('m_bleed'), canvasDepth: getRaw('canvasDepth'), canvasWrap: getRaw('canvasWrap'), floaterInset: getVal('floaterInset') || 0.75,
+        bleed: getVal('m_bleed'), canvasDepth: getRaw('canvasDepth'), canvasWrap: getRaw('canvasWrap'), canvasSides: getStr('m_canvasSides') || '', floaterInset: getVal('floaterInset') || 0.75,
         // Preserved from prior row state — set when a floater swatch was picked.
         // Used by buildSpecStrings to derive Float Reveal = floaterInset - faceWidth.
         // Not surfaced in the form (it's swatch metadata, not user-edited).
@@ -13019,7 +13884,9 @@ function syncDashAndCalculate(opts) {
         sbPaperBorder: row.useFloatMount === true ? (getVal('sbPaperBorder') || 0) : (getVal('fauxBorder') || 0),
         sbPaperEdge: getStr('sbPaperEdge') || 'clean',
         sbPaperEdgeSeed: row.sbPaperEdgeSeed || 0,
-        glass: getStr('m_glass'), hardware: getStr('m_hardware'), mount: getStr('m_mount'), backing: getStr('m_backing'), notes: getStr('m_notes'), prodNotes: getStr('m_prodNotes')
+        glass: getStr('m_glass'), hardware: getStr('m_hardware'), mount: getStr('m_mount'), backing: getStr('m_backing'), notes: getStr('m_notes'), prodNotes: getStr('m_prodNotes'),
+        weightLbs: getVal('m_weight'),   // 20.28, pounds; 0 = not given
+        zone: getStr('m_zone')   // 20.30, the code pattern's {zone}
     };
     // EVERYTHING THE FORM DOES NOT OWN CARRIES THROUGH (19.73). The row is rebuilt from the
     // form on every keystroke, so a field missing from the list above was deleted by the
@@ -13339,6 +14206,21 @@ function updateDashVisualsFromDOM() {
             });
         }
         artVis.appendChild(aimg);
+        // 20.17: THE SIDES, WHILE YOU CROP. A canvas whose picture wraps shows the band of the
+        // picture that will go round the stretcher, faint, outside the face; red stripes where
+        // the crop leaves no picture. Screen only.
+        if ((isCanvas || isFrameless) && data.canvasSides === 'image') {
+            const wpx = _canvasWrapOf(data) * ratio;
+            if (wpx > 0) {
+                const gh = document.createElement('div'); gh.className = 'canvas-sides-ghost';
+                gh.setAttribute('data-export-skip', '1');
+                gh.title = 'The sides: this band of the picture wraps round the stretcher. Red stripes mean the crop leaves no picture there.';
+                gh.style.cssText = 'position:absolute; left:' + (artL - wpx) + 'px; top:' + (artT - wpx) + 'px; width:' + (ow + 2 * wpx) + 'px; height:' + (oh + 2 * wpx) + 'px; overflow:hidden; pointer-events:none; outline:1px dashed rgba(200,40,40,0.8); background:repeating-linear-gradient(45deg, rgba(220,50,50,0.35) 0 4px, transparent 4px 8px);';
+                const gi = document.createElement('img'); gi.src = data.artworkUrl; gi.draggable = false;
+                gi.style.cssText = 'position:absolute; left:' + (rect.dx + wpx) + 'px; top:' + (rect.dy + wpx) + 'px; width:' + rect.dw + 'px; height:' + rect.dh + 'px; opacity:0.45; display:block;';
+                gh.appendChild(gi); fVis.appendChild(gh);
+            }
+        }
         // 19.12: WHAT YOU CAN DO TO A PICTURE, ON THE PICTURE. Once an opening had artwork
         // nothing said a new image can be dropped on it, and Remove sat up in the zoom row.
         // Shown on hover: Replace and Remove top-right, and a strip saying the two gestures.
@@ -13382,6 +14264,7 @@ function updateDashVisualsFromDOM() {
         artVis.innerHTML = _artAddIconHTML(artW * ratio, artH * ratio, "document.getElementById('m_artworkFile').click()");
     }
     fVis.appendChild(artVis);
+    try { _canvasSidesNotePaint(data); } catch (e) {}
 }
 
 // CSV IMPORT PARSER
@@ -13432,7 +14315,7 @@ function _csvPlaceRows(rows, cats) {
         dashProjectData = rows;
         order.forEach(k => {
             const g = groups[k];
-            const code = _nextPlacementCode(_catCodeInfo(g[0].category || '').prefix);
+            const code = _nextPlacementCode(_catCodeInfo(g[0].category || '').prefix, { level: g[0].level, zone: g[0].zone });
             const letters = _setLetters(g.length);
             g.forEach((r, j) => {
                 const to = g.length === 1 ? code : code + letters[j];
@@ -13763,7 +14646,7 @@ function handleDashProductChange(shouldSync = true) {
     // plumbing that has no meaning here.
     if (isFlat) {
         matWrapper.style.display = 'none';
-        canvasSettings.style.display = 'none';
+        canvasSettings.style.display = 'none'; _canvasSidesRowShow(false);
         bleedSettings.style.display = 'grid';
         if (egdSettings) egdSettings.style.display = 'grid';
         // The frame block is HIDDEN, not dimmed. Dimming is right for a wrapped
@@ -13829,7 +14712,7 @@ function handleDashProductChange(shouldSync = true) {
     // gap); Frameless ignores it (no frame to inset from).
     if (isFloater || isFrameless) {
         matWrapper.style.display = 'none';
-        canvasSettings.style.display = 'grid';
+        canvasSettings.style.display = 'grid'; _canvasSidesRowShow(true);
         bleedSettings.style.display = 'grid';
         // For frameless canvas, dim out the Inset field (it's irrelevant — there's no frame).
         const insetCell = document.getElementById('floaterInset');
@@ -13848,9 +14731,18 @@ function handleDashProductChange(shouldSync = true) {
         const wrapEl = document.getElementById('canvasWrap');
         const currentDepth = parseFloat(depthEl ? depthEl.value : '') || 0;
         if (depthEl && currentDepth === 0) {
-            depthEl.value = '2';
-            if (wrapEl && (parseFloat(wrapEl.value) || 0) === 0) {
-                wrapEl.value = '2';
+            if (isFloater) {
+                // 20.17: a floater gets the deepest standard stretcher its rabbet takes
+                // (1.5" when the rabbet is unknown) and a wrap of that + 0.5".
+                const k = unitFactor(dashUnit, 'in'), rb = (parseFloat((document.getElementById('rabbetDepth') || {}).value) || 0) * k;
+                const d = (rb > 0 ? _stdStretcherFor(rb) : null) || 1.5;
+                depthEl.value = dashFmt(d / k);
+                if (wrapEl && (parseFloat(wrapEl.value) || 0) === 0) wrapEl.value = dashFmt((d + 0.5) / k);
+            } else {
+                depthEl.value = '2';
+                if (wrapEl && (parseFloat(wrapEl.value) || 0) === 0) {
+                    wrapEl.value = '2';
+                }
             }
         }
         if(shouldSync) syncDashAndCalculate();
@@ -13866,7 +14758,7 @@ function handleDashProductChange(shouldSync = true) {
 
     // Non-floater, non-frameless: show wrapper, hide canvas settings, show bleed.
     matWrapper.style.display = 'block';
-    canvasSettings.style.display = 'none';
+    canvasSettings.style.display = 'none'; _canvasSidesRowShow(false);
     bleedSettings.style.display = 'grid';
 
     // SHADOW BOX product: auto-flip the toggle to Float Mount (and persist) on
@@ -13980,24 +14872,20 @@ function handleRabbetChange() {
         if (rabbet > 0) {
             const prevRabbet = parseFloat(row.rabbetDepth) || 0;
 
-            // Auto-fill canvasDepth = rabbet (stretcher bar fits the rabbet pocket).
-            if (depthEl) {
-                const currentDepth = parseFloat(depthEl.value) || 0;
-                const isUnsetOrAutoFilled = (currentDepth === 0) ||
-                    (prevRabbet > 0 && Math.abs(currentDepth - prevRabbet) < 0.001);
-                if (isUnsetOrAutoFilled) {
-                    depthEl.value = dashFmt(rabbet);
-                }
-            }
-
-            // Auto-fill canvasWrap = rabbet + 0.5" (printer safety margin).
-            if (wrapEl) {
-                const prevWrapSuggestion = prevRabbet > 0 ? prevRabbet + 0.5 : null;
-                const currentWrap = parseFloat(wrapEl.value) || 0;
-                const isUnsetOrAutoFilled = (currentWrap === 0) ||
-                    (prevWrapSuggestion !== null && Math.abs(currentWrap - prevWrapSuggestion) < 0.001);
-                if (isUnsetOrAutoFilled) {
-                    wrapEl.value = dashFmt(rabbet + 0.5);
+            // 20.17: the stretcher is the deepest STANDARD depth the rabbet takes (a 1.625"
+            // rabbet takes 1.5"), never the rabbet itself: that was a made-to-order stretcher.
+            // The wrap is stretcher + 0.5" (the quote template). Earlier fills (depth = rabbet,
+            // wrap = rabbet + 0.5) still count as auto-filled, so they are replaced too.
+            const k = unitFactor(dashUnit, 'in'), half = 0.5 / k;
+            const stdOf = (rb) => { const s = _stdStretcherFor(rb * k); return s ? s / k : null; };
+            const prevStd = prevRabbet > 0 ? stdOf(prevRabbet) : null, std = stdOf(rabbet);
+            const near = (a, b) => b != null && Math.abs(a - b) < 0.001;
+            let depthNow = depthEl ? (parseFloat(depthEl.value) || 0) : 0;
+            if (depthEl && std != null && (depthNow === 0 || near(depthNow, prevRabbet) || near(depthNow, prevStd))) {
+                const prevDepth = depthNow; depthNow = std; depthEl.value = dashFmt(std);
+                if (wrapEl) {
+                    const w = parseFloat(wrapEl.value) || 0;
+                    if (w === 0 || near(w, prevRabbet + half) || near(w, prevDepth + half) || near(w, (prevStd || 0) + half)) wrapEl.value = dashFmt(std + half);
                 }
             }
         }
@@ -14012,6 +14900,13 @@ function handleRabbetChange() {
 // rabbet, not stretcher (since stretcher = rabbet anyway).
 function handleCanvasDepthChange() {
     const row = dashProjectData[dashSelectedRowIndex];
+    // 20.17: a floater's wrap follows its stretcher: depth + 0.5", unless typed.
+    if (row && row.product === "Framed Canvas (Floater)") {
+        const depthEl = document.getElementById('canvasDepth'), wrapEl = document.getElementById('canvasWrap');
+        const half = 0.5 / unitFactor(dashUnit, 'in'), d = parseFloat(depthEl && depthEl.value) || 0, prev = parseFloat(row.canvasDepth) || 0;
+        const w = parseFloat(wrapEl && wrapEl.value) || 0;
+        if (wrapEl && d > 0 && (w === 0 || (prev > 0 && Math.abs(w - (prev + half)) < 0.001))) wrapEl.value = dashFmt(d + half);
+    }
     if (row && row.product === "Frameless Canvas (Wrapped)") {
         const depthEl = document.getElementById('canvasDepth');
         const wrapEl = document.getElementById('canvasWrap');
@@ -14726,10 +15621,10 @@ function _imageFilePrecheck(file) {
         return { title: 'HEIC photos aren\u2019t supported', body: 'Browsers can\u2019t open HEIC/HEIF (the iPhone camera format). Convert it to JPG or PNG first \u2014 on iPhone, sharing via Mail or saving to Files usually converts automatically, or set Settings \u2192 Camera \u2192 Formats \u2192 Most Compatible \u2014 then upload again.' };
     }
     if (file.type && !/^image\//i.test(file.type)) {
-        return { title: 'Not an image file', body: _imgFileDesc(file) + ' isn\u2019t an image. FRAME imports JPG, PNG, WebP, GIF, BMP, or SVG files.' };
+        return { title: 'Not an image file', body: _imgFileDesc(file) + ' isn\u2019t an image. Farmhand imports JPG, PNG, WebP, GIF, BMP, or SVG files.' };
     }
     if (file.size && file.size > _IMG_IMPORT_MAX_MB * 1048576) {
-        return { title: 'Image too large', body: _imgFileDesc(file) + ' is over the ' + _IMG_IMPORT_MAX_MB + ' MB import limit. Export a smaller JPG or PNG \u2014 pages only need about 1100 px on the long edge, and FRAME downscales imports to that anyway, so a lighter export loses nothing.' };
+        return { title: 'Image too large', body: _imgFileDesc(file) + ' is over the ' + _IMG_IMPORT_MAX_MB + ' MB import limit. Export a smaller JPG or PNG \u2014 pages only need about 1100 px on the long edge, and Farmhand downscales imports to that anyway, so a lighter export loses nothing.' };
     }
     return null;
 }
@@ -14746,6 +15641,9 @@ function _imageReadFailMsg(file) {
 // transparency stays a PNG: a didactic panel's clear areas went BLACK through JPEG.
 // While onReady runs, _artIncomingFile names the file, so the apply paths can link it.
 let _artIncomingFile = null;
+// 20.10: and _artIncomingPx the file's OWN pixel size, before the downscale (null for an SVG,
+// which prints at any size), so Preflight can say whether the original will print sharp.
+let _artIncomingPx = null;
 const ART_MAX_PX = 1200, FLAT_ART_MAX_PX = 3200;
 function _artMaxFor(row) { return (row && _isFlatGraphic(row.product)) ? FLAT_ART_MAX_PX : ART_MAX_PX; }
 function processArtworkFile(file, onReady, opts) {
@@ -14766,7 +15664,8 @@ function processArtworkFile(file, onReady, opts) {
             const dataUrl = (isPng && _imageDataHasAlpha(cx, w, h)) ? c.toDataURL('image/png') : c.toDataURL('image/jpeg', 0.85);
             const baseName = (file.name || '').replace(/\.[^.]+$/, '');
             _artIncomingFile = file;
-            try { onReady(dataUrl, baseName, w, h); } finally { _artIncomingFile = null; }
+            _artIncomingPx = (/svg/i.test(file.type || '') || /\.svg$/i.test(file.name || '')) ? null : { w: img.naturalWidth || 0, h: img.naturalHeight || 0 };
+            try { onReady(dataUrl, baseName, w, h); } finally { _artIncomingFile = null; _artIncomingPx = null; }
         };
         img.onerror = () => { const m = _imageDecodeFailMsg(file); showInfoModal(m.title, m.body); };
         img.src = ev.target.result;
@@ -14780,7 +15679,7 @@ function processArtworkFile(file, onReady, opts) {
 // when that file changes on disk, and offers to update it. The designer re-exports from
 // Illustrator or Photoshop to the same name and FRAME picks the new version up, keeping
 // the piece's size, crop and position.
-//   r.artLink = { id, name, mod, size }   on the row (or a wall frame with no row):
+//   r.artLink = { id, name, mod, size, pw, ph }   on the row (pw/ph: the file's own pixels, 20.10) (or a wall frame with no row):
 //       what was placed, saved with the project.
 //   the FILE HANDLE   per browser, in IndexedDB under that id. Only Chrome and Edge give
 //       one, and only for a file DRAGGED IN (_linkNoteDrop) or picked through Relink.
@@ -14835,6 +15734,7 @@ function _linkAttach(o) {
     if (!f) { delete o.artLink; return; }
     const id = (o.artLink && o.artLink.id) || _linkNewId();
     o.artLink = { id: id, name: f.name || '', mod: f.lastModified || 0, size: f.size || 0 };
+    _linkPx(o.artLink, _artIncomingPx);
     const hp = _linkDropHandles.get(_linkFileKey(f)) || (f._frameHandle ? Promise.resolve(f._frameHandle) : null);
     if (hp) hp.then(h => { if (h) _linkStorePut(id, h); });
 }
@@ -14862,16 +15762,22 @@ function _linkTargets() {
 }
 // Swap in the file's current contents. Size, crop and position are the piece's, so they
 // stay; the image code follows the file only while it still IS the file name.
-function _linkApply(t, u, n, w, h, file) {
+// The source file's pixels ride on the link; a picture with none (SVG, unknown) drops them.
+function _linkPx(link, px) {
+    if (!link) return;
+    if (px && px.w > 0 && px.h > 0) { link.pw = px.w; link.ph = px.h; } else { delete link.pw; delete link.ph; }
+}
+function _linkApply(t, u, n, w, h, file, px) {
     const o = t.o;
     const oldFile = o.artworkFile || '';
     o.artworkUrl = u; o.artworkW = w || 0; o.artworkH = h || 0; o.artworkFile = n;
     if (!o.imageCode || o.imageCode === oldFile) o.imageCode = n;
     o.artLink = Object.assign({}, o.artLink || {}, { name: file.name || '', mod: file.lastModified || 0, size: file.size || 0 });
+    _linkPx(o.artLink, px);
     if (t.idx >= 0 && typeof pushUpdatesToElevations === 'function') pushUpdatesToElevations(t.idx);
 }
 function _linkReadFile(file, row) {
-    return new Promise(res => { try { processArtworkFile(file, (u, n, w, h) => res({ u: u, n: n, w: w, h: h }), { max: _artMaxFor(row) }); } catch (e) { res(null); } });
+    return new Promise(res => { try { processArtworkFile(file, (u, n, w, h) => res({ u: u, n: n, w: w, h: h, px: _artIncomingPx }), { max: _artMaxFor(row) }); } catch (e) { res(null); } });
 }
 async function _linkUpdate(targets) {
     let done = 0;
@@ -14882,7 +15788,7 @@ async function _linkUpdate(targets) {
             const f = await hnd.getFile();
             const r = await _linkReadFile(f, t.o);
             if (!r) continue;
-            _linkApply(t, r.u, r.n, r.w, r.h, f);
+            _linkApply(t, r.u, r.n, r.w, r.h, f, r.px);
             done++;
         } catch (e) {}
     }
@@ -14954,7 +15860,7 @@ async function _linkRelink(t) {
     if (!r) return false;
     if (!t.o.artLink) t.o.artLink = { id: _linkNewId() };
     if (handle) await _linkStorePut(t.o.artLink.id, handle);
-    _linkApply(t, r.u, r.n, r.w, r.h, file);
+    _linkApply(t, r.u, r.n, r.w, r.h, file, r.px);
     _linkAfterChange();
     return true;
 }
@@ -15010,7 +15916,7 @@ async function openLinksPanel() {
         const note = document.createElement('div');
         note.style.cssText = 'font-size:var(--fs-60); color:var(--text-muted); line-height:1.5; margin-top:10px;';
         note.textContent = (typeof window !== 'undefined' && typeof window.showOpenFilePicker === 'function')
-            ? 'A picture dragged in from your files, or picked with Relink, is watched: export over the same file and FRAME offers to update it when you come back. Pictures added any other way are Not watched until relinked.'
+            ? 'A picture dragged in from your files, or picked with Relink, is watched: export over the same file and Farmhand offers to update it when you come back. Pictures added any other way are Not watched until relinked.'
             : 'This browser cannot watch files (Chrome and Edge can). Relink still replaces a picture and keeps its size, crop and position.';
         body.appendChild(note);
         foot.innerHTML = '';
@@ -15078,11 +15984,32 @@ function handleDashArtworkUpload(e) {
     e.target.value = '';  // allow re-uploading the same file
 }
 
+// A NEW PICTURE IS A NEW ARTWORK (20.28). Swapping the image kept the old artist and
+// title, so a deck credited one artist's piece to another, or "Farmboy Fine Arts" to a
+// rostered artist (seen in several studio decks, the best designers' included). When the
+// image code changes to a DIFFERENT code, title, artist, affiliation, medium and year are
+// cleared. The same code again (a re-export, a recolour kept under its code) keeps them.
+const ART_IDENTITY_FIELDS = ['artworkTitle', 'artist', 'artistAffil', 'artMedium', 'artYear'];
+function _artIdentityResetOnSwap(row, newCode) {
+    if (!row) return false;
+    const was = _imgCodeKey(row), now = _imgCodeKey({ imageCode: _imgCodeClean(newCode) });
+    if (!was || was === now) return false;
+    let had = false;
+    ART_IDENTITY_FIELDS.forEach(k => { if (String(row[k] == null ? '' : row[k]).trim()) { had = true; row[k] = ''; } });
+    return had;
+}
+function _artIdentityToast(row, code) {
+    try {
+        _toast('Artist and title cleared', 'The new picture (' + _imgCodeClean(code) + ') is a different artwork, so the artist, title, medium and year on '
+            + ((row && row.id) || 'this piece') + ' were cleared. Text boxes already on its page keep their words: check them.');
+    } catch (e) {}
+}
 // Assign artwork to the currently-selected dashboard row (used by form + dash
 // preview drops). Honors bulk-edit scratch mode.
 function applyArtworkToCurrentRow(dataUrl, baseName, w, h) {
     const row = _bulkEditing ? _bulkScratch : dashProjectData[dashSelectedRowIndex];
     if (_catRefuseArt(row)) return;
+    let _cleared = false;
     if (row) {
         row.artworkUrl = dataUrl; row.artworkFile = baseName;
         _linkAttach(row);   // 19.74: remember the file it came from
@@ -15096,6 +16023,8 @@ function applyArtworkToCurrentRow(dataUrl, baseName, w, h) {
         row.artZoom = 1; row.artPanX = 0; row.artPanY = 0;
         // Auto-populate the Image Code from the dropped filename (this is what
         // flows to the CSV + the bottom-right caption in InDesign).
+        _cleared = !_bulkEditing && _artIdentityResetOnSwap(row, baseName);
+        if (_cleared) ['m_artist', 'm_artworkTitle'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
         row.imageCode = baseName;
         const ic = document.getElementById('m_imageCode'); if (ic) ic.value = baseName;
     }
@@ -15103,6 +16032,7 @@ function applyArtworkToCurrentRow(dataUrl, baseName, w, h) {
     _syncArtCropControls();
     syncDashAndCalculate();
     if (!_bulkEditing && row) { pushHistory(); _warnSameImage(dashSelectedRowIndex); }
+    if (_cleared) _artIdentityToast(row, baseName);
 }
 
 // Assign artwork to a specific dashboard row by index, then live-sync to its
@@ -15115,16 +16045,19 @@ function applyArtworkToRowIndex(idx, dataUrl, baseName, w, h) {
     _linkAttach(row);   // 19.74
     row.artworkW = w || 0; row.artworkH = h || 0;    // never the previous picture's size (18.94)
     row.artZoom = 1; row.artPanX = 0; row.artPanY = 0;
+    const _cleared = _artIdentityResetOnSwap(row, baseName);   // 20.28
     row.imageCode = baseName;
     pushUpdatesToElevations(idx);
     if (idx === dashSelectedRowIndex) {
         updateDashArtworkThumb(dataUrl);
         const ic = document.getElementById('m_imageCode'); if (ic) ic.value = baseName;
+        if (_cleared) ['m_artist', 'm_artworkTitle'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
         _syncArtCropControls();
     }
     drawElevAll();
     pushHistory();
     _warnSameImage(idx);
+    if (_cleared) _artIdentityToast(row, baseName);
 }
 
 // ── Bulk artwork replacement (relink-by-code) ────────────────────────────
@@ -15763,7 +16696,8 @@ function loadDashFromCustomLibrary(idx) {
 // frame is a grid with search and filters, organised three ways:
 //   THIS PROJECT  frames already on an item (DERIVED from the rows, never stored) plus
 //                 a shortlist of candidates (editorialContent.frameShortlist, codes).
-//   TEAM          groupings everyone sees: library/groupings.json, committed to the repo.
+//   CLIENT        groupings everyone sees: library/groupings.json, committed to the repo
+//                 (the sidebar's Client groupings, 20.38; a grouping's `client` nests it).
 //                 FRAME is a static site and cannot write there, so a designer's
 //                 "Share with team" downloads a file and a person commits it. No tokens.
 //   MINE          groupings on this computer (localStorage), usable at once.
@@ -15868,11 +16802,25 @@ async function _fbLoadTeam() {
     } catch (e) { _fbTeam = []; _fbTeamErr = String(e && e.message || e); }
     return _fbTeam;
 }
+// CLIENT GROUPINGS (20.38): a shared grouping may name its `client` (Ford). The sidebar then
+// lists the client as one row that opens like a vendor, its groupings (Standard, Floater,
+// Shadowbox) under it; the client row itself is every frame in them, once each, in order.
+// A grouping with no client lists on its own, as before.
+function _fbClientOf(g) { return (g && typeof g.client === 'string') ? g.client.trim() : ''; }
+function _fbClientGrouping(name) {
+    const gs = (_fbTeam || []).filter(g => _fbClientOf(g) === name);
+    if (!gs.length) return null;
+    const seen = {}, codes = [];
+    gs.forEach(g => g.codes.forEach(cd => { const k = _fbNorm(cd); if (k && !seen[k]) { seen[k] = 1; codes.push(cd); } }));
+    return { id: 'client:' + name, name: name, client: name, note: 'Every ' + name + ' frame: ' + gs.map(g => g.name).join(', ') + '.', codes: codes, _client: true };
+}
 function _fbGroupingFor(src) {
     if (src.indexOf('team:') === 0) return (_fbTeam || []).find(g => 'team:' + g.id === src) || null;
+    if (src.indexOf('client:') === 0) return _fbClientGrouping(src.slice(7));
     if (src.indexOf('mine:') === 0) return _fbMine().find(g => 'mine:' + g.id === src) || null;
     return null;
 }
+let _fbOpenClients = {};   // which client rows are open (module state, like _fbOpenVendors)
 // Folder names are storage (avant-garde, Shadow-Boxes); show them as words.
 function _fbVendorLabel(v) { return (typeof _prettyVendor === 'function') ? _prettyVendor(v) : String(v || ''); }
 function _fbColLabel(vendor, collection) {
@@ -16031,16 +16979,37 @@ function _fbRender() {
     const side = document.getElementById('fbSide'); if (!side) return;
     const all = _fbAll(), byCode = _fbByCode(all);
     // A source that no longer exists (deleted grouping) falls back to the project.
-    if ((_fbState.src.indexOf('team:') === 0 || _fbState.src.indexOf('mine:') === 0) && !_fbGroupingFor(_fbState.src)) _fbState.src = 'project';
+    if ((_fbState.src.indexOf('team:') === 0 || _fbState.src.indexOf('client:') === 0 || _fbState.src.indexOf('mine:') === 0) && !_fbGroupingFor(_fbState.src)) _fbState.src = 'project';
     side.innerHTML = '';
     _fbSideHead(side, 'This project');
     const usedN = _fbInUse().length, shortN = _fbShortlist().filter(c => _fbInUse().every(u => _fbNorm(u) !== _fbNorm(c))).length;
     _fbSideItem(side, 'project', 'Project frames', usedN + shortN);
-    _fbSideHead(side, 'Team groupings');
+    _fbSideHead(side, 'Client groupings');
     const team = _fbTeam || [];
     if (!_fbTeam) { const p = document.createElement('div'); p.className = 'fb-side-note'; p.textContent = 'Loading…'; side.appendChild(p); }
     else if (!team.length) { const p = document.createElement('div'); p.className = 'fb-side-note'; p.textContent = 'None yet. Share one of yours.'; side.appendChild(p); }
-    team.forEach(g => _fbSideItem(side, 'team:' + g.id, g.name, g.codes.length));
+    {
+        // A client opens like a vendor (20.38): the client row shows all its frames, its
+        // groupings indent under it while it is open. One client open at a time.
+        const curS = _fbState.src, done = {};
+        team.forEach(g => {
+            const cl = _fbClientOf(g);
+            if (!cl) { _fbSideItem(side, 'team:' + g.id, g.name, g.codes.length); return; }
+            if (done[cl]) return; done[cl] = 1;
+            const mine = team.filter(x => _fbClientOf(x) === cl);
+            const open = (cl in _fbOpenClients) ? !!_fbOpenClients[cl] : (curS === 'client:' + cl || mine.some(x => curS === 'team:' + x.id));
+            const all0 = _fbClientGrouping(cl);
+            _fbSideItem(side, 'client:' + cl, (open ? '\u25BE ' : '\u25B8 ') + cl, all0 ? all0.codes.length : 0, 'ven');
+            const b = side.lastChild;
+            b.onclick = () => {
+                const willOpen = !(open && curS === 'client:' + cl);
+                Object.keys(_fbOpenClients).forEach(k => { _fbOpenClients[k] = false; });
+                _fbOpenClients[cl] = willOpen; _fbState.src = 'client:' + cl; _fbRender();
+            };
+            if (!open) return;
+            mine.forEach(x => _fbSideItem(side, 'team:' + x.id, x.name, x.codes.length, 'col'));
+        });
+    }
     _fbSideHead(side, 'My groupings', { label: '+', title: 'New grouping', onClick: () => _fbNewGrouping([]) });
     const mine = _fbMine();
     if (!mine.length) { const p = document.createElement('div'); p.className = 'fb-side-note'; p.textContent = 'Group frames you reach for together.'; side.appendChild(p); }
@@ -16078,7 +17047,7 @@ function _fbRenderHead() {
     const st = _fbState, g = _fbGroupingFor(st.src);
     const title = document.createElement('div'); title.className = 'fb-title';
     title.textContent = st.src === 'project' ? 'Project frames' : st.src === 'all' ? 'All frames'
-        : g ? g.name : st.src.indexOf('col:') === 0 ? _fbColLabel.apply(null, st.src.slice(4).split('/'))
+        : g ? ((_fbClientOf(g) && !g._client) ? _fbClientOf(g) + ': ' + g.name : g.name) : st.src.indexOf('col:') === 0 ? _fbColLabel.apply(null, st.src.slice(4).split('/'))
         : st.src.indexOf('ven:') === 0 ? _fbVendorLabel(st.src.slice(4)) : '';
     head.appendChild(title);
     if (g && g.note) { const n = document.createElement('div'); n.className = 'fb-note'; n.textContent = g.note; head.appendChild(n); }
@@ -16245,7 +17214,7 @@ function _fbShareGrouping(g) {
     const blob = new Blob([_fbGroupingFileText(g)], { type: 'application/json' });
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'frame-grouping-' + slug + '.json'; a.click();
     setTimeout(() => { try { URL.revokeObjectURL(a.href); } catch (e) {} }, 4000);
-    showInfoModal('Grouping ready to share', 'Saved as frame-grouping-' + slug + '.json in your Downloads. Send that file to whoever looks after the FRAME library. Once it is added to library/groupings.json it appears under Team groupings for everyone, and yours is marked as shared.');
+    showInfoModal('Grouping ready to share', 'Saved as frame-grouping-' + slug + '.json in your Downloads. Send that file to whoever looks after the Farmhand library. Once it is added to library/groupings.json it appears under Client groupings for everyone, and yours is marked as shared.');
 }
 // Pick = the existing dropdown path, so a frame chosen here is applied exactly as before.
 function _fbPick(rec) {
@@ -16296,7 +17265,7 @@ function loadFramePreset(e) {
                     ['extW','extH','fW','fHeight','rabbetDepth','bleed','canvasDepth','canvasWrap','m1T','m1B','m1L','m1R','m2'].forEach(p => { if(d.frame[p] !== undefined && !isNaN(d.frame[p])) d.frame[p] = dashFmt(d.frame[p]*factor); });
                 }
                 dashProjectData[dashSelectedRowIndex] = d.frame; loadDashDataIntoControls(d.frame); renderDashTable(); pushUpdatesToElevations(dashSelectedRowIndex);
-            } else showInfoModal('Not a preset file', 'That file does not look like a FRAME preset, so nothing was changed.');
+            } else showInfoModal('Not a preset file', 'That file does not look like a Farmhand preset, so nothing was changed.');
         } catch(err) { showInfoModal('Could not read that file', ((err && err.message) || 'The file could not be parsed') + '. Nothing was changed.'); }
     };
     r.readAsText(f); e.target.value = '';
@@ -17102,7 +18071,8 @@ async function _ctxDrawToCanvas(x, elev, g) {
         if (!art && shape === 'ellipse') {
             x.beginPath(); x.ellipse(bx + bw / 2, by + bh / 2, bw / 2, bh / 2, 0, 0, Math.PI * 2); x.fill(); x.stroke();
         } else {
-            x.fillRect(bx, by, bw, bh);
+            // With a body (20.20) the white comes in with the art, below.
+            if (!_ctxBodyOn(b, art)) x.fillRect(bx, by, bw, bh);
             if (!art) {
                 x.strokeRect(bx, by, bw, bh);
                 if (shape === 'shelf') { x.lineWidth = linePx * 2; x.beginPath(); x.moveTo(bx, by); x.lineTo(bx + bw, by); x.stroke(); }
@@ -17121,7 +18091,8 @@ async function _ctxDrawToCanvas(x, elev, g) {
             const W = Math.max(1, Math.round(bw)), H = Math.max(1, Math.round(bh));
             // _ctxArtSvg divides authored weights by its scale; this scale makes the
             // OBJECT line come out at linePx and the rest of the hierarchy in proportion.
-            const svg = _ctxArtSvg(art, _ctxInkHex(), (bw / (art.w || 1)) * (CTX_LW_OBJ / linePx)).replace('<svg ', '<svg width="' + W + '" height="' + H + '" ');
+            let svg = _ctxArtSvg(art, _ctxInkHex(), (bw / (art.w || 1)) * (CTX_LW_OBJ / linePx)).replace('<svg ', '<svg width="' + W + '" height="' + H + '" ');
+            if (_ctxBodyOn(b, art)) svg = svg.replace('xmlns="http://www.w3.org/2000/svg">', 'xmlns="http://www.w3.org/2000/svg">' + _ctxBodyGroup(art));
             try {
                 // NOT _loadImg: its cache keys on length + the last 32 characters, and every
                 // one of these ends in the same closing tags, so two drawings could swap.
@@ -17184,6 +18155,25 @@ async function renderElevationToCanvas(elev, featuredId, opts) {
     const wallW_px = wallWin * ppi, wallH_px = wallHin * ppi;
     const lw = Math.max(1, Math.round(ppi * 0.06));   // wall lineweight
 
+    // — Wall colour (20.32), under everything else —
+    { const _wc = _wallColor(elev); if (_wc) { x.fillStyle = _wc; x.fillRect(wallLeftPx, wallTopPx, wallW_px, wallH_px * (1 - _wallPaintBaseFrac(elev))); } }   // above the baseboard (20.35)
+    // — The client elevation (20.36), when the wall shows it in the deck: over the paint, under
+    //   everything else, clipped to the wall, as on the wall's own page. 20.31 drew it on the
+    //   wall page and the exports only, so a spec page's thumbnail showed FRAME's bare wall.
+    //   Placement is the editor's: elevUnit, x from the wall's left, y up from the floor. —
+    try {
+        const u = _underlayInDeck(elev) ? _elevUnderlay(elev) : null;
+        const uw = u ? toIn(u.w) : 0, uh = u ? toIn(u.h) : 0;
+        if (u && u.src && uw > 0 && uh > 0) {
+            const im = await _underlayImage(u.src);
+            if (im) {
+                x.save();
+                x.beginPath(); x.rect(wallLeftPx, wallTopPx, wallW_px, wallH_px); x.clip();
+                x.drawImage(im, wallLeftPx + (toIn(u.x) || 0) * ppi, floorPx - ((toIn(u.y) || 0) + uh) * ppi, uw * ppi, uh * ppi);
+                x.restore();
+            }
+        }
+    } catch (e) {}
     // — Wall outline (the wall lines) —
     x.strokeStyle = '#333333'; x.lineWidth = lw;
     x.strokeRect(wallLeftPx, wallTopPx, wallW_px, wallH_px);
@@ -19029,9 +20019,13 @@ function _frameRecCfg() {
 // Rows-per-page for a given column count + size. Bigger size = fewer rows so
 // images stay large and overflow flows onto extra pages.
 function _frameRecRowsPerPage(cfg) {
-    const base = cfg.size === 'compact' ? 6 : cfg.size === 'medium' ? 4 : 3;   // per column
-    return base * Math.max(1, cfg.cols);
+    // 20.42: 3 and 4 columns STACK each card (pictures on top, text under), so the corner and
+    // profile keep their 1-column size; a stacked card is taller, so fewer fit a column.
+    if (_frameRecStacked(cfg)) return (cfg.size === 'compact' ? 3 : 2) * Math.max(1, cfg.cols);
+    return _frameRecBaseRows(cfg) * Math.max(1, cfg.cols);
 }
+function _frameRecBaseRows(cfg) { return cfg.size === 'compact' ? 6 : cfg.size === 'medium' ? 4 : 3; }   // per column, side by side
+function _frameRecStacked(cfg) { return Math.max(1, Math.min(4, (cfg && cfg.cols) || 1)) >= 3; }
 // Turn the flat frame list into an ordered list of PAGES. Each page is
 // { header, frames:[...] }. Grouping inserts a header and never lets a group's
 // first row share a page-break awkwardly — a new group always starts a fresh
@@ -19131,11 +20125,23 @@ function _drawFrameRecPage(doc, logos, pageNum, meta, pageArg) {
     // Distribute frames column-major so reading order is top-to-bottom then next
     // column, which keeps grouped runs contiguous.
     const perCol = Math.ceil(frames.length / cols);
-    const rowGap = cols >= 3 ? 10 : 16;
-    // Font + image scale by size setting; more columns nudges everything down.
+    // THE PICTURES KEEP THEIR 1-COLUMN SIZE (20.42). "I like the size of them when 1 column
+    // is selected... if they can remain the same as you add more columns." The profile was
+    // capped at a quarter of the column, so 3 and 4 columns shrank it (and the text, by 0.88
+    // and 0.8, which then clipped the Size line). At 3+ columns a card now STACKS: corner and
+    // profile side by side at the 1-column size, the text under them at the full column
+    // width and the 1-column type size. 1 and 2 columns are unchanged.
+    const stacked = _frameRecStacked(cfg);
+    const rowGap = (cols >= 3 && !stacked) ? 10 : 16;
     const sizeScale = cfg.size === 'compact' ? 0.72 : cfg.size === 'medium' ? 0.86 : 1;
     const colScale = cols >= 4 ? 0.8 : cols === 3 ? 0.88 : cols === 2 ? 0.95 : 1;
-    const S = sizeScale * colScale;
+    const S = stacked ? sizeScale : sizeScale * colScale;
+    // The 1-column picture size for this Size setting: 80% of a full-page 1-column row.
+    const _rows1 = _frameRecBaseRows(cfg);
+    const P1 = 0.8 * (listBot - contentTop - 16 * (_rows1 - 1)) / _rows1;
+    // Text under a stacked card: heading, vendor, size (and max size), used on.
+    const _hasMax = frames.some(f => f && f.maxSizeText);
+    const textH = (13 * S + 2) + (14 * S + 4) + (13 * S + 2) * (_hasMax ? 2 : 1) + 9 * S + 8;
     for (let c = 0; c < cols; c++) {
         const colFrames = frames.slice(c * perCol, (c + 1) * perCol);
         if (!colFrames.length) continue;
@@ -19147,6 +20153,7 @@ function _drawFrameRecPage(doc, logos, pageNum, meta, pageArg) {
         const rowH = (listBot - contentTop - rowGap * (perCol - 1)) / perCol;
         colFrames.forEach((f, i) => {
             const y = contentTop + i * (rowH + rowGap);
+            if (stacked) { _frameRecStackedCard(doc, f, cx, y, colW, rowH, P1, textH, S, hx); if (i < nRows - 1) { doc.setDrawColor(232, 232, 232); doc.setLineWidth(0.5); doc.line(cx, y + rowH + rowGap / 2, cx + colW, y + rowH + rowGap / 2); } return; }
             // Corner sample (real corner image, never the tiled mockup swatch)
             const swMaxW = Math.min(colW * 0.24, 78 * S), swH = rowH * 0.94;
             if (f.img && (f.img.naturalWidth || f.img.width)) {
@@ -19195,6 +20202,51 @@ function _drawFrameRecPage(doc, logos, pageNum, meta, pageArg) {
     }
 
     _drawPdfFooter(doc, logos, pageNum, meta);
+}
+
+// One stacked card (3+ columns, 20.42): corner and profile side by side in a band as tall
+// as the 1-column picture (shorter only if the row cannot hold it and the text), the text
+// under it at the column's full width. Same sources and fallbacks as the side-by-side card.
+function _frameRecStackedCard(doc, f, cx, y, colW, rowH, P1, textH, S, hx) {
+    const band = Math.max(18, Math.min(P1, rowH - textH));
+    let x = cx;
+    if (f.img && (f.img.naturalWidth || f.img.width)) {
+        const iw = f.img.naturalWidth || f.img.width, ih = f.img.naturalHeight || f.img.height;
+        const fit = Math.min((colW * 0.34) / iw, band / ih);
+        const dw = iw * fit, dh = ih * fit;
+        try { doc.addImage(f.img, 'JPEG', x, y + (band - dh) / 2, dw, dh); } catch (e) { try { _addPngImage(doc, f.img, x, y + (band - dh) / 2, dw, dh); } catch (e2) {} }
+        x += dw + 12;
+    } else if (f.color) {
+        const [r, g, b] = hx(f.color); doc.setFillColor(r, g, b); doc.rect(x, y, band * 0.3, band, 'F'); x += band * 0.3 + 12;
+    } else {
+        doc.setDrawColor(200, 200, 200); doc.setLineDashPattern([3, 3], 0); doc.rect(x, y, band * 0.3, band, 'S'); doc.setLineDashPattern([], 0); x += band * 0.3 + 12;
+    }
+    if (f.profileImg && (f.profileImg.naturalWidth || f.profileImg.width)) {
+        const pf = Math.min(band, cx + colW - x);
+        const iw = f.profileImg.naturalWidth || f.profileImg.width, ih = f.profileImg.naturalHeight || f.profileImg.height;
+        const fit = Math.min(pf / iw, pf / ih);
+        const dw = iw * fit, dh = ih * fit;
+        try { _addPngImage(doc, f.profileImg, x + (pf - dw) / 2, y + (band - dh) / 2, dw, dh); } catch (e) { try { doc.addImage(f.profileImg, 'JPEG', x + (pf - dw) / 2, y + (band - dh) / 2, dw, dh); } catch (e2) {} }
+    }
+    const tW = colW;
+    let ty = y + band + 8 + 13 * S;
+    doc.setFont(_font('serif'), 'bold'); doc.setFontSize(Math.max(8, 13 * S)); doc.setTextColor(20, 20, 20);
+    const heading = (f.code || '\u2014') + (f.name || f.finish ? ' ' + (f.name || f.finish) : '');
+    doc.text(doc.splitTextToSize(heading, tW)[0] || heading, cx, ty); ty += 13 * S + 2;
+    doc.setFont(_font('serif'), 'normal'); doc.setFontSize(Math.max(7, 10 * S)); doc.setTextColor(60, 60, 60);
+    if (f.vendor) { doc.text('Vendor: ' + f.vendor, cx, ty); ty += 14 * S + 4; } else ty += 8 * S;
+    const labelW = 52 * S;
+    const line = (lab, val) => {
+        if (!val) return;
+        doc.setFont(_font('serif'), 'bold'); doc.setTextColor(20, 20, 20); doc.text(lab, cx, ty);
+        doc.setFont(_font('serif'), 'normal'); doc.setTextColor(40, 40, 40);
+        doc.text(doc.splitTextToSize(val, tW - labelW)[0] || val, cx + labelW, ty); ty += 13 * S + 2;
+    };
+    line('Size', f.sizeText);
+    line('Max Size', f.maxSizeText);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(Math.max(6, 7.5 * S)); doc.setTextColor(150, 150, 150);
+    doc.text('Used on ' + f.count + ' piece' + (f.count === 1 ? '' : 's'), cx, ty);
+    doc.setTextColor(20, 20, 20);
 }
 
 // Studio block for the Thank You page (stable across projects).
@@ -21129,13 +22181,30 @@ function _deckPageList() {
     if (isInstall) {
         // Install guide: one page per elevation (the walls from the Elevations
         // tab), shown in full — no per-piece duplicates.
+        // 20.15: BY LEVEL means a plan, then the walls whose pieces are pinned on it, as spec
+        // pages do (Ford Hub L03: the existing-inventory plan, then EA..EG, then the art plan
+        // and 01..35). Before, every plan printed first and every wall after it, whatever the
+        // setting said. A wall with no pinned piece, and every wall in the other orders,
+        // follows the plans as before.
+        const walls = inc.spec ? installDescs() : [];
+        const byLevel = inc.floorplanKey && _deckPlanOrder() === 'byLevel';
+        const wallLv = (d) => {
+            const f = ((d.elev && d.elev.frames) || []).find(x => x && x.active !== false);
+            const r = f && (dashProjectData || []).find(o => o && o.id === f.id);
+            return (r && (r.planX != null || _fpPins(r).length)) ? _deckLvlOf(r.level) : null;
+        };
+        const placed = {};
         if (inc.floorplanKey) {
             // Same level list the export uses. These two tested different things — the
             // studio the filtered rows, the export dashProjectData — so a level could
             // appear in one and not the other.
-            _deckEmitLevels(units).forEach(li => { pages.push({ kind: 'floorplan', type: 'floorplan', title: (floorplanLevels[li] && floorplanLevels[li].name) || ('Level ' + (li + 1)), level: li }); _planDetailDescsFor(li).forEach(d => pages.push(d)); });
+            _deckEmitLevels(units).forEach(li => {
+                pages.push({ kind: 'floorplan', type: 'floorplan', title: (floorplanLevels[li] && floorplanLevels[li].name) || ('Level ' + (li + 1)), level: li });
+                _planDetailDescsFor(li).forEach(d => pages.push(d));
+                if (byLevel) walls.forEach((d, i) => { if (wallLv(d) === li) { pages.push(d); placed[i] = 1; } });
+            });
         }
-        if (inc.spec) installDescs().forEach(d => pages.push(d));
+        walls.forEach((d, i) => { if (!placed[i]) pages.push(d); });
     } else if (inc.floorplanKey || inc.spec) {
         // ORDER COMES FROM _deckPlanSlots, which the PDF's plan builder also calls. Do
         // not reintroduce the sequence here: this is the clause that has drifted from the
@@ -21173,17 +22242,40 @@ function _deckPageList() {
         pages.length = 0;
         merged.forEach(p => pages.push(p));
     }
+    // A STANDARD PAGE MOVED BY HAND (20.03) leaves its home slot and is pinned like an
+    // inserted page: `ec.pagePlace[key]` is the key it follows. Both kinds go through one
+    // resolver, because either can be anchored to the other (Timeline after a moodboard, a
+    // divider after Frame Recommendations). An anchor not placed yet waits for a later pass.
+    const pins = [];
     (ec.layoutPages || []).forEach(p => {
         if (!p.afterKey) return;
-        const d = { kind: 'layout', type: p.type || 'moodboard', title: p.title || _mbDefaultTitle(p.type || 'moodboard') || 'Page', page: p };
-        if (p.afterKey === '__start__') { pages.unshift(d); return; }
-        let idx = -1;
-        for (let i = pages.length - 1; i >= 0; i--) { if (_deckPageKey(pages[i]) === p.afterKey) { idx = i; break; } }
-        if (idx < 0) { pages.push(d); return; }
-        let j = idx + 1;
-        while (j < pages.length && pages[j].kind === 'layout' && pages[j].page && pages[j].page.afterKey === p.afterKey) j++;
-        pages.splice(j, 0, d);
+        pins.push({ d: { kind: 'layout', type: p.type || 'moodboard', title: p.title || _mbDefaultTitle(p.type || 'moodboard') || 'Page', page: p }, after: p.afterKey });
     });
+    const place = ec.pagePlace || {};
+    const moved = [];
+    for (let i = pages.length - 1; i >= 0; i--) {
+        const k = _deckPageKey(pages[i]);
+        if (k && place[k] && _deckPageFloats(k)) moved.unshift({ d: pages.splice(i, 1)[0], after: place[k] });
+    }
+    moved.forEach(x => pins.push(x));
+    pins.forEach(x => { x.d._pinAfter = x.after; });
+    let pending = pins;
+    while (pending.length) {
+        const later = [];
+        pending.forEach(x => {
+            if (x.after === '__start__') { let j = 0; while (j < pages.length && pages[j]._pinAfter === '__start__') j++; pages.splice(j, 0, x.d); return; }
+            let idx = -1;
+            for (let i = pages.length - 1; i >= 0; i--) { if (_deckPageKey(pages[i]) === x.after) { idx = i; break; } }
+            if (idx < 0) { later.push(x); return; }
+            let j = idx + 1;
+            while (j < pages.length && pages[j]._pinAfter === x.after) j++;
+            pages.splice(j, 0, x.d);
+        });
+        // Nothing found its anchor this pass: the first one goes to the end (what an
+        // unresolved anchor always did) and the rest try again, since some may follow it.
+        if (later.length === pending.length) pages.push(later.shift().d);
+        pending = later;
+    }
     // Already merged and hidden-filtered above, before the pins were placed.
     // The contents page is written from this list, so it is synced here, last.
     const _toc = _tocSyncAll(pages);
@@ -24198,6 +25290,22 @@ function _dsRunPreflight() {
     try { issues.push.apply(issues, _samplePreflight()); } catch (e) {}
     // Duplicate image codes; TBDs, leftover options and a wrong version in an IFS (19.88).
     try { issues.push.apply(issues, _readinessPreflight()); } catch (e) {}
+    // What ten studio projects kept catching after issue; stale stage and version (20.04).
+    try { issues.push.apply(issues, _ifsAuditPreflight(pages)); } catch (e) {}
+    // Another job's file stamp in typed text; Pending drawings and N/A credits in an IFS (20.28).
+    try { issues.push.apply(issues, _leftoverPreflight(pages)); } catch (e) {}
+    try { issues.push.apply(issues, _stagePreflight(pages)); } catch (e) {}
+    try { issues.push.apply(issues, _artTypePreflight(pages)); } catch (e) {}
+    // A picture too small for the size it prints (20.10).
+    try { issues.push.apply(issues, _printResPreflight()); } catch (e) {}
+    // Frame and mats that add up to more than the overall size (20.11).
+    try { issues.push.apply(issues, _sizeMathPreflight()); } catch (e) {}
+    // Bigger than a sheet of paper, mat, glass or a stretcher can make in one piece (20.16).
+    try { issues.push.apply(issues, _maxMakePreflight()); } catch (e) {}
+    // How a canvas's sides are made, and whether the crop leaves picture for them (20.17).
+    try { issues.push.apply(issues, _canvasSidesPreflight()); } catch (e) {}
+    // An image code with no house prefix, e.g. a client photo still named IMG_4021 (20.12).
+    try { issues.push.apply(issues, _imgCodeShapePreflight()); } catch (e) {}
     // Spelling \u2014 a separate pass, see _dsRunSpellCheck for what it does and doesn't do.
     try { issues.push.apply(issues, _dsRunSpellCheck()); } catch (e) {}
     return issues;
@@ -25585,12 +26693,22 @@ function _dsWireRailDrag(cell, desc, i) {
         _dsDragFromKey = null;
     });
 }
-function _dsPageMovable(desc) { return !!(desc && desc.kind === 'layout' && desc.page && !desc.page._tocPartOf); }
+// THE STANDARD PAGES A DESIGNER MAY PLACE (20.03). Studio decks put Process + Timeline at
+// the end as often as near the front, and Frame Recommendations wherever the conversation
+// reaches frames. The cover stays page 1. Placement is `editorialContent.pagePlace[key]`,
+// the key the page follows (as an inserted page's afterKey), stored only once moved.
+const DECK_FLOAT_KEYS = ['card:timeline', 'fixed:understanding', 'fixed:narrative', 'fixed:strategy', 'card:frameRec', 'fixed:slogan', 'card:contacts'];
+function _deckPageFloats(key) { return DECK_FLOAT_KEYS.indexOf(key) >= 0; }
+function _dsPageMovable(desc) {
+    if (!desc) return false;
+    if (desc.kind === 'layout') return !!(desc.page && !desc.page._tocPartOf);
+    return (desc.kind === 'fixed' || desc.kind === 'card') && _deckPageFloats(_deckPageKey(desc));
+}
 function _dsPageLockNote(desc) {
     if (!desc || _dsPageMovable(desc)) return '';
     if (desc.kind === 'layout' && desc.page && desc.page._tocPartOf) return 'The contents continued \u2014 it follows the first Contents page and goes away when the contents fits on one.';
     if (desc.kind === 'fixed' || desc.kind === 'card') {
-        return 'Fixed page — its place in the deck is set. Switch it on or off under Project, Include pages.';
+        return 'The cover is always the first page. Switch pages on or off under Project, Include pages.';
     }
     if (desc.kind === 'floorplan' || desc.kind === 'planDetail') {
         return 'Ordered with the plans — change Floorplan order under Project (or pick Manual to sequence them yourself).';
@@ -25626,14 +26744,34 @@ function _dsMovePageTo(desc, newIdx) {
     // Build the order this move is asking for, then read the anchor off it. Working from
     // the RESULT rather than from offsets is what keeps "before page 3" meaning the same
     // thing whether the page is currently above or below it.
+    const oldBefore = (from > 0) ? (_deckPageKey(list[from - 1]) || '__start__') : '__start__';
     const moved = list.splice(from, 1)[0];
     list.splice(to, 0, moved);
     const before = (to > 0) ? list[to - 1] : null;
-    desc.page.afterKey = before ? (_deckPageKey(before) || '__start__') : '__start__';
-    // `place` is the template's own anchor (afterCover, afterStrategy…). Once a page has
-    // been positioned by hand that anchor is no longer the truth, and leaving it would let
-    // it fight the afterKey on the next rebuild.
-    delete desc.page.place;
+    const after = before ? (_deckPageKey(before) || '__start__') : '__start__';
+    if (desc.kind === 'layout') {
+        desc.page.afterKey = after;
+        // `place` is the template's own anchor (afterCover, afterStrategy…). Once a page has
+        // been positioned by hand that anchor is no longer the truth, and leaving it would let
+        // it fight the afterKey on the next rebuild.
+        delete desc.page.place;
+    } else {
+        // A standard page (20.03). Pages pinned to it stay where they were rather than
+        // travelling with it: moving Process + Timeline to the end must not drag the page
+        // that happened to follow it.
+        (editorialContent.layoutPages || []).forEach(p => { if (p.afterKey === myKey) p.afterKey = oldBefore; });
+        const pl = editorialContent.pagePlace || (editorialContent.pagePlace = {});
+        Object.keys(pl).forEach(k => { if (pl[k] === myKey) pl[k] = oldBefore; });
+        pl[myKey] = after;
+    }
+    // A pinned neighbour sharing the anchor would be sorted against the moved page by the
+    // resolver's own order; anchoring it to the moved page says which comes first.
+    const next = list[to + 1];
+    const nk = next && _deckPageKey(next);
+    if (nk && nk !== myKey) {
+        if (next.kind === 'layout' && next.page && next.page.afterKey === after) next.page.afterKey = myKey;
+        else if (editorialContent.pagePlace && editorialContent.pagePlace[nk] === after) editorialContent.pagePlace[nk] = myKey;
+    }
     _dsSyncLayoutPageOrder(list);
     if (typeof pushHistory === 'function') pushHistory();
     if (typeof scheduleAutosave === 'function') scheduleAutosave();
@@ -25736,20 +26874,28 @@ function _dsPageHandPlaced(p) {
     const home = _starterLayoutHome()[p.id];
     return !(home && home === p.afterKey);
 }
+// Inserted pages off their template's anchor plus standard pages moved by hand (20.03).
+function _dsHandPlacedCount() {
+    const pl = editorialContent.pagePlace || {};
+    return (editorialContent.layoutPages || []).filter(_dsPageHandPlaced).length
+        + Object.keys(pl).filter(k => pl[k] && _deckPageFloats(k)).length;
+}
 // Put every inserted page back where its template meant it to go. Once a few have been
 // hand-anchored there is otherwise no way back short of deleting and re-adding them.
 function _dsResetLayoutOrder() {
     const arr = (editorialContent.layoutPages || []);
     const hand = arr.filter(_dsPageHandPlaced);
-    if (!hand.length) { _toast('Nothing to reset', 'No pages have been moved by hand — they are all still where their template puts them.'); return; }
+    const n = _dsHandPlacedCount();
+    if (!n) { _toast('Nothing to reset', 'No pages have been moved by hand — they are all still where their template puts them.'); return; }
     _confirmDestroy({
-        title: 'Put ' + hand.length + ' hand-placed page' + (hand.length === 1 ? '' : 's') + ' back in the default order?',
-        body: 'Pages you moved by hand go back to where their template puts them.',
+        title: 'Put ' + n + ' hand-placed page' + (n === 1 ? '' : 's') + ' back in the default order?',
+        body: 'Pages you moved by hand go back to where their template puts them, and standard pages (Process + Timeline, Frame Recommendations…) to their usual place.',
         confirm: 'Reset order',
         undoable: true,
         onConfirm: () => {
             // A starter page goes back to its starter anchor; anything else to its template's.
             hand.forEach(p => { const home = _starterLayoutHome()[p.id]; if (home) { p.afterKey = home; return; } delete p.afterKey; if (!p.place) p.place = 'afterStrategy'; });
+            delete editorialContent.pagePlace;
             if (typeof pushHistory === 'function') pushHistory();
             if (typeof scheduleAutosave === 'function') scheduleAutosave();
             _dsRefresh();
@@ -25918,11 +27064,11 @@ function _dsRenderRail() {
     // put them short of deleting and re-adding each one. Hidden when there is nothing to
     // undo, so it is not a permanently-armed button for a rare job.
     {
-        const handPlaced = (editorialContent.layoutPages || []).filter(_dsPageHandPlaced).length;
+        const handPlaced = _dsHandPlacedCount();
         if (handPlaced) {
             const rst = document.createElement('button');
             rst.textContent = '↺ Reset page order (' + handPlaced + ')';
-            rst.title = 'Put every hand-placed page back where its template puts it. Fixed and generated pages are unaffected — they were never moved.';
+            rst.title = 'Put every hand-placed page back where its template puts it, and moved standard pages back in their usual place. Generated pages are unaffected — they were never moved.';
             rst.style.cssText = 'width:100%; height:22px; margin-top:5px; font-size:var(--fs-60); background:var(--bg-input);'
                 + ' color:var(--text-muted); border:1px solid var(--border-color); border-radius:var(--r-4); cursor:pointer;';
             rst.onclick = () => _dsResetLayoutOrder();
@@ -26188,7 +27334,15 @@ function _dsOpenSelSettings(ev) {
             if (el && _elType(el) === 'text') { _dsOpenTextGearPopup({ kind: 'mb', i: _mbSelected }, cx, cy); return; }
         }
     } catch (e) {}
-    const a = _dsCurrentAnnot();
+    let a = _dsCurrentAnnot();
+    // A multi-selection of picture boxes opens ONE popup that edits them together (20.02).
+    if (!a) {
+        try {
+            const cur = _mbCurAnnList();
+            const k = cur && (_mbSelAnn || []).find(ix => cur.list[ix] && (cur.list[ix].type === 'shape' || cur.list[ix].type === 'image'));
+            if (k != null) { _dsOpenGearPopup(cur.key, k, cx, cy); return; }
+        } catch (e) {}
+    }
     if (!a) { _toast && _toast('Nothing selected', 'Click a text box, shape or arrow on the page first.'); return; }
     const ty = a.type || 'text';
     if (ty === 'arrow' || ty === 'elbow') _dsOpenArrowGearPopup(_dsSelKey, _dsSelIdx, cx, cy);
@@ -26454,6 +27608,16 @@ function _dsRenderAnnots(page, desc, w, hh) {
     _dsLastAnnW = w; _dsLastAnnH = hh;
 
     const key = _deckPageKey(desc); if (!key) return;
+    // 20.33: the wall's ELEVATION REQUIRED stamp. Not selectable: it belongs to the wall
+    // (Elevations tab > Elevation required), so the tooltip says where to change it.
+    _elevReqStamps(key).forEach(a => {
+        const el = document.createElement('div');
+        el.textContent = a.text;
+        el.dataset.elevReq = '1';
+        el.title = 'This wall is marked Elevation required (Elevations tab, under Wall finish)';
+        el.style.cssText = 'position:absolute; left:' + (a.x * w) + 'px; top:' + (a.y * hh) + 'px; width:' + (a.w * w) + 'px; font-family:' + _dsAnnFam(a.font) + '; font-size:' + Math.max(7, a.size * hh) + 'px; line-height:1.15; color:' + a.color + '; font-weight:' + (a.bold ? 700 : 400) + '; text-align:' + a.align + '; white-space:pre-wrap;font-kerning:none; pointer-events:auto; cursor:default; z-index:' + (100 + 5000) + ';';
+        page.appendChild(el);
+    });
     const list = (editorialContent.annotations && editorialContent.annotations[key]) || [];
     list.forEach((a, i) => {
         if (a && a.hidden) return;
@@ -26620,7 +27784,9 @@ function _dsRenderAnnots(page, desc, w, hh) {
             };
             const panModeI = (a.zoom || 1) > 1;
             box.onmousedown = panModeI
-                ? (e) => { const wasSel = sel; _dsSelKey = key; _dsSelIdx = i; _dsClearMbSel(); _dsSyncToolbar(); if (!wasSel) { _dsRenderCenter(); return; } _dsShapePanDown(e, key, i, bw, bh); }
+                // Shift-click and a group drag work on a cropped picture too (20.02): this branch
+                // used to select it alone, so a moodboard could never be multi-selected.
+                ? (e) => { if (a && a.locked) { e.preventDefault(); e.stopPropagation(); return; } if (_dsAnnShiftToggle(e, i)) return; if (_dsAnnGroupDragStart(e, key, i, list)) return; const wasSel = sel; _mbSelAnn = []; _dsSelKey = key; _dsSelIdx = i; _dsClearMbSel(); _dsSyncToolbar(); if (!wasSel) { _dsRenderCenter(); return; } _dsShapePanDown(e, key, i, bw, bh); }
                 : moveDownI;
             box.style.cursor = panModeI ? 'grab' : 'move';
             const handle = document.createElement('div');
@@ -26690,7 +27856,9 @@ function _dsRenderAnnots(page, desc, w, hh) {
             // A pixel of slack is rounding, not a crop; 1pt is something to drag.
             const panMode = !!(a.dataUrl && _panCR && (_panCR.slackX > 1 || _panCR.slackY > 1));
             box.onmousedown = panMode
-                ? (e) => { const wasSel = sel; _dsSelKey = key; _dsSelIdx = i; _dsClearMbSel(); _dsSyncToolbar(); if (!wasSel) { _dsRenderCenter(); return; } _dsShapePanDown(e, key, i, bw, bh); }
+                // Shift-click and a group drag work on a cropped picture too (20.02): this branch
+                // used to select it alone, so a moodboard could never be multi-selected.
+                ? (e) => { if (a && a.locked) { e.preventDefault(); e.stopPropagation(); return; } if (_dsAnnShiftToggle(e, i)) return; if (_dsAnnGroupDragStart(e, key, i, list)) return; const wasSel = sel; _mbSelAnn = []; _dsSelKey = key; _dsSelIdx = i; _dsClearMbSel(); _dsSyncToolbar(); if (!wasSel) { _dsRenderCenter(); return; } _dsShapePanDown(e, key, i, bw, bh); }
                 : moveDown;
             box.style.cursor = panMode ? 'grab' : 'move';
             if (a.dataUrl) box.onwheel = (e) => { e.preventDefault(); a.zoom = _dsZoomRound(Math.max(1, Math.min(5, (a.zoom || 1) + (e.deltaY < 0 ? DS_ZOOM_STEP : -DS_ZOOM_STEP) * (e.shiftKey ? 4 : 1)))); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderCenter(); };
@@ -27805,6 +28973,9 @@ const _DS_NOTE_PRESETS = [
     ['Colour disclaimer', 'Note:\nColors may appear differently on your monitor compared to the final product due to variations in screen settings, printing methods, and substrates.'],
     ['Dimensions note', 'Note:\nAll dimensions are approximate and subject to final site verification.'],
     ['Artwork placement', 'Note:\nArtwork placement shown is for reference only. Final positioning to be confirmed on site during installation.'],
+    // 20.07: one note per kind of work, so an original never carries a commission's wording.
+    ['Commission note', 'Note:\nCommissioned artwork. The image shown represents the artist’s style and direction; the final piece is made for this space and may differ in composition and colour.'],
+    ['Original artwork note', 'Note:\nOriginal artwork, shown as photographed by the artist or gallery. Colour and finish are confirmed in person before purchase.'],
 ];
 const _DS_LOREM = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.';
 function _dsUserTextPresets() { return editorialContent.textPresets || (editorialContent.textPresets = []); }
@@ -27823,22 +28994,24 @@ async function _dsSaveSelectedTextPreset() {
 }
 // Stamps: the status marks a deck goes out under. Bold red caps, top right,
 // in the same red the text-ink strip offers, so a stamp and a red note match.
-const _DS_STAMPS = ['DRAFT', 'FOR APPROVAL', 'CONCEPT ONLY', 'NOT TO SCALE', 'PRELIMINARY'];
+const _DS_STAMPS = ['DRAFT', 'FOR APPROVAL', 'CONCEPT ONLY', 'NOT TO SCALE', 'PRELIMINARY', 'COLOR SAMPLE APPROVAL REQUIRED'];   // 20.08: colour settled by physical strikes, not on screen
 const _DS_STAMP_INK = '#e00000';
 function _dsAddStatusStamp(word) {
+    // A long stamp gets a wider box ending on the same right edge, so it stays one line.
+    const sw = String(word || '').length > 16 ? 0.46 : 0.26, sx = 0.94 - sw;
     if (_dsCurrentEditablePage()) {
         try {
             addMoodboardText();
             const els = _mbEls(); const el = els[els.length - 1];
-            if (el && el.type === 'text') { el.text = word; el.w = 0.26; el.x = 0.68; el.y = 0.05; el.size = 0.034; el.bold = true; el.color = _DS_STAMP_INK; el.font = 'display'; el.align = 'right'; renderMoodboardCanvas(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); }
+            if (el && el.type === 'text') { el.text = word; el.w = sw; el.x = sx; el.y = 0.05; el.size = 0.034; el.bold = true; el.color = _DS_STAMP_INK; el.font = 'display'; el.align = 'right'; renderMoodboardCanvas(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); }
         } catch (e) {}
         return;
     }
     const desc = _dsPages[_dsIndex]; const key = _deckPageKey(desc);
     if (!key) { _toast('Not available here', 'This page type doesn’t support overlay text.'); return; }
     const list = _dsAnnList(key);
-    const _fs = _dsFreeSpot(list, 0.68, 0.05);
-    list.push({ type: 'note', text: word, x: _fs.x, y: _fs.y, w: 0.26, size: 0.034, color: _DS_STAMP_INK, font: 'display', bold: true, italic: false, align: 'right' });
+    const _fs = _dsFreeSpot(list, sx, 0.05);
+    list.push({ type: 'note', text: word, x: _fs.x, y: _fs.y, w: sw, size: 0.034, color: _DS_STAMP_INK, font: 'display', bold: true, italic: false, align: 'right' });
     if (typeof pushHistory === 'function') pushHistory();
     if (typeof scheduleAutosave === 'function') scheduleAutosave();
     _dsSelectAnnot(key, list.length - 1); _dsRenderRail();
@@ -27966,6 +29139,97 @@ function _dsAddPresetNote(text) {
     if (typeof pushHistory === 'function') pushHistory();
     if (typeof scheduleAutosave === 'function') scheduleAutosave();
     _dsSelectAnnot(key, list.length - 1); _dsRenderRail();
+}
+// 20.27: A PIECE'S NOTES AND ITS TITLE / ARTIST ARE TEXT BOXES, NOT SPEC LINES. A long
+// note broke the look of the spec block, and title and artist are often unknown, so
+// neither prints in the spec any more. The right panel on a spec page drops either one
+// on the page as an ordinary note annotation the designer moves, sizes and edits. The
+// words are COPIED from the row when the box is made (not linked): the box is the
+// designer's to rewrite. A blank field comes in as placeholder wording that
+// PAGE_PLACEHOLDER_RE already flags ("Text here", "Artwork title", "Artist name").
+function _pieceTextRows(desc) {
+    if (!desc) return [];
+    return ((desc.members && desc.members.length) ? desc.members : [desc.row]).filter(r => r && r.id);
+}
+function _pieceNoteText(rows) {
+    const parts = rows.map(r => ({ id: r.id, t: String(r.notes || '').trim() })).filter(p => p.t);
+    if (!parts.length) return 'Note:\nText here';
+    if (rows.length === 1) return /^notes?\b/i.test(parts[0].t) ? parts[0].t : 'Note:\n' + parts[0].t;
+    return 'Notes:\n' + parts.map(p => p.id + '  ' + p.t).join('\n');
+}
+function _pieceCreditText(rows) {
+    if (rows.length === 1) {
+        const L = _labelLines(rows[0]);
+        return [L.title || 'Artwork title', L.artist || 'Artist name'].concat(L.detail ? [L.detail] : []).join('\n');
+    }
+    return rows.map(r => { const L = _labelLines(r); return r.id + '  ' + (L.title || 'Artwork title') + ', ' + (L.artist || 'Artist name'); }).join('\n');
+}
+// WHERE THE SPEC ROWS ENDED on the last drawn page, by the page's first piece id, as
+// fractions of the page: { x, y, w, aspect }. Written by both spec drawers (per-piece and the
+// shared set column), read by _dsAddPieceText so a new box starts UNDER the spec block
+// in its column rather than on the artwork. The page is on screen when the button is
+// pressed, so it has been drawn; no entry (never drawn) falls back to a fixed spot.
+const _specBlockEnd = {};
+function _noteSpecEnd(doc, id, x, y, w) {
+    try {
+        const ps = doc.internal.pageSize, W = ps.getWidth(), H = ps.getHeight();
+        if (id && W > 0 && H > 0 && isFinite(x) && isFinite(y) && isFinite(w)) _specBlockEnd[id] = { x: x / W, y: y / H, w: w / W, aspect: W / H };
+    } catch (e) {}
+}
+const PIECE_TEXT_SIZE = 0.016;   // about the spec rows' own type size
+// The bottom of a note box, estimated (no layout here): its lines, wrapped by width.
+function _pieceTextBottom(a, aspect) {
+    const sz = a.size || PIECE_TEXT_SIZE, per = Math.max(8, Math.floor((a.w || 0.3) * aspect / (sz * 0.5)));
+    const n = String(a.text || '').split('\n').reduce((t, l) => t + Math.max(1, Math.ceil(l.length / per)), 0);
+    return (a.y || 0) + n * sz * 1.3;
+}
+function _dsAddPieceText(desc, kind) {
+    const key = _deckPageKey(desc); const rows = _pieceTextRows(desc);
+    if (!key || !rows.length) return;
+    const list = _dsAnnList(key);
+    const isNote = kind === 'note';
+    const end = _specBlockEnd[rows[0].id];
+    let x = 0.62, y = isNote ? 0.74 : 0.62, w = 0.3;
+    if (end) {
+        // Under the spec block, in its column, below any box already stacked there.
+        x = end.x; w = Math.max(0.15, Math.min(0.32, end.w)); y = end.y + 0.035;
+        const aspect = end.aspect || 16 / 9;
+        list.forEach(a => { if (a && a.type === 'note' && Math.abs((a.x || 0) - x) < 0.02 && (a.y || 0) >= end.y - 0.01) y = Math.max(y, _pieceTextBottom(a, aspect) + 0.025); });
+    }
+    const fs = _dsFreeSpot(list, x, y);
+    list.push({ type: 'note', text: isNote ? _pieceNoteText(rows) : _pieceCreditText(rows), x: fs.x, y: fs.y, w: w,
+        size: PIECE_TEXT_SIZE, color: isNote ? '#555555' : '#222222', font: 'serif', italic: isNote, bold: false, align: 'left' });
+    if (typeof pushHistory === 'function') pushHistory();
+    if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    _dsSelectAnnot(key, list.length - 1); _dsRenderRail();
+}
+function _dsPieceTextInto(t, desc) {
+    const rows = _pieceTextRows(desc);
+    if (!rows.length || !_deckPageKey(desc)) return;
+    const body = _dsSection(t, 'Text boxes', 'piecetext', true,
+        'Notes and the artist and title are not printed in the spec. Add either one as a text box, then move it next to the piece or wherever it reads best on the page and edit the words there. The text is copied from the item when you add it. A blank field comes in as placeholder wording, which preflight flags until you replace or delete it.');
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex; gap:6px;';
+    [['note', '+ Item note', 'The item’s Notes as a text box on this page'],
+     ['credit', '+ Artist + title', 'Title and artist as a text box on this page (set them on the Production tab, Labels)']].forEach(([kind, label, tip]) => {
+        const b = document.createElement('button');
+        b.type = 'button'; b.className = 'action-btn btn-secondary'; b.textContent = label; b.title = tip;
+        b.dataset.pieceText = kind;
+        b.style.cssText = 'flex:1 1 0; min-width:0; height:26px; font-size:var(--fs-65);';
+        b.onclick = () => _dsAddPieceText(desc, kind);
+        row.appendChild(b);
+    });
+    body.appendChild(row);
+    const noNote = !rows.some(r => String(r.notes || '').trim());
+    const noCredit = !rows.some(r => String(r.artworkTitle || '').trim() || String(r.artist || '').trim());
+    if (noNote || noCredit) {
+        const n = document.createElement('div');
+        n.style.cssText = 'font-size:var(--fs-60); color:var(--text-muted); line-height:1.4; margin-top:6px;';
+        n.textContent = (noNote && noCredit) ? 'No notes, title or artist on this item yet: both boxes start as placeholders.'
+            : noNote ? 'No notes on this item yet: the note starts as a placeholder.'
+            : 'No title or artist on this item yet: that box starts as a placeholder.';
+        body.appendChild(n);
+    }
 }
 function _dsAddTextSmart() { if (_dsCurrentEditablePage()) { try { addMoodboardText(); } catch (e) {} } else { _dsAddTextBox(); } }
 function _dsAddImageSmart() { if (_dsCurrentEditablePage()) { const fi = document.getElementById('moodboardFile'); if (fi) fi.click(); } else { _dsAddImageBox(); } }
@@ -28197,6 +29461,36 @@ function _dsMoveGrip(box, onDown) {
 }
 // Settings — bottom-left of a selected shape/image; opens the settings popup.
 const DS_SETTINGS_SIZE = 22;
+// The boxes a picture popup edits together (20.02): every selected shape or image box on
+// the page when the popup's own box is one of a multi-selection, else just that one.
+const DS_GEAR_LOOK = ['radius', 'showCaption', 'capSource', 'capAlign', 'capFont', 'capPt', 'fit', 'shadow', 'fill', 'stroke', 'strokeW'];
+function _dsGearGroup(key, i) {
+    const list = _dsAnnList(key) || [];
+    const sel = (typeof _mbSelAnn !== 'undefined' && Array.isArray(_mbSelAnn)) ? _mbSelAnn : [];
+    let cur = null; try { cur = _mbCurAnnList(); } catch (e) {}
+    if (sel.length < 2 || sel.indexOf(i) < 0 || !cur || cur.key !== key) return [i];
+    return sel.filter(k => list[k] && (list[k].type === 'shape' || list[k].type === 'image') && !list[k].locked);
+}
+function _dsGearLook(a) { const o = {}; DS_GEAR_LOOK.forEach(k => { o[k] = JSON.stringify(a[k]); }); return o; }
+// Copy what changed on `a` since `look0` onto the rest of the group. Only CHANGED fields: the
+// boxes keep everything else their own (a radius differing per box survives a caption edit).
+// A control that pushed its own undo step (the caption toggle, the size) has that step
+// RETAKEN with the whole group in it, so one Ctrl+Z undoes all the boxes together.
+function _dsGearGroupApply(a, look0, group, key, hist0) {
+    if (!group || group.length < 2) return 0;
+    const list = _dsAnnList(key) || [];
+    const changed = DS_GEAR_LOOK.filter(k => JSON.stringify(a[k]) !== look0[k]);
+    if (!changed.length) return 0;
+    let n = 0;
+    group.forEach(k => {
+        const b = list[k]; if (!b || b === a) return;
+        changed.forEach(f => { if (a[f] === undefined) delete b[f]; else b[f] = _cloneData(a[f]); });
+        if (b.showCaption && !b.caption) b.caption = 'Caption';
+        n++;
+    });
+    if (n && hist0 != null && undoStack.length > hist0) { try { undoStack[undoStack.length - 1] = snapshotProjectState({ plans: true }); } catch (e) {} }
+    return n;
+}
 function _dsGearButton(box, key, i) {
     const g = document.createElement('button');
     g.className = '_dsChrome';
@@ -28357,6 +29651,10 @@ function _dsOpenGearPopup(key, i, cx, cy) {
     document.removeEventListener('mousedown', _dsGearPopupOutside);
     const a = (_dsAnnList(key) || [])[i]; if (!a) return;
     const isImg = a.type === 'image';
+    // 20.02: SEVERAL PICTURES SELECTED, ONE POPUP. Opened on one of a multi-selection, every
+    // look setting changed here is copied onto the other selected boxes (_dsGearGroupApply).
+    const group = _dsGearGroup(key, i);
+    const _look0 = _dsGearLook(a), _hist0 = undoStack.length;
     const pop = document.createElement('div'); pop.id = 'dsGearPopup';
     // WIDER AND SHORTER. At 236 every section was a header line above its controls,
     // which ran the popup the full height of the screen and still scrolled — and a
@@ -28372,11 +29670,12 @@ function _dsOpenGearPopup(key, i, cx, cy) {
     pop.onmousedown = (e) => e.stopPropagation();
     // Reopen at the SAME spot (cx+10 / cy-10 are undone here so the panel
     // doesn't creep across the screen on every settings change).
-    const refresh = () => { if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsSyncToolbar(); _dsRenderCenter(); _dsRenderRail(); _dsOpenGearPopup(key, i, parseFloat(pop.style.left) - 10, parseFloat(pop.style.top) + 10); };
+    const refresh = () => { _dsGearGroupApply(a, _look0, group, key, _hist0); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsSyncToolbar(); _dsRenderCenter(); _dsRenderRail(); _dsOpenGearPopup(key, i, parseFloat(pop.style.left) - 10, parseFloat(pop.style.top) + 10); };
     // Drag-to-move header.
     const head = document.createElement('div');
     head.style.cssText = 'display:flex; align-items:center; justify-content:space-between; cursor:move; margin-bottom:8px; user-select:none;';
-    head.innerHTML = '<span style="font-weight:700; font-size:var(--fs-60); letter-spacing:0.4px; text-transform:uppercase;">' + (isImg ? 'Image box' : (a.shape === 'ellipse' ? 'Ellipse' : 'Rectangle')) + ' settings</span>';
+    head.innerHTML = '<span style="font-weight:700; font-size:var(--fs-60); letter-spacing:0.4px; text-transform:uppercase;">' + (group.length > 1 ? group.length + ' boxes selected' : (isImg ? 'Image box' : (a.shape === 'ellipse' ? 'Ellipse' : 'Rectangle')) + ' settings') + '</span>';
+    if (group.length > 1) head.title = 'Corners, caption, fit, shadow, fill and stroke changed here apply to all ' + group.length + ' selected boxes; the picture and caption text stay each box\u2019s own';
     const closeB = document.createElement('button'); closeB.textContent = '\u00d7'; closeB.style.cssText = 'border:none; background:transparent; color:var(--text-muted); font-size:14px; cursor:pointer; padding:0 2px;';
     closeB.title = 'Close';
     closeB.onclick = () => _dsCloseGearPopup();
@@ -28624,6 +29923,20 @@ function _dsOpenGearPopup(key, i, cx, cy) {
         capF.style.cssText = 'flex:1; height:22px; font-size:var(--fs-60); background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:var(--r-4);';
         capF.onchange = () => { a.capFont = capF.value; refresh(); };
         cr2.appendChild(capF);
+        // Caption size (20.02), in points, default 9; one step is half a point. On the Font
+        // row, so the popup stays square (test_gear_code_copy).
+        const csz = cr2; cr2.title = 'Caption typeface and size in points';
+        const cur = () => (a.capPt > 0 ? a.capPt : CAP_PT_DEFAULT);
+        const setPt = (n) => { if (!(n > 0)) return; const v = Math.max(5, Math.min(24, Math.round(n * 2) / 2)); if (v === CAP_PT_DEFAULT) delete a.capPt; else a.capPt = v; if (typeof pushHistory === 'function') pushHistory(); refresh(); };
+        const sDn = document.createElement('button'); sDn.className = 'action-btn btn-secondary'; sDn.textContent = '\u2212'; sDn.title = 'Smaller caption'; sDn.setAttribute('data-cap-size', 'down'); sDn.style.cssText = 'width:22px; height:22px; min-width:22px; padding:0; margin-left:6px;';
+        const sIn = document.createElement('input'); sIn.type = 'number'; sIn.min = '5'; sIn.max = '24'; sIn.step = '0.5'; sIn.value = cur(); sIn.setAttribute('data-cap-size', 'value');
+        sIn.title = 'Caption size in points';
+        sIn.style.cssText = 'width:40px; height:22px; margin-left:4px; text-align:center; font-size:var(--fs-65); background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:var(--r-4); padding:0 2px;';
+        sIn.onchange = () => setPt(parseFloat(sIn.value));
+        const sUp = document.createElement('button'); sUp.className = 'action-btn btn-secondary'; sUp.textContent = '+'; sUp.title = 'Bigger caption'; sUp.setAttribute('data-cap-size', 'up'); sUp.style.cssText = 'width:22px; height:22px; min-width:22px; padding:0;';
+        sDn.onclick = () => setPt(cur() - 0.5); sUp.onclick = () => setPt(cur() + 0.5);
+        const sU = document.createElement('span'); sU.textContent = 'pt'; sU.style.cssText = 'color:var(--text-muted); margin-left:4px;';
+        csz.appendChild(sDn); csz.appendChild(sIn); csz.appendChild(sUp); csz.appendChild(sU);
     }
     // How-to.
     pop.appendChild(_dsHowToDot('Scroll to zoom, drag inside to pan, move it by the grip at top-left. Double-click the caption to edit it.'));
@@ -28699,7 +30012,9 @@ function _dsAnnCaptionInto(page, box, a, key, i, w, hh) {
     const fam = _fontCss(a.capFont, 'serif');
     const byFile = a.capSource === 'filename';
     cap.textContent = _dsResolveCaptionText(a);
-    cap.style.cssText = 'position:absolute; left:' + ((a.x || 0) * w) + 'px; top:' + ((a.y || 0) * hh + bh + 4) + 'px; width:' + bw + 'px; text-align:' + align + '; font-size:' + Math.max(8, 0.0165 * hh) + 'px; font-style:italic; color:' + _dsDisplayInk('#8a8a8a', key) + '; font-family:' + fam + '; cursor:' + (byFile ? 'default' : 'text') + '; z-index:20; white-space:pre-wrap;font-kerning:none;';
+    const capBase = a.capPt > 0 ? Math.max(5, a.capPt / 540 * hh) : Math.max(8, 0.0165 * hh);
+    const capPx = byFile ? _capCodeFitPx(cap.textContent, capBase, bw, fam) : capBase;
+    cap.style.cssText = 'position:absolute; left:' + ((a.x || 0) * w) + 'px; top:' + ((a.y || 0) * hh + bh + 4) + 'px; width:' + bw + 'px; text-align:' + align + '; font-size:' + capPx + 'px; font-style:italic;' + (byFile ? ' white-space:nowrap; display:flex; justify-content:' + (align === 'left' ? 'flex-start' : align === 'right' ? 'flex-end' : 'center') + ';' : '') + ' color:' + _dsDisplayInk('#8a8a8a', key) + '; font-family:' + fam + '; cursor:' + (byFile ? 'default' : 'text') + '; z-index:20;' + (byFile ? 'font-kerning:none;' : ' white-space:pre-wrap;font-kerning:none;');
     cap.title = byFile ? 'Caption follows the image\u2019s file name \u2014 change it in the gear popup\u2019s Caption section' : 'Double-click to edit the caption';
     if (byFile) { page.appendChild(cap); return; }
     cap.ondblclick = (e) => {
@@ -29548,6 +30863,9 @@ function _layoutRichLines(t, boxWpx, PH, measure) {
             cur.tokens.push({ text: txt, r: tok.r, x: cur.w, w: w, fs: st.fs, heavy: st.heavy, ital: st.ital });
             cur.w += w; cur.fs = Math.max(cur.fs, st.fs);
         });
+        // The last line of a paragraph (20.01): justify leaves it alone, as the editor's
+        // CSS does (text-align-last), not only the last line of the whole box.
+        cur.paraEnd = true;
         lines.push(cur);
     });
     return lines;
@@ -29589,7 +30907,7 @@ function _drawRichTextPdf(doc, t, x, y, w, PH) {
         // legacy plain-text path used for body-copy paragraphs. The LAST
         // line of the block is left as-is (standard typographic convention;
         // also avoids ugly single-word stretching on a short final line).
-        if (justify && li < lines.length - 1 && line.tokens.length > 1) {
+        if (justify && li < lines.length - 1 && !(line.paraEnd && t.align !== 'justify-all') && line.tokens.length > 1) {
             const slack = w - line.w;
             const gaps = line.tokens.filter(tk => !tk.text.trim());
             if (slack > 0.5 && gaps.length) {
@@ -30369,12 +31687,28 @@ function _dsAddFooter(page, w, hh, desc) {
     } catch (e) {}
 }
 function _dsAddStamp(page, w, hh, desc) {
-    if (!desc || desc.kind !== 'spec') return;
-    const st = _approvalOf(desc._ovKey || (desc.row && desc.row.id) || '');
-    if (!st) return;
+    // One stamp, or a row of them for a set approved piece by piece (20.08): the screen
+    // shows what _drawApprovalStamps prints, right to left.
+    const stamps = _approvalStamps(desc);
+    if (stamps.length > 1) {
+        const row = document.createElement('div');
+        row.className = 'ds-approval-stamps';
+        row.style.cssText = 'position:absolute; top:' + Math.round(hh * 0.012) + 'px; right:' + Math.round(w * 0.043) + 'px; display:flex; flex-direction:row-reverse; gap:' + Math.max(3, Math.round(w * 0.006)) + 'px; z-index:20; pointer-events:none;';
+        stamps.forEach(t => {
+            const s = document.createElement('div');
+            const col = t.st === 'approved' ? '#1a7f37' : '#c0392b';
+            s.textContent = t.txt;
+            s.style.cssText = "font-family:'Druk','Arial Narrow',Arial,sans-serif; font-weight:700; font-size:" + Math.max(7, Math.round(hh * 0.02)) + 'px; letter-spacing:0.04em; color:' + col + '; border:1.5px solid ' + col + '; background:#fff; border-radius:var(--r-4); padding:' + Math.max(1, Math.round(hh * 0.006)) + 'px ' + Math.max(3, Math.round(w * 0.008)) + 'px;';
+            row.appendChild(s);
+        });
+        page.appendChild(row);
+        return;
+    }
+    if (!stamps.length) return;
+    const st = stamps[0].st;
     const s = document.createElement('div');
     const approved = st === 'approved';
-    s.textContent = approved ? 'APPROVED' : 'PENDING APPROVAL';
+    s.textContent = stamps[0].txt;
     const col = approved ? '#1a7f37' : '#c0392b';
     s.style.cssText = 'position:absolute; top:' + Math.round(hh * 0.012) + 'px; right:' + Math.round(w * 0.043) + "px; font-family:'Druk','Arial Narrow',Arial,sans-serif; font-weight:700; font-size:" + Math.max(7, Math.round(hh * 0.024)) + 'px; letter-spacing:0.04em; color:' + col + '; border:1.5px solid ' + col + '; background:#fff; padding:2px 7px; border-radius:var(--r-4); z-index:6;';
     page.appendChild(s);
@@ -33634,7 +34968,7 @@ function openDashMenu(btn, which) {
             { label: 'Links…', hint: 'linked pictures: update, relink', onClick: () => openLinksPanel() },
         ],
         import: [
-            { label: 'Import CSV…', hint: 'a database exported from FRAME', onClick: () => { const f = document.getElementById('csvImport'); if (f) f.click(); } },
+            { label: 'Import CSV…', hint: 'a database exported from Farmhand', onClick: () => { const f = document.getElementById('csvImport'); if (f) f.click(); } },
             { label: 'Bulk Images…', hint: 'replace artwork, matched by name', onClick: () => openBulkReplaceModal() },
             { label: 'New items from photos…', hint: 'one new item per picture', onClick: () => dashNewFromPhotos() },
         ],
@@ -34067,7 +35401,8 @@ function _fpAddCodesBar(desc) {
 // the selection, but from the floorplan there is no selection to be next to).
 function _fpAddCodes(catKey, n, opts) {
     const info = _catCodeInfo(catKey);
-    const code = _nextPlacementCode(info.prefix);
+    const ctx = (opts && opts.ctx) || null;
+    const code = _nextPlacementCode(info.prefix, ctx);
     const k = Math.max(1, Math.min(12, n || 1));
     const letters = (typeof _setLetters === 'function') ? _setLetters(k) : 'ABCDEFGHIJKL'.slice(0, k).split('');
     const _f = unitFactor('in', dashUnit);
@@ -34079,6 +35414,8 @@ function _fpAddCodes(catKey, n, opts) {
         row.category = catKey || '';
         row.qty = 0;
         row.product = info.product;
+        if (ctx && typeof ctx.level === 'number') row.level = ctx.level;   // 20.30
+        if (ctx && String(ctx.zone || '').trim()) row.zone = String(ctx.zone).trim();
         // A flat graphic gets what the product dropdown seeds for one: the 2" bleed and
         // its application wording.
         if (_isFlatGraphic(row.product)) {
@@ -34677,11 +36014,11 @@ function _placementDone(wall) {
 // A new code of a type, as a single or a set. With `hang`, it goes straight onto its own
 // wall (adopting an untouched default wall first, like the floorplan mockup does).
 // Returns { code, wall }.
-function _placementMint(catKey, setValue, hang) {
+function _placementMint(catKey, setValue, hang, ctx) {
     const choice = _placementSetChoices().find(c => c.value === setValue) || _placementSetChoices()[0];
     // Found by a marker, never by the returned code: the settle inside the add can
     // renumber it (the trap dashNewFromPhotos hit in 19.26).
-    _fpAddCodes(catKey, choice.n, { quiet: true, mark: { _mintMark: 1 } });
+    _fpAddCodes(catKey, choice.n, { quiet: true, mark: { _mintMark: 1 }, ctx: ctx || null });
     const rows = dashProjectData.filter(r => r && r._mintMark);
     rows.forEach(r => { delete r._mintMark; });
     const code = rows.length ? _artGroupKey(rows[0].id) : '';
@@ -34817,13 +36154,29 @@ function _askPlacement(mode, opts) {
         const sSel = mkSel(_placementSetChoices(), 'n1'); sSel.setAttribute('data-ask', 'set');
         s2.appendChild(field('Category', cSel));
         s2.appendChild(field('Frame set', sSel));
+        // 20.30: the pattern's level and sector, started from the selected piece.
+        const need = _codePatternNeeds();
+        const selRow = (typeof dashSelectedRowIndex === 'number' && dashProjectData) ? dashProjectData[dashSelectedRowIndex] : null;
+        let lSel = null, zIn = null;
+        if (need.level && (floorplanLevels || []).length > 1) {
+            lSel = mkSel((floorplanLevels || []).map((L, i) => ({ value: String(i), label: ((L && L.name) || ('Level ' + (i + 1))) + ' (' + _levelCode(i) + ')' })),
+                String((selRow && typeof selRow.level === 'number') ? selRow.level : 0));
+            lSel.setAttribute('data-ask', 'level');
+            s2.appendChild(field('Level', lSel));
+        }
+        if (need.zone) {
+            zIn = document.createElement('input'); zIn.type = 'text'; zIn.setAttribute('data-ask', 'zone');
+            zIn.value = (selRow && selRow.zone) || ''; zIn.placeholder = 'e.g. 16';
+            s2.appendChild(field(_codeZoneLabel(), zIn));
+        }
+        const ctxNow = () => ({ level: lSel ? (parseInt(lSel.value, 10) || 0) : ((selRow && typeof selRow.level === 'number') ? selRow.level : 0), zone: zIn ? zIn.value.trim() : '' });
         const go2 = btn(''); go2.setAttribute('data-ask', 'go-new');
         const sync2 = () => {
-            const code = _nextPlacementCode(_catCodeInfo(cSel.value).prefix);
+            const code = _nextPlacementCode(_catCodeInfo(cSel.value).prefix, ctxNow());
             go2.textContent = (wallMode ? 'Create ' + code + ' and its wall' : 'Create ' + code);
         };
-        cSel.onchange = sync2; sync2();
-        go2.onclick = () => { _fpAddType = cSel.value; finish({ kind: 'new', cat: cSel.value, set: sSel.value }); };
+        cSel.onchange = sync2; if (lSel) lSel.onchange = sync2; if (zIn) zIn.oninput = sync2; sync2();
+        go2.onclick = () => { _fpAddType = cSel.value; finish({ kind: 'new', cat: cSel.value, set: sSel.value, ctx: ctxNow() }); };
         s2.appendChild(go2);
 
         const row = document.createElement('div'); row.className = 'ask-actions';
@@ -34918,13 +36271,18 @@ function _codePrefixOrder() {
     return out;
 }
 // Prefix and placement number of ANY code, plain or catalogue: ART.12B, ART.01A.1, EGD-3.
+// 20.29: the number must END the placement. A client's level-first code (L3.ART.S16-10A) read
+// as prefix L, number 3, so every Level 3 piece was "L.3" and the rows, the Items list and the
+// deck sorted all the A pieces, then all the B pieces. A number followed by a separator and a
+// word (L3.ART, B2.EGD) is a level or zone, not a placement: such a code sorts naturally.
 function _codeSortParts(id) {
-    const m = /^([A-Za-z]+)[.\-_ ]?(\d+)/.exec(String(id || '').trim());
+    const m = /^([A-Za-z]+)[.\-_ ]?(\d+)(?!\d)(?![.\-_ ][A-Za-z]{2})/.exec(String(id || '').trim());
     return m ? { prefix: m[1], n: parseInt(m[2], 10) } : null;
 }
 function _codeRowKey(id, idx, cr, order, catOrd) {
     const sp = _codeSortParts(id);
-    if (!sp) return { rank: Infinity, prefix: '', n: 0, cat: 0, suf: '', idx: idx, ord: idx };
+    // 20.14: a code FRAME does not parse (a client's 1B.L3.ART-01) still sorts, naturally.
+    if (!sp) return { rank: Infinity, prefix: '', n: 0, cat: 0, suf: '', nat: String(id == null ? '' : id), idx: idx, ord: idx };
     const r = order.indexOf(sp.prefix);
     const isCat = !!(cr && cr[id]);
     const gk = _artGroupKey(id);
@@ -34935,8 +36293,13 @@ function _codeRowKey(id, idx, cr, order, catOrd) {
     return { rank: r < 0 ? 1000 : r, prefix: sp.prefix, n: sp.n, cat: isCat ? 1 : 0,
              suf: isCat ? '' : String(id).slice(gk.length).replace(/^[-_.\s]+/, ''), idx: idx, ord: ord };
 }
+// Natural order for codes with no house shape: 1B.L3.ART-02 before -10, digits before
+// letters (-35 before -EA). Codes that are equal ignoring case keep their order.
+function _codeNatCmp(x, y) { return String(x).localeCompare(String(y), 'en', { numeric: true, sensitivity: 'base' }); }
 function _codeKeyCmp(a, b) {
     if (a.rank !== b.rank) return a.rank < b.rank ? -1 : 1;
+    if ((a.empty | 0) !== (b.empty | 0)) return (a.empty | 0) - (b.empty | 0);
+    if (a.nat != null && b.nat != null) { const c = _codeNatCmp(a.nat, b.nat); if (c) return c; }
     if (a.prefix !== b.prefix) return a.prefix < b.prefix ? -1 : 1;
     if (a.n !== b.n) return a.n - b.n;
     if (a.cat !== b.cat) return a.cat - b.cat;
@@ -34983,13 +36346,12 @@ function _codesSortWalls() {
     const els = (typeof elevations !== 'undefined' && elevations) || [];
     if (els.length < 2) return false;
     const cr = _catalogueRowIds(), order = _codePrefixOrder();
-    const none = { rank: Infinity, prefix: '', n: 0, cat: 0, suf: '' };
+    const none = { rank: Infinity, prefix: '', n: 0, cat: 0, suf: '', empty: 1 };
     const keyed = els.map((e, i) => {
         let best = null;
         ((e && e.frames) || []).forEach(f => {
             if (!f || !f.id) return;
             const k = _codeRowKey(f.id, 0, cr, order);
-            if (k.rank === Infinity) return;
             if (!best || _codeKeyCmp(k, best) < 0) best = k;
         });
         const k = Object.assign({}, best || none, { idx: i, suf: '', cat: 0 });
@@ -35520,6 +36882,43 @@ function _codesCommitFormId(inputEl) {
     _codesCommitRowId(dashSelectedRowIndex, inputEl);
 }
 
+// ── RECODE A PROJECT TO ITS PATTERN (20.30) ───────────────────────────────────────
+// A project started on ART.1 codes moves to the client's pattern in one go: every house-
+// coded placement whose pieces have what the pattern needs (a Sector when it uses one)
+// takes the next pattern code, in code order, pieces keeping their letters (ART.11B ->
+// L3.ART.S24-07B). Walls named after the code, page settings and the rename log follow,
+// as for any rename. Placements still missing a sector are left and counted.
+// Returns { moved: [{from, to}], skipped: [keys] }.
+function _codePatternPlan() {
+    const out = { todo: [], skipped: [] };
+    if (!_codePatternParts(_codePattern())) return out;
+    const need = _codePatternNeeds();
+    _placementList().forEach(g => {
+        if (!_plainCodeParts(g.key)) return;   // already a client or catalogue code
+        const r0 = g.rows[0] || {};
+        const zone = String(r0.zone || '').trim();
+        if (need.zone && !zone) { out.skipped.push(g.key); return; }
+        out.todo.push({ key: g.key, prefix: _plainCodeParts(g.key).prefix, ctx: { level: typeof r0.level === 'number' ? r0.level : 0, zone: zone } });
+    });
+    return out;
+}
+function recodeToPattern(quiet) {
+    const plan = _codePatternPlan();
+    const moved = [];
+    plan.todo.forEach(t => {
+        const to = _nextPatternCode(t.prefix, t.ctx);
+        if (to && _fpRenameGroup(t.key, to, { quiet: true, force: true })) moved.push({ from: t.key, to: to });
+    });
+    if (moved.length) {
+        _codesSettle();
+        if (!quiet) {
+            _codesRefreshViews();
+            if (typeof pushHistory === 'function') pushHistory();
+            if (typeof scheduleAutosave === 'function') scheduleAutosave();
+        }
+    }
+    return { moved: moved, skipped: plan.skipped };
+}
 // ── RENAME A PLACEMENT ──────────────────────────────────────────────────────
 // Every piece of the placement keeps its suffix (ART.4A -> ART.9A), so a rename is one
 // gesture for a triptych, not three. The id is the identity everything reads: the
@@ -35949,7 +37348,18 @@ function _fpPanelCats(t) {
                 },
             });
         };
-        row.appendChild(sw); row.appendChild(lbI); row.appendChild(sbI); row.appendChild(rm);
+        // 20.30: the type's code prefix, per project (GLA where a client says GLA).
+        const pxI = document.createElement('input'); pxI.type = 'text'; pxI.value = _catCodeInfo(cc.key).prefix || ''; pxI.title = 'Code prefix for this type ({type} in the code pattern)';
+        pxI.setAttribute('data-cat-prefix', cc.key);
+        pxI.style.cssText = 'flex:0 0 44px; width:44px; height:24px; font-size:var(--fs-60); padding:0 4px; text-transform:uppercase; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:var(--r-4);';
+        pxI.onchange = () => {
+            const v = pxI.value.trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
+            if (!v || !/^[A-Z]/.test(v)) { pxI.value = _catCodeInfo(cc.key).prefix; return; }
+            const a = _artCatsEnsure(); if (a[ci]) { a[ci].prefix = v; if (!a[ci].product) a[ci].product = _catCodeInfo(cc.key).product; }
+            if (typeof pushHistory === 'function') pushHistory();
+            if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderTools();
+        };
+        row.appendChild(sw); row.appendChild(lbI); row.appendChild(pxI); row.appendChild(sbI); row.appendChild(rm);
         t.appendChild(row);
     });
     const addCat = document.createElement('button'); addCat.textContent = '+ Add category'; addCat.className = 'action-btn btn-secondary'; addCat.style.cssText = 'width:100%; height:26px; font-size:var(--fs-60); margin-bottom:4px;';
@@ -35960,7 +37370,84 @@ function _fpPanelCats(t) {
         if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderTools();
     };
     t.appendChild(addCat);
-
+    _codePatternPanelInto(t);
+}
+// ITEM CODES (20.30): the pattern, the word for {zone}, each level's code, a preview of the
+// next code, and the one-shot recode of house codes.
+function _codePatternPanelInto(t) {
+    const box = document.createElement('div'); box.className = 'code-pattern-panel';
+    box.style.cssText = 'margin-top:12px; padding-top:8px; border-top:1px solid var(--border-color);';
+    const hd = document.createElement('div'); hd.textContent = 'Item codes';
+    hd.style.cssText = 'font-size:var(--fs-60); font-weight:700; letter-spacing:0.4px; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px;';
+    box.appendChild(hd);
+    const inp = 'height:24px; font-size:var(--fs-60); padding:0 5px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:var(--r-4);';
+    const save = () => { if (typeof pushHistory === 'function') pushHistory(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderTools(); };
+    const pat = _codePattern();
+    const sel = document.createElement('select'); sel.setAttribute('data-code-pattern', 'preset');
+    sel.style.cssText = 'width:100%; margin-bottom:4px; ' + inp;
+    CODE_PATTERN_PRESETS.concat([{ v: '__custom', label: 'Custom\u2026' }]).forEach(p => {
+        const o = document.createElement('option'); o.value = p.v; o.textContent = p.label; sel.appendChild(o);
+    });
+    sel.value = CODE_PATTERN_PRESETS.some(p => p.v === pat) ? pat : '__custom';
+    const txt = document.createElement('input'); txt.type = 'text'; txt.value = pat; txt.placeholder = '{level}.{type}.S{zone}-{nn}';
+    txt.setAttribute('data-code-pattern', 'text');
+    txt.style.cssText = 'width:100%; margin-bottom:4px; font-family:var(--font-mono, monospace); ' + inp;
+    txt.style.display = sel.value === '__custom' ? '' : 'none';
+    const setPat = (v) => {
+        const clean = String(v || '').trim();
+        if (clean && !_codePatternParts(clean)) { _toast('A pattern needs a number', 'Add {n}, {nn} or {nnn} where the placement number goes.'); return; }
+        editorialContent.codePattern = clean;
+        save();
+    };
+    sel.onchange = () => { if (sel.value === '__custom') { txt.style.display = ''; txt.focus(); return; } setPat(sel.value); };
+    txt.onchange = () => setPat(txt.value);
+    box.appendChild(sel); box.appendChild(txt);
+    const need = _codePatternNeeds(pat);
+    if (need.zone) {
+        const zl = document.createElement('input'); zl.type = 'text'; zl.value = editorialContent.codeZoneLabel || ''; zl.placeholder = 'Sector';
+        zl.title = 'What the client calls {zone}: Sector, Zone, Area, Wing';
+        zl.setAttribute('data-code-pattern', 'zone-label');
+        zl.style.cssText = 'width:100%; margin-bottom:4px; ' + inp;
+        zl.onchange = () => { editorialContent.codeZoneLabel = zl.value.trim(); save(); };
+        box.appendChild(zl);
+    }
+    if (need.level) {
+        (floorplanLevels || []).forEach((L, i) => {
+            const row = document.createElement('div'); row.style.cssText = 'display:flex; align-items:center; gap:5px; margin-bottom:3px;';
+            const nm = document.createElement('span'); nm.textContent = (L && L.name) || ('Level ' + (i + 1));
+            nm.style.cssText = 'flex:1; min-width:0; font-size:var(--fs-60); color:var(--text-main); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;';
+            const ci = document.createElement('input'); ci.type = 'text'; ci.value = (L && L.code) || ''; ci.placeholder = _levelCode(i);
+            ci.setAttribute('data-level-code', String(i));
+            ci.style.cssText = 'flex:0 0 56px; width:56px; ' + inp;
+            ci.onchange = () => { if (!floorplanLevels[i]) return; const v = ci.value.trim(); if (v) floorplanLevels[i].code = v; else delete floorplanLevels[i].code; save(); };
+            row.appendChild(nm); row.appendChild(ci); box.appendChild(row);
+        });
+    }
+    if (pat) {
+        const nx = document.createElement('div'); nx.setAttribute('data-code-pattern', 'next');
+        nx.style.cssText = 'font-size:var(--fs-55); color:var(--text-muted); margin:2px 0 6px;';
+        const sample = _nextPlacementCode('ART', need.zone ? { zone: '1' } : null);
+        nx.textContent = 'Next new code looks like ' + sample + (need.zone ? ' (' + _codeZoneLabel() + ' 1)' : '');
+        box.appendChild(nx);
+        const plan = _codePatternPlan();
+        if (plan.todo.length || plan.skipped.length) {
+            const b = document.createElement('button'); b.className = 'action-btn btn-secondary'; b.setAttribute('data-code-pattern', 'recode');
+            b.style.cssText = 'width:100%; height:26px; font-size:var(--fs-60);';
+            b.textContent = plan.todo.length
+                ? 'Recode ' + plan.todo.length + ' placement' + (plan.todo.length === 1 ? '' : 's') + ' to this pattern'
+                : plan.skipped.length + (plan.skipped.length === 1 ? ' placement needs a ' : ' placements need a ') + _codeZoneLabel() + ' to recode';
+            b.disabled = !plan.todo.length;
+            b.title = plan.skipped.length ? (plan.skipped.length + ' more need a ' + _codeZoneLabel() + ' first: ' + plan.skipped.slice(0, 8).join(', ') + (plan.skipped.length > 8 ? '\u2026' : '')) : '';
+            b.onclick = () => {
+                const res = recodeToPattern();
+                _toast(res.moved.length + ' placement' + (res.moved.length === 1 ? '' : 's') + ' recoded',
+                    res.skipped.length ? (res.skipped.length + ' still need a ' + _codeZoneLabel() + ' (set it on the item, then recode again).') : 'Renames are in the code log.');
+                _dsRenderTools();
+            };
+            box.appendChild(b);
+        }
+    }
+    t.appendChild(box);
 }
 function _fpPanelPlan(t, desc) {
     _fpPlanOrderInto(t);
@@ -36236,6 +37723,7 @@ function _dsRenderTools() {
             bnote.appendChild(_dsHelpDot('A full-page wall elevation before this group\u2019s spec pages. '
                 + 'Measurements come from the Elevations tab; the notes below print on this page and on every install-guide page.'));
             head.appendChild(bnote);
+            head.appendChild(_wallFinishPrintToggle(desc));
             t.appendChild(head);
             const igBodyB = _dsSection(t, 'Elevation measurements & notes', 'installguide', true);
             // PRESENTATION LAYOUT, then PAGE APPEARANCE, then the measurements.
@@ -36269,6 +37757,7 @@ function _dsRenderTools() {
             // one card's options — every Group A/B/C arrangement honours it.
             _dsDualUnitInto(head);
             t.appendChild(head);
+            _dsPieceTextInto(t, desc);   // 20.27: notes and artist / title as page text boxes
 
             // THE GROUP CARDS ARE GONE, for the reason the per-piece ones went: four
             // rendered demos under a picker invite browsing arrangements rather than
@@ -36392,6 +37881,7 @@ function _dsRenderTools() {
             // reachable from whichever mode you happen to be in.
             _dsDualUnitInto(head);
             t.appendChild(head);
+            _dsPieceTextInto(t, desc);   // 20.27: notes and artist / title as page text boxes
 
             // THE PICTURE CARDS ARE GONE FROM THE PER-PIECE PANEL. They were rendered
             // page demos under “Click to switch”, and once the SHOW ON PAGE ticks
@@ -39225,6 +40715,7 @@ function _drawSharedSpecColumn(doc, o) {
         endY = Math.max(endY, y - fit.lineH + 3);
     });
     doc.setTextColor(20, 20, 20);
+    _noteSpecEnd(doc, members[0] && members[0].id, x, endY, w);   // 20.27: piece text boxes start here
     return endY;
 }
 // Frame corner + profile pairs for the set, laid out RIGHT to left so the strip
@@ -40422,6 +41913,19 @@ function _dsPageNotesInto(body, desc, wall, save) {
     };
     ta.onchange = commit; ta.onblur = commit;
     body.appendChild(ta);
+    // 20.28: this wall's hang order and typical gap, printed as notes on its page.
+    const mkField = (lbl, attr, val, ph, onSet) => {
+        const row = document.createElement('label'); row.className = 'ds-pgnotes-row ds-pgnotes-field';
+        const t = document.createElement('span'); t.textContent = lbl; t.style.flex = 'none';
+        const inp = document.createElement('input'); inp.type = 'text'; inp.setAttribute(attr, ''); inp.value = val; inp.placeholder = ph;
+        inp.style.cssText = 'flex:1; min-width:0;';
+        inp.onchange = () => { onSet(String(inp.value || '').trim()); save(); };
+        row.appendChild(t); row.appendChild(inp); body.appendChild(row);
+    };
+    mkField('Install sequence', 'data-wall-seq', wall.installSeq || '', 'B, C, A, D', v => { if (v) wall.installSeq = v; else delete wall.installSeq; });
+    const _gIn = parseFloat(wall.typGapIn);
+    mkField('Typical gap (' + elevUnit + ')', 'data-wall-gap', (isFinite(_gIn) && _gIn > 0) ? String(_elevHeightInUnit(_gIn)) : '', elevUnit === 'in' ? '3' : (elevUnit === 'cm' ? '7.5' : '75'),
+        v => { const n = parseFloat(v); if (isFinite(n) && n > 0) wall.typGapIn = n * unitFactor(elevUnit, 'in'); else delete wall.typGapIn; });
 }
 // Width and type-size sliders for the note column. Both trade off directly against
 // how big the elevation can be, and the right compromise depends on the wall and how
@@ -40647,7 +42151,7 @@ function _jumpEntries() {
         if (_catPlaces().length) out.push({ group: 'Views', title: 'Catalogue overview', sub: 'every placement and option', go: [{ kind: 'run', label: 'Open', run: openCatalogueOverview }], hay: 'catalogue overview options images missing' });
     } catch (e) {}
     // 19.95: Production is a window, not a view, but it is reached from anywhere here.
-    PROD_TABS.forEach(t => out.push({ group: 'Views', title: 'Production: ' + t[1], sub: t[2], go: [{ kind: 'run', label: 'Open', run: () => openProduction(t[0]) }], hay: 'production ' + t[1] + ' ' + t[2] + (t[0] === 'pricing' ? ' budget quote excel salesforce' : t[0] === 'shipping' ? ' commercial invoice customs border hs code' : '') }));
+    PROD_TABS.forEach(t => out.push({ group: 'Views', title: 'Production: ' + t[1], sub: t[2], go: [{ kind: 'run', label: 'Open', run: () => openProduction(t[0]) }], hay: 'production ' + t[1] + ' ' + t[2] + (t[0] === 'pricing' ? ' budget quote excel salesforce' : t[0] === 'shipping' ? ' commercial invoice customs border hs code' : t[0] === 'brand' ? ' residence inn springhill suites marriott ford retail signature email template standard items' : '') }));
     [['dashboard', '1  Frame Dashboard'], ['elevation', '2  Elevation'], ['deck', '3  Deck']].forEach(v => {
         out.push({ group: 'Views', title: v[1], sub: 'view', go: [{ kind: 'view', label: 'Open', view: v[0] }], hay: v[1] + ' view tab' });
     });
@@ -41495,7 +42999,27 @@ function _installNoteLines(elev) {
         if (t) out.push(t);
     });
     _installNoteList().forEach(r => { if (r && r.on && !_installNoteOffHere(elev, 'c:' + r.id)) { const t = (r.text || '').trim(); if (t) out.push(t); } });
+    _installWallSetOutExtras(elev).forEach(t => out.push(t));
     _installWallNoteLines(elev).forEach(t => out.push(t));
+    return out;
+}
+// HANG ORDER AND TYPICAL GAP (20.28). The studio's install guides that worked best said
+// which piece goes up first ("Install sequence: B, C, A, D", centre out) and the gap that
+// holds unless a dimension says otherwise. Per wall: `elev.installSeq` (letters as typed)
+// and `elev.typGapIn` (inches). Both print as this wall's notes; neither is a drawing input.
+function _installSeqOf(elev) {
+    return String((elev && elev.installSeq) || '').toUpperCase().split(/[\s,;>\u2013\u2192]+/).map(s => s.trim()).filter(Boolean).join(', ');
+}
+function _installWallSetOutExtras(elev) {
+    const out = [];
+    if (!elev) return out;
+    const seq = _installSeqOf(elev);
+    if (seq) out.push('Install sequence: ' + seq + '.');
+    const g = parseFloat(elev.typGapIn);
+    if (isFinite(g) && g > 0) {
+        const v = g * unitFactor('in', elevUnit);
+        out.push('Typical spacing between frames is ' + elevFmt(v) + unitSuffix() + _elevDualPart(v) + ' unless dimensioned otherwise.');
+    }
     return out;
 }
 
@@ -41505,7 +43029,13 @@ function _installNoteLines(elev) {
 function _installNoteSetOut(elev) {
     const out = [];
     const aff = FRAME_INSTALL_NOTES.find(n => n.key === 'aff');
-    if (_elevHangOn(elev)) { const t = aff ? _installNoteText(aff) : ''; if (t) out.push(t); }
+    const dat = _elevDatum(elev);
+    if (_elevHangOn(elev) && dat) {
+        out.push('Heights on this wall are measured from the ' + dat.name.toLowerCase() + ' (' + _elevAffLabel(dat.hIn * unitFactor('in', elevUnit))
+            + '), not the floor. Align the centre of all artwork ' + _elevHangLabel(elev, getHangHeight()).replace(/ ABOVE .*$/, '')
+            + ' above the ' + dat.name.toLowerCase() + '. Do not align to the top or bottom of the frame.');
+    }
+    else if (_elevHangOn(elev)) { const t = aff ? _installNoteText(aff) : ''; if (t) out.push(t); }
     else out.push('Set the height from the dimensions shown on this elevation, not from a standard hang height.');
     const cls = _elevBlockCLs(elev);
     cls.forEach(b => {
@@ -43203,7 +44733,18 @@ async function _drawFlatGraphicSpecPage(doc, logos, pageNum, meta, r, ctx) {
 // there threw on every breaker render while the file parsed perfectly well.
 const IG_LEG_ROW_H = 8.6, IG_LEG_GAP = 4, IG_LEG_LETTER_W = 13, IG_LEG_TOP_GAP = 10;
 const IG_LEG_FS = 7, IG_LEG_VAL_FS_MIN = 5;
-const IG_LEG_LABELS = { item: 'Item', dims: 'Overall dimensions', art: 'Art dimensions', code: 'Image code' };
+const IG_LEG_LABELS = { item: 'Item', dims: 'Overall dimensions', art: 'Art dimensions', weight: 'Weight', code: 'Image code' };
+// WEIGHT ON THE INSTALL PAGE (20.28). The installer picks fixings by weight; the studio's
+// best install guides gave it per piece. A legend line appears on a wall where any piece
+// has a weight (row `weightLbs`, pounds), so a wall with none prints as before.
+function _igLegWeightText(rr) {
+    const w = parseFloat(rr && rr.weightLbs);
+    if (!(isFinite(w) && w > 0)) return '\u2014';
+    return _num1(w) + ' lb' + (_specDualUnit() ? ' (' + _num1(w * 0.45359237) + ' kg)' : '');
+}
+function _igLegHasWeight(frames, lookupRow) {
+    return (frames || []).some(f => f && (parseFloat(((lookupRow && lookupRow(f.id)) || {}).weightLbs) > 0));
+}
 // THE LEGEND NAMES THE ITEM WHEN THE LETTER DOES NOT (19.68). Wall letters follow
 // position, so on a wall holding ART.9, ART.8B and ART.8A left to right the legend's A
 // is ART.9 while ART.8's own spec page calls another piece A. An installer checking one
@@ -43228,7 +44769,7 @@ function _igLegVals(rr) {
     // from the five other places that print it.
     const _op = (typeof _rowOpeningAndPrint === 'function') ? _rowOpeningAndPrint(rr) : null;
     const art = _op ? _igLegDimText(_op.openW, _op.openH) : '\u2014';
-    return { item: String(rr.id || '').trim() || '\u2014', dims: dims, art: art, code: (rr.imageCode || '').trim() || '\u2014' };
+    return { item: String(rr.id || '').trim() || '\u2014', dims: dims, art: art, weight: _igLegWeightText(rr), code: (rr.imageCode || '').trim() || '\u2014' };
 }
 // { stacked, valFs } for one line: stacked when label + gap + value overruns tw.
 function _igLegLineFit(doc, label, value, tw) {
@@ -43517,6 +45058,11 @@ async function _drawInstallGuidePage(doc, logos, pageNum, meta, arg, ctx) {
     // grey under ELEVATION DETAIL, under a heading that already starts with the same code
     // in Druk; the letter legend carries it too. A per-piece install page keeps its code.
     const _igCodeId = isElev ? '' : ((arg && arg.id) || '');
+    // WALL FINISH (20.25): an elevation page has no code line, so the wall's finish takes
+    // that slot ("WALL: WOOD · BLUE WD-11"). Same face, same place, same clearance.
+    // 20.40: one deck-wide switch hides it on every page without losing what was typed.
+    const _igWallTxt = (isElev && _wallFinishPrints(elev)) ? _wallFinishText(elev) : '';
+    const _igLine3 = _igCodeId || _igWallTxt;
     // The title block's real right edge, measured in the faces it prints in. Anything
     // starting right of this can rise to the top margin without touching it.
     let _igTitleRight = SR.R;
@@ -43531,7 +45077,7 @@ async function _drawInstallGuidePage(doc, logos, pageNum, meta, arg, ctx) {
         const _ss = _subtitleStyleFor();
         doc.setFont(_font(_ss.font), _pdfTitleStyle(_ss.font)); doc.setFontSize(_ss.size);
         w = Math.max(w, doc.getTextWidth(_igSub));
-        if (_igCodeId) { const _cs = _specCodeStyle(); doc.setFont(_font(_cs.font), _pdfFontStyle(_cs.font)); doc.setFontSize(Math.min(_cs.size, 13)); w = Math.max(w, doc.getTextWidth(_igCodeId + '')); }
+        if (_igLine3) { const _cs = _specCodeStyle(); doc.setFont(_font(_cs.font), _pdfFontStyle(_cs.font)); doc.setFontSize(Math.min(_cs.size, 13)); w = Math.max(w, doc.getTextWidth(_igLine3 + '')); }
         _igTitleRight = M + w;
     } catch (e) { _igTitleRight = SR.R; }
     // Where a drawing placed at `left` may start. Beside the title it gets the whole
@@ -43553,7 +45099,7 @@ async function _drawInstallGuidePage(doc, logos, pageNum, meta, arg, ctx) {
         if (clearW > 0) { const c = _igFit(asp, clearW, yB - SR.T); if (c[1] > under[1]) return c; }
         return under;
     };
-    const _igLegTop = _igBand.sub + _subtitleClear() + (_igCodeId ? 10 : 0) + IG_LEG_TOP_GAP;
+    const _igLegTop = _igBand.sub + _subtitleClear() + (_igLine3 ? 10 : 0) + IG_LEG_TOP_GAP;
     // FULL WIDTH: the notes sit in the title band, right of the heading, right-aligned to
     // the safety edge. A note set taller than the band pushes the drawing down rather than
     // print over it. A heading too long to leave room puts them under it, on the left.
@@ -43587,6 +45133,7 @@ async function _drawInstallGuidePage(doc, logos, pageNum, meta, arg, ctx) {
         _igLegItem ? 'item' : null,
         _igNoteCfg.legendDims !== false ? 'dims' : null,
         _igNoteCfg.legendArt ? 'art' : null,
+        _igLegHasWeight(activeFrames, lookupRow) ? 'weight' : null,
         _igNoteCfg.legendCode !== false ? 'code' : null
     ].filter(Boolean);
     const _igLegendOn = !_igWide && !!(_igNoteCfg.legend && activeFrames.length);   // full width: no legend column
@@ -43619,7 +45166,7 @@ async function _drawInstallGuidePage(doc, logos, pageNum, meta, arg, ctx) {
     // column cannot describe the placement differently.
     // An ALTERNATE arrangement says so in place of ELEVATION DETAIL (`_catBreakerSub`).
     doc.text(_igSub, M, _igBand.sub);
-    const codeId = _igCodeId;
+    const codeId = _igLine3;
     if (codeId) { const _cs = _specCodeStyle(); const _crgb = _annHexToRgb(_cs.color); doc.setFont(_font(_cs.font), _pdfFontStyle(_cs.font)); doc.setFontSize(Math.min(_cs.size, 13)); doc.setTextColor(_crgb.r, _crgb.g, _crgb.b); doc.text(codeId, M, _igBand.sub + _subtitleClear() + 10); }
 
     try {
@@ -43792,6 +45339,7 @@ async function _drawInstallGuidePage(doc, logos, pageNum, meta, arg, ctx) {
                     _igLegItem ? 'item' : null,
                     cfg.legendDims !== false ? 'dims' : null,
                     cfg.legendArt ? 'art' : null,
+                    _igLegHasWeight(activeFrames, lookupRow) ? 'weight' : null,
                     cfg.legendCode !== false ? 'code' : null
                 ].filter(Boolean);
                 const drawLegendBlocks = (lx, topY, blockW) => {
@@ -44054,7 +45602,10 @@ async function _drawInstallGuidePage(doc, logos, pageNum, meta, arg, ctx) {
                 const centerAFF = toIn(hangFrame.y) + toIn(hangFrame.h) / 2;
                 const affX = PXf(er.wallRightFrac) + 12;
                 doc.setLineDashPattern([3, 2], 0);
-                doc.line(affX, PYf(cyFrac), affX, PYf(floorFrac));                                  // AFF
+                const _fbDat = _elevDatum(elev);                                                    // 20.28
+                const _fbDatIn = _fbDat ? Math.min(centerAFF, _fbDat.hIn) : 0;
+                const _fbFromFrac = (padIn + wallHin - _fbDatIn) / er.hIn;
+                doc.line(affX, PYf(cyFrac), affX, PYf(_fbFromFrac));                                // AFF, or from the datum
                 if (dimFrame) {                                                                     // single frame: full CL/EQ
                     const cxFrac = er.wallLeftFrac + (toIn(dimFrame.x) + toIn(dimFrame.w) / 2) / er.wIn;
                     const fLeftFrac = er.wallLeftFrac + toIn(dimFrame.x) / er.wIn;
@@ -44071,7 +45622,8 @@ async function _drawInstallGuidePage(doc, logos, pageNum, meta, arg, ctx) {
                     doc.setLineDashPattern([], 0);
                 }
                 doc.setFont(_font('serif'), 'normal'); doc.setFontSize(9.5);
-                doc.text(Math.round(centerAFF * 2.54) + 'cm/' + Math.round(centerAFF) + '" AFF', affX + 4, (PYf(cyFrac) + PYf(floorFrac)) / 2);
+                const _fbV = centerAFF - _fbDatIn;
+                doc.text(Math.round(_fbV * 2.54) + 'cm/' + Math.round(_fbV) + '"' + (_fbDat ? ' ABOVE ' + _fbDat.name : ' AFF'), affX + 4, (PYf(cyFrac) + PYf(_fbFromFrac)) / 2);
             }
         } else {
             doc.setFont(_font('serif'), 'italic'); doc.setFontSize(10); doc.setTextColor(150, 150, 150);
@@ -44722,6 +46274,7 @@ async function _drawSpecPageTemplate(doc, logos, pageNum, meta, r, tplKey, ctx) 
             if (de > ds) { doc.setLineDashPattern([0.5, 1.5], 0); doc.setDrawColor(160, 160, 160); doc.setLineWidth(0.5); doc.line(ds, sy - 2, de, sy - 2); doc.setLineDashPattern([], 0); }
             sy += _lead;
         });
+        _noteSpecEnd(doc, r && r.id, sx, sy - _lead + 3, sw);   // 20.27: piece text boxes start here
     }
 
     // — Elevation (wall thumbnail) —
@@ -45006,18 +46559,44 @@ function _softShadowDataUrl(wPt, hPt, ell) {
         _shadowCache[key] = out; return out;
     } catch (e) { return null; }
 }
+const CAP_CODE_MIN_PT = 6;
+const CAP_PT_DEFAULT = 9;   // a shape's caption, points on the 540pt page; `a.capPt` overrides (20.02)
+// The screen half of the same rule: the size (px) an image-code caption is drawn at so it
+// fits `boxW`, from `basePx` down to the same floor as the PDF, measured in the caption face.
+function _capCodeFitPx(text, basePx, boxW, fam) {
+    let px = basePx;
+    try {
+        const cx = _richMeasureCtx(); if (!cx) return px;
+        const floor = Math.min(basePx, basePx * CAP_CODE_MIN_PT / CAP_PT_DEFAULT);
+        cx.font = 'italic ' + px + 'px ' + fam;
+        while (px > floor && cx.measureText(text).width > boxW) { px -= basePx / 18; cx.font = 'italic ' + px + 'px ' + fam; }
+    } catch (e) {}
+    return px;
+}
 function _drawAnnCaption(doc, a, x, y, pw, ph) {
     const capText = _dsResolveCaptionText(a);
     if (!a.showCaption || !capText.trim()) return;
     try {
-        doc.setFont(_font(_fontToken(a.capFont, 'serif')), 'italic'); doc.setFontSize(9); doc.setTextColor(138, 138, 138);
+        const fs0 = a.capPt > 0 ? a.capPt : CAP_PT_DEFAULT;
+        doc.setFont(_font(_fontToken(a.capFont, 'serif')), 'italic'); doc.setFontSize(fs0); doc.setTextColor(138, 138, 138);
         const align = a.capAlign || 'center';
         let tx = x; if (align === 'center') tx = x + pw / 2; else if (align === 'right') tx = x + pw;
+        // AN IMAGE CODE IS NEVER BROKEN (20.01): it has no spaces, so splitTextToSize cut it
+        // mid-code ("DMM.010.00"). One line, stepped down to fit the box, as on screen.
+        if (a.capSource === 'filename') {
+            const t1 = capText.trim(); let fs = fs0;
+            const floor = Math.min(fs0, CAP_CODE_MIN_PT);
+            while (fs > floor && doc.getTextWidth(t1) > pw) { fs -= 0.5; doc.setFontSize(fs); }
+            doc.text(t1, tx, y + ph + 3 + fs0, { align: align });
+            return;
+        }
         const lines = doc.splitTextToSize(capText.trim(), pw);
-        doc.text(lines, tx, y + ph + 12, { align: align, maxWidth: pw });
+        doc.text(lines, tx, y + ph + 3 + fs0, { align: align, maxWidth: pw });
     } catch (e) {}
 }
 function _drawAnnotations(doc, key, PW, PH) {
+    // 20.33: ELEVATION REQUIRED on a wall's pages, computed from the wall, never stored.
+    try { _elevReqStamps(key).forEach(a => _drawOneAnnotation(doc, a, PW, PH)); } catch (e) {}
     if (_annInlineDrawn && _annInlineDrawn[key]) return;   // already interleaved with elements on a layout page
     const list = (editorialContent.annotations && editorialContent.annotations[key]) || [];
     if (!list.length) return;
@@ -45133,23 +46712,49 @@ function _drawOneAnnotation(doc, a, PW, PH) {
 }
 // "APPROVED" stamp, top-right corner. Used to mark a deck as client-approved
 // while other placements are still in revision.
+// THE STAMPS A SPEC PAGE WEARS (20.08), one answer for the PDF and the screen. A page's own
+// status as before; a SET page marked pending whose pieces are partly Approved on the
+// dashboard says which (Pentagon City approved pieces of a set one by one and kept those
+// pages unchanged while the rest were reselected): green APPROVED A, C beside red PENDING B.
+function _approvalStamps(desc) {
+    if (!desc || desc.kind !== 'spec') return [];
+    const st = _approvalOf(desc._ovKey || (desc.row && desc.row.id) || '');
+    if (!st) return [];
+    if (st === 'approved') return [{ txt: 'APPROVED', st: 'approved' }];
+    const mem = desc.members || [];
+    if (mem.length > 1) {
+        const from = desc._letterFrom || 0, L = _setLetters(from + mem.length);
+        const ok = [], rest = [];
+        mem.forEach((m, i) => { (['approved', 'production'].indexOf(_pieceStatus(m)) >= 0 ? ok : rest).push(L[from + i]); });
+        if (ok.length && rest.length) return [{ txt: 'APPROVED ' + ok.join(', '), st: 'approved' }, { txt: 'PENDING ' + rest.join(', '), st: 'pending' }];
+        if (ok.length) return [{ txt: 'APPROVED', st: 'approved' }];
+    }
+    return [{ txt: 'PENDING APPROVAL', st: 'pending' }];
+}
 function _drawApprovalStamp(doc, PW, PH, M, status) {
-    const approved = status === 'approved';
-    const txt = approved ? 'APPROVED' : 'PENDING APPROVAL';
-    const rgb = approved ? [26, 127, 55] : [192, 57, 43];
-    doc.setFont(_font('display'), 'bold');
-    doc.setFontSize(approved ? 13 : 11);
-    const tw = doc.getTextWidth(txt);
-    const padX = 9, padY = 6, bh = 22;
-    const bw = tw + padX * 2;
-    const x = PW - M - bw;          // right-aligned, same edge as the back-link
-    const y = 6;                    // in the top margin band, above ALL page
+    _drawApprovalStamps(doc, PW, PH, M, [{ txt: status === 'approved' ? 'APPROVED' : 'PENDING APPROVAL', st: status }]);
+}
+// Right to left from the margin, the first stamp outermost.
+function _drawApprovalStamps(doc, PW, PH, M, stamps) {
+    let right = PW - M;             // right-aligned, same edge as the back-link
+    (stamps || []).forEach(s => {
+        const approved = s.st === 'approved';
+        const rgb = approved ? [26, 127, 55] : [192, 57, 43];
+        doc.setFont(_font('display'), 'bold');
+        doc.setFontSize(approved && s.txt === 'APPROVED' ? 13 : 11);
+        const tw = doc.getTextWidth(s.txt);
+        const padX = 9, padY = 6, bh = 22;
+        const bw = tw + padX * 2;
+        const x = right - bw;
+        const y = 6;                // in the top margin band, above ALL page
                                     // content — framed mockups can't reach here
-    doc.setDrawColor(rgb[0], rgb[1], rgb[2]); doc.setLineWidth(1.6);
-    doc.setFillColor(255, 255, 255);
-    doc.roundedRect(x, y, bw, bh, 3, 3, 'FD');
-    doc.setTextColor(rgb[0], rgb[1], rgb[2]);
-    doc.text(txt, x + padX, y + bh - padY);
+        doc.setDrawColor(rgb[0], rgb[1], rgb[2]); doc.setLineWidth(1.6);
+        doc.setFillColor(255, 255, 255);
+        doc.roundedRect(x, y, bw, bh, 3, 3, 'FD');
+        doc.setTextColor(rgb[0], rgb[1], rgb[2]);
+        doc.text(s.txt, x + padX, y + bh - padY);
+        right = x - 6;
+    });
 }
 async function _buildSpecPagePDF(opts) {    const { jsPDF } = window.jspdf;
     // The whole deck, always: the page list is the studio's (see below), so there is no
@@ -45373,9 +46978,13 @@ async function _buildSpecPagePDF(opts) {    const { jsPDF } = window.jspdf;
     // — Approval status: spec pages the client has approved (green) or that are
     //   pending approval (red), shown under the floorplan back-link —
     const _stat = editorialContent.approvalStatus || {};
+    let _descAt = {};
+    try { _deckPageList().forEach(d => { const k = _deckPageKey(d); if (k) _descAt[k] = d; }); } catch (e) { _descAt = {}; }
     for (let p = 1; p <= pageNum; p++) {
         const k = _pageKeys[p] || '';
-        if (k.indexOf('spec:') === 0) { const s = _stat[k.slice(5)]; if (s) { try { doc.setPage(p); _drawApprovalStamp(doc, PW, PH, M, s); } catch (e) {} } }
+        if (k.indexOf('spec:') !== 0) continue;
+        const stamps = _descAt[k] ? _approvalStamps(_descAt[k]) : (_stat[k.slice(5)] ? [{ txt: _stat[k.slice(5)] === 'approved' ? 'APPROVED' : 'PENDING APPROVAL', st: _stat[k.slice(5)] }] : []);
+        if (stamps.length) { try { doc.setPage(p); _drawApprovalStamps(doc, PW, PH, M, stamps); } catch (e) {} }
     }
     try {
         const sc = window._exportScope || { mode: 'all' };
@@ -45395,7 +47004,7 @@ async function _buildSpecPagePDF(opts) {    const { jsPDF } = window.jspdf;
             if (keep.size) { for (let p = pageNum; p >= 1; p--) { if (!keep.has(p)) { try { doc.deletePage(p); } catch (e) {} } } }
         }
     } catch (e) {}
-    const fname = 'FRAME_Presentation.pdf';
+    const fname = _deckPdfFileName();
     // Last line of defence for a cancel. The page walk above is peppered with
     // `try { } catch (e) {}` blocks that deliberately swallow per-page failures
     // so one bad asset can't kill a whole deck — but that means one of them
@@ -45519,7 +47128,9 @@ function suggestedCanvasWrapFromRabbet(r) {
     if (r.product !== "Framed Canvas (Floater)") return null;
     const rabbet = parseFloat(r.rabbetDepth) || 0;
     if (rabbet <= 0) return null;
-    return rabbet + 0.5;
+    // 20.17: the standard stretcher the rabbet takes, + 0.5" (was rabbet + 0.5)
+    const k = unitFactor(dashUnit, 'in'), d = _stdStretcherFor(rabbet * k);
+    return d ? (d + 0.5) / k : null;
 }
 
 // buildSpecStrings — single source of truth for spec block content.
@@ -45865,11 +47476,10 @@ function buildSpecStrings(r, opts) {
         mountLine = (r.mount || '').trim();
     }
 
-    // ── Notes line is intentionally NOT auto-composed. Per studio decision,
-    // the production note (e.g. "Print float-mounted over mat w/ 0.25\" spacers")
-    // is hand-added in InDesign when needed, since not every piece warrants it.
-    // The user's typed Notes on the dashboard still get included if they exist.
-    const notesLine = (r.notes || '').trim();
+    // ── NOTES ARE NOT IN THE SPEC BLOCK (20.27). A long note broke the look of the
+    // block, so the piece's Notes (and its title / artist) go on the page as text boxes
+    // the designer places: Deck Studio, spec page, TEXT BOXES (_dsPieceTextInto). The
+    // field still reaches the CSV export and the IFS readiness check.
 
     // ── Float Reveal (floaters only) ───────────────────────────────────────
     // Per studio convention: Float Reveal is the air gap between the canvas
@@ -45914,7 +47524,7 @@ function buildSpecStrings(r, opts) {
     //   3. Production attributes: Mount, Hardware, Glass
     //   4. Physical: Substrate
     //   5. Dimensions: Image Size + Overall Dimensions appended in InDesign script
-    //   6. Notes (when user typed them)
+    //   (Notes are not printed here since 20.27: text boxes on the page)
     const lines = [];
     lines.push({ label: 'Application', value: application });
 
@@ -46002,7 +47612,6 @@ function buildSpecStrings(r, opts) {
 
     // Notes (if user typed something — auto-fill is intentionally skipped per
     // latest decision; designers add production notes by hand in InDesign)
-    if (notesLine) lines.push({ label: 'Notes', value: notesLine });
 
     // Art / Overall dimensions are added by the InDesign script using the
     // computed Art Size W/H and Overall Width/Height columns from the CSV
@@ -46907,6 +48516,8 @@ function applyIdRename(oldId, newId, quiet) {
     });
     // "Keep apart" answers name rows by id (19.44).
     try { (editorialContent.codeSetsApart || []).forEach(a => { if (Array.isArray(a)) a.forEach((x, i) => { if (x === oldId) a[i] = newId; }); }); } catch (e) {}
+    // The rename log the Issues diff reads (20.09), only for a piece the dashboard has.
+    if (dashRow) _codeLogAdd(oldId, newId);
     // QUIET for a batch: a renumber renames every piece twice, and re-rendering the
     // elevation, the dashboard and the push list per row made sixty codes crawl. The
     // batch redraws once at the end (_codesRefreshViews).
@@ -47875,7 +49486,7 @@ function _frameErrIsNoise(msg, where) {
 // frames that say where it happened rather than the whole descent.
 function _frameErrDetail(rec) {
     const lines = [
-        'FRAME ' + APP_VERSION + ' (' + APP_BUILD + ')',
+        'Farmhand ' + APP_VERSION + ' (' + APP_BUILD + ')',
         rec.when,
         rec.kind + ': ' + rec.message,
     ];
@@ -47897,7 +49508,7 @@ function _frameReportError(kind, message, where, stack) {
         };
         _frameErrors.push(rec);
         if (_frameErrors.length > FRAME_ERR_MAX) _frameErrors.shift();
-        try { console.error('[FRAME ' + APP_VERSION + '] ' + rec.kind + ': ' + rec.message, rec.where, rec.stack); } catch (e) {}
+        try { console.error('[Farmhand ' + APP_VERSION + '] ' + rec.kind + ': ' + rec.message, rec.where, rec.stack); } catch (e) {}
         // Deduped on the FAULT, not the occurrence: the same line failing again
         // is the same news, and this can fire on every frame of a drag.
         const key = rec.kind + '|' + rec.message + '|' + rec.where;
@@ -47921,18 +49532,18 @@ function _frameReportError(kind, message, where, stack) {
 // _dsCopyText already carries the file:// fallback for a machine where
 // navigator.clipboard is not available.
 function _frameErrAnnounce(detail) {
-    const body = 'FRAME hit an error and part of the page may not have finished drawing. '
+    const body = 'Farmhand hit an error and part of the page may not have finished drawing. '
         + 'Your project is still in memory, so use Save Project now before anything else.'
         + String.fromCharCode(10) + String.fromCharCode(10)
         + 'Then send these details with a note about what you were doing:'
         + String.fromCharCode(10) + String.fromCharCode(10) + detail;
     try {
         if (typeof showConfirmModal === 'function') {
-            showConfirmModal('FRAME hit an error', body, 'Copy details', 'Close',
+            showConfirmModal('Farmhand hit an error', body, 'Copy details', 'Close',
                 () => { try { _dsCopyText(detail); } catch (e) {} });
             return;
         }
-        if (typeof showInfoModal === 'function') { showInfoModal('FRAME hit an error', body); return; }
+        if (typeof showInfoModal === 'function') { showInfoModal('Farmhand hit an error', body); return; }
     } catch (e) {}
     try { console.error(body); } catch (e) {}
 }
@@ -48671,7 +50282,7 @@ function _homeScreenTitle() {
     try {
         if (APP_BUILD !== 'dev') return;
         const m = document.querySelector('meta[name="apple-mobile-web-app-title"]');
-        if (m) m.setAttribute('content', 'FRAME dev');
+        if (m) m.setAttribute('content', 'Farmhand dev');
     } catch (e) {}
 }
 _homeScreenTitle();
@@ -48851,7 +50462,7 @@ function _phoneBuild() {
     const brand = document.querySelector('.nav-brand');
     if (brand && !brand.querySelector('.phone-mark')) {
         const m = document.createElement('img');
-        m.className = 'phone-mark'; m.src = 'icon-180.png'; m.alt = 'FRAME';
+        m.className = 'phone-mark'; m.src = 'icon-180.png'; m.alt = 'Farmhand';
         brand.appendChild(m);
     }
     // THE HEADER'S MIDDLE IS THE VIEW'S OWN CONTROL (19.28): the wall picker on Walls, the
@@ -49255,12 +50866,12 @@ const HELP_REFERENCE_DATA = [
     {
         id: 'getting-started',
         title: 'Start here',
-        intro: `FRAME turns a list of pieces into a client presentation. You list the item codes, spec each piece, place it on its wall, pin it on the floorplan, lay out the deck, and generate the PDF. The tabs at the top are numbered from where a project starts: <strong>1 Deck</strong> (the floorplan Items list), <strong>2 Frame Dashboard</strong>, <strong>3 Elevation</strong>, then back to the Deck to pin, build and generate.`,
+        intro: `Farmhand turns a list of pieces into a client presentation. You list the item codes, spec each piece, place it on its wall, pin it on the floorplan, lay out the deck, and generate the PDF. The tabs at the top are numbered from where a project starts: <strong>1 Deck</strong> (the floorplan Items list), <strong>2 Frame Dashboard</strong>, <strong>3 Elevation</strong>, then back to the Deck to pin, build and generate.`,
         entries: [
             { title: 'Guided tour', live: 'tour' },
             { title: 'Where this project is', live: 'steps' },
-            { title: 'On iPhone and iPad', body: `<strong>iPhone.</strong> Hold it upright to work and turn it sideways to look at a wall or a page full screen. The bar along the bottom is <strong>Deck</strong> (blue), <strong>Items</strong> (pink), <strong>Walls</strong> (yellow) and <strong>Controls</strong>; the header takes the colour of the view you are on, and the strip of icons just above the bar is that view's tools.<br><br><strong>Items</strong>: add an item, the camera (new items straight from photos), duplicate, delete, then the Edit, Import and Export menus. Tap an item to open it; the back arrow in the header returns to the list.<br><strong>Walls</strong>: Art, Guides, Context and Glass open the wall's panels. Tap the wall name in the header to switch walls or add one. Pinch to zoom the wall; swipe across an empty part of it for the next wall.<br><strong>Deck</strong>: Project, Pages and Templates, each in its own colour. <strong>All pages</strong>, <strong>Preview</strong> and <strong>Preflight</strong> light up on Pages; the menu at the end holds <strong>Generate PDF</strong> and the approval stamp. The row above the page has the page arrows and the drawing tools; tap something on the page and its settings, front, back and delete take the arrows' place. Swipe across the page for the next one.<br><strong>Controls</strong> shows the controller: a joystick that nudges whatever is selected, and Shift, Ctrl and Alt keys that stay on once tapped.<br><br><strong>iPad.</strong> The full app, by finger: drag anything, double-tap for double-click, and use the controller for nudges and Shift or Ctrl selects. The panels fold away with the tab on their edge.<br><br>On either, Safari's Share button and <strong>Add to Home Screen</strong> make FRAME its own full-screen app, and it opens with no signal once it has been opened once.` },
-            { title: 'Opening FRAME', body: `FRAME opens on the start screen. <strong>Continue</strong> brings back work that was never saved to a file (it only appears when there is some). <strong>New project</strong> asks for the project name, the client and the units, then takes you to the floorplan <strong>Items</strong> list to add the item codes. <strong>Open project</strong> opens a saved .json file.<br><br>While a project is getting started, a bar at the bottom left says the one next step and has a <strong>Go</strong> button. It goes away once the pieces are listed, on walls and pinned. Click the × to hide it until next time.` },
+            { title: 'On iPhone and iPad', body: `<strong>iPhone.</strong> Hold it upright to work and turn it sideways to look at a wall or a page full screen. The bar along the bottom is <strong>Deck</strong> (blue), <strong>Items</strong> (pink), <strong>Walls</strong> (yellow) and <strong>Controls</strong>; the header takes the colour of the view you are on, and the strip of icons just above the bar is that view's tools.<br><br><strong>Items</strong>: add an item, the camera (new items straight from photos), duplicate, delete, then the Edit, Import and Export menus. Tap an item to open it; the back arrow in the header returns to the list.<br><strong>Walls</strong>: Art, Guides, Context and Glass open the wall's panels. Tap the wall name in the header to switch walls or add one. Pinch to zoom the wall; swipe across an empty part of it for the next wall.<br><strong>Deck</strong>: Project, Pages and Templates, each in its own colour. <strong>All pages</strong>, <strong>Preview</strong> and <strong>Preflight</strong> light up on Pages; the menu at the end holds <strong>Generate PDF</strong> and the approval stamp. The row above the page has the page arrows and the drawing tools; tap something on the page and its settings, front, back and delete take the arrows' place. Swipe across the page for the next one.<br><strong>Controls</strong> shows the controller: a joystick that nudges whatever is selected, and Shift, Ctrl and Alt keys that stay on once tapped.<br><br><strong>iPad.</strong> The full app, by finger: drag anything, double-tap for double-click, and use the controller for nudges and Shift or Ctrl selects. The panels fold away with the tab on their edge.<br><br>On either, Safari's Share button and <strong>Add to Home Screen</strong> make Farmhand its own full-screen app, and it opens with no signal once it has been opened once.` },
+            { title: 'Opening Farmhand', body: `Farmhand opens on the start screen. <strong>Continue</strong> brings back work that was never saved to a file (it only appears when there is some). <strong>New project</strong> asks for the project name, the client and the units, then takes you to the floorplan <strong>Items</strong> list to add the item codes. <strong>Open project</strong> opens a saved .json file.<br><br>While a project is getting started, a bar at the bottom left says the one next step and has a <strong>Go</strong> button. It goes away once the pieces are listed, on walls and pinned. Click the × to hide it until next time.` },
             {
                 title: 'The five steps',
                 body: `<ol class="help-steps">
@@ -49273,7 +50884,7 @@ const HELP_REFERENCE_DATA = [
             },
             {
                 title: 'Saving your work',
-                body: `A project is one <strong>.json</strong> file carrying every piece, wall, page and setting.<br><br>In <strong>Chrome and Edge</strong>, <strong>Open Project</strong> opens the file and FRAME remembers it, so <strong>Save Project</strong> (<span class="help-kbd">Ctrl+S</span>) writes straight back to that same file. The first save of a new project asks where to put it. <span class="help-kbd">Ctrl+Shift+S</span> saves a copy somewhere else and switches to it. The file you are working on is named in the browser tab.<br><br>In <strong>Firefox and Safari</strong>, and on a page opened straight from disk, Save downloads a new .json each time, so watch which copy is current.<br><br>FRAME also autosaves to your browser as you work. If a tab crashes or closes you are offered the work back when you return. If the unsaved dot beside Save turns <strong>red</strong>, autosave has stopped: save to a file.<br><br><strong>Versions</strong> (in the menu beside Save) keeps named snapshots in this browser (for example "V1 sent to client") that you can compare and restore.`
+                body: `A project is one <strong>.json</strong> file carrying every piece, wall, page and setting.<br><br>In <strong>Chrome and Edge</strong>, <strong>Open Project</strong> opens the file and Farmhand remembers it, so <strong>Save Project</strong> (<span class="help-kbd">Ctrl+S</span>) writes straight back to that same file. The first save of a new project asks where to put it. <span class="help-kbd">Ctrl+Shift+S</span> saves a copy somewhere else and switches to it. The file you are working on is named in the browser tab.<br><br>In <strong>Firefox and Safari</strong>, and on a page opened straight from disk, Save downloads a new .json each time, so watch which copy is current.<br><br>Farmhand also autosaves to your browser as you work. If a tab crashes or closes you are offered the work back when you return. If the unsaved dot beside Save turns <strong>red</strong>, autosave has stopped: save to a file.<br><br><strong>Versions</strong> (in the menu beside Save) keeps named snapshots in this browser (for example "V1 sent to client") that you can compare and restore.`
             },
             {
                 title: 'Undo',
@@ -49285,7 +50896,7 @@ const HELP_REFERENCE_DATA = [
             },
             {
                 title: 'Getting stuck',
-                body: `If FRAME hits an error it says so in a box with <strong>Copy details</strong>. Save your project first, then send those details with a note about what you were doing. The Version section below says where.`
+                body: `If Farmhand hits an error it says so in a box with <strong>Copy details</strong>. Save your project first, then send those details with a note about what you were doing. The Version section below says where.`
             }
         ]
     },
@@ -49305,7 +50916,7 @@ const HELP_REFERENCE_DATA = [
             { title: 'Wallcovering and window film', body: `The size you type is the graphic. A 2" bleed is filled in for you (never over a number you typed). Window film can print as one file or <strong>split per panel</strong>, one file per pane of glass with bleed on every edge. See Context &amp; glass.` },
             { title: 'Bulk Edit', body: `Select several rows (Ctrl+click or Shift+click in the table), then <strong>Edit</strong> &gt; <strong>Bulk Edit…</strong>. Fields that differ across the rows are greyed out, and nothing changes until <strong>Apply to Selected</strong>.` },
             { title: 'Bulk Images', body: `In the Frame Dashboard, under <strong>Import</strong>. Choose revised image files named to match your pieces (by image code, item code or original file name) and each one replaces the matching piece's artwork.` },
-            { title: 'Production and the budget', body: `The <strong>Production</strong> button in the item toolbar opens one window with five tabs: <strong>Samples</strong> (every frame and mat in the deck and what the client approved), <strong>Vendors</strong> (who makes each piece, and the production pack), <strong>Pricing</strong> (cost, sell and allowance per piece, the budget, the rate card, Excel and Salesforce), <strong>Issues</strong> (what changed since the deck last went out) and <strong>Shipping</strong> (commercial invoices across the Canada and USA border, lines from the pieces). Once anything is priced or a budget is set, the button shows the budget itself: what the pieces sell for, what is left, and the selected piece against its allowance. It turns amber when either is passed and moves as you change a size. A number on it means something needs a look, and a click opens that tab. Ctrl+K finds each tab by name. On Pricing, <strong>RFQ</strong> and <strong>RFI</strong> write the 2026 quote template (the RFI has no prices and leaves purchases off), and <strong>Salesforce CSV</strong> writes the Quote Import Template. Sell is cost times 1.8731 plus the artist royalty (0% on an F image code, 10% on PEN, 5% otherwise), unless a Markup or a sell price is typed. The <strong>Rate card</strong> estimates a piece before a vendor quotes: base plus per square foot by product, plus add-ons (premium frame, non-glare glass, moisture sealant, oversize, a buffer) that apply by themselves from the frame code, the Glass field, the location and the size. For a first budget from a bare floor plan, use <strong>Sketch</strong> on the plan's add bar: pick a type and a <strong>Size</strong>, and every click drops a priced piece.` },
+            { title: 'Production and the budget', body: `The <strong>Production</strong> button in the item toolbar opens one window with six tabs: <strong>Samples</strong> (every frame and mat in the deck and what the client approved), <strong>Vendors</strong> (who makes each piece, and the production pack), <strong>Pricing</strong> (cost, sell and allowance per piece, the budget, the rate card, Excel and Salesforce), <strong>Issues</strong> (what changed since the deck last went out) and <strong>Shipping</strong> (commercial invoices across the Canada and USA border, lines from the pieces) and <strong>Brand standards</strong> (fixed-price Residence Inn, SpringHill Suites and Ford items added to the project in one click, and the client emails that go with them, filled from the project). Once anything is priced or a budget is set, the button shows the budget itself: what the pieces sell for, what is left, and the selected piece against its allowance. It turns amber when either is passed and moves as you change a size. A number on it means something needs a look, and a click opens that tab. Ctrl+K finds each tab by name. On Pricing, <strong>RFQ</strong> and <strong>RFI</strong> write the 2026 quote template (the RFI has no prices and leaves purchases off), and <strong>Salesforce CSV</strong> writes the Quote Import Template. Sell is cost times 1.8731 plus the artist royalty (0% on an F image code, 10% on the twelve artists the quote template lists, 5% otherwise), unless a Markup or a sell price is typed. The <strong>Rate card</strong> estimates a piece before a vendor quotes: base plus per square foot by product, plus add-ons (premium frame, non-glare glass, moisture sealant, oversize, a buffer) that apply by themselves from the frame code, the Glass field, the location and the size. For a first budget from a bare floor plan, use <strong>Sketch</strong> on the plan's add bar: pick a type and a <strong>Size</strong>, and every click drops a priced piece.` },
             { title: 'PNGs and CSV', body: `The download icon exports the selected row as a PNG. <strong>Export</strong> &gt; <strong>Batch PNGs</strong> exports every row plus the CSV in one ZIP. The CSV round-trips: export it for the InDesign script or a colleague, and import it back to carry on.` }
         ]
     },
@@ -49315,7 +50926,7 @@ const HELP_REFERENCE_DATA = [
         intro: `Each wall is its own drawing. The rail on the left lists the walls. The sidebar has four tabs: <strong>Art</strong> for the pieces, <strong>Guides</strong> for what the drawings show, <strong>Context</strong> for what is in the room, and <strong>Glass</strong> for window panels.`,
         entries: [
             { title: 'Walls and the rail', body: `Click a wall in the rail to open it and drag walls to reorder them. <strong>+ Add Wall</strong> asks which item code the wall is for: one that is not on a wall yet, or a new code of a type and frame set. Every wall belongs to a code, so none is left out of the deck. The &times; on a wall deletes it, and that can be undone.` },
-            { title: 'Linked images', body: `A picture dragged in from your files is <strong>linked</strong> to that file (Chrome and Edge). Export over the same file from Illustrator or Photoshop and, when you come back to FRAME, it says the file changed and offers <strong>Update</strong>: the new picture goes in at the same size, crop and position. <strong>Links</strong> (in the Frame Dashboard's Edit menu) lists every picture as Up to date, Modified, Missing, Needs access or Not watched, with Update and Relink. After reopening a project the browser asks once more for access: Allow access in Links.` },
+            { title: 'Linked images', body: `A picture dragged in from your files is <strong>linked</strong> to that file (Chrome and Edge). Export over the same file from Illustrator or Photoshop and, when you come back to Farmhand, it says the file changed and offers <strong>Update</strong>: the new picture goes in at the same size, crop and position. <strong>Links</strong> (in the Frame Dashboard's Edit menu) lists every picture as Up to date, Modified, Missing, Needs access or Not watched, with Update and Relink. After reopening a project the browser asks once more for access: Allow access in Links.` },
             { title: 'Measuring to the graphic', body: `With the measure tool or a free line out, a point near an edge in a wallcovering's picture (the bottom of a printed year, the side of a shape) snaps onto it and shows a <strong>magenta</strong> dot; a point near the edge of a frame or panel lands on that edge anywhere along it. So: click under the printed 1938, then on the top of the panel, for the gap between them. The reach is a few screen pixels: zoom in for finer picking. Hold <strong>Alt</strong> to place a point exactly where you click. A point on the graphic moves with it. <strong>Guide box</strong> (Lines menu) draws an empty to space things against; frames snap to its edges, level lines and centre lines. Any free line can be <strong>Guide only</strong>: on the wall, never printed.` },
             { title: 'Wall layers', body: `A wall is built up in three layers, bottom to top: <strong>Wallcovering</strong> (the printed graphic), <strong>Framed art</strong>, and <strong>On top</strong> (didactic panels, labels, signage). The wall, the PDF and the spec-page thumbnails all draw in that order. Each piece takes its product's layer; a <strong>Didactic Panel</strong> goes on top. Once a wall has more than one layer, the Art list is grouped by layer and clicking a piece's letter moves it to another layer.` },
             { title: 'Wall mode: ART, EGD, WF', body: `<strong>ART WALL</strong> is the default: framed art hangs on it. <strong>EGD WALL</strong> makes the wall a graphic surface: a wallcovering fills it and stays inside it, above the baseboard. <strong>WF WALL</strong> builds a standard window elevation for window film and opens the Glass tab. A wall with glass on it normally stays an ART wall.` },
@@ -49337,7 +50948,7 @@ const HELP_REFERENCE_DATA = [
         title: 'Context & glass',
         intro: `The Context and Glass tabs describe the room, not the art: the client's own elevation to trace from, the furniture and fixtures that decide where art can go, and window panels for film.`,
         entries: [
-            { title: 'Trace a client elevation', body: `In the Context tab, <strong>+ Add client elevation</strong> puts the client's or architect's drawing behind the wall as a faded tracing guide. It never prints. Use <strong>Fade</strong> to set how strongly it shows and <strong>Place</strong> to move and scale it on the wall.` },
+            { title: 'Trace a client elevation', body: `In the Wall tab, <strong>+ Add client elevation</strong> puts the client's or architect's drawing (a PNG or JPG) behind the wall as a faded tracing guide. Use <strong>Fade</strong> to set how strongly it shows and <strong>Place</strong> to move and scale it on the wall. It prints only if you switch on <strong>Show in deck</strong>: then it prints behind the art on this wall's pages and exports, at full strength and cropped to the wall.` },
             { title: 'Calibrate the drawing', body: `<strong>Calibrate</strong> scales the traced drawing to the wall: click the two ends of anything whose real size you know, type the size, and <strong>Apply</strong>. It scales both directions by the same amount, so nothing is stretched. <strong>Un-stretch</strong> undoes a stretch; <strong>Fill wall</strong> is the one deliberate stretch.` },
             { title: 'Room objects', body: `Pick an item from the Context library (doors, beds, TVs, millwork, lighting and more) and click the wall to place it at its standard size, or drag to size it. Objects print, and they hide what is behind them, which is how you see how much of a wallcovering a headboard covers. Proportions are locked by default, and items with a side view can be turned.` },
             { title: 'Window panels', body: `In the Glass tab, add a run of glass and divide it into panels; panel widths can differ. A second run continues the first. Drag a run by its grip, never by the glass, so film graphics on it stay clickable. Seams show over the art on purpose: that is where a graphic gets cut.` },
@@ -49377,6 +50988,7 @@ const HELP_REFERENCE_DATA = [
         entries: [
             { title: 'Presentation type', body: `On the <strong>Project</strong> tab, pick <strong>Concept</strong>, <strong>Wireframe</strong>, <strong>Art Development</strong>, <strong>Final Spec</strong>, <strong>Install Guide</strong> or <strong>Catalogue</strong>. Each one sets which pages appear. <strong>Include pages</strong> switches individual pages on and off.` },
             { title: 'Pages', body: `The <strong>Pages</strong> tab shows every page in order; click one to edit it. Pages you insert can be dragged anywhere, or placed with the gap between two pages. Spec, floorplan and breaker pages follow the project's own order, and a note on each says where that order is set.` },
+            { title: 'Editing several pictures at once', body: `On a page, <span class="help-kbd">Shift+click</span> each picture (or drag a box around them), then open the settings. The popup says how many boxes are selected, and corners, caption on or off, caption source, alignment, font and <strong>Size</strong>, fit, shadow, fill and stroke changed there apply to all of them; each keeps its own picture and caption text. One Ctrl+Z undoes a change on all of them.` },
             { title: 'Spec pages', body: `Under <strong>SHOW ON PAGE</strong>, tick what the page carries: <strong>Frame corner</strong>, <strong>Moulding profile</strong>, <strong>Floorplan</strong> and <strong>Elevation</strong>. A ticked part you do not have yet keeps its space, so the page does not move while you fill it in. An unticked part is removed. It applies deck-wide by default, or to one page. Pieces print one per page, or grouped A/B/C with shared specs.` },
             { title: 'Breaker and install pages', body: `These carry a wall's dimensioned drawing with a letter legend, installation notes and, optionally, the plan. Notes are standard items you tick plus your own. <strong>Edit &hellip; in Elevations</strong> jumps to the wall, and a bar there brings you back to the same page. To change one page only, pick <strong>This page only</strong> under Apply changes to; it stays picked for that page, and <strong>Reset to all pages</strong> undoes the page's own settings. <strong>Full width</strong> runs a long wall across the whole page under the title, with the notes beside the title.` },
             { title: 'Headings', body: `Click a page's heading or subheading to change its type. The change applies to the whole deck unless you choose this page only.` },
@@ -49435,7 +51047,7 @@ const HELP_REFERENCE_DATA = [
         title: 'Tips',
         entries: [
             { title: 'A white mat with a thin black reveal', body: `Set Mat 1 to white, turn the chain off, and give Mat 2 a 0.25" black reveal.` },
-            { title: 'Float mounts need rabbet', body: `A float mount stack needs at least <strong>0.625"</strong> of rabbet. FRAME warns when the moulding is too shallow.` },
+            { title: 'Float mounts need rabbet', body: `A float mount stack needs at least <strong>0.625"</strong> of rabbet. Farmhand warns when the moulding is too shallow.` },
             { title: 'Sourced Object', body: `For sculptures, objects and pieces framed elsewhere. It currently renders and specs as Framed Art, so clear the frame and mat fields yourself if they should not print.` },
             { title: 'Your own moulding profiles', body: `Put one image per profile in a folder and choose it from the Frame Library. The file name carries the code, width, depth and rabbet: <strong>MICH-41-12_1.75_0.625.png</strong> is code MICH-41-12, 1.75" wide, 0.625" rabbet.` },
             { title: 'Light and dark', body: `The sun and moon button switches theme. The drawings and pages stay print colours either way.` }
@@ -49444,7 +51056,7 @@ const HELP_REFERENCE_DATA = [
     {
         id: 'version',
         title: 'Version',
-        intro: `About this build of FRAME.`,
+        intro: `About this build of Farmhand.`,
         entries: [
             {
                 title: 'Current version',
@@ -49452,7 +51064,21 @@ const HELP_REFERENCE_DATA = [
             },
             {
                 title: `What's new`,
-                body: `<strong>19.99</strong> <b>Commercial invoices</b> for shipments between Canada and the USA, on a new <b>Shipping</b> tab in Production. Tick the pieces in the box (or add a vendor's pieces at once) and each becomes a line: description with its size and codes, HS code by product (originals 9701.21, prints framed or on canvas 4911.91, wallcovering 4814.90, window film 3919.90), quantity from the walls and value at cost or sell. Port of lading follows the route (Quebec to the USA by ground is Lacolle, Ontario is Windsor, back into Quebec is Champlain, into Ontario is Port Huron, any air is Montreal-Trudeau) unless you type one. Any line can be edited. Shippers and consignees saved to the address book, and the name you sign with, stay on this computer. Download PDF writes commercial_invoice_ followed by the invoice number.<br><br>
+                body: `<strong>20.45</strong> <b>FRAME is now Farmhand everywhere you read it.</b> The browser tab, the home-screen app name, the start screen, Help, the tour, messages and file pickers all say Farmhand. Project files are unchanged: files saved before open as they always did, and older builds still open new ones. On the start screen, <b>New to Farmhand? Take the guided tour</b> is now a button with a play mark and a ring that pulses a few times once the screen has settled, so it is easy to find.\n<strong>20.44</strong> <b>The start screen quote is bigger.</b> “Many hands make light work” now runs wider than the Farmhand logo beneath it, with – Thomas Gordon Towers set right-aligned under it.\n<strong>20.43</strong> <b>Farmhand.</b> The start screen and the header carry the new FARMHAND logo, one drawing that follows the theme (dark ink in light mode, light ink in dark mode). The start screen opens with a quote that fades in above the logo as it comes together: “Many hands make light work”, Thomas Gordon Towers.\n<strong>20.42</strong> <b>Frame Recommendations keeps its picture size at 3 and 4 columns.</b> The frame profile drawing (and the corner) used to shrink as you added columns. At 3 and 4 columns each frame now shows its corner and profile at the same size as in 1 column, with the name, vendor and size underneath at full width, so the size line is no longer cut off. A stacked card is taller, so a page holds 6 frames at 3 columns and 8 at 4 columns. 1 and 2 columns are unchanged.\n<strong>20.41</strong> <b>A Wall tab, and every wall setting has All walls.</b> On the Elevation tab, the wall type, the client elevation, Elevation required, the wall finish and the paint are together on a new <b>Wall</b> tab (they were above the tabs and on Context). Only the wall size, zoom and export stay above the tabs, so the Art tab has more room. Wall finish now prints per wall (the <b>Print</b> tick), and <b>All walls</b> beside it, beside Elevation required and beside Show in deck sets every wall at once. Adding a client elevation to a wall marked Elevation required offers to untick it. Deck Studio's breaker page has the same Print wall finish tick for that wall, with All walls.\n<strong>20.40</strong> <b>Wall finish can be switched off.</b> The WALL: line under ELEVATION DETAIL (WALL: WOOD · WD-1) has an on/off switch for the whole deck: <b>Print on pages</b> beside WALL FINISH on the Elevation tab, or <b>Print wall finish</b> on an elevation breaker page in Deck Studio. Off hides it on every wall page; each wall keeps what you typed, so turning it back on brings it all back.\n<strong>20.39</strong> <b>Drag a project file in to open it.</b> Drop a FRAME project .json from Finder anywhere on the FRAME window (the start screen or the app) and it opens, the same as Open Project. If the open project has unsaved changes, FRAME asks first. In Chrome, Save then writes back to the file you dropped.\n<strong>20.38</strong> <b>Client groupings.</b> In the frame browser, Team groupings is now <b>Client groupings</b>, and a client opens like a vendor: click <b>Ford</b> to see all of Ford's frames, with <b>Standard</b>, <b>Floater</b> and <b>Shadowbox</b> listed under it. Framerica's BW26-409 Gallery White is now in the library and in Ford Standard.\n<strong>20.37</strong> <b>See every image in the project, and package them.</b> The Save menu (the arrow beside Save Project) has <b>Images</b>: every picture in the project, grouped as client elevations, artwork, floorplans, Deck Studio images and so on, each with its image code or name, where it is used, its size, and whether it can be exported (in the file, linked, or missing). <b>Package</b> downloads one zip with the project file, every image in a folder per kind, and a list of what is in it, like packaging an InDesign file. Client elevations now keep the name of the file you added, shown and editable on the Context tab.\n<strong>20.36</strong> <b>The client elevation shows in the spec page thumbnail too.</b> A wall set to <b>Show in deck</b> now has its client elevation in the small Elevation picture on its spec pages, cropped to the wall and behind the art, the same as on the wall's own page. Before, only the wall page and the exports showed it.\n<strong>20.35</strong> <b>Wall paint uses the usual colour picker, and stops at the baseboard.</b> Under Wall Finish, <b>Paint</b> is now a row of round swatches like every other colour choice in FRAME: no paint, whites, greys, charcoal, navy, light oak and walnut, then the colour wheel for anything else. The paint covers the wall down to the top of the baseboard; the baseboard itself stays unpainted, in the editor, on the pages and in exports.\n<strong>20.34</strong> <b>Elevation required sits clear of the size legend.</b> On wall pages the stamp now prints low in the left column, just above the floorplan thumbnail, instead of straight under the WALL: line, where an install page's size legend is and the two overlapped.\n<strong>20.33</strong> <b>Elevation required, stamped for you.</b> When the client has not sent an elevation for a wall, tick <b>Elevation required</b> under Wall Finish. That wall's pages and the spec pages of the art on it print <b>ELEVATION REQUIRED</b> in red with a line under it (Artwork size to be confirmed, or your own words): top right on spec pages, under the title on wall pages, where it stays clear of the drawing. Untick it when the drawing arrives and every page is clean again; nothing is left behind on the pages.\n<strong>20.32</strong> <b>Walls can be painted.</b> Under Wall Finish there is a <b>Wall colour</b> swatch. Pick the wall's paint and the wall shows in that colour in the editor, on its deck pages, in the elevation thumbnail on spec pages, and in SVG, PDF and PNG exports, so the art is seen against the wall it hangs on. <b>Clear</b> puts it back to a plain wall. Catalogue options take it from their wall like the finish.\n<strong>20.31</strong> <b>The client's elevation can be the drawing.</b> On a wall's Context tab, a client elevation you have dropped in and calibrated has a new <b>Show in deck</b> switch. With it on, the drawing prints behind your art on that wall's deck pages and exports, at full strength and cropped to the wall, so the page shows the architect's wall with the art on it and no InDesign step is needed. Off, it stays a faded tracing guide that never prints, as before. Calibrate first (click the two ends of a dimension printed on the drawing and type it) so the art is to scale.\n<strong>20.30</strong> <b>Item codes can follow the client's pattern.</b> On the Deck Studio floorplan, the Categories tab has <b>Item codes</b>: pick a pattern such as <b>L3.ART.S16-01</b> (level, type, sector) or type your own with {level}, {type}, {zone} and {nn}. New codes follow it: <b>+ Add Item</b> asks for the sector and shows the code it will make, and each level's code (Level 03 is L3) can be changed there. Each category has its own prefix box, so a project can call glass GLA. Items have a <b>Sector</b> field beside Location, and <b>Recode</b> moves a project's ART.1 codes to the pattern in one go (pieces keep their letters; walls named after a code follow).\n<strong>20.29</strong> <b>A client's level-first codes sort and duplicate properly.</b> Codes like <b>L3.ART.S16-10A</b> (level, type, sector, placement, piece) were read as type L, number 3, so the item list and the deck listed every A piece first, then every B. They now sort by sector and placement. Duplicating one gives the next placement in that code (L3.ART.S16-11), not L3.1.
+<strong>20.28</strong> <b>Install heights say what they are measured from, and the install page says more.</b> On the Guides tab, <b>Heights from</b> sets what a wall's heights are measured from when the client's markup says (Chair rail at 36", Counter at 34"): the hang dimension then runs from it, is labelled 46" ABOVE CHAIR RAIL instead of AFF, the datum is drawn across the wall with its own height, and the install note says so. Blank is the floor, as before. On an install page's <b>This page</b> panel, <b>Install sequence</b> (B, C, A, D) and <b>Typical gap</b> print as notes. A piece's <b>Weight (lb)</b> (Hardware & Notes) prints in the install legend on any wall where a piece has one. Changing a piece's picture to a different image code now clears its artist, title, medium and year, so one artist's piece is never credited to another. Preflight also flags another project's file stamp in typed text (a footer copied from another job), Frame Code, Colour / CITY, COUNTRY / CODE-XXXX / 0"W x 0"H left from a template, and in an IFS a typed "Elevation Pending" or a title or artist of N/A. The version box takes a scope prefix (GR.V4, CORR.V1), and the PDF downloads as date.project.version.pdf instead of FRAME_Presentation.pdf.
+<strong>20.27</strong> <b>Notes, artist and title come off the spec and onto the page as text boxes.</b> An item's Notes no longer print in the spec block, where a long note broke its look. On a spec page in Deck Studio, the right panel has TEXT BOXES: <b>+ Item note</b> drops the item's Notes onto the page and <b>+ Artist + title</b> drops its title and artist (and medium and year when set), each as a text box you move next to the piece or anywhere on the page and edit there. The words are copied when you add the box. A blank field comes in as placeholder wording (Text here, Artwork title, Artist name) that preflight flags until you replace or delete it. On a set page each line starts with the piece's code. Notes still go to the CSV.
+<strong>20.26</strong> <b>Glass is drawn in black, and Outlines start off.</b> A glass run and its mullions now print in black like the rest of the wall drawing; red is kept for the dimensions (panel widths, overall size and the panel letters stay red). The red outline round each frame no longer shows on a fresh wall while the Outlines button is off: it only appears once you turn Outlines on.
+<strong>20.25</strong> <b>Wall finish on every wall page.</b> Under Wall Dimensions, WALL FINISH sets what the wall is (painted drywall, wood, wallcovering, glass, concrete, stone, tile, brick, metal, acoustic panel) and its colour or spec code (White, PT-1, WD-11 Walnut). The wall's page prints it under the heading, for example WALL: WOOD · BLUE WD-11, so frames can be chosen against the wall. Blank prints nothing. Catalogue options take it from their mockup.
+<strong>20.24</strong> <b>The context library is the hospitality block set, and you can see all of it at once.</b> Beds, nightstands, desks, media walls, wardrobes, sofas, vanities, showers, tubs, offices, glass partitions, doors, chairs, toilets and basins now use the studio's own drawings. Where a piece kept its size, walls already using it pick up the new drawing; where the size changed, it is a new item, and the old one stays on any wall that has it. <b>See all blocks</b> under the Context palette opens a contact sheet of the whole library at one scale; click a block to place it.
+<strong>20.23</strong> <b>Context drawings in a thinner, product-drawing style.</b> One fine, even line and near-square corners throughout. Beds have a framed headboard (with reading lights on the Panel style and the king set), four pillows with gently dipped tops, a duvet that drapes and flares over a platform base on block legs. Doors have a cased frame, hinges and a lever; the toilet a classic tank with a flush lever; vanities sit on a slim metal frame with tab pulls and a low stretcher, with a widespread faucet on the vanity + mirror; the lounge chair is an open frame armchair. Sizes are unchanged.
+<strong>20.22</strong> <b>The context library, redrawn to the hospitality reference sheet.</b> Every drawing is now one bold, even line with soft corners and simple shapes, and the palette follows the catalogue: Guestroom, Bathroom, Toilets, Office, Glass, Doors, Chairs, Decor, Keep clear and Basic. New blocks: king bed with nightstands, double queen beds, twin bed, desk with chair, TV with console, wardrobe wall, vanity with mirror and sconces, single and double vanities, glass shower, shower niche, freestanding tub, towel bar with hooks, a shelf of toiletries, accessible toilet with grab bar, vessel basin, workstation with task chair, desk with storage, meeting table with chairs, a 3-drawer file, five glass partitions and a glass sliding door, double, pocket, barn, glass and accessible doors, dining chair, bar stool and banquette. Everything already on a wall keeps its size.
+<strong>20.21</strong> <b>Beds that look like beds, and one line weight.</b> Every bed (the plain queen, king and full, and the Platform, Panel, Tall upholstered, Wingback and Low profile styles) is redrawn: flanged shams with a pillow and a lumbar in front of them, a draped duvet, a soft base on small feet, and the side view has pillows leaning on the headboard and a throw over the foot. Pillows in front now hide the ones behind. All context drawings are drawn at one line weight, with no thick and thin lines. A bed already set to a style keeps its size.
+<strong>20.20</strong> <b>Context drawings fill their own shape, not a box.</b> A chair dropped on a wall used to come in as a white rectangle that hid the wall around it. Now only the solid parts of a drawing are white: you see the wall between chair legs and casters, under a desk, between upper and base cabinets and inside a toilet stall, on screen, in the SVG and in the PDF, and the baseboard runs through wherever nothing stands in front of it. Keep clear blocks and plain boxes still fill their whole box.
+<strong>20.19</strong> <b>More things to put on a wall, drawn clean.</b> The wall's Context library has a new Office group (desks, a workstation with its screen, task chair, monitor, conference table, files, cabinet, bookcase, whiteboard, kitchenette, fridge) and more for guestrooms (club chair, desk chair, bench, wardrobe, minibar, floor mirror, planter, coat stand), restrooms (wall-hung toilet and flush plate, urinal, pedestal sink, stall, towel dispenser, hand dryer, soap, paper holder, robe hook, towel ring, lighted mirror) and fixtures (65 and 75 inch TVs, picture light, pendant, drinking fountain, clock). Keep clear adds a fire alarm pull, extinguisher cabinet, exit sign, return grille and access panel, and every switch, outlet and device now draws as itself instead of a labelled box. The five bed styles are redrawn smooth: they were traced and looked jagged. A bed already set to a style keeps its size.
+<strong>20.18</strong> <b>Plan pins hold two digits.</b> A long client code (ART-1001) used to print its whole number in the pin and spill out of the circle. The pin now shows the last two digits (01), or numbers the long codes 01, 02, 03 in code order when the last two digits would repeat. The item code itself is unchanged, and the plan key beside the pins still reads 01 | ART-1001.<br><br><strong>20.17</strong> <b>Canvas sides, decided up front.</b> A framed canvas (floater) now prints at its art size plus the wrap round the stretcher, as the quote template says (stretcher depth + 0.5\" a side): a 28.5 x 38.5 canvas is a 32.5 x 42.5 print, on the RFQ, the RFI and the contact sheet. Before, the floater's print size had no wrap. Each canvas has a <b>Sides</b> choice on the dashboard: <b>Picture wraps</b> (crop into the picture so its edges go round the sides; the dashboard shows that band faintly round the face, with red stripes where the crop leaves no picture, and <b>Make room</b> zooms in just enough), <b>Mirror the edge</b> (the printer does it), or <b>Extend in production</b>. The choice goes in the RFQ and RFI Notes, and Preflight asks for it on any canvas with a picture. Typing a floater's rabbet now fills the deepest standard stretcher it takes (1.5\" for a 1.625\" rabbet) and a wrap 0.5\" deeper, instead of a made-to-order stretcher the depth of the rabbet; Preflight flags a stretcher that is not a standard depth. Every estimate now carries a 3% buffer (currency against USD, fuel, shipping) unless the rate card's Buffer % says otherwise; type 0 for none.<br><br><strong>20.16</strong> <b>The quote template's own rules.</b> From the company's 2026 quote template: twelve artists take a 10% royalty (AJG, ISM, JMS, LSA, PEN, LDC, NHS, SAL, STN, THK, TJB, ZPK), not just PEN, so their pieces price higher than before. A didactic panel (printed acrylic, dibond) gets 0.125\" bleed instead of none, and the RFQ lists it as a Printed Panel Product, not EGD. Preflight now says when a piece is bigger than can be made in one piece: paper wider than 59\" on the short side, glass past 40 x 60 (use acrylic), mat board past 40 x 60 that is not white or cream, or past 48 x 72, acrylic past 59 x 96, MDF past 60 x 96, canvas too wide for its stretcher depth (53.4\" at 0.75\", 52\" at 1.5\", 51\" at 2\"), or a stretcher bar longer than 9.5 ft. It also flags a floater whose canvas stretcher is deeper than the frame's rabbet, which leaves the canvas standing proud of the frame, and names the standard stretcher depth that fits. A warning in a concept deck, an error in Final Spec.<br><br><strong>20.15</strong> <b>Install pages follow their plan.</b> In the Install guide layout, with plans ordered by level (the default), each floor plan is now followed by the walls whose pieces are pinned on it, as spec pages always were. Before, every plan printed first and every wall after them.<br><br><strong>20.14</strong> <b>Client codes in number order.</b> Codes in the client's own format (1B.L3.ART-01) now sort in number order on the dashboard, the walls and the pages, like ART codes always have: ART-02 before ART-10, numbers before letters. Before, they stayed in the order they were added.<br><br><strong>20.13</strong> <b>Client codes ending in letters.</b> A code like 1B.L3.ART-EA is its own placement now, not piece A of a set called 1B.L3.ART-E. A piece letter follows the placement's number (ART.1A) or a separator (1B.L3.ART-EF-A), so a client's lettered placements each get their own pin, wall and page.<br><br><strong>20.12</strong> <b>Every picture has a house code.</b> Preflight flags an image code that is not a house code, such as a client photo still named IMG_4021 or a render's file name, so the vendor can find the file. A house code is a prefix of letters then numbers (FAO.010.00031). A warning in a concept deck, an error in Final Spec.<br><br><strong>20.11</strong> <b>The sizes add up.</b> Preflight flags a piece whose frame and mats are wider than its overall size, which leaves no opening for the picture (a 2\" frame and 4\" mats on a 10\" piece). A warning in a concept deck, an error in Final Spec.<br><br><strong>20.10</strong> <b>Will it print sharp?</b> FRAME now remembers how big a picture's original file was (it keeps a smaller copy to work with), and Preflight says when that file is too small for the size it prints: under about 150 pixels per inch for framed work, 75 for a wallcovering, counting any zoomed crop. A warning in a concept deck, an error in Final Spec. Pictures added before 20.10 are not judged until they are added again.<br><br><strong>20.09</strong> <b>Renumbered pieces are said.</b> Production, Issues now lists pieces whose code changed since an issue as <b>RENUMBERED</b> (ART.2 → ART.1), not as one piece removed and another added, in the copied text and the changes CSV, so vendors and the client hear about it. Spec changes on a renumbered piece show under its new code.<br><br><strong>20.08</strong> <b>Approve a set piece by piece.</b> Mark a set's page as pending (the Approval button) and set each approved piece to Approved on the dashboard: the page prints a green <b>APPROVED A, C</b> beside a red <b>PENDING B</b>, in the PDF and on screen. The Text menu's stamps add <b>COLOR SAMPLE APPROVAL REQUIRED</b>, for colour that will be settled with physical samples.<br><br><strong>20.07</strong> <b>The art type is how the piece is bought.</b> Preflight flags a piece coded as an original (FAO) whose source link is a shop (Etsy, Amazon, Wayfair and the like): a shop piece is sourced (FSO), shown in its real colour and finish. It also flags a commission note on a page with no commission on it, and a commission with no note. The Text menu has two new notes: <b>Commission note</b> and <b>Original artwork note</b>.<br><br><strong>20.06</strong> <b>Wall labels.</b> Production has a <b>Labels</b> tab: title, artist, affiliation, medium and year for each piece, with a tick for the pieces that get a label (objects start unticked). <b>Label sheet (PDF)</b> prints 4" x 2" labels, ten to a Letter page (Avery 5163); <b>Labels CSV</b> is for whoever prints them. Preflight's missing title or artist warning opens this tab.<br><br><strong>20.05</strong> <b>New pieces follow the client's codes.</b> In a project numbered the client's way (ART-01, ART-02), a new piece is ART-03 or the next free number, not ART.3. The separator and zero padding come from the codes already there, so the plan, vendor sheet, crate list and install guide all read the same.<br><br><strong>20.04</strong> <b>Preflight checks what vendors kept finding after a deck went out.</b> In every deck: words left from a template (CLIENT NAME, SECTION HEADING, the filler paragraph, Artist Name), two placements with the same code, and a cover or heading whose version or stage disagrees with the Project tab (a V2 ART DEVELOPMENT cover on a V6). In a Final Spec or Install Guide deck: a piece with no size or frame code, framed paper with no glass, canvas with no stretcher depth, an original or commission with no title or artist, and OPTION headings. Picking Final Spec or Install Guide now counts as an IFS for every Preflight check.<br><br><strong>20.03</strong> <b>Move the standard pages.</b> Process / Timeline, Project Understanding, Art Narrative, Art Collection Strategy, Frame Recommendations, Good Art Good People and Thank You can now be dragged in the page rail, given a page number, or placed before or after a page, like an inserted page. Pages next to a moved page stay where they were. Reset page order puts them back in their usual place. The cover stays page 1.<br><br><strong>20.02</strong> <b>Edit several pictures at once.</b> Shift+click pictures on a page (or drag a box around them) and open the settings: corners, captions on or off, caption source, alignment, font, fit, shadow, fill and stroke change on all of them together. Captions have a <b>Size</b> now, so a page of captions can all match. Shift+click also works on a picture cropped inside its box, which before selected it alone. Pictures placed by the deck agent have straight corners.<br><br>
+<strong>20.01</strong> Groundwork for building a deck from a brief: a driver that runs FRAME in the background (tools/frame-driver.js) and more of what it can ask FRAME to do (project fields, which standard pages print, filling the cover, removing an unused picture box, the contents page, the Thank You team). Two fixes it found in the PDF: a justified paragraph no longer stretches its last line when another paragraph follows, and an image code under a picture is never cut in half; it prints whole on one line, a little smaller if the box is narrow.<br><br>
+<strong>20.00</strong> <b>Brand standards</b>, a sixth tab in Production, for Residence Inn, SpringHill Suites and Ford orders. Keep the fixed-price standard items in one list (brand, item, product, size, image code, cost, sell) and share it with the team as a file; it stays on this computer, never in the code. Add puts an item into the project as a piece at its size, image code and price, with a quantity for orders that hang on no wall. Below it, the client emails from the team's cheat sheet (RI / SHS first reply, custom size quote, PO received, Ford Retail Signature 2.0 contractor enquiry) fill themselves from the project: name, attention line, the order, totals, the card fee and the Ford rate. Copy email keeps the custom-size sentence bold when pasted into Outlook; Edit wording saves your own version.<br><br>
+<strong>19.99</strong> <b>Commercial invoices</b> for shipments between Canada and the USA, on a new <b>Shipping</b> tab in Production. Tick the pieces in the box (or add a vendor's pieces at once) and each becomes a line: description with its size and codes, HS code by product (originals 9701.21, prints framed or on canvas 4911.91, wallcovering 4814.90, window film 3919.90), quantity from the walls and value at cost or sell. Port of lading follows the route (Quebec to the USA by ground is Lacolle, Ontario is Windsor, back into Quebec is Champlain, into Ontario is Port Huron, any air is Montreal-Trudeau) unless you type one. Any line can be edited. Shippers and consignees saved to the address book, and the name you sign with, stay on this computer. Download PDF writes commercial_invoice_ followed by the invoice number.<br><br>
 <strong>19.98</strong> <b>Budget sketch</b> on the floor plan. The add bar has a <b>Size</b> (the standard sizes from the budgeting guide, 11 x 14 to 40 x 50, both ways round) and a <b>Sketch</b> button: while it is on, every click on the plan drops a new piece of the chosen type and size right there, and an <b>Area</b> field names where they go. The pieces are priced by the rate card as they land, and a budget line under the bar shows the total against the budget. Esc or Sketch again stops. + Add code takes the size too.<br><br>
 <strong>19.97</strong> The rate card has <b>add-ons</b>, from the studio's budgeting guide: premium frame (a Larson-Juhl or Universal Arquati moulding), non-glare glass (read off the Glass field, entered at 30x40 and scaled to each piece's area), moisture sealant (pieces in a bath, restroom, spa, pool or locker room, with a Sealant tick per piece on the Pricing tab), oversize (past 40x50) and a buffer percent on every estimate. Each one applies by itself from what the piece already says, and the Pricing tab lists what each piece took. Wallcovering and window film price per square foot alone: leave the base blank.<br><br>
 <strong>19.96</strong> Quotes come out in the company's own formats. On the Pricing tab, <b>RFQ</b> writes the 2026 quote template's front sheet (columns A to AN, the header, the mount formulas for art and image size, shipping and totals, file named YYMMDD_CLIENT_Project_RFQ.xlsx) and <b>RFI</b> writes the same sheet without prices, for vendors, leaving originals, commissions and found objects off. The production pack now carries each vendor's RFI in that layout too. <b>Salesforce CSV</b> now writes the Quote Import Template's 11 columns: vendor codes (Duggal DG00, Bruce White BW00 ...), markup as a plain number, no special characters. Prices follow the house formula: sell = cost x (1.8731 + the artist royalty), royalty 0% on an F image code, 10% on PEN, 5% otherwise, with a Royalty column for a piece the client owns. A Markup typed on the Pricing tab replaces the 1.8731, never the royalty, and the margin is after royalties.<br><br>
@@ -49527,7 +51153,7 @@ const HELP_REFERENCE_DATA = [
             },
             {
                 title: 'Reporting issues',
-                body: `Open an issue at <a href="https://github.com/JDHilliard-lab/FRAME-dev/issues" target="_blank" rel="noopener" style="color:var(--accent);">github.com/JDHilliard-lab/FRAME-dev/issues</a> with your version and build (above), what you were trying to do, and what happened. Screenshots help.<br><br>If FRAME shows a <strong>FRAME hit an error</strong> box, press <strong>Copy details</strong> and paste that in as well: it carries the version, the build and the stack, which is most of what a fix starts from.`
+                body: `Open an issue at <a href="https://github.com/JDHilliard-lab/FRAME-dev/issues" target="_blank" rel="noopener" style="color:var(--accent);">github.com/JDHilliard-lab/FRAME-dev/issues</a> with your version and build (above), what you were trying to do, and what happened. Screenshots help.<br><br>If Farmhand shows a <strong>Farmhand hit an error</strong> box, press <strong>Copy details</strong> and paste that in as well: it carries the version, the build and the stack, which is most of what a fix starts from.`
             }
         ]
     }
@@ -49688,7 +51314,7 @@ function confirmDuplicate(type) {
     if(type === 'new') {
         const dashSrc = dashProjectData.find(d => d.id === temp.id);
         const newDash = JSON.parse(JSON.stringify(dashSrc || dashDefaultData));
-        newDash.id = _nextPlacementCode(_codePrefixOfRow(newDash));   // keeps its type (18.28)
+        newDash.id = _duplicateCodeFor(newDash);   // keeps its type (18.28) and a client code's shape (20.29)
         newDash.qty = 0;
         dashProjectData.push(newDash);
         nF.id = newDash.id;
@@ -50564,6 +52190,8 @@ function drawElevAll() {
     
     const wall = document.getElementById('wall');
     wall.style.width = (wallW * elevScale) + 'px'; wall.style.height = (wallH * elevScale) + 'px';
+    // 20.32: a painted wall, as a layer above the wall's background that stops at the baseboard (20.35).
+    _wallColorPaint();
 
     // Baseboard: a horizontal line at the baseboard height from the floor,
     // spanning the wall width, drawn with the wall lineweight. 0 = none.
@@ -52172,6 +53800,43 @@ function makeElevDraggable(el, idx) {
 function _elevAffLabel(hangVal) {
     return elevFmt(hangVal) + unitSuffix() + _elevDualPart(hangVal) + ' AFF';
 }
+// HEIGHTS NAME WHAT THEY ARE MEASURED FROM (20.28). A client often gives a height from
+// something other than the floor ("46 in from chair rail to top of frame"). Labelled AFF,
+// that number hangs the art about three feet low, which is what a studio corridor install
+// guide did. Per wall, `elev.datum = { name, hIn }`: what the height is measured from
+// (CHAIR RAIL, COUNTER, PANEL) and its height above the floor in INCHES. On that wall the
+// hang dimension runs up from the datum, its label names it, the datum line is drawn with
+// its own AFF height, and the install note says so. No datum, a blank name or no height
+// = the floor, exactly as before.
+function _elevDatum(elev) {
+    const d = elev && elev.datum;
+    if (!d || typeof d !== 'object') return null;
+    const name = String(d.name || '').trim().toUpperCase();
+    const hIn = parseFloat(d.hIn);
+    if (!name || /^(AFF|FLOOR|FINISHED FLOOR)$/.test(name) || !(isFinite(hIn) && hIn > 0)) return null;
+    return { name: name, hIn: hIn };
+}
+// The hang-height label for one wall. `hangVal` is in elevUnit, like _elevAffLabel's.
+function _elevHangLabel(elev, hangVal) {
+    const d = _elevDatum(elev);
+    if (!d) return _elevAffLabel(hangVal);
+    const v = Math.max(0, hangVal - d.hIn * unitFactor('in', elevUnit));
+    return elevFmt(v) + unitSuffix() + _elevDualPart(v) + ' ABOVE ' + d.name;
+}
+// The datum line's own label: CHAIR RAIL 36" AFF. '' with no datum.
+function _elevDatumLineLabel(elev) {
+    const d = _elevDatum(elev);
+    return d ? (d.name + ' ' + _elevAffLabel(d.hIn * unitFactor('in', elevUnit))) : '';
+}
+// `hVal` is in elevUnit (what the Guides tab shows); stored in inches like the hang height.
+function setElevDatum(name, hVal) {
+    const e = elevations[currentElevIndex]; if (!e) return;
+    const nm = String(name == null ? '' : name).trim();
+    const h = parseFloat(hVal);
+    if (!nm) delete e.datum;
+    else e.datum = { name: nm, hIn: (isFinite(h) && h > 0) ? h * unitFactor(elevUnit, 'in') : 0 };
+    _elevSetOutChanged();
+}
 
 // ── SCALE FIGURE HEIGHT DIMENSION ────────────────────────────────────────────
 // A real vertical dimension on the character, floor to the top of the head, built
@@ -52468,7 +54133,7 @@ function _elevWallGuidesSync() {
     const e = (typeof elevations !== 'undefined' && elevations) ? elevations[currentElevIndex] : null;
     if (!e) { box.innerHTML = ''; return; }
     const blocks = Array.isArray(e.contextBlocks) ? e.contextBlocks : [];
-    const hangTxt = (typeof getHangHeight === 'function') ? _elevAffLabel(getHangHeight()) : 'AFF';
+    const hangTxt = (typeof getHangHeight === 'function') ? _elevHangLabel(e, getHangHeight()) : 'AFF';
     let html = '<div class="section-title section-title-static">This wall</div>';
     // Baseboard (19.70): per wall, on every kind of wall. The height is in Elevation settings.
     html += '<label class="ewg-row" title="This wall has a baseboard, drawn at the height set in Elevation settings. Turn off where the wall runs to the floor (a wallcovering then sits on the floor).">'
@@ -52489,6 +54154,17 @@ function _elevWallGuidesSync() {
     }
     html += '<label class="ewg-row" title="The dashed hang line, its ' + _svgEsc(hangTxt) + ' dimension and the target. Turn off where the art is hung to a shelf, booth or furniture instead; the install note then says to work from the dimensions shown.">'
         + '<input type="checkbox" data-ewg="hang"' + (_elevHangOn(e) ? ' checked' : '') + ' onchange="setElevHangGuide(this.checked)"> Hang height (' + _svgEsc(hangTxt) + ')</label>';
+    // 20.28: what this wall's heights are measured from, when the client's markup says.
+    const _dd = (e.datum && typeof e.datum === 'object') ? e.datum : {};
+    const _ddH = parseFloat(_dd.hIn);
+    html += '<div class="ewg-row ewg-datum" title="When the client gives heights from a chair rail, counter or panel, name it and give its height above the floor. The hang dimension then runs from it and is labelled ABOVE CHAIR RAIL, never AFF. Blank = the floor.">'
+        + '<span style="flex:none;">Heights from</span>'
+        + '<input type="text" data-ewg="datum-name" list="ewgDatumList" placeholder="Floor" value="' + _svgEsc(_dd.name || '') + '" style="flex:1; min-width:0;"'
+        + ' onchange="setElevDatum(this.value, this.parentElement.querySelector(\'[data-ewg=datum-h]\').value)">'
+        + '<span style="flex:none;">at</span><input type="number" data-ewg="datum-h" min="0" step="0.25" value="' + (_ddH > 0 ? _elevHeightInUnit(_ddH) : '') + '" style="width:54px;"'
+        + ' onchange="setElevDatum(this.parentElement.querySelector(\'[data-ewg=datum-name]\').value, this.value)">'
+        + '<span style="flex:none;">' + _svgEsc(elevUnit) + ' AFF</span></div>'
+        + '<datalist id="ewgDatumList"><option value="Chair rail"><option value="Counter"><option value="Wainscot"><option value="Panel"><option value="Niche"></datalist>';
     html += '<label class="ewg-row" title="The CL line down the middle of the wall. Off by itself once a context block carries a centre line.">'
         + '<input type="checkbox" data-ewg="wallcl"' + (_elevWallClOn(e) ? ' checked' : '') + ' onchange="setElevWallCL(this.checked)"> Wall centre line</label>';
     if (blocks.length) {
@@ -52639,7 +54315,10 @@ function drawElevGuides(wallW, wallH) {
         const hangLblOffIn = (ce && typeof ce.hangDimLblOffset === 'number') ? ce.hangDimLblOffset : 0;
         const dimXIn = 8 * unitFactor('in', elevUnit) + hangDimOffIn * unitFactor('in', elevUnit);
         const dimXpx = dimXIn * elevScale;
-        const hangPx = hangVal * elevScale;
+        // A wall with a datum (20.28) is dimensioned from the datum up, not from the floor.
+        const _dat = _elevDatum(ce);
+        const datPx = _dat ? Math.min(hangVal, _dat.hIn * unitFactor('in', elevUnit)) * elevScale : 0;
+        const hangPx = hangVal * elevScale - datPx;
         const hangHalfSpan = Math.max(0, hangPx / 2 - 14); // keep number on the line
         let lblShiftPx = hangLblOffIn * unitFactor('in', elevUnit) * elevScale; // up = +
         lblShiftPx = Math.max(-hangHalfSpan, Math.min(hangHalfSpan, lblShiftPx));
@@ -52649,7 +54328,7 @@ function drawElevGuides(wallW, wallH) {
         fh.className = 'floor-hang-dim';
         fh.setAttribute('data-dim-type', 'floor-art');
         fh.style.cssText =
-            `position:absolute; left:${dimXpx}px; bottom:0; height:${hangPx}px; width:0; z-index:1;`;
+            `position:absolute; left:${dimXpx}px; bottom:${datPx}px; height:${hangPx}px; width:0; z-index:1;`;
         // Ends: perpendicular strokes under the plain style (what this dim has
         // always drawn), 45° architectural ticks under the tick style — the same
         // _dimTicksHTML every other dimension uses, so one setting governs all of
@@ -52667,8 +54346,19 @@ function drawElevGuides(wallW, wallH) {
             // ("above finished floor") is what makes this callout self-describing
             // now the HANG HEIGHT word is gone: '60" AFF' says what '60"' alone
             // did not, and it stays correct whether the studio hangs at 57 or 60.
-            `<div class="hang-dim-num" style="position:absolute; left:0; top:calc(50% - ${lblShiftPx}px); transform:translate(-50%,-50%) rotate(-90deg); color:var(--dim-color); font-family:var(--dim-font-family); font-size:var(--dim-font-size); font-weight:600; white-space:nowrap; background:rgba(255,255,255,0.85); padding:0 4px; pointer-events:auto; cursor:ns-resize;">${_elevAffLabel(hangVal)}</div>`;
+            `<div class="hang-dim-num" style="position:absolute; left:0; top:calc(50% - ${lblShiftPx}px); transform:translate(-50%,-50%) rotate(-90deg); color:var(--dim-color); font-family:var(--dim-font-family); font-size:var(--dim-font-size); font-weight:600; white-space:nowrap; background:rgba(255,255,255,0.85); padding:0 4px; pointer-events:auto; cursor:ns-resize;">${_svgEsc(_elevHangLabel(ce, hangVal))}</div>`;
         guideLayer.appendChild(fh);
+        // The datum itself, dashed across the wall with its own height (20.28).
+        if (_dat) {
+            const dl = document.createElement('div'); dl.className = 'hang-guide dim-dash-h datum-guide';
+            dl.setAttribute('data-svg-pen', 'line'); dl.setAttribute('data-svg-dash', '1');
+            dl.style.bottom = datPx + 'px';
+            const dlab = document.createElement('span'); dlab.className = 'datum-label';
+            dlab.textContent = _elevDatumLineLabel(ce);
+            dlab.style.cssText = 'position:absolute; right:4px; bottom:2px; color:var(--dim-color); font-family:var(--dim-font-family); font-size:var(--dim-font-size); font-weight:600; white-space:nowrap; background:rgba(255,255,255,0.85); padding:0 3px;';
+            dl.appendChild(dlab);
+            guideLayer.appendChild(dl);
+        }
         attachHangDimHandle(fh, { halfSpanPx: hangHalfSpan, numCenterTopPx: (hangPx / 2 - lblShiftPx) });
     }
     
@@ -52760,6 +54450,11 @@ function _makeGlazingDraggable(grip, ri) {
         };
     };
 }
+// 20.26: THE GLASS IS DRAWN IN BLACK, not the dimension colour. "The red lines should
+// only be the dimension lines": the run outline and its mullions are a physical thing
+// on the wall, like a context block, so they print in drawing ink; the panel dims and
+// letter tags stay in the dimension colour. The exporter reads the computed colour.
+function _elevGlassInk() { return '#141414'; }   // a function: drawn from boot paths (TDZ)
 function renderGlazingRuns(wallW, wallH) {
     const layer = document.getElementById('glazing-layer');
     if (!layer) return;
@@ -52788,7 +54483,7 @@ function renderGlazingRuns(wallW, wallH) {
         g.setAttribute('data-svg-pen', 'line');
         g.style.cssText = 'position:absolute; left:' + (x0 * elevScale) + 'px; bottom:' + (y0 * elevScale)
             + 'px; width:' + (runW * elevScale) + 'px; height:' + (h * elevScale)
-            + 'px; border:var(--dim-line-w, 1px) solid var(--dim-color, #444); box-sizing:border-box;'
+            + 'px; border:var(--dim-line-w, 1px) solid ' + _elevGlassInk() + '; box-sizing:border-box;'
             + ' background:rgba(120,170,200,0.10); pointer-events:none;';
         layer.appendChild(g);
         // THE DRAG GRIP. Only on the Glass tab, and only the chip takes the pointer — see
@@ -52818,7 +54513,7 @@ function renderGlazingRuns(wallW, wallH) {
             m.setAttribute('data-svg-pen', 'line');
             m.style.cssText = 'position:absolute; left:' + (sx * elevScale) + 'px; bottom:' + (y0 * elevScale)
                 + 'px; width:var(--dim-line-w, 1px); height:' + (h * elevScale)
-                + 'px; background:var(--dim-color, #444); pointer-events:none;';
+                + 'px; background:' + _elevGlassInk() + '; pointer-events:none;';
             layer.appendChild(m);
         });
         // A LETTER TAG in each pane. Without one, a panel schedule listing print
@@ -53430,7 +55125,8 @@ function renderContextBlocks(wallW, wallH) {
         const hasArt = !!art;
         if (hasArt) el.classList.add('ctx-has-art');
         let extra = '';
-        if (hasArt) extra = ' border:none;';
+        // The art carries its own outline; with a body (20.20) the box goes clear too.
+        if (hasArt) extra = ' border:none;' + (_ctxBodyOn(b, art) ? ' background:transparent;' : '');
         else if (shape === 'ellipse') extra = ' border-radius:50%;';
         else if (shape === 'shelf') extra = ' border-top-width:2px; border-top-color:' + CONTEXT_INK + ';';
         // A screen reads as a solid object rather than an opening, so it is the one
@@ -53473,6 +55169,14 @@ function renderContextBlocks(wallW, wallH) {
         const hatchRegion = hasArt ? _ctxHatchRegion(b, art) : null;
         const avoid = _ctxAvoid(b);
         if (avoid) el.classList.add('ctx-avoid');
+        // The drawing's own white, FIRST, so the surface hatch and the lines sit over it.
+        if (_ctxBodyOn(b, art)) {
+            const bw0 = document.createElement('div');
+            bw0.className = 'ctx-body';
+            bw0.style.cssText = 'position:absolute; inset:0; pointer-events:none;';
+            bw0.innerHTML = _ctxBodySvg(art);
+            el.appendChild(bw0);
+        }
         // A keep-clear block is hatched over its whole box, art or not (19.47).
         if (!hasArt || hatchRegion || avoid) {
             const fillSvg = _ctxFillSvg(avoid ? 'avoid' : fillKind, pw, ph, avoid ? null : hatchRegion, art, b.id);
@@ -54171,6 +55875,9 @@ function importElevUnderlay(file) {
             const fit = _underlayContain(natW, natH, wallW, wallH);
             elev.underlay = {
                 src: src,
+                // 20.37: the file it came from, less the extension (as image codes are), so
+                // the Context panel, the Images window and a package can say which drawing it is.
+                name: String((file && file.name) || '').replace(/\.[A-Za-z0-9]{1,5}$/, ''),
                 natW: natW || 0, natH: natH || 0,
                 // Centred on the wall, so both edges are visible to drag from. A
                 // contained image is never larger than the wall, so this can't push
@@ -54183,10 +55890,13 @@ function importElevUnderlay(file) {
                 opacity: prev ? _underlayOpacity(prev) : UNDERLAY_DEFAULT_OPACITY,
                 lockAspect: prev ? _underlayLocked(prev) : true
             };
-            if (typeof _elevShowTabFor === 'function') _elevShowTabFor('context');
+            if (typeof _elevShowTabFor === 'function') _elevShowTabFor('wall');
             const d = document.getElementById('sec-underlay');
             if (d) d.open = true;
             _ctxCommit();
+            // THE DRAWING HAS ARRIVED (20.41). A wall still marked Elevation required would
+            // keep printing the red stamp over the elevation that answers it, so ask.
+            if (!prev && elev.elevRequired === true) _ulOfferClearRequired(elev);
         };
         // Decoding can fail (a corrupt file, an unsupported codec). Placing it at the
         // wall size with no natural aspect is the honest fallback: the image still
@@ -54501,7 +56211,7 @@ function _ulCalibrateClick(e) {
     // The panel now asks what that distance really is. Deliberately an inline field
     // rather than a prompt: the measured value stays on screen beside it, and a typo
     // is a re-edit instead of starting the two clicks again.
-    if (typeof _elevShowTabFor === 'function') _elevShowTabFor('context');
+    if (typeof _elevShowTabFor === 'function') _elevShowTabFor('wall');
     const d = document.getElementById('sec-underlay');
     if (d) d.open = true;
     initElevControls();
@@ -54541,7 +56251,8 @@ function renderUnderlayControls() {
     if (!u) {
         box.innerHTML = `<div class="gz-hint">Drop the client's or architect's elevation in behind
                  this wall and fade it back, then trace the doors, windows and millwork onto it as
-                 context blocks. The image is a guide only — it never appears in an export.</div>
+                 context blocks. It is a tracing guide unless you switch on <b>Show in deck</b>, which
+                 prints it behind the art on this wall's pages and exports.</div>
                  <button class="gz-add" onclick="pickElevUnderlay()">+ Add client elevation</button>`;
         return;
     }
@@ -54583,6 +56294,18 @@ function renderUnderlayControls() {
             <button class="gz-btn${_ulCalibrateActive ? ' gz-btn-on' : ''}" onclick="toggleUnderlayCalibrate()"
                     title="Scale the image off a dimension printed on it — click the two ends of a known size, then type it">Calibrate</button>
             <button class="gz-btn gz-btn-del" onclick="removeElevUnderlay()" title="Remove this image">&times;</button>
+          </div>
+          <div class="gz-count" style="margin-bottom:5px;">
+            <input type="text" class="gz-in" data-ul-name value="${_esc(u.name || '')}" placeholder="Name this drawing (e.g. A-501 Elevation 3)"
+                   title="Which drawing this is. Taken from the file name when you add it; shows in Save menu > Images and in a package."
+                   onchange="setUnderlayName(this.value)" style="flex:1 1 auto; min-width:0;">
+            <span class="gz-note" style="flex:0 0 auto;">${(u.natW && u.natH) ? (Math.round(u.natW) + ' \u00d7 ' + Math.round(u.natH) + ' px') : ''}</span>
+          </div>
+          <div class="gz-count" style="margin-bottom:5px;">
+            <button class="gz-btn${u.inDeck === true ? ' gz-btn-on' : ''}" data-ul-indeck onclick="setUnderlayInDeck(${u.inDeck === true ? 'false' : 'true'})"
+                    title="Print this client elevation behind the art on this wall's deck pages and exports, at full strength and cropped to the wall. Calibrate it first so the art is to scale.">${u.inDeck === true ? '&#10003; Shown in deck' : 'Show in deck'}</button>
+            <span class="gz-note">${u.inDeck === true ? 'Prints behind the art, cropped to the wall' : 'Tracing guide only'}</span>
+            <button type="button" class="wall-all-btn" data-ul-indeck-all onclick="_wallAllMenu(this, 'indeck')" title="Show in deck, or tracing guide only, on every wall that has a client elevation">All walls &#9662;</button>
           </div>
           <label class="gz-f" style="margin-bottom:5px;">
             <span>Fade <span id="underlayOpacityOut" class="gz-note">${pct}%</span></span>
@@ -54636,6 +56359,7 @@ function renderContextControls() {
     // scratch is "put a 65 inch TV on the wall and move it".
     html += `<div class="ctx-palette">`;
     group.items.forEach(p => {
+        if (p.hidden) return;   // superseded by a hospitality drawing (20.24); saved walls still draw it
         const armed = contextToolActive && _ctxArmedPreset === p.key;
         // The tooltip states the real size AND how the AFF is measured, because "60 in
         // AFF" means the centre for a TV and the underside for a door, and that
@@ -54654,7 +56378,9 @@ function renderContextControls() {
         <div class="gz-sub" style="margin:0 0 7px;">${contextToolActive
             ? '<strong>Click the wall</strong> to place a ' + _svgEsc(armedP.name).toLowerCase()
               + ' at ' + _gzFmt(armedP.w) + '&times;' + _gzFmt(armedP.h) + '", or <strong>drag</strong> for a custom size. Escape to cancel.'
-            : 'Pick an item, then click the wall for its exact size or drag for your own. Click a block to select it and press <strong>Delete</strong>; Ctrl-click to add to the selection, Ctrl+A for all.'}</div>`;
+            : 'Pick an item, then click the wall for its exact size or drag for your own. Click a block to select it and press <strong>Delete</strong>; Ctrl-click to add to the selection, Ctrl+A for all.'}
+          <button type="button" class="gz-btn ctx-sheet-btn" onclick="openContextSheet()"
+                  title="Every block in the library on one sheet, drawn to one scale. Click one to place it.">See all blocks</button></div>`;
     if (!blocks.length) {
         html += `<div class="gz-hint">Nothing on this wall but art. Add a block for a door, window,
                  TV or run of millwork — art draws in front of it, and it prints on the elevation so
@@ -54743,6 +56469,55 @@ function renderContextControls() {
     html += `</div>`;
     box.innerHTML = html;
 }
+// THE CONTACT SHEET (20.24): the whole library in one popup, every block drawn at ONE
+// scale so sizes compare (a king set beside a soap dispenser), grouped like the palette.
+// Built from CONTEXT_LIBRARY and _ctxArtSvg, so it can never show a drawing the wall
+// would not. Hidden (superseded) items are left out. Clicking a tile arms that block.
+const CTX_SHEET_PX_IN = 1.5;   // px per inch on the sheet
+function openContextSheet() {
+    const old = document.getElementById('ctxSheet'); if (old) old.remove();
+    const ov = document.createElement('div');
+    ov.id = 'ctxSheet'; ov.className = 'frame-modal'; ov.setAttribute('data-modal-backdrop', ''); ov.style.display = 'flex';
+    const card = document.createElement('div'); card.className = 'fsp-card ctx-sheet-card';
+    const head = document.createElement('div'); head.className = 'fsp-head';
+    head.innerHTML = '<div><div class="fsp-title">Context blocks</div><div class="fsp-sub">Everything in the library, drawn to one scale. Click a block to place it on the wall.</div></div>';
+    const x = document.createElement('button'); x.type = 'button'; x.className = 'fsp-close phone-x'; x.setAttribute('data-modal-close', ''); x.setAttribute('aria-label', 'Close');
+    x.innerHTML = '<svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+    x.onclick = () => ov.remove();
+    head.appendChild(x); card.appendChild(head);
+    const K = CTX_SHEET_PX_IN;
+    const tile = (p, art, side) => {
+        const b = document.createElement('button'); b.type = 'button'; b.className = 'ctx-sheet-tile';
+        b.setAttribute('data-ctx-key', p.key + (side ? ':side' : ''));
+        const w = Math.max(1, art.w * K), h = Math.max(1, art.h * K);
+        b.innerHTML = '<div class="ctx-sheet-pic">' + _ctxArtSvg(art, '#141414', K)
+            .replace('<svg ', '<svg width="' + w.toFixed(1) + '" height="' + h.toFixed(1) + '" ') + '</div>'
+            + '<div class="ctx-sheet-name"></div><div class="ctx-sheet-size"></div>';
+        b.querySelector('.ctx-sheet-name').textContent = p.name + (side ? ' (side)' : '');
+        b.querySelector('.ctx-sheet-size').textContent = (p.ref ? p.ref + ' \u00b7 ' : '') + _gzFmt(art.w) + ' \u00d7 ' + _gzFmt(art.h) + '"';
+        b.title = 'Place a ' + p.name.toLowerCase() + ' on the wall';
+        b.onclick = () => {
+            ov.remove();
+            _ctxPaletteCat = _ctxCatOf(p.key);
+            if (!(contextToolActive && _ctxArmedPreset === p.key)) armContextShape(p.key);
+            else renderContextControls();
+        };
+        return b;
+    };
+    CONTEXT_LIBRARY.forEach(c => {
+        const items = c.items.filter(p => !p.hidden && p.svg);
+        if (!items.length) return;
+        const h = document.createElement('div'); h.className = 'fsp-sec'; h.textContent = c.cat; card.appendChild(h);
+        const row = document.createElement('div'); row.className = 'ctx-sheet-row'; card.appendChild(row);
+        items.forEach(p => {
+            row.appendChild(tile(p, { w: p.w, h: p.h, svg: p.svg }, false));
+            if (_ctxHasSide(p)) row.appendChild(tile(p, { w: p.side.w, h: p.side.h, svg: p.side.svg }, true));
+        });
+    });
+    ov.appendChild(card);
+    document.body.appendChild(ov);
+    return ov;
+}
 // Which library group the palette is showing. Module state, not project data — it is
 // where you are looking, not anything about the wall.
 let _ctxPaletteCat = null;
@@ -54767,7 +56542,7 @@ function setContextPaletteCat(cat) {
 const ELEV_TAB_KEY = 'elevSidebarTab';
 let _elevSidebarTab = 'art';
 function switchElevTab(key) {
-    const valid = ['art', 'guides', 'context', 'glass'];
+    const valid = ['art', 'wall', 'guides', 'context', 'glass'];
     _elevSidebarTab = valid.indexOf(key) >= 0 ? key : 'art';
     document.querySelectorAll('[data-elevtabpane]').forEach(el => {
         el.style.display = (el.getAttribute('data-elevtabpane') === _elevSidebarTab) ? '' : 'none';
@@ -57969,7 +59744,14 @@ async function exportElevPNG(opts) {
     // PDF elevations built from this same function.
     const _ulLayer = document.getElementById('underlay-layer');
     const _ulDisp = _ulLayer ? _ulLayer.style.display : null;
-    if (_ulLayer) _ulLayer.style.display = 'none';
+    const _ulOver = _ulLayer ? _ulLayer.style.overflow : null;
+    const _ulImg = _ulLayer ? _ulLayer.querySelector('img') : null;
+    const _ulOp = _ulImg ? _ulImg.style.opacity : null;
+    // 20.31: a wall whose client elevation is its drawing keeps it, full strength, clipped.
+    if (_ulLayer && _underlayInDeck(elevations[currentElevIndex])) {
+        _ulLayer.style.overflow = 'hidden';
+        if (_ulImg) _ulImg.style.opacity = '1';
+    } else if (_ulLayer) _ulLayer.style.display = 'none';
 
     // Reference padding for the whole export (ELEV_EXPORT_WRAP_PADDING). Set
     // BEFORE the redraw below, because that redraw is what measures it. The
@@ -57994,7 +59776,7 @@ async function exportElevPNG(opts) {
     await _exportSettle();
 
     const oldOverflow = ws.style.overflow; ws.style.overflow = 'visible';
-    const oldWallBg = wall.style.background; wall.style.background = 'transparent';
+    const oldWallBg = wall.style.background; wall.style.background = 'transparent';   // #wall-paint (20.32/20.35) stays: it is a layer, not this
 
     // Character clip-fix + flush-right + flush-bottom export padding.
     // The character is position:absolute inside #wall so it doesn't contribute
@@ -58260,7 +60042,7 @@ async function exportElevPNG(opts) {
         // elevation would be hostile). Single export keeps the alert.
         if (opts && opts.returnBlob) throw err;
         showInfoModal('Image export failed', (err && err.message ? err.message : 'Unknown error') + String.fromCharCode(10, 10)
-            + 'If you opened FRAME straight from a file (file://...), the browser blocks it from reading local files. Open it from the site, or serve the folder with a local web server such as VS Code Live Server, and try again.');
+            + 'If you opened Farmhand straight from a file (file://...), the browser blocks it from reading local files. Open it from the site, or serve the folder with a local web server such as VS Code Live Server, and try again.');
     } finally {
         // Restore every frame we touched
         restoreList.forEach(({ div, hiddenChildren, overlayCanvas }) => {
@@ -58287,7 +60069,8 @@ async function exportElevPNG(opts) {
         _elevExportFloor = Math.max(0, _elevExportFloor - 1);
         if (_dockSl) _dockSl.style.display = _dockDisp;
         // …and the tracing guide, which is authoring UI and belongs back on screen.
-        if (_ulLayer) _ulLayer.style.display = _ulDisp;
+        if (_ulLayer) { _ulLayer.style.display = _ulDisp; _ulLayer.style.overflow = _ulOver; }
+        if (_ulImg) _ulImg.style.opacity = _ulOp;
         // Restore zoom factor and re-render at user's zoom level
         elevZoomFactor = oldZoomFactor;
         drawElevAll();
@@ -58815,6 +60598,19 @@ async function exportElevSVG(opts) {
             return { x: r.left + ox, y: r.top + oy, w: r.width, h: r.height };
         };
 
+        // ── WALL COLOUR (20.32): the very first thing, so the underlay, art and blocks sit on it.
+        //    The SVG is parsed as XML: every attribute needs a value (a bare data-wall-color failed the whole capture).
+        {
+            const _wc = _wallColor(elevations[currentElevIndex]);
+            if (_wc) { const _wr = rectToSvg(wall); const _ph = _wr.h * (1 - _wallPaintBaseFrac(elevations[currentElevIndex])); backLayer.push(`<rect data-wall-color="1" x="${_wr.x.toFixed(1)}" y="${_wr.y.toFixed(1)}" width="${_wr.w.toFixed(1)}" height="${_ph.toFixed(1)}" fill="${_wc}"/>`); }   // down to the baseboard, not over it (20.35)
+        }
+        // ── CLIENT ELEVATION AS THE DRAWING (20.31): behind everything, clipped to the wall.
+        {
+            const _ue = elevations[currentElevIndex];
+            const _ui = _underlayInDeck(_ue) ? document.querySelector('#underlay-layer img.elev-underlay-img') : null;
+            if (_ui) backLayer.push(..._underlayDeckSvg(_ue, rectToSvg(_ui), rectToSvg(wall), _elevId ? _elevId(_ue) : currentElevIndex));
+        }
+
         // ── WALL outline: transparent fill, uniform thin stroke all around
         //    (the thick floor is gone). A baseboard line is drawn separately if
         //    the user set a baseboard height. ──
@@ -58842,17 +60638,27 @@ async function exportElevSVG(opts) {
                 const by = br.y.toFixed(1);
                 const x0 = wp.x, x1 = wp.x + wp.w;
                 const spans = [];
-                document.querySelectorAll('#context-layer .ctx-block').forEach(ctxEl => {
+                for (const ctxEl of document.querySelectorAll('#context-layer .ctx-block')) {
                     const cs2 = getComputedStyle(ctxEl);
-                    if (cs2.display === 'none' || cs2.visibility === 'hidden') return;
+                    if (cs2.display === 'none' || cs2.visibility === 'hidden') continue;
+                    const cp = rectToSvg(ctxEl);
+                    if (!(cp.w > 0) || !(cp.h > 0)) continue;
+                    if (br.y < cp.y || br.y > cp.y + cp.h) continue;   // doesn't cross the line
+                    // A body that follows its drawing (20.20) hides the baseboard only where
+                    // the drawing is solid at that height: it shows between chair casters.
+                    if (ctxEl.querySelector('.ctx-body')) {
+                        const artEl0 = ctxEl.querySelector('.ctx-art');
+                        const ap = artEl0 ? _ctxArtFor(artEl0.dataset.ctxArt, artEl0.dataset.ctxArtView, artEl0.dataset.ctxArtVariant) : null;
+                        const fr = ap ? await _ctxBodySpansAt(ap, (br.y - cp.y) / cp.h) : null;
+                        if (fr) { fr.forEach(([a, b]) => spans.push([cp.x + a * cp.w, cp.x + b * cp.w])); continue; }
+                        spans.push([cp.x, cp.x + cp.w]);
+                        continue;
+                    }
                     // A transparent block hides nothing. Read the COMPUTED background so
                     // this follows CONTEXT_FILL rather than assuming what it is.
-                    if (!cs2.backgroundColor || cs2.backgroundColor === 'rgba(0, 0, 0, 0)') return;
-                    const cp = rectToSvg(ctxEl);
-                    if (!(cp.w > 0) || !(cp.h > 0)) return;
-                    if (br.y < cp.y || br.y > cp.y + cp.h) return;   // doesn't cross the line
+                    if (!cs2.backgroundColor || cs2.backgroundColor === 'rgba(0, 0, 0, 0)') continue;
                     spans.push([cp.x, cp.x + cp.w]);
-                });
+                }
                 spans.sort((a, b) => a[0] - b[0]);
                 let cx = x0;
                 const seg = (a, b) => {
@@ -58921,7 +60727,11 @@ async function exportElevSVG(opts) {
             const bd = _parseBorder(ccs.borderTop);
             const stroke = bd ? bd.color : CONTEXT_EDGE;
             const sw = _svgStrokePx(null, bd ? bd.width : 1);
-            if (artOk) {
+            if (artOk && ctxEl.querySelector('.ctx-body')) {
+                // The body follows the drawing (20.20): its closed shapes, not the box.
+                ctxLayer.push(_ctxBodySvg(artP).replace(/^<svg /,
+                    `<svg x="${p.x.toFixed(1)}" y="${p.y.toFixed(1)}" width="${p.w.toFixed(1)}" height="${p.h.toFixed(1)}" `));
+            } else if (artOk) {
                 // The tint, with NO stroke — the art supplies the outline, and two
                 // outlines a hairline apart reads as a rendering fault. Drawn first so
                 // the surface hint and the drawing both sit over it, matching the screen
@@ -59459,7 +61269,7 @@ async function exportElevSVG(opts) {
 // Sizes are INCHES both ways (the project unit is converted); pages are addressed by
 // KEY (`_deckPageKey`), items by code, walls by `elev.id`, never an index. A write is
 // one undo entry. Failures come back as `{ error }`, never a modal: nobody is watching.
-const FRAME_API_VERSION = 1;
+const FRAME_API_VERSION = 2;
 function _apiErr(msg) { return { error: msg }; }
 function _apiAfterEdit() {
     try { if (typeof scheduleAutosave === 'function') scheduleAutosave(); } catch (e) {}
@@ -59488,6 +61298,9 @@ async function _apiFile(src, name) {
 function _apiLoadImage(url) {
     return new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = () => rej(new Error('image did not decode')); im.src = url; });
 }
+// A page whose words and pictures are its own: a layout page, or a fixed page drawn from
+// elements (cover, understanding, narrative, strategy, slogan). 20.01.
+function _apiFillable(d) { return !!d && (d.kind === 'layout' || (d.kind === 'fixed' && d.page && Array.isArray(d.page.elements))); }
 // The text and image slots of a layout page, in the order a template lists them.
 function _apiSlots(desc) {
     const key = _deckPageKey(desc);
@@ -59521,7 +61334,7 @@ const FRAME_API = {
     listPages() {
         const out = []; let n = 1;
         (_deckPageList() || []).forEach(d => {
-            out.push({ key: _deckPageKey(d), kind: d.kind, label: _dsPageLabel(d), page: n, span: _deckPageSpan(d), editable: d.kind === 'layout' });
+            out.push({ key: _deckPageKey(d), kind: d.kind, label: _dsPageLabel(d), page: n, span: _deckPageSpan(d), editable: _apiFillable(d) });
             n += _deckPageSpan(d);
         });
         return out;
@@ -59538,18 +61351,19 @@ const FRAME_API = {
     describePage(key) {
         const d = _apiPage(key);
         if (!d) return _apiErr('no page ' + key);
-        if (d.kind !== 'layout') return { key: key, kind: d.kind, label: _dsPageLabel(d), texts: [], images: [] };
+        if (!_apiFillable(d)) return { key: key, kind: d.kind, label: _dsPageLabel(d), texts: [], images: [] };
         const s = _apiSlots(d);
         return {
             key: key, kind: d.kind, label: _dsPageLabel(d),
             texts: s.texts.map((o, n) => ({ slot: n, text: o.e.text || '', x: o.e.x, y: o.e.y, w: o.e.w, font: o.e.font || '', size: o.e.size })),
-            images: s.shapes.map((a, n) => ({ slot: n, x: a.x, y: a.y, w: a.w, h: a.h, filled: !!a.dataUrl, fileName: a.fileName || '' })),
+            images: s.shapes.map((a, n) => ({ slot: n, x: a.x, y: a.y, w: a.w, h: a.h, filled: !!a.dataUrl, fileName: a.fileName || '', caption: a.showCaption ? _dsResolveCaptionText(a) : '' })),
         };
     },
 
     // ── Writing ──
     // A new code: { category: 'framed'|'canvas'|'egd'|'wf'|<project category>, set: 'n1'..'n4'
     // or a salon preset key, hang: true for its own wall, location, widthIn, heightIn }.
+    // 20.30: level (plan index) and zone (the pattern's {zone}) mint a code in the project's pattern.
     addItem(opts) {
         opts = opts || {};
         const cat = opts.category != null ? opts.category : 'framed';
@@ -59559,7 +61373,7 @@ const FRAME_API = {
         // Location and size land BEFORE the wall is drawn: the wall is named and sized from them.
         const before = {}; (dashProjectData || []).forEach(r => { if (r) before[r.id] = true; });
         const base = undoStack[undoStack.length - 1];
-        const res = _placementMint(cat, set, false);
+        const res = _placementMint(cat, set, false, (opts.level != null || opts.zone != null) ? { level: opts.level, zone: opts.zone } : null);
         const rows = (dashProjectData || []).filter(r => r && !before[r.id] && _artGroupKey(r.id) === res.code);
         const kIn = unitFactor('in', dashUnit);
         rows.forEach(r => {
@@ -59646,7 +61460,7 @@ const FRAME_API = {
     async fillPage(key, fill, _o) {
         const d = _apiPage(key);
         if (!d) return _apiErr('no page ' + key);
-        if (d.kind !== 'layout') return _apiErr(key + ' is not a layout page');
+        if (!_apiFillable(d)) return _apiErr(key + ' has no slots to fill (a layout page, or the cover, understanding, narrative, strategy or slogan)');
         const s = _apiSlots(d); fill = fill || {};
         const each = (v, fn) => { if (!v) return; Object.keys(v).forEach(k => { if (v[k] != null) fn(+k, v[k]); }); };
         const bad = [];
@@ -59656,8 +61470,12 @@ const FRAME_API = {
             delete o.e.runs;   // rich runs would keep printing the template's words
         });
         const jobs = [];
+        // 20.01: `false` takes an unused slot off the page (an empty grey box never prints well).
+        // Removed after the fills, so the slot numbers above still mean the template's.
+        const drop = [];
         each(fill.images, (n, v) => {
             const a = s.shapes[n]; if (!a) { bad.push('image slot ' + n); return; }
+            if (v === false) { drop.push(a); return; }
             const src = (v && typeof v === 'object' && !(typeof Blob !== 'undefined' && v instanceof Blob)) ? v : { image: v };
             jobs.push((async () => {
                 const file = await _apiFile(src.image, src.name);
@@ -59668,13 +61486,99 @@ const FRAME_API = {
                 const sc = Math.min(1, 1400 / Math.max(im.naturalWidth || 1, im.naturalHeight || 1));
                 const cnv = document.createElement('canvas'); cnv.width = Math.max(1, Math.round((im.naturalWidth || 1) * sc)); cnv.height = Math.max(1, Math.round((im.naturalHeight || 1) * sc));
                 let durl = url;
-                try { const cx = cnv.getContext('2d'); if (cx) { cx.drawImage(im, 0, 0, cnv.width, cnv.height); durl = /png/i.test(file.type) ? cnv.toDataURL('image/png') : cnv.toDataURL('image/jpeg', 0.85); } } catch (e) { durl = url; }
+                // A PNG stays a PNG only where its transparency is real (20.01): a pool of PNG
+                // photographs made a 96 MB project of a 15-page concept deck.
+                try { const cx = cnv.getContext('2d'); if (cx) { cx.drawImage(im, 0, 0, cnv.width, cnv.height); durl = (/png/i.test(file.type) && _imageDataHasAlpha(cx, cnv.width, cnv.height)) ? cnv.toDataURL('image/png') : cnv.toDataURL('image/jpeg', /png/i.test(file.type) ? 0.92 : 0.85); } } catch (e) { durl = url; }
                 _dsSetShapeImage(a, durl, im, file);
+                // 20.01: `fit: 'whole'` shrinks the box around the picture INSIDE its slot,
+                // centred (artwork is never cropped); `caption: 'code'` prints the image
+                // code under it, any other string prints that text.
+                // Square corners unless asked (20.02): the studio's moodboards are straight-edged.
+                a.radius = (src.radius != null && isFinite(+src.radius)) ? Math.max(0, +src.radius) : 0;
+                if (src.fit === 'whole') {
+                    const w0 = a.w || 0.25, h0 = a.h || _dsShapeRatioH(w0, a.aspect), asp = a.aspect || 1;
+                    let w = w0, h = _dsShapeRatioH(w0, asp);
+                    if (h > h0) { h = h0; w = h0 / _dsShapeRatioH(1, asp); }
+                    a.x = (a.x || 0) + (w0 - w) / 2; a.y = (a.y || 0) + (h0 - h) / 2; a.w = w; a.h = h;
+                    a.fit = 'cover'; a.lockAspect = true; a.lockRatio = asp;
+                }
+                if (src.caption) {
+                    a.showCaption = true;
+                    if (src.caption === 'code') a.capSource = 'filename';
+                    else { a.capSource = 'text'; a.caption = String(src.caption); }
+                }
             })());
         });
         await Promise.all(jobs);
+        if (drop.length) { const list = (editorialContent.annotations || {})[s.key] || []; drop.forEach(a => { const i = list.indexOf(a); if (i >= 0) list.splice(i, 1); }); }
         if (!(_o && _o.noHistory)) { pushHistory(); _apiAfterEdit(); }
         return bad.length ? _apiErr('missing ' + bad.join(', ')) : { key: key };
+    },
+
+    // The Project tab's fields (20.01): { name, client, attn, date, code, version, location }.
+    // Written into the same inputs a designer types in, so the cover, footer and save agree.
+    setProject(fields) {
+        fields = fields || {};
+        const map = { name: 'g_projName', client: 'g_client', attn: 'g_attn', date: 'g_date', code: 'specPdfCode', version: 'specPdfVersion', location: 'specPdfLocation' };
+        const done = [];
+        Object.keys(fields).forEach(k => {
+            const el = map[k] && document.getElementById(map[k]); if (!el || fields[k] == null) return;
+            el.value = String(fields[k]); done.push(k);
+            try { el.dispatchEvent(new Event('input', { bubbles: true })); el.dispatchEvent(new Event('change', { bubbles: true })); } catch (e) {}
+        });
+        const bad = Object.keys(fields).filter(k => !map[k]);
+        _apiAfterEdit();
+        return bad.length ? _apiErr('unknown field ' + bad.join(', ') + ' (name, client, attn, date, code, version, location)') : { set: done };
+    },
+    // Which standard pages print (20.01): { cover, timeline, understanding, narrative,
+    // strategy, frameRec, floorplanKey, spec, slogan, contacts } true/false. The Project
+    // tab's tick boxes, so the same one undo entry and the same saved map.
+    setPages(inc) {
+        inc = inc || {};
+        const bad = Object.keys(inc).filter(k => !DECK_INCLUDE_PAGES.some(p => p.key === k));
+        if (bad.length) return _apiErr('unknown page ' + bad.join(', ') + ' (' + DECK_INCLUDE_PAGES.map(p => p.key).join(', ') + ')');
+        Object.keys(inc).forEach(k => { const e = document.getElementById('specInc_' + k); if (e) e.checked = !!inc[k]; });
+        _dsIncludeChanged();
+        _apiAfterEdit();
+        return { pages: _dsInclude() };
+    },
+    // A page's line on the contents page (20.01): { hide: true|false, label: 'text' }.
+    setContentsEntry(key, o) {
+        const d = _apiPage(key); if (!d) return _apiErr('no page ' + key);
+        o = o || {};
+        if ('hide' in o) setTocOverride([key], 'hide', !!o.hide);
+        if ('label' in o) setTocOverride([key], 'label', o.label || '');
+        pushHistory(); _apiAfterEdit();
+        return { key: key };
+    },
+    // The studio directory the Thank You page picks from (20.01): [{name, role, team}].
+    async listContacts() { return (await _loadRepoContacts()).map(c => ({ name: c.name, role: c.role, team: c.team })); },
+    // The Thank You page's people, in print order (20.01): names from the directory, or
+    // { name, role, email, phone } for someone not in it. Replaces the list.
+    async setContacts(people) {
+        const dir = await _loadRepoContacts();
+        const out = [], bad = [];
+        (people || []).forEach(p => {
+            if (p && typeof p === 'object') { out.push({ name: p.name || '', role: p.role || '', email: p.email || '', phone: p.phone || '' }); return; }
+            const c = dir.find(x => String(x.name).toLowerCase() === String(p).trim().toLowerCase());
+            if (c) out.push({ name: c.name, role: c.role, email: c.email, phone: c.phone }); else bad.push(String(p));
+        });
+        if (bad.length) return _apiErr('not in the directory: ' + bad.join(', ') + ' (listContacts, or pass {name, role, email, phone})');
+        editorialContent.contacts = _contactsSerialize(out);
+        editorialContent.contactsHidden = []; editorialContent.contactsV = 2; delete editorialContent.contactsOrder;
+        pushHistory(); _apiAfterEdit();
+        return { contacts: out.map(c => c.name) };
+    },
+    // A layout page out of the deck (20.01). Fixed pages are switched off with setPages.
+    removePage(key) {
+        const d = _apiPage(key); if (!d) return _apiErr('no page ' + key);
+        if (d.kind !== 'layout' || !d.page) return _apiErr(key + ' is not a layout page; switch a standard page off with setPages');
+        const list = editorialContent.layoutPages || [], i = list.indexOf(d.page);
+        if (i < 0) return _apiErr('no page ' + key);
+        list.splice(i, 1);
+        if (editorialContent.annotations) delete editorialContent.annotations[key];
+        pushHistory(); _apiAfterEdit();
+        return { removed: key };
     },
 
     // ── Output ──
@@ -59696,7 +61600,10 @@ const FRAME_API = {
     // printed a placeholder instead of a wall).
     async exportPDF() {
         if (window._specPdfBusy) return _apiErr('a PDF is already being built');
-        const r = await exportSpecPagePDF({ returnPdf: true });
+        // The same options Generate PDF passes (applySpecPdfModal), or the footer loses its
+        // location, code and version and the file its name (20.01).
+        const pe = document.getElementById('specPdfPreset');
+        const r = await exportSpecPagePDF({ returnPdf: true, all: true, meta: _deckFooterMeta(), include: _dsInclude(), preset: pe ? String(pe.value || '').trim() : '' });
         return r || _apiErr('nothing was built (no pieces in the project?)');
     },
     // The project file text (what Save Project writes) and the way back in.
@@ -59823,9 +61730,21 @@ function _sampleRequestText(opts) {
 }
 // IFS is the stage where nothing may be pending. Read off the footer version the deck
 // already prints (Project tab), so there is no second "stage" setting to forget.
+// 20.04: the footer box holds four characters ("V5"), so it rarely says IFS. The
+// presentation type IS the stage (Final Spec, Install Guide), and the designer picks it.
 function _deckIsIFS() {
+    const st = _deckStage();
+    if (st === 'specification' || st === 'installation') return true;
     let v = ''; try { v = _deckFooterMeta().version || ''; } catch (e) {}
     return /\bIFS\b|issued for spec/i.test(v);
+}
+// THE DECK'S STAGE (20.04): the presentation type, else a stage word in the footer.
+const PRES_STAGE = { concept: 'concept', wireframe: 'concept', artdev: 'development', final: 'specification', install: 'installation' };
+function _deckStage() {
+    const t = editorialContent && editorialContent.presentationType;
+    if (t && PRES_STAGE[t]) return PRES_STAGE[t];
+    let v = ''; try { v = _deckFooterMeta().version || ''; } catch (e) {}
+    return _deckStageOf(v);
 }
 function _samplePreflight() {
     const out = [];
@@ -59893,6 +61812,372 @@ function _readinessPreflight() {
     return out;
 }
 
+// ── WHAT TEN STUDIO PROJECTS KEPT CATCHING AFTER ISSUE (20.04) ─────────────────────────
+// Vendors and PMs found these by reading issued decks line by line, again and again:
+// pieces with no size or frame code, framed paper with no glass, canvas with no stretcher
+// depth, originals with no title or artist (Choctaw added 17 titles during the install),
+// template words left on a page, OPTION headings in a final IFS, two placements with one
+// code. The data checks run in an IFS only; text and codes are checked always.
+const IFS_GLAZED = ['Framed Art', 'Framed Art (Shadow Box)'];
+const IFS_FRAMED = ['Framed Art', 'Framed Art (Shadow Box)', 'Framed Canvas (Floater)'];
+const IFS_CANVAS = ['Framed Canvas (Floater)', 'Frameless Canvas (Wrapped)'];
+// The starter deck's and templates' own filler is the commonest leftover ("paravian" is
+// the starter's stand-in paragraph; a filler bio once went to a client).
+const PAGE_PLACEHOLDER_RE = /\blorem\b|\bplaceholder\b|\bartist name\b|\bartwork title\b|\bclient name\b|\b(?:cover page |alt section |section )?(?:sub)?heading\b|\boptional image code\b|\bparavian\b|\btext here\b|\btitle here\b|\bTBD\b|\bframe code, colou?r\b|\bcity, country\b|\bcode-x{3,}|\b0"\s*w\s*[x\u00d7]\s*0"\s*h/i;
+// Every text a designer typed on a page, with its page index: page elements, fixed-page
+// elements and annotations. Generated pages (spec, plans) print data, checked above.
+function _pfPageTexts(pages) {
+    const out = [];
+    const strip = (t) => String(t || '').replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
+    (pages || []).forEach((d, i) => {
+        let els = null;
+        if (d.kind === 'layout' && d.page) els = d.page.elements || [];
+        else if (d.kind === 'fixed') { try { const rr = _fixedPageFor(d.fixed); if (rr && rr.page) els = rr.page.elements || []; } catch (e) {} }
+        (els || []).forEach(e => { if (e && !e.hidden && e.type === 'text' && e.text && !e._toc) out.push({ i: i, d: d, t: strip(e.text) }); });
+        const k = _deckPageKey(d);
+        ((k && (editorialContent.annotations || {})[k]) || []).forEach(a => { if (a && !a.hidden && (a.type === 'text' || a.type === 'note') && a.text) out.push({ i: i, d: d, t: strip(a.text) }); });
+    });
+    return out.filter(x => x.t);
+}
+// ── ANOTHER JOB'S TEXT, PENDING DRAWINGS, N/A CREDITS (20.28) ─────────────────────────
+// Twenty more studio decks: typed footers and cover strips carried another project's file
+// stamp (one hotel's footer in a model-suite deck; another site's "V6 - ISSUE FOR SPEC"
+// on every page of a didactics deck), "Elevation Pending" was typed beside drawings that
+// were there, and "Title N/A" boxes reached final decks. FRAME's own footer is built from
+// the Project tab, so only typed text can carry these.
+// A file stamp: dotted or dashed code with at least 8 letters/digits before a .V<n>.
+const FILE_STAMP_RE = /\b([A-Z0-9]{2,}(?:[.\-][A-Z0-9]+)+)\.V\d+\b/g;
+function _leftoverPreflight(pages) {
+    const out = [];
+    const ifs = _deckIsIFS();
+    let meta = {}; try { meta = _deckFooterMeta() || {}; } catch (e) {}
+    const norm = (s) => String(s || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+    const code = norm(meta.code);
+    const nmEl = document.getElementById('g_projName');
+    const pname = norm(nmEl && nmEl.value);
+    const flagged = {};
+    _pfPageTexts(pages).forEach(x => {
+        if ((code || pname.length >= 4) && !flagged['s' + x.i]) {
+            const re = new RegExp(FILE_STAMP_RE.source, 'g'); let m;
+            while ((m = re.exec(x.t.toUpperCase()))) {
+                const body = norm(m[1]);
+                if (body.length < 8) continue;
+                if (code && body.indexOf(code) >= 0) continue;
+                if (pname.length >= 4 && body.indexOf(pname.slice(0, 12)) >= 0) continue;
+                flagged['s' + x.i] = 1;
+                out.push({ sev: ifs ? 'err' : 'warn', text: _dsPageLabel(x.d) + ' — says “' + m[0] + '”, which is not this project (' + (meta.code || (nmEl && nmEl.value) || 'Project tab') + '). Text copied from another job?', idx: x.i });
+                break;
+            }
+        }
+        if (ifs && !flagged['p' + x.i] && /\b(?:elevation|floor ?plan|drawing)s? pending\b/i.test(x.t)) {
+            flagged['p' + x.i] = 1;
+            out.push({ sev: 'warn', text: _dsPageLabel(x.d) + ' — says “Pending” in an IFS. If the drawing is on the page, delete the words; if it is missing, say ELEVATION REQUIRED in red and what is needed.', idx: x.i });
+        }
+        if (ifs && !flagged['n' + x.i] && /\b(?:title|artist)\s*:?\s*n\s*\/\s*a\b/i.test(x.t)) {
+            flagged['n' + x.i] = 1;
+            out.push({ sev: 'warn', text: _dsPageLabel(x.d) + ' — a title or artist reads N/A in an IFS. Give the real credit, or delete the box for a piece that has none.', idx: x.i });
+        }
+    });
+    return out;
+}
+function _ifsAuditPreflight(pages) {
+    const out = [];
+    const rows = _deckSpecRows();
+    const go = (r) => ({ kind: 'piece', label: 'Piece', rowId: r.id });
+    // Two placements with one code (always): the plan, vendor sheet and install guide would
+    // point at one wall for both. Punctuation-blind, so ART-1 and ART.1 collide too.
+    const seen = {};
+    rows.forEach(r => {
+        const c = String((r && r.id) || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+        if (!c) return;
+        (seen[c] = seen[c] || []).push(r.id);
+    });
+    Object.keys(seen).forEach(c => { if (seen[c].length > 1) out.push({ sev: 'err', text: seen[c].join(' and ') + ' — two placements with the same code. Each code must mean one place.', idx: null, go: go({ id: seen[c][0] }) }); });
+    // Words left from a template, and OPTION headings once the deck is final.
+    const ifs = _deckIsIFS();
+    const flagged = {};
+    _pfPageTexts(pages).forEach(x => {
+        const m = PAGE_PLACEHOLDER_RE.exec(x.t);
+        if (m && !flagged['p' + x.i]) { flagged['p' + x.i] = 1; out.push({ sev: ifs ? 'err' : 'warn', text: _dsPageLabel(x.d) + ' — still says “' + m[0] + '” (template text)', idx: x.i }); }
+        if (ifs && /\bOPTION\b/.test(x.t) && !flagged['o' + x.i]) { flagged['o' + x.i] = 1; out.push({ sev: 'warn', text: _dsPageLabel(x.d) + ' — an OPTION heading in an IFS. Show only what the client chose.', idx: x.i }); }
+    });
+    if (!ifs) return out;
+    rows.forEach(r => {
+        if (!r || !r.id) return;
+        const prod = String(r.product || '');
+        const errs = [], warns = [];
+        if (!(+r.extW > 0 && +r.extH > 0)) errs.push('overall size');
+        if (IFS_FRAMED.indexOf(prod) >= 0 && !String(r.fCode || '').trim()) errs.push('frame code');
+        if (IFS_GLAZED.indexOf(prod) >= 0 && !String(r.glass || '').trim()) warns.push('glass');
+        if (IFS_CANVAS.indexOf(prod) >= 0 && !(+r.canvasDepth > 0)) warns.push('stretcher depth');
+        // An original, commission or artist's work carries a label and an invoice.
+        if (_rowIsPurchase(r) && prod !== 'Sourced Object') {
+            const bad = (v) => { const s = String(v || '').trim(); return !s || /^(n\/?a|tbd|untitled\?|artist name|artwork title)$/i.test(s); };
+            if (bad(r.artworkTitle)) warns.push('title');
+            if (bad(r.artist)) warns.push('artist');
+        }
+        if (errs.length) out.push({ sev: 'err', text: r.id + ' — no ' + errs.join(' or ') + ' in an IFS', idx: null, go: go(r) });
+        if (warns.length) out.push(Object.assign({ sev: 'warn', text: r.id + ' — no ' + warns.join(', ') + ' in an IFS', idx: null, go: go(r) }, (warns.indexOf('title') >= 0 || warns.indexOf('artist') >= 0) ? { prod: { tab: 'labels' } } : {}));
+    });
+    return out;
+}
+// ── THE ART TYPE IS HOW THE PIECE IS BOUGHT (20.07) ─────────────────────────────────────
+// One Park Tower: Etsy clay panels were coded and labelled as originals (FAO) and shown in
+// the seller's renders; the client expected smooth ceramic, got matte clay and returned all
+// of it. The same deck put the commission disclaimer on gallery originals. A piece bought
+// from a shop is sourced (FSO), and the note on a page must fit the work on it.
+const SHOP_HOST_RE = /(^|\.)(etsy|amazon|wayfair|ebay|target|walmart|ikea|homedepot|crateandbarrel|potterybarn|westelm|cb2|anthropologie|society6|redbubble|minted|allmodern|overstock|temu|aliexpress)\.[a-z.]+$/i;
+const COMMISSION_NOTE_RE = /represents the artist.?s style|may differ in composition/i;
+function _rowIsCommission(r) { return /^FCM[._-]/i.test(String((r && r.imageCode) || '').trim()) || /commission/i.test(String((r && r.artType) || '')); }
+function _rowIsOriginalCode(r) { return /^FAO[._-]/i.test(String((r && r.imageCode) || '').trim()) || /original/i.test(String((r && r.artType) || '')); }
+function _shopHostOf(r) {
+    const u = String((r && r.sourceUrl) || '').trim();
+    if (!u) return '';
+    let h = ''; try { h = new URL(/^https?:/i.test(u) ? u : 'https://' + u).hostname.replace(/^www\./i, ''); } catch (e) { return ''; }
+    return SHOP_HOST_RE.test(h) ? h : '';
+}
+function _artTypePreflight(pages) {
+    const out = [];
+    _deckSpecRows().forEach(r => {
+        if (!r || !r.id) return;
+        const shop = _shopHostOf(r);
+        if (shop && _rowIsOriginalCode(r)) out.push({ sev: 'warn', text: r.id + ' — bought from ' + shop + ' but coded as an original. A shop piece is sourced (FSO); show its real colour and finish, not the seller’s render.', idx: null, go: { kind: 'piece', label: 'Piece', rowId: r.id } });
+    });
+    // Notes against the work on their page: spec pages only, where the page IS the pieces.
+    const notes = {};
+    _pfPageTexts(pages).forEach(x => { if (x.d.kind === 'spec' && COMMISSION_NOTE_RE.test(x.t)) notes[x.i] = 1; });
+    (pages || []).forEach((d, i) => {
+        if (d.kind !== 'spec' || d._install) return;
+        const mem = (d.members && d.members.length) ? d.members : (d.row ? [d.row] : []);
+        const comm = mem.filter(_rowIsCommission);
+        if (notes[i] && !comm.length) out.push({ sev: 'warn', text: _dsPageLabel(d) + ' — carries the commission note, but nothing on it is a commission. Use the note that fits the work.', idx: i });
+        if (!notes[i] && comm.length) out.push({ sev: 'warn', text: _dsPageLabel(d) + ' — ' + comm.map(r => r.id).join(', ') + (comm.length === 1 ? ' is a commission' : ' are commissions') + ' with no commission note (Text menu › Commission note).', idx: i });
+    });
+    return out;
+}
+// ── WILL IT PRINT SHARP (20.10) ──────────────────────────────────────────────────────
+// "Check the file can print at the size before proposing it": in several of the ten
+// projects a picture was proposed, approved and quoted before anyone found the file was a
+// web image. FRAME keeps a 1200 px copy, so the ORIGINAL's pixels are recorded on the link
+// at import (artLink.pw / ph) and read against the print size: cover fit, so the tighter
+// axis decides, and a zoomed crop uses fewer of them. A picture imported before 20.10 (no
+// pixels recorded) is not judged. Below the minimum: a warning, an error in an IFS.
+const PRINT_PPI_MIN = 150, FLAT_PPI_MIN = 75;   // a wallcovering is read from further away
+function _artPrintPpi(r) {
+    const l = r && r.artLink;
+    if (!l || !(l.pw > 0) || !(l.ph > 0) || !r.artworkUrl) return null;
+    const sz = _rowOpeningAndPrint(r), k = unitFactor(dashUnit, 'in');
+    // A floater's picture is cropped to the face; its wrap is picture outside that crop, or
+    // mirrored, or built later, so the face is what the pixels are spread over (20.17).
+    const fl = r.product === 'Framed Canvas (Floater)';
+    const pw = (fl ? sz.openW : sz.printW) * k, ph = (fl ? sz.openH : sz.printH) * k;
+    if (!(pw > 0) || !(ph > 0)) return null;
+    return Math.min(l.pw / pw, l.ph / ph) / Math.max(1, parseFloat(r.artZoom) || 1);
+}
+function _printResPreflight() {
+    const out = [], ifs = _deckIsIFS();
+    _deckSpecRows().forEach(r => {
+        const ppi = _artPrintPpi(r);
+        if (ppi == null) return;
+        const min = _isFlatGraphic(r.product) ? FLAT_PPI_MIN : PRINT_PPI_MIN;
+        if (ppi >= min) return;
+        const sz = _rowOpeningAndPrint(r);
+        const dims = _fmtUnitNum(sz.printW, dashUnit) + ' × ' + _fmtUnitNum(sz.printH, dashUnit) + ' ' + dashUnit;
+        out.push({ sev: ifs ? 'err' : 'warn', text: r.id + ' — the picture is ' + r.artLink.pw + ' × ' + r.artLink.ph + ' px: ' + Math.round(ppi) + ' ppi at its ' + dims + ' print. It needs about ' + min + ' to print sharp; ask for a bigger file.', idx: null, go: { kind: 'piece', label: 'Piece', rowId: r.id } });
+    });
+    return out;
+}
+// ── THE SIZES ADD UP (20.11) ─────────────────────────────────────────────────────────
+// "Overall = art + mat + frame" was checked by hand before every RFI in the ten projects.
+// FRAME derives the opening, so the one way the sum goes wrong is a frame and mats that are
+// wider than the overall (a 2" moulding and 4" mats on a 10" piece): the opening clamps to
+// nothing and the page shows a frame with no picture. Named with the numbers that clash.
+function _sizeMathPreflight() {
+    const out = [], ifs = _deckIsIFS();
+    _deckSpecRows().forEach(r => {
+        if (!r || !r.id) return;
+        const sz = _rowOpeningAndPrint(r);
+        if (!sz.short) return;
+        const f = (v) => _fmtUnitNum(parseFloat(v) || 0, dashUnit);
+        out.push({ sev: ifs ? 'err' : 'warn', text: r.id + ' — the frame (' + f(r.fW) + ' ' + dashUnit + ' a side) and mats leave no opening in a ' + f(r.extW) + ' × ' + f(r.extH) + ' ' + dashUnit + ' overall. Check the overall size, frame width and mats.', idx: null, go: { kind: 'piece', label: 'Piece', rowId: r.id } });
+    });
+    return out;
+}
+// ── CAN IT BE MADE IN ONE PIECE (20.16) ──────────────────────────────────────────────
+// The 2026 quote template's "Maximum Printing Size Considerations": what a framer can make
+// from one sheet, roll or stick. A piece past them goes back from the vendor as a split, a
+// seam or a re-quote, so say it before the RFI. INCHES, short side x long side.
+const MAX_MAKE = {
+    paper: 59,                                         // most papers are 59" on one side
+    canvasByDepth: [[0.75, 53.4], [1.5, 52], [2, 51]], // stretcher depth -> max image, short side
+    stretcherBar: 114,                                 // 9.5' is the longest single stick
+    mat: [[32, 40], [40, 60], [48, 72]],               // 48 x 72 only in acid-free white or cream
+    glass: [40, 60],
+    acrylic: [59, 96],
+    mdf: [60, 96]
+};
+function _fitsSheet(w, h, sheet) { const a = Math.min(w, h), b = Math.max(w, h); return a <= sheet[0] + 1e-6 && b <= sheet[1] + 1e-6; }
+// The biggest image a stretcher of this depth takes: the stricter of the two depths around it.
+function _canvasMaxShort(depth) {
+    const t = MAX_MAKE.canvasByDepth;
+    if (!(depth > 0)) return null;
+    for (let i = 0; i < t.length; i++) if (depth <= t[i][0] + 1e-6) return t[i][1];
+    return t[t.length - 1][1];
+}
+// Problems for one piece, as plain sentences (no code, no severity): the Preflight wording.
+function _maxMakeIssues(r) {
+    const out = [];
+    if (!r || !(parseFloat(r.extW) > 0) || !(parseFloat(r.extH) > 0)) return out;
+    const k = unitFactor(dashUnit, 'in'), I = (v) => (parseFloat(v) || 0) * k;
+    const sz = _rowOpeningAndPrint(r), u = dashUnit;
+    const show = (w, h) => _fmtUnitNum(w / k, u) + ' × ' + _fmtUnitNum(h / k, u) + ' ' + u;
+    const showIn = (v) => _fmtUnitNum(v / k, u) + ' ' + u;
+    const oW = I(sz.openW), oH = I(sz.openH), pW = I(sz.printW), pH = I(sz.printH);
+    const prod = r.product || '';
+    const canvas = prod === 'Framed Canvas (Floater)' || prod === 'Frameless Canvas (Wrapped)';
+    if (canvas) {
+        const d = I(r.canvasDepth), max = _canvasMaxShort(d) || _canvasMaxShort(1.5);
+        if (Math.min(oW, oH) > max + 1e-6) out.push('the canvas image is ' + show(oW, oH) + '; a ' + (d > 0 ? showIn(d) : '1.5 in (assumed)') + ' stretcher takes at most ' + showIn(max) + ' on the short side. Make it smaller or split it.');
+        if (Math.max(oW, oH) > MAX_MAKE.stretcherBar + 1e-6) out.push('the canvas is ' + showIn(Math.max(oW, oH)) + ' long; one stretcher bar is at most 9.5 ft (' + showIn(MAX_MAKE.stretcherBar) + '). It needs a joined bar or a smaller size.');
+        return out;
+    }
+    if (prod === 'Didactic Panel') {
+        const m = String(r.material || '');
+        if (/acryl|plexi/i.test(m) && !_fitsSheet(pW, pH, MAX_MAKE.acrylic)) out.push('the acrylic panel prints at ' + show(pW, pH) + '; acrylic sheet is ' + show(MAX_MAKE.acrylic[0], MAX_MAKE.acrylic[1]) + ' and prints at most ' + showIn(MAX_MAKE.acrylic[0]) + ' on the short side.');
+        if (/\bmdf\b|masonite/i.test(m) && !_fitsSheet(I(r.extW), I(r.extH), MAX_MAKE.mdf)) out.push('the panel is ' + show(I(r.extW), I(r.extH)) + '; MDF and Masonite come at most ' + show(MAX_MAKE.mdf[0], MAX_MAKE.mdf[1]) + '.');
+        return out;
+    }
+    if (prod !== 'Framed Art' && prod !== 'Framed Art (Shadow Box)') return out;
+    // Paper: a print on paper (the shadow box often holds objects, so paper is Framed Art only).
+    if (prod === 'Framed Art') {
+        const wb = (r.useFloatMount === true) ? I(r.sbPaperBorder) * 2 : 0;
+        const sW = pW + wb, sH = pH + wb;
+        if (Math.min(sW, sH) > MAX_MAKE.paper + 1e-6) out.push('the print is ' + show(sW, sH) + ' on paper; most papers are ' + showIn(MAX_MAKE.paper) + ' wide, so ' + showIn(Math.min(sW, sH)) + ' on the short side will not fit the roll. Ask the vendor or make it smaller.');
+    }
+    // What fills the frame: its inside size plus the rabbet lip under the moulding (0.25" a side).
+    const fW = I(r.fW), inW = I(r.extW) - 2 * fW + 0.5, inH = I(r.extH) - 2 * fW + 0.5;
+    const matsOn = (r.m1A !== false) && r.useFloatMount !== true;
+    if (matsOn && (parseFloat(r.m1T) || parseFloat(r.m1L) || parseFloat(r.m1B) || parseFloat(r.m1R)) && inW > 0 && inH > 0) {
+        const sheets = MAX_MAKE.mat, big = sheets[sheets.length - 1];
+        if (!_fitsSheet(inW, inH, big)) out.push('the mat is ' + show(inW, inH) + '; the biggest mat board is ' + show(big[0], big[1]) + '. Use a split mat, a float mount or a smaller frame.');
+        else if (!_fitsSheet(inW, inH, sheets[sheets.length - 2]) && !/white|cream/i.test(String(r.m1ColorName || ''))) out.push('the mat is ' + show(inW, inH) + ', which needs the ' + show(big[0], big[1]) + ' board, and that only comes in acid-free white or cream (this mat is ' + (String(r.m1ColorName || '').trim() || 'not named') + ').');
+    }
+    const g = String(r.glass || '').trim();
+    if (g && !/^n\/?a$/i.test(g) && inW > 0 && inH > 0) {
+        const acr = /acryl|plexi|optium/i.test(g), sheet = acr ? MAX_MAKE.acrylic : MAX_MAKE.glass;
+        if (!_fitsSheet(inW, inH, sheet)) out.push((acr ? 'the acrylic' : 'the glass') + ' is ' + show(inW, inH) + '; ' + (acr ? 'acrylic' : 'glass') + ' comes at most ' + show(sheet[0], sheet[1]) + '.' + (acr ? '' : ' Use acrylic (up to ' + show(MAX_MAKE.acrylic[0], MAX_MAKE.acrylic[1]) + ').'));
+    }
+    return out;
+}
+// ── THE CANVAS SITS INSIDE ITS FLOATER (20.16) ───────────────────────────────────────
+// A stretcher deeper than the floater's rabbet stands proud of the frame (it has happened on
+// real installs). Stretchers come in the standard depths below; a custom depth costs more, so
+// the fix offered is the deepest STANDARD stretcher that fits, or a deeper floater. INCHES.
+const STD_STRETCHER_DEPTHS = [0.75, 1.5, 2];
+function _stdStretcherFor(rabbetIn) { return STD_STRETCHER_DEPTHS.filter(x => x <= rabbetIn + 1e-6).pop() || null; }
+function _canvasDepthIssue(r) {
+    if (!r || r.product !== 'Framed Canvas (Floater)') return null;
+    const k = unitFactor(dashUnit, 'in'), d = (parseFloat(r.canvasDepth) || 0) * k, rb = (parseFloat(r.rabbetDepth) || 0) * k;
+    if (!(d > 0)) return null;
+    const u = dashUnit, show = (v) => _fmtUnitNum(v / k, u) + ' ' + u;
+    // 20.17: a depth off the standard list is a custom stretcher (FRAME used to fill depth =
+    // rabbet, e.g. 1.625"): say so and name the standard one that fits.
+    if (!(rb > 0) || d <= rb + 1e-6) {
+        if (STD_STRETCHER_DEPTHS.some(x => Math.abs(x - d) < 1e-3)) return null;
+        const std = STD_STRETCHER_DEPTHS.filter(x => x <= (rb > 0 ? rb : d) + 1e-6).pop();
+        return 'a ' + show(d) + ' stretcher is not a standard depth (' + STD_STRETCHER_DEPTHS.map(show).join(', ') + '), so it is made to order and costs more. ' + (std ? 'Use ' + show(std) + '.' : 'Use a standard depth and a floater that takes it.');
+    }
+    const fit = STD_STRETCHER_DEPTHS.filter(x => x <= rb + 1e-6).pop();
+    return 'the ' + show(d) + ' stretcher is deeper than the floater’s ' + show(rb) + ' rabbet, so the canvas stands ' + show(d - rb) + ' proud of the frame. '
+        + (fit ? 'Use a ' + show(fit) + ' stretcher (a standard depth) or a deeper floater.' : 'Use a deeper floater; no standard stretcher fits this one.');
+}
+// A canvas with a picture and no decision on its sides, or a picture that cannot cover them.
+function _canvasSidesPreflight() {
+    const out = [], ifs = _deckIsIFS();
+    _deckSpecRows().forEach(r => {
+        if (!r || !r.id || !r.artworkUrl) return;
+        const info = _canvasSidesInfo(r);
+        if (!info) return;
+        const go = { kind: 'piece', label: 'Piece', rowId: r.id };
+        if (!info.mode) { out.push({ sev: 'warn', text: r.id + ' — say how the canvas sides are made: the picture wraps (crop into it), mirror the edge, or extend it in production (Sides, on the dashboard).', idx: null, go: go }); return; }
+        if (info.short.length) {
+            const f = (v) => _fmtUnitNum(Math.max(0, v), dashUnit) + ' ' + dashUnit;
+            const least = Math.min.apply(null, info.short.map(k => info.spare[k]));
+            out.push({ sev: ifs ? 'err' : 'warn', text: r.id + ' — the picture wraps round the sides, but the crop leaves only ' + f(least) + ' of the ' + f(info.wrap) + ' it needs on the ' + info.short.join(', ') + '. Use Make room on the dashboard, or pick Mirror or Extend.', idx: null, go: go });
+        }
+    });
+    return out;
+}
+function _maxMakePreflight() {
+    const out = [], ifs = _deckIsIFS();
+    _deckSpecRows().forEach(r => {
+        if (!r || !r.id) return;
+        const cd = _canvasDepthIssue(r);
+        _maxMakeIssues(r).concat(cd ? [cd] : []).forEach(t => out.push({ sev: ifs ? 'err' : 'warn', text: r.id + ' — ' + t, idx: null, go: { kind: 'piece', label: 'Piece', rowId: r.id } }));
+    });
+    return out;
+}
+// ── EVERY PICTURE HAS A HOUSE CODE (20.12) ───────────────────────────────────────────
+// "Every code has a house prefix, client photos included": the ten projects printed camera
+// names (IMG_4021) and render file names under pieces, and the vendor could not find the file.
+// A house code is a prefix of letters, then two dotted number groups (JZY.010.00219, FAO.010.00031,
+// GDC.000.00219.1). Blank and TBD codes are other checks' business. File extensions are
+// already stripped on import (_imgCodeClean).
+const HOUSE_IMG_CODE_RE = /^[A-Z]{2,5}\.\d{2,4}\.\d{3,6}(?:\.\d+)?[A-Z]?$/i;
+function _imgCodeShapePreflight() {
+    const out = [], ifs = _deckIsIFS();
+    _deckSpecRows().forEach(r => {
+        if (!r || !r.id || !r.artworkUrl) return;
+        const ic = _imgCodeClean(r.imageCode || '');
+        if (!ic || /\bTBD\b/i.test(ic) || HOUSE_IMG_CODE_RE.test(ic)) return;
+        out.push({ sev: ifs ? 'err' : 'warn', text: r.id + ' — image code “' + ic + '” is not a house code (like FAO.010.00031). Give the picture its prefix and number so the vendor can find the file.', idx: null, go: { kind: 'piece', label: 'Piece', rowId: r.id } });
+    });
+    return out;
+}
+// ── ONE VERSION AND STAGE ON EVERY PAGE (20.04) ───────────────────────────────────────
+// Stale covers and headings went out in most of the ten projects (a V2 cover on a V6,
+// ART DEVELOPMENT on an IFS); Ford Salt Lake City spent a whole round fixing them. The
+// footer's version (Project tab) is the truth: a formal stage name typed on a page must be
+// the footer's stage, and a version number beside it (or anywhere on the cover) its number.
+const DECK_STAGES = [
+    ['concept', /\b(?:art(?:work)? concept|issued? for concept(?: approval)?)\b/i],
+    ['development', /\bart(?:work)? development\b/i],
+    ['specification', /\b(?:issued? for spec(?:ification)?|IFS)\b/i],
+    ['installation', /\b(?:issued? for install(?:ation)?|IFI|installation guide)\b/i],
+];
+function _deckStageOf(text) {
+    const s = String(text || '');
+    const hit = DECK_STAGES.filter(st => st[1].test(s));
+    return hit.length ? hit[hit.length - 1][0] : null;
+}
+function _stagePreflight(pages) {
+    const out = [];
+    const fv = String(_deckFooterMeta().version || '').trim();
+    const fStage = _deckStage();
+    const fNum = (/\bV\s?(\d+)\b/i.exec(fv) || [])[1] || null;
+    if (!fStage && !fNum) return out;
+    const STAGE_LABEL = { concept: 'Concept', development: 'Art Development', specification: 'Final Spec', installation: 'Install Guide' };
+    const truth = [fNum ? 'V' + fNum : null, fStage ? STAGE_LABEL[fStage] : null].filter(Boolean).join(' ');
+    const seen = {};
+    _pfPageTexts(pages).forEach(x => {
+        const hits = DECK_STAGES.map(st => { const m = st[1].exec(x.t); return m ? { s: st[0], w: m[0].toUpperCase() } : null; }).filter(Boolean);
+        const stages = hits.map(h => h.s);
+        const isCover = x.d.kind === 'fixed' && x.d.fixed === 'cover';
+        const wrongStage = fStage ? hits.filter(h => h.s !== fStage).map(h => '“' + h.w + '”') : [];
+        let wrongV = null;
+        if (fNum && (stages.length || isCover)) {
+            const re = /\bV\s?(\d+)\b/gi; let m;
+            while ((m = re.exec(x.t))) { if (m[1] !== fNum) { wrongV = 'V' + m[1]; break; } }
+        }
+        if (!wrongStage.length && !wrongV) return;
+        const what = [wrongV, wrongStage.length ? wrongStage[0] : null].filter(Boolean).join(', ');
+        const key = x.i + '|' + what;
+        if (seen[key]) return; seen[key] = 1;
+        out.push({ sev: 'warn', text: _dsPageLabel(x.d) + ' — says ' + what + ', but this deck is ' + truth + ' (Project tab). Update the page or the Project tab.', idx: x.i });
+    });
+    return out;
+}
+
 // ── VENDORS AND THE PRODUCTION PACK (19.89) ────────────────────────────────────
 // Caesars went to two vendors (Bruce White framed, Duggal prints and acrylic) and the
 // PM split the RFI by hand, hiding the sourced objects and originals, then the
@@ -59949,6 +62234,18 @@ function _prodPackPlan() {
 }
 // File-name safe, keeps dots (image codes and versions carry them).
 function _prodSafe(s) { return String(s || '').trim().replace(/[\\/:*?"<>|]+/g, '-').replace(/\s+/g, '-') || 'x'; }
+// THE PDF IS NAMED LIKE THE STUDIO NAMES ITS ISSUES (20.28): date.project.version, e.g.
+// 261108.FAUL-PIN.GR.V4.pdf. Every deck used to download as FRAME_Presentation.pdf, so the
+// file sent and the file on the server could not be told apart by name. No code and no
+// project name = the old name.
+function _deckPdfFileName() {
+    let meta = {}; try { meta = _deckFooterMeta() || {}; } catch (e) {}
+    const el = document.getElementById('g_projName');
+    const proj = String(meta.code || (el && el.value) || '').trim();
+    if (!proj) return 'FRAME_Presentation.pdf';
+    const ver = String(meta.version || '').trim();
+    return _prodStamp() + '.' + _prodSafe(proj) + (ver ? '.' + _prodSafe(ver) : '') + '.pdf';
+}
 function _prodStamp() { const d = new Date(); return String(d.getFullYear()).slice(2) + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0'); }
 function _prodProjectTag() {
     let code = ''; try { code = _deckFooterMeta().code || ''; } catch (e) {}
@@ -60006,8 +62303,20 @@ async function _contactSheetPdf(rows, title) {
                         const px = Math.max(1, Math.round(dw * 2.5)), py = Math.max(1, Math.round(dh * 2.5));
                         const cnv = document.createElement('canvas'); cnv.width = px; cnv.height = py;
                         const g = cnv.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, px, py);
-                        const cr = computeArtDrawRect(px, py, iw / ih, r.artZoom, r.artPanX, r.artPanY);
-                        g.drawImage(img, cr.dx, cr.dy, cr.dw, cr.dh);
+                        const cwr = IFS_CANVAS.indexOf(r.product) >= 0 ? _canvasWrapOf(r) : 0;
+                        if (cwr > 0 && sz.printW > 0) {
+                            // 20.17: a canvas is cropped to its FACE; the wrap is the band round it.
+                            // Picture wraps: the picture outside the crop shows there. Mirror or
+                            // extend: the band is grey, the vendor or production makes it.
+                            const wx = cwr / sz.printW * px, wy = cwr / sz.printH * py, fw = px - 2 * wx, fh = py - 2 * wy;
+                            const cr = computeArtDrawRect(fw, fh, iw / ih, r.artZoom, r.artPanX, r.artPanY);
+                            if (r.canvasSides !== 'image') { g.fillStyle = '#e6e6e6'; g.fillRect(0, 0, px, py); g.save(); g.beginPath(); g.rect(wx, wy, fw, fh); g.clip(); }
+                            g.drawImage(img, wx + cr.dx, wy + cr.dy, cr.dw, cr.dh);
+                            if (r.canvasSides !== 'image') g.restore();
+                        } else {
+                            const cr = computeArtDrawRect(px, py, iw / ih, r.artZoom, r.artPanX, r.artPanY);
+                            g.drawImage(img, cr.dx, cr.dy, cr.dw, cr.dh);
+                        }
                         doc.addImage(cnv.toDataURL('image/jpeg', 0.85), 'JPEG', x + (bw - dw) / 2, y + (bh - dh) / 2, dw, dh);
                     }
                 } catch (e) {}
@@ -60021,6 +62330,142 @@ async function _contactSheetPdf(rows, title) {
         }
     }
     return doc;
+}
+// ── WALL LABELS (20.06) ──────────────────────────────────────────────────────────────
+// Choctaw's labels read Title, Artist (tribal affiliation), Size, Year; 17 titles were
+// added during the install because the deck had "N/A". Title and artist were hidden form
+// fields (captions were typed in InDesign), so there was nowhere in FRAME to fill them in.
+// The Labels tab is that place; the label sheet prints on 4" x 2" stock (Avery 5163, ten to
+// a Letter page) and the CSV goes to whoever prints them. `r.labelOff` = this piece gets no
+// label (client-owned work, objects); objects and flat graphics default to none.
+const LABEL_FIELDS = [['artworkTitle', 'Title'], ['artist', 'Artist'], ['artistAffil', 'Affiliation'], ['artMedium', 'Medium'], ['artYear', 'Year']];
+function _labelDefaultOn(r) { return !(r.product === 'Sourced Object' || _isFlatGraphic(r.product)); }
+function _labelOn(r) { return r.labelOff === '1' ? false : (r.labelOff === '0' ? true : _labelDefaultOn(r)); }
+function _labelRows() { return _deckSpecRows().filter(r => r && r.id); }
+function _labelSize(r) {
+    const s = _rowOpeningAndPrint(r);
+    if (!(s.openW > 0 && s.openH > 0)) return '';
+    const u = (typeof dashUnit !== 'undefined' && dashUnit) || 'in';
+    return _fmtUnitNum(s.openW, u) + ' × ' + _fmtUnitNum(s.openH, u) + ' ' + u;
+}
+// The label's lines, in print order; empty parts are left out, never printed as blanks.
+function _labelLines(r) {
+    const t = String(r.artworkTitle || '').trim(), a = String(r.artist || '').trim(), af = String(r.artistAffil || '').trim();
+    const med = String(r.artMedium || '').trim(), yr = String(r.artYear || '').trim();
+    return {
+        title: t,
+        artist: a + (af ? ' (' + af + ')' : ''),
+        detail: [med, yr].filter(Boolean).join(', '),
+        size: _labelSize(r),
+    };
+}
+function setRowLabel(id, patch) {
+    if ('labelOn' in patch) {
+        const r = dashProjectData.find(x => x && x.id === id);
+        const on = !!patch.labelOn; delete patch.labelOn;
+        patch.labelOff = (r && on === _labelDefaultOn(r)) ? '' : (on ? '0' : '1');
+    }
+    return setRowsProduction([id], patch);
+}
+function _labelCsv(rows) {
+    const q = (v) => { const s = String(v == null ? '' : v); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+    const head = ['Code', 'Title', 'Artist', 'Affiliation', 'Medium', 'Year', 'Size', 'Image Code', 'Location'];
+    const lines = [head.join(',')];
+    rows.forEach(r => lines.push([r.id, r.artworkTitle, r.artist, r.artistAffil, r.artMedium, r.artYear, _labelSize(r), _imgCodeNoExt(r.imageCode), r.location].map(q).join(',')));
+    return lines.join('\n');
+}
+function _imgCodeNoExt(c) { return String(c || '').trim().replace(/\.(jpe?g|png|tiff?|psd|pdf|webp)$/i, ''); }
+function _labelSheetPdf(rows) {
+    const JP = (window.jspdf && window.jspdf.jsPDF) || (typeof jsPDF !== 'undefined' ? jsPDF : null);
+    if (!JP) throw new Error('PDF library not loaded');
+    const doc = new JP({ orientation: 'portrait', unit: 'pt', format: 'letter' });
+    // Avery 5163: 4" x 2", two across and five down, 0.5" top, 0.15625" side, 0.1875" gap.
+    const W = 288, H = 144, TOP = 36, SIDE = 11.25, GAPX = 13.5, PAD = 16, per = 10;
+    const pages = Math.max(1, Math.ceil(rows.length / per));
+    for (let p = 0; p < pages; p++) {
+        if (p) doc.addPage();
+        for (let i = 0; i < per; i++) {
+            const r = rows[p * per + i]; if (!r) break;
+            const x = SIDE + (i % 2) * (W + GAPX), y = TOP + Math.floor(i / 2) * H;
+            doc.setDrawColor(225, 225, 225); doc.setLineWidth(0.4); doc.rect(x, y, W, H);
+            const L = _labelLines(r);
+            let cy = y + PAD + 10;
+            const line = (txt, font, size, rgb, gap) => {
+                if (!txt) return;
+                doc.setFont('helvetica', font); doc.setFontSize(size); doc.setTextColor(rgb[0], rgb[1], rgb[2]);
+                doc.splitTextToSize(txt, W - PAD * 2).slice(0, 2).forEach(t => { doc.text(t, x + PAD, cy); cy += size * 1.25; });
+                cy += gap;
+            };
+            line(L.title || 'Untitled', 'bolditalic', 13, [20, 20, 20], 3);
+            line(L.artist, 'normal', 10, [40, 40, 40], 1);
+            line(L.detail, 'normal', 9, [90, 90, 90], 1);
+            line(L.size, 'normal', 9, [90, 90, 90], 0);
+            // Which wall it goes on, small, for whoever hangs it.
+            doc.setFont('helvetica', 'normal'); doc.setFontSize(6.5); doc.setTextColor(150, 150, 150);
+            doc.text(String(r.id || ''), x + W - PAD, y + H - 10, { align: 'right' });
+        }
+    }
+    return doc;
+}
+function downloadLabels(kind) {
+    const rows = _labelRows().filter(_labelOn);
+    if (!rows.length) { _toast('No labels to make', 'Tick the pieces that get a label on the Labels tab.'); return; }
+    const name = _prodStamp() + '.' + _prodProjectTag() + '.Labels';
+    let blob;
+    if (kind === 'csv') blob = new Blob([_labelCsv(rows)], { type: 'text/csv' });
+    else {
+        try { blob = _labelSheetPdf(rows).output('blob'); }
+        catch (e) { showInfoModal('Label sheet', 'The label sheet could not be made: ' + _esc(e && e.message || e)); return; }
+    }
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+    a.download = name + (kind === 'csv' ? '.csv' : '.pdf'); a.click();
+    setTimeout(() => { try { URL.revokeObjectURL(a.href); } catch (e) {} }, 4000);
+    const untitled = rows.filter(r => !String(r.artworkTitle || '').trim()).length;
+    if (untitled) _toast('Some labels have no title', untitled + ' label' + (untitled === 1 ? ' prints' : 's print') + ' as Untitled.');
+}
+function _prodLabelsInto(body) {
+    const rows = _labelRows();
+    const intro = document.createElement('div'); intro.style.cssText = 'font-size:var(--fs-70); color:var(--text-muted); margin-bottom:10px;';
+    intro.textContent = rows.length
+        ? 'What each wall label says. Spell the artist the way they want it printed. Untick pieces that get no label (work the client already owns, objects). Changes save as you leave each field.'
+        : 'No pieces in the deck yet.';
+    body.appendChild(intro);
+    if (!rows.length) return;
+    const bar = document.createElement('div'); bar.style.cssText = 'display:flex; gap:6px; align-items:center; flex-wrap:wrap; margin-bottom:10px;';
+    const on = rows.filter(_labelOn), missing = on.filter(r => !String(r.artworkTitle || '').trim() || !String(r.artist || '').trim()).length;
+    const cnt = document.createElement('span'); cnt.id = 'labelCount'; cnt.style.cssText = 'font-size:var(--fs-70); color:var(--text-muted); flex:1 1 auto;';
+    cnt.textContent = on.length + ' label' + (on.length === 1 ? '' : 's') + (missing ? ' · ' + missing + ' missing a title or artist' : '');
+    bar.appendChild(cnt);
+    bar.appendChild(_prodBtn('Label sheet (PDF)', () => downloadLabels('pdf'), false, '4" x 2" labels, ten to a Letter page (Avery 5163)'));
+    bar.appendChild(_prodBtn('Labels CSV', () => downloadLabels('csv'), true, 'One row per label, for whoever prints them'));
+    body.appendChild(bar);
+    const tbl = document.createElement('table'); tbl.id = 'labelTable';
+    tbl.style.cssText = 'width:100%; border-collapse:collapse; font-size:var(--fs-70);';
+    tbl.innerHTML = '<thead><tr style="text-align:left; color:var(--text-muted);"><th style="padding:4px;" title="Gets a label">Label</th><th style="padding:4px;">Code</th>'
+        + LABEL_FIELDS.map(f => '<th style="padding:4px;">' + f[1] + '</th>').join('') + '<th style="padding:4px;">Size</th></tr></thead>';
+    const tb = document.createElement('tbody'); tbl.appendChild(tb);
+    rows.forEach(r => {
+        const tr = document.createElement('tr'); tr.setAttribute('data-label-row', r.id);
+        tr.style.cssText = 'border-top:1px solid var(--border-color);';
+        const td = () => { const c = document.createElement('td'); c.style.cssText = 'padding:4px; vertical-align:middle;'; tr.appendChild(c); return c; };
+        const cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = _labelOn(r);
+        cb.onchange = () => { setRowLabel(r.id, { labelOn: cb.checked }); _prodShow(); };
+        td().appendChild(cb);
+        const code = td(); code.textContent = r.id; code.style.fontWeight = '700';
+        LABEL_FIELDS.forEach(([k, lab]) => {
+            const inp = document.createElement('input'); inp.type = 'text'; inp.value = String(r[k] || '');
+            inp.setAttribute('data-label-field', k);
+            inp.placeholder = lab;
+            inp.style.cssText = 'width:100%; min-width:0; height:24px; font-size:var(--fs-70); padding:2px 5px;' + (k === 'artYear' ? ' max-width:56px;' : '');
+            // Commit on change, never per keystroke: each commit is one undo step.
+            inp.onchange = () => { const p = {}; p[k] = inp.value; setRowLabel(r.id, p); };
+            inp.onkeydown = (e) => e.stopPropagation();
+            td().appendChild(inp);
+        });
+        const sz = td(); sz.textContent = _labelSize(r); sz.style.cssText += 'white-space:nowrap; color:var(--text-muted);';
+        tb.appendChild(tr);
+    });
+    body.appendChild(tbl);
 }
 // Every file of the pack, as [{name, kind, data}] (string data for CSV/text, a jsPDF doc
 // for PDFs), so the plan can be checked without a canvas and the ZIP is one loop.
@@ -60055,7 +62500,7 @@ async function _prodPackFiles(opts) {
     return files;
 }
 async function downloadProductionPack() {
-    if (typeof JSZip === 'undefined') { showInfoModal('Production pack', 'The ZIP library did not load. Reload FRAME and try again.'); return; }
+    if (typeof JSZip === 'undefined') { showInfoModal('Production pack', 'The ZIP library did not load. Reload Farmhand and try again.'); return; }
     const plan = _prodPackPlan();
     if (!plan.vendors.length && !plan.unassigned.length && !plan.purchases.length) { _toast('Nothing to send', 'There are no pieces in the deck yet.'); return; }
     let files;
@@ -60149,11 +62594,46 @@ function _issueSnapshot() {
     _deckSpecRows().forEach(r => { if (r && r.id) out[r.id] = _issueRowRecord(r); });
     return out;
 }
+// ── RENAMES BETWEEN ISSUES (20.09) ────────────────────────────────────────────────────
+// Ford Admin renumbered every placement between V1 and V2, One Park Tower every ground
+// floor code at V7, and nobody said so; the diff read each as one piece removed and another
+// added. applyIdRename logs every rename (`editorialContent.codeLog`, entries {s, f, t},
+// `codeLogSeq` the running number), an issue remembers the number it was marked at
+// (`logSeq`), and the diff follows each old code through the renames after it (temporary
+// renumber stems included). Issues older than the log fall back to the same picture and
+// image code.
+const CODE_LOG_KEEP = 2000;
+function _codeLogAdd(from, to) {
+    const ec = editorialContent;
+    const seq = (ec.codeLogSeq || 0) + 1;
+    ec.codeLogSeq = seq;
+    const log = ec.codeLog || (ec.codeLog = []);
+    log.push({ s: seq, f: from, t: to });
+    if (log.length > CODE_LOG_KEEP) log.splice(0, log.length - CODE_LOG_KEEP);
+}
+// {oldCode: newCode} for every code renamed since `seq`, or null when the log no longer
+// reaches back that far (then the caller falls back to matching pictures).
+function _codeRenamesSince(seq) {
+    const log = editorialContent.codeLog || [];
+    if (seq == null) return null;
+    if (log.length && log[0].s > seq + 1) return null;
+    const cur = {};   // original -> current
+    const back = {};  // current -> original
+    log.forEach(e => {
+        if (e.s <= seq) return;
+        const orig = (back[e.f] != null) ? back[e.f] : e.f;
+        delete back[e.f];
+        cur[orig] = e.t; back[e.t] = orig;
+    });
+    const out = {};
+    Object.keys(cur).forEach(o => { if (cur[o] !== o) out[o] = cur[o]; });
+    return out;
+}
 function markIssued(label) {
     const ec = editorialContent;
     let v = ''; try { v = _deckFooterMeta().version || ''; } catch (e) {}
     const list = (ec.issues || []).slice();
-    const rec = { label: String(label || v || ('Issue ' + (list.length + 1))).trim(), at: _todayIso(), rows: _issueSnapshot() };
+    const rec = { label: String(label || v || ('Issue ' + (list.length + 1))).trim(), at: _todayIso(), rows: _issueSnapshot(), logSeq: ec.codeLogSeq || 0 };
     list.push(rec);
     while (list.length > ISSUE_KEEP) list.shift();
     ec.issues = list;
@@ -60170,11 +62650,30 @@ function deleteIssue(i) {
 // {added, removed, changed: [{id, fields: [{label, was, now}]}]} between an issue and now.
 function _issueDiff(issue) {
     const was = (issue && issue.rows) || {}, now = _issueSnapshot();
-    const added = Object.keys(now).filter(id => !was[id]);
-    const removed = Object.keys(was).filter(id => !now[id]);
+    // Where each issued code lives now (20.09): renamed through the log, else itself.
+    const to = {};
+    const ren = _codeRenamesSince(issue && issue.logSeq);
+    // Renamed pieces first: a code another piece was renamed INTO is no longer this one's.
+    const into = {};
+    if (ren) Object.keys(was).forEach(o => { const n = ren[o]; if (n && now[n]) { to[o] = n; into[n] = 1; } });
+    Object.keys(was).forEach(o => { if (to[o] || (ren && ren[o])) return; if (now[o] && !into[o]) to[o] = o; });
+    if (!ren) {
+        // An issue older than the log: the same picture under the same image code.
+        const taken = {}; Object.keys(to).forEach(o => { taken[to[o]] = 1; });
+        Object.keys(was).forEach(o => {
+            const a = was[o]; if (to[o] || !a.Artwork) return;
+            const hits = Object.keys(now).filter(n => !taken[n] && !was[n] && now[n].Artwork === a.Artwork && now[n]['Image code'] === a['Image code']);
+            if (hits.length === 1) { to[o] = hits[0]; taken[hits[0]] = 1; }
+        });
+    }
+    const fromOf = {}; Object.keys(to).forEach(o => { fromOf[to[o]] = o; });
+    const added = Object.keys(now).filter(id => fromOf[id] == null);
+    const removed = Object.keys(was).filter(id => to[id] == null);
+    const renamed = Object.keys(to).filter(o => to[o] !== o).map(o => ({ from: o, to: to[o] }));
     const changed = [];
     Object.keys(now).forEach(id => {
-        const a = was[id], b = now[id]; if (!a) return;
+        const o = fromOf[id]; if (o == null) return;
+        const a = was[o], b = now[id];
         const fields = [];
         const keys = Object.keys(a); Object.keys(b).forEach(k => { if (keys.indexOf(k) < 0) keys.push(k); });
         keys.forEach(k => {
@@ -60185,14 +62684,15 @@ function _issueDiff(issue) {
         });
         if (fields.length) changed.push({ id: id, fields: fields });
     });
-    const byCode = (p, q) => String(p.id || p).localeCompare(String(q.id || q), undefined, { numeric: true });
-    return { added: added.sort(byCode), removed: removed.sort(byCode), changed: changed.sort(byCode) };
+    const byCode = (p, q) => String(p.id || p.to || p).localeCompare(String(q.id || q.to || q), undefined, { numeric: true });
+    return { added: added.sort(byCode), removed: removed.sort(byCode), changed: changed.sort(byCode), renamed: renamed.sort(byCode) };
 }
 function _issueDiffText(issue) {
     const d = _issueDiff(issue);
     const NL = '\n';
-    if (!d.added.length && !d.removed.length && !d.changed.length) return 'No changes since ' + issue.label + ' (' + issue.at + ').';
+    if (!d.added.length && !d.removed.length && !d.changed.length && !d.renamed.length) return 'No changes since ' + issue.label + ' (' + issue.at + ').';
     let t = 'Changes since ' + issue.label + ' (' + issue.at + ')' + NL;
+    if (d.renamed.length) t += NL + 'RENUMBERED (same piece, new code)' + NL + d.renamed.map(r => '    ' + r.from + '  \u2192  ' + r.to).join(NL) + NL;
     if (d.added.length) t += NL + 'ADDED' + NL + d.added.map(id => '    ' + id).join(NL) + NL;
     if (d.removed.length) t += NL + 'REMOVED' + NL + d.removed.map(id => '    ' + id).join(NL) + NL;
     if (d.changed.length) t += NL + 'CHANGED' + NL + d.changed.map(c => '    ' + c.id + NL + c.fields.map(f => '        ' + f.label + ': ' + (f.was || '(blank)') + '  →  ' + (f.now || '(blank)')).join(NL)).join(NL) + NL;
@@ -60203,6 +62703,7 @@ function _issueDiffCSV(issue) {
     const q = (s) => '"' + String(s == null ? '' : s).replace(/"/g, '""') + '"';
     const vend = {}; _deckSpecRows().forEach(r => { if (r && r.id) vend[r.id] = _rowVendor(r); });
     let csv = ['Item Code', 'Change', 'Field', 'Was', 'Now', 'Vendor'].map(q).join(',') + '\n';
+    d.renamed.forEach(r => { csv += [r.to, 'Renumbered', 'Item Code', r.from, r.to, vend[r.to] || ''].map(q).join(',') + '\n'; });
     d.added.forEach(id => { csv += [id, 'Added', '', '', '', vend[id] || ''].map(q).join(',') + '\n'; });
     d.removed.forEach(id => { csv += [id, 'Removed', '', '', '', ((issue.rows || {})[id] || {}).Vendor || ''].map(q).join(',') + '\n'; });
     d.changed.forEach(c => c.fields.forEach(f => { csv += [c.id, 'Changed', f.label, f.was, f.now, vend[c.id] || ''].map(q).join(',') + '\n'; }));
@@ -60211,7 +62712,7 @@ function _issueDiffCSV(issue) {
 function _prodIssuesInto(body) {
     const list = editorialContent.issues || [];
     const intro = document.createElement('div'); intro.style.cssText = 'font-size:var(--fs-70); color:var(--text-muted); margin-bottom:10px;';
-    intro.textContent = 'Mark the deck as issued each time it goes to the client or to production. FRAME keeps what every piece printed then, and lists what has changed since: for the client email, the vendors’ spec updates, and the next RFI.';
+    intro.textContent = 'Mark the deck as issued each time it goes to the client or to production. Farmhand keeps what every piece printed then, and lists what has changed since: for the client email, the vendors’ spec updates, and the next RFI.';
     body.appendChild(intro);
     const top = document.createElement('div'); top.style.cssText = 'display:flex; gap:6px; align-items:center; flex-wrap:wrap; margin-bottom:12px; font-size:var(--fs-70);';
     const lab = document.createElement('input'); lab.type = 'text'; lab.id = 'issueLabel'; lab.style.cssText = 'width:200px; height:24px;';
@@ -60236,7 +62737,7 @@ function _prodIssuesInto(body) {
         const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = _prodStamp() + '.' + _prodProjectTag() + '.Changes-since-' + _prodSafe(issue.label) + '.csv'; a.click();
     }, true));
     row.appendChild(_prodBtn('Delete this record', () => _confirmDestroy({
-        title: 'Delete the record of ' + issue.label + '?', body: 'Only FRAME’s record of what was issued goes; the deck is not touched.',
+        title: 'Delete the record of ' + issue.label + '?', body: 'Only Farmhand’s record of what was issued goes; the deck is not touched.',
         confirm: 'Delete', undoable: true, onConfirm: () => { deleteIssue(pick); _prodIssuePick = null; _prodShow(); }
     }), true));
     body.appendChild(row);
@@ -60263,13 +62764,17 @@ const PRICE_STALE_DAYS = 90;
 const PRICE_FIELDS = ['unitCost', 'costSrc', 'costAt', 'unitSell', 'allowance', 'priceFor', 'royalty', 'sealant'];
 // 19.96: THE HOUSE FORMULA, from the 2026 quote template. Revenue markup = 87.31% + the
 // artist royalty, and unit price = cost x (1 + markup). Royalty follows the image code (an F
-// code is Farmboy's own: 0%; PEN 10%; anything else 5%) unless the piece says otherwise
+// code is Farmboy's own: 0%; the twelve ROYALTY_10_CODES 10%; anything else 5%) unless the piece says otherwise
 // (`r.royalty`, a fraction; a client who owns an image outright). A markup typed on the
 // Pricing tab replaces the 1.8731, never the royalty.
 const HOUSE_MARKUP = 1.8731;
+// 20.16: the template's Artist Royalties sheet: these twelve artist codes take 10%, every
+// other artist code 5%, F codes none. FRAME knew only PEN, so the other eleven priced at 5%.
+const ROYALTY_10_CODES = ['AJG', 'ISM', 'JMS', 'LSA', 'PEN', 'LDC', 'NHS', 'SAL', 'STN', 'THK', 'TJB', 'ZPK'];
 function _rowRoyaltyAuto(r) {
     const c = String((r && r.imageCode) || '').trim().toUpperCase();
-    if (/^PEN([._\-\s]|$)/.test(c)) return 0.10;
+    const pre = (c.match(/^[A-Z]+/) || [''])[0];
+    if (ROYALTY_10_CODES.indexOf(pre) >= 0) return 0.10;
     if (/^F/.test(c)) return 0;
     return 0.05;
 }
@@ -60306,7 +62811,10 @@ function _priceMarkup() {
 function _priceQty(r) {
     if (_catOptionRowIds()[r.id]) return 0;
     const q = parseInt(r.qty, 10);
-    return q > 0 ? q : 1;
+    if (q > 0) return q;
+    // 20.00: a brand-standard order hangs on no wall; its quantity is the order's
+    const o = parseInt(r.orderQty, 10);
+    return o > 0 ? o : 1;
 }
 function _priceRow(r) {
     const roy = _rowRoyalty(r), allow = _priceNum(r.allowance), mk = _priceMarkup() + roy;
@@ -60398,6 +62906,8 @@ function _rateFor(r) {
 // "on a 30x40", so it scales with the piece's area. `buffer` is a percent on the whole
 // estimate ("always add a buffer"). No amounts in the code: the site is public.
 const ADDON_KEYS = ['premiumFrame', 'nonGlare', 'sealant', 'oversize', 'buffer'];
+// 20.17: the studio's standard buffer on every estimate, a percent (a policy, not a price).
+const HOUSE_BUFFER_PCT = 3;
 const PREMIUM_FRAME_RE = /^(LJ|UA)-/i;
 const NON_GLARE_RE = /non[\s-]*glare|anti[\s-]*(glare|reflect)|museum|optium|\bAR\b/i;
 const HUMID_LOC_RE = /bath|rest\s*room|wash\s*room|powder|shower|\bspa\b|pool|locker|sauna|steam|humid/i;
@@ -60432,8 +62942,10 @@ function _estimateCost(r) {
         const n = _priceNum(ad[a]); if (n == null) return;
         c += a === 'nonGlare' ? n * sqft / NON_GLARE_REF_SQFT : n;
     });
-    const buf = _priceNum(ad.buffer);
-    if (buf != null && buf > 0 && c > 0) c *= 1 + buf / 100;
+    // 20.17: every estimate carries the house buffer (currency against USD, fuel, shipping)
+    // unless the card says otherwise; a typed 0 means none.
+    const typed = _priceNum(ad.buffer), buf = typed != null ? typed : HOUSE_BUFFER_PCT;
+    if (buf > 0 && c > 0) c *= 1 + buf / 100;
     return c > 0 ? Math.round(c * 100) / 100 : null;
 }
 // Refresh every ESTIMATE (and fill pieces with no price) from the rate card. Quotes stay.
@@ -60599,7 +63111,7 @@ function _quoteSheetRows() {
     return out;
 }
 async function exportQuoteXlsx() {
-    if (typeof JSZip === 'undefined') { showInfoModal('Excel', 'The ZIP library did not load. Reload FRAME and try again.'); return; }
+    if (typeof JSZip === 'undefined') { showInfoModal('Excel', 'The ZIP library did not load. Reload Farmhand and try again.'); return; }
     const blob = await _xlsxBlob(_quoteSheets());
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = _prodStamp() + '.' + _prodProjectTag() + '.Quote.xlsx'; a.click();
     setTimeout(() => { try { URL.revokeObjectURL(a.href); } catch (e) {} }, 4000);
@@ -60680,8 +63192,9 @@ const RFQ_COLS = ['Level', 'Formula Note', 'Qty', 'Item Code', 'Product', 'Locat
     'Frame Code / Color', 'Frame Width', 'Frame Height', 'Security Hardware', 'Substrate', 'Mount', 'Notes', 'Vendor',
     'Vendor Unit Cost', 'Extended Cost', 'Artist Royalty', 'Revenue Markup', 'Margin Check', 'Unit Price (USD)', 'Extended Total (USD)'];
 function _rfqMount(r) {
-    if (_isFlatGraphic(r.product)) return 'egd';
+    // The panel first: it is a flat graphic too, so after the EGD test it never got here (20.16).
     if (r.product === 'Didactic Panel') return 'dibond';
+    if (_isFlatGraphic(r.product)) return 'egd';
     if (r.product === 'Sourced Object') return 'object';
     if (r.product === 'Framed Canvas (Floater)' || r.product === 'Frameless Canvas (Wrapped)') return 'canvas';
     if (r.useFloatMount === true) return (parseFloat(r.sbPaperBorder) || 0) > 0 ? 'float_white' : 'float';
@@ -60727,7 +63240,7 @@ function _rfqSheet(docType, only) {
         const mB = matsOn ? I(r.m1B) : floatM ? I(r.sbPaperMargin) : 0, mL = matsOn ? I(r.m1L) : floatM ? I(r.sbPaperMargin) : 0;
         const wb = mt === 'float_white' ? I(r.sbPaperBorder) : 0;
         const cd = canvas ? I(r.canvasDepth) : 0;
-        const wrap = r.product === 'Frameless Canvas (Wrapped)' ? I(r.canvasWrap) : (canvas ? cd + 0.5 : 0);
+        const wrap = canvas ? I(_canvasWrapOf(r)) : 0;
         // the template's formula where it agrees with FRAME, else FRAME's number
         const F = (f, tv, fv) => B(near(tv, fv) ? { f: f, v: fv } : { v: fv });
         let J, K, L, M;
@@ -60748,12 +63261,12 @@ function _rfqSheet(docType, only) {
         if (multi) { const lv = levels[_deckLvlOf(r.level)]; lvName = (lv && lv.name) || ''; }
         const vName = _rowVendor(r);
         a.push(B(lvName), B(RFQ_MOUNT_LABEL[mt]), B(p.qty), B(r.id), B(r.product || ''), B(r.location || ''), B(_rfqImageCode(r)), B(H), B(V), J, K, L, M,
-            B(cd), canvas && r.product !== 'Frameless Canvas (Wrapped)' ? B({ f: 'N' + n + '+0.5', v: cd + 0.5 }) : B(wrap),
+            B(cd), canvas && r.product !== 'Frameless Canvas (Wrapped)' && near(wrap, cd + 0.5) ? B({ f: 'N' + n + '+0.5', v: wrap }) : B(wrap),
             B(matsOn ? (r.m1ColorName || '') : (floatM ? (r.sbBackerColorName || '') : (flat ? 0 : ''))), B(mT), B(mR), B(mB), B(mL),
             B(canvas || flat || !framed ? 'N/A' : (r.glass || '')), B(flat ? '' : (r.paperType || '')), B(), B(), B(wb || ''),
             B(framed ? (String(r.fCode || '').trim() || 'TBD') : 'N/A'), B(fw), B(framed ? I(r.fHeight) : 0),
             B(mt === 'egd' ? 'N/A' : (r.hardware || '')), B(flat ? (r.material || '') : canvas ? 'Canvas' : (r.paperType || '')),
-            B(mt === 'egd' ? '' : (r.mount || RFQ_MOUNT_LABEL[mt])), B(String(r.prodNotes || '').trim()), B(vName));
+            B(mt === 'egd' ? '' : (r.mount || RFQ_MOUNT_LABEL[mt])), B([_canvasSidesNote(r), String(r.prodNotes || '').trim()].filter(Boolean).join('. ')), B(vName));
         if (!rfi) {
             const mk = p.markup - 1; // the revenue markup over cost, royalty included
             a.push(B(p.cost != null ? { v: p.cost, money: true } : { money: true }),
@@ -60790,7 +63303,7 @@ function _rfqFileName(docType) {
     return _prodStamp() + '_' + client + '_' + proj + '_' + (docType === 'rfi' ? 'RFI' : 'RFQ') + '.xlsx';
 }
 async function exportRfqXlsx(docType) {
-    if (typeof JSZip === 'undefined') { showInfoModal('Excel', 'The ZIP library did not load. Reload FRAME and try again.'); return; }
+    if (typeof JSZip === 'undefined') { showInfoModal('Excel', 'The ZIP library did not load. Reload Farmhand and try again.'); return; }
     if (!_rfqRows(docType).length) { _toast('Nothing to send', docType === 'rfi' ? 'No pieces a print vendor makes are in the deck yet.' : 'There are no pieces in the deck yet.'); return; }
     const blob = await _xlsxBlob([_rfqSheet(docType)]);
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = _rfqFileName(docType); a.click();
@@ -60853,7 +63366,7 @@ async function importPricesFile(file) {
         else rows = _csvRows(await file.text());
     } catch (e) { showInfoModal('Import prices', 'That file could not be read: ' + _esc(e && e.message || e) + '. Save it from Excel as .xlsx or .csv and try again.'); return null; }
     const res = _priceImportRows(rows);
-    if (res.error) { showInfoModal('Import prices', res.error + ' Export a quote from FRAME first: its columns are the ones FRAME reads back.'); return res; }
+    if (res.error) { showInfoModal('Import prices', res.error + ' Export a quote from Farmhand first: its columns are the ones Farmhand reads back.'); return res; }
     showInfoModal('Prices imported', res.updated.length + ' piece' + (res.updated.length === 1 ? '' : 's') + ' updated.'
         + (res.unknown.length ? '<br><br>Not in this project (left alone): ' + _esc(res.unknown.join(', ')) : '') + '<br><br>Ctrl+Z undoes the import.');
     try { _prodShow(); } catch (e) {}
@@ -60975,7 +63488,7 @@ function _prodPricingInto(body) {
     if (!rows.length) return;
     const tbl = document.createElement('table'); tbl.id = 'priceTable';
     tbl.style.cssText = 'width:100%; border-collapse:collapse; font-size:var(--fs-70);';
-    tbl.innerHTML = '<thead><tr style="text-align:left; color:var(--text-muted);"><th style="padding:4px;">Code</th><th style="padding:4px;">Product</th><th style="padding:4px;">Vendor</th><th style="padding:4px;">Qty</th><th style="padding:4px;">Unit cost</th><th style="padding:4px;">Source</th><th style="padding:4px;" title="Artist royalty: an F image code 0%, PEN 10%, anything else 5%. Type a rate for a piece the client owns outright.">Royalty</th><th style="padding:4px;" title="Rate card add-ons this piece takes in its estimate. Sealant follows the location; tick to change it.">Add-ons</th><th style="padding:4px;">Unit sell</th><th style="padding:4px;">Line</th><th style="padding:4px;">Allowance</th></tr></thead>';
+    tbl.innerHTML = '<thead><tr style="text-align:left; color:var(--text-muted);"><th style="padding:4px;">Code</th><th style="padding:4px;">Product</th><th style="padding:4px;">Vendor</th><th style="padding:4px;">Qty</th><th style="padding:4px;">Unit cost</th><th style="padding:4px;">Source</th><th style="padding:4px;" title="Artist royalty: an F image code 0%, 10% on AJG, ISM, JMS, LSA, PEN, LDC, NHS, SAL, STN, THK, TJB and ZPK, anything else 5%. Type a rate for a piece the client owns outright.">Royalty</th><th style="padding:4px;" title="Rate card add-ons this piece takes in its estimate. Sealant follows the location; tick to change it.">Add-ons</th><th style="padding:4px;">Unit sell</th><th style="padding:4px;">Line</th><th style="padding:4px;">Allowance</th></tr></thead>';
     const tb = document.createElement('tbody'); tbl.appendChild(tb);
     rows.forEach(r => {
         const p = _priceRow(r);
@@ -61043,10 +63556,10 @@ function openRateCard() {
      ['nonGlare', 'Non-glare glass, at 30x40', 'Added when the Glass field says non-glare, anti-reflective or museum; scaled by the piece’s area against a 30 x 40'],
      ['sealant', 'Moisture sealant', 'Added when the location reads as humid (bath, restroom, spa, pool, shower, locker); a piece can be switched on the Pricing tab'],
      ['oversize', 'Oversize, past 40x50', 'Added when the overall size is bigger than 40 x 50 either way round'],
-     ['buffer', 'Buffer %', 'A percentage on top of every estimate']].forEach(([k, label, tip]) => {
+     ['buffer', 'Buffer %', 'A percentage on top of every estimate, for currency against USD, fuel and shipping. 3% when blank; type 0 for none']].forEach(([k, label, tip]) => {
         const l = document.createElement('label'); l.style.cssText = 'display:flex; gap:6px; align-items:center;'; l.title = tip;
         const t = document.createElement('span'); t.textContent = label; t.style.cssText = 'width:170px;';
-        const i = document.createElement('input'); i.type = 'text'; i.setAttribute('data-addon', k); i.value = ad[k] != null ? ad[k] : ''; i.style.cssText = 'width:70px; height:24px;';
+        const i = document.createElement('input'); i.type = 'text'; i.setAttribute('data-addon', k); i.value = ad[k] != null ? ad[k] : ''; if (k === 'buffer') i.placeholder = String(HOUSE_BUFFER_PCT); i.style.cssText = 'width:70px; height:24px;';
         l.appendChild(t); l.appendChild(i); adBox.appendChild(l);
     });
     card.appendChild(adBox);
@@ -61421,12 +63934,320 @@ function _prodShippingInto(body) {
     foot.appendChild(_prodBtn('Download PDF', () => downloadCommercialInvoice(sh.id), false, 'commercial_invoice_<number>.pdf'));
 }
 
+// ── BRAND STANDARDS (20.00) ──────────────────────────────────────────────────
+// From the team's BRAND STANDARDS project: Marriott Residence Inn / SpringHill Suites
+// brand-standard artwork and wallcovering, and Ford (Retail Signature 2.0, facilities).
+// Two halves. STANDARD ITEMS: a fixed-price list (brand, item, product, size, image code,
+// cost, sell) kept on THIS COMPUTER (`BS_ITEMS_KEY`) and passed round the team as a file,
+// never in the code: the site is public. Adding one to a project mints a piece through the
+// floor plan's own minter (`_fpAddCodes` with a marker), sized, coded and priced as a dated
+// quote with its fixed sell, carrying `stdItem` (the list item's id) so the emails can tell
+// a standard piece from a custom one. CLIENT EMAILS: the cheat-sheet replies as templates
+// with {tokens} filled from the project (`_bsMailCtx`); **bold** survives a rich copy into
+// Outlook. Amounts the emails quote (card fee, Ford's preliminary rate per sq ft) are
+// settings in the same file, so no number lives in the code either.
+const BS_ITEMS_KEY = 'frame_brand_items';
+const BS_SET_KEY = 'frame_brand_settings';
+const BS_ITEM_FIELDS = ['brand', 'name', 'product', 'w', 'h', 'imageCode', 'artType', 'cost', 'sell', 'note'];
+const BS_MAILS = [
+    { key: 'riReply', label: 'RI / SHS: first reply with pricing', subject: '{project}: brand-standard artwork pricing', body:
+        'Hi {attn},\n\nThank you for reaching out about brand-standard artwork for {project}. Pricing for the standard sizes:\n\n{items}\n\n'
+        + '**Pricing is for the standard sizes only; custom wall sizes must be custom-quoted.** If a wall differs from the standard, send its in-field dimensions and we will quote it.\n\n'
+        + 'To start production we need a PO with verified in-field dimensions and a 100% deposit. Please also send your tax-exempt certificate if the property has one.\n\n'
+        + 'Lead time is 4-6 weeks from PO and deposit, FOB Seattle, WA. Approvals are on digital references; we do not send physical strike-offs.\n\nBest,\n{signer}\nFarmboy Fine Arts' },
+    { key: 'riCustom', label: 'RI / SHS: custom size quote', subject: '{project}: custom size quote', body:
+        'Hi {attn},\n\nThank you for the dimensions. Here is the quote for the custom sizes at {project}:\n\n{custom}\n\nTotal: {custom_total}\n\n'
+        + 'Wallcovering is printed with bleed past the wall dimensions and trimmed on site. Please confirm the dimensions were measured in the field.\n\n'
+        + 'Once we have a PO with the verified dimensions and a 100% deposit, lead time is 4-6 weeks, FOB Seattle, WA.\n\nBest,\n{signer}\nFarmboy Fine Arts' },
+    { key: 'riPo', label: 'RI / SHS: PO received', subject: '{project}: PO received', body:
+        'Hi {attn},\n\nThank you, we have received the PO for {project}. The order:\n\n{order}\n\nTotal: {total}\n\n'
+        + 'Production starts once the 100% deposit is in. ACH is preferred; a credit card payment carries a {card_fee} fee, and a cheque should come by FedEx. '
+        + 'Please send your tax-exempt certificate if the property has one.\n\n'
+        + 'Lead time is 4-6 weeks, FOB Seattle, WA. We will send digital references for your approval before anything is printed.\n\nBest,\n{signer}\nFarmboy Fine Arts' },
+    { key: 'ford', label: 'Ford Retail Signature 2.0: contractor enquiry', subject: '{project}: Ford Retail Signature 2.0 graphics', body:
+        'Hi {attn},\n\nThank you for reaching out about the wallcovering, vinyl graphics and artwork for {project}. To quote, please send:\n\n'
+        + '- the floor plans\n- quantities\n- the install address\n- your timeline\n\n'
+        + 'We will have the quote back within 3-5 business days. If you need a number before then, budget {ford_rate} per square foot as a preliminary figure.\n\nBest,\n{signer}\nFarmboy Fine Arts' }
+];
+function _bsLoad() {
+    try { const v = JSON.parse(localStorage.getItem(BS_ITEMS_KEY) || '[]'); return Array.isArray(v) ? v.filter(x => x && x.id && x.name) : []; } catch (e) { return []; }
+}
+function _bsSettings() {
+    try { const v = JSON.parse(localStorage.getItem(BS_SET_KEY) || '{}'); return (v && typeof v === 'object' && !Array.isArray(v)) ? v : {}; } catch (e) { return {}; }
+}
+function _bsSaveSettings(patch) {
+    const s = Object.assign({}, _bsSettings(), patch || {});
+    Object.keys(s).forEach(k => { if (s[k] === '' || s[k] == null) delete s[k]; });
+    if (s.mails) { Object.keys(s.mails).forEach(k => { if (!s.mails[k]) delete s.mails[k]; }); if (!Object.keys(s.mails).length) delete s.mails; }
+    try { localStorage.setItem(BS_SET_KEY, JSON.stringify(s)); } catch (e) {}
+    return s;
+}
+// ONE writer for the list. Cleans each item to its fields, gives it an id, drops a nameless row.
+function setBrandItems(list) {
+    const seen = {};
+    const out = (list || []).map(x => {
+        const o = {};
+        BS_ITEM_FIELDS.forEach(k => { const v = x && x[k]; if (v != null && String(v).trim() !== '') o[k] = String(v).trim(); });
+        ['w', 'h', 'cost', 'sell'].forEach(k => { if (k in o) { const n = _priceNum(o[k]); if (n == null) delete o[k]; else o[k] = n; } });
+        let id = String((x && x.id) || '').trim();
+        if (!id || seen[id]) id = 'bs' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+        seen[id] = 1; o.id = id;
+        return o;
+    }).filter(o => o.name);
+    try { localStorage.setItem(BS_ITEMS_KEY, JSON.stringify(out)); } catch (e) {}
+    return out;
+}
+function _bsBrands(items) { const b = []; (items || _bsLoad()).forEach(x => { const k = x.brand || ''; if (k && b.indexOf(k) < 0) b.push(k); }); return b.sort(); }
+function _bsMoney(n) {
+    if (n == null || !isFinite(n)) return '';
+    const cur = _pricing().currency || 'USD';
+    const d = Math.round(n * 100) % 100 ? 2 : 0;
+    try { return new Intl.NumberFormat('en-US', { style: 'currency', currency: cur, minimumFractionDigits: d, maximumFractionDigits: d }).format(n); }
+    catch (e) { return '$' + n.toFixed(d); }
+}
+// The category a product mints under: one whose own product it is, else one of its prefix
+// (a flat graphic's), else the first artwork one; the product is then set on the row.
+function _bsCatFor(product) {
+    const cats = _artCats().filter(c => c && c.key);
+    let c = cats.find(x => _catCodeInfo(x.key).product === product);
+    if (!c && _isFlatGraphic(product)) c = cats.find(x => _isFlatGraphic(_catCodeInfo(x.key).product));
+    if (!c) c = cats.find(x => _catCodeInfo(x.key).prefix === 'ART');
+    return (c || cats[0] || {}).key || '';
+}
+// Add `qty` of a standard item as ONE piece (a brand order hangs on no wall, so its quantity
+// is `orderQty`, read by `_priceQty`). One undo entry. Returns the new piece's code.
+function addBrandItem(itemId, qty, location, quiet) {
+    const it = _bsLoad().find(x => x.id === itemId); if (!it) return null;
+    const product = FRAME_PRODUCTS.indexOf(it.product) >= 0 ? it.product : 'Framed Art';
+    const f = unitFactor('in', dashUnit);
+    const mark = { _bsNew: true, product: product, stdItem: it.id };
+    if (it.w > 0 && it.h > 0) { mark.extW = dashFmt(it.w * f); mark.extH = dashFmt(it.h * f); }
+    if (it.imageCode) mark.imageCode = it.imageCode;
+    if (it.artType) mark.artType = it.artType;
+    if (String(location || '').trim()) mark.location = String(location).trim();
+    const n = parseInt(qty, 10); if (n > 1) mark.orderQty = n;
+    _fpAddCodes(_bsCatFor(product), 1, { quiet: true, mark: mark });
+    const r = dashProjectData.find(x => x && x._bsNew);
+    if (!r) return null;
+    delete r._bsNew;
+    const p = {};
+    if (it.cost != null) p.unitCost = it.cost;
+    if (it.sell != null) p.unitSell = it.sell;
+    if (Object.keys(p).length) setRowPrice(r.id, p, true);
+    if (!quiet) {
+        if (typeof renderDashTable === 'function') renderDashTable();
+        if (typeof populateDashPushSelector === 'function') populateDashPushSelector();
+        pushHistory();
+        if (typeof scheduleAutosave === 'function') scheduleAutosave();
+    }
+    return r.id;
+}
+// What the emails are filled from.
+function _bsMailCtx(brand) {
+    const g = (id) => { const el = document.getElementById(id); return el ? String(el.value || '').trim() : ''; };
+    const set = _bsSettings();
+    const items = _bsLoad().filter(x => !brand || x.brand === brand);
+    const sz = (w, h) => (w > 0 && h > 0) ? w + ' x ' + h + ' in' : '';
+    const rows = _deckSpecRows().filter(r => r && r.id);
+    const line = (r) => {
+        const p = _priceRow(r), q = _priceQty(r) || 1;
+        const name = (r.stdItem && (_bsLoad().find(x => x.id === r.stdItem) || {}).name) || r.product || '';
+        return '- ' + r.id + ': ' + [name, sz(_inNum(r.extW), _inNum(r.extH)), String(r.location || '').trim()].filter(Boolean).join(', ')
+            + (q > 1 ? ', qty ' + q : '') + (p.sell != null ? ': ' + _bsMoney(p.sell) + (q > 1 ? ' each' : '') : ': to be quoted');
+    };
+    const custom = rows.filter(r => !r.stdItem);
+    const sum = (list) => list.reduce((a, r) => { const p = _priceRow(r); return a + (p.sell != null ? p.sell * (_priceQty(r) || 1) : 0); }, 0);
+    return {
+        attn: g('g_attn').split(/\s+/)[0] || '', client: g('g_client'), project: g('g_projName'), signer: _shipSigner(),
+        items: items.map(x => '- ' + [x.brand ? x.brand + ' ' + x.name : x.name, sz(x.w, x.h), x.product].filter(Boolean).join(', ') + (x.sell != null ? ': ' + _bsMoney(x.sell) : '')).join('\n'),
+        order: rows.map(line).join('\n'), custom: custom.map(line).join('\n'),
+        total: rows.length ? _bsMoney(sum(rows)) : '', custom_total: custom.length ? _bsMoney(sum(custom)) : '',
+        card_fee: set.cardFee || '', ford_rate: set.fordRate || '', today: _todayIso()
+    };
+}
+// A blank token stays visible as [token], so a gap is seen before the email goes.
+function _bsFill(text, ctx) {
+    return String(text || '').replace(/\{([a-z_]+)\}/g, (m, k) => (ctx[k] != null && String(ctx[k]) !== '') ? String(ctx[k]) : '[' + k.replace(/_/g, ' ') + ']');
+}
+function _bsMail(key) {
+    const t = BS_MAILS.find(x => x.key === key) || BS_MAILS[0];
+    const own = (_bsSettings().mails || {})[t.key] || {};
+    return { key: t.key, label: t.label, subject: own.subject || t.subject, body: own.body || t.body, own: !!(own.subject || own.body) };
+}
+function _bsPlain(text) { return String(text || '').replace(/\*\*([\s\S]*?)\*\*/g, '$1'); }
+function _bsHtml(text) {
+    return _esc(String(text || '')).replace(/\*\*([\s\S]*?)\*\*/g, '<b>$1</b>').split('\n').join('<br>');
+}
+// Copy with the bold kept where the clipboard takes HTML (Outlook), plain text otherwise.
+function _bsCopyMail(text) {
+    try {
+        if (navigator.clipboard && navigator.clipboard.write && typeof ClipboardItem !== 'undefined') {
+            const item = new ClipboardItem({ 'text/html': new Blob([_bsHtml(text)], { type: 'text/html' }), 'text/plain': new Blob([_bsPlain(text)], { type: 'text/plain' }) });
+            navigator.clipboard.write([item]).then(() => _toast('Email copied', 'Paste it into Outlook; the bold comes with it.'), () => _dsCopyText(_bsPlain(text)));
+            return;
+        }
+    } catch (e) {}
+    _dsCopyText(_bsPlain(text));
+}
+function _bsExportFile() {
+    const data = { type: 'frame-brand-standards', v: 1, items: _bsLoad(), settings: _bsSettings() };
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }));
+    a.download = _prodStamp() + '_brand_standards.json'; a.click();
+    setTimeout(() => { try { URL.revokeObjectURL(a.href); } catch (e) {} }, 4000);
+}
+// A team file REPLACES the list (it is the shared one) and merges its settings over mine.
+function _bsImportText(text) {
+    let d = null; try { d = JSON.parse(text); } catch (e) {}
+    if (!d || d.type !== 'frame-brand-standards' || !Array.isArray(d.items)) return null;
+    const items = setBrandItems(d.items);
+    if (d.settings && typeof d.settings === 'object') _bsSaveSettings(d.settings);
+    return items.length;
+}
+let _bsBrand = '', _bsMailKey = 'riReply', _bsEditing = false;
+function _prodBrandInto(body) {
+    const items = _bsLoad();
+    const brands = _bsBrands(items);
+    if (_bsBrand && brands.indexOf(_bsBrand) < 0) _bsBrand = '';
+    const head = (t) => { const d = document.createElement('div'); d.style.cssText = 'font-size:var(--fs-65); font-weight:700; text-transform:uppercase; letter-spacing:0.4px; margin:4px 0 6px;'; d.textContent = t; return d; };
+    const intro = document.createElement('div'); intro.style.cssText = 'font-size:var(--fs-70); color:var(--text-muted); margin-bottom:8px;';
+    intro.textContent = items.length
+        ? 'Fixed-price brand-standard items. Add one and it becomes a piece at its size, image code and price; the emails below fill themselves from the project.'
+        : 'No standard items on this computer yet. Open the list to type them, or import the team’s brand standards file.';
+    body.appendChild(intro);
+    const bar = document.createElement('div'); bar.style.cssText = 'display:flex; gap:6px; flex-wrap:wrap; align-items:center; margin-bottom:8px;';
+    if (brands.length > 1) {
+        const sel = document.createElement('select'); sel.id = 'bsBrand'; sel.style.cssText = 'height:26px; width:auto;';
+        [['', 'All brands']].concat(brands.map(b => [b, b])).forEach(([v, l]) => { const o = document.createElement('option'); o.value = v; o.textContent = l; sel.appendChild(o); });
+        sel.value = _bsBrand; sel.onchange = () => { _bsBrand = sel.value; _prodShow(); };
+        bar.appendChild(sel);
+    }
+    bar.appendChild(_prodBtn('Edit list…', () => openBrandItems(), true, 'Type or change the standard items, the card fee and the Ford rate'));
+    bar.appendChild(_prodBtn('Import file…', () => {
+        const inp = document.createElement('input'); inp.type = 'file'; inp.accept = '.json,application/json';
+        inp.onchange = () => {
+            const f = inp.files && inp.files[0]; if (!f) return;
+            const rd = new FileReader();
+            rd.onload = () => { const n = _bsImportText(rd.result); if (n == null) showInfoModal('Brand standards', 'That file is not a Farmhand brand standards file.'); else { _toast('Brand standards imported', n + ' item' + (n === 1 ? '' : 's') + ' on this computer now.'); _prodShow(); } };
+            rd.readAsText(f);
+        };
+        inp.click();
+    }, true, 'Load the team’s brand standards file: it replaces the list on this computer'));
+    if (items.length) bar.appendChild(_prodBtn('Export file', _bsExportFile, true, 'Save the list and settings as a file to share with the team'));
+    body.appendChild(bar);
+    const shown = items.filter(x => !_bsBrand || x.brand === _bsBrand);
+    if (shown.length) {
+        const tbl = document.createElement('table'); tbl.id = 'bsItems'; tbl.style.cssText = 'width:100%; border-collapse:collapse; font-size:var(--fs-70); margin-bottom:12px;';
+        tbl.innerHTML = '<thead><tr style="text-align:left; color:var(--text-muted);"><th style="padding:4px;">Brand</th><th style="padding:4px;">Item</th><th style="padding:4px;">Size</th><th style="padding:4px;">Image code</th><th style="padding:4px;">Sell</th><th style="padding:4px;">In project</th><th style="padding:4px;"></th></tr></thead>';
+        const tb = document.createElement('tbody'); tbl.appendChild(tb);
+        shown.forEach(x => {
+            const tr = document.createElement('tr'); tr.setAttribute('data-bs-item', x.id); tr.style.cssText = 'border-top:1px solid var(--border-color);';
+            const used = dashProjectData.filter(r => r && r.stdItem === x.id).map(r => r.id);
+            tr.innerHTML = '<td style="padding:5px 4px;">' + _esc(x.brand || '') + '</td><td style="padding:5px 4px;"><b>' + _esc(x.name) + '</b><div style="color:var(--text-muted);">' + _esc(x.product || 'Framed Art') + '</div></td>'
+                + '<td style="padding:5px 4px;">' + (x.w > 0 && x.h > 0 ? x.w + ' x ' + x.h + ' in' : '') + '</td><td style="padding:5px 4px;">' + _esc(x.imageCode || '') + '</td>'
+                + '<td style="padding:5px 4px;">' + _esc(x.sell != null ? _bsMoney(x.sell) : (x.cost != null ? 'cost ' + _bsMoney(x.cost) : '')) + '</td><td style="padding:5px 4px;">' + _esc(used.join(', ')) + '</td>';
+            const td = document.createElement('td'); td.style.cssText = 'padding:5px 4px;';
+            const act = document.createElement('div'); act.style.cssText = 'display:flex; gap:4px; align-items:center; flex-wrap:nowrap;';
+            const q = document.createElement('input'); q.type = 'number'; q.min = '1'; q.value = '1'; q.title = 'Quantity'; q.style.cssText = 'width:48px; height:24px;'; q.setAttribute('data-bs-qty', '');
+            const loc = document.createElement('input'); loc.type = 'text'; loc.placeholder = 'Location'; loc.style.cssText = 'width:96px; height:24px;'; loc.setAttribute('data-bs-loc', '');
+            act.appendChild(q); act.appendChild(loc); td.appendChild(act);
+            act.appendChild(_prodBtn('Add', () => {
+                const id = addBrandItem(x.id, q.value, loc.value);
+                if (id) _toast('Added ' + id, x.name + '. Ctrl+Z undoes it.');
+                _prodShow();
+            }, false, 'Add to this project as a piece at this size and price'));
+            tr.appendChild(td); tb.appendChild(tr);
+        });
+        body.appendChild(tbl);
+    }
+    // The emails.
+    body.appendChild(head('Client email'));
+    const mrow = document.createElement('div'); mrow.style.cssText = 'display:flex; gap:6px; flex-wrap:wrap; align-items:center; margin-bottom:6px;';
+    const ms = document.createElement('select'); ms.id = 'bsMail'; ms.style.cssText = 'height:26px; width:auto;';
+    BS_MAILS.forEach(t => { const o = document.createElement('option'); o.value = t.key; o.textContent = t.label; ms.appendChild(o); });
+    ms.value = _bsMailKey; ms.onchange = () => { _bsMailKey = ms.value; _bsEditing = false; _prodShow(); };
+    mrow.appendChild(ms);
+    body.appendChild(mrow);
+    const m = _bsMail(_bsMailKey), ctx = _bsMailCtx(_bsBrand);
+    const subj = document.createElement('input'); subj.type = 'text'; subj.id = 'bsMailSubject'; subj.style.cssText = 'width:100%; height:26px; margin-bottom:4px;';
+    const ta = document.createElement('textarea'); ta.id = 'bsMailBody'; ta.rows = 14; ta.style.cssText = 'width:100%; font-size:var(--fs-70); resize:vertical;';
+    if (_bsEditing) { subj.value = m.subject; ta.value = m.body; }
+    else { subj.value = _bsFill(m.subject, ctx); ta.value = _bsFill(m.body, ctx); }
+    body.appendChild(subj); body.appendChild(ta);
+    const note = document.createElement('div'); note.style.cssText = 'font-size:var(--fs-65); color:var(--text-muted); margin:4px 0;';
+    note.textContent = _bsEditing
+        ? 'Editing the wording. {attn} {client} {project} {items} {order} {custom} {total} {custom_total} {card_fee} {ford_rate} {signer} are filled in; **text** prints bold.'
+        : (/\[[a-z ]+\]/.test(ta.value) ? 'Words in [brackets] have nothing to fill them yet: the project name and attention line come from the Project tab, the fee and rate from Edit list, your name from the Shipping tab signer.' : 'Edit freely before you copy; the wording you save is kept on this computer.');
+    body.appendChild(note);
+    const btns = document.createElement('div'); btns.style.cssText = 'display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end;';
+    if (_bsEditing) {
+        if (m.own) btns.appendChild(_prodBtn('Back to the standard wording', () => { const s = _bsSettings(); const ml = Object.assign({}, s.mails || {}); delete ml[m.key]; _bsSaveSettings({ mails: ml }); _bsEditing = false; _prodShow(); }, true));
+        btns.appendChild(_prodBtn('Cancel', () => { _bsEditing = false; _prodShow(); }, true));
+        btns.appendChild(_prodBtn('Save wording', () => { const s = _bsSettings(); const ml = Object.assign({}, s.mails || {}); ml[m.key] = { subject: subj.value, body: ta.value }; _bsSaveSettings({ mails: ml }); _bsEditing = false; _prodShow(); }, false, 'Keep this wording on this computer (and in an exported file)'));
+    } else {
+        btns.appendChild(_prodBtn('Edit wording', () => { _bsEditing = true; _prodShow(); }, true, 'Change the template itself, with its {tokens}'));
+        btns.appendChild(_prodBtn('Open in mail', () => {
+            const href = 'mailto:?subject=' + encodeURIComponent(subj.value) + '&body=' + encodeURIComponent(_bsPlain(ta.value));
+            const a = document.createElement('a'); a.href = href; a.click();
+        }, true, 'A new message in your mail app (plain text)'));
+        btns.appendChild(_prodBtn('Copy email', () => _bsCopyMail(ta.value), false, 'Copy the email, bold included, to paste into Outlook'));
+    }
+    body.appendChild(btns);
+}
+function openBrandItems() {
+    let m = document.getElementById('brandItemsModal'); if (m) m.remove();
+    m = document.createElement('div'); m.id = 'brandItemsModal';
+    m.className = 'frame-modal fm-nested'; m.style.display = 'flex';
+    const card = document.createElement('div');
+    card.style.cssText = 'background:var(--bg-panel); border:1px solid var(--border-color); border-radius:var(--r-8); box-shadow:0 15px 35px rgba(0,0,0,0.4); width:900px; max-width:96vw; max-height:88vh; overflow:auto; padding:18px; display:flex; flex-direction:column; gap:10px; font-size:var(--fs-70);';
+    card.innerHTML = '<h3 style="margin:0; font-size:var(--fs-95); color:var(--text-strong);">Standard items</h3><div style="color:var(--text-muted);">Sizes in inches. Sell is the fixed client price; leave it blank and the house markup prices the cost. Kept on this computer; Export file on the Brand standards tab shares it with the team.</div>';
+    const cols = [['brand', 'Brand', 60], ['name', 'Item', 150], ['product', 'Product', 150], ['w', 'W', 44], ['h', 'H', 44], ['imageCode', 'Image code', 110], ['artType', 'Art type', 90], ['cost', 'Cost', 64], ['sell', 'Sell', 64], ['note', 'Note', 100]];
+    const tbl = document.createElement('table'); tbl.id = 'brandItemsTable'; tbl.style.cssText = 'border-collapse:collapse;';
+    tbl.innerHTML = '<thead><tr style="text-align:left; color:var(--text-muted);">' + cols.map(c => '<th style="padding:2px 3px;">' + c[1] + '</th>').join('') + '<th></th></tr></thead>';
+    const tb = document.createElement('tbody'); tbl.appendChild(tb);
+    const addRow = (x) => {
+        const tr = document.createElement('tr'); tr.setAttribute('data-bs-edit', (x && x.id) || '');
+        cols.forEach(([k, , w]) => {
+            const td = document.createElement('td'); td.style.cssText = 'padding:2px 3px;';
+            let i;
+            if (k === 'product') { i = document.createElement('select'); FRAME_PRODUCTS.forEach(p => { const o = document.createElement('option'); o.value = p; o.textContent = p; i.appendChild(o); }); i.value = (x && x.product) || 'Framed Art'; }
+            else { i = document.createElement('input'); i.type = 'text'; i.value = x && x[k] != null ? x[k] : ''; }
+            i.setAttribute('data-k', k); i.style.cssText = 'width:' + w + 'px; height:24px;';
+            td.appendChild(i); tr.appendChild(td);
+        });
+        const td = document.createElement('td');
+        const del = _prodBtn('×', () => tr.remove(), true, 'Remove this item'); td.appendChild(del); tr.appendChild(td);
+        tb.appendChild(tr);
+    };
+    _bsLoad().forEach(addRow);
+    if (!tb.children.length) addRow(null);
+    card.appendChild(tbl);
+    const addB = _prodBtn('+ Item', () => addRow({ brand: (_bsBrand || '') }), true); addB.style.alignSelf = 'flex-start'; card.appendChild(addB);
+    const set = _bsSettings();
+    const sRow = document.createElement('div'); sRow.style.cssText = 'display:flex; gap:14px; flex-wrap:wrap; align-items:center;';
+    const sIn = (id, label, val, tip) => { const l = document.createElement('label'); l.style.cssText = 'display:flex; gap:6px; align-items:center;'; l.title = tip; l.textContent = label; const i = document.createElement('input'); i.type = 'text'; i.id = id; i.value = val || ''; i.style.cssText = 'width:80px; height:24px;'; l.appendChild(i); sRow.appendChild(l); return i; };
+    const fee = sIn('bsCardFee', 'Credit card fee', set.cardFee, 'As the PO email should say it, e.g. 4%');
+    const rate = sIn('bsFordRate', 'Ford preliminary rate / sq ft', set.fordRate, 'As the Ford email should say it, e.g. $10');
+    card.appendChild(sRow);
+    const read = () => Array.prototype.map.call(tb.querySelectorAll('tr[data-bs-edit]'), tr => {
+        const o = { id: tr.getAttribute('data-bs-edit') };
+        tr.querySelectorAll('[data-k]').forEach(i => { o[i.getAttribute('data-k')] = i.value; });
+        return o;
+    });
+    const foot = document.createElement('div'); foot.style.cssText = 'display:flex; gap:8px; justify-content:flex-end;';
+    const cancel = _prodBtn('Cancel', () => m.remove(), true); cancel.setAttribute('data-modal-close', '');
+    const ok = _prodBtn('Save', () => { setBrandItems(read()); _bsSaveSettings({ cardFee: fee.value.trim(), fordRate: rate.value.trim() }); m.remove(); _prodShow(); }, false);
+    foot.appendChild(cancel); foot.appendChild(ok); card.appendChild(foot);
+    m.appendChild(card); document.body.appendChild(m);
+}
 const PROD_TABS = [
     ['samples', 'Samples', 'Frame and mat samples: what to order, and what the client approved'],
     ['vendors', 'Vendors', 'Who makes each piece, and the production pack: RFIs, contact sheets, purchases'],
     ['pricing', 'Pricing', 'Costs, sell prices, allowances and the budget; Excel and Salesforce'],
     ['issues', 'Issues', 'What went out at each issue, and what has changed since'],
-    ['shipping', 'Shipping', 'Commercial invoices for shipments between Canada and the USA']
+    ['shipping', 'Shipping', 'Commercial invoices for shipments between Canada and the USA'],
+    ['brand', 'Brand standards', 'Fixed-price RI / SHS and Ford items, and the client emails that go with them'],
+    ['labels', 'Labels', 'What each wall label says (title, artist, year), the label sheet and its CSV']
 ];
 let _prodTab = 'samples';
 function openProduction(tab) {
@@ -61461,7 +64282,7 @@ function _prodShow() {
     const body = document.getElementById('productionBody'); if (!body) return;
     document.querySelectorAll('#productionTabs [data-prod-tab]').forEach(b => b.classList.toggle('active', b.getAttribute('data-prod-tab') === _prodTab));
     body.innerHTML = '';
-    const fn = { samples: _prodSamplesInto, vendors: _prodVendorsInto, pricing: _prodPricingInto, issues: _prodIssuesInto, shipping: _prodShippingInto }[_prodTab];
+    const fn = { samples: _prodSamplesInto, vendors: _prodVendorsInto, pricing: _prodPricingInto, issues: _prodIssuesInto, shipping: _prodShippingInto, brand: _prodBrandInto, labels: _prodLabelsInto }[_prodTab];
     if (fn) fn(body);
 }
 function _prodBtn(label, onClick, secondary, tip) {

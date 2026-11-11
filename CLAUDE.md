@@ -244,6 +244,9 @@ run but passes alone is usually load timing: rerun before chasing it.
   `_codesMoveBeside` for the Items drag; `_codesRenameRow` for a typed code (number is a
   position, new prefix recodes via `_recodeForCategory`, letter change renames one piece,
   number change on one piece moves the set). None push history; the caller does.
+  **A NEW CODE COPIES THE PROJECT'S STYLE (20.05, `_codeNumsFor` returns `sep` + `width`)**: the separator and zero
+  padding most codes of that prefix use (ties to '.'), the number counted across every style. ART-01 projects mint
+  ART-05, never ART.3.
   **A structured or catalogue code is never renumbered and RESERVES its number**
   (`_renumberPrefix`). **`applyIdRename(…, quiet)`** skips its re-renders;
   `_codesRefreshViews()` redraws once. `_fpRenameGroup` also renames a wall named after the
@@ -328,9 +331,15 @@ run but passes alone is usually load timing: rerun before chasing it.
 - **A floorplan page has no Templates tab** (`_dsPageTakesTemplates`); hidden, not
   disabled, Layers stays. Re-apply the hide via `_dsSyncToolsTabBar` after `_dsToolsTab`
   runs, and fall back to Page if Templates was open when a plan is selected.
-- **ONLY INSERTED LAYOUT PAGES CAN BE MOVED** (`_dsPageMovable`). Fixed pages, floorplans,
-  plan details, spec pages and breakers are placed by `_deckPageList` / `_deckPlanSlots`
-  from the data; don't add per-page overrides for them (manual plan order covers it).
+- **INSERTED PAGES AND THE STANDARD PAGES MOVE; GENERATED PAGES DO NOT** (`_dsPageMovable`).
+  20.03: `DECK_FLOAT_KEYS` (timeline, understanding, narrative, strategy, frameRec, slogan,
+  contacts; never the cover) move by `editorialContent.pagePlace[key]` = the key they follow,
+  stored only once moved, resolved in the SAME multi-pass pin loop as layout `afterKey` (either
+  can anchor to the other). Moving one re-anchors pages pinned to it onto its old neighbour (they
+  stay put), and a pinned neighbour sharing the new anchor onto it. Reset clears `pagePlace`;
+  `_dsHandPlacedCount` is the one count. Floorplans, plan details, spec pages and breakers are
+  placed by `_deckPageList` / `_deckPlanSlots` from the data; don't add per-page overrides for
+  them (manual plan order covers it).
   `_dsPageLockNote` says why a page can't move and where its order is decided.
   **`_dsMovePageTo` is the ONE move** (rail drag, "move to page N", page-actions menu). It
   reads the anchor off the RESULTING order, drops `place` (it fights the hand-set
@@ -371,7 +380,19 @@ run but passes alone is usually load timing: rerun before chasing it.
   **Flat graphics render behind framed art unconditionally**: `drawElevAll` sorts them to
   the front of `_drawOrder` while preserving original indices, because
   `makeElevDraggable` and every dim lookup address frames by index in `elevFrames`.
-- **WALL CONTEXT: the underlay never exports, the blocks always do.**
+- **IMAGES AND PACKAGE (20.37, `_projectImages`, `openImagesModal`, `packageProject`, Save menu).** The list is read
+  off `_projectPayload()` by ONE walk (`_looksLikeImage` + `classify` by path), deduped by the string like the
+  18.81 pool, so it cannot disagree with Save. A new place that stores pictures needs a `classify` branch or it
+  lands under Other (still listed, still packaged). Status from the string: data: in the file, http/library linked,
+  blob: not saved, an `artworkFile` with no `artworkUrl` missing. Images export AS STORED. The client elevation
+  keeps `underlay.name` (file name less extension, `setUnderlayName`). Test `tests/test_images_package.js`.
+- **WALL CONTEXT: the underlay never exports, the blocks always do** (unless `underlay.inDeck`, 20.31: the
+  client's drawing IS the page, so `_underlayDeckSvg` puts it FIRST in `exportElevSVG`'s back layer, clipped to the
+  wall rect, full strength; `exportElevPNG` keeps the layer with `overflow:hidden` and opacity 1 instead of hiding
+  it. The artboard-bounds list still never includes `#underlay-layer`. Toggle: `setUnderlayInDeck`; test
+  `tests/test_underlay_in_deck.js`). FOURTH PLACE (20.36): `renderElevationToCanvas`, the spec-page thumbnail, draws
+  it too (over the 20.32 paint, clipped to the wall) through `_underlayImage` (decode cache, resolves null on
+  error or after 4 s so a bad image cannot hang a build). Leave any of the four out and that page shows a bare wall.
   `elev.underlay = {src, x, y, w, h, opacity}` is a tracing guide;
   `elev.contextBlocks = [{x, y, w, h, label}]` are doors, windows, millwork, TVs. Both in
   `elevUnit`, `x`/`y` bottom-left; `_ctxPxTop` is the only flip.
@@ -998,6 +1019,22 @@ run but passes alone is usually load timing: rerun before chasing it.
   File name goes in the document title.
   `_confirmDiscardUnsaved` runs before loading, and the picker opens from inside its Yes
   handler (a picker needs a user gesture; after an awaited modal it is refused).
+  **A DROPPED .JSON IS THE THIRD OPEN PATH (20.39, `_wireProjectFileDrop`).** Window CAPTURE
+  listeners take only a drag whose item type is `application/json` (blank type is a folder,
+  the library zone's); everything else passes through to the image zones. The handle is
+  asked for synchronously in the drop (`getAsFileSystemHandle`), awaited after the confirm.
+- **THE WALL TAB (20.41, `data-elevtabpane="wall"`).** Wall type, client elevation
+  (`#sec-underlay`), Elevation required, wall finish and paint live there; only W/H, zoom and
+  export stay in `#elev-sec-wall` above the tabs. Underlay paths open `'wall'`, not `'context'`.
+  Tab order art, wall, guides, context, glass (pinned by three tests).
+- **PAGE OPTIONS ARE PER WALL WITH AN "ALL WALLS" (20.41).** Wall finish: deck default
+  `editorialContent.wallFinishPrint === false` plus per-wall `elev.wallFinishPrint` (boolean,
+  absent = follow deck); `_wallFinishPrints(elev)` resolves it, `_setWallFinishPrints` (all)
+  sets the default AND deletes every wall's own value, `_setWallFinishPrintsWall` stores
+  nothing when it matches the default. `_wallAllMenu(anchor, 'finish'|'required'|'indeck')`
+  is the All walls menu; Required-all marks only walls with no client elevation. New page
+  options should follow this shape. Adding a first client elevation to a wall marked
+  Elevation required offers to untick it (`_ulOfferClearRequired`).
 - **ONE AUTOSAVE PER TAB (18.82).** Records are keyed by `_autosaveSession` (the old
   shared `ADB_ID = 'current'` is read and cleared, never written). `_aPrune` keeps the
   newest `AUTOSAVE_KEEP` (5), max `AUTOSAVE_MAX_DAYS`, never this tab's. `clearAutosave`
@@ -1828,7 +1865,8 @@ run but passes alone is usually load timing: rerun before chasing it.
   addressed by CODE. Project frames = frames on an item (`_fbInUse`, DERIVED from rows, never stored) +
   `editorialContent.frameShortlist` (codes; `_fbShortlist` is READ-ONLY, `_fbSetShortlist` the one
   writer, pushes history, deletes the field when empty). My groupings: localStorage `FB_MINE_KEY`.
-  Team groupings: `library/groupings.json`, committed by a person; the app is static and never writes
+  Team groupings (shown as CLIENT GROUPINGS since 20.38: a grouping's optional `client` nests it under one
+  vendor-style row, `_fbClientGrouping` = the union, `_fbOpenClients`): `library/groupings.json`, committed by a person; the app is static and never writes
   to GitHub (no tokens). Picking goes through `loadDashFromCustomLibrary` via the hidden
   `libVendor`/`libCollection` selects, which must stay in the DOM. Catalogue facts (colour, family,
   profile, series) come from `library/<v>/<c>/catalogue.json`, merged by
@@ -2344,6 +2382,57 @@ run but passes alone is usually load timing: rerun before chasing it.
   note, at}`, one writer `setSampleStatus` (prunes empties). `sampleReplace` swaps through `_salonFrameDress` (library)
   or the typed code, pushes to wall copies, ONE undo. Preflight (`_samplePreflight`): rejected and still used = err;
   IFS (`_deckIsIFS`, read off the footer version, no stage setting) and not approved = warn. Issues carry `prod`.
+- **A SPEC PAGE'S STAMPS ARE `_approvalStamps(desc)` (20.08)**, for the PDF post-pass (`_drawApprovalStamps`, right to
+  left from the margin; `_drawApprovalStamp` is a wrapper) and the screen (`_dsAddStamp`). A set page marked pending
+  with some members' `_pieceStatus` approved/production prints APPROVED <letters> + PENDING <letters> (letters from
+  `_letterFrom`); no page status = no stamp, whatever the dashboard says.
+- **THE ART TYPE IS HOW THE PIECE IS BOUGHT (20.07, `_artTypePreflight`).** FAO/original with a `sourceUrl` host in
+  `SHOP_HOST_RE` warns; `COMMISSION_NOTE_RE` text on a spec page must sit with an `_rowIsCommission` piece and a
+  commission needs it. The two presets (`Commission note`, `Original artwork note`) are in `_DS_NOTE_PRESETS`; the
+  original note must NOT match `COMMISSION_NOTE_RE` (tested).
+- **NOTES AND TITLE / ARTIST ARE NEVER SPEC LINES (20.27).** `buildSpecStrings` emits no Notes row (a long note broke
+  the block; title/artist are often unknown). The spec page's right panel, TEXT BOXES (`_dsPieceTextInto`, both the
+  Per-piece and Group A/B/C branches), drops them as ordinary `note` annotations (`_dsAddPieceText`): words COPIED,
+  not linked; blank = placeholder wording `PAGE_PLACEHOLDER_RE` flags. Both spec drawers record where their rows end
+  (`_noteSpecEnd` → `_specBlockEnd[firstId]`, page fractions) so new boxes stack under the block. The `Notes` slot in
+  `SPEC_ROW_GROUPS` stays: `_SPEC_ROW_UNKNOWN_GROUP` is an index into it.
+- **A PROJECT'S CODES CAN FOLLOW THE CLIENT'S PATTERN (20.30, `editorialContent.codePattern`, `_nextPatternCode`,
+  `_levelCode`, `row.zone`, `recodeToPattern`, `_codePatternPanelInto`).** Tokens {type} (the category's prefix, editable
+  per category), {level} (`floorplanLevels[i].code`, else the number in the level name: Level 03 is L3), {zone} (the
+  item's Sector field) and {n}/{nn}/{nnn}. `_nextPlacementCode(prefix, ctx)` tries the pattern first; **a token it
+  cannot fill falls back to the house code**, never `L3.ART.S-01`. The number counts on its own stem (per level and
+  sector). Pattern codes are not plain codes, so the renumber never touches them. Test: `tests/test_code_pattern.js`.
+- **A NUMBER FOLLOWED BY A WORD IS A LEVEL, NOT A PLACEMENT (20.29, `_codeSortParts`, `_nextCodeLike`,
+  `_duplicateCodeFor`).** `L3.ART.S16-10A` read as prefix L, number 3, so every Level 3 piece sorted as "L.3" (all A
+  pieces, then all B). The house-code number must not be followed by a separator and two letters; such a code
+  sorts naturally. A duplicate of a code like it is the next number on its own stem (`L3.ART.S16-11`), padding
+  kept; `_codePrefixOfRow` takes the type token inside a client code, never the level. Test:
+  `tests/test_structured_codes.js`.
+- **HEIGHTS NAME THEIR DATUM (20.28, `elev.datum = {name, hIn}`, `_elevDatum`, `_elevHangLabel`, `setElevDatum`).**
+  A client height from a chair rail labelled AFF hangs art ~3 ft low. With a datum the hang dim runs from it
+  (`bottom:datPx`), its label is `21" ABOVE CHAIR RAIL`, `.datum-guide` draws the datum with its own AFF height, and
+  `_installNoteSetOut` says it. Stored in INCHES; blank name, Floor/AFF or no height = the floor. A drawing input
+  (in the capture signature); `installSeq` / `typGapIn` (`_installWallSetOutExtras`) are notes, excluded from it.
+- **WEIGHT AND A NEW PICTURE (20.28).** Row `weightLbs` (`#m_weight`) adds a Weight legend line only on a wall where a
+  piece has one (`_igLegHasWeight`, BOTH key lists: `_igLegKeys` and `_legLines`, or the height reserved and the
+  lines drawn disagree). `_artIdentityResetOnSwap` clears title/artist/affil/medium/year when the image code changes
+  to a DIFFERENT code (same code with an extension keeps them); the form's `m_artist`/`m_artworkTitle` must be
+  cleared too or `syncDashAndCalculate` writes them straight back.
+- **ANOTHER JOB'S TEXT (20.28, `_leftoverPreflight`, `FILE_STAMP_RE`).** Typed text with a file stamp (8+ letters
+  before `.V<n>`) not containing this project's code or name is flagged; no code and no name = no check. In an IFS
+  also typed "Elevation Pending" and "Title N/A". The PDF is `_deckPdfFileName()` (date.code.version), the
+  version box takes 12 characters for a scope prefix (GR.V4).
+- **WALL LABELS ARE A PRODUCTION TAB (20.06, `_prodLabelsInto`, `setRowLabel`, `_labelLines`, `_labelSheetPdf`, `_labelCsv`).**
+  Row fields `artworkTitle`/`artist` (hidden in the form) plus `artistAffil`, `artMedium`, `artYear`; `labelOff` '1'/'0'
+  only when it differs from `_labelDefaultOn` (objects and flat graphics off). Sheet = Avery 5163 (4"x2", 2x5 Letter).
+  Empty parts are left out, never printed blank.
+- **THE STAGE IS THE PRESENTATION TYPE (20.04, `_deckStage`, `PRES_STAGE`).** `_deckIsIFS` is true for Final Spec
+  and Install Guide (the footer box `#specPdfVersion` is maxlength 4, so "V6" never says IFS). `_ifsAuditPreflight`
+  (always: duplicate placement codes, punctuation-blind; `PAGE_PLACEHOLDER_RE` on typed page text via `_pfPageTexts`,
+  warn, err in an IFS; IFS only: OPTION headings, no size / frame code (err), no glass on `IFS_GLAZED`, no stretcher
+  depth on `IFS_CANVAS`, no title/artist on `_rowIsPurchase` non-objects) and `_stagePreflight` (a formal stage name in
+  `DECK_STAGES` that is not the deck's stage; a `V<n>` ≠ the footer's on the cover or beside a stage name, never in
+  body copy). The starter deck's own filler is flagged on purpose.
 - **IFS READINESS (19.88, `_readinessPreflight`).** Always: one `_imgCodeKey` on two `_artSig`s (reuse those two,
   never a new signature). IFS only: TBD in image code / `buildSpecStrings` values / notes, a catalogue placement with
   more than one option, footer `V<n>` vs the project file name's `V<n>`.
@@ -2352,6 +2441,66 @@ run but passes alone is usually load timing: rerun before chasing it.
   `_rowIsPurchase` (Sourced Object, FAO/FCM/FSO/FSL code, original/commission/sourced art type) NEVER goes on an RFI.
   A per-vendor RFI is `buildDashCSVString({only})`, never a second CSV writer. `Vendor,Source URL` trail `Category`.
   Contact sheet caption `_contactSheetCaption` = image code + `_WxH` at PRINT size, project unit, no extension.
+- **WILL IT PRINT SHARP (20.10, `_artIncomingPx`, `_linkPx`, `artLink.pw/ph`, `_artPrintPpi`, `_printResPreflight`).** The
+  import keeps a 1200 px copy, so the ORIGINAL's pixels ride on the link (set beside `_artIncomingFile`, SVG none;
+  `_linkReadFile` passes them to `_linkApply`). ppi = min(pw/printW, ph/printH) / artZoom, print size from
+  `_rowOpeningAndPrint` in inches. Under `PRINT_PPI_MIN` 150 (`FLAT_PPI_MIN` 75): warn, err in an IFS. No pixels = not judged.
+- **THE SIZES ADD UP (20.11, `_rowOpeningAndPrint(...).short`, `_sizeMathPreflight`).** `short` = a sized piece whose
+  opening was <= 0 BEFORE the clamp; warn, err in an IFS.
+- **EVERY PICTURE HAS A HOUSE CODE (20.12, `HOUSE_IMG_CODE_RE`, `_imgCodeShapePreflight`).** Letters 2-5 then TWO dotted
+  number groups (JZY.010.00219; IMG_4021 must fail). Blank / TBD skipped (other checks). Warn, err in an IFS. Test fixtures with real pictures
+  need a house image code or they gain this warning.
+- **A PIECE LETTER FOLLOWS A NUMBER OR A SEPARATOR (20.13, `_artGroupKey`).** One letter is stripped only after a digit
+  (`ART.1A`, `ART-1AA` = arrangement A piece A) or a separator (`ART.1.A`, `1B.L3.ART-EF-A`); `1B.L3.ART-EA` is its own
+  placement (Ford Hub's existing-inventory codes). Still ONE letter: two-letter runs would break catalogue keys.
+- **A CODE FRAME CANNOT PARSE STILL SORTS (20.14, `_codeRowKey` `nat`, `_codeNatCmp`).** After every parsed code, in natural
+  order (`1B.L3.ART-02` < `-10` < `-EA`); walls too (`_codesSortWalls` no longer skips them; `empty` walls last).
+- **INSTALL PAGES FOLLOW THEIR PLAN (20.15).** In Install-guide mode with `_deckPlanOrder() === 'byLevel'`, each plan is
+  followed by the walls whose first active frame's row is pinned on that level (`_deckLvlOf(r.level)`); unpinned walls
+  and the other orders keep "all plans, then all walls".
+- **THE QUOTE TEMPLATE'S RULES (20.16, `ROYALTY_10_CODES`, `PRINTED_PANEL_BLEED_IN`, `MAX_MAKE`, `_maxMakeIssues`,
+  `_canvasDepthIssue`, `STD_STRETCHER_DEPTHS`, `_maxMakePreflight`).** From the real `2026 QUOTE TEMPLATE - Terms and
+  Conditions.xltx`: royalty 10% is a list of twelve prefixes, not PEN alone. Didactic Panel bleed 0.125 (printed panel);
+  `_rfqMount` tests the panel BEFORE `_isFlatGraphic` (it is one, so it read as EGD). Max sizes in INCHES, short x long,
+  shown in the project unit; mat/glass judged at overall - 2 x fW + 0.5 (rabbet lip). Floater: stretcher deeper than
+  `rabbetDepth` = proud canvas; offer the deepest standard depth, never a custom one (costs more). Warn, err in an IFS.
+- **A CANVAS'S SIDES (20.17, `_canvasWrapOf`, `canvasSides`, `CANVAS_SIDES`, `_canvasSidesInfo`, `_canvasRoomCrop`,
+  `canvasSidesMakeRoom`, `_canvasSidesNote`, `_canvasSidesPreflight`, `_stdStretcherFor`).** Floater print = art + 2 x
+  `_canvasWrapOf` (typed wrap, else depth + 0.5"); the RFQ O cell keeps `N+0.5` only when it agrees. The crop is STILL the
+  face everywhere (`computeArtDrawRect` untouched): 'image' means the picture outside the crop is the wrap, judged by
+  `_canvasSidesInfo.short`; the dashboard band `.canvas-sides-ghost` is screen only. `_artPrintPpi` spreads a floater over
+  its FACE. Rabbet/depth auto-fill uses `STD_STRETCHER_DEPTHS` (never depth = rabbet). `HOUSE_BUFFER_PCT` 3 applies when
+  the card's buffer is blank (0 = none); pricing fixtures not about the buffer pass `{ buffer: 0 }`.
+- **GLASS IS DRAWING INK, NOT DIMENSION INK (20.26, `_elevGlassInk()`).** The run outline and mullions are black; panel
+  dims and letter tags stay `--dim-color`. A function, not a const (drawn from boot paths). A guide layer that starts
+  hidden needs a line in style.css's `#label-layer, ... { display: none; }` rule, since `toggleElevLayer` and
+  `_elevGuideVis` read an unset inline display as OFF (`#outline-layer` showed while its button said off).
+- **ELEVATION REQUIRED IS COMPUTED, NEVER STORED (20.33, `elev.elevRequired`, `elev.elevRequiredNote`, `_elevReqWallForKey`,
+  `_elevReqStamps`).** The flag lives on the wall; the stamp is two virtual note annotations made per page key and
+  drawn by `_drawAnnotations` (PDF) and `_dsRenderAnnots` (read-only, `data-elev-req`). Never push them into
+  `editorialContent.annotations`, or unticking leaves stamps behind. Keys: `spec:elev:<i>`, `spec:elevgrp:<set>`, `ig:<name>`
+  are wall pages (stamp left column at y 0.545, above the plan thumbnail: the drawing runs to the top, and 20.33's spot under
+  the WALL: line sat on an install page's size legend, 20.34); `spec:<set>` is a spec page (top
+  right). A page that already carries a hand-made ELEVATION REQUIRED note gets no second one. `renderDeckPageCanvas`
+  (driver `render`) draws NO annotations at all; check stamps in an exported PDF.
+- **WALL COLOUR IS ONE READER (20.32, `elev.wallColor` '#rrggbb', `_wallColor`, `_wallColorPaint`, `setElevWallColor`).**
+  Optional, deleted when cleared. Every wall painter goes through `_wallColor`: `drawElevAll` calls
+  `_wallColorPaint`, `exportElevSVG` pushes a `data-wall-color` rect FIRST in `backLayer` (under the 20.31 underlay),
+  and `renderElevationToCanvas` fills the wall before its outline. In `CAT_WALL_FIELDS`.
+  20.35: the control is the app's picker (`_frameSwatchesInto` dots from `WALL_PAINT_FAMILIES` + the colour-wheel
+  input, `#wallColorNone` slash dot first); a plain picker on its own row went unnoticed. Paint STOPS AT THE BASEBOARD
+  (`_wallPaintBaseFrac`): the editor paints a `#wall-paint` layer (first child of #wall) instead of #wall's background,
+  so the PNG export no longer touches it; the SVG rect and the thumbnail fill are shortened by the same fraction.
+- **WALL FINISH IS NOT WALL MODE (20.25, `elev.wallFinish` / `elev.wallFinishNote`, `_wallFinishText`).** Mode (ART/EGD/WF)
+  is what goes ON the wall; finish is the wall itself. Both keys optional and deleted when blank. The install renderer
+  prints `_wallFinishText` in the code-line slot of an elevation page (`_igLine3`); both keys are in `CAT_WALL_FIELDS`.
+- **A PIN HOLDS TWO DIGITS (20.18, `_fpShortPinNums`, `g.fullNum`).** `_fpGroups` passes every group through it: an
+  all-digit `num` longer than 2 shows its last two while unique and not 00, else the long ones get 01.. in `_codeNatCmp`
+  order around the short codes' numbers. Never changes a code; dotted nums untouched.
+- **RENAMES ARE LOGGED (20.09, `_codeLogAdd` in `applyIdRename`, `codeLog`/`codeLogSeq`, issue `logSeq`,
+  `_codeRenamesSince`).** `_issueDiff` maps every issued code to its current one (renamed pieces first, so a code another
+  piece was renamed INTO is no longer the old piece's), returns `renamed`; temp renumber stems collapse in the chain. An
+  issue with no `logSeq` (or a log trimmed past it, `CODE_LOG_KEEP`) falls back to same `Artwork` sig + image code.
 - **ISSUES (19.90, `markIssued`, `_issueSnapshot`, `_issueDiff`, `editorialContent.issues`, max `ISSUE_KEEP`).** A
   record is TEXT ONLY: `buildSpecStrings` lines + image code, product, location, qty, vendor and `_artSig` (never a
   data URL; tested). Keyed by row id, so a renumber reads as removed + added. The pack adds the latest diff.
@@ -2379,7 +2528,7 @@ run but passes alone is usually load timing: rerun before chasing it.
   Import compares against `_priceRow(r).cost`, or a round-tripped estimate becomes a quote. No Update estimates button.
 - **THE COMPANY'S OWN SHEETS (19.96, `_rfqSheet(docType, only)`, `_salesforceLinesCSV`, `_rowRoyalty`, `HOUSE_MARKUP`,
   `VENDOR_CODES` / `_vendorCode`).** From the team's Claude projects (RFQ/RFI Generator, RFQ -> Import Template). Sell =
-  cost x (markup + royalty): markup is typed or `HOUSE_MARKUP` 1.8731 (template AK = 87.31% + AJ), royalty F 0 / PEN 0.10 /
+  cost x (markup + royalty): markup is typed or `HOUSE_MARKUP` 1.8731 (template AK = 87.31% + AJ), royalty F 0 / `ROYALTY_10_CODES` 0.10 /
   else 0.05 or `r.royalty` (stored only when it differs). Margin is AFTER royalties. RFQ = template front sheet, rows 1-8
   header, row 9 titles (`RFQ_COLS`, A to AN), data from row 10, `freeze: 9`; J to M are the template's mount formula ONLY
   where it equals `_rowOpeningAndPrint` (else FRAME's number). RFI = A to AG, no purchases, Total Pieces only. SF CSV is the
@@ -2404,6 +2553,61 @@ run but passes alone is usually load timing: rerun before chasing it.
   typed fields (`sh.lines[id]`, blank deletes; unticking a piece drops its override). Port = typed, else Talia's route
   table, else BLANK (never a guess). Address book and signer are localStorage (`SHIP_BOOK_KEY`, `SHIP_SIGNER_KEY`):
   no names or tax ids in the code. Lines print bare numbers; the currency is stated once.
+- **BRAND STANDARDS (20.00, Production > Brand standards, `_prodBrandInto`, `setBrandItems`, `addBrandItem`, `BS_MAILS`,
+  `_bsMailCtx`, `_bsFill`).** The fixed-price RI / SHS / Ford list lives on THIS COMPUTER (`BS_ITEMS_KEY`, settings incl.
+  card fee, Ford rate and saved wording in `BS_SET_KEY`) and travels as a `frame-brand-standards` file (import REPLACES the
+  list); never in the code or the project. `addBrandItem` mints through `_fpAddCodes` with the `_bsNew` marker (never the
+  returned code), prices through `setRowPrice` (cost = quote, sell = fixed), stamps `stdItem` (what `{custom}` leaves out)
+  and `orderQty`, which `_priceQty` reads only when the walls give 0. A blank token prints `[token]`, never ''. `**bold**`
+  is `<b>` in the rich copy (`_bsCopyMail`) and stripped in plain text and mailto.
+- **THE DECK DRIVER (20.01, `tools/frame-driver.js`, skill `.claude/skills/build-deck`).** Node, no dependencies:
+  serves the tree + `/__file?p=` on 127.0.0.1, runs headless Chrome over CDP, takes `call <fn> '<json>'` /
+  `render` / `pdf` / `save` / `sheet` / `eval` / `stop`; state in `FRAME_DRIVER_STATE` (default tmp). A `{$file}`
+  argument is LOADED AS AN IMAGE and handed on at most 3000 px (Chrome refuses to `fetch` the 50 MB+ print
+  originals). FRAME_API 2 adds `setProject`, `setPages`, `removePage`, `setContentsEntry`, `listContacts`,
+  `setContacts`, fixed pages in `describePage`/`fillPage` (`_apiFillable`), image `{fit:'whole', caption:'code'}`,
+  `false` to remove a slot, `caption` in `describePage`; an API PNG stays PNG only with real alpha. `exportPDF` passes
+  what Generate PDF passes (`meta`, `include`, `all`, `preset`), or the footer loses location/code/version.
+  `test_frame_driver` runs real Chrome (skips with none).
+- **A JUSTIFIED PARAGRAPH'S LAST LINE IS NOT STRETCHED (20.01).** `_layoutRichLines` marks `paraEnd` on each
+  hard line's last line; `_drawRichTextPdf` skips it unless `justify-all`, as the editor's CSS does.
+- **AN IMAGE-CODE CAPTION IS ONE LINE (20.01, `_drawAnnCaption`, `_capCodeFitPx`, `CAP_CODE_MIN_PT`).** jsPDF's
+  `splitTextToSize` cut a code with no spaces mid-code while `CanvasPdfRec` (which never breaks a word) showed it whole;
+  a `capSource: 'filename'` caption steps down to fit the box (floor 6pt) in the PDF and on screen.
+- **SEVERAL PICTURES, ONE POPUP (20.02, `_dsGearGroup`, `_dsGearGroupApply`, `DS_GEAR_LOOK`).** Opened on a box in a
+  multi-selection (`_mbSelAnn`, this page, shapes/images, not locked), the picture popup copies every CHANGED look field
+  onto the others in its `refresh`; a control that pushed its own undo step has it retaken (one Ctrl+Z). The dock's
+  settings button opens it on a multi-selection. Caption size is `a.capPt` (points, default `CAP_PT_DEFAULT` 9, stored
+  only when different), read by `_drawAnnCaption` and the screen caption. BOTH pan-mode (cropped picture) mousedown
+  handlers run `_dsAnnShiftToggle` / `_dsAnnGroupDragStart` first, or a moodboard can never be multi-selected.
+  API image fills set `radius` 0 unless asked (straight-edged house moodboards). The driver waits for the start screen
+  before closing it (it opens after the API is ready and swallows clicks).
+- **THE CONTEXT LIBRARY IS GENERATED BY `tools/ctx-art.js` (20.22).** Drawings, sizes and the palette groups
+  live there; `node tools/ctx-art.js --write` rewrites the block between the `// <ctx-library` markers in app.js,
+  `--sheet out.html` draws a contact sheet. Never edit that block by hand (`test_ctx_art_generated` fails).
+  Style (20.23) is the designer's product-elevation reference: ONE thin even stroke (`CTX_LW_*` equal, 0.8),
+  near-square corners (every radius x `RK` 0.55 in `R`), frame members as double lines; shared parts `door()`,
+  `toilet()`, `vanity()`, `faucet()`, `pillow()`, `bedding()` carry it, so restyle those first. Draw back to front; `R/P/C(..., true)` =
+  opaque (`data-o`), `open()` = a stroke that must stay a line (the body would fill its chord), `HID()` = dashed.
+  Groups: Guestroom, Bathroom, Toilets, Office, Glass, Doors, Chairs, Decor, Keep clear, Basic (no `&` in a
+  group name: it rides in an inline onclick). Existing keys, sizes and side sizes never change (saved walls);
+  the five `BED_STYLE_VARIANTS` keep their keys and 100-wide aspects. Reference sites (First In Architecture
+  etc.) forbid redistributing their DWGs: proportions only, never traced in.
+- **THE HOSPITALITY SET IS THE DESIGNER'S DRAWINGS (20.24, `tools/ctx-hospitality/*.svg`, `HC_MAP`, `hcFit`).**
+  mm, floor at the bottom, `fill="#fff"` = solid (becomes `data-o`), `fill="none"` = glass (becomes the hatch region).
+  `HC_MAP` either REPLACES a key (drawing fitted UNIFORMLY into that key's own size, on its floor; refused past
+  `HC_TOL` 8% off its proportions) or mints `hc-<id>` at the true size and marks what it supersedes `hidden`
+  (kept for saved walls, out of the palette and the sheet). Coordinates are rewritten numerically, never a
+  transform (it would scale the one stroke weight). New drawings: drop the file in and add a `HC_MAP` line.
+  **See all blocks** (`openContextSheet`, `CTX_SHEET_PX_IN`) is the contact sheet popup: every shown item at one
+  scale, built from `CONTEXT_LIBRARY` + `_ctxArtSvg`; a tile arms that block.
+- **A CONTEXT BLOCK'S WHITE IS ITS DRAWING, NOT ITS BOX (20.20, `_ctxBodyOn`, `_ctxBodyGroup`, `_ctxBodySvg`,
+  `_ctxBodySpansAt`).** Every closed shape in the art is filled white (stroke off, dashes stripped) UNDER the
+  lines: `.ctx-body` first in the block on screen (box `background:transparent`), `_ctxBodySvg` in the export in
+  place of the box rect, and the canvas thumbnail inlines `_ctxBodyGroup` instead of `fillRect`. Keep clear
+  (`_ctxAvoid`) and art-less blocks keep the box. The export's baseboard gap is read off a rasterised body at the
+  baseboard height (null without a canvas, then the box). An OPEN CURVE fills across its chord, so a stroke that
+  must stay a line carries `fill="none"` in the art (faucets, the toilet side lid, the chair side back).
 - **Measuring speed:** drive Chrome over CDP (`Profiler.start` around a click) against the real Ford project;
   self time in a big anonymous loop with cheap helpers means native DOM work (parsing, sync image loads).
 

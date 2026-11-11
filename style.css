@@ -266,6 +266,9 @@ input[type="number"] { -moz-appearance: textfield; }
 /* ========================================= */
 .app-top-nav { display: flex; align-items: center; background: var(--bg-nav); height: 45px; flex-shrink: 0; padding-right: 15px; border-bottom: 1px solid var(--border-color); z-index: 1000; transition: background 0.3s;}
 .nav-brand { display: flex; align-items: center; height: 100%; }
+/* The header logo (20.43): one inline drawing in currentColor, so it follows the theme. */
+.nav-logo { display: flex; align-items: center; color: var(--text-strong); }
+.nav-logo-svg { height: 17px; width: auto; display: block; fill: currentColor; }
 /* THE THEME TOGGLE SHOWS THE MODE IT WILL SWITCH TO, not the one you are in.
  * It carried a moon in both themes, so the one control whose whole job is to
  * change something never changed itself - there was no feedback that the click
@@ -1155,6 +1158,7 @@ select.no-arrow::-ms-expand { display: none; }
  * giving it flex:1 would squash the frame list that is meant to take the height. */
 .elev-tabpane { min-height: 0; }
 .elev-tabpane[data-elevtabpane="art"] { flex: none; }
+.elev-tabpane[data-elevtabpane="wall"],
 .elev-tabpane[data-elevtabpane="guides"],
 .elev-tabpane[data-elevtabpane="context"],
 .elev-tabpane[data-elevtabpane="glass"] {
@@ -1656,7 +1660,7 @@ body.dragging-frame #frame-layer .frame-vis:hover { z-index: calc(var(--lz, 10) 
 .od-id-tag { position: absolute; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; color: var(--dim-color); font-family: var(--dim-font-family); line-height: 1; z-index: 30; pointer-events: none; transform: translate(calc(-100% - 4px), -4px); text-shadow: none; font-size: calc(var(--dim-font-size) * 0.85); background: rgba(255,255,255,0.8); padding: 2px 3px; border-radius: var(--r-2); }
 
 /* All grid layers hidden by default */
-#label-layer, #od-layer, #dim-layer, #guide-layer, #grid-layer, #frame-center-layer { display: none; }
+#label-layer, #od-layer, #dim-layer, #guide-layer, #grid-layer, #frame-center-layer, #outline-layer { display: none; }
 .dim-layer, .grid-layer, .arch-dim-layer, .od-layer, .frame-center-layer, .label-layer { position: absolute; inset: 0; pointer-events: none; z-index: 30; }
 /* CLICK-THROUGH, like every other full-wall layer above. This is an `inset: 0` div
  * covering the entire wall, so with the default `pointer-events: auto` it swallowed
@@ -2554,7 +2558,14 @@ button.cat-node:hover { border-color: var(--ui-active); }
    what a designer should not be looking at before choosing a project. */
 .frame-modal.start-screen { background: var(--bg-main); backdrop-filter: none; -webkit-backdrop-filter: none; align-items: center; justify-content: center; }
 .ss-wrap { display: flex; flex-direction: column; align-items: center; gap: 0; width: min(760px, 92vw); color: var(--text-main); }
-.ss-logo { width: min(340px, 70vw); height: auto; color: var(--text-strong); fill: currentColor; overflow: visible; }
+.ss-logo { width: min(520px, 80vw); height: auto; color: var(--text-strong); fill: currentColor; overflow: visible; }
+/* The quote over the logo (20.43): fades in as the letters settle. */
+.ss-quote { margin: 0 0 34px; text-align: center; opacity: 0; transform: translateY(-6px); animation: ssQuote 1400ms cubic-bezier(.2,.7,.2,1) 900ms forwards; }
+/* Display size, set like the logo (px, capped by the window) so the line always runs
+   wider than the logo under it (20.44). */
+.ss-quote blockquote { margin: 0; font-family: 'Messina', Georgia, serif; font-style: italic; font-size: min(46px, 6.6vw); line-height: 1.2; color: var(--text-strong); white-space: nowrap; }
+.ss-quote figcaption { margin-top: 10px; text-align: right; font-family: 'Messina', Georgia, serif; font-size: var(--fs-95); color: var(--text-muted); }
+@keyframes ssQuote { to { opacity: 1; transform: translateY(0); } }
 .ss-tag { margin-top: 14px; font-size: var(--fs-65); letter-spacing: 0.32em; text-transform: uppercase; color: var(--text-muted); opacity: 0; animation: ssFade 700ms ease 1050ms forwards; }
 .ss-body { width: 100%; margin-top: 44px; opacity: 0; transform: translateY(6px); animation: ssRise 600ms cubic-bezier(.2,.7,.2,1) 1250ms forwards; }
 .ss-cards { display: flex; gap: 14px; justify-content: center; }
@@ -2583,15 +2594,15 @@ button.cat-node:hover { border-color: var(--ui-active); }
 /* THE LOGO COMES TOGETHER. The mark slides in from the left while the letters close
    up from slightly spread, staggered, each fading in. Small distances and an
    ease-out, so it settles rather than arrives. In SVG user units (the viewBox is
-   346 wide), so the move scales with the logo. */
-.ss-logo .fl-mark { opacity: 0; transform: translateX(-26px); animation: flMark 950ms cubic-bezier(.2,.7,.2,1) 120ms forwards; }
-.ss-logo .fl-l { opacity: 0; transform: translateX(calc(14px + var(--i) * 6px)); animation: flLetter 900ms cubic-bezier(.2,.7,.2,1) calc(260ms + var(--i) * 70ms) forwards; }
+   982 wide since 20.43), so the move scales with the logo. */
+.ss-logo .fl-mark { opacity: 0; transform: translateX(-60px); animation: flMark 950ms cubic-bezier(.2,.7,.2,1) 120ms forwards; }
+.ss-logo .fl-l { opacity: 0; transform: translateX(calc(34px + var(--i) * 12px)); animation: flLetter 900ms cubic-bezier(.2,.7,.2,1) calc(260ms + var(--i) * 70ms) forwards; }
 @keyframes flMark { to { opacity: 1; transform: translateX(0); } }
 @keyframes flLetter { to { opacity: 1; transform: translateX(0); } }
 @keyframes ssFade { to { opacity: 1; } }
 @keyframes ssRise { to { opacity: 1; transform: translateY(0); } }
 @media (prefers-reduced-motion: reduce) {
-    .ss-logo .fl-mark, .ss-logo .fl-l, .ss-tag, .ss-body, .ss-ver { animation: none; opacity: 1; transform: none; }
+    .ss-logo .fl-mark, .ss-logo .fl-l, .ss-quote, .ss-tag, .ss-body, .ss-ver { animation: none; opacity: 1; transform: none; }
 }
 
 /* NEXT STEP (18.10): one line, the one thing this project needs next. Below every dialog
@@ -2766,9 +2777,22 @@ button.cat-node:hover { border-color: var(--ui-active); }
     .frame-tour .tour-spot, .frame-tour .tour-card, .frame-tour .tour-fill { transition: none; }
     .frame-tour .tour-card.tour-nudge { animation: none; }
 }
-.ss-tour { display: block; margin: 14px auto 0; border: none; background: transparent; color: var(--text-muted);
-    font-size: var(--fs-70); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
-.ss-tour:hover { color: var(--text-strong); }
+.ss-tour { display: flex; align-items: center; gap: 8px; margin: 18px auto 0; padding: 7px 16px 7px 10px; cursor: pointer;
+    border: 1px solid var(--ui-active); border-radius: var(--r-10); background: transparent; color: var(--ui-active);
+    font-size: var(--fs-75); font-weight: 600; letter-spacing: 0.02em;
+    transition: background 150ms ease, color 150ms ease, transform 150ms ease;
+    /* 20.45: three soft rings once the cards have risen (ssRise ends ~1.85s), then still. */
+    animation: ssTourPulse 1600ms ease-out 2100ms 3; }
+.ss-tour:hover, .ss-tour:focus-visible { background: var(--ui-active); color: var(--bg-main); transform: translateY(-1px); }
+.ss-tour .ss-tour-ic { width: 18px; height: 18px; flex: none; }
+.ss-tour .ss-tour-ic path { fill: currentColor; stroke: none; }
+.ss-tour:not(:hover) .ss-tour-ic { animation: ssTourNudge 1600ms ease-in-out 2100ms 3; }
+@keyframes ssTourPulse {
+    0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ui-active) 55%, transparent); }
+    70%, 100% { box-shadow: 0 0 0 12px color-mix(in srgb, var(--ui-active) 0%, transparent); }
+}
+@keyframes ssTourNudge { 0%, 100% { transform: scale(1); } 35% { transform: scale(1.18); } }
+@media (prefers-reduced-motion: reduce) { .ss-tour, .ss-tour .ss-tour-ic { animation: none; } }
 .next-step .ns-tour { border-color: var(--ui-active); color: var(--ui-active); }
 
 /* 18.36: header controls that only mean something in some views (data-views). A class,
@@ -3374,6 +3398,18 @@ html.phone-land .phone-deckbar { bottom: calc(10px + env(safe-area-inset-bottom,
 html.phone .fsp-card { width: 100%; height: 100%; max-height: none; border-radius: 0; border: none; padding: 12px; }
 html.phone .fsp-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 html.phone .fsp-pic { height: 90px; }
+/* Context block contact sheet (20.24): one scale, paper tiles, floors aligned. */
+.ctx-sheet-btn { width: auto; display: inline-block; margin: 6px 0 0; }
+.ctx-sheet-card { width: min(1200px, 96vw); }
+.ctx-sheet-row { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px; }
+.ctx-sheet-tile { display: flex; flex-direction: column; align-items: center; gap: 3px; min-width: 96px; padding: 10px 10px 6px; cursor: pointer;
+    background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--r-6); color: #141414; }
+.ctx-sheet-tile:hover { border-color: var(--ui-active); box-shadow: 0 0 0 1px var(--ui-active); }
+.ctx-sheet-pic { display: flex; align-items: flex-end; justify-content: center; border-bottom: 1px solid #141414; padding: 0 6px; }
+.ctx-sheet-pic svg { display: block; overflow: visible; }
+.ctx-sheet-name { font-size: var(--fs-65); font-weight: 700; color: #141414; text-align: center; max-width: 240px; }
+.ctx-sheet-size { font-size: var(--fs-55); color: #6e6e6e; }
+html.phone .ctx-sheet-card { width: 100%; height: 100%; max-height: none; border-radius: 0; border: none; padding: 12px; }
 
 /* ═══ iPHONE: the deck's tabs above the tab bar (19.32) ═══════════════════════════════ */
 /* Project / Pages / Templates plus the deck menu, pinned over the bottom bar on Deck. The
@@ -3571,3 +3607,20 @@ html.phone .frame-tour .tour-card { left: 8px !important; right: 8px !important;
 /* 19.93/19.95: the Production button, showing the budget, turns amber past the budget or the selected piece’s allowance. */
 .dash-prod-btn { white-space: nowrap; font-variant-numeric: tabular-nums; }
 .dash-prod-btn[data-over] { color: var(--warn); border-color: var(--warn); }
+
+/* 20.39: dragging a project .json over the window. Never takes the pointer: the drop lands on the window listener. */
+.project-drop-hint { position: fixed; inset: 0; z-index: var(--z-toast); pointer-events: none; display: flex; align-items: center; justify-content: center;
+    background: var(--modal-scrim); border: 3px dashed var(--ui-active); box-sizing: border-box; }
+.project-drop-hint .pdh-box { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 22px 30px; border-radius: var(--r-8);
+    background: var(--bg-panel); border: 1px solid var(--border-color); color: var(--text-main); }
+.project-drop-hint strong { font-family: var(--ui-display); font-size: var(--fs-105); font-weight: 400; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-strong); }
+.project-drop-hint span { font-size: var(--fs-70); color: var(--text-muted); }
+
+/* 20.41: the Wall tab. Its two plain blocks sit on the same 20px column as the header did. */
+.elev-wall-pane { padding: 4px 20px 10px; }
+.elev-wall-pane + #sec-underlay, #sec-underlay + .elev-wall-pane { border-top: 1px solid var(--border-color); }
+/* "All walls" beside a per-wall switch: the same setting for every wall at once. */
+.wall-all-btn { margin-left: auto; flex: 0 0 auto; height: 20px; padding: 0 7px; border-radius: var(--r-4); cursor: pointer;
+    font-size: var(--fs-55); font-weight: 400; letter-spacing: 0; text-transform: none;
+    background: transparent; color: var(--text-muted); border: 1px solid var(--border-color); }
+.wall-all-btn:hover, .wall-all-btn:focus-visible { color: var(--text-main); border-color: var(--ui-active); }
