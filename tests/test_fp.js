@@ -562,7 +562,8 @@ const fs = require('fs');
       // into its slot — a wrong drawing that looks completely normal.
       const A = window.__appSrc;
       const del = A.slice(A.indexOf('async function _fpDeleteLevel'), A.indexOf('floorplanLevels.splice(removed, 1)'));
-      if (del.indexOf('_fpPins(r)') < 0) throw new Error('level deletion ignores the pin array');
+      // 20.50: _fpPinsAll, so a moved placement's temporary pin is renumbered too, not dropped.
+      if (del.indexOf('_fpPinsAll(r)') < 0) throw new Error('level deletion ignores the pin array (or drops temporary pins)');
       if (del.indexOf('- 1') < 0) throw new Error('level deletion does not renumber the pins above it');
       // The arithmetic itself, as the deletion does it.
       const shift = (pins, removed) => pins.filter(p => p.lv !== removed)
@@ -580,8 +581,10 @@ const fs = require('fs');
         const at = A.indexOf('function ' + fn);
         if (at < 0) throw new Error('missing ' + fn);
         const body = A.slice(at, at + 900);
-        if (!/_fpSetPin\\(|_fpClearPin\\(/.test(body)) throw new Error(fn + ' still writes a single placement');
+        // 20.51: the two placing handlers go through _fpPlaceGroup (it asks across sectors).
+        if (!/_fpSetPin\\(|_fpClearPin\\(|_fpPlaceGroup\\(/.test(body)) throw new Error(fn + ' still writes a single placement');
       });
+      { const at = A.indexOf('function _fpPlaceGroup'); if (at < 0 || A.slice(at, A.indexOf('function ', at + 10)).indexOf('_fpSetPin(') < 0) throw new Error('_fpPlaceGroup does not pin per plan'); }
       // And the markup tool resolves its pins for the level it is showing.
       const mk = A.indexOf('function renderFloorplanMarkup');
       if (A.slice(mk, mk + 900).indexOf('_fpGroups(_fpLevel)') < 0) throw new Error('the markup tool shows only primary pins');
