@@ -74,17 +74,6 @@ const fs = require('fs');
       if (editorialContent.annotations['layout:s1']) throw new Error('deleted page annotations not cleaned up');
     });
 
-    __check('the dormant _dsDeleteInserted path has the same relinking fix', () => {
-      editorialContent.layoutPages = [
-        { id: 't1', type: 'custom', title: 'T1', elements: [], afterKey: '__start__' },
-        { id: 't2', type: 'custom', title: 'T2', elements: [], afterKey: 'layout:t1' }
-      ];
-      editorialContent.annotations = {};
-      _dsDeleteInserted(editorialContent.layoutPages[0]);
-      const t2 = editorialContent.layoutPages.find(p => p.id === 't2');
-      if (t2.afterKey !== '__start__') throw new Error('_dsDeleteInserted did not relink: ' + t2.afterKey);
-    });
-
     __check('CSS FIX: the center preview banner and page mock are wrapped as a single flex-column child of dsCenter (no more side-by-side squish)', () => {
       editorialContent.layoutPages = [{ id: 'pgCenter', type: 'moodboard', title: 'Center test', elements: [] }];
       _dsPages = [{ kind: 'layout', page: editorialContent.layoutPages[0] }]; _dsIndex = 0;

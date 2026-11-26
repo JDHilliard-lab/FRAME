@@ -48,10 +48,10 @@ const path = require('path');
       if (!modal().querySelector('[data-unit-opt="Second unit:cm"].active')) throw new Error('tab did not redraw lit');
       setProjectDualUnit('mm'); modal().remove();
     });
-    __check('openUnitMenu opens Settings on Units (18.57: no header chip), the Deck button on Frame effects', () => {
+    __check('Settings opens on Units (18.57: no header chip), the Deck button on Frame effects', () => {
       if (document.getElementById('unitChip')) throw new Error('the units chip is back in the header');
-      openUnitMenu();
-      if (!modal() || !tabIs('units')) throw new Error('openUnitMenu did not land on Units');
+      openAppSettings('units');
+      if (!modal() || !tabIs('units')) throw new Error('Settings did not land on Units');
       modal().remove();
       document.getElementById('projFrameFxBtn').click();
       if (!modal() || !tabIs('fx')) throw new Error('Deck Studio button did not land on Frame effects');

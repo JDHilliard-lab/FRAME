@@ -492,8 +492,8 @@ Same format as `CLAUDE.md`: the rule, the names, the trap, one clause of why. Ad
   `_elevPrimeCaptures`, or an automatic refresh pops the render modal whenever the cache
   was dropped.
 - **THE JUMP BETWEEN A BREAKER PAGE AND ITS WALL REMEMBERS WHERE IT CAME FROM**
-  (`_dsJumpToElevation` / `_elevReturnToDeck`, `#elevReturnBar`). Return point is the page
-  KEY, never `_dsIndex`. `_elevReturnToDeck` calls `_dsRefresh()` BEFORE `_dsRestoreSel`.
+  (`_dsJumpToElevation` / `_takeReturnTrip`, `#elevReturnBar`). Return point is the page
+  KEY, never `_dsIndex`. `_takeReturnTrip` calls `_dsRefresh()` BEFORE `_dsRestoreSel`.
   Arriving at the deck by any route clears it.
 - **LAYOUT GUIDES ARE REACHABLE FROM DECK STUDIO** (`_dsElevGuidesInto`, install/breaker
   panel). Deck-wide, and labelled so (one elevation view). `_dsGuideIsOn` reads exactly as
@@ -717,7 +717,7 @@ Same format as `CLAUDE.md`: the rule, the names, the trap, one clause of why. Ad
   `_igCloseAfter` (translate is NOT scaled: divide it by m). Panel `_igCloseupPanelInto` returns before the wall controls.
   The floor plan key drops the set's own code from its letters (`_fpKeyEntries`), so ART.3 + ART.3A..I prints A–I.
 - **A SPEC PAGE'S STAMPS ARE `_approvalStamps(desc)` (20.08)**, for the PDF post-pass (`_drawApprovalStamps`, right to
-  left from the margin; `_drawApprovalStamp` is a wrapper) and the screen (`_dsAddStamp`). A set page marked pending
+  left from the margin) and the screen (`_dsAddStamp`). A set page marked pending
   with some members' `_pieceStatus` approved/production prints APPROVED <letters> + PENDING <letters> (letters from
   `_letterFrom`); no page status = no stamp, whatever the dashboard says.
 - **NOTES AND TITLE / ARTIST ARE NEVER SPEC LINES (20.27).** `buildSpecStrings` emits no Notes row (a long note broke

@@ -13,7 +13,6 @@ const check = (label, fn) => { try { fn(); results.push({ label, ok: true }); } 
 const MOVED = [
   'Scroll to zoom, drag inside to pan, move it by the grip at top-left.',
   'Double-click the box to edit its text. Drag a corner to resize',
-  'Drag mockups anywhere, resize from the corner',
   'Narrower column and smaller text leave the elevation bigger.',
   'Pieces that share a value share a line',
   'Drop or click',

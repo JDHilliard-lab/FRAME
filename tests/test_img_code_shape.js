@@ -28,7 +28,7 @@ const fx = window.__fx;
 
 check('EXACT BUG: a client photo still named IMG_4021 is flagged, named and linked to its piece', () => {
   const pf = fx.setup(['IMG_4021']);
-  if (pf.length !== 1 || pf[0].sev !== 'warn' || pf[0].text.indexOf('ART.1 — image code “IMG_4021”') !== 0) throw new Error(JSON.stringify(pf));
+  if (pf.length !== 1 || pf[0].sev !== 'warn' || pf[0].text.indexOf('ART.1: image code “IMG_4021”') !== 0) throw new Error(JSON.stringify(pf));
   if (!pf[0].go || pf[0].go.rowId !== 'ART.1') throw new Error('no way to the piece');
 });
 check('a render file name too, and an error in Final Spec', () => {

@@ -201,24 +201,24 @@ const path = require('path');
 
     __check('EXACT REQUEST: inches lead, with the chosen metric unit in brackets', () => {
       __seed('in');
-      setElevDualUnit('mm');
+      setProjectDualUnit('mm');
       const got = elevFmtU(4);
       if (got !== '4\\"(102mm)') throw new Error('got "' + got + '"');
-      setElevDualUnit('cm');
+      setProjectDualUnit('cm');
       if (elevFmtU(4) !== '4\\"(10.2cm)') throw new Error('cm gave "' + elevFmtU(4) + '"');
-      setElevDualUnit('');
+      setProjectDualUnit('');
     });
 
     __check('a metric project still prints inches first, and the project unit is untouched', () => {
       __seed('mm');
       const before = elevUnit;
-      setElevDualUnit('mm');
+      setProjectDualUnit('mm');
       const got = elevFmtU(102);         // 102mm stored
       // 18.60: inches print to the project rounding (0.### by default), so 102mm is 4.016".
       if (got.indexOf('4.016\\"') !== 0) throw new Error('expected inches first, got "' + got + '"');
       if (got.indexOf('(102mm)') < 0) throw new Error('lost the companion: "' + got + '"');
       if (elevUnit !== before) throw new Error('the project unit changed to ' + elevUnit);
-      setElevDualUnit('');
+      setProjectDualUnit('');
       elevUnit = 'in';
     });
 
@@ -226,15 +226,15 @@ const path = require('path');
     __check('every interior number carries its unit mark, with or without dual units', () => {
       __seed('in');
       if (elevFmtU(4) !== '4\\"') throw new Error('single-unit interior number lost its mark: ' + elevFmtU(4));
-      setElevDualUnit('mm');
+      setProjectDualUnit('mm');
       const got = elevFmtU(4);
-      setElevDualUnit('');
+      setProjectDualUnit('');
       if (got.indexOf('\\"') < 0) throw new Error('a bare number with a bracketed one reads as a mistake: "' + got + '"');
     });
 
     __check('the wall dims and the AFF callout carry the companion too', () => {
       __seed('in');
-      setElevDualUnit('mm');
+      setProjectDualUnit('mm');
       const aff = _elevAffLabel(57);
       if (aff.indexOf('(') < 0 || aff.indexOf('AFF') < 0) throw new Error('AFF label: ' + aff);
       // The wall dims build their own label; they must not print an inch value
@@ -244,18 +244,18 @@ const path = require('path');
         const t = wall.textContent;
         if (/\\d+\\s*mm\\(/.test(t)) throw new Error('the wall dim printed the project unit as its primary: ' + t);
       }
-      setElevDualUnit('');
+      setProjectDualUnit('');
     });
 
     // 18.48: the corner legend is gone on request: with the second unit on, every
     // number carries its own units, so the note only repeated them.
     __check('EXACT ASK: no ALL DIMENSIONS IN note is drawn on the wall or exported', () => {
       __seed('in');
-      setElevDualUnit('mm'); drawElevAll();
+      setProjectDualUnit('mm'); drawElevAll();
       if (document.getElementById('elev-unit-legend')) throw new Error('the corner note is still drawn');
       if (typeof unitLegendText === 'function') throw new Error('the legend text builder is still there');
       if (S.indexOf('ALL DIMENSIONS IN') >= 0) throw new Error('the legend wording is still in app.js');
-      setElevDualUnit('');
+      setProjectDualUnit('');
     });
 
     __check('the toggle persists, remembers the unit, and Elevation settings points to Settings > Units', () => {
@@ -263,12 +263,12 @@ const path = require('path');
       // window shows them and links there.
       if (H.indexOf('elevDualUnitCb') >= 0) throw new Error('a second units control is back in Elevation settings');
       if (H.indexOf("openAppSettings('units')") < 0 || H.indexOf('elevSetUnitsTxt') < 0) throw new Error('Elevation settings does not show the units and link to Settings');
-      setElevDualUnit('cm');
-      toggleElevDualUnit(false);
+      setProjectDualUnit('cm');
+      setProjectDualUnit('');
       if (_elevDualUnit() !== '') throw new Error('unticking did not turn it off');
-      toggleElevDualUnit(true);
+      setProjectDualUnit(_elevDualLast || 'mm');   // what the tick does: back to the remembered unit
       if (_elevDualUnit() !== 'cm') throw new Error('re-ticking forgot the cm choice, got ' + _elevDualUnit());
-      setElevDualUnit('');
+      setProjectDualUnit('');
       // 18.37: it is project data now, so it travels in the file rather than localStorage.
       if (S.indexOf("localStorage.getItem('elevDualUnit')") >= 0) throw new Error('a per-computer elevation unit is read again');
     });
@@ -286,13 +286,13 @@ const path = require('path');
     // architectural standard for a vertical dimension. _wallStackedLbl went with it.
     __check('EXACT BUG: the vertical wall dim label is rotated, so it cannot cross the wall line', () => {
       __seed('in');
-      setElevDualUnit('cm');
+      setProjectDualUnit('cm');
       drawElevAll();
       const v = document.querySelector('.arch-dim-v .arch-label-new');
       if (!v) throw new Error('no vertical wall dim label');
       if (!v.classList.contains('arch-label-rot')) throw new Error('THE BUG: the vertical wall label is not rotated, so a long dual-unit number reaches the wall line');
       if ((v.textContent || '').indexOf('274.3cm') < 0) throw new Error('lost the companion: ' + v.textContent);
-      setElevDualUnit('');
+      setProjectDualUnit('');
     });
 
     __check('the rotation is 90 degrees counter-clockwise and takes the label out of flow', () => {
@@ -305,12 +305,12 @@ const path = require('path');
 
     __check('the HORIZONTAL wall dim is left alone — it has the whole wall to sit in', () => {
       __seed('in');
-      setElevDualUnit('mm');
+      setProjectDualUnit('mm');
       drawElevAll();
       const h = document.querySelector('.arch-dim-h .arch-label-new');
       if (!h) throw new Error('no horizontal wall dim label');
       if (h.classList.contains('arch-label-rot')) throw new Error('the horizontal wall label was rotated too');
-      setElevDualUnit('');
+      setProjectDualUnit('');
     });
 
     __check('the superseded stacking helper is gone, not left unused', () => {

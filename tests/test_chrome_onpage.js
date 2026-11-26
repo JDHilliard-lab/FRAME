@@ -48,7 +48,7 @@ const path = require('path');
   check('no chrome positions itself with an edge the clamp cannot unpick', () => {
     // right:/bottom:/transform: are how the unclamped versions placed themselves.
     // Any left behind would fight the left/top _dsPinChrome writes.
-    ['_dsMoveGrip', '_dsGearButton', '_dsImgZoomPill', '_dsAnnHandles', '_dsImgPanHandle'].forEach(fn => {
+    ['_dsMoveGrip', '_dsGearButton', '_dsImgZoomPill', '_dsAnnHandles'].forEach(fn => {
       const b = codeOnly(fnBody(fn));
       if (b.indexOf('_dsPinChrome') < 0) throw new Error(fn + ' does not pin its chrome to the page');
       ['right:-', 'bottom:100%', 'translate(-50%', 'translateX(-50%'].forEach(bad => {

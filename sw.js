@@ -11,7 +11,7 @@
 //   a new version, its files are fetched in the background and the old version's copies
 //   are dropped (so a cached index.html always has its matching app.js beside it, which
 //   is what _checkBuildPairing checks).
-//   EVERYTHING ELSE (the frame library, fonts, swatches, the CDN scripts) is STALE WHILE
+//   EVERYTHING ELSE (the frame library, fonts, swatches) is STALE WHILE
 //   REVALIDATE: answered from the cache at once, refreshed in the background, capped at
 //   RUNTIME_MAX entries (oldest dropped first) so a long library browse cannot fill a phone.
 // Nothing here touches project data: autosaves and backups live in IndexedDB.
@@ -20,8 +20,12 @@ const SCOPE = self.registration ? self.registration.scope : 'frame';
 const SHELL = 'frame-shell::' + SCOPE;
 const RUNTIME = 'frame-run::' + SCOPE;
 const RUNTIME_MAX = 1500;
-const STATIC = ['./', 'lib-jspdf.min.js', 'lib-jszip.min.js', 'manifest.webmanifest',
-    'icon-180.png', 'icon-512.png', 'favicon.png', 'Frame_logo_light.svg', 'Frame_logo_Dark.svg'];
+// 20.82: html2canvas, Oswald and the scale figure are local files now, and are fetched at
+// install so they never depend on the runtime cache (which drops its oldest entries).
+const STATIC = ['./', 'lib-jspdf.min.js', 'lib-jszip.min.js', 'lib-html2canvas.min.js',
+    'fonts/Oswald-latin.woff2', 'fonts/Oswald-latin-ext.woff2', 'Character_Lady_walk.svg',
+    'manifest.webmanifest', 'icon-180.png', 'icon-512.png', 'favicon.png',
+    'Frame_logo_light.svg', 'Frame_logo_Dark.svg'];
 const VERSIONED = ['style.css', 'templates.js', 'app.js'];
 
 // The versioned file URLs a page names, e.g. ['app.js?v=19.26', ...].

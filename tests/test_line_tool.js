@@ -28,7 +28,7 @@ const path = require('path');
 
   // ── source: the draw tool and the handle drag both go through the one rule
   check('the draw tool constrains the PREVIEW and the COMMIT through one endAt()', () => {
-    const d = bodyOf('const straight = (shapeKind', 'function _dsAddArtDetail(');
+    const d = bodyOf('const straight = (shapeKind', 'function _dsAngleIconSVG(');
     if (d.indexOf('_dsLineConstrain(') < 0) throw new Error('draw tool does not use the shared constraint');
     const mv = d.indexOf('const mv = (ev) =>'), up = d.indexOf('const up = (ev) =>');
     if (mv < 0 || up < 0) throw new Error('draw handlers not found');
@@ -41,7 +41,7 @@ const path = require('path');
     if (d.indexOf('ang < 6 || ang > 174') >= 0) throw new Error('the old inline snap is back');
   });
   check('Esc during a draw drops the line and is not passed on to disarm the tool', () => {
-    const d = bodyOf('const straight = (shapeKind', 'function _dsAddArtDetail(');
+    const d = bodyOf('const straight = (shapeKind', 'function _dsAngleIconSVG(');
     const k = d.indexOf('const onKey');
     if (k < 0) throw new Error('no Esc handler on the draw');
     const ks = d.slice(k, d.indexOf('};', k));
@@ -61,7 +61,7 @@ const path = require('path');
     if (!(v >= 1000000)) throw new Error('DS_DRAW_LAYER_Z is too low: ' + v);
   });
   check('every drag in the annotation layer leaves an undo step', () => {
-    const a = src.indexOf('function _dsRenderAnnots('), b = src.indexOf('function _dsAddArtDetail(');
+    const a = src.indexOf('function _dsRenderAnnots('), b = src.indexOf('function _dsAngleIconSVG(');
     const zones = [src.slice(a, b), bodyOf('function _dsShapePanDown(', '\nfunction '), bodyOf('function _dsAnnHandles(', '\nfunction ')];
     const missing = [];
     zones.forEach((z, zi) => {

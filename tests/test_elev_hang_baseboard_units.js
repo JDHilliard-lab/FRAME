@@ -109,7 +109,7 @@ const path = require('path');
     // ── Unit toggling ──
     __check('EXACT BUG: repeated unit toggles do not drift the standard', () => {
       __seed('in');
-      for (let n = 0; n < 8; n++) { setElevUnit('cm'); setElevUnit('mm'); setElevUnit('in'); }
+      for (let n = 0; n < 8; n++) { setUnit('cm'); setUnit('mm'); setUnit('in'); }
       if (__hangBox().value !== '57') throw new Error('after 24 unit switches the hang height reads ' + __hangBox().value);
       if (__baseBox().value !== '4') throw new Error('after 24 unit switches the baseboard reads ' + __baseBox().value);
       if (elevHangIn !== 57) throw new Error('the stored inches drifted to ' + elevHangIn);
@@ -146,10 +146,10 @@ const path = require('path');
       __seed('in');
       __hangBox().value = '60'; updateHangHeight();
       if (elevHangIn !== 60) throw new Error('typing 60 stored ' + elevHangIn + ' inches');
-      setElevUnit('cm');
+      setUnit('cm');
       if (__hangBox().value !== '152.4') throw new Error('60in became ' + __hangBox().value + 'cm');
       if (Math.abs(getHangHeight() - 152.4) > 0.001) throw new Error('getHangHeight() is ' + getHangHeight() + ' in cm');
-      setElevUnit('in');
+      setUnit('in');
       if (__hangBox().value !== '60') throw new Error('came back as ' + __hangBox().value);
       __seed('in');
     });
@@ -212,7 +212,7 @@ const path = require('path');
       __hangBox().value = '62'; updateHangHeight();
       const snap = snapshotProjectState();
       if (snap.hangHeightIn !== 62) throw new Error('the snapshot holds ' + snap.hangHeightIn);
-      elevHangIn = 57; setElevUnit('cm');
+      elevHangIn = 57; setUnit('cm');
       restoreProjectState(snap);
       if (elevHangIn !== 62) throw new Error('restore gave ' + elevHangIn + ' inches');
       if (__hangBox().value !== '157.48') throw new Error('the input after restore in cm reads ' + __hangBox().value);

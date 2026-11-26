@@ -1476,8 +1476,8 @@ const fs = require('fs');
       // back to where it is in deck studio?"
       const A = window.__appSrc;
       if (A.indexOf('function _dsJumpToElevation') < 0) throw new Error('there is no way through to the wall');
-      if (A.indexOf('function _elevReturnToDeck') < 0) throw new Error('there is no way back');
-      const j = A.slice(A.indexOf('function _dsJumpToElevation'), A.indexOf('function _elevReturnToDeck'));
+      if (A.indexOf('function _takeReturnTrip') < 0) throw new Error('there is no way back');
+      const jA = A.indexOf('function _dsJumpToElevation'), j = A.slice(jA, A.indexOf('\\nfunction ', jA + 1));
       // The KEY, never _dsIndex: the deck rebuilds constantly, and an index would bring
       // you back to whatever had since taken that slot. Same rule the page drag learned.
       if (j.indexOf('_deckPageKey(desc)') < 0) throw new Error('the return point is not stored as a key');
@@ -1485,9 +1485,8 @@ const fs = require('fs');
       if (j.indexOf("switchView('elevation', idx)") < 0) throw new Error('the jump does not open the wall');
       // The logic lives in _takeReturnTrip now: there are THREE trips (deck->wall,
       // wall->dashboard, dashboard->wall) and they share one slot and one renderer,
-      // so _elevReturnToDeck is a one-line alias onto it. Same behaviour, read from
-      // where it actually is.
-      const r = A.slice(A.indexOf('function _takeReturnTrip'), A.indexOf('function _elevReturnToDeck'));
+      // (the old _elevReturnToDeck alias had no caller and is gone, 20.83).
+      const rA = A.indexOf('function _takeReturnTrip'), r = A.slice(rA, A.indexOf('\\nfunction ', rA + 1));
       // Refresh BEFORE looking the key up: the deck may have been rebuilt while the wall
       // was being edited, which is exactly what a guide toggle does.
       if (r.indexOf('_dsRefresh()') < 0) throw new Error('the return does not rebuild the deck first');
@@ -1508,7 +1507,8 @@ const fs = require('fs');
       // landmarks rather than by a character count, which reads as deleted the
       // moment the function grows.
       const sb = A.indexOf('function _syncReturnBars');
-      const b = A.slice(sb, A.indexOf('function _elevSyncReturnBtn', sb));
+      // To the end of _returnBarInto, the renderer _syncReturnBars hands each bar to.
+      const b = A.slice(sb, A.indexOf('\\nfunction ', A.indexOf('function _returnBarInto(') + 1));
       if (b.indexOf("if (!on) { bar.style.display = 'none'") < 0) {
         throw new Error('the bar does not hide itself when there is no return point');
       }

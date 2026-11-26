@@ -123,7 +123,8 @@ const path = require('path');
     // The toolbar fit menu had it as an inline calculation and _dsShapeFitToImage
     // repeated the same arithmetic; the second was added a version after the first.
     if (src.indexOf('(a.w * 936 / asp) / 540') >= 0) throw new Error('the inline copy of the fit arithmetic is back');
-    if (src.indexOf("op === 'frame') { _dsShapeFitToImage(") < 0) throw new Error('the fit op no longer delegates');
+    // 20.83: the toolbar fit menu and its _dsShapeFitOp had no caller and are gone; the gear's fit is the one.
+    if (src.indexOf('function _dsShapeFitToImage(') < 0) throw new Error('the one fit implementation is missing');
   });
 
   // ── Behaviour ───────────────────────────────────────────────────────────

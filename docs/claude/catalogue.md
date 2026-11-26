@@ -7,7 +7,8 @@ Same format as `CLAUDE.md`: the rule, the names, the trap, one clause of why. Ad
   order: one placement offered with several arrangements and several sets of artwork, and
   the client picks. It deliberately states no quantity.
   Walls: `elev.catalogueMaster` marks a MOCKUP (an arrangement drawing; `_isCatalogueMaster`,
-  switched per elevation by `#catMasterBtn` / `toggleCatalogueMaster`). An OPTION is a wall
+  set by `_catEnsureCatalogue` when Deck Studio's "+ Add option" first makes the wall an
+  arrangement; the old `#catMasterBtn` / `toggleCatalogueMaster` switch is gone). An OPTION is a wall
   with `catalogueOption` + `variationOfId` pointing at its mockup (`_catMasterOf`,
   `_isCatalogueOption`). Options are identified by that LINK, never by parsing the code.
   Spelling (17.97, current): `ART.1` placement (primary arrangement, short form), `ART.1B`
@@ -84,7 +85,7 @@ Same format as `CLAUDE.md`: the rule, the names, the trap, one clause of why. Ad
   both live-elevation renderers ask the wall; `renderFrameToCanvas` deliberately does NOT
   (one piece, no wall); a test pins that split. Do not add a second argument to
   `_captureElevWithGuides` (index-only is pinned). Cache invalidation is free because
-  `toggleCatalogueMaster` pushes history.
+  the "+ Add option" gesture that sets the flag pushes history.
   The `catalogue` preset keeps `wf: false` (deck-wide wireframe would grey the option
   pages), sets `breakers: true` and `tpl: 'setLegend'`. `breakers` is read only when a
   preset declares it.
@@ -137,8 +138,8 @@ Same format as `CLAUDE.md`: the rule, the names, the trap, one clause of why. Ad
   Two rows with one id is unrecoverable corruption: both minters refuse up front via
   `_catRowIdsTaken`.
   `_catAddArrangement(srcIdx, {newSet})` is the ONE minter for layouts and frame sets
-  (opened by `_catLayoutChooser` from `catArrangementAction` / `catFrameSetAction`, which
-  also collects the name). A LAYOUT lands after the last wall of ITS SET; a FRAME SET
+  (called by `_catAddOptionOfKind`, Deck Studio's "+ Add option"; the old + LAYOUT / + SET
+  buttons and their `_catLayoutChooser` prompt were removed in 20.83). A LAYOUT lands after the last wall of ITS SET; a FRAME SET
   after the last wall of the placement. It RESOLVES THROUGH THE MOCKUP when started from
   an option. Artwork is carried onto the new arrangement's first OPTION, never onto the
   mockup. Where slot ids have no separator (`ART-1A`) a hyphen is introduced, since

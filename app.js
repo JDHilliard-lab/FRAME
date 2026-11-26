@@ -6,7 +6,7 @@
 // Update APP_VERSION on each release. APP_BUILD is derived from the URL (see
 // below) — the version pill turns orange on the dev site to make it obvious at a
 // glance which build you are looking at.
-const APP_VERSION = '20.79';
+const APP_VERSION = '20.83';
 const IDML_STYLE_SEED = [{"id":"sty_cover_title","name":"Cover Title","group":"Cover","font":"display","size":0.1111,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"upper","track":0.01},{"id":"sty_cover_title_centered","name":"Cover Title (Centered)","group":"Cover","font":"display","size":0.1111,"bold":true,"italic":false,"color":"#ffffff","align":"center","caps":"upper","track":0.01},{"id":"sty_cover_location","name":"Cover Location","group":"Cover","font":"serif","size":0.0222,"bold":false,"italic":false,"color":"#ffffff","align":"right","caps":"none","track":0.0},{"id":"sty_cover_project_code","name":"Cover Project Code","group":"Cover","font":"serif","size":0.0222,"bold":false,"italic":false,"color":"#ffffff","align":"right","caps":"none","track":0.0},{"id":"sty_toc_section_title","name":"TOC Section Title","group":"Table of Contents","font":"serif","size":0.0241,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.0},{"id":"sty_toc_entry","name":"TOC Entry","group":"Table of Contents","font":"serif","size":0.0185,"bold":false,"italic":false,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_section_heading","name":"Section Heading","group":"Header","font":"display","size":0.0556,"bold":true,"italic":false,"color":"#000000","align":"left","caps":"upper","track":0.01},{"id":"sty_header_one_xl","name":"Header One (XL)","group":"Header","font":"display","size":0.0444,"bold":true,"italic":false,"color":"#000000","align":"left","caps":"upper","track":0.01},{"id":"sty_paragraph_heading_right","name":"Paragraph Heading (Right)","group":"Header","font":"display","size":0.0333,"bold":true,"italic":false,"color":"#1a1a1a","align":"right","caps":"upper","track":0.01},{"id":"sty_body_copy_standard","name":"Body Copy (Standard)","group":"Body Copy","font":"serif","size":0.0148,"bold":false,"italic":false,"color":"#222222","align":"justify","caps":"none","track":0.0},{"id":"sty_body_copy_large_+_bold","name":"Body Copy (Large + Bold)","group":"Body Copy","font":"serif","size":0.0185,"bold":true,"italic":false,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_body_copy_primary","name":"Body Copy (Primary)","group":"Body Copy","font":"serif","size":0.0148,"bold":false,"italic":false,"color":"#222222","align":"justify","caps":"none","track":0.0},{"id":"sty_body_description","name":"Body Description","group":"Body Text","font":"serif","size":0.0167,"bold":false,"italic":false,"color":"#333333","align":"left","caps":"none","track":0.0},{"id":"sty_body_subheading","name":"Body Subheading","group":"Body Text","font":"serif","size":0.0204,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.0},{"id":"sty_spec_copy","name":"Spec Copy","group":"Spec Page","font":"serif","size":0.0148,"bold":false,"italic":false,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_spec_subject","name":"Spec Subject","group":"Spec Page","font":"serif","size":0.0148,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.01},{"id":"sty_spec_notes","name":"Spec Notes","group":"Spec Page","font":"serif","size":0.013,"bold":false,"italic":true,"color":"#939597","align":"left","caps":"none","track":0.005},{"id":"sty_spec_static_caption","name":"Spec Static Caption","group":"Spec Page","font":"serif","size":0.013,"bold":false,"italic":true,"color":"#999999","align":"left","caps":"none","track":0.0},{"id":"sty_image_code","name":"Image Code","group":"Captions","font":"serif","size":0.012,"bold":false,"italic":true,"color":"#7f7f7f","align":"right","caps":"none","track":0.01},{"id":"sty_caption_image_code","name":"Caption Image Code","group":"Captions","font":"serif","size":0.0111,"bold":false,"italic":false,"color":"#bfbfbf","align":"left","caps":"none","track":0.0},{"id":"sty_artist_name","name":"Artist Name","group":"Captions","font":"serif","size":0.0139,"bold":true,"italic":false,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_artwork_title","name":"Artwork Title","group":"Captions","font":"serif","size":0.013,"bold":false,"italic":true,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_thank_you_\u2014_name","name":"Thank You \u2014 Name","group":"Thank You","font":"display","size":0.0417,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"upper","track":0.0},{"id":"sty_thank_you_\u2014_role","name":"Thank You \u2014 Role","group":"Thank You","font":"serif","size":0.0148,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"none","track":0.0},{"id":"sty_thank_you_\u2014_contact","name":"Thank You \u2014 Contact","group":"Thank You","font":"serif","size":0.013,"bold":false,"italic":false,"color":"#ffffff","align":"left","caps":"none","track":0.0},{"id":"sty_subhead","name":"Subhead","group":"Subheadings","font":"display","size":0.0204,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"upper","track":0.035},{"id":"sty_section_subheading_left","name":"Section Subheading (Left)","group":"Subheadings","font":"display","size":0.0333,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"upper","track":0.01},{"id":"sty_section_subheading_right","name":"Section Subheading (Right)","group":"Subheadings","font":"display","size":0.0333,"bold":true,"italic":false,"color":"#1a1a1a","align":"right","caps":"upper","track":0.01},{"id":"sty_section_subheading_serif","name":"Section Subheading (Serif)","group":"Subheadings","font":"serif","size":0.0139,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.0},{"id":"sty_subheading_white,_center","name":"Subheading (White, Center)","group":"Subheadings","font":"serif","size":0.013,"bold":false,"italic":false,"color":"#ffffff","align":"center","caps":"none","track":0.0},{"id":"sty_quote_\u2014_druk","name":"Quote \u2014 Druk","group":"Quotes","font":"display","size":0.0694,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.025},{"id":"sty_quote_\u2014_druk_alt","name":"Quote \u2014 Druk (Alt)","group":"Quotes","font":"display","size":0.0444,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.0},{"id":"sty_quote_\u2014_serif","name":"Quote \u2014 Serif","group":"Quotes","font":"serif","size":0.0417,"bold":false,"italic":false,"color":"#ffffff","align":"left","caps":"none","track":0.0},{"id":"sty_quote_\u2014_serif_white,_cap","name":"Quote \u2014 Serif (White, Caps)","group":"Quotes","font":"display","size":0.0333,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"upper","track":0.01},{"id":"sty_display_keyword","name":"Display Keyword","group":"Keywords","font":"display","size":0.1111,"bold":true,"italic":false,"color":"#000000","align":"left","caps":"upper","track":0.01},{"id":"sty_keywords_full_page","name":"Keywords (Full Page)","group":"Keywords","font":"display","size":0.0556,"bold":true,"italic":false,"color":"#ffffff","align":"justify-all","caps":"none","track":0.02},{"id":"sty_brand_keyword","name":"Brand Keyword","group":"Keywords","font":"display","size":0.1852,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"upper","track":0.01},{"id":"sty_moodboard_keyword","name":"Moodboard Keyword","group":"Keywords","font":"display","size":0.0833,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"upper","track":0.0}];
 // The default fill for a placeholder shape, and the ONE definition of it. It was
 // written out nine times: the starter deck, the shape creator, the duplicate
@@ -379,7 +379,9 @@ function _startScreenNewForm(body, cards, peek) {
     const form = document.createElement('form'); form.className = 'ss-form';
     form.innerHTML = '<label>Project name<input type="text" name="name" autocomplete="off" placeholder="e.g. Marriott Downtown"></label>'
         + '<label>Client<input type="text" name="client" autocomplete="off" placeholder="Optional"></label>'
+        + '<label>Job code<input type="text" name="code" autocomplete="off" placeholder="e.g. BEYE-HILT-WAIL-2024" style="font-family:monospace;"><span class="ss-hint"></span></label>'
         + '<div class="ss-units-row"><span>Units</span><div class="frame-tabs ss-units"></div></div>'
+        + '<label class="ss-check"><input type="checkbox" name="folder" checked><span>Make the project folder (in my work folder, not Dropbox)</span></label>'
         + '<div class="ss-actions"><button type="button" class="action-btn btn-secondary ss-back">Back</button><button type="submit" class="action-btn ss-go">Start</button></div>';
     let unit = (typeof dashUnit !== 'undefined' && UNIT_INFO[dashUnit]) ? dashUnit : 'in';
     const ub = form.querySelector('.ss-units');
@@ -390,9 +392,17 @@ function _startScreenNewForm(body, cards, peek) {
         ub.appendChild(b);
     });
     form.querySelector('.ss-back').onclick = () => { form.remove(); cards.style.display = ''; };
+    const hint = form.querySelector('.ss-hint');
+    form.elements.code.oninput = () => {
+        const v = form.elements.code.value.trim();
+        hint.textContent = (v && !_jobCodeLooksRight(v)) ? 'Usually CLIENT-BRAND-CITY-####. Fine to keep if this job differs.' : '';
+    };
     form.onsubmit = (e) => {
         e.preventDefault();
-        _startNewProject({ name: form.elements.name.value, client: form.elements.client.value, unit: unit });
+        const code = form.elements.code.value.trim().toUpperCase();
+        _startNewProject({ name: form.elements.name.value, client: form.elements.client.value, code: code, unit: unit });
+        // The dialog previews the folders; nothing is made until its Create.
+        if (form.elements.folder.checked) openProjectFolderDialog({ project: form.elements.name.value, client: form.elements.client.value });
     };
     cards.style.display = 'none';
     body.insertBefore(form, cards);
@@ -404,6 +414,8 @@ function _startNewProject(o) {
     const name = String((o && o.name) || '').trim() || 'Untitled project';
     setVal('g_projName', name);
     if (o && String(o.client || '').trim()) setVal('g_client', String(o.client).trim());
+    // The job code is the deck's Project code: PDF names (YYMMDD.CODE.V#) and the design folder read it.
+    if (o && String(o.code || '').trim()) setVal('specPdfCode', String(o.code).trim().toUpperCase());
     // The client typed here goes on the cover (18.56), replacing ONLY the starter's own
     // CLIENT NAME placeholder, so a cover a designer has already written is never touched.
     // The big heading is left alone: at its size a long project name would wrap into the
@@ -526,7 +538,6 @@ function _tourDeckPage(kinds) {
     }
     _dsRenderRail(); _dsRenderCenter(); _dsRenderTools();
 }
-function _tourParentOf(id) { const el = document.getElementById(id); return el ? el.parentElement : null; }
 const FRAME_TOUR = [
     { ch: 0, title: 'Welcome to Farmhand',
       body: 'Farmhand turns a list of artwork into a client presentation: spec pages, wall elevations, floor plans and the PDF. This tour walks the job in the order a deck is built. It only looks around, so it cannot change your project. Use the arrow keys or the buttons, and Esc to leave at any point.' },
@@ -1290,12 +1301,6 @@ const FRAME_SWATCH_FAMILIES = [
     { name: 'Neutrals', colors: ['#000000', '#1a1a1a', '#4a4a4a', '#9c9c9c', '#b0b0b0', '#ffffff'] },
     { name: 'Accents',  colors: ['#e00000', '#c0392b', '#1f4e79', '#2e8b6f', '#c07b2e', '#6b4e9a'] },
 ];
-// Flat list, for the compact single-row swatch strips in the gear popups.
-function _frameSwatchList() {
-    const out = [];
-    FRAME_SWATCH_FAMILIES.forEach(f => f.colors.forEach(c => { if (out.indexOf(c) < 0) out.push(c); }));
-    return out;
-}
 // A black-to-grey ramp for things that are drawn as a SILHOUETTE rather than
 // coloured — currently just the scale figure. Same shape as a swatch family so it
 // goes through _frameSwatchesInto and comes out looking like every other swatch
@@ -1958,13 +1963,6 @@ function _fpMigrate() {
     if (_fpLevel < 0 || _fpLevel >= floorplanLevels.length) _fpLevel = 0;
 }
 function _fpActive() { _fpMigrate(); return floorplanLevels[_fpLevel]; }
-// Per-level 1-based callout number for each item (in dashProjectData order),
-// matching the Floorplan Key page numbering exactly.
-function _fpNumbers() {
-    const counts = {}, map = {};
-    (dashProjectData || []).forEach(it => { if (!it) return; const lv = it.level || 0; counts[lv] = (counts[lv] || 0) + 1; map[it.id] = counts[lv]; });
-    return map;
-}
 // Plan callout numbers come from the ART code itself, not a running count.
 // Set-pieces (ART.005-A, -B, -C, -D) share one group → one pin labelled "05".
 function _artGroupKey(code) {
@@ -2902,13 +2900,13 @@ const LAYOUT_TEMPLATES = {
         { name: 'Over image', els: () => [_tImg(0, 0, 1, 1), _tTxt('SECTION TITLE', .08, .42, .84, .12, 5, 'display', '#1a1a1a')] }
     ],
     bio: [
-        { name: 'Portrait + bio', els: () => [_tImg(.06, .14, .34, .66, 1), _tTxt('ARTIST NAME', .46, .14, .48, .06, 5, 'display', '#1a1a1a'), _tTxt('Artist biography — background, practice, and relevance to this collection.', .46, .26, .48, .028, 6, 'serif', '#222222')] },
+        { name: 'Portrait + bio', els: () => [_tImg(.06, .14, .34, .66, 1), _tTxt('ARTIST NAME', .46, .14, .48, .06, 5, 'display', '#1a1a1a'), _tTxt('Artist biography: background, practice, and relevance to this collection.', .46, .26, .48, .028, 6, 'serif', '#222222')] },
         { name: 'Text only', els: () => [_tTxt('ARTIST NAME', .06, .14, .8, .06, 5, 'display', '#1a1a1a'), _tTxt('Artist biography copy.', .06, .26, .62, .03, 6, 'serif', '#222222')] },
         { name: 'Lead image', els: () => [_tImg(.06, .12, .88, .4, 1.6), _tTxt('ARTIST NAME', .06, .56, .7, .05, 5, 'display', '#1a1a1a'), _tTxt('Artist biography below the lead image.', .06, .67, .88, .026, 6, 'serif', '#222222')] }
     ],
     plan: [
         { name: 'Full plan', els: () => [_tImg(.06, .12, .88, .78, 1.6)] },
-        { name: 'Plan + caption', els: () => [_tImg(.06, .1, .88, .72, 1.8), _tTxt('Floor plan — level / zone', .06, .86, .7, .03, 6, 'serif', '#666666')] },
+        { name: 'Plan + caption', els: () => [_tImg(.06, .1, .88, .72, 1.8), _tTxt('Floor plan: level / zone', .06, .86, .7, .03, 6, 'serif', '#666666')] },
         { name: 'Title + plan', els: () => [_tTxt('PLAN VIEW', .06, .08, .7, .055, 5, 'display', '#1a1a1a'), _tImg(.06, .2, .88, .68, 1.7)] }
     ],
     custom: [
@@ -2938,7 +2936,7 @@ const SPEC_TEMPLATES = {
         code: { align: 'right', size: 13, gap: 14, field: 'imageCode' }
     },
     installGuide: {
-        label: 'Install guide — dimensioned elevation',
+        label: 'Install guide: dimensioned elevation',
         help: 'One page per wall elevation, drawn full size with the dimensions, hang height and spacing set in the Elevations tab. Needs artwork placed on a wall first.',
         custom: true
     },
@@ -2972,7 +2970,7 @@ const SPEC_TEMPLATES = {
         sharedSpec: true
     },
     artSpecDetail: {
-        label: 'Artwork spec \u2014 detail (plan + elevation)',
+        label: 'Artwork spec: detail (plan + elevation)',
         help: 'One piece per page, titled item code | location. Spec list on the left, then a floorplan crop and the wall elevation side by side beneath it, with the framed piece large on the right. No frame profile.',
         // x values start at .045 (not .025) — .025 landed 23pt from the page
         // edge, inside the 40pt safety margin. Elevation.y sits deeper (.65,
@@ -2987,8 +2985,8 @@ const SPEC_TEMPLATES = {
         code: { align: 'right', size: 11, gap: 14, field: 'imageCode' }
     },
     frameSpecDetail: {
-        label: 'Framing spec \u2014 detail (corner + profile)',
-        help: 'Everything on Artwork spec \u2014 detail, plus the frame corner sample and the moulding profile drawing in a strip above the floorplan and elevation. The one to use when the framing is the point.',
+        label: 'Framing spec: detail (corner + profile)',
+        help: 'Everything on Artwork spec: detail, plus the frame corner sample and the moulding profile drawing in a strip above the floorplan and elevation. The one to use when the framing is the point.',
         title: { x: .045, y: .15, size: 19, align: 'left', field: 'idLocation' },
         spec: { x: .045, y: .21, w: .31 },
         // Corner + profile thumbnails pin directly above the plan/elevation
@@ -3008,13 +3006,13 @@ const SPEC_TEMPLATES = {
     // template grid for the same reason.
     egdDetail: {
         label: 'Wallcovering / window film',
-        help: 'The only layout for a wallcovering or window film, and it is applied automatically. Title and spec (Application, Art Type, Overall Dimensions) top-left, floorplan detail bottom-left, and the dimensioned elevation as large as the page allows on the right. Pattern-swatch callouts and reference images are per project — build them on the page with the arrow and note tools.',
+        help: 'The only layout for a wallcovering or window film, and it is applied automatically. Title and spec (Application, Art Type, Overall Dimensions) top-left, floorplan detail bottom-left, and the dimensioned elevation as large as the page allows on the right. Pattern-swatch callouts and reference images are per project: build them on the page with the arrow and note tools.',
         flat: true,
         custom: true
     },
     custom: {
         label: 'Custom (free layout)',
-        help: 'An empty page you place yourself — drag in artwork, text and thumbnails anywhere. What you place is what exports; the centre preview is already live, so there is nothing to build.',
+        help: 'An empty page you place yourself: drag in artwork, text and thumbnails anywhere. What you place is what exports; the centre preview is already live, so there is nothing to build.',
         freeform: true
     }
 };
@@ -3713,9 +3711,6 @@ function _wallAllSegs(o) {
     if (o && Array.isArray(o.wallLines) && o.wallLines.length) return o.wallLines.map(l => [l.x1, l.y1, l.x2, l.y2]);
     return (o && o.wallLine) ? _wallSegs(o.wallLine, o.wallPanels) : [];
 }
-function _fpGroupsOnLevel(level) {
-    return (typeof _fpGroups === 'function' ? _fpGroups(level) : []).filter(g => g.wallLine && (g.level || 0) === (level || 0));
-}
 function categoryColor(key) {
     const c = _artCats().find(c => c.key === (key || ''));
     return c ? c.color : '#444444';
@@ -4294,14 +4289,6 @@ function setAnnotFontWeight(wt) {
     applyAnnotationStyleFromModal();
 }
 
-function setSvgFrameMode(mode) {
-    svgFrameMode = mode;
-    saveSvgFrameMode();
-    const mTex = document.getElementById('svgModeTexture');
-    const mCol = document.getElementById('svgModeColor');
-    if (mTex) mTex.classList.toggle('active', mode === 'texture');
-    if (mCol) mCol.classList.toggle('active', mode === 'autocolor');
-}
 
 // Returns array of selected-and-active frames (refs into elevFrames).
 // Selection-only contract per user decision — no fallback to all-active.
@@ -4620,7 +4607,6 @@ let svgFrameMode = 'texture';
 function loadSvgFrameMode() {
     try { localStorage.removeItem('svgFrameMode'); } catch (e) {}   // the old remembered choice
 }
-function saveSvgFrameMode() {}
 
 // Compute the average color of an image (drawn small for speed). Returns a
 // hex string. Used by autocolor SVG mode so a wood-grain swatch becomes a
@@ -5020,7 +5006,7 @@ function updateDirtyIndicator() {
     if (!dot) {
         dot = document.createElement('span');
         dot.id = 'unsavedIndicator';
-        dot.title = 'Unsaved changes — press Ctrl+S to save';
+        dot.title = 'Unsaved changes: press Ctrl+S to save';
         dot.style.cssText = 'display:none; width:10px; height:10px; border-radius:50%; background:#ff8c00; flex-shrink:0; box-shadow: 0 0 6px rgba(255,140,0,0.5);';
         // Insert right before the Save Project button so the dot lives next
         // to its remedy. Find the Save button by its visible text.
@@ -5584,7 +5570,7 @@ async function _vRestore(id, label) {
         'Your current work is saved as a new version first, then the project is replaced with this one.',
         'Restore', 'Cancel');
     if (!ok) return;
-    try { await _vSaveCurrent('Auto-backup before restore \u2014 ' + new Date().toLocaleString()); } catch (e) {}
+    try { await _vSaveCurrent('Auto-backup before restore: ' + new Date().toLocaleString()); } catch (e) {}
     let payload = null; try { payload = await _vGetData(id); } catch (e) {}
     if (!payload) { showInfoModal('Restore', 'Could not load that version\u2019s data.'); return; }
     _versionRestore(payload);
@@ -6575,7 +6561,7 @@ function _syncCatalogueBtn() {
         const p2 = _catPlacementKey(c2);
         const n2 = c2 ? _catSetsOf(p2).length : 0;
         set.title = c2
-            ? ('Add a DIFFERENT SET OF FRAMES at ' + p2 + ' \u2014 a single piece where this is a salon hang. '
+            ? ('Add a DIFFERENT SET OF FRAMES at ' + p2 + ': a single piece where this is a salon hang. '
                + 'Its frames are its own and nothing here reaches the other sets; it shares this placement\u2019s pin on the floorplan. '
                + n2 + ' frame set' + (n2 === 1 ? '' : 's') + ' so far.')
             : 'Place a piece carrying an item code before adding a frame set.';
@@ -6586,7 +6572,7 @@ function _syncCatalogueBtn() {
         const place = _catPlacementKey(code);
         const n = code ? _catArrangementsOf(place).length : 0;
         arr.title = code
-            ? ('Add another LAYOUT for ' + place + ' \u2014 a diptych where this is a salon hang, say. It becomes its own mockup with its own breaker page and shares this placement\u2019s pin on the floorplan, so the plan still shows one location. '
+            ? ('Add another LAYOUT for ' + place + ': a diptych where this is a salon hang, say. It becomes its own mockup with its own breaker page and shares this placement\u2019s pin on the floorplan, so the plan still shows one location. '
                + n + ' arrangement' + (n === 1 ? '' : 's') + ' so far.'
                + (isOpt ? ' Taken from an option, the new arrangement starts empty with its first option carrying these images.' : ''))
             : 'Place a piece carrying an item code before adding a second arrangement.';
@@ -6601,7 +6587,7 @@ function _syncCatalogueBtn() {
     }
     const dup = document.getElementById('dupElevBtn');
     if (dup) dup.title = isMaster
-        ? ('Add art option ' + _catNextOptionNum(elev) + ' \u2014 a copy of this arrangement with its own images and item codes')
+        ? ('Add art option ' + _catNextOptionNum(elev) + ': a copy of this arrangement with its own images and item codes')
         : 'Duplicate this wall';
     if (!hint) return;
     if (isOpt) {
@@ -6625,7 +6611,7 @@ function _syncCatalogueBtn() {
                + ' and no other set.')
             : ('Layout ' + (_catArrLetter(code) || '') + ' of frame set ' + place
                + '. Frame specs follow ' + ((prim && _catBaseCode(prim)) || 'the primary') + '; the positions are this wall\u2019s.'))
-            + ' Drawn with no artwork \u2014 duplicate it to add image set ' + _catNextOptionNum(elev) + '. '
+            + ' Drawn with no artwork: duplicate it to add image set ' + _catNextOptionNum(elev) + '. '
             + (opts.length ? (opts.length + ' image set' + (opts.length === 1 ? '' : 's') + ' follow this wall.') : 'No image sets yet.');
     } else {
         // A plain wall says nothing here: options are made from Deck Studio now, and a
@@ -7196,12 +7182,6 @@ function applyOuterShadowsState(on) {
     }
 }
 
-function toggleOuterShadows() {
-    applyOuterShadowsState(!dashOuterShadowsOn);
-    try {
-        localStorage.setItem('dashOuterShadowsOn', dashOuterShadowsOn ? '1' : '0');
-    } catch (e) { /* private mode — skip persistence */ }
-}
 
 function initOuterShadowsToggle() {
     try {
@@ -7857,6 +7837,9 @@ function openSaveMenu() {
         _dsFlySep(menu);
         _dsFlyItem(menu, { label: 'Images\u2026', hint: 'Every image in the project, and whether it exports', icon: '<rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-9 8"/>', run: () => openImagesModal() });
         _dsFlyItem(menu, { label: 'Package\u2026', hint: 'One zip: the project file and every image', icon: '<path d="M3 7l9-4 9 4v10l-9 4-9-4z"/><path d="M3 7l9 4 9-4M12 11v10"/>', run: () => packageProject() });
+        _dsFlySep(menu);
+        _dsFlyItem(menu, { label: 'New project folder\u2026', hint: 'Client and project folders in your work folder (never Dropbox); Save and PDFs go there', icon: '<path d="M3 7h6l2 2h10v10H3z"/><path d="M12 12v5M9.5 14.5h5"/>', run: () => openProjectFolderDialog() });
+        _dsFlyItem(menu, { label: 'Set up my work folder\u2026', hint: 'Once per computer: where 00 ACTIVE PROJECTS lives, like Documents', icon: '<path d="M3 7h6l2 2h10v10H3z"/>', run: () => setupWorkFolder() });
     });
 }
 function renderNavTabs() {
@@ -8058,13 +8041,13 @@ function renderWallRail() {
         const nm = _esc(elev.name || '');
         const _tip = !_r ? (elev.name || '')
             : (_r.kind === 'set'
-                ? ((elev.name || '') + ' \u2014 frame set ' + _r.set + ' at ' + _r.place
+                ? ((elev.name || '') + ': frame set ' + _r.set + ' at ' + _r.place
                     + '. Its frames are its own; sizes, mouldings and mats set here reach every LAYOUT of this set and no other set.'
                     + (_r.isPlacePrimary ? ' It also holds the placement\u2019s pin on the floorplan.' : ''))
                 : (_r.kind === 'layout'
-                    ? ((elev.name || '') + ' \u2014 layout ' + _r.letter + ' of frame set ' + _r.setKey
+                    ? ((elev.name || '') + ': layout ' + _r.letter + ' of frame set ' + _r.setKey
                         + '. Frame specs follow ' + _r.primCode + '; the positions are this wall\u2019s own.')
-                    : ((elev.name || '') + ' \u2014 image set ' + _r.opt + ' of ' + _r.of + '. Everything but the images follows that wall.')));
+                    : ((elev.name || '') + ': image set ' + _r.opt + ' of ' + _r.of + '. Everything but the images follows that wall.')));
         // A MOCKUP AND ITS OPTIONS LOOK IDENTICAL IN A LIST OF NAMES, and the one thing a
         // designer needs to know before dragging a frame is which wall the others follow.
         // The mockup carries the accent; an option carries its own and names its mockup in
@@ -8540,7 +8523,6 @@ function _elevPortalClose() {
     // real view pinned to a stale box.
     host.style.width = ''; host.style.height = '';
 }
-function _elevPortalIsOpen() { return _elevPortalDepth > 0; }
 
 // Helper: turn a free-form string into a filesystem-safe slug.
 // Spaces → underscores; strips anything not alphanumeric / dash / underscore.
@@ -8821,6 +8803,479 @@ async function saveMasterProject(opts) {
 }
 
 function saveMasterProjectAs() { return saveMasterProject({ saveAs: true }); }
+
+// ── PROJECT FOLDERS (20.81) ─────────────────────────────────────────────────
+// Designers work LOCALLY in a tree that mirrors Dropbox (00 ACTIVE PROJECTS / CLIENT (CODE) /
+// PROJECT / the studio template) and copy finished presentations into Dropbox themselves.
+// FARMHAND NEVER WRITES INTO DROPBOX: work in progress (wrong image codes, PSDs saved all
+// day) must not sync to the team. The browser only gives a folder's NAME, never its path, so
+// _pjfLooksLikeDropbox recognises the studio's Dropbox by what is in it and refuses it.
+// Two ways in: Set up my work folder (once; the handle is remembered in the frame-links
+// store) and New project folder (client, project, levels). Both ONLY ADD: an existing
+// folder is found by a loose name match (00. Active Projects = 00 ACTIVE PROJECTS, 01.PDF =
+// 01. PDF) and reused, nothing is renamed, moved or written over, and the dialog previews
+// every folder as new or already there before Create.
+// The template is Dropbox's 00. FILE TEMPLATE 2026 (DUPLICATE ONLY) + the Farmboy Design
+// Post Haste template + 06. FARMHAND. test_design_folder pins it; change all three together.
+const DESIGN_FOLDER_ROOT = '01. Design';
+const DESIGN_SUBFOLDERS = ['00. ARCHIVE', '01. PDF', '02. INDESIGN', '03. LINKS', '04. SOURCE', '05. PRINT FILES', '06. FARMHAND'];
+const DESIGN_PROJECT_SUB = '06. FARMHAND';
+const DESIGN_PDF_SUB = '01. PDF';
+// With "ARTWORK and EGD folders" ticked these get an ARTWORK and an EGD folder each, the way
+// Ford Hub's levels are filed on Dropbox (EGD = window film and wallcoverings).
+const DESIGN_SPLIT_SUBS = ['01. PDF', '02. INDESIGN', '03. LINKS', '04. SOURCE', '05. PRINT FILES'];
+const DESIGN_SPLIT_KINDS = ['ARTWORK', 'EGD'];
+const PJF_WORK_ROOT = '00 ACTIVE PROJECTS';
+const PJF_STORE_KEY = 'farmhand-work-root';
+const PJF_TEMPLATE_TOP = [
+    { name: '00. BDQ' },
+    { name: DESIGN_FOLDER_ROOT, design: true },
+    { name: '02. Project Management', kids: [
+        { name: '01. Financials', kids: [
+            { name: '00. Quoting & Estimates', kids: [{ name: 'Farmboy Quotes' }, { name: 'Vendor Quotes' }] },
+            { name: '01. Purchase Orders', kids: [{ name: 'Client' }, { name: 'Vendor' }] },
+            { name: '02. Invoicing', kids: [{ name: 'Farmboy Invoices' }, { name: 'Vendor Invoices' }] },
+            { name: '03. Expenses', kids: [{ name: '00.Receipts' }, { name: '01.Reimbursable' }] },
+        ] },
+        { name: '02. Sampling' },
+    ] },
+    { name: '03. Production & Procurement', kids: [
+        { name: '00. Installation' }, { name: '01. Vendor Docs (BOLs, Proofs, Production Images etc)' }, { name: '02. RFI' },
+    ] },
+    { name: '04. References' },
+    { name: '05. Transfer Out' },
+];
+// The job code finished projects are filed under: CLIENT-BRAND-CITY-#### (BEYE-HILT-WAIL-2024).
+// A hint only; plenty of real jobs differ (ALGR-DELT-NORM-001), so it never blocks.
+const JOB_CODE_RE = /^[A-Z0-9+&]{3,5}-[A-Z0-9+&]{3,5}-[A-Z0-9+&]{3,5}-[0-9X]{3,7}$/;
+let _designFolder = null;   // { project, pdf } directory handles Save and PDFs go to, this session only
+let _pjfRoot = null;        // the work folder's 00 ACTIVE PROJECTS handle, once loaded
+
+function _dirPickerAvailable() {
+    try { return typeof window !== 'undefined' && typeof window.showDirectoryPicker === 'function'; } catch (e) { return false; }
+}
+function _jobCode() {
+    const el = document.getElementById('specPdfCode');
+    return String((el && el.value) || '').trim().toUpperCase();
+}
+function _jobCodeLooksRight(code) { return JOB_CODE_RE.test(String(code || '').trim().toUpperCase()); }
+// The studio's file naming, YYMMDD.JOBCODE.V#: the same stamp the deck PDF uses.
+function _designProjectFileName(code) {
+    let tag = code ? _prodSafe(code) : '';
+    if (!tag) { const el = document.getElementById('g_projName'); tag = slugifyForFilename((el && el.value) || 'Untitled'); }
+    let ver = ''; try { ver = String(_deckFooterMeta().version || '').trim(); } catch (e) {}
+    return _prodStamp() + '.' + tag + '.' + (ver ? _prodSafe(ver) : 'V1') + '.json';
+}
+async function _designFileExists(dir, name) {
+    try { await dir.getFileHandle(name); return true; } catch (e) { return false; }
+}
+
+// Names compare loosely: case, dots, dashes, underscores and runs of spaces do not count.
+function _pjfKey(s) { return String(s || '').toUpperCase().replace(/[.\s_\-]+/g, ' ').trim(); }
+// A folder name Mac AND Windows accept: Windows refuses \ / : * ? " < > |, a trailing dot
+// or space, and the device names (CON, NUL, COM1...). Dropbox already holds names with a
+// colon ("level 01:02") that break on Windows, so a new one never gets one.
+function _pjfSafeName(s) {
+    let n = String(s || '').replace(/[\\/:*?"<>|\u0000-\u001f]+/g, '-').replace(/\s+/g, ' ').trim().replace(/[. ]+$/, '');
+    if (/^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])$/i.test(n)) n += '_';
+    return n;
+}
+// "01-04", "1 2 3", "01, 02, P1" -> ['01', '02', '03', '04'] / ... ; non-numbers kept as typed.
+function _pjfParseLevels(s) {
+    const out = [];
+    String(s || '').split(/[,;\s]+/).forEach(tok => {
+        if (!tok) return;
+        const m = tok.match(/^(\d{1,2})-(\d{1,2})$/);
+        if (m) {
+            let a = parseInt(m[1], 10), b = parseInt(m[2], 10);
+            if (a > b) { const t = a; a = b; b = t; }
+            for (let i = a; i <= b && i - a < 60; i++) out.push(String(i).padStart(2, '0'));
+        } else if (/^\d{1,2}$/.test(tok)) out.push(tok.padStart(2, '0'));
+        else { const n = _pjfSafeName(tok.toUpperCase()); if (n) out.push(n); }
+    });
+    return out.filter((v, i) => out.indexOf(v) === i);
+}
+function _pjfDesignKids(levels, split) {
+    const subs = () => DESIGN_SUBFOLDERS.map(s => ({ name: s, kids: (split && DESIGN_SPLIT_SUBS.indexOf(s) >= 0) ? DESIGN_SPLIT_KINDS.map(k => ({ name: k })) : undefined }));
+    return (levels && levels.length) ? levels.map(l => ({ name: 'LEVEL ' + l, level: l, kids: subs() })) : subs();
+}
+function _pjfProjectKids(levels, split) {
+    return PJF_TEMPLATE_TOP.map(n => n.design ? { name: n.name, kids: _pjfDesignKids(levels, split) } : n);
+}
+// Where the project file and PDFs go for a "save to" choice like { level: '01', kind: 'ARTWORK' }.
+function _pjfSavePaths(to) {
+    const lv = to && to.level ? ['LEVEL ' + to.level] : [];
+    const pdf = [DESIGN_FOLDER_ROOT].concat(lv, [DESIGN_PDF_SUB]).concat(to && to.kind ? [to.kind] : []);
+    return { project: [DESIGN_FOLDER_ROOT].concat(lv, [DESIGN_PROJECT_SUB]).join('/'), pdf: pdf.join('/') };
+}
+
+async function _pjfDirs(dir) {
+    const out = [];
+    if (!dir) return out;
+    try {
+        if (typeof dir.values === 'function') { for await (const h of dir.values()) if (h && h.kind === 'directory') out.push(h); }
+    } catch (e) {}
+    return out;
+}
+// The existing child folder this name means: the exact name first, then a loose match.
+async function _pjfFind(dir, name) {
+    if (!dir) return null;
+    try { return await dir.getDirectoryHandle(name); } catch (e) {}
+    const k = _pjfKey(name);
+    const all = await _pjfDirs(dir);
+    for (const h of all) if (_pjfKey(h.name) === k) return h;
+    return null;
+}
+// Walks a folder spec under `base`. dry: only looks. Otherwise makes what is missing
+// (create: true never touches an existing folder). Each row: the path as it is on disk,
+// 'new' or 'there', the spec path (template names), and the handle when there is one.
+async function _pjfApply(base, kids, dry, rows, prefix, specPrefix) {
+    rows = rows || [];
+    for (const n of kids || []) {
+        let h = await _pjfFind(base, n.name);
+        const status = h ? 'there' : 'new';
+        if (!h && !dry && base) h = await base.getDirectoryHandle(n.name, { create: true });
+        const path = (prefix ? prefix + '/' : '') + (h ? h.name : n.name);
+        const spec = (specPrefix ? specPrefix + '/' : '') + n.name;
+        rows.push({ path: path, spec: spec, status: status, handle: h || null, depth: spec.split('/').length - 1 });
+        if (n.kids) await _pjfApply(h, n.kids, dry, rows, path, spec);
+    }
+    return rows;
+}
+// The studio's Dropbox, recognised by what only it has. Picking it is refused.
+async function _pjfLooksLikeDropbox(dir) {
+    if (!dir) return false;
+    if (/dropbox/i.test(String(dir.name || ''))) return true;
+    const keys = (await _pjfDirs(dir)).map(h => _pjfKey(h.name));
+    if (keys.some(k => k.indexOf('00 FILE TEMPLATE') === 0 || k.indexOf('00 PROJECT ARCHIVE') === 0)) return true;
+    if (keys.indexOf('01 CREATIVE TEAM') >= 0 && keys.indexOf('03 SALES') >= 0) return true;
+    if (keys.some(k => /DROPBOX/.test(k))) return true;
+    return false;
+}
+async function _pjfPermitted(dir, ask) {
+    if (!dir) return false;
+    try {
+        let p = typeof dir.queryPermission === 'function' ? await dir.queryPermission({ mode: 'readwrite' }) : 'granted';
+        if (p === 'prompt' && ask && typeof dir.requestPermission === 'function') p = await dir.requestPermission({ mode: 'readwrite' });
+        return p === 'granted';
+    } catch (e) { return false; }
+}
+async function _pjfLoadRoot() {
+    if (_pjfRoot) return _pjfRoot;
+    try { _pjfRoot = await _linkStoreGet(PJF_STORE_KEY); } catch (e) { _pjfRoot = null; }
+    return _pjfRoot;
+}
+// What a picked folder is: the work folder itself, a folder holding it, a project (it has
+// template folders), its 01. Design, or else a client folder.
+async function _pjfClassify(dir) {
+    const k = _pjfKey(dir.name);
+    if (k === _pjfKey(PJF_WORK_ROOT)) return { kind: 'root', root: dir };
+    if (k === _pjfKey(DESIGN_FOLDER_ROOT)) return { kind: 'design', design: dir };
+    const kids = (await _pjfDirs(dir)).map(h => ({ h: h, k: _pjfKey(h.name) }));
+    const root = kids.find(c => c.k === _pjfKey(PJF_WORK_ROOT));
+    if (root) return { kind: 'root', root: root.h };
+    const top = PJF_TEMPLATE_TOP.map(n => _pjfKey(n.name));
+    if (kids.some(c => top.indexOf(c.k) >= 0)) return { kind: 'project', project: dir };
+    return { kind: 'client', client: dir };
+}
+
+// SET UP MY WORK FOLDER. Pick Documents (or anywhere local): its 00 ACTIVE PROJECTS is used
+// if it has one (or if that is what was picked), otherwise one is made after asking.
+// Returns 'ok' / 'cancelled' / 'dropbox' / 'failed' / 'nopicker'.
+async function setupWorkFolder() {
+    if (!_dirPickerAvailable()) {
+        showInfoModal('Work folder', 'This browser cannot make folders. Use Chrome or Edge (Mac or Windows) to set up your work folder.');
+        return 'nopicker';
+    }
+    let picked;
+    try { picked = await window.showDirectoryPicker({ id: 'farmhand-work', mode: 'readwrite', startIn: 'documents' }); }
+    catch (err) {
+        if (err && err.name === 'AbortError') return 'cancelled';
+        try { showInfoModal('Could not open the folder', 'Farmhand could not get to that folder: ' + ((err && err.message) || 'unknown error') + '.'); } catch (e) {}
+        return 'failed';
+    }
+    try {
+        const refuse = () => {
+            showInfoModal('That looks like Dropbox', '"' + picked.name + '" looks like the studio Dropbox. Farmhand only makes folders in your own work folder (Documents is a good place). Copy finished presentations into Dropbox yourself.');
+            return 'dropbox';
+        };
+        if (await _pjfLooksLikeDropbox(picked)) return refuse();
+        const c = await _pjfClassify(picked);
+        let root = c.kind === 'root' ? c.root : null;
+        if (root && root !== picked && await _pjfLooksLikeDropbox(root)) return refuse();
+        if (!root) {
+            if (c.kind === 'project' || c.kind === 'design') {
+                showInfoModal('Pick the folder above', '"' + picked.name + '" is a project folder. Pick the folder that holds 00 ACTIVE PROJECTS (or should), such as Documents.');
+                return 'failed';
+            }
+            const ok = await _askYesNo('Make ' + PJF_WORK_ROOT + '?', 'There is no ' + PJF_WORK_ROOT + ' folder in "' + picked.name + '". Make one there? Your client and project folders go inside it, named the same as on Dropbox.', 'Make it', 'Cancel', {});
+            if (!ok) return 'cancelled';
+            root = await picked.getDirectoryHandle(PJF_WORK_ROOT, { create: true });
+        }
+        _pjfRoot = root;
+        try { await _linkStorePut(PJF_STORE_KEY, root); } catch (e) {}
+        _toast('Work folder set', (root === picked ? root.name : picked.name + '/' + root.name) + '. New project folders go here.');
+        return 'ok';
+    } catch (err) {
+        try { showInfoModal('Could not set up the work folder', 'Farmhand could not write to that folder: ' + ((err && err.message) || 'unknown error') + '.'); } catch (e) {}
+        return 'failed';
+    }
+}
+
+// The rows a New project folder would make or reuse. ctx: { root?, client?, project?, design? }
+// handles (the deepest one given is where it starts); o: { client, project, levels, split }.
+function _pjfSpec(ctx, o) {
+    const levels = _pjfParseLevels(o.levels);
+    if (ctx.design) return { base: ctx.design, kids: _pjfDesignKids(levels, o.split), prefix: ctx.design.name, specPrefix: DESIGN_FOLDER_ROOT };
+    if (ctx.project) return { base: ctx.project, kids: _pjfProjectKids(levels, o.split), prefix: ctx.project.name, specPrefix: '', projectAt: -1 };
+    const proj = { name: _pjfSafeName(o.project), kids: _pjfProjectKids(levels, o.split) };
+    if (ctx.client) return { base: ctx.client, kids: [proj], prefix: ctx.client.name, specPrefix: '', projectAt: 0 };
+    return { base: ctx.root || null, kids: [{ name: _pjfSafeName(o.client), kids: [proj] }], prefix: ctx.root ? ctx.root.name : PJF_WORK_ROOT, specPrefix: '', projectAt: 1 };
+}
+// The template path inside the project for a spec row ("01. Design/LEVEL 01/06. FARMHAND").
+function _pjfInProject(spec, sp) {
+    if (sp.specPrefix) return sp.specPrefix + '/' + spec;
+    const parts = spec.split('/');
+    return parts.slice((sp.projectAt == null ? 0 : sp.projectAt) + 1).join('/');
+}
+// Makes the folders. o.saveTo: null, or { level, kind } -> the project file goes into that
+// 06. FARMHAND, and deck PDFs into that 01. PDF (ARTWORK/EGD) for the rest of the session.
+// Returns { result, rows, made }.
+async function createProjectFolder(ctx, o) {
+    const sp = _pjfSpec(ctx, o);
+    if (!sp.base) return { result: 'failed', rows: [], made: 0 };
+    if (!ctx.design && !ctx.project && !_pjfSafeName(o.project)) return { result: 'failed', rows: [], made: 0 };
+    if (!ctx.design && !ctx.project && !ctx.client && !_pjfSafeName(o.client)) return { result: 'failed', rows: [], made: 0 };
+    const rows = await _pjfApply(sp.base, sp.kids, false, [], sp.prefix, sp.specPrefix);
+    const made = rows.filter(r => r.status === 'new').length;
+    const find = (p) => { const r = rows.find(x => _pjfInProject(x.spec, sp) === p); return r ? r.handle : null; };
+    const projRow = (sp.specPrefix || ctx.project) ? null : rows.find(r => r.depth === (sp.projectAt || 0));
+    const where = ctx.project || ctx.design ? sp.prefix : (projRow ? projRow.path : sp.prefix);
+    if (!o.saveTo) {
+        _toast('Project folder ready', where + (made ? ' (' + made + ' new folders)' : ' (nothing was missing)'));
+        return { result: 'ok', rows: rows, made: made };
+    }
+    const paths = _pjfSavePaths(o.saveTo);
+    const projDir = find(paths.project), pdfDir = find(paths.pdf);
+    if (!projDir) return { result: 'failed', rows: rows, made: made };
+    _designFolder = { project: projDir, pdf: pdfDir || null };
+    const fname = _designProjectFileName(_jobCode());
+    if (await _designFileExists(projDir, fname)) {
+        const replace = await _askYesNo('That project file already exists',
+            fname + ' is already in ' + paths.project + '. Replace it with this project, or keep it and leave this project unsaved?',
+            'Replace', 'Keep it', { danger: true });
+        if (!replace) { _toast('Project folder ready', where + '. The project was not saved there.'); return { result: 'ok', rows: rows, made: made }; }
+    }
+    _flushElevationInputs();
+    const fh = await projDir.getFileHandle(fname, { create: true });
+    await _fsaWrite(fh, _projectFileText(_projectPayload()));
+    _setProjectFile(fh, fname);
+    _afterSave();
+    _toast('Project folder ready', where + '. Saved ' + fname + ' in ' + paths.project + '; Save writes there and PDFs go to ' + paths.pdf + '.');
+    return { result: 'ok', rows: rows, made: made };
+}
+
+// NEW PROJECT FOLDER: the dialog. o: { project, client } to prefill (the start screen).
+// Resolves to 'ok' / 'cancelled' / 'zip' / 'failed'. Nothing is made before Create.
+function openProjectFolderDialog(opts) {
+    const o = opts || {};
+    return new Promise((resolve) => {
+        const ov = document.createElement('div');
+        ov.className = 'frame-modal fm-nested ask-fields pjf-modal'; ov.setAttribute('data-modal-backdrop', ''); ov.style.display = 'flex';
+        const card = document.createElement('form'); card.className = 'ask-card pjf-card';
+        card.innerHTML = '<h3 class="ask-title">New project folder</h3>'
+            + '<div class="ask-body pjf-where"></div>'
+            + '<label class="ask-field pjf-client-row"><span>Client folder</span><input type="text" name="client" autocomplete="off" placeholder="e.g. FORD MOTOR COMPANY (FORD)"><span class="pjf-hint">Same name as the client folder on Dropbox.</span></label>'
+            + '<label class="ask-field pjf-project-row"><span>Project folder</span><input type="text" name="project" autocomplete="off" placeholder="e.g. FORD - HUB PHASE 1B"><span class="pjf-hint">Same name as on Dropbox.</span></label>'
+            + '<div class="pjf-fixed"></div>'
+            + '<label class="ask-field"><span>Levels (optional)</span><input type="text" name="levels" autocomplete="off" placeholder="e.g. 01-04, or leave empty"></label>'
+            + '<label class="pjf-check"><input type="checkbox" name="split"><span>ARTWORK and EGD folders inside PDF, INDESIGN, LINKS, SOURCE and PRINT FILES</span></label>'
+            + '<label class="ask-field"><span>Save this project into</span><select name="saveTo"></select></label>'
+            + '<div class="pjf-preview-head"></div><div class="pjf-preview"></div>'
+            + '<div class="ask-actions"><button type="button" class="action-btn btn-secondary pjf-pick">Pick an existing folder…</button><span style="flex:1"></span><button type="button" class="action-btn btn-secondary pjf-cancel">Cancel</button><button type="submit" class="action-btn pjf-go">Create</button></div>';
+        ov.appendChild(card);
+        const f = card.elements;
+        const $ = (s) => card.querySelector(s);
+        const ctx = { root: null, rootOk: false, client: null, project: null, design: null };
+        const canFolders = _dirPickerAvailable();
+        let done = false, seq = 0, splitTouched = false, saveChosen = false, timer = null;
+        const finish = (v) => { if (done) return; done = true; ov.remove(); resolve(v); };
+        f.project.value = o.project ? _pjfSafeName(o.project) : '';
+        f.split.onchange = () => { splitTouched = true; fillSaveTo(); refresh(); };
+        f.levels.oninput = () => { if (!splitTouched) f.split.checked = _pjfParseLevels(f.levels.value).length > 0; fillSaveTo(); refresh(); };
+        f.client.oninput = refresh; f.project.oninput = refresh; f.saveTo.onchange = () => { saveChosen = true; };
+        function fillSaveTo() {
+            const keep = saveChosen ? f.saveTo.value : null;   // only a choice the designer made
+            const levels = _pjfParseLevels(f.levels.value);
+            const kinds = f.split.checked ? DESIGN_SPLIT_KINDS : [null];
+            const opts2 = [];
+            (levels.length ? levels : [null]).forEach(l => kinds.forEach(k => {
+                const label = [l ? 'LEVEL ' + l : DESIGN_FOLDER_ROOT, k].filter(Boolean).join(' · ');
+                opts2.push({ v: JSON.stringify({ level: l, kind: k }), label: label });
+            }));
+            opts2.push({ v: '', label: 'Don’t save the project there' });
+            f.saveTo.innerHTML = '';
+            opts2.forEach(x => { const op = document.createElement('option'); op.value = x.v; op.textContent = x.label; f.saveTo.appendChild(op); });
+            if (keep != null && opts2.some(x => x.v === keep)) f.saveTo.value = keep; else f.saveTo.selectedIndex = 0;
+        }
+        function showWhere() {
+            const w = $('.pjf-where'); w.innerHTML = '';
+            const fixed = $('.pjf-fixed'); fixed.innerHTML = '';
+            const deep = ctx.design || ctx.project || ctx.client;
+            $('.pjf-client-row').style.display = (ctx.client || ctx.project || ctx.design) ? 'none' : '';
+            $('.pjf-project-row').style.display = (ctx.project || ctx.design) ? 'none' : '';
+            if (deep) {
+                fixed.textContent = (ctx.design ? 'Filling in ' : ctx.project ? 'Adding what is missing to ' : 'New project inside ') + '"' + deep.name + '"';
+            }
+            if (!canFolders) { w.textContent = 'This browser cannot make folders: Create downloads them as a zip to unzip into your work folder. Chrome or Edge make them directly.'; return; }
+            if (deep) { w.textContent = 'Only adds folders. Nothing already there is renamed, moved or replaced.'; return; }
+            if (ctx.root && !ctx.rootOk) {
+                w.appendChild(document.createTextNode('Work folder: ' + ctx.root.name + '. The browser needs your OK to open it again this session. '));
+                const al = document.createElement('button'); al.type = 'button'; al.className = 'pjf-link pjf-allow'; al.textContent = 'Allow access';
+                al.onclick = async () => { ctx.rootOk = await _pjfPermitted(ctx.root, true); if (ctx.rootOk) await loadClients(); showWhere(); refresh(); };
+                w.appendChild(al);
+            } else if (ctx.root) {
+                w.appendChild(document.createTextNode('Work folder: ' + ctx.root.name + ' (on this computer, never Dropbox). '));
+                const ch = document.createElement('button'); ch.type = 'button'; ch.className = 'pjf-link'; ch.textContent = 'Change…';
+                ch.onclick = async () => { if (await setupWorkFolder() === 'ok') { ctx.root = _pjfRoot; ctx.rootOk = true; await loadClients(); showWhere(); refresh(); } };
+                w.appendChild(ch);
+            } else {
+                w.appendChild(document.createTextNode('No work folder yet. Set one up once (Documents is a good place); Farmhand never writes into Dropbox. '));
+                const su = document.createElement('button'); su.type = 'button'; su.className = 'pjf-link'; su.textContent = 'Set up…';
+                su.onclick = async () => { if (await setupWorkFolder() === 'ok') { ctx.root = _pjfRoot; ctx.rootOk = true; await loadClients(); showWhere(); refresh(); } };
+                w.appendChild(su);
+            }
+        }
+        async function loadClients() {
+            if (!ctx.root || !ctx.rootOk) return;
+            const names = (await _pjfDirs(ctx.root)).map(h => h.name).filter(n => !/^00[ .]/.test(n)).sort();
+            let dl = card.querySelector('datalist');
+            if (!dl) { dl = document.createElement('datalist'); dl.id = 'pjfClients' + Math.random().toString(36).slice(2, 8); card.appendChild(dl); f.client.setAttribute('list', dl.id); }
+            dl.innerHTML = ''; names.forEach(n => { const op = document.createElement('option'); op.value = n; dl.appendChild(op); });
+            // "Ford" typed on the start screen finds FORD MOTOR COMPANY (FORD).
+            if (o.client && !f.client.value) {
+                const k = _pjfKey(o.client);
+                const hit = names.find(n => _pjfKey(n) === k || _pjfKey(n.replace(/\s*\([^)]*\)\s*$/, '')) === k || (_pjfKey((n.match(/\(([^)]*)\)\s*$/) || [])[1]) === k));
+                f.client.value = hit || '';
+            }
+        }
+        const input = () => ({ client: f.client.value, project: f.project.value, levels: f.levels.value, split: f.split.checked });
+        const missing = () => {
+            if (ctx.project || ctx.design) return '';
+            if (!_pjfSafeName(f.project.value)) return 'Type the project folder name.';
+            if (!ctx.client && !_pjfSafeName(f.client.value)) return 'Type or pick the client folder.';
+            if (canFolders && !ctx.root && !ctx.client) return 'Set up your work folder first.';
+            if (canFolders && !ctx.client && !ctx.rootOk) return 'Press Allow access to see what will be made.';
+            return '';
+        };
+        function refresh() { clearTimeout(timer); timer = setTimeout(run, 150); }
+        async function run() {
+            const my = ++seq;
+            const why = missing();
+            $('.pjf-go').disabled = !!why;
+            const head = $('.pjf-preview-head'), box = $('.pjf-preview');
+            if (why) { head.textContent = why; box.innerHTML = ''; return; }
+            const sp = _pjfSpec(canFolders ? ctx : {}, input());
+            const rows = await _pjfApply(canFolders ? sp.base : null, sp.kids, true, [], sp.prefix, sp.specPrefix);
+            if (my !== seq) return;
+            const nNew = rows.filter(r => r.status === 'new').length;
+            head.textContent = nNew + ' new folder' + (nNew === 1 ? '' : 's') + (rows.length - nNew ? ', ' + (rows.length - nNew) + ' already there' : '');
+            const renamed = [f.client.value, f.project.value].filter(v => v && _pjfSafeName(v) !== v.trim().replace(/\s+/g, ' '));
+            if (renamed.length) head.textContent += '. Characters Windows does not allow were changed to -';
+            box.innerHTML = '';
+            rows.forEach(r => {
+                const d = document.createElement('div'); d.className = 'pjf-row pjf-' + r.status;
+                d.style.paddingLeft = (r.depth * 14) + 'px';
+                d.textContent = r.path.split('/').pop();
+                const t = document.createElement('span'); t.className = 'pjf-tag'; t.textContent = r.status === 'new' ? 'new' : 'already there';
+                d.appendChild(t); box.appendChild(d);
+            });
+        }
+        $('.pjf-cancel').onclick = () => finish('cancelled');
+        $('.pjf-pick').style.display = canFolders ? '' : 'none';
+        $('.pjf-pick').onclick = async () => {
+            let picked;
+            try { picked = await window.showDirectoryPicker({ id: 'farmhand-work', mode: 'readwrite', startIn: 'documents' }); } catch (e) { return; }
+            if (await _pjfLooksLikeDropbox(picked)) { showInfoModal('That looks like Dropbox', '"' + picked.name + '" looks like the studio Dropbox. Pick the folder in your own work folder instead.'); return; }
+            const c = await _pjfClassify(picked);
+            ctx.client = ctx.project = ctx.design = null;
+            if (c.kind === 'root') {
+                if (await _pjfLooksLikeDropbox(c.root)) { showInfoModal('That looks like Dropbox', 'That 00 ACTIVE PROJECTS looks like the studio Dropbox. Pick your own work folder.'); return; }
+                ctx.root = _pjfRoot = c.root; ctx.rootOk = true; try { await _linkStorePut(PJF_STORE_KEY, c.root); } catch (e) {}
+                await loadClients();
+            } else ctx[c.kind] = c[c.kind];
+            showWhere(); refresh();
+        };
+        card.onsubmit = async (e) => {
+            e.preventDefault();
+            if ($('.pjf-go').disabled) return;
+            const inp = input();
+            let saveTo = null; try { saveTo = f.saveTo.value ? JSON.parse(f.saveTo.value) : null; } catch (er) {}
+            if (!canFolders) { await _downloadProjectFolderZip(inp); finish('zip'); return; }
+            const base = ctx.design || ctx.project || ctx.client || ctx.root;
+            if (!(await _pjfPermitted(base, true))) { showInfoModal('Farmhand needs your OK', 'Allow Farmhand to edit that folder (the browser asks once per session), then press Create again.'); return; }
+            $('.pjf-go').disabled = true;
+            try {
+                const r = await createProjectFolder(ctx, Object.assign(inp, { saveTo: saveTo }));
+                finish(r.result);
+            } catch (err) {
+                $('.pjf-go').disabled = false;
+                showInfoModal('Could not make the project folder', 'Farmhand could not write to that folder: ' + ((err && err.message) || 'unknown error') + '.');
+            }
+        };
+        try { new MutationObserver(() => { if (!ov.isConnected) finish('cancelled'); }).observe(document.body, { childList: true }); } catch (e) {}
+        document.body.appendChild(ov);
+        fillSaveTo();
+        (async () => {
+            if (canFolders) {
+                const r = await _pjfLoadRoot();
+                // Remembered; when the browser wants a fresh OK, the dialog shows Allow access.
+                if (r) { ctx.root = r; ctx.rootOk = await _pjfPermitted(r, false); }
+                await loadClients();
+            }
+            showWhere(); run();
+            try { (f.project.value ? f.client : f.project).focus(); } catch (e) {}
+        })();
+    });
+}
+// Safari and Firefox cannot make folders from a web page: hand over the empty structure.
+async function _downloadProjectFolderZip(o) {
+    if (typeof JSZip === 'undefined') { showInfoModal('Project folder', 'This browser cannot make folders. Use Chrome or Edge.'); return 'failed'; }
+    const zip = new JSZip();
+    const sp = _pjfSpec({}, o);
+    const rows = await _pjfApply(null, sp.kids, true, [], '', '');
+    rows.forEach(r => zip.folder(r.path));
+    const blob = await zip.generateAsync({ type: 'blob' });
+    const fileName = (_pjfSafeName(o.project) || 'Project') + ' folders.zip';
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = fileName; a.click();
+    setTimeout(() => { try { URL.revokeObjectURL(a.href); } catch (er) {} }, 8000);
+    _toast('Project folders downloaded', fileName + ': unzip it into your work folder (00 ACTIVE PROJECTS), not Dropbox.');
+    return 'zip';
+}
+
+// Every deck PDF goes through here. With a design folder this session it lands in
+// 01. PDF; without one, or if the folder stopped letting us write, it downloads as before.
+async function _deliverPdf(doc, fname) {
+    const dir = _designFolder && _designFolder.pdf;
+    if (dir) {
+        try {
+            let perm = 'granted';
+            if (typeof dir.queryPermission === 'function') perm = await dir.queryPermission({ mode: 'readwrite' });
+            if (perm === 'granted') {
+                if (await _designFileExists(dir, fname)) {
+                    const replace = await _askYesNo('Replace the PDF?', fname + ' is already in ' + DESIGN_PDF_SUB + '. Replace it?', 'Replace', 'Download instead', {});
+                    if (!replace) { doc.save(fname); return 'download'; }
+                }
+                const fh = await dir.getFileHandle(fname, { create: true });
+                await _fsaWrite(fh, doc.output('blob'));
+                _toast('PDF saved', DESIGN_PDF_SUB + '/' + fname);
+                return 'folder';
+            }
+        } catch (e) {}
+    }
+    doc.save(fname);
+    return 'download';
+}
 
 // LOADING USED TO DISCARD UNSAVED WORK WITHOUT ASKING. beforeunload covers
 // closing the tab and covered nothing here, so opening a second project over an
@@ -11626,29 +12081,6 @@ function _catSyncAllOptions() {
     (elevations || []).forEach(e => { if (_catSyncOption(e)) moved = true; });
     return moved;
 }
-// The switch the Elevations panel offers. Per ELEVATION, like EGD wall mode and unlike
-// every deck-wide control near it.
-function toggleCatalogueMaster() {
-    const elev = elevations[currentElevIndex];
-    if (!elev) return;
-    if (_isCatalogueOption(elev)) {
-        _toast('This is an option', 'This wall is an art option of ' + (_catMasterOf(elev).name || 'its master') + '. Mark the master instead.');
-        return;
-    }
-    if (elev.catalogueMaster) {
-        if (_catOptionsOf(elev).length) {
-            _toast('Options are attached', 'Delete this wall\'s art options before turning the mockup off, or they lose the arrangement they follow.');
-            return;
-        }
-        delete elev.catalogueMaster;
-    } else {
-        elev.catalogueMaster = true;
-    }
-    initElevControls(); drawElevAll();
-    if (typeof _syncCatalogueBtn === 'function') _syncCatalogueBtn();
-    if (typeof pushHistory === 'function') pushHistory();
-    if (typeof scheduleAutosave === 'function') scheduleAutosave();
-}
 // Duplicate, when the wall is a master. One row per SLOT, minted EMPTY: an option that
 // has not been filled in has to read as unfilled rather than as absent, which is the
 // only way a 200-image catalogue can be checked at all.
@@ -11900,7 +12332,7 @@ function _catAddArrangement(srcIdx, opts) {
     if (o.newSet) {
         _toast('Frame set ' + newSetNum + ' added',
             newBase + (o.label ? (' \u00b7 ' + o.label) : '') + ' is a different set of frames offered at ' + place
-            + '. Its frames are its own \u2014 add, remove and resize them freely; nothing here reaches the other sets. '
+            + '. Its frames are its own: add, remove and resize them freely; nothing here reaches the other sets. '
             + 'It shares the placement\u2019s pin and gets its own breaker page.');
         pushHistory();
         return;
@@ -11911,76 +12343,6 @@ function _catAddArrangement(srcIdx, opts) {
         + ' by letter; only the positions are its own. It shares the placement\u2019s pin and gets its own breaker page.'
         + (carried.length ? ' Its first option carries the images from the wall you copied.' : ''));
     pushHistory();
-}
-// -- THE CHOICE IS MADE AT CREATION, NOT DEFAULTED -------------------------
-// Linked and free layouts look identical once they exist, so a default is a decision
-// made silently on a designer's behalf that they then have to discover. Asking once, at
-// the moment the wall is made, also puts the distinction in front of whoever meets it
-// first. The NAME is collected here for the same reason: Triptych is known now and gets
-// typed into a dialog that is already open, rather than hunted for in a panel later.
-function catArrangementAction() { _catLayoutChooser(currentElevIndex, 'layout'); }
-function catFrameSetAction() { _catLayoutChooser(currentElevIndex, 'set'); }
-function _catLayoutChooser(srcIdx, kind) {
-    const isSet = (kind === 'set');
-    const src = elevations[srcIdx];
-    if (!src) return;
-    const srcCode = _catBaseCode(src);
-    if (!srcCode) {
-        showInfoModal('No item code on this wall', 'A layout takes its code from the pieces on the wall, so place at least one piece carrying an item code (ART.1A) before adding a second layout for the same spot.');
-        return;
-    }
-    const anchor = _isCatalogueOption(src) ? _catMasterOf(src) : src;
-    const place = _catPlacementKey(_catBaseCode(anchor) || srcCode);
-    const prim = _catPrimaryArr(place);
-    const ov = document.createElement('div');
-    ov.className = 'frame-modal fm-nested';
-    ov.setAttribute('data-modal-backdrop', '');
-    ov.style.display = 'flex';
-    const card = document.createElement('div');
-    card.style.cssText = 'background:var(--bg-panel); border:1px solid var(--border); border-radius:var(--r-8); padding:20px; width:520px; max-width:92vw; max-height:88vh; overflow:auto;';
-    const h = document.createElement('div');
-    h.style.cssText = 'font-size:var(--fs-105); font-weight:700; color:var(--text-strong); margin-bottom:4px;';
-    h.textContent = isSet ? ('Add a frame set to ' + place) : ('Add a layout to ' + _catSetKey(_catBaseCode(anchor) || srcCode));
-    const sub = document.createElement('div');
-    sub.style.cssText = 'font-size:var(--fs-70); color:var(--text-muted); line-height:1.45; margin-bottom:14px;';
-    // The two sentences a designer needs: what this wall will BE, and what it will and
-    // will not follow. Said here rather than discovered later from a drawing that moved.
-    sub.textContent = isSet
-        ? ('A DIFFERENT SET OF FRAMES offered at the same spot \u2014 a single piece where this is a salon hang. Its frames are its own: add, remove and resize freely, and nothing reaches the other sets. It shares ' + place + '\u2019s pin on the floorplan and gets its own breaker page.')
-        : ('THE SAME FRAMES, REARRANGED. Sizes, mouldings and mats follow this frame set\u2019s primary layout by letter, so a resize there reaches this wall; only the positions are its own. It shares ' + place + '\u2019s pin and gets its own breaker page.');
-    const lbl = document.createElement('div');
-    lbl.style.cssText = 'font-size:var(--fs-65); color:var(--text-muted); text-transform:uppercase; letter-spacing:0.4px; margin-bottom:5px;';
-    lbl.textContent = 'Name (optional)';
-    const nameIn = document.createElement('input');
-    nameIn.type = 'text';
-    nameIn.placeholder = isSet ? 'Triptych' : 'Stacked right';
-    nameIn.maxLength = 40;
-    nameIn.style.cssText = 'width:100%; height:30px; margin-bottom:16px;';
-    const go = document.createElement('button');
-    go.className = 'action-btn';
-    go.textContent = isSet ? 'ADD FRAME SET' : 'ADD LAYOUT';
-    go.style.cssText = 'width:100%; height:30px; letter-spacing:0.3px; margin-bottom:9px;';
-    go.onclick = () => {
-        const label = nameIn.value.trim();
-        ov.remove();
-        _catAddArrangement(srcIdx, { newSet: isSet, label: label });
-    };
-    nameIn.addEventListener('keydown', (ev) => { if (ev.key === 'Enter') go.click(); });
-    const cancel = document.createElement('button');
-    cancel.className = 'action-btn btn-secondary';
-    cancel.textContent = 'Cancel';
-    cancel.style.cssText = 'width:auto; padding:0 16px; height:28px; margin-top:4px;';
-    cancel.onclick = () => ov.remove();
-    cancel.setAttribute('data-modal-close', '');
-    card.appendChild(h); card.appendChild(sub);
-    card.appendChild(lbl); card.appendChild(nameIn);
-    card.appendChild(go);
-    card.appendChild(cancel);
-    ov.appendChild(card);
-    // Backdrop and Escape come from the shared dialog handler, which knows a drag
-    // that started inside the card is not a click on the backdrop.
-    document.body.appendChild(ov);
-    try { nameIn.focus(); } catch (e) {}
 }
 // ── OPTIONS, FROM DECK STUDIO (17.89) ──────────────────────────────────────
 // Options live where they are presented. A designer looking at ART.1's breaker or
@@ -12434,7 +12796,7 @@ function fitFlatGraphicsToWallAction() {
     if (!elev || !elev.frames) return;
     const flats = elev.frames.filter(f => f && f.active !== false && _isFlatGraphic(f.product));
     if (!flats.length) {
-        _toast('Nothing to fit', 'This wall has no wallcovering or window film on it. Fit to wall sizes a flat graphic to the wall inside its dimension lines — add one from the dashboard first.');
+        _toast('Nothing to fit', 'This wall has no wallcovering or window film on it. Fit to wall sizes a flat graphic to the wall inside its dimension lines: add one from the dashboard first.');
         return;
     }
     const picked = flats.filter(f => f.selected);
@@ -12468,7 +12830,7 @@ function populateDashPushSelector() {
     if (row && _isFlatGraphic(row.product)) {
         const nw = document.createElement('option');
         nw.value = '__new__';
-        nw.textContent = '— New elevation for this graphic —';
+        nw.textContent = '+ New elevation for this graphic';
         select.appendChild(nw);
     }
 }
@@ -12954,14 +13316,6 @@ function toggleDashSection(id, btn) {
     }
 }
 
-function toggleDashSwatchDropdown() {
-    const s = document.getElementById('swatchDropdownList');
-    s.style.display = s.style.display === 'block' ? 'none' : 'block';
-}
-
-function setDashUnit(newUnit) {
-    setUnit(newUnit);
-}
 
 // Unified unit setter. Called by all 3 toggle locations (dashboard, elevation
 // Settings modal, header bar). Converts dashboard rows AND elevation frames
@@ -13054,7 +13408,6 @@ function _projUnitsSummaryInto(host) {
     txt.title = 'Sizes are typed in ' + NAME[main] + (dual ? ', and ' + dual + ' prints in brackets beside inches' : ', with no second unit') + '. Rounding: ' + used.map(u => pat(u) + ' ' + u).join(', ') + '. Change them in Settings, Units.';
     host.appendChild(txt);
 }
-function openUnitMenu() { openAppSettings('units'); }
 function setUnit(newUnit) {
     if (!UNIT_INFO[newUnit]) return;  // unknown unit, ignore
     if (dashUnit === newUnit && elevUnit === newUnit) return;  // already set
@@ -13360,7 +13713,7 @@ function openBulkEditModal() {
     if (selected.length === 1) {
         summary.innerHTML = `Editing <strong>${dashProjectData[selected[0]].id}</strong>. Tip: select multiple rows (Shift/Ctrl-click) to bulk edit. Greyed fields differ across the selection.`;
     } else {
-        summary.innerHTML = `Editing <strong>${selected.length}</strong> rows. Greyed-out fields differ across the selection — only fields the rows share can be changed together.`;
+        summary.innerHTML = `Editing <strong>${selected.length}</strong> rows. Greyed-out fields differ across the selection: only fields the rows share can be changed together.`;
     }
 
     // Scratch = deep copy of the PRIMARY row. The form edits this, never the
@@ -13407,11 +13760,11 @@ function _bulkApplyDifferingGreyout(selected) {
     // Reset any previous greyout first.
     Object.values(BULK_FIELD_ELEMENTS).flat().concat(BULK_LOCKED_ELEMENTS).forEach(id => setDisabled(id, false, ''));
     // Per-row unique fields: always locked.
-    BULK_LOCKED_ELEMENTS.forEach(id => setDisabled(id, true, 'Per-row value — not bulk-editable'));
+    BULK_LOCKED_ELEMENTS.forEach(id => setDisabled(id, true, 'Per-row value, not bulk-editable'));
     // Differing fields: lock.
     Object.keys(BULK_FIELD_ELEMENTS).forEach(key => {
         if (!sameAcross(key)) {
-            BULK_FIELD_ELEMENTS[key].forEach(id => setDisabled(id, true, 'Differs across selected rows — change them individually'));
+            BULK_FIELD_ELEMENTS[key].forEach(id => setDisabled(id, true, 'Differs across selected rows: change them individually'));
         }
     });
 }
@@ -15471,23 +15824,6 @@ function syncDashLibraryFolder(e, getPath) {
 // (which already expects that property) consumes them unchanged.
 // =====================================================================
 
-function openLibrarySyncModal() {
-    document.getElementById('librarySyncModal').style.display = 'flex';
-    // Reset the drop zone visual to its idle state
-    const zone = document.getElementById('libraryDropZone');
-    zone.classList.remove('drag-over', 'processing');
-    document.getElementById('libraryDropZoneText').innerText = 'Drop folder here';
-    // Refresh the storage indicator each time the modal opens — counts/bytes
-    // are live so the user always sees current state.
-    refreshLibraryStorageStatus();
-    // Reset the clear button to its idle label (in case it was in
-    // confirm-armed state from a previous open).
-    const clearBtn = document.getElementById('libraryClearBtn');
-    if (clearBtn) {
-        clearBtn.textContent = 'Clear My Saved Swatches';
-        clearBtn.dataset.confirmArmed = '0';
-    }
-}
 
 // Populate the saved-swatches status row inside the sync modal. Called on
 // modal open and after every sync. Reads stats directly from localStorage
@@ -15513,7 +15849,7 @@ function handleClearCustomLibrary() {
     const btn = document.getElementById('libraryClearBtn');
     if (!btn) return;
     if (btn.dataset.confirmArmed !== '1') {
-        btn.textContent = 'Click again to confirm — this clears all saved swatches';
+        btn.textContent = 'Click again to confirm: this clears all saved swatches';
         btn.dataset.confirmArmed = '1';
         // Auto-disarm after 5 seconds so the user doesn't accidentally hit it
         // later thinking it's the normal button.
@@ -15564,7 +15900,7 @@ function initLibraryDropZone() {
         const items = e.dataTransfer && e.dataTransfer.items ? Array.from(e.dataTransfer.items) : [];
         console.log('[DROP] dataTransfer.items count:', items.length);
         if (items.length === 0) {
-            console.warn('[DROP] No items in dataTransfer — drop ignored.');
+            console.warn('[DROP] No items in dataTransfer: drop ignored.');
             return;
         }
         zone.classList.add('processing');
@@ -15617,7 +15953,7 @@ function initLibraryDropZone() {
         // available, retry with the modern File System Access API. Different
         // implementation, so the readEntries-empty bug doesn't apply.
         if (allFiles.length === 0 && modernHandlePromises.length > 0) {
-            console.log('[DROP] Legacy walk returned 0 files — falling back to modern File System Access API');
+            console.log('[DROP] Legacy walk returned 0 files: falling back to modern File System Access API');
             zoneText.innerText = 'Retrying with modern API...';
             try {
                 const handles = await Promise.all(modernHandlePromises);
@@ -15722,7 +16058,7 @@ async function walkEntry(entry, prefix, out, pathMap, dirsVisited, allEntries, s
                 let retries = 0;
                 while (retries < 3 && batch.length === 0) {
                     retries++;
-                    console.log(`[WALK] Dir "${entry.name}" first batch empty — retry ${retries}/3`);
+                    console.log(`[WALK] Dir "${entry.name}" first batch empty: retry ${retries}/3`);
                     await new Promise(r => setTimeout(r, 50 * retries));
                     try {
                         batch = await new Promise((resolve, reject) => reader.readEntries(resolve, reject));
@@ -15742,7 +16078,7 @@ async function walkEntry(entry, prefix, out, pathMap, dirsVisited, allEntries, s
             }
             safetyCounter++;
             if (safetyCounter > 1000) {
-                console.error(`[WALK] Safety limit hit walking "${entry.name}" — too many batches.`);
+                console.error(`[WALK] Safety limit hit walking "${entry.name}": too many batches.`);
                 break;
             }
         } while (batch.length > 0);
@@ -15866,13 +16202,13 @@ function _imageFilePrecheck(file) {
     if (!file) return { title: 'No file received', body: 'The drop didn\u2019t contain a file. Try dragging the image file itself (not a link or a selection).' };
     const name = (file.name || '').toLowerCase();
     if (/image\/hei[cf]/i.test(file.type || '') || /\.(heic|heif)$/.test(name)) {
-        return { title: 'HEIC photos aren\u2019t supported', body: 'Browsers can\u2019t open HEIC/HEIF (the iPhone camera format). Convert it to JPG or PNG first \u2014 on iPhone, sharing via Mail or saving to Files usually converts automatically, or set Settings \u2192 Camera \u2192 Formats \u2192 Most Compatible \u2014 then upload again.' };
+        return { title: 'HEIC photos aren\u2019t supported', body: 'Browsers can\u2019t open HEIC/HEIF (the iPhone camera format). Convert it to JPG or PNG first. On iPhone, sharing via Mail or saving to Files usually converts automatically, or set Settings \u2192 Camera \u2192 Formats \u2192 Most Compatible: then upload again.' };
     }
     if (file.type && !/^image\//i.test(file.type)) {
         return { title: 'Not an image file', body: _imgFileDesc(file) + ' isn\u2019t an image. Farmhand imports JPG, PNG, WebP, GIF, BMP, or SVG files.' };
     }
     if (file.size && file.size > _IMG_IMPORT_MAX_MB * 1048576) {
-        return { title: 'Image too large', body: _imgFileDesc(file) + ' is over the ' + _IMG_IMPORT_MAX_MB + ' MB import limit. Export a smaller JPG or PNG \u2014 pages only need about 1100 px on the long edge, and Farmhand downscales imports to that anyway, so a lighter export loses nothing.' };
+        return { title: 'Image too large', body: _imgFileDesc(file) + ' is over the ' + _IMG_IMPORT_MAX_MB + ' MB import limit. Export a smaller JPG or PNG: pages only need about 1100 px on the long edge, and Farmhand downscales imports to that anyway, so a lighter export loses nothing.' };
     }
     return null;
 }
@@ -15880,7 +16216,7 @@ function _imageDecodeFailMsg(file) {
     return { title: 'Couldn\u2019t open that image', body: _imgFileDesc(file) + ' couldn\u2019t be decoded by the browser. It may be corrupt, or a format browsers can\u2019t display (TIFF, PSD, RAW\u2026). Re-export it as JPG or PNG and try again.' };
 }
 function _imageReadFailMsg(file) {
-    return { title: 'Couldn\u2019t read the file', body: _imgFileDesc(file) + ' couldn\u2019t be read from disk. It may have moved, be in use by another app, or be on a disconnected drive \u2014 try again or copy it locally first.' };
+    return { title: 'Couldn\u2019t read the file', body: _imgFileDesc(file) + ' couldn\u2019t be read from disk. It may have moved, be in use by another app, or be on a disconnected drive: try again or copy it locally first.' };
 }
 // and hands back {dataUrl, baseName} via callback. Used by the file picker and
 // all drag-and-drop targets so behavior is identical everywhere.
@@ -16343,7 +16679,7 @@ function openBulkReplaceModal() {
     card.innerHTML = '<div style="display:flex; align-items:center; justify-content:space-between; padding:16px 18px; border-bottom:1px solid var(--border-color);"><div style="font-size:var(--fs-95); font-weight:700; color:var(--text-main);">Bulk replace artwork</div><button id="brClose" style="border:none; background:none; color:var(--text-muted); font-size:var(--fs-120); cursor:pointer; line-height:1;">\u00d7</button></div>';
     const bodyEl = document.createElement('div'); bodyEl.style.cssText = 'padding:16px 18px; overflow:auto;';
     const intro = document.createElement('p'); intro.style.cssText = 'font-size:var(--fs-70); color:var(--text-muted); line-height:1.55; margin:0 0 12px;';
-    intro.innerHTML = 'Choose revised image files named to match your pieces \u2014 by <b>image code</b>, <b>item code</b>, or original filename. Each file replaces the matching piece\u2019s artwork; the code and caption stay the same. Matching ignores case, spaces, dashes and the extension, so <i>ART-001.jpg</i> matches <i>ART.001</i>.';
+    intro.innerHTML = 'Choose revised image files named to match your pieces: by <b>image code</b>, <b>item code</b>, or original filename. Each file replaces the matching piece\u2019s artwork; the code and caption stay the same. Matching ignores case, spaces, dashes and the extension, so <i>ART-001.jpg</i> matches <i>ART.001</i>.';
     bodyEl.appendChild(intro);
     const pick = document.createElement('input'); pick.type = 'file'; pick.accept = 'image/*'; pick.multiple = true; pick.style.cssText = 'font-size:var(--fs-75); color:var(--text-main); margin-bottom:12px;';
     pick.onchange = (e) => _bulkReplacePicked(e.target.files);
@@ -18574,56 +18910,6 @@ function buildPngFilename(row) {
 // block, and a footer (page number). Built in-browser with jsPDF (vendored),
 // reusing renderFrameToCanvas (artwork baked in) + buildSpecStrings. This is a
 // clean structural first version — exact styling is meant to be iterated on.
-// Draw the bottom-right scale cluster: a thin-bordered box containing a 6-ft
-// person silhouette and the piece thumbnail(s) drawn at the SAME real-world
-// scale, so viewers can read the art's size against the figure. `pieces` is an
-// array of { dataUrl, wIn, hIn } (overall framed size in inches).
-function _drawScaleCluster(doc, x, y, w, h, pieces) {
-    // Box
-    doc.setDrawColor(180, 180, 180);
-    doc.setLineWidth(0.75);
-    doc.setFillColor(255, 255, 255);
-    doc.rect(x, y, w, h, 'S');
-
-    const pad = 10;
-    const innerH = h - pad * 2;
-    const baseY = y + h - pad;            // feet sit on this baseline
-    // Person is 6 ft = 72". Fit the figure to ~85% of the inner height.
-    const figH = innerH * 0.85;
-    const ptPerIn = figH / 72;            // shared real-world scale for the box
-    const figX = x + pad;
-    // — Person silhouette (simple, drawn in vector) —
-    doc.setFillColor(40, 40, 40);
-    const fw = figH * 0.16;               // shoulder width ~ proportional
-    const cx = figX + fw / 2;
-    const headR = figH * 0.045;
-    // head
-    doc.circle(cx, baseY - figH + headR, headR, 'F');
-    // body (rounded rect-ish: torso + legs as a tapered blob via two rects)
-    const torsoTop = baseY - figH + headR * 2 + 1;
-    const torsoH = (baseY - torsoTop) * 0.55;
-    doc.setFillColor(40, 40, 40);
-    doc.roundedRect(cx - fw / 2, torsoTop, fw, torsoH, fw * 0.3, fw * 0.3, 'F');
-    // legs (two narrow rects)
-    const legW = fw * 0.34, legGap = fw * 0.12;
-    const legTop = torsoTop + torsoH - 1;
-    const legH = baseY - legTop;
-    doc.rect(cx - legGap / 2 - legW, legTop, legW, legH, 'F');
-    doc.rect(cx + legGap / 2, legTop, legW, legH, 'F');
-
-    // — Thumbnails to the right of the figure, same scale, bottom-aligned —
-    let tx = figX + fw + 12;
-    pieces.forEach(pc => {
-        if (!pc.dataUrl || !pc.wIn || !pc.hIn) return;
-        const tw = pc.wIn * ptPerIn, th = pc.hIn * ptPerIn;
-        // clamp to the box if a piece is very tall
-        const scale = Math.min(1, innerH / th);
-        const dw = tw * scale, dh = th * scale;
-        if (tx + dw > x + w - pad) return;  // out of room — skip overflow
-        try { doc.addImage(pc.dataUrl, 'JPEG', tx, baseY - dh, dw, dh); } catch (e) {}
-        tx += dw + 8;
-    });
-}
 
 // Context blocks onto a canvas elevation, in the wall's own geometry. Line art goes
 // through _ctxArtSvg (the one drawing source, ink as a real hex: there is no CSS
@@ -20344,31 +20630,6 @@ function _drawPdfFooter(doc, logos, pageNum, meta) {
     doc.setTextColor(20, 20, 20);
 }
 
-// Placeholder page for deck sections not yet built (floorplan key, frame
-// recommendations, narrative, contacts, slogan). Emits a clearly-labeled page
-// in correct deck order so the full presentation skeleton — order, footer,
-// page count — is visible and reviewable before each section is implemented.
-function _drawPlaceholderPage(doc, logos, pageNum, meta, title, subtitle) {
-    const PW = doc.internal.pageSize.getWidth();
-    const PH = doc.internal.pageSize.getHeight();
-    const B = _titleBand(PW, PH);
-    const M = B.x;
-    // Dashed "to be built" frame on the safety frame itself, so the page it
-    // stands in for is the shape the real one will be.
-    doc.setDrawColor(200, 200, 200);
-    doc.setLineWidth(0.75);
-    doc.setLineDashPattern([4, 4], 0);
-    doc.rect(B.x, B.top, B.w, B.bottom - B.top, 'S');
-    doc.setLineDashPattern([], 0);
-    _drawPageTitle(doc, PW, PH, (title || 'SECTION').toString(), subtitle ? subtitle.toString() : '');
-    // Centered "placeholder" tag.
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(11);
-    doc.setTextColor(180, 180, 180);
-    doc.text('PLACEHOLDER \u2014 NOT YET BUILT', PW / 2, PH / 2, { align: 'center' });
-    doc.setTextColor(20, 20, 20);
-    _drawPdfFooter(doc, logos, pageNum, meta);
-}
 
 // Single source of truth for the Floorplan Key page's entry list. Both the
 // live preview (renderDeckPageCanvas) and the PDF export build their entries
@@ -21875,7 +22136,7 @@ async function exportSpecPagePDF(opts) {
                     'Save anyway', 'Cancel', { danger: true });
             }
             if (opts.returnPdf) result = { blob: built.doc.output('blob'), fileName: built.fname, pages: built.doc.getNumberOfPages(), missing: missing.map(m => ({ page: m.page, name: m.name || '' })) };
-            else if (deliver) { if (opts.preview) showSpecPdfPreview(built.doc, built.fname); else built.doc.save(built.fname); }
+            else if (deliver) { if (opts.preview) showSpecPdfPreview(built.doc, built.fname); else await _deliverPdf(built.doc, built.fname); }
         }
     } catch (e) {
         // A cancel is a deliberate user action, not a failure — unwinding via a
@@ -21997,7 +22258,7 @@ function _pdfRequestCancel() {
     if (b) { b.disabled = true; b.textContent = 'Cancelling…'; b.style.opacity = '0.6'; b.style.cursor = 'default'; }
     // Say so immediately — the current page/capture still has to finish before
     // the next checkpoint is reached, so without this the click feels ignored.
-    _pdfProgress(null, 'Cancelling — finishing the current page…');
+    _pdfProgress(null, 'Cancelling, finishing the current page…');
 }
 function _pdfIsCancelled() { return !!_pdfCancelled; }
 // Throw at a safe point if a cancel was requested. Called at every page
@@ -22389,7 +22650,6 @@ function _specTplEffective(tplKey, ovKey, slots) {
     tpl._leftX = leftX;
     return tpl;
 }
-function _fixedHidden(f) { return !!(editorialContent.hiddenFixed && editorialContent.hiddenFixed[f]); }
 // ── WHICH ROWS PRODUCE SPEC PAGES: ONE DEFINITION ────────────────────────
 // _deckPageList and the export's old hand-mirrored builder each filtered dashProjectData
 // with their own copy of this expression. Since 18.32 the export walks _deckPageList
@@ -23258,7 +23518,7 @@ function _deckMockHTML(desc, w, h) {
     }
     if (desc.kind === 'prose' || (desc.kind === 'fixed') || desc.kind === 'card') {
         const body = (desc.text || '').toString();
-        const bodyHtml = body ? _esc(body).replace(/\n/g, '<br>') : '<span style="color:#bbb;">(empty — add a template or copy via this page\u2019s tools)</span>';
+        const bodyHtml = body ? _esc(body).replace(/\n/g, '<br>') : '<span style="color:#bbb;">(empty: add a template or copy via this page\u2019s tools)</span>';
         return wrap('<div style="position:absolute; left:' + pad + 'px; top:' + pad + 'px; right:' + pad + 'px;"><div style="font-family:' + DRUK + '; font-weight:700; color:#111; font-size:' + fs(0.08) + 'px; text-transform:uppercase; letter-spacing:0.02em;">' + _esc(desc.title) + '</div><div style="color:#333; font-size:' + fs(0.04) + 'px; line-height:1.5; margin-top:' + Math.round(h * 0.05) + 'px; max-height:' + Math.round(h * 0.7) + 'px; overflow:hidden;">' + bodyHtml + '</div></div>');
     }
     if (desc.kind === 'floorplan') {
@@ -23824,7 +24084,7 @@ function _specSetRows(members, letters, opts) {
         for (let i = 0; i < blocks.length; i++) {
             const vals = varying.map(l => valueOf(l, i));
             if (!vals.some(v => v)) continue;      // piece has none of these fields
-            const k = vals.join(' ');
+            const k = vals.join('\u0000');
             if (!byKey[k]) { byKey[k] = { vals: vals, idxs: [] }; order.push(k); }
             byKey[k].idxs.push(i);
         }
@@ -24132,17 +24392,6 @@ function _mergeFlatPages(pages) {
         s.page.title = s.rows.map(m => (m && m.id) || '').filter(Boolean).join(' + ');
     });
     return drop.size ? pages.filter(p => !drop.has(p)) : pages;
-}
-// Flat graphics that share a WALL share a SHEET, used by the group-mode split.
-function _groupFlatsByElev(flats) {
-    const byElev = [], loose = [];
-    (flats || []).forEach(m => {
-        const el = _flatGraphicElevFor(m);
-        if (!el) { loose.push([m]); return; }
-        const hit = byElev.find(g => g.el === el);
-        if (hit) hit.rows.push(m); else byElev.push({ el: el, rows: [m] });
-    });
-    return byElev.map(g => g.rows).concat(loose);
 }
 function _partitionFlatMembers(members) {
     const m = members || [];
@@ -24514,7 +24763,7 @@ function _dsSpecSlotsInto(host, desc, ovKey, group) {
         ['deck', 'All option sheets', 'Every placement\'s options sheet in the deck follows it'],
         ['page', 'Just this placement', 'An exception for this placement only (all its pages); every other options sheet keeps the deck setting']
     ] : [
-        ['deck', 'All specs', 'Set the house layout — every per-piece spec page follows it'],
+        ['deck', 'All specs', 'Set the house layout: every per-piece spec page follows it'],
         ['page', 'Just this page', 'An exception on this page only; every other page keeps the deck layout']
     ], _dsSlotScope, (v) => { _dsSlotScope = v; _dsRenderTools(); });
     if (Object.keys(ov).length) {
@@ -24599,7 +24848,7 @@ function _dsBreakerToggleInto(head, groupMode) {
     // Was a third standing paragraph under the three toggles. It explains where the
     // guides come from, which is a thing you ask once, so it rides the parent ?.
     try { brTxt.appendChild(_dsHelpDot('Layout guides (wall dimensions, hang height, spacing) come straight from the '
-        + 'Elevations tab \u2014 whatever is on there shows here.')); } catch (e) {}
+        + 'Elevations tab: whatever is on there shows here.')); } catch (e) {}
 }
 // (There is deliberately no per-breaker guide toggle: a breaker always mirrors
 // whatever guides the Elevations tab has on. See _captureElevWithGuides.)
@@ -24623,7 +24872,6 @@ function _buildSpecUnits(rs, isGroup) {
     return order.map(k => { const u = map[k]; if (u._mgOrder) { u.members.sort((a, b) => u._mgOrder.indexOf(a.id) - u._mgOrder.indexOf(b.id)); u.rep = u.members[0] || u.rep; } return u; });
 }
 function _approvalOf(ovKey) { return (ovKey && editorialContent.approvalStatus && editorialContent.approvalStatus[ovKey]) || ''; }
-function _pageApproved(ovKey) { return _approvalOf(ovKey) === 'approved'; }
 function _dsCurrentSpecKey() { const d = _dsPages[_dsIndex]; return (d && d.kind === 'spec') ? (d._ovKey || (d.row && d.row.id) || '') : ''; }
 function _dsSetApproval(ovKey, status) {
     if (!ovKey) return;
@@ -24641,7 +24889,7 @@ function _dsSyncApprovedBtn() {
     b.disabled = !onSpec;
     b.style.opacity = onSpec ? '1' : '0.4';
     b.style.cursor = onSpec ? 'pointer' : 'not-allowed';
-    b.title = onSpec ? 'Click to cycle: none \u2192 pending \u2192 approved' : 'Approval applies to spec pages only \u2014 select a spec page';
+    b.title = onSpec ? 'Click to cycle: none \u2192 pending \u2192 approved' : 'Approval applies to spec pages only: select a spec page';
     const map = { '': { bg: 'var(--bg-input)', fg: 'var(--text-main)', bd: 'var(--border-color)', t: 'APPROVAL' }, pending: { bg: '#c0392b', fg: '#fff', bd: '#c0392b', t: 'PENDING \u25CB' }, approved: { bg: '#1a7f37', fg: '#fff', bd: '#1a7f37', t: 'APPROVED \u2713' } };
     const m = map[st] || map[''];
     b.style.background = m.bg; b.style.color = m.fg; b.style.borderColor = m.bd; b.textContent = m.t;
@@ -24656,7 +24904,7 @@ function _dsToggleApproved() {
 // Presentation-type presets: flip the include toggles + spec layout for each
 // stage of a deck's life. Presets, not locks — tweak freely afterward.
 const PRES_PRESETS = {
-    concept: { label: 'Concept', inc: { cover: 1, understanding: 1, narrative: 1, strategy: 1, slogan: 1, contacts: 1, timeline: 1, frameRec: 0, floorplanKey: 0, spec: 0 }, tpl: null, wf: false, note: 'Beauty pages, story, moodboards & concept art — no specs.' },
+    concept: { label: 'Concept', inc: { cover: 1, understanding: 1, narrative: 1, strategy: 1, slogan: 1, contacts: 1, timeline: 1, frameRec: 0, floorplanKey: 0, spec: 0 }, tpl: null, wf: false, note: 'Beauty pages, story, moodboards & concept art, no specs.' },
     wireframe: { label: 'Wireframe', inc: { cover: 1, understanding: 1, narrative: 1, strategy: 0, slogan: 1, contacts: 1, floorplanKey: 1, spec: 1, frameRec: 0, timeline: 0 }, tpl: 'frameRight', wf: true, note: 'Elevations & plan views with empty frame/canvas placements (no artwork yet). Specs optional per page.' },
     artdev: { label: 'Art Development', inc: { cover: 1, understanding: 1, narrative: 1, strategy: 0, slogan: 1, contacts: 1, floorplanKey: 1, spec: 1, frameRec: 0, timeline: 0 }, tpl: 'frameRight', wf: false, note: 'Artwork populated in mockups, with specs figured alongside.' },
     final: { label: 'Final Spec', inc: { cover: 1, understanding: 0, narrative: 0, strategy: 0, slogan: 1, contacts: 1, floorplanKey: 1, spec: 1, frameRec: 1, timeline: 0 }, tpl: 'frameRight', wf: false, note: 'Approval package: full specs, image codes, final selections.' },
@@ -24780,7 +25028,7 @@ function openDeckStudio(tab) {
         const holder = document.createElement('div'); holder.id = 'dsProjCoverPrev';
         holder.style.cssText = 'width:100%; aspect-ratio:936/540; background:#fff; border:1px solid var(--border-color); border-radius:var(--r-6); overflow:hidden; position:relative;';
         const sub = document.createElement('div'); sub.id = 'dsProjPrevCap'; sub.style.cssText = 'font-size:var(--fs-60); color:var(--text-muted); margin-top:8px; line-height:1.4;';
-        sub.textContent = 'Live preview \u2014 the real page, as the deck will build it.';
+        sub.textContent = 'Live preview: the real page, as the deck will build it.';
         const rb = document.createElement('button'); rb.textContent = 'Refresh preview'; rb.className = 'action-btn btn-secondary'; rb.style.cssText = 'width:auto; height:26px; padding:0 12px; font-size:var(--fs-60); margin-top:8px;'; rb.onclick = () => _dsRenderCoverPreview();
         colC.appendChild(cap); colC.appendChild(tabs); colC.appendChild(holder); colC.appendChild(sub); colC.appendChild(rb);
         cols.appendChild(colA); cols.appendChild(colB); cols.appendChild(colC);
@@ -24917,8 +25165,8 @@ async function _dsRenderCoverPreview() {
     }
     if (cap) {
         cap.textContent = sec.demo
-            ? ('Standard demo ' + sec.label.toLowerCase() + ' page \u2014 a fixed example piece, so every type slot is visible. Your own pages use these settings.')
-            : ('Live preview of ' + sec.label + ' \u2014 the real page, as the deck will build it.');
+            ? ('Standard demo ' + sec.label.toLowerCase() + ' page: a fixed example piece, so every type slot is visible. Your own pages use these settings.')
+            : ('Live preview of ' + sec.label + ': the real page, as the deck will build it.');
     }
     // Another tab clicked while this one is still rendering must not have its
     // result painted over the new selection when it finally resolves.
@@ -26041,19 +26289,6 @@ function _dsPageActionsInto(parent, desc) {
     }
     parent.appendChild(wrap);
 }
-// Move a layout page one slot earlier/later in the DECK order by re-anchoring
-// its afterKey to the neighboring page's key ('__start__' to lead the deck).
-// This makes template pages fully movable anywhere in the presentation.
-// One slot earlier or later, for the page-actions menu. DELEGATES to _dsMovePageTo:
-// this was a second implementation of the same move with its own afterKey arithmetic,
-// so the menu and the rail could disagree about where "one slot later" is.
-function _dsMoveLayoutPage(desc, dir) {
-    if (!_dsPageMovable(desc)) return;
-    const myKey = _deckPageKey(desc);
-    const i = (_dsPages || []).findIndex(d => _deckPageKey(d) === myKey);
-    if (i < 0) return;
-    _dsMovePageTo(desc, i + (dir < 0 ? -1 : 1));
-}
 function _dsDuplicateLayoutPage(desc) {
     if (!desc || desc.kind !== 'layout' || !desc.page) return;
     const pages = editorialContent.layoutPages || [];
@@ -26167,7 +26402,7 @@ function _dsRunSpellCheck() {
             const label = _dsPageLabel(d);
             const list = Array.from(words).slice(0, 6);
             const extra = words.size > list.length ? (' (+' + (words.size - list.length) + ' more)') : '';
-            issues.push({ sev: 'spell', text: label + ' \u2014 possible misspelling' + (words.size > 1 ? 's' : '') + ': ' + list.join(', ') + extra, idx: i, words: Array.from(words) });
+            issues.push({ sev: 'spell', text: label + ': possible misspelling' + (words.size > 1 ? 's' : '') + ': ' + list.join(', ') + extra, idx: i, words: Array.from(words) });
         }
     });
     return issues;
@@ -26198,11 +26433,11 @@ function _dsRunPreflight() {
         const specIdx = pages.findIndex(d => d.kind === 'spec' && d.row && d.row.id === r.id);
         const gi = specIdx >= 0 ? specIdx : null;
         const piece = { kind: 'piece', label: 'Piece', rowId: r.id };
-        if (!r.artworkUrl) issues.push({ sev: 'err', text: r.id + ' \u2014 no artwork image on the dashboard', idx: gi, go: piece });
+        if (!r.artworkUrl) issues.push({ sev: 'err', text: r.id + ': no artwork image on the dashboard', idx: gi, go: piece });
         if (hasSpecs) {
-            if ((r.planX == null || r.planY == null) && !_fpTempPin(r)) issues.push({ sev: 'warn', text: r.id + ' \u2014 no floorplan pin, so its spec page has no plan crop', idx: gi });   // a moved piece has its own line (20.50)
+            if ((r.planX == null || r.planY == null) && !_fpTempPin(r)) issues.push({ sev: 'warn', text: r.id + ': no floorplan pin, so its spec page has no plan crop', idx: gi });   // a moved piece has its own line (20.50)
             const inElev = (elevations || []).some(e => e.frames && e.frames.some(f => f && f.id === r.id));
-            if (!inElev) issues.push({ sev: 'warn', text: r.id + ' \u2014 not placed in any elevation, so its spec page has no elevation thumbnail', idx: gi, go: piece });
+            if (!inElev) issues.push({ sev: 'warn', text: r.id + ': not placed in any elevation, so its spec page has no elevation thumbnail', idx: gi, go: piece });
         }
     });
     // Editable pages: empty image frames + hidden items
@@ -26213,28 +26448,28 @@ function _dsRunPreflight() {
         if (!els) return;
         const label = _dsPageLabel(d);
         const empties = els.filter(e => e && !e.hidden && (e.type || 'image') === 'image' && !e.img).length;
-        if (empties) issues.push({ sev: 'err', text: label + ' \u2014 ' + empties + ' empty image frame' + (empties > 1 ? 's' : ''), idx: i });
+        if (empties) issues.push({ sev: 'err', text: label + ': ' + empties + ' empty image frame' + (empties > 1 ? 's' : ''), idx: i });
         const hidden = els.filter(e => e && e.hidden).length;
-        if (hidden) issues.push({ sev: 'warn', text: label + ' \u2014 ' + hidden + ' hidden element' + (hidden > 1 ? 's' : '') + ' will not export', idx: i });
+        if (hidden) issues.push({ sev: 'warn', text: label + ': ' + hidden + ' hidden element' + (hidden > 1 ? 's' : '') + ' will not export', idx: i });
     });
     // Hidden annotations
     Object.keys(editorialContent.annotations || {}).forEach(k => {
         const hid = (editorialContent.annotations[k] || []).filter(a => a && a.hidden).length;
-        if (hid && idxByKey[k] != null) issues.push({ sev: 'warn', text: _dsPageLabel(pages[idxByKey[k]]) + ' \u2014 ' + hid + ' hidden annotation' + (hid > 1 ? 's' : '') + ' will not export', idx: idxByKey[k] });
+        if (hid && idxByKey[k] != null) issues.push({ sev: 'warn', text: _dsPageLabel(pages[idxByKey[k]]) + ': ' + hid + ' hidden annotation' + (hid > 1 ? 's' : '') + ' will not export', idx: idxByKey[k] });
     });
     // Floorplan pages without a plan image
     pages.forEach((d, i) => {
         if (d.kind !== 'floorplan') return;
         const lv = (typeof floorplanLevels !== 'undefined' ? floorplanLevels : [])[d.level];
-        if (lv && !lv.imageData) issues.push({ sev: 'err', text: _dsPageLabel(d) + ' \u2014 no plan image uploaded', idx: i });
+        if (lv && !lv.imageData) issues.push({ sev: 'err', text: _dsPageLabel(d) + ': no plan image uploaded', idx: i });
     });
     // Contents lines still reading as template filler (18.75): they would print as-is.
     try {
         if (pages.some(d => d && d.kind === 'layout' && _tocIsAutoPage(d.page))) {
             const m = _tocModel(pages);
             m.sections.forEach(sec => {
-                if (sec.ph && sec.divKey && idxByKey[sec.divKey] != null) issues.push({ sev: 'warn', text: 'Contents \u2014 section \u201c' + sec.title + '\u201d is still the divider\u2019s placeholder heading', idx: idxByKey[sec.divKey] });
-                sec.entries.forEach(e => { if (e.ph && idxByKey[e.keys[0]] != null) issues.push({ sev: 'warn', text: 'Contents \u2014 \u201c' + e.label + '\u201d is placeholder text or an untitled page', idx: idxByKey[e.keys[0]] }); });
+                if (sec.ph && sec.divKey && idxByKey[sec.divKey] != null) issues.push({ sev: 'warn', text: 'Contents: section \u201c' + sec.title + '\u201d is still the divider\u2019s placeholder heading', idx: idxByKey[sec.divKey] });
+                sec.entries.forEach(e => { if (e.ph && idxByKey[e.keys[0]] != null) issues.push({ sev: 'warn', text: 'Contents: \u201c' + e.label + '\u201d is placeholder text or an untitled page', idx: idxByKey[e.keys[0]] }); });
             });
         }
     } catch (e) {}
@@ -26243,7 +26478,7 @@ function _dsRunPreflight() {
         (elevations || []).forEach(e => {
             if (!e || _isCatalogueMaster(e)) return;
             _elevClashes(e).forEach(c => issues.push({ sev: 'warn',
-                text: (c.frame.id || c.frame.letter || 'A frame') + ' \u2014 covers the ' + _ctxBlockName(c.block).toLowerCase() + ' on ' + String(e.name || 'a wall') + ' (marked keep clear)',
+                text: (c.frame.id || c.frame.letter || 'A frame') + ': covers the ' + _ctxBlockName(c.block).toLowerCase() + ' on ' + String(e.name || 'a wall') + ' (marked keep clear)',
                 idx: null, wall: { kind: 'wall', elevId: _elevId(e) } }));
         });
     } catch (e) {}
@@ -26254,7 +26489,7 @@ function _dsRunPreflight() {
             const plan = _codesJoinPlan(sg.keys);
             if (!plan) return;
             const wall = String((sg.elev && sg.elev.name) || ('Wall ' + (sg.elevIdx + 1)));
-            issues.push({ sev: 'warn', text: sg.keys.join(', ') + ' \u2014 hang ' + _num1(sg.gapIn) + '" apart on ' + wall + '. One set, ' + plan.label + '?', idx: null, set: sg, setPlan: plan, wall: { kind: 'wall', elevId: _elevId(sg.elev) } });
+            issues.push({ sev: 'warn', text: sg.keys.join(', ') + ': hang ' + _num1(sg.gapIn) + '" apart on ' + wall + '. One set, ' + plan.label + '?', idx: null, set: sg, setPlan: plan, wall: { kind: 'wall', elevId: _elevId(sg.elev) } });
         });
     } catch (e) {}
     // Frame and mat samples the client rejected, or not approved by IFS (19.87).
@@ -26358,7 +26593,7 @@ function _dsShowPreflight() {
     if (!issues.length) {
         const ok = document.createElement('div');
         ok.style.cssText = 'display:flex; align-items:center; gap:10px; padding:16px 12px; border:1px solid rgba(60,160,90,0.5); background:rgba(60,160,90,0.12); border-radius:var(--r-8); font-size:var(--fs-80);';
-        ok.innerHTML = '<span style="font-size:var(--fs-105);">\u2713</span> All clear \u2014 no missing artwork, pins, plan images, empty frames, or possible spelling issues. Ready to export.';
+        ok.innerHTML = '<span style="font-size:var(--fs-105);">\u2713</span> All clear: no missing artwork, pins, plan images, empty frames, or possible spelling issues. Ready to export.';
         panel.appendChild(ok);
     } else {
         const section = (title, list, color, spellMode) => {
@@ -26437,9 +26672,9 @@ function _dsShowPreflight() {
                 panel.appendChild(row);
             });
         };
-        section('Errors \u2014 will export wrong or blank', errs, '#e05252');
-        section('Warnings \u2014 double-check these', warns, '#d9a13b');
-        section('Spelling \u2014 worth a second look', spells, 'var(--ui-active)', true);
+        section('Errors: will export wrong or blank', errs, '#e05252');
+        section('Warnings: double-check these', warns, '#d9a13b');
+        section('Spelling: worth a second look', spells, 'var(--ui-active)', true);
         if (spells.length) {
             const note = document.createElement('p'); note.style.cssText = 'font-size:var(--fs-60); color:var(--text-muted,#999); margin:8px 0 0; line-height:1.5;';
             note.textContent = 'This checks against a compact common-word list, not a full dictionary, so it will miss some real typos and flag some real words (brand names, codes, less common terms). \u201cNot a typo\u201d remembers a word for this project so it stops flagging.';
@@ -26505,19 +26740,6 @@ function _dsDuplicatePageQuick(desc) {
     }
 }
 let _dsRailFilter = '';
-function _dsCreateInsert(type, afterKey) {
-    _mbMigratePages();
-    const variants = LAYOUT_TEMPLATES[type];
-    const els = (variants && variants[0] && variants[0].els) ? variants[0].els() : [];
-    const pg = { id: 'pg' + Math.random().toString(36).slice(2), type: type, title: _mbDefaultTitle(type), elements: JSON.parse(JSON.stringify(els)), afterKey: afterKey || '__start__' };
-    editorialContent.layoutPages.push(pg);
-    if (typeof pushHistory === 'function') pushHistory();
-    if (typeof scheduleAutosave === 'function') scheduleAutosave();
-    _dsRefresh();
-    const k = 'layout:' + pg.id;
-    const ni = _dsPages.findIndex(d => _deckPageKey(d) === k);
-    if (ni >= 0) _dsSelectPage(ni);
-}
 // ── Template Library (Templates tab) ───────────────────────────────────────
 const DECK_TPL_CATS = [
     { key: 'cover', label: 'Cover' },
@@ -26711,21 +26933,10 @@ function _dsToggleFav(key) {
 function _dsFavStar(key) {
     const b = document.createElement('button'); const on = _dsIsFav(key);
     b.textContent = on ? '\u2605' : '\u2606';
-    b.title = on ? 'Unpin from favourites' : 'Pin as favourite \u2014 shows in the Pages sidebar (max 4)';
+    b.title = on ? 'Unpin from favourites' : 'Pin as favourite: shows in the Pages sidebar (max 4)';
     b.style.cssText = 'width:auto; height:24px; padding:0 6px; font-size:var(--fs-80); line-height:1; cursor:pointer; background:none; border:1px solid var(--border-color); border-radius:var(--r-4); color:' + (on ? '#e5b53a' : 'var(--text-muted)') + '; margin-left:auto;';
     b.onclick = (e) => { e.stopPropagation(); _dsToggleFav(key); };
     return b;
-}
-function _dsResolveFavs() {
-    const out = [];
-    _dsFavs().forEach(key => {
-        try {
-            if (key.slice(0, 2) === 'm:') { const t = IDML_MASTER_TEMPLATES.find(x => x.name === key.slice(2)); if (t) out.push({ key, cat: _IDML_CAT_MAP[t.type] || 'moodboard', name: t.name.replace('Farmboy \u00b7 ', ''), els: JSON.parse(JSON.stringify(t.elements || [])) }); }
-            else if (key.slice(0, 2) === 'u:') { const t = (editorialContent.templates || []).find(x => (x.name || '') === key.slice(2)); if (t) out.push({ key, cat: t.type || 'moodboard', name: t.name || 'Saved', els: JSON.parse(JSON.stringify(t.elements || [])) }); }
-            else if (key.slice(0, 2) === 'b:') { const rest = key.slice(2); const ci2 = rest.indexOf(':'); const bt = (LAYOUT_TEMPLATES[rest.slice(0, ci2)] || []).find(x => x.name === rest.slice(ci2 + 1)); if (bt) out.push({ key, cat: rest.slice(0, ci2), name: bt.name, els: bt.els() }); }
-        } catch (e) {}
-    });
-    return out;
 }
 let _dsToolsActiveTab = 'page';
 let _dsCenterPreviewItem = null;   // template currently previewed in the center canvas, not yet applied
@@ -26905,7 +27116,7 @@ function _dsSaveCurrentPageBtnInto(host) {
     b.textContent = 'Save this page as template';
     b.disabled = !ok;
     b.title = ok ? 'Add the open page\u2019s layout to the library below'
-                 : 'Open a layout or a cover / narrative page first \u2014 a spec or floorplan page has no layout to save';
+                 : 'Open a layout or a cover / narrative page first: a spec or floorplan page has no layout to save';
     if (!ok) b.style.opacity = '0.45';
     b.onclick = () => _dsSaveCurrentAsTemplate();
     host.appendChild(b);
@@ -26919,7 +27130,7 @@ function _dsRenderToolsTemplatesTab() {
     // category you're currently looking at further down.
     const header = document.createElement('div'); header.style.cssText = 'flex-shrink:0; padding:12px 12px 10px; border-bottom:1px solid var(--border-color);';
     const head = document.createElement('div'); head.style.cssText = 'margin-bottom:10px;';
-    head.innerHTML = '<div style="font-size:var(--fs-80); font-weight:800; color:var(--text-main);">Templates</div><div style="font-size:var(--fs-60); color:var(--text-muted); margin-top:2px;">Click one to preview it on the page \u2014 apply it right from there.</div>';
+    head.innerHTML = '<div style="font-size:var(--fs-80); font-weight:800; color:var(--text-main);">Templates</div><div style="font-size:var(--fs-60); color:var(--text-muted); margin-top:2px;">Click one to preview it on the page; apply it right from there.</div>';
     header.appendChild(head);
     _dsSaveCurrentPageBtnInto(header);
     const btnRow = document.createElement('div'); btnRow.style.cssText = 'display:flex; gap:4px; margin-bottom:8px;';
@@ -27208,7 +27419,7 @@ function _dsRenderTemplatesTab() {
     host.innerHTML = '';
     const wrap = document.createElement('div'); wrap.style.cssText = 'max-width:1200px; margin:0 auto; width:100%;';
     const head = document.createElement('div'); head.style.cssText = 'display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:14px;';
-    const title = document.createElement('div'); title.innerHTML = '<div style="font-size:var(--fs-105); font-weight:800; color:var(--text-main);">Template Library</div><div style="font-size:var(--fs-70); color:var(--text-muted);">Click a thumbnail to preview it at full size, then Add to deck \u2014 no scrolling needed.</div>'; title.style.cssText = 'flex:1; min-width:200px;';
+    const title = document.createElement('div'); title.innerHTML = '<div style="font-size:var(--fs-105); font-weight:800; color:var(--text-main);">Template Library</div><div style="font-size:var(--fs-70); color:var(--text-muted);">Click a thumbnail to preview it at full size, then Add to deck, no scrolling needed.</div>'; title.style.cssText = 'flex:1; min-width:200px;';
     head.appendChild(title);
     const mkBtn = (label, fn, primary) => { const b = document.createElement('button'); b.textContent = label; b.className = primary ? 'action-btn' : 'action-btn btn-secondary'; b.style.cssText = 'width:auto; height:32px; padding:0 14px; font-size:var(--fs-70); font-weight:700;'; b.onclick = fn; return b; };
     head.appendChild(mkBtn('+ Save current page', _dsSaveCurrentAsTemplate, true));
@@ -27436,7 +27647,7 @@ function _dsRenderStylesTab() {
     wrap.appendChild(head);
     const tgt = _dsStyleTarget();
     const note = document.createElement('div'); note.style.cssText = 'font-size:var(--fs-70); margin-bottom:14px; padding:7px 10px; border-radius:var(--r-6); ' + (tgt ? 'background:rgba(26,127,55,0.12); color:#1a7f37;' : 'background:var(--bg-input); color:var(--text-muted);');
-    note.textContent = tgt ? 'A text box is selected — Apply/Shuffle will style it live.' : 'No text box selected. Pick one on a page (Pages tab) to apply styles to it.';
+    note.textContent = tgt ? 'A text box is selected: Apply/Shuffle will style it live.' : 'No text box selected. Pick one on a page (Pages tab) to apply styles to it.';
     wrap.appendChild(note);
     _dsStyleGroups().forEach(group => {
         const styles = _dsTextStyles().filter(s => s.group === group);
@@ -27496,24 +27707,6 @@ function _dsQuickAddBlankPage(afterKey) {
     const k = 'layout:' + pg.id;
     const ni = _dsPages.findIndex(d => _deckPageKey(d) === k);
     if (ni >= 0) _dsSelectPage(ni);
-}
-function _dsOpenInsertMenu(anchorBtn, afterKey) {
-    const old = document.getElementById('dsInsMenu'); if (old) { old.remove(); return; }
-    const menu = document.createElement('div'); menu.id = 'dsInsMenu';
-    menu.style.cssText = 'position:fixed; z-index:100030; background:var(--bg-panel,#1d1d20); border:1px solid var(--border-color); border-radius:var(--r-6); padding:4px; box-shadow:0 8px 24px rgba(0,0,0,0.35); min-width:152px;';
-    const r = anchorBtn.getBoundingClientRect();
-    menu.style.left = Math.min(r.left, window.innerWidth - 168) + 'px';
-    menu.style.top = Math.min(r.bottom + 4, window.innerHeight - 230) + 'px';
-    const hdr = document.createElement('div'); hdr.textContent = 'Insert a page'; hdr.style.cssText = 'font-size:var(--fs-60); color:var(--text-muted); padding:4px 8px 6px;'; menu.appendChild(hdr);
-    [['breaker', 'Breaker'], ['divider', 'Divider'], ['moodboard', 'Moodboard'], ['bio', 'Artist bio'], ['plan', 'Plan view'], ['custom', 'Custom'], ['toc', 'Contents (auto)'], ['artindex', 'Artwork index (auto)']].forEach(pair => {
-        const b = document.createElement('button'); b.textContent = pair[1];
-        b.style.cssText = 'display:block; width:100%; text-align:left; font-size:var(--fs-70); padding:6px 10px; border:none; background:none; color:var(--text-main); cursor:pointer; border-radius:var(--r-4);';
-        b.onmouseenter = () => b.style.background = 'var(--bg-input)'; b.onmouseleave = () => b.style.background = 'none';
-        b.onclick = () => { menu.remove(); _dsCreateInsert(pair[0], afterKey); };
-        menu.appendChild(b);
-    });
-    document.body.appendChild(menu);
-    setTimeout(() => { const close = (ev) => { if (!menu.contains(ev.target) && ev.target !== anchorBtn) { menu.remove(); document.removeEventListener('mousedown', close); } }; document.addEventListener('mousedown', close); }, 0);
 }
 // The gap between two pages, and the place a new one goes in. It was a permanent 16px
 // lane with a button parked in it - about a fifth of the rail's scroll on a 21-page deck,
@@ -27699,15 +27892,15 @@ function _dsPageMovable(desc) {
 }
 function _dsPageLockNote(desc) {
     if (!desc || _dsPageMovable(desc)) return '';
-    if (desc.kind === 'layout' && desc.page && desc.page._tocPartOf) return 'The contents continued \u2014 it follows the first Contents page and goes away when the contents fits on one.';
+    if (desc.kind === 'layout' && desc.page && desc.page._tocPartOf) return 'The contents continued: it follows the first Contents page and goes away when the contents fits on one.';
     if (desc.kind === 'fixed' || desc.kind === 'card') {
         return 'The cover is always the first page. Switch pages on or off under Project, Include pages.';
     }
     if (desc.kind === 'floorplan' || desc.kind === 'planDetail') {
-        return 'Ordered with the plans — change Floorplan order under Project (or pick Manual to sequence them yourself).';
+        return 'Ordered with the plans: change Floorplan order under Project (or pick Manual to sequence them yourself).';
     }
     if (desc.kind === 'spec') {
-        return 'Generated from the artwork — it follows Floorplan order and the presentation layout.';
+        return 'Generated from the artwork: it follows Floorplan order and the presentation layout.';
     }
     return 'This page cannot be moved.';
 }
@@ -27879,7 +28072,7 @@ function _dsResetLayoutOrder() {
     const arr = (editorialContent.layoutPages || []);
     const hand = arr.filter(_dsPageHandPlaced);
     const n = _dsHandPlacedCount();
-    if (!n) { _toast('Nothing to reset', 'No pages have been moved by hand — they are all still where their template puts them.'); return; }
+    if (!n) { _toast('Nothing to reset', 'No pages have been moved by hand: they are all still where their template puts them.'); return; }
     _confirmDestroy({
         title: 'Put ' + n + ' hand-placed page' + (n === 1 ? '' : 's') + ' back in the default order?',
         body: 'Pages you moved by hand go back to where their template puts them, and standard pages (Process + Timeline, Frame Recommendations…) to their usual place.',
@@ -27894,16 +28087,6 @@ function _dsResetLayoutOrder() {
             _dsRefresh();
         },
     });
-}
-function _dsDeleteInserted(pageObj) {
-    const delKey = 'layout:' + pageObj.id;
-    const delAfterKey = pageObj.afterKey;
-    (editorialContent.layoutPages || []).forEach(p => { if (p !== pageObj && p.afterKey === delKey) p.afterKey = delAfterKey; });
-    editorialContent.layoutPages = (editorialContent.layoutPages || []).filter(p => p !== pageObj);
-    try { if (editorialContent.annotations) delete editorialContent.annotations[delKey]; } catch (e) {}
-    if (typeof pushHistory === 'function') pushHistory();
-    if (typeof scheduleAutosave === 'function') scheduleAutosave();
-    _dsRefresh();
 }
 // A CACHED THUMBNAIL IS THE SAME <img> EVERY TIME (19.56). The rail is rebuilt on every
 // layout switch, page select and refresh, and Chrome loads a data: image SYNCHRONOUSLY when
@@ -28061,7 +28244,7 @@ function _dsRenderRail() {
         if (handPlaced) {
             const rst = document.createElement('button');
             rst.textContent = '↺ Reset page order (' + handPlaced + ')';
-            rst.title = 'Put every hand-placed page back where its template puts it, and moved standard pages back in their usual place. Generated pages are unaffected — they were never moved.';
+            rst.title = 'Put every hand-placed page back where its template puts it, and moved standard pages back in their usual place. Generated pages are unaffected: they were never moved.';
             rst.style.cssText = 'width:100%; height:22px; margin-top:5px; font-size:var(--fs-60); background:var(--bg-input);'
                 + ' color:var(--text-muted); border:1px solid var(--border-color); border-radius:var(--r-4); cursor:pointer;';
             rst.onclick = () => _dsResetLayoutOrder();
@@ -28155,7 +28338,7 @@ function _dsRenderRail() {
             const _pnLast = _dsPrintedStarts().reduce((m, r) => Math.max(m, r.start + Math.max(1, r.span) - 1), 0);
             num.type = 'number'; num.min = '1'; num.max = String(_pnLast || _dsPages.length);
             num.value = String(_pnMe);
-            num.title = 'Move this page \u2014 type a page number and press Enter.';
+            num.title = 'Move this page: type a page number and press Enter.';
             num.className = 'ds-pagenum';
             num.style.cssText = 'position:absolute; right:2px; top:' + Math.round(th / 2 - 8) + 'px; width:22px;'
                 + ' height:16px; padding:0; text-align:center; z-index:7; font-size:var(--fs-60); font-weight:700;'
@@ -29355,19 +29538,6 @@ function _dsRenderAnnots(page, desc, w, hh) {
         page.appendChild(ov);
     }
 }
-function _dsAddArtDetail() {
-    const desc = _dsPages[_dsIndex];
-    const pid = (desc && desc.kind === 'spec' && ((desc.row && desc.row.id) || (desc.members && desc.members[0] && desc.members[0].id))) || null;
-    if (!pid) return;
-    const key = _deckPageKey(desc); if (!key) return;
-    const list = _dsAnnList(key);
-    list.push({ type: 'artdetail', pieceId: pid, x: 0.30, y: 0.14, w: 0.14 });
-    _dsSelKey = key; _dsSelIdx = list.length - 1;
-    _artDetailEnsure(pid).then(() => { try { _dsRenderCenter(); } catch (e) {} });
-    if (typeof pushHistory === 'function') pushHistory();
-    if (typeof scheduleAutosave === 'function') scheduleAutosave();
-    _dsRenderCenter(); _dsSyncToolbar();
-}
 // Arrow-specific toolbar actions — apply to the selected arrow AND remember
 // the choice as the default for the next new arrow.
 // Shape stroke + fill actions — 3 preset swatches / custom colour / clear,
@@ -29446,14 +29616,6 @@ function _dsShapeFitToImage(a, anyContent) {
     a.zoom = 1; a.panX = 0; a.panY = 0;   // the box matches now; there is nothing to pan
     return true;
 }
-function _dsShapeToggleAspectLock() {
-    const a = _dsCurrentAnnot(); if (!a || a.type !== 'shape') return;
-    a.lockAspect = !a.lockAspect;
-    if (a.lockAspect) a.h = _dsShapeRatioH(a.w || 0.25, _dsShapeHeldRatio(a));
-    if (typeof pushHistory === 'function') pushHistory();
-    if (typeof scheduleAutosave === 'function') scheduleAutosave();
-    _dsSyncToolbar(); _dsRenderCenter(); _dsRenderRail();
-}
 // Clear a shape's image fill (back to its colour) — also usable on image
 // boxes, where it empties the frame.
 function _dsClearAnnImage() {
@@ -29472,21 +29634,9 @@ function _dsToggleAnnCaption() {
     if (typeof scheduleAutosave === 'function') scheduleAutosave();
     _dsSyncToolbar(); _dsRenderCenter(); _dsRenderRail();
 }
-function _dsCycleAnnCapAlign() {
-    const a = _dsCurrentAnnot(); if (!a || !a.showCaption) return;
-    const order = ['left', 'center', 'right'];
-    a.capAlign = order[(order.indexOf(a.capAlign || 'center') + 1) % 3];
-    if (typeof scheduleAutosave === 'function') scheduleAutosave();
-    _dsSyncToolbar(); _dsRenderCenter(); _dsRenderRail();
-}
 function _dsShapeStrokeSwatch(hex) { const a = _dsCurrentAnnot(); if (!a || a.type !== 'shape') return; a.stroke = (a.stroke === hex) ? null : hex; if (!a.strokeW) a.strokeW = 1.5; if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsSyncToolbar(); _dsRenderCenter(); _dsRenderRail(); }
 function _dsShapeStrokeColor(hex) { const a = _dsCurrentAnnot(); if (!a || a.type !== 'shape') return; a.stroke = hex; if (!a.strokeW) a.strokeW = 1.5; if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsSyncToolbar(); _dsRenderCenter(); _dsRenderRail(); }
-function _dsShapeStrokeBump(d) { const a = _dsCurrentAnnot(); if (!a || a.type !== 'shape' || !a.stroke) return; a.strokeW = Math.max(0.5, Math.min(8, (a.strokeW || 1.5) + d * 0.5)); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsSyncToolbar(); _dsRenderCenter(); _dsRenderRail(); }
 function _dsShapeToggleFill() { const a = _dsCurrentAnnot(); if (!a || a.type !== 'shape') return; if (a.fill === 'none') { a.fill = SHAPE_DEFAULT_FILL; } else { a.fill = 'none'; if (!a.stroke) { a.stroke = '#c0392b'; a.strokeW = a.strokeW || 1.5; } } if (typeof pushHistory === 'function') pushHistory(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsSyncToolbar(); _dsRenderCenter(); _dsRenderRail(); }
-function _dsArrowSwatch(hex) { const a = _dsCurrentAnnot(); if (!a || (a.type !== 'arrow' && a.type !== 'elbow')) return; a.color = hex; _dsSetArrowDefault('color', hex); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsSyncToolbar(); _dsRenderCenter(); _dsRenderRail(); }
-function _dsAnnBumpWeight(delta) { const a = _dsCurrentAnnot(); if (!a || (a.type !== 'arrow' && a.type !== 'elbow')) return; const w = Math.max(0.5, Math.min(8, (a.weight || 1.4) + delta * 0.5)); a.weight = w; _dsSetArrowDefault('weight', w); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsSyncToolbar(); _dsRenderCenter(); _dsRenderRail(); }
-function _dsAnnCycleTip() { const a = _dsCurrentAnnot(); if (!a || (a.type !== 'arrow' && a.type !== 'elbow')) return; const next = (a.tip === 'none') ? 'arrow' : 'none'; a.tip = next; _dsSetArrowDefault('tip', next); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsSyncToolbar(); _dsRenderCenter(); _dsRenderRail(); }
-function _dsAnnToggleStartCap() { const a = _dsCurrentAnnot(); if (!a || (a.type !== 'arrow' && a.type !== 'elbow')) return; const next = (a.startCap === 'circle') ? 'none' : 'circle'; a.startCap = next; _dsSetArrowDefault('startCap', next); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsSyncToolbar(); _dsRenderCenter(); _dsRenderRail(); }
 function _dsSelectAnnot(key, idx) { if (typeof _mbSel !== 'undefined') { _mbSel = []; _mbSelAnn = []; _mbSelected = -1; } _dsSelKey = key; _dsSelIdx = idx; _dsSyncToolbar(); _dsRenderCenter(); }
 function _dsSyncToolbar() {
     const editable = !!(typeof _dsCurrentEditablePage === 'function' && _dsCurrentEditablePage());
@@ -29549,13 +29699,13 @@ function _dsSyncToolbar() {
     // On a phone the toolbar is ONE row: the selection actions take the page arrows' place (19.33).
     document.documentElement.classList.toggle('phone-ds-sel', _anySel);
     const hint = document.getElementById('dsSelHint');
-    if (hint) hint.textContent = mbEl ? (mbType === 'text' ? 'Text \u2014 font, size & colour at left \u00b7 double-click to edit' : 'Element \u2014 drag to move, corner to resize, layer & delete at left')
+    if (hint) hint.textContent = mbEl ? (mbType === 'text' ? 'Text: font, size & colour at left \u00b7 double-click to edit' : 'Element: drag to move, corner to resize, layer & delete at left')
         : !selected ? 'Select a box to style it \u00b7 double-click to edit \u00b7 drag to move'
-        : isText ? 'Text box \u2014 double-click to type, drag corner to scale'
-        : isArrow ? 'Arrow \u2014 drag it to move, drag an end to re-aim'
-        : isMock ? 'Mockup \u2014 drag to move, corner to resize, double-click to swap artwork'
-        : isShape ? 'Shape \u2014 colour or image fill, drop shadow, drag to move, corner to resize'
-        : 'Image \u2014 drag to move, corner to resize';
+        : isText ? 'Text box: double-click to type, drag corner to scale'
+        : isArrow ? 'Arrow: drag it to move, drag an end to re-aim'
+        : isMock ? 'Mockup: drag to move, corner to resize, double-click to swap artwork'
+        : isShape ? 'Shape: colour or image fill, drop shadow, drag to move, corner to resize'
+        : 'Image: drag to move, corner to resize';
     const setEnabled = (id, on) => { const e = document.getElementById(id); if (e) { e.style.opacity = on ? '1' : '0.35'; e.style.pointerEvents = on ? 'auto' : 'none'; } };
     setEnabled('dsAnnBold', isText); setEnabled('dsAnnItalic', isText); setEnabled('dsAnnAlignBtn', isText); setEnabled('dsAnnWeight', isText); setEnabled('dsAnnOutline', isText);
     setEnabled('dsAnnFront', selected || !!mbEl); setEnabled('dsAnnBack', selected || !!mbEl);
@@ -30300,42 +30450,8 @@ function _dsFillShapeWithImage() {
     _dsFillShapeMode = true;
     const fi = document.getElementById('dsAnnImageFile'); if (fi) fi.click();
 }
-function _dsAnnFit() { _dsOpenFitMenu(); }
-function _dsImageTarget() {
-    if (_dsCurrentEditablePage() && typeof _mbSelEl === 'function' && typeof _mbSelected !== 'undefined' && _mbSelected >= 0) { const el = _mbSelEl(); if (el && _elType(el) === 'image') return { kind: 'mb', el: el, anchor: 'dsMbFit' }; }
-    const a = _dsCurrentAnnot(); if (a && (a.type === 'shape' || a.type === 'image') && a.dataUrl) return { kind: 'ann', el: a, anchor: 'dsAnnFit' };
-    return null;
-}
-function _dsOpenFitMenu() {
-    const t = _dsImageTarget(); if (!t) return;
-    _dsCloseFitMenu();
-    const btn = document.getElementById(t.anchor);
-    const m = document.createElement('div'); m.id = 'dsFitMenu';
-    m.style.cssText = 'position:fixed; z-index:100000; background:var(--bg-panel); border:1px solid var(--border-color); border-radius:var(--r-8); box-shadow:0 10px 30px rgba(0,0,0,0.4); padding:5px; min-width:220px;';
-    const r = btn ? btn.getBoundingClientRect() : { left: 200, bottom: 80 };
-    m.style.left = Math.round(r.left) + 'px'; m.style.top = Math.round((r.bottom || 80) + 6) + 'px';
-    [['Fill frame proportionally', 'fill'], ['Fit content proportionally', 'contain'], ['Fit content to frame', 'stretch'], ['Fit frame to content', 'frame'], ['Center content', 'center']].forEach(p => {
-        const b = document.createElement('button'); b.textContent = p[0]; b.style.cssText = 'display:block; width:100%; text-align:left; background:transparent; border:none; border-radius:var(--r-4); padding:8px 10px; cursor:pointer; color:var(--text-main); font-size:var(--fs-75);';
-        b.onmouseenter = () => b.style.background = 'var(--bg-input)'; b.onmouseleave = () => b.style.background = 'transparent';
-        b.onclick = () => { _dsShapeFitOp(p[1]); _dsCloseFitMenu(); }; m.appendChild(b);
-    });
-    document.body.appendChild(m);
-    setTimeout(() => document.addEventListener('mousedown', _dsFitMenuOutside), 0);
-}
 function _dsFitMenuOutside(e) { const m = document.getElementById('dsFitMenu'); if (m && !m.contains(e.target)) _dsCloseFitMenu(); }
 function _dsCloseFitMenu() { const m = document.getElementById('dsFitMenu'); if (m) m.remove(); document.removeEventListener('mousedown', _dsFitMenuOutside); }
-function _dsShapeFitOp(op) {
-    const t = _dsImageTarget(); if (!t) return; const a = t.el;
-    if (op === 'fill') { a.fit = 'cover'; a.zoom = 1; a.panX = 0; a.panY = 0; }
-    else if (op === 'contain') { a.fit = 'contain'; a.zoom = 1; a.panX = 0; a.panY = 0; }
-    else if (op === 'stretch') { a.fit = 'stretch'; }
-    else if (op === 'center') { a.panX = 0; a.panY = 0; }
-    else if (op === 'frame') { _dsShapeFitToImage(a, true); if (a.fit === 'stretch') a.fit = 'cover'; }
-    if (typeof pushHistory === 'function') pushHistory();
-    if (typeof scheduleAutosave === 'function') scheduleAutosave();
-    if (t.kind === 'mb') { try { renderMoodboardCanvas(); } catch (e) {} }
-    _dsRenderCenter(); _dsRenderRail();
-}
 function _dsShapeDropImage(e, key, idx) {
     e.preventDefault(); e.stopPropagation();
     const list = (editorialContent.annotations || {})[key]; const a = list && list[idx];
@@ -30732,7 +30848,7 @@ function _dsOpenGearPopup(key, i, cx, cy) {
         const fitBoxR = subRow();
         const fbB = document.createElement('button'); fbB.className = 'action-btn btn-secondary';
         fbB.textContent = 'Fit box to image'; fbB.style.cssText = 'flex:1; height:22px; font-size:var(--fs-60);';
-        fbB.title = 'Reshape the box to the image\u2019s own proportions \u2014 keeps the width, moves the height';
+        fbB.title = 'Reshape the box to the image\u2019s own proportions: keeps the width, moves the height';
         fbB.onclick = () => { if (_dsShapeFitToImage(a)) { a.lockRatio = parseFloat(a.aspect); refresh(); } };
         fitBoxR.appendChild(fbB);
         const lkW = document.createElement('label');
@@ -30758,7 +30874,7 @@ function _dsOpenGearPopup(key, i, cx, cy) {
         // out by hand even if the clipboard is refused, and so Copy has something to
         // select. Same string _dsResolveCaptionText prints, from _dsImageCode, or the
         // panel and the page would disagree about what the code is.
-        const cdR = sec('Code', 'The image code — the file this box was filled from, without its extension');
+        const cdR = sec('Code', 'The image code: the file this box was filled from, without its extension');
         const code = _dsImageCode(a);
         if (code) {
             const ci = document.createElement('input'); ci.type = 'text'; ci.readOnly = true; ci.value = code;
@@ -30791,7 +30907,7 @@ function _dsOpenGearPopup(key, i, cx, cy) {
             // Images placed before the name was recorded have nothing to show, and
             // nothing to recover it from. Say so rather than showing an empty field.
             const nn = document.createElement('div');
-            nn.textContent = 'No file name on record — re-upload the image to capture it.';
+            nn.textContent = 'No file name on record: re-upload the image to capture it.';
             nn.style.cssText = 'flex:1 1 auto; font-size:var(--fs-55); color:var(--text-muted); line-height:1.35;';
             cdR.appendChild(nn);
         }
@@ -30826,7 +30942,7 @@ function _dsOpenGearPopup(key, i, cx, cy) {
         fillIn.onchange = () => { a.fill = fillIn.value; refresh(); };
         fr.appendChild(fillIn);
         const tB = document.createElement('button'); tB.className = 'action-btn btn-secondary'; tB.textContent = a.fill === 'none' ? 'Fill: transparent' : 'Make transparent';
-        tB.title = 'Transparent fill \u2014 e.g. a red outline circling something on an image';
+        tB.title = 'Transparent fill: e.g. a red outline circling something on an image';
         tB.style.cssText = 'flex:1; height:22px; font-size:var(--fs-55);' + (a.fill === 'none' ? ' border-color:var(--ui-active); color:var(--ui-active);' : '');
         tB.onclick = () => { _dsSelKey = key; _dsSelIdx = i; _dsShapeToggleFill(); pop.remove(); };
         fr.appendChild(tB);
@@ -30847,7 +30963,7 @@ function _dsOpenGearPopup(key, i, cx, cy) {
         // the same weight on the next page — what the weight actually IS — was the one
         // thing it would not tell you.
         const wIn = document.createElement('input'); wIn.type = 'number'; wIn.min = '0.25'; wIn.max = '20'; wIn.step = '0.25'; wIn.value = curW;
-        wIn.title = 'Stroke weight in points \u2014 type it to match another shape exactly';
+        wIn.title = 'Stroke weight in points: type it to match another shape exactly';
         wIn.style.cssText = 'width:48px; height:22px; text-align:center; font-size:var(--fs-65); background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:var(--r-4); padding:0 2px;';
         const commitW = () => { const n = parseFloat(wIn.value); if (!isNaN(n)) setW(n); else wIn.value = curW; };
         wIn.onchange = commitW; wIn.onkeydown = (ev) => { ev.stopPropagation(); if (ev.key === 'Enter') { ev.preventDefault(); commitW(); } };
@@ -30883,7 +30999,7 @@ function _dsOpenGearPopup(key, i, cx, cy) {
     }
     // Caption.
     const cr1 = sec('Caption', 'Printed under the box');
-    const capB = document.createElement('button'); capB.className = 'action-btn btn-secondary'; capB.textContent = a.showCaption ? 'Caption: on' : 'Caption: off'; capB.title = 'Print a caption under this box — the image code, or your own text';
+    const capB = document.createElement('button'); capB.className = 'action-btn btn-secondary'; capB.textContent = a.showCaption ? 'Caption: on' : 'Caption: off'; capB.title = 'Print a caption under this box: the image code, or your own text';
     capB.style.cssText = 'flex:1; height:22px; font-size:var(--fs-60);' + (a.showCaption ? ' border-color:var(--ui-active); color:var(--ui-active);' : '');
     capB.onclick = () => { _dsSelKey = key; _dsSelIdx = i; _dsToggleAnnCaption(); refresh(); };
     cr1.appendChild(capB);
@@ -30894,13 +31010,13 @@ function _dsOpenGearPopup(key, i, cx, cy) {
         // spec pages. Available on shapes with an image fill too, not just
         // the plain image-placeholder type — disabled until a file with a
         // known name has actually been uploaded into this box.
-        const csr = sec('Source', 'What the caption says — your own text, or the image code');
+        const csr = sec('Source', 'What the caption says: your own text, or the image code');
         [['text', 'Custom text'], ['filename', 'Code']].forEach(([v, l]) => {
             const b = document.createElement('button'); b.className = 'action-btn btn-secondary'; b.textContent = l;
             const on = (a.capSource || 'text') === v;
             const disabled = (v === 'filename' && !a.fileName);
             b.style.cssText = 'flex:1; height:22px; font-size:var(--fs-55);' + (on ? ' border-color:var(--ui-active); color:var(--ui-active);' : '') + (disabled ? ' opacity:0.4; cursor:not-allowed;' : '');
-            b.disabled = disabled; if (disabled) b.title = 'No file name on record for this image \u2014 re-upload it to use this option';
+            b.disabled = disabled; if (disabled) b.title = 'No file name on record for this image: re-upload it to use this option';
             b.onclick = () => { a.capSource = v; refresh(); };
             csr.appendChild(b);
         });
@@ -30993,7 +31109,7 @@ function _dsCopyFallback(text, inputEl, done) {
         if (tmp) tmp.remove();
         if (ok) { done(); return; }
     } catch (e) { if (tmp) { try { tmp.remove(); } catch (e2) {} } }
-    try { _toast('Copy blocked', 'The code is selected — press Ctrl+C to copy it.'); } catch (e) {}
+    try { _toast('Copy blocked', 'The code is selected: press Ctrl+C to copy it.'); } catch (e) {}
 }
 function _dsAnnCaptionInto(page, box, a, key, i, w, hh) {
     if (!a.showCaption) return;
@@ -31011,7 +31127,7 @@ function _dsAnnCaptionInto(page, box, a, key, i, w, hh) {
     const capBase = a.capPt > 0 ? Math.max(5, a.capPt / 540 * hh) : Math.max(8, 0.0165 * hh);
     const capPx = byFile ? _capCodeFitPx(cap.textContent, capBase, bw, fam) : capBase;
     cap.style.cssText = 'position:absolute; left:' + ((a.x || 0) * w) + 'px; top:' + ((a.y || 0) * hh + bh + 4) + 'px; width:' + bw + 'px; text-align:' + align + '; font-size:' + capPx + 'px; font-style:italic;' + (byFile ? ' white-space:nowrap; display:flex; justify-content:' + (align === 'left' ? 'flex-start' : align === 'right' ? 'flex-end' : 'center') + ';' : '') + ' color:' + _dsDisplayInk('#8a8a8a', key) + '; font-family:' + fam + '; cursor:' + (byFile ? 'default' : 'text') + '; z-index:20;' + (byFile ? 'font-kerning:none;' : ' white-space:pre-wrap;font-kerning:none;');
-    cap.title = byFile ? 'Caption follows the image\u2019s file name \u2014 change it in the gear popup\u2019s Caption section' : 'Double-click to edit the caption';
+    cap.title = byFile ? 'Caption follows the image\u2019s file name: change it in the gear popup\u2019s Caption section' : 'Double-click to edit the caption';
     if (byFile) { page.appendChild(cap); return; }
     cap.ondblclick = (e) => {
         e.preventDefault(); e.stopPropagation();
@@ -31037,7 +31153,7 @@ function _dsImgZoomPill(box, opts) {
     zWrap.style.cssText = 'position:absolute; display:flex; gap:3px; z-index:24; align-items:center;';
     const mk = (label, delta) => {
         const b = document.createElement('button'); b.textContent = label;
-        b.title = (delta > 0 ? 'Zoom in' : 'Zoom out') + ' \u2014 you can also scroll on the box';
+        b.title = (delta > 0 ? 'Zoom in' : 'Zoom out') + '; you can also scroll on the box';
         b.style.cssText = 'width:20px; height:20px; padding:0; font-size:12px; line-height:1; border-radius:50%; border:1px solid var(--selected); background:#fff; color:var(--selected); cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,0.25);';
         b.onmousedown = (e) => { e.preventDefault(); e.stopPropagation(); };
         b.onclick = (e) => { e.preventDefault(); e.stopPropagation(); const cur = opts.get(); const nz = _dsZoomRound(Math.max(opts.min, Math.min(opts.max, cur + delta * (e.shiftKey ? 5 : 1)))); if (nz !== cur) opts.set(nz); };
@@ -31050,7 +31166,7 @@ function _dsImgZoomPill(box, opts) {
     const zLbl = document.createElement('input');
     zLbl.type = 'text';
     zLbl.value = opts.get().toFixed(1);
-    zLbl.title = 'Zoom \u2014 type a value, or scroll on the image';
+    zLbl.title = 'Zoom: type a value, or scroll on the image';
     zLbl.style.cssText = 'font-size:10px; color:#fff; background:var(--selected); border:none; border-radius:var(--r-8); padding:2px 0; width:34px; text-align:center; font-family:inherit;';
     zLbl.onmousedown = (e) => { e.stopPropagation(); };
     zLbl.onclick = (e) => { e.stopPropagation(); zLbl.select(); };
@@ -31081,19 +31197,6 @@ function _dsImgZoomPill(box, opts) {
     else _dsPinChrome(box, zWrap, 4, 30, _zw, _zh);
     box.appendChild(zWrap);
 }
-// Subtle centre pan handle: four small chevrons (\u2039 \u203a and up/down) on a
-// translucent disc. Drag to pan with LIVE feedback; only shown when zoomed in.
-function _dsImgPanHandle(box, onDown) {
-    const ph = document.createElement('div');
-    ph.className = '_dsChrome';
-    ph.title = 'Drag to pan the image \u00b7 scroll to zoom';
-    ph.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b6b74" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 5 12 1 16 5" transform="translate(0,2)"/><polyline points="8 19 12 23 16 19" transform="translate(0,-2)"/><polyline points="5 8 1 12 5 16" transform="translate(2,0)"/><polyline points="19 8 23 12 19 16" transform="translate(-2,0)"/></svg>';
-    ph.style.cssText = 'position:absolute; width:22px; height:22px; border-radius:50%; background:rgba(255,255,255,0.82); border:1px solid rgba(120,120,130,0.6); cursor:move; display:flex; align-items:center; justify-content:center; z-index:23; box-shadow:0 1px 4px rgba(0,0,0,0.2);';
-    { const _b = _dsBoxWH(box); _dsPinChrome(box, ph, (_b.w - 24) / 2, (_b.h - 24) / 2, 24, 24); }
-    ph.onmousedown = onDown;
-    box.appendChild(ph);
-    return ph;
-}
 function _dsShapePanDown(e, key, idx, bw, bh) {
     e.preventDefault(); e.stopPropagation();
     const list = (editorialContent.annotations || {})[key]; const a = list && list[idx]; if (!a) return;
@@ -31107,21 +31210,6 @@ function _dsShapePanDown(e, key, idx, bw, bh) {
     };
     const up = () => { document.removeEventListener('mousemove', mv); document.removeEventListener('mouseup', up); _dsDragDone(_dsGeo0, a); if (typeof scheduleAutosave === 'function') scheduleAutosave(); };
     document.addEventListener('mousemove', mv); document.addEventListener('mouseup', up);
-}
-// A styled note callout: Messina Serif Regular Italic, 14pt / 18pt leading,
-// fixed by design (not tied to the deck's general paragraph style) — height
-// is dynamic since the box just wraps and grows with its text, same as any
-// other text annotation.
-function _dsAddNote() {
-    if (_dsActiveTab !== 'pages') return;
-    const desc = _dsPages[_dsIndex]; const key = _deckPageKey(desc);
-    if (!key) { _toast('Not available here', 'This page type doesn\u2019t support notes.'); return; }
-    const list = _dsAnnList(key);
-    list.push({ type: 'note', text: 'New note', x: 0.1, y: 0.12, w: 0.3, size: 14 / 540, leading: 18, font: 'serif', italic: true, bold: false, color: '#222222', align: 'left' });
-    if (typeof pushHistory === 'function') pushHistory();
-    if (typeof scheduleAutosave === 'function') scheduleAutosave();
-    _dsSelectAnnot(key, list.length - 1);
-    _dsRenderRail();
 }
 function _dsAddTextBox() {
     if (_dsActiveTab !== 'pages') return;
@@ -31205,15 +31293,15 @@ function _dsTypeSection(title, getStyle, apply, hint, opts) {
     h.style.cssText = 'flex:0 0 46px; font-size:var(--fs-60); font-weight:700; color:var(--text-main); text-transform:uppercase; letter-spacing:0.2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;';
     row.appendChild(h);
     const fsel = _fillFontSelect(document.createElement('select'), st.font);
-    fsel.title = (hint || title) + ' \u2014 typeface';
+    fsel.title = (hint || title) + ': typeface';
     fsel.style.cssText = 'flex:1 1 auto; min-width:0; height:24px; font-size:var(--fs-60); padding:0 4px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:var(--r-4);';
     fsel.onchange = () => apply('font', fsel.value);
     const sin = document.createElement('input'); sin.type = 'number'; sin.min = '6'; sin.max = '60'; sin.value = st.size;
-    sin.title = (hint || title) + ' \u2014 size in points';
+    sin.title = (hint || title) + ': size in points';
     sin.style.cssText = 'flex:0 0 38px; width:38px; height:24px; text-align:center; font-size:var(--fs-60); padding:0 2px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:var(--r-4);';
     sin.onchange = () => { let v = parseFloat(sin.value); if (isNaN(v)) v = 16; v = Math.max(6, Math.min(60, v)); apply('size', v); };
     const cin = document.createElement('input'); cin.type = 'color'; cin.value = st.color || '#222222';
-    cin.title = (hint || title) + ' \u2014 colour';
+    cin.title = (hint || title) + ': colour';
     cin.style.cssText = 'flex:0 0 auto;';
     cin.oninput = () => apply('color', cin.value);
     // opts.inkInline — the panel is showing the strip itself, so the dot is left
@@ -31247,39 +31335,23 @@ function _dsTypeDefaultsInto(host) {
     };
     host.appendChild(_dsTypeSection('Titles', _titleStyle, (k, v) => { editorialContent.titleStyle = Object.assign({}, _titleStyle(), { [k]: v }); save(); }, 'Page titles'));
     host.appendChild(_dsTypeSection('Sub', _subtitleStyle, (k, v) => { editorialContent.subtitleStyle = Object.assign({}, _subtitleStyle(), { [k]: v }); save(); }, 'Page subheadings'));
-    host.appendChild(_dsTypeSection('Body', _paragraphStyle, (k, v) => { editorialContent.paragraphStyle = Object.assign({}, _paragraphStyle(), { [k]: v }); save(); }, 'Paragraphs \u2014 applies to new text boxes you add'));
+    host.appendChild(_dsTypeSection('Body', _paragraphStyle, (k, v) => { editorialContent.paragraphStyle = Object.assign({}, _paragraphStyle(), { [k]: v }); save(); }, 'Paragraphs: applies to new text boxes you add'));
     host.appendChild(_dsTypeSection('Caption', _specCodeStyle, (k, v) => { editorialContent.specCodeStyle = Object.assign({}, _specCodeStyle(), { [k]: v }); save(); }, 'Captions and image codes'));
     // Spec text is a font choice only: the Application / Frame Size / Frame Code list
     // carries its own fixed size and colour.
     const sfWrap = document.createElement('div'); sfWrap.style.cssText = 'display:flex; gap:5px; align-items:center; margin-bottom:5px;';
     const sfH = document.createElement('div'); sfH.textContent = 'Spec';
-    sfH.title = 'Spec text \u2014 the Application / Frame Size / Frame Code list. Its size and colour are fixed by the layout.';
+    sfH.title = 'Spec text: the Application / Frame Size / Frame Code list. Its size and colour are fixed by the layout.';
     sfH.style.cssText = 'flex:0 0 46px; font-size:var(--fs-60); font-weight:700; color:var(--text-main); text-transform:uppercase; letter-spacing:0.2px;';
     sfWrap.appendChild(sfH);
     const sfSel = _fillFontSelect(document.createElement('select'), _specFont(), 'serif');
-    sfSel.title = 'Spec text \u2014 typeface';
+    sfSel.title = 'Spec text: typeface';
     sfSel.style.cssText = 'flex:1 1 auto; min-width:0; height:24px; font-size:var(--fs-60); padding:0 4px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:var(--r-4);';
     sfSel.onchange = () => { editorialContent.specFont = sfSel.value; save(); };
     sfWrap.appendChild(sfSel);
     host.appendChild(sfWrap);
     // The note is on the heading's tooltip; see lbl above.
 }
-// The page-settings GEAR lived here and is gone. Of its four items, two could not
-// work and two belonged somewhere else:
-//
-// 'Show alignment guides' was a SECOND toggle for the dedicated Guides button's own
-// 'Show guides' checkbox, and the two disagreed by construction: that one persists
-// deck-wide through _setDeckGuide, this one was a module flag OR'd into the paint call,
-// so switching it on left the Guides menu still reading off, and switching the Guides
-// menu on made this item do nothing visible.
-//
-// 'Fit page to window' re-rendered the centre and nothing else. There is no zoom or pan
-// state for the centre preview, so there was never anything to re-centre or re-fit.
-//
-// The two real ones (clear overlays, revert a built render) are now in the Page tab of
-// the tools panel, which is already this page's settings home and is always on screen
-// rather than behind a popup — the same move the type defaults made off the Aa button.
-function _dsAnnCycleAlign() { _dsOpenAlignMenu(); }
 // Leading (line spacing) nudge for the selected text — works on both page
 // annotations and template text boxes. Steps in 1pt (at the 540pt page scale);
 // starts from the text's own size * 1.15 if never set.
@@ -31410,7 +31482,7 @@ function _dsOpenTextGearPopup(target, cx, cy) {
     const str = row();
     [['bold', 'B', 'font-weight:800;'], ['italic', 'I', 'font-style:italic;'], ['outline', 'O', 'font-weight:800; -webkit-text-stroke:1px currentColor;']].forEach(([f, l, css]) => {
         const b = document.createElement('button'); b.className = 'action-btn btn-secondary'; b.textContent = l;
-        b.title = { bold: 'Bold', italic: 'Italic', outline: 'Outlined \u2014 stroke only, no fill' }[f] || l;
+        b.title = { bold: 'Bold', italic: 'Italic', outline: 'Outlined: stroke only, no fill' }[f] || l;
         b.style.cssText = 'width:26px; height:22px; min-width:26px; padding:0; ' + css + (a[f] ? ' border-color:var(--ui-active); color:var(--ui-active);' : '');
         b.onclick = () => {
             if (f === 'outline') { a[f] = !a[f]; if (typeof scheduleAutosave === 'function') scheduleAutosave(); refresh(); return; }
@@ -31491,7 +31563,7 @@ function _dsOpenTextGearPopup(target, cx, cy) {
     // Distinct id from the right-panel version (used on layout/template
     // pages) so the two never collide if both happen to be in the DOM.
     try { _paneStyles.appendChild(_dsDockedStylesSection(3, '_dsDockedStylesPopup')); } catch (e) {}
-    _paneText.appendChild(_dsHowToDot('Double-click the box to edit its text. Drag a corner to resize \u2014 the text re-wraps and the size stays.'));
+    _paneText.appendChild(_dsHowToDot('Double-click the box to edit its text. Drag a corner to resize: the text re-wraps and the size stays.'));
     document.body.appendChild(pop);
     _dsClampPopup(pop);   // measured, now that the popup has a real height
     try { _mbUpdateToolbar(); } catch (e) {}
@@ -31558,28 +31630,8 @@ function _dsAlignIconSVG(align) {
     else rows = L(4, 20, 6) + L(4, 15, 11) + L(4, 20, 16) + L(4, 15, 21);
     return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">' + rows + '</svg>';
 }
-function _dsAlignApply(val) { const t = _dsAlignTarget(); if (!t) return; t.el.align = val; if (typeof scheduleAutosave === 'function') scheduleAutosave(); if (t.kind === 'mb') { try { renderMoodboardCanvas(); } catch (e) {} } else { _dsRenderCenter(); } _dsRenderRail(); _dsSyncToolbar(); }
-function _dsOpenAlignMenu() {
-    const t = _dsAlignTarget(); if (!t) return; _dsCloseAlignMenu();
-    const btn = document.getElementById(t.kind === 'mb' ? 'dsMbAlign' : 'dsAnnAlignBtn');
-    const m = document.createElement('div'); m.id = 'dsAlignMenu';
-    m.style.cssText = 'position:fixed; z-index:100000; background:var(--bg-panel); border:1px solid var(--border-color); border-radius:var(--r-8); box-shadow:0 10px 30px rgba(0,0,0,0.4); padding:5px; min-width:240px;';
-    const r = btn ? btn.getBoundingClientRect() : { left: 200, bottom: 80 };
-    m.style.left = Math.round(r.left) + 'px'; m.style.top = Math.round((r.bottom || 80) + 6) + 'px';
-    [['Align left', 'left'], ['Align center', 'center'], ['Align right', 'right'], ['Justify · last line left', 'justify'], ['Justify · last line center', 'justify-center'], ['Justify all lines', 'justify-all']].forEach(p => {
-        const b = document.createElement('button');
-        b.innerHTML = '<span style="display:inline-flex; vertical-align:middle; margin-right:8px;">' + _dsAlignIconSVG(p[1]) + '</span>' + p[0];
-        const onSel = (t.el.align || 'left') === p[1];
-        b.style.cssText = 'display:flex; align-items:center; width:100%; text-align:left; background:' + (onSel ? 'var(--bg-input)' : 'transparent') + '; border:none; border-radius:var(--r-4); padding:8px 10px; cursor:pointer; color:var(--text-main); font-size:var(--fs-75);';
-        b.onmouseenter = () => b.style.background = 'var(--bg-input)'; b.onmouseleave = () => b.style.background = (onSel ? 'var(--bg-input)' : 'transparent');
-        b.onclick = () => { _dsAlignApply(p[1]); _dsCloseAlignMenu(); }; m.appendChild(b);
-    });
-    document.body.appendChild(m); setTimeout(() => document.addEventListener('mousedown', _dsAlignMenuOutside), 0);
-}
 function _dsAlignMenuOutside(e) { const m = document.getElementById('dsAlignMenu'); if (m && !m.contains(e.target)) _dsCloseAlignMenu(); }
 function _dsCloseAlignMenu() { const m = document.getElementById('dsAlignMenu'); if (m) m.remove(); document.removeEventListener('mousedown', _dsAlignMenuOutside); }
-function _dsAnnSet(prop, val) { const a = _dsCurrentAnnot(); if (!a) return; if (a.type === 'shape' && prop === 'color') { a.fill = val; a.dataUrl = null; } else { a[prop] = val; } if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsSyncToolbar(); _dsRenderCenter(); _dsRenderRail(); }
-function _dsAnnSetWeight(v) { const a = _dsCurrentAnnot(); if (!a) return; a.weight = parseInt(v, 10) || 400; a.bold = a.weight >= 600; if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsSyncToolbar(); _dsRenderCenter(); _dsRenderRail(); }
 function _dsAnnHandles(box, a, w, hh) {
     const _lockH = () => { if (a.lockAspect && a.type === 'shape') a.h = _dsShapeRatioH(a.w || 0.25, _dsShapeHeldRatio(a)); };
     const dirs = ['nw', 'n', 'ne', 'e', 'se', 's', 'sw', 'w'];
@@ -31656,8 +31708,6 @@ function _dsSelToBack() { if (_dsMbHasSel()) _mbToBack(); else _dsAnnToBack(); }
 function _dsSelDelete() { if (_dsMbHasSel()) _mbDelete(); else _dsDeleteAnnot(); }
 function _dsAnnToFront() { const a = _dsCurrentAnnot(); if (!a) return; const list = (editorialContent.annotations || {})[_dsSelKey]; if (!list) return; const i = _dsSelIdx; if (i < 0 || i >= list.length) return; list.splice(i, 1); list.push(a); _dsSelIdx = list.length - 1; if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderCenter(); _dsRenderRail(); }
 function _dsAnnToBack() { const a = _dsCurrentAnnot(); if (!a) return; const list = (editorialContent.annotations || {})[_dsSelKey]; if (!list) return; const i = _dsSelIdx; if (i < 0 || i >= list.length) return; list.splice(i, 1); list.unshift(a); _dsSelIdx = 0; if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderCenter(); _dsRenderRail(); }
-function _dsAnnBump(d) { const a = _dsCurrentAnnot(); if (!a) return; a.size = Math.max(0.012, Math.min(0.2, (a.size || 0.03) + d * 0.004)); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsSyncToolbar(); _dsRenderCenter(); _dsRenderRail(); }
-function _dsAnnToggle(prop) { const a = _dsCurrentAnnot(); if (!a) return; a[prop] = !a[prop]; if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsSyncToolbar(); _dsRenderCenter(); _dsRenderRail(); }
 let _dsClipboard = null;   // { kind: 'ann'|'mb', items: [...] } — deep copies
 // Bullets / numbered lists for text boxes and annotations. Applied at render
 // time to each hard line ('\n'); the stored text stays clean.
@@ -32435,7 +32485,7 @@ function _dsTitleHandles(page, desc, w, hh) {
         const box = document.createElement('div');
         box.className = '_dsTitleHandle';
         box.dataset.titleHandle = which;
-        box.title = label + ' — click to set the typeface and size';
+        box.title = label + ': click to set the typeface and size';
         box.style.cssText = 'position:absolute; left:' + (B.x * sx) + 'px; top:' + top + 'px; width:' + ((B.right - B.x) * sx) + 'px; height:' + h + 'px;'
             + ' cursor:pointer; box-sizing:border-box; border-radius:var(--r-2);'
             + ' border:1px ' + (sel ? 'solid var(--selected)' : 'dashed transparent') + ';';
@@ -32519,7 +32569,7 @@ function _dsOpenTitleTypePopup(anchorRect, key, which) {
         const getStyle = () => (_dsTitleTypeScope === 'page') ? ((which === 'sub') ? _subtitleStyleFor(key) : _titleStyleFor(key)) : readDeck();
         body.appendChild(_dsTypeSection(which === 'sub' ? 'Sub' : 'Title', getStyle,
             (k2, v) => { _setPageTypeStyle(key, which, k2, v, _dsTitleTypeScope); paint(); },
-            (which === 'sub' ? 'Page subheading' : 'Page heading') + ' — ' + (_dsTitleTypeScope === 'page' ? 'this page only' : 'every automated page'),
+            (which === 'sub' ? 'Page subheading' : 'Page heading') + ': ' + (_dsTitleTypeScope === 'page' ? 'this page only' : 'every automated page'),
             { inkInline: true }));
         // The inks sit BETWEEN the row they change and the scope buttons that
         // decide who the change reaches, which is the order the decision is made
@@ -32531,7 +32581,7 @@ function _dsOpenTitleTypePopup(anchorRect, key, which) {
         lbl.style.cssText = 'font-size:var(--fs-55); font-weight:700; letter-spacing:0.4px; color:var(--text-muted); margin:8px 0 3px;';
         body.appendChild(lbl);
         _dsSegRowInto(body, [
-            ['deck', 'Whole deck', 'Set the house style — every automated page follows it'],
+            ['deck', 'Whole deck', 'Set the house style: every automated page follows it'],
             ['page', 'Just this page', 'An exception on this page only; every other page keeps the deck style']
         ], _dsTitleTypeScope, (v) => { _dsTitleTypeScope = v; paint(); });
         if (_pageTypeOv(key, which)) {
@@ -32931,7 +32981,6 @@ function _deckSpecTpl(desc) {
     if (desc._tplFixed && desc._specTpl) return desc._specTpl;   // not in the deck's mode (19.62)
     return (!desc._manual && !desc._install) ? _specTplResolve(ok) : (desc._specTpl || _specTplResolve(ok));
 }
-function _descTpl(desc) { return _deckSpecTpl(desc); }
 async function _drawDeckSpecPage(doc, desc, env) {
     const logos = env.logos || {}, meta = env.meta || {}, pn = env.pageNum || 1;
     const ctx = { PW: env.PW, PH: env.PH, M: env.M, swatch: !!env.swatch, members: desc.members };
@@ -33561,7 +33610,7 @@ function _dsThemeControlInto(t, key, desc) {
         return body;
     };
 
-    const textBody = group('Text', 'Light pages take dark type; Dark pages take white type. This does not set the page colour \u2014 Background does.');
+    const textBody = group('Text', 'Light pages take dark type; Dark pages take white type. This does not set the page colour: Background does.');
     const modes = document.createElement('div');
     modes.style.cssText = 'display:flex; gap:4px;';
     // Deliberately NOT .frame-tab here, which is the app's tab strip and paints its
@@ -33582,7 +33631,7 @@ function _dsThemeControlInto(t, key, desc) {
     });
     textBody.appendChild(modes);
 
-    const bgBody = group('Background', 'A flat colour, a gradient, or an image. The x sits on the outermost one \u2014 take it off to see what is underneath. Clearing the colour returns the page to the Text theme: white on Light, black on Dark.');
+    const bgBody = group('Background', 'A flat colour, a gradient, or an image. The x sits on the outermost one: take it off to see what is underneath. Clearing the colour returns the page to the Text theme: white on Light, black on Dark.');
 
     // TOGGLING IS NON-DESTRUCTIVE. Each icon selects which layer is showing; the
     // settings for the other two stay on the page, so trying a background image and
@@ -33595,7 +33644,7 @@ function _dsThemeControlInto(t, key, desc) {
     const setMode = (m) => { th.bgMode = m; refresh(); };
 
     const cWrap = dot(th.bg, (th.mode === 'dark' ? '#000000' : '#ffffff'),
-        'Background colour' + (mode === 'colour' ? ' \u2014 showing' : ' \u2014 click the swatch to set it, then this layer shows'),
+        'Background colour' + (mode === 'colour' ? ': showing' : ': click the swatch to set it, then this layer shows'),
         (v) => {
             th.bg = v;
             // Picking a colour selects the flat layer, which is what you just asked for;
@@ -33661,7 +33710,7 @@ function _dsThemeControlInto(t, key, desc) {
     };
     const iOn = (mode === 'image');
     const iWrap = iconBtn(_dsImageIconSVG(), iOn,
-        iOn ? 'Image is showing \u2014 click to replace it' : (hasImg ? 'Show the image you added' : 'Fill the page with an image'),
+        iOn ? 'Image is showing: click to replace it' : (hasImg ? 'Show the image you added' : 'Fill the page with an image'),
         () => { if (iOn || !hasImg) file.click(); else setMode('image'); });
     if (iOn) {
         _dsClearBadge(iWrap, 'Delete this image', () => {
@@ -33730,7 +33779,7 @@ function _dsThemeControlInto(t, key, desc) {
             const gT = document.createElement('button');
             gT.className = 'action-btn btn-secondary';
             gT.innerHTML = _dsGradIconSVG();
-            gT.title = tGrad ? 'Back to an even tint' : 'Fade the tint across the image \u2014 set the far end to 0% to fade it out completely';
+            gT.title = tGrad ? 'Back to an even tint' : 'Fade the tint across the image: set the far end to 0% to fade it out completely';
             gT.style.cssText = 'flex:0 0 auto; width:24px; min-width:24px; height:22px; padding:0; display:inline-flex; align-items:center; justify-content:center;'
                 + (tGrad ? ' border-color:var(--ui-active); color:var(--ui-active); opacity:1;' : ' opacity:0.5;');
             gT.onmouseenter = () => { if (!tGrad) gT.style.opacity = '0.85'; };
@@ -33762,7 +33811,7 @@ function _dsThemeControlInto(t, key, desc) {
             // whole point of the far stop, and 'transparent' is what 0 means.
             t2Row.appendChild(opacity(() => {
                 const v = parseFloat(th.tintA2); return isFinite(v) ? Math.max(0, Math.min(1, v)) : 0;
-            }, (v) => { th.tintA2 = v; }, 0, 'Opacity at the far end \u2014 0% is fully transparent'));
+            }, (v) => { th.tintA2 = v; }, 0, 'Opacity at the far end: 0% is fully transparent'));
             const aI = document.createElement('span');
             aI.innerHTML = _dsAngleIconSVG();
             aI.title = 'Direction the tint fades, in degrees: 0 points up, 90 right, 180 down.';
@@ -33861,15 +33910,13 @@ function _dsThumbObserve(thumb, desc) {
     _dsThumbPending.set(thumb, desc);
     _dsThumbObserver.observe(thumb);
 }
-// Back-compat shim (some callers may still reference it).
-function _dsThumbRender(desc, thumb) { _dsThumbObserve(thumb, desc); }
 // Paint a rendered thumbnail into whatever rail element currently holds that key.
 // Tiny badge shown in a thumbnail's corner once it holds a REAL render (vs the
 // rough mock or an unrendered lazy placeholder), so designers can tell at a
 // glance which previews are trustworthy \u2014 especially useful while testing
 // different templates page by page.
 function _dsThumbBadgeHTML() {
-    return '<span class="_dsThumbBadge" title="Real preview \u2014 matches the export" style="position:absolute; top:3px; right:3px; width:13px; height:13px; border-radius:50%; background:#2ecc71; color:#fff; font-size:8px; line-height:13px; text-align:center; font-weight:700; box-shadow:0 1px 3px rgba(0,0,0,0.35); pointer-events:none;">\u2713</span>';
+    return '<span class="_dsThumbBadge" title="Real preview: matches the export" style="position:absolute; top:3px; right:3px; width:13px; height:13px; border-radius:50%; background:#2ecc71; color:#fff; font-size:8px; line-height:13px; text-align:center; font-weight:700; box-shadow:0 1px 3px rgba(0,0,0,0.35); pointer-events:none;">\u2713</span>';
 }
 // Real HTML/CSS render for layout + fixed (element-bearing) pages' rail
 // thumbnails, instead of routing them through the canvas raster path
@@ -34110,7 +34157,7 @@ function _dsUpdateThumbProgress() {
     if (_dsPrimeStep) {
         const p = _dsPrimeStep, pct = Math.round(p.n / p.total * 100);
         el.style.display = 'flex';
-        el.innerHTML = '<span style="display:flex; gap:6px;"><span>Updating elevations \u2014 ' + Math.min(p.n + 1, p.total) + ' of ' + p.total + '</span>' + stop + '</span>' + bar(pct);
+        el.innerHTML = '<span style="display:flex; gap:6px;"><span>Updating elevations: ' + Math.min(p.n + 1, p.total) + ' of ' + p.total + '</span>' + stop + '</span>' + bar(pct);
         wire(); return;
     }
     const remaining = _thumbQueue.length + (_thumbBusy ? 1 : 0);
@@ -34119,28 +34166,15 @@ function _dsUpdateThumbProgress() {
     const done = total - remaining;
     const pct = Math.round(done / total * 100);
     el.style.display = 'flex';
-    el.innerHTML = '<span style="display:flex; gap:6px;"><span>Updating previews \u2014 ' + done + ' of ' + total + '</span>' + stop + '</span>' + bar(pct);
+    el.innerHTML = '<span style="display:flex; gap:6px;"><span>Updating previews: ' + done + ' of ' + total + '</span>' + stop + '</span>' + bar(pct);
     wire();
-}
-function _dsShowPreviewModal(url, title) {
-    let m = document.getElementById('_dsPreviewModal'); if (m) m.remove();
-    m = document.createElement('div'); m.id = '_dsPreviewModal';
-    m.style.cssText = 'position:fixed; inset:0; z-index:100002; background:rgba(10,10,12,0.88); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:28px; gap:14px;';
-    const cap = document.createElement('div'); cap.textContent = (title || 'Page') + ' \u2014 exact export preview'; cap.style.cssText = 'color:#fff; font-size:var(--fs-80);';
-    const img = document.createElement('img'); img.src = url; img.style.cssText = 'max-width:92vw; max-height:78vh; box-shadow:0 12px 48px rgba(0,0,0,0.6); border-radius:var(--r-4); background:#fff;';
-    const close = document.createElement('button'); close.textContent = 'Close'; close.className = 'action-btn'; close.style.cssText = 'padding:8px 20px;'; close.onclick = () => m.remove();
-    m.appendChild(cap); m.appendChild(img); m.appendChild(close);
-    // The shared dialog shell: Escape closes it, and the backdrop only on a press that
-    // started there (the old e.target test closed on a drag released past the image).
-    m.className = 'frame-modal fm-nested'; m.setAttribute('data-modal-backdrop', ''); close.setAttribute('data-modal-close', '');
-    document.body.appendChild(m);
 }
 async function _dsBuildPage(silent) {
     const desc = _dsPages[_dsIndex];
     if (!desc) return;
     if (desc.kind === 'spec') {
         const _bt = desc._specTpl || _specTplResolve(desc._ovKey || (desc.row && desc.row.id) || '');
-        if (SPEC_TEMPLATES[_bt] && SPEC_TEMPLATES[_bt].freeform) { if (!silent) _toast('Custom layout', 'Custom pages already show an exact live preview \u2014 what you place is what exports.'); return; }
+        if (SPEC_TEMPLATES[_bt] && SPEC_TEMPLATES[_bt].freeform) { if (!silent) _toast('Custom layout', 'Custom pages already show an exact live preview: what you place is what exports.'); return; }
     }
     const key = _deckPageKey(desc);
     // A batch capture already owns the view. Rendering now would draw the
@@ -34264,21 +34298,10 @@ function _dsManualSection(desc) {
     } else {
         const hint = document.createElement('p');
         hint.style.cssText = 'font-size:var(--fs-60); color:var(--text-muted); margin:6px 0 0; line-height:1.4;';
-        hint.textContent = 'Pick another piece to place it on this page as a diptych/triptych — regardless of how they\u2019re coded.';
+        hint.textContent = 'Pick another piece to place it on this page as a diptych/triptych, regardless of how they\u2019re coded.';
         wrap.appendChild(hint);
     }
     return wrap;
-}
-function _dsAddMockup(pieceId) {
-    const desc = _dsPages[_dsIndex]; if (!desc) return;
-    const key = _deckPageKey(desc); if (!key) return;
-    const m = editorialContent.annotations || (editorialContent.annotations = {});
-    const list = m[key] || (m[key] = []);
-    const nMock = list.filter(a => a.type === 'mockup').length;
-    list.push({ type: 'mockup', pieceId: pieceId, x: Math.min(0.7, 0.1 + nMock * 0.05), y: 0.2, w: 0.3, showCode: true });
-    if (typeof pushHistory === 'function') pushHistory(); if (typeof scheduleAutosave === 'function') scheduleAutosave();
-    if (pieceId) _mockupEnsure(pieceId).then(() => { _dsRenderCenter(); _dsRenderRail(); });
-    _dsRenderCenter(); _dsRenderRail(); _dsRenderTools();
 }
 function _dsSeedCustom(desc) {
     const key = _deckPageKey(desc); if (!key) return;
@@ -34288,40 +34311,6 @@ function _dsSeedCustom(desc) {
     const ids = ((desc.members && desc.members.length) ? desc.members.map(x => x && x.id) : [desc.row && desc.row.id]).filter(Boolean);
     const n = Math.max(1, ids.length);
     ids.forEach((id, i) => { list.push({ type: 'mockup', pieceId: id, x: 0.06 + i * (0.9 / n), y: 0.2, w: Math.min(0.42, 0.84 / n), showCode: true }); if (id) _mockupEnsure(id); });
-}
-function _dsStatusSection(desc) {
-    const wrap = document.createElement('div');
-    wrap.style.cssText = 'margin-top:12px; padding-top:10px; border-top:1px dashed var(--border-color);';
-    const title = document.createElement('div'); title.style.cssText = 'font-size:var(--fs-70); font-weight:700; color:var(--text-main); margin-bottom:6px;'; title.textContent = 'Artwork status'; wrap.appendChild(title);
-    const pieces = (desc.members && desc.members.length) ? desc.members.filter(Boolean) : (desc.row ? [desc.row] : []);
-    if (!pieces.length) { const n = document.createElement('div'); n.style.cssText = 'font-size:var(--fs-60); color:var(--text-muted);'; n.textContent = 'No piece on this page.'; wrap.appendChild(n); return wrap; }
-    const same = pieces.every(p => _pieceStatus(p) === _pieceStatus(pieces[0]));
-    const cur = same ? _pieceStatus(pieces[0]) : null;
-    const grid = document.createElement('div'); grid.style.cssText = 'display:grid; grid-template-columns:1fr 1fr; gap:6px;';
-    STATUS_ORDER.forEach(s => {
-        const d = STATUS_DEFS[s], active = (cur === s);
-        const b = document.createElement('button'); b.textContent = d.label;
-        b.style.cssText = 'font-size:var(--fs-65); font-weight:700; padding:7px 6px; border-radius:var(--r-4); cursor:pointer; border:1px solid ' + d.color + '; background:' + (active ? d.color : 'transparent') + '; color:' + (active ? '#fff' : d.color) + ';';
-        b.onclick = () => { pieces.forEach(p => { if (p) p.status = s; }); if (typeof pushHistory === 'function') pushHistory(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderRail(); _dsRenderTools(); };
-        grid.appendChild(b);
-    });
-    wrap.appendChild(grid);
-    if (!same) { const m = document.createElement('div'); m.style.cssText = 'font-size:var(--fs-60); color:var(--text-muted); margin-top:6px;'; m.textContent = 'Pieces on this page have mixed statuses — choose one to set them all.'; wrap.appendChild(m); }
-    return wrap;
-}
-function _dsCustomSection(desc) {
-    const wrap = document.createElement('div');
-    wrap.style.cssText = 'margin-top:12px; padding-top:10px; border-top:1px dashed var(--border-color);';
-    const title = document.createElement('div'); title.style.cssText = 'font-size:var(--fs-70); font-weight:700; color:var(--text-main); margin-bottom:6px;'; title.textContent = 'Custom layout'; wrap.appendChild(title);
-    title.appendChild(_dsHelpDot('Drag mockups anywhere, resize from the corner, double-click one to swap its artwork. Use the toolbar for text, images and arrows.'));
-    const row = document.createElement('div'); row.style.cssText = 'display:flex; gap:6px;';
-    const sel = document.createElement('select'); sel.style.cssText = 'flex:1; font-size:var(--fs-65); padding:5px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:var(--r-4);';
-    const ph = document.createElement('option'); ph.value = ''; ph.textContent = 'Add a mockup\u2026'; sel.appendChild(ph);
-    (typeof dashProjectData !== 'undefined' ? dashProjectData : []).forEach(r => { if (!r || !r.id) return; const o = document.createElement('option'); o.value = r.id; o.textContent = r.id; sel.appendChild(o); });
-    const add = document.createElement('button'); add.textContent = 'Add'; add.style.cssText = 'font-size:var(--fs-65); font-weight:700; padding:5px 14px; border-radius:var(--r-4); cursor:pointer; border:1px solid var(--ui-active); background:var(--ui-active); color:#fff;';
-    add.onclick = () => { if (sel.value) _dsAddMockup(sel.value); };
-    row.appendChild(sel); row.appendChild(add); wrap.appendChild(row);
-    return wrap;
 }
 function _dsPickMockupPiece(a) {
     const old = document.getElementById('dsMockPick'); if (old) old.remove();
@@ -34504,10 +34493,10 @@ function _dsSyncBuildBtn() {
     if (_dsPreviewQueued && isSpec) {
         b.style.background = 'var(--warn)'; b.style.color = '#fff'; b.title = 'Updating preview\u2026'; b.innerHTML = _dsEyeSVG;
     } else if (stale) {
-        b.style.background = '#e6b400'; b.style.color = '#fff'; b.title = 'This page changed \u2014 click to update the preview'; b.innerHTML = _dsRefreshSVG;
+        b.style.background = '#e6b400'; b.style.color = '#fff'; b.title = 'This page changed: click to update the preview'; b.innerHTML = _dsRefreshSVG;
     } else {
         b.style.background = built ? '#1a7f37' : ''; b.style.color = built ? '#fff' : '';
-        b.title = built ? 'Preview is up to date \u2014 click to refresh anyway' : 'Preview \u2014 render an exact preview of how this page exports';
+        b.title = built ? 'Preview is up to date: click to refresh anyway' : 'Preview: render an exact preview of how this page exports';
         b.innerHTML = _dsEyeSVG;
     }
 }
@@ -34557,7 +34546,7 @@ function _dsRenderCenter() {
     if (_dsInTemplateLibraryMode && !_dsTemplateEditSession) {
         const msg = document.createElement('div');
         msg.style.cssText = 'color:var(--text-muted); font-size:var(--fs-80); text-align:center; max-width:340px;';
-        msg.innerHTML = 'Select a template from the library on the left \u2014 or create a new one \u2014 to start editing it here.';
+        msg.innerHTML = 'Select a template from the library on the left (or create a new one) to start editing it here.';
         c.appendChild(msg);
         return;
     }
@@ -35735,66 +35724,6 @@ function _dsTemplateCategory(desc) {
     if (desc.kind === 'layout') return LAYOUT_TEMPLATES[desc.type] ? desc.type : null;
     return null;
 }
-function _dsApplyTemplate(els, type) {
-    const desc = _dsPages[_dsIndex];
-    if (!desc || !desc.page) return;
-    desc.page.elements = JSON.parse(JSON.stringify(els || []));
-    if (desc.kind === 'layout' && type) desc.page.type = type;
-    if (typeof pushHistory === 'function') pushHistory();
-    if (typeof scheduleAutosave === 'function') scheduleAutosave();
-    _dsRefresh();
-}
-function _dsLayoutStyleControls(t) {
-    // A clear gap above: the footer is a different subject from the theme and background
-    // controls it follows, and sharing their spacing made the section read as one list.
-    const wrap = document.createElement('div'); wrap.style.cssText = 'border:1px solid var(--border-color); border-radius:var(--r-6); padding:10px; margin:0 0 10px; background:var(--bg-input);';
-    const lbl = document.createElement('div'); lbl.textContent = 'Edit this page'; lbl.style.cssText = 'font-size:var(--fs-70); font-weight:700; color:var(--text-main); margin-bottom:8px;'; wrap.appendChild(lbl);
-    const addRow = document.createElement('div'); addRow.style.cssText = 'display:flex; flex-wrap:wrap; gap:5px; margin-bottom:8px;';
-    const ab = (label, fn) => { const b = document.createElement('button'); b.textContent = label; b.className = 'action-btn btn-secondary'; b.style.cssText = 'width:auto; height:28px; padding:0 9px; font-size:var(--fs-65);'; b.onclick = fn; addRow.appendChild(b); };
-    ab('+ Text', () => { addMoodboardText(); });
-    ab('+ Image', () => { const fi = document.getElementById('moodboardFile'); if (fi) fi.click(); });
-    ab('Arrow', () => { addMoodboardArrow(); });
-    ab('Elbow', () => { addMoodboardElbow(); });
-    wrap.appendChild(addRow);
-    const sel = document.createElement('div');
-    const tc = document.createElement('div'); tc.id = 'dsLayTextCtl'; tc.style.cssText = 'display:none; flex-wrap:wrap; gap:6px; align-items:center; margin-bottom:8px;';
-    const font = _fillFontSelect(document.createElement('select')); font.id = 'dsLayFont'; font.style.cssText = 'flex:1 1 100%; height:28px; font-size:var(--fs-65); background:var(--bg-panel); color:var(--text-main); border:1px solid var(--border-color); border-radius:var(--r-4);';
-    font.onchange = () => _mbSetFont(font.value); tc.appendChild(font);
-    const sizeWrap = document.createElement('div'); sizeWrap.style.cssText = 'display:flex; align-items:center; gap:4px;';
-    const am = document.createElement('button'); am.textContent = 'A\u2212'; am.className = 'action-btn btn-secondary'; am.style.cssText = 'width:30px; height:28px; padding:0; font-size:var(--fs-70);'; am.onclick = () => _mbNudgeSize(-0.005);
-    const sv = document.createElement('span'); sv.id = 'dsLaySizeVal'; sv.style.cssText = 'font-size:var(--fs-65); color:var(--text-muted); min-width:26px; text-align:center;';
-    const ap = document.createElement('button'); ap.textContent = 'A+'; ap.className = 'action-btn btn-secondary'; ap.style.cssText = 'width:30px; height:28px; padding:0; font-size:var(--fs-70);'; ap.onclick = () => _mbNudgeSize(0.005);
-    sizeWrap.appendChild(am); sizeWrap.appendChild(sv); sizeWrap.appendChild(ap); tc.appendChild(sizeWrap);
-    const col = document.createElement('input'); col.type = 'color'; col.id = 'dsLayColor'; col.style.cssText = 'flex:0 0 auto;'; col.onchange = () => _mbSetTextColor(col.value); _dsInkQuickPicks(col, (hex) => _mbSetTextColor(hex)); tc.appendChild(col);
-    sel.appendChild(tc);
-    const lr = document.createElement('div'); lr.id = 'dsLayActions'; lr.style.cssText = 'display:none; flex-wrap:wrap; gap:5px;';
-    const fr = document.createElement('button'); fr.textContent = 'Front'; fr.className = 'action-btn btn-secondary'; fr.style.cssText = 'width:auto; height:28px; padding:0 9px; font-size:var(--fs-65);'; fr.onclick = () => _mbToFront();
-    const bk = document.createElement('button'); bk.textContent = 'Back'; bk.className = 'action-btn btn-secondary'; bk.style.cssText = 'width:auto; height:28px; padding:0 9px; font-size:var(--fs-65);'; bk.onclick = () => _mbToBack();
-    const dl = document.createElement('button'); dl.textContent = 'Delete'; dl.className = 'action-btn btn-secondary'; dl.style.cssText = 'width:auto; height:28px; padding:0 9px; font-size:var(--fs-65);'; dl.onclick = () => { _mbDelete(); };
-    lr.appendChild(fr); lr.appendChild(bk); lr.appendChild(dl); sel.appendChild(lr);
-    const hint = document.createElement('div'); hint.id = 'dsLayHint'; hint.style.cssText = 'font-size:var(--fs-60); color:var(--text-muted); margin-top:4px;'; hint.textContent = 'Click an element to style it \u00b7 double-click text to edit.';
-    sel.appendChild(hint);
-    wrap.appendChild(sel);
-    t.appendChild(wrap);
-    _dsUpdateLayoutStyleBar();
-}
-function _dsUpdateLayoutStyleBar() {
-    const el = (typeof _mbSelEl === 'function') ? _mbSelEl() : null;
-    const ty = el ? _elType(el) : null;
-    const tc = document.getElementById('dsLayTextCtl'), lr = document.getElementById('dsLayActions'), hint = document.getElementById('dsLayHint');
-    if (!tc && !lr) return;
-    if (lr) lr.style.display = el ? 'flex' : 'none';
-    if (tc) tc.style.display = (ty === 'text') ? 'flex' : 'none';
-    if (hint) hint.style.display = el ? 'none' : 'block';
-    if (ty === 'text') {
-        const f = document.getElementById('dsLayFont'); if (f) f.value = _fontToken(el.font, 'serif');
-        // TRUE PDF points (size × 540, same conversion the popup and the PDF
-        // drawer use) — this readout used an arbitrary ×1000 scale before, so
-        // the toolbar said 19 while the popup said 10 for the same box.
-        const sv = document.getElementById('dsLaySizeVal'); if (sv) sv.textContent = Math.round((el.size || 0.045) * 540) + 'pt';
-        const c = document.getElementById('dsLayColor'); if (c) c.value = el.color || '#222222';
-    }
-}
 // DECK-WIDE footer branding, on the Project tab. Which logo the deck carries, what the
 // copyright line says, and whether either appears at all, are facts about the
 // presentation — not about the page that happened to be open when you set them. They
@@ -36252,7 +36181,7 @@ function _dsFillDockedStyles(wrap, cols) {
     const tgt = _dsStyleTarget();
     const status = document.createElement('div');
     status.style.cssText = 'font-size:var(--fs-60); color:' + (tgt ? 'var(--ui-active)' : 'var(--text-muted)') + '; margin-bottom:6px;';
-    status.textContent = tgt ? 'Applying to selected text \u2014 click styles to try them' : 'Select a text box on the page to style it';
+    status.textContent = tgt ? 'Applying to selected text: click styles to try them' : 'Select a text box on the page to style it';
     wrap.appendChild(status);
     // Ink mode: Auto follows the page theme (black on light pages, white on
     // dark) so text can't vanish into a matching background; Dark/Light force
@@ -36284,7 +36213,7 @@ function _dsFillDockedStyles(wrap, cols) {
             // Every button in these popups carries a hover helper. A named style's
             // button shows its name in its own face, which says what it LOOKS like but
             // not what it is for or what applying it will do.
-            b.title = 'Apply "' + s.name + '"  ·  ' + (s.group || 'Style') + '  ·  ' + Math.round((s.size || 0.03) * 1080) + 'pt ' + _styleColorName(s.color) + (tgt ? '' : '  —  select a text box first');
+            b.title = 'Apply "' + s.name + '"  ·  ' + (s.group || 'Style') + '  ·  ' + Math.round((s.size || 0.03) * 1080) + 'pt ' + _styleColorName(s.color) + (tgt ? '' : ' (select a text box first)');
             const on = curId === s.id;
             b.style.cssText = 'display:flex; align-items:center; gap:6px; width:100%; text-align:left; margin-bottom:2px; padding:4px 7px; border-radius:var(--r-4); cursor:pointer; border:1px solid ' + (on ? 'var(--ui-active)' : 'transparent') + '; background:' + (on ? 'color-mix(in srgb, var(--ui-active) 18%, transparent)' : 'transparent') + '; color:var(--text-main); font-size:var(--fs-70);';
             // Colour chip + name (e.g. Black / White / #hex) so a style's ink is
@@ -36302,7 +36231,7 @@ function _dsFillDockedStyles(wrap, cols) {
     wrap.appendChild(list);
     const edit = document.createElement('button'); edit.textContent = 'Edit styles\u2026'; edit.className = 'action-btn btn-secondary';
     edit.style.cssText = 'width:100%; height:22px; font-size:var(--fs-60); margin-top:5px;';
-    edit.title = 'Open the style editor (add, rename, recolour styles \u2014 edits apply everywhere the style is used)';
+    edit.title = 'Open the style editor (add, rename, recolour styles; edits apply everywhere the style is used)';
     edit.onclick = () => _dsTab('styles');
     wrap.appendChild(edit);
 }
@@ -38241,7 +38170,7 @@ function _sectorMismatchPreflight(pages) {
     const planIdx = (n) => (pages || []).findIndex(d => d && d.kind === 'floorplan' && (d.level || 0) === n);
     return _codesSectorMismatches().map(m => {
         const i = planIdx(m.li);
-        return { sev: ifs ? 'err' : 'warn', text: m.key + ' — is on ' + lvName(m.li) + ' but its code says ' + _codeZoneLabel() + ' ' + m.zone + '. Recode it to ' + _codeZoneLabel() + ' ' + m.want + '.',
+        return { sev: ifs ? 'err' : 'warn', text: m.key + ': is on ' + lvName(m.li) + ' but its code says ' + _codeZoneLabel() + ' ' + m.zone + '. Recode it to ' + _codeZoneLabel() + ' ' + m.want + '.',
             idx: i >= 0 ? i : null, fix: { label: 'Recode', title: 'Give it the next ' + _codeZoneLabel() + ' ' + m.want + ' code; its pin comes across to this plan. Ctrl+Z undoes it.', run: () => _codesFixSector(m.row) } };
     });
 }
@@ -39526,8 +39455,8 @@ function _fpItemRow(g, desc) {
     // Names every plan it is on, because "on 3 plans" is the answer you want when the
     // same code runs through several guestroom types.
     const pinNames = pins.map(p => (floorplanLevels[_deckLvlOf(p.lv)] || {}).name || ('Level ' + (_deckLvlOf(p.lv) + 1)));
-    const status = !placed ? 'not placed \u2014 click the row, then click the plan'
-        : (pins.length > 1 ? ('on ' + pins.length + ' plans: ' + pinNames.join(', ') + (here ? '' : ' \u2014 not this one'))
+    const status = !placed ? 'not placed: click the row, then click the plan'
+        : (pins.length > 1 ? ('on ' + pins.length + ' plans: ' + pinNames.join(', ') + (here ? '' : ', not this one'))
                            : (here ? 'placed here' : 'on ' + pinNames[0]));
     // HOLLOW UNTIL PINNED. A new code is a ring in its category colour; it fills once it
     // has a pin on a plan. The old amber ring said "something is wrong" about a code that
@@ -39536,7 +39465,7 @@ function _fpItemRow(g, desc) {
     num.style.cssText = 'flex:0 0 ' + FP_ITEM_COLS.num + 'px; box-sizing:border-box; height:20px; padding:0 3px; border-radius:var(--r-10); display:inline-flex; align-items:center; justify-content:center; font-size:var(--fs-60); font-weight:700; '
         + (placed ? ('color:#fff; background:' + _cc + '; border:2px solid ' + _cc + ';') : ('color:' + _cc + '; background:transparent; border:2px solid ' + _cc + ';'));
     num.className = placed ? 'fp-num fp-num-placed' : 'fp-num fp-num-hollow';
-    row.title = (codes || g.key) + ' \u2014 ' + status;
+    row.title = (codes || g.key) + ': ' + status;
     const code = document.createElement('span');
     // A set shows its PLACEMENT code (ART.2), not a truncated list of its pieces; the
     // pieces are in the tooltip and on the Frames button's count.
@@ -39711,7 +39640,7 @@ function _fpItemRow(g, desc) {
             _dsRefresh(); _dsRenderTools(); _dsRenderCenter();
         };
         row.appendChild(chip);
-        row.title = (codes || g.key) + ' \u2014 ' + (_tp ? 'moved to ' + flName + ', no spot yet' : 'sector changed, check its spot');
+        row.title = (codes || g.key) + ': ' + (_tp ? 'moved to ' + flName + ', no spot yet' : 'sector changed, check its spot');
     }
     row.appendChild(mvB); row.appendChild(catWrap); row.appendChild(lnB); row.appendChild(frB); row.appendChild(xB);
     row.onclick = () => _dsFpArm(g.key);
@@ -39793,9 +39722,9 @@ function _fpPlanOrderInto(t) {
     // height clips the descenders off the option text.
     sel.style.cssText = 'width:100%; height:30px; font-size:var(--fs-65); padding:4px 7px; background:var(--bg-input);'
         + ' color:var(--text-main); border:1px solid var(--border-color); border-radius:var(--r-4); box-sizing:border-box;';
-    [['byLevel', 'By level — plan, then its specs'],
+    [['byLevel', 'By level: plan, then its specs'],
      ['plansFirst', 'All plans first, then all specs'],
-     ['manual', 'Manual — set the plan order below']].forEach(([v, l]) => {
+     ['manual', 'Manual: set the plan order below']].forEach(([v, l]) => {
         const o = document.createElement('option'); o.value = v; o.textContent = l;
         if (_deckPlanOrder() === v) o.selected = true;
         sel.appendChild(o);
@@ -40520,7 +40449,7 @@ function _dsRenderTools() {
         const nin = document.createElement('input'); nin.type = 'text';
         nin.value = desc.page.title || '';
         nin.placeholder = _mbDefaultTitle(desc.page.type || 'moodboard') || 'Page name';
-        nin.title = 'Rename this page \u2014 shown in the rail and used to organise templates. It never prints.';
+        nin.title = 'Rename this page: shown in the rail and used to organise templates. It never prints.';
         // Borderless until focused, so it reads as the heading it replaces rather than
         // as a form field parked at the top of the panel.
         nin.style.cssText = 'width:100%; box-sizing:border-box; font-size:var(--fs-85); font-weight:700; color:var(--text-strong); background:transparent; border:1px solid transparent; border-radius:var(--r-4); padding:1px 4px; margin:0 0 1px -4px;';
@@ -40617,7 +40546,7 @@ function _dsRenderTools() {
             // why. Say so instead of switching.
             if (_tplModeOf(tpl) === 'install' && !_elevHasPlacedFrames()) {
                 showInfoModal('No wall elevations yet',
-                    'Install guide builds one page per wall elevation, so it needs artwork placed on a wall first — there is nothing for it to draw yet.\n\n'
+                    'Install guide builds one page per wall elevation, so it needs artwork placed on a wall first: there is nothing for it to draw yet.\n\n'
                     + 'Open the Elevations tab, drop the pieces onto a wall, then come back and pick Install guide.\n\n'
                     + 'To put a full-page elevation in front of each group’s spec pages without switching modes, tick "Add elevation breaker page" instead.');
                 return;
@@ -40823,7 +40752,7 @@ function _dsRenderTools() {
                     row.style.cssText = 'display:flex; align-items:center; gap:6px; font-size:var(--fs-60); color:var(--text-main); cursor:pointer; margin-bottom:2px;';
                     const cb = document.createElement('input'); cb.type = 'checkbox'; cb.value = k;
                     checks.push(cb); row.appendChild(cb);
-                    row.appendChild(document.createTextNode(k + ((d.row && d.row.location) ? (' — ' + d.row.location) : '')));
+                    row.appendChild(document.createTextNode(k + ((d.row && d.row.location) ? (': ' + d.row.location) : '')));
                     list.appendChild(row);
                 });
                 pick.appendChild(list);
@@ -40886,7 +40815,7 @@ function _dsRenderTools() {
                 const n = document.createElement('div');
                 n.style.cssText = 'font-size:var(--fs-60); color:var(--text-muted); line-height:1.45;';
                 n.innerHTML = 'Wallcovering and window film use their own sheet: spec, floorplan '
-                    + 'and the dimensioned elevation. The arrangement follows the wall — two graphics '
+                    + 'and the dimensioned elevation. The arrangement follows the wall: two graphics '
                     + 'sharing an elevation put their specs side by side and give the drawing the '
                     + 'page bottom.';
                 tplBody.appendChild(n);
@@ -40910,7 +40839,7 @@ function _dsRenderTools() {
             if (!_specTplSlotAware(resolved)) {
                 const n = document.createElement('div');
                 n.style.cssText = 'font-size:var(--fs-60); color:var(--text-muted); line-height:1.45;';
-                n.textContent = 'This page is a free layout: everything on it was placed by hand, so there is nothing to tick. Drag, edit and place directly on the page — what you see is what exports.';
+                n.textContent = 'This page is a free layout: everything on it was placed by hand, so there is nothing to tick. Drag, edit and place directly on the page: what you see is what exports.';
                 tplBody.appendChild(n);
             }
             return;
@@ -40941,7 +40870,7 @@ function _dsRenderTools() {
         const note = document.createElement('div');
         note.style.cssText = 'padding:10px; border:1px solid var(--border-color); border-radius:var(--r-6); background:var(--bg-input); margin-bottom:8px;';
         note.innerHTML = '<div style="font-size:var(--fs-70); font-weight:700; color:var(--text-main); margin-bottom:4px;">Auto-generated</div>'
-            + '<div style="font-size:var(--fs-65); color:var(--text-muted); line-height:1.5;">This index lists every artwork with the page it appears on. It updates automatically as the deck changes — page numbers are finalised on export.</div>';
+            + '<div style="font-size:var(--fs-65); color:var(--text-muted); line-height:1.5;">This index lists every artwork with the page it appears on. It updates automatically as the deck changes: page numbers are finalised on export.</div>';
         t.appendChild(note);
     }
     // A layout page's five buttons are gone: duplicate, move earlier, move later and
@@ -41037,8 +40966,8 @@ function _dsRenderTools() {
 
         const lab = document.createElement('div');
         lab.innerHTML = _timelineStyle() === 'pills'
-            ? 'Stages \\u2014 one per line:<br><b>Stage name | approval; approval</b>'
-            : 'Phases \\u2014 one per line: <b>Phase | Timeframe</b>';
+            ? 'Stages, one per line:<br><b>Stage name | approval; approval</b>'
+            : 'Phases, one per line: <b>Phase | Timeframe</b>';
         lab.style.cssText = 'font-size:var(--fs-65); color:var(--text-muted); margin-bottom:6px; line-height:1.5;';
         const ta = document.createElement('textarea'); ta.rows = 6;
         ta.style.cssText = 'width:100%; box-sizing:border-box; font-size:var(--fs-70); line-height:1.4; padding:6px 8px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:var(--r-4); resize:vertical; font-family:monospace;';
@@ -41099,12 +41028,12 @@ function _dsRenderTools() {
             t.appendChild(fNote);
             const qRow = document.createElement('div'); qRow.style.cssText = 'display:flex; gap:6px; margin-bottom:10px;';
             const mk = (txt, fn, title) => { const b = document.createElement('button'); b.textContent = txt; b.title = title || ''; b.className = 'action-btn btn-secondary'; b.style.cssText = 'flex:1; height:26px; font-size:var(--fs-60);'; b.onclick = fn; return b; };
-            qRow.appendChild(mk('All black', () => { editorialContent.timelineColors = {}; if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderTools(); _dsRenderCenter(); }, 'Farmboy default \u2014 black pills'));
+            qRow.appendChild(mk('All black', () => { editorialContent.timelineColors = {}; if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderTools(); _dsRenderCenter(); }, 'Farmboy default: black pills'));
             qRow.appendChild(mk('Fill from palette', () => { editorialContent.timelineColors = {}; _timelineStages().forEach((s, i) => { editorialContent.timelineColors[i] = TIMELINE_PALETTE[i % TIMELINE_PALETTE.length]; }); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsRenderTools(); _dsRenderCenter(); }, 'Assign the coloured palette across stages'));
             t.appendChild(qRow);
             const stages = _timelineStages();
             if (stages.length) {
-                const cl = document.createElement('div'); cl.textContent = 'Stages \u2014 colour + dates'; cl.style.cssText = 'font-size:var(--fs-60); text-transform:uppercase; letter-spacing:0.6px; color:var(--text-muted); margin-bottom:6px;';
+                const cl = document.createElement('div'); cl.textContent = 'Stages: colour + dates'; cl.style.cssText = 'font-size:var(--fs-60); text-transform:uppercase; letter-spacing:0.6px; color:var(--text-muted); margin-bottom:6px;';
                 t.appendChild(cl);
                 editorialContent.timelineColors = editorialContent.timelineColors || {};
                 editorialContent.timelineNotes = editorialContent.timelineNotes || {};
@@ -41302,10 +41231,6 @@ function _specPdfPrefill() {
     const mbCount = document.getElementById('specPdfMoodboardCount');
     if (mbCount) { _mbMigratePages(); const n = (editorialContent.layoutPages || []).length; mbCount.textContent = n + ' page' + (n === 1 ? '' : 's'); }
 }
-// Compat entry point. The Spec PDF button that used to call this is gone (the
-// Deck tab replaces it), but _dsPreflightGo and any saved onclick still route
-// here. Goes through switchView so the view actually becomes visible.
-function openSpecPdfModal() { switchView('deck'); }
 
 function applySpecPdfModal() {
     const g = (id) => { const el = document.getElementById(id); return el ? (el.value || '').trim() : ''; };
@@ -41466,7 +41391,7 @@ function renderFloorplanMarkup() {
         sel.onchange = (e) => _fpSetCategory(g.key, e.target.value);
         if (placed) {
             const zs = document.createElement('select');
-            zs.title = 'Spec-page zoom \u2014 how tight the auto plan crop frames this pin on its spec page';
+            zs.title = 'Spec-page zoom: how tight the auto plan crop frames this pin on its spec page';
             zs.style.cssText = 'flex:0 0 auto; font-size:var(--fs-60); padding:2px 3px; background:var(--bg-input); color:var(--text-main); border:1px solid var(--border-color); border-radius:var(--r-4);';
             [['2', 'Wide'], ['3', 'Std'], ['4.5', 'Close'], ['6', 'Tight']].forEach(([v, l]) => {
                 const o = document.createElement('option'); o.value = v; o.textContent = l;
@@ -41483,7 +41408,7 @@ function renderFloorplanMarkup() {
 
     const hint = document.getElementById('fpMarkupHint');
     if (hint) hint.textContent = _fpArmedId
-        ? 'Now click the plan to drop ' + _fpArmedId + ' — or pick another group.'
+        ? 'Now click the plan to drop ' + _fpArmedId + ', or pick another group.'
         : 'Click a group, then click the plan to drop its pin. Set-pieces (-A/-B/…) share one pin. Drag to move; double-click to remove.';
 }
 
@@ -41491,7 +41416,7 @@ function _fpMakePin(g) {
     const pin = document.createElement('div');
     pin.style.cssText = 'position:absolute; left:' + (g.planX * 100) + '%; top:' + (g.planY * 100) + '%; transform:translate(-50%,-50%); min-width:22px; height:22px; padding:0 5px; border-radius:var(--r-10); background:' + categoryColor(g.category) + '; color:#fff; border:2px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,0.4); display:flex; align-items:center; justify-content:center; font-size:var(--fs-60); font-weight:700; cursor:grab; user-select:none;';
     pin.textContent = g.num;
-    pin.title = g.ids.filter(Boolean).join(', ') + (g.location ? ' \u2014 ' + g.location : '');
+    pin.title = g.ids.filter(Boolean).join(', ') + (g.location ? ': ' + g.location : '');
     pin.onmousedown = (e) => _fpPinMouseDown(e, g.key);
     pin.ondblclick = (e) => { e.stopPropagation(); _fpRemovePin(g.key); };
     return pin;
@@ -41670,7 +41595,7 @@ function closeSpecPdfPreview() {
     if (frame) frame.src = 'about:blank';
 }
 function downloadSpecPdfPreview() {
-    if (window._lastSpecDoc) { try { window._lastSpecDoc.save(window._lastSpecName || 'FRAME_Presentation.pdf'); } catch (e) {} }
+    if (window._lastSpecDoc) { try { _deliverPdf(window._lastSpecDoc, window._lastSpecName || 'FRAME_Presentation.pdf'); } catch (e) {} }
 }
 
 // ── Moodboard image manager ───────────────────────────────────────────────
@@ -41875,7 +41800,7 @@ function _fixedPageFor(key) {
         if (!editorialContent.narrativePage || !Array.isArray(editorialContent.narrativePage.elements)) editorialContent.narrativePage = { elements: [] };
         page = editorialContent.narrativePage; label = 'Art Narrative';
         if (!page.elements.length) {
-            const body = (editorialContent.narrative || 'Add the art narrative here — the story behind the collection, the themes, and how the work connects to the space.');
+            const body = (editorialContent.narrative || 'Add the art narrative here: the story behind the collection, the themes, and how the work connects to the space.');
             page.elements = [_tTxt('ART NARRATIVE', .06, .12, .5, .06, 6, 'display', '#1a1a1a'), _tTxt(body, .06, .26, .52, .03, 5, 'serif', '#222222'), _tImg(.62, .14, .32, .62, 1)];
         }
         page.type = 'narrative';
@@ -41890,7 +41815,7 @@ function _fixedPageFor(key) {
         if (!editorialContent.understandingPage || !Array.isArray(editorialContent.understandingPage.elements)) editorialContent.understandingPage = { elements: [] };
         page = editorialContent.understandingPage; label = 'Project Understanding';
         if (!page.elements.length) {
-            const body = (editorialContent.understanding || 'Add the project understanding here — goals, audience, site context, and what success looks like.');
+            const body = (editorialContent.understanding || 'Add the project understanding here: goals, audience, site context, and what success looks like.');
             page.elements = [_tTxt('PROJECT UNDERSTANDING', .06, .12, .6, .06, 6, 'display', '#1a1a1a'), _tTxt(body, .06, .26, .52, .03, 5, 'serif', '#222222'), _tImg(.62, .14, .32, .62, 1)];
         }
         page.type = 'narrative';
@@ -42033,7 +41958,6 @@ function _contactsCommit() {
     if (typeof markDirty === 'function') markDirty();
     if (typeof scheduleAutosave === 'function') scheduleAutosave();
 }
-function _contactsPersistOrderHide() { _contactsCommit(); }
 function _contactsRender() {
     const wrap = document.getElementById('contactsRows'); if (!wrap) return;
     wrap.innerHTML = '';
@@ -42302,7 +42226,6 @@ function _guidePref() {
     } catch (e) {}
     return editorialContent.guidePref;
 }
-function _pageGuideKey() { try { const d = _dsPages[_dsIndex]; return d ? _deckPageKey(d) : null; } catch (e) { return null; } }
 function _pageGuide() {
     // Deck-wide resolution only — the whole presentation shares one guide
     // configuration (per-page overrides were retired; see _guidePref).
@@ -42397,7 +42320,7 @@ function _mbDrawGuideSet(canvas, cr) {
     // disappear" bug).
     if (!canvas || _mbActiveCanvasId !== 'dsLayoutCanvas') return;
     const G = _pageGuide();
-    if (G.show && !G.set) { console.warn('Guide set "' + G.setId + '" no longer exists \u2014 guides hidden until a valid set is chosen.'); }
+    if (G.show && !G.set) { console.warn('Guide set "' + G.setId + '" no longer exists: guides hidden until a valid set is chosen.'); }
     _paintGuideSet(canvas, G);
 }
 // Snap a box (fractions) against the current page's snapping mode:
@@ -42528,7 +42451,7 @@ function _mbOpenGuideManager() {
         if (!set.builtin) { const del = document.createElement('button'); del.textContent = 'Delete'; del.className = 'action-btn btn-secondary'; del.style.cssText = 'height:24px; font-size:var(--fs-60); padding:0 8px; color:#c0392b;'; del.onclick = () => { const i = _guideSets().indexOf(set); if (i >= 0) { _guideSets().splice(i, 1); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _mbOpenGuideManager(); } }; head.appendChild(del); }
         panel.appendChild(head);
         if (!set.builtin) panel.appendChild(editor(set));
-        else { const note = document.createElement('div'); note.textContent = 'Built-in \u2014 duplicate to customise.'; note.style.cssText = 'font-size:var(--fs-60); color:var(--text-muted,#888); margin-bottom:6px;'; panel.appendChild(note); }
+        else { const note = document.createElement('div'); note.textContent = 'Built-in: duplicate to customise.'; note.style.cssText = 'font-size:var(--fs-60); color:var(--text-muted,#888); margin-bottom:6px;'; panel.appendChild(note); }
     });
     const add = document.createElement('button'); add.textContent = '+ New guide set'; add.className = 'action-btn'; add.style.cssText = 'height:30px; font-size:var(--fs-70); padding:0 14px; margin-top:8px;';
     add.onclick = () => { _guideSets().push({ id: 'g_' + Math.random().toString(36).slice(2, 8), name: 'Custom guides', builtin: false, margin: { t: 0.05, b: 0.05, l: 0.05, r: 0.05 }, cols: 0, gutter: 0, rows: 0, rowGutter: 0, vlines: [], hlines: [] }); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _mbOpenGuideManager(); };
@@ -42561,7 +42484,7 @@ function _dsAnnLabel(a) {
     if (a.type === 'shape') return (a.shape || 'shape').charAt(0).toUpperCase() + (a.shape || 'shape').slice(1);
     // Text annotations show a content preview — in the unified layers list a
     // row that just says "text" is useless for finding the right box.
-    if (a.type === 'text' || a.type === 'note') { const tx = ((a.text || '') + '').replace(/\s+/g, ' ').trim(); return tx ? ('Text \u2014 ' + tx.slice(0, 22)) : 'Text'; }
+    if (a.type === 'text' || a.type === 'note') { const tx = ((a.text || '') + '').replace(/\s+/g, ' ').trim(); return tx ? ('Text: ' + tx.slice(0, 22)) : 'Text'; }
     if (a.type === 'image') return 'Image placeholder';
     if (a.type === 'arrow') return (a.tip === 'none') ? 'Line' : 'Arrow';
     if (a.type === 'elbow') return _dsLineLabel(a);
@@ -42632,7 +42555,7 @@ function _dsRenderLayersPanel() {
         return r;
     };
     if (union.length) {
-        p.appendChild(grpHead('Layers (front to back) \u2014 drag to reorder'));
+        p.appendChild(grpHead('Layers (front to back): drag to reorder'));
         union.forEach((u, pos) => {
             const selected = u.ann
                 ? ((ann && _dsSelKey === ann.key && _dsSelIdx === u.i) || (_mbSelAnn && _mbSelAnn.indexOf(u.i) >= 0))
@@ -42822,7 +42745,7 @@ function renderMoodboardCanvas() {
         const g = document.createElement('div');
         g.style.cssText = 'position:absolute; left:' + (L * 100) + '%; top:' + (T * 100) + '%; width:' + ((R - L) * 100) + '%; height:' + ((B - T) * 100) + '%; border:1.5px dashed var(--selected); border-radius:var(--r-4); pointer-events:none; z-index:9000;';
         const chip = document.createElement('div');
-        chip.textContent = selCount + ' selected \u2014 drag any one to move all';
+        chip.textContent = selCount + ' selected: drag any one to move all';
         chip.style.cssText = 'position:absolute; top:-20px; left:0; background:var(--selected); color:#fff; font:600 10px Arial,sans-serif; padding:2px 7px; border-radius:var(--r-8); white-space:nowrap;';
         g.appendChild(chip);
         canvas.appendChild(g);
@@ -42941,7 +42864,7 @@ function renderMoodboardCanvas() {
     if (!els.length && !_mbPlacing && !_hasAnnots) {
         const p = document.createElement('p');
         p.style.cssText = 'color:#888; font-size:var(--fs-85); position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); margin:0; text-align:center;';
-        p.textContent = 'Empty layout — add images, text notes, or arrows.';
+        p.textContent = 'Empty layout: add images, text notes, or arrows.';
         canvas.appendChild(p);
     }
     if (_mbPlacing && _mbDraft) {
@@ -42988,8 +42911,6 @@ function _textExtraCss(t, resolvedInk) {
     if (t.outline) { const oc = resolvedInk || t.color || '#ffffff'; const ow = t.outlineW || 1.4; s += '-webkit-text-stroke:' + ow + 'px ' + oc + '; text-stroke:' + ow + 'px ' + oc + '; color:transparent; -webkit-text-fill-color:transparent;'; }
     return s;
 }
-// Map our six alignment modes to what jsPDF understands.
-function _pdfAlign(align) { return (align === 'center' || align === 'justify-center') ? 'center' : align === 'right' ? 'right' : (align === 'justify' || align === 'justify-all') ? 'justify' : 'left'; }
 // Faded, non-interactive guides showing where the title and page margins
 // print, plus a thin line marking the footer band — so elements don't get
 // buried under deck chrome. The footer's actual CONTENT (page #, project
@@ -43112,9 +43033,6 @@ function _mbReapplyStyles() {
 }
 function _mbSelEl() { return (_mbSelected >= 0) ? _mbEls()[_mbSelected] : null; }
 function _mbSetFont(v) { const el = _mbSelEl(); if (el) { el.font = v; renderMoodboardCanvas(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); } }
-function _mbSetWeight(v) { const el = _mbSelEl(); if (el) { el.weight = parseInt(v, 10) || 400; el.bold = el.weight >= 600; renderMoodboardCanvas(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); } }
-function _mbToggleOutline() { const el = _mbSelEl(); if (el) { el.outline = !el.outline; renderMoodboardCanvas(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsSyncToolbar(); } }
-function _mbToggleShadow() { const el = _mbSelEl(); if (el) { el.shadow = !el.shadow; renderMoodboardCanvas(); if (typeof scheduleAutosave === 'function') scheduleAutosave(); _dsSyncToolbar(); } }
 function _mbCloseAlignMenu() { const m = document.getElementById('_mbAlignMenu'); if (m) m.remove(); document.removeEventListener('mousedown', _mbAlignMenuOutside, true); }
 function _mbAlignMenuOutside(e) { const m = document.getElementById('_mbAlignMenu'); const btn = document.getElementById('dsMbArrange'); if (m && !m.contains(e.target) && e.target !== btn) _mbCloseAlignMenu(); }
 function _mbOpenAlignMenu() {
@@ -43232,16 +43150,6 @@ function _mbTileDown(e, i) {
     document.addEventListener('mousemove', _mbMove);
     document.addEventListener('mouseup', _mbUp);
     renderMoodboardCanvas();
-}
-function _mbResizeDown(e, i) {
-    e.preventDefault(); e.stopPropagation();
-    const canvas = _mbCanvas();
-    const r = canvas ? canvas.getBoundingClientRect() : null;
-    if (!r) return;
-    const t = _mbEls()[i];
-    _mbDrag = { mode: 'resize', i, dir: 'se', startX: e.clientX, startY: e.clientY, r, ox: t.x, oy: t.y, ow: t.w, oh: t.h, os: t.size };
-    document.addEventListener('mousemove', _mbMove);
-    document.addEventListener('mouseup', _mbUp);
 }
 function _mbHandleDown(e, i, dir) {
     { const _t = (_mbEls() || [])[i]; if (_t && _t.locked) { e.preventDefault(); e.stopPropagation(); return; } }
@@ -43585,8 +43493,8 @@ function updateCopyCount() {
     const limit = COPY_LIMITS[window._copyEditTarget] || 300;
     const w = _copyWordCount(area.value);
     let color = 'var(--text-muted)', note = '';
-    if (w > limit) { color = '#c0392b'; note = ' \u2014 over by ' + (w - limit) + ', may run off the page'; }
-    else if (w > limit * 0.85) { color = '#b8860b'; note = ' \u2014 approaching limit'; }
+    if (w > limit) { color = '#c0392b'; note = ': over by ' + (w - limit) + ', may run off the page'; }
+    else if (w > limit * 0.85) { color = '#b8860b'; note = ': approaching limit'; }
     el.style.color = color;
     el.textContent = w + ' / ' + limit + ' words' + note;
 }
@@ -44832,7 +44740,7 @@ function _dsInstallNotesInto(body, desc) {
     chip.style.cssText = 'background:#ffffff; border:1px solid var(--border-color); border-radius:var(--r-4); padding:6px 7px; max-height:110px; overflow:auto;';
     if (!prevLines.length) {
         const empty = document.createElement('div');
-        empty.textContent = 'Nothing ticked \u2014 this page prints no note block.';
+        empty.textContent = 'Nothing ticked: this page prints no note block.';
         empty.style.cssText = 'font-size:var(--fs-55); color:#9c9c9c; font-style:italic;';
         chip.appendChild(empty);
     } else {
@@ -45323,8 +45231,6 @@ function _takeReturnTrip() {
         if (i >= 0) { try { selectDashRow(i); } catch (e) {} }
     }
 }
-// The deck-specific name the rest of the file and the tests already call.
-function _elevReturnToDeck() { _takeReturnTrip(); }
 
 // ONE renderer for both bars. Shown only when there is somewhere to go back TO: a
 // permanently parked "back" button that does nothing most of the time is furniture.
@@ -45359,8 +45265,6 @@ function _returnBarInto(bar, wantView) {
     b.onclick = () => _takeReturnTrip();
     bar.appendChild(b);
 }
-// The name the rest of the file and the tests already call.
-function _elevSyncReturnBtn() { _syncReturnBars(); }
 // ── Layout guides, from the page that shows them ──────────────────────────
 // Turning the scale character on meant leaving Deck Studio for the Elevations tab,
 // finding the button, coming back and rebuilding the page. The state is one line of DOM
@@ -45380,7 +45284,7 @@ const _DS_ELEV_GUIDES = [
     ['frame-center-layer', 'Centres', 'Crosshair at each frame centre'],
     ['custom-lines-layer', 'Measure lines', 'Lines drawn with the measure tool'],
     ['outline-layer', 'Outlines', 'A line in the dimension colour round each frame and panel'],
-    ['grid-layer', 'Grid', 'Working grid — usually off for a client page']
+    ['grid-layer', 'Grid', 'Working grid, usually off for a client page']
 ];
 // Read it the SAME way toggleElevLayer does: an unset display counts as OFF, which is
 // what every one of these layers ships as. Reading it any other way would put this
@@ -45440,7 +45344,7 @@ function _dsElevGuidesInto(parent, desc) {
         const b = document.createElement('button');
         b.type = 'button';
         b.textContent = name;
-        b.title = tip + ' — deck-wide, and the same switch as the Elevations tab.';
+        b.title = tip + ': deck-wide, and the same switch as the Elevations tab.';
         b.className = 'wall-mode-btn' + (on ? ' active' : '');
         b.style.cssText = 'height:24px; font-size:var(--fs-60); font-weight:700; letter-spacing:0.2px;'
             + ' border:1px solid var(--border-color); border-radius:var(--r-4); cursor:pointer;'
@@ -45812,7 +45716,7 @@ function _dsInstallGuideControls(body, desc, opts) {
         const legCb = document.createElement('input'); legCb.type = 'checkbox'; legCb.checked = !!cfg().legend;
         legCb.onchange = () => commit({ legend: legCb.checked });
         legRow.appendChild(legCb); legRow.appendChild(document.createTextNode('Letter legend (A, B, C\u2026)'));
-        legRow.appendChild(_dsHelpDot('Spec-style dotted rows under the title \u2014 keeps image codes off the elevation so the measurements stay clean. '
+        legRow.appendChild(_dsHelpDot('Spec-style dotted rows under the title: keeps image codes off the elevation so the measurements stay clean. '
             + 'The letter sits in its own gutter with the ticked lines aligned beside it.'));
         body.appendChild(legRow);
         // The column exists whenever anything is IN it: a legend, or notes on the left. The
@@ -46500,7 +46404,7 @@ async function _drawInstallCloseupPage(doc, logos, pageNum, meta, arg, ctx) {
         _igCaptureDeferred = true;
         _pdfNoteMissingElev(pageNum, (elev && elev.name) || '');
         doc.setFont(_font('serif'), 'italic'); doc.setFontSize(9.5); doc.setTextColor(180, 180, 180);
-        doc.text(failed ? 'Elevation capture failed \u2014 open the Elevations tab and Build again' : 'Updating this elevation drawing\u2026', PW / 2, PH / 2, { align: 'center' });
+        doc.text(failed ? 'Elevation capture failed: open the Elevations tab and Build again' : 'Updating this elevation drawing\u2026', PW / 2, PH / 2, { align: 'center' });
         doc.setTextColor(20, 20, 20);
         return;
     }
@@ -46534,7 +46438,7 @@ async function _drawInstallDetailPage(doc, logos, pageNum, meta, arg, ctx) {
         try { doc.rect(SR.L, boxT, SR.R - SR.L, boxB - boxT, 'S'); } catch (e) {}
         try { doc.setLineDashPattern([], 0); } catch (e) {}
         doc.setFont(_font('serif'), 'italic'); doc.setFontSize(9.5); doc.setTextColor(180, 180, 180);
-        doc.text(failed ? 'Elevation capture failed \u2014 open the Elevations tab and Build again' : 'Updating this elevation drawing\u2026', (SR.L + SR.R) / 2, (boxT + boxB) / 2, { align: 'center' });
+        doc.text(failed ? 'Elevation capture failed: open the Elevations tab and Build again' : 'Updating this elevation drawing\u2026', (SR.L + SR.R) / 2, (boxT + boxB) / 2, { align: 'center' });
         doc.setTextColor(20, 20, 20);
         _drawPdfFooter(doc, logos, pageNum, meta);
         return;
@@ -46763,7 +46667,7 @@ function _elevPrimeStep(done, total, name) {
     const p = document.getElementById('elevPrimePct'); if (p) p.textContent = pct + '%';
     const l = document.getElementById('elevPrimeLabel');
     if (l) l.textContent = (done >= total) ? 'Finishing up…'
-        : ('Wall ' + Math.min(done + 1, total) + ' of ' + total + (name ? ' — ' + name : ''));
+        : ('Wall ' + Math.min(done + 1, total) + ' of ' + total + (name ? ': ' + name : ''));
 }
 function _elevPrimeCancel() {
     if (!_elevPrimeActive) return;
@@ -47404,7 +47308,7 @@ function _drawGlazingSchedule(doc, rows, x, y, w, bottom, col2X, isCont) {
         // and Druk has no italic, so the hierarchy is carried by size and colour.
         doc.setFont(_font('spec'), 'normal'); doc.setFontSize(6.5); doc.setTextColor(120, 120, 120);
         const note = 'Bleed all edges. Adjacent panels overlap ' + fmt(lap.overlapRight * 2)
-            + ' — trim and align across each seam.';
+            + ': trim and align across each seam.';
         (doc.splitTextToSize(note, w) || [note]).forEach(ln => {
             if (cy > bottom - 6) return;
             doc.text(ln, x, cy); cy += 8;
@@ -47695,7 +47599,7 @@ async function _drawFlatGraphicSpecPage(doc, logos, pageNum, meta, r, ctx) {
             // that states the wall is past what a single view holds is a drawing note.
             if (drew && _tooWide) {
                 doc.setFont(_font('spec'), 'normal'); doc.setFontSize(6.5); doc.setTextColor(150, 120, 60);
-                doc.text('Wall exceeds a single-view scale — issue this elevation in sections.',
+                doc.text('Wall exceeds a single-view scale: issue this elevation in sections.',
                     elevLeft, Math.min(dy + dh + 9, SR.B));
             }
         } else {
@@ -48225,7 +48129,7 @@ async function _drawInstallGuidePage(doc, logos, pageNum, meta, arg, ctx) {
                 // say it failed, because "hit Build" is misleading when Build is what
                 // just ran.
                 doc.text(capFailed
-                        ? 'Elevation capture failed — open the Elevations tab and Build again'
+                        ? 'Elevation capture failed: open the Elevations tab and Build again'
                         : 'Updating this elevation drawing\u2026',
                     bx + bw / 2, by + bh / 2, { align: 'center' });
                 doc.setTextColor(20, 20, 20);
@@ -49747,9 +49651,6 @@ function _approvalStamps(desc) {
     }
     return [{ txt: 'PENDING APPROVAL', st: 'pending' }];
 }
-function _drawApprovalStamp(doc, PW, PH, M, status) {
-    _drawApprovalStamps(doc, PW, PH, M, [{ txt: status === 'approved' ? 'APPROVED' : 'PENDING APPROVAL', st: status }]);
-}
 // Right to left from the margin, the first stamp outermost.
 function _drawApprovalStamps(doc, PW, PH, M, stamps) {
     let right = PW - M;             // right-aligned, same edge as the back-link
@@ -50033,7 +49934,7 @@ async function _buildSpecPagePDF(opts) {    const { jsPDF } = window.jspdf;
     // The fail-safe holds the finished document so it can check the ledger first.
     if (opts._hold) return { doc: doc, fname: fname };
     if (opts.preview) { showSpecPdfPreview(doc, fname); }
-    else { doc.save(fname); }
+    else { await _deliverPdf(doc, fname); }
 }
 
 async function exportDashNativePNG() {
@@ -50133,21 +50034,6 @@ function validateRow(r) {
     return warnings;
 }
 
-// Floater-specific helper: derive the suggested canvasWrap from the rabbet
-// depth. Used by the dashboard form to auto-fill canvasWrap when rabbet
-// changes on a floater row. Formula per studio convention: wrap = rabbet + 0.5"
-// (the +0.5" is safety margin for the printer + stretching allowance).
-//
-// Returns null when the input doesn't make sense (no rabbet, or product isn't
-// a floater) — caller should leave canvasWrap untouched in that case.
-function suggestedCanvasWrapFromRabbet(r) {
-    if (r.product !== "Framed Canvas (Floater)") return null;
-    const rabbet = parseFloat(r.rabbetDepth) || 0;
-    if (rabbet <= 0) return null;
-    // 20.17: the standard stretcher the rabbet takes, + 0.5" (was rabbet + 0.5)
-    const k = unitFactor(dashUnit, 'in'), d = _stdStretcherFor(rabbet * k);
-    return d ? (d + 0.5) / k : null;
-}
 
 // buildSpecStrings — single source of truth for spec block content.
 //
@@ -51643,7 +51529,7 @@ function initElevControls() {
                             : `<span class="frame-letter-large">${f.letter}</span>`}
                     </div>
                     <div class="frame-item-icons">
-                        <!-- ITEM CODE — matches header item-code column via shared grid template. -->
+                        <!-- ITEM CODE: matches header item-code column via shared grid template. -->
                         <div class="frame-col">
                             <input type="text" class="frame-item-id frame-item-id-edit frame-item-id-inline"
                                    value="${f.id}"
@@ -51651,9 +51537,9 @@ function initElevControls() {
                                    onchange="renameFrameId(this, ${idx})"
                                    onclick="event.stopPropagation()"
                                    ondragstart="event.preventDefault()"
-                                   title="Edit ITEM CODE — applies to all elevations using this frame">
+                                   title="Edit ITEM CODE: applies to all elevations using this frame">
                         </div>
-                        <!-- WALL ALIGN — 2 sub-buttons inside this column. -->
+                        <!-- WALL ALIGN: 2 sub-buttons inside this column. -->
                         <div class="frame-col" style="gap:0; flex-direction:row;">
                             <div style="width:26px; display:flex; justify-content:center;">
                                 <button class="icon-btn" title="Snap to Hang Height" onclick="snapFrameToHang(${idx}, event)">${svgSnapHang}</button>
@@ -51664,7 +51550,7 @@ function initElevControls() {
                         </div>
                         <!-- EDGE GAP collapsed: opens popover. -->
                         <div class="frame-col">
-                            <button class="icon-btn edge-gap-trigger ${dtActiveCount>0?'has-active':''}" title="Edge Gap — distance to wall edges" onclick="openEdgeGapPopover(${idx}, this, event)">
+                            <button class="icon-btn edge-gap-trigger ${dtActiveCount>0?'has-active':''}" title="Edge Gap: distance to wall edges" onclick="openEdgeGapPopover(${idx}, this, event)">
                                 ${svgEdgeGap}
                                 ${dtActiveCount>0 ? `<span class="edge-gap-badge">${dtActiveCount}</span>` : ''}
                             </button>
@@ -51731,23 +51617,6 @@ function openElevLayerMenu(idx, btn, e) {
     }))));
 }
 
-// Per-frame distance dimension toggle. Stores under f.distToggles[which].
-// Re-renders both the panel (to flip active state) and the wall (to draw or
-// hide the dim line).
-function toggleFrameDistDim(idx, which, e) {
-    e.stopPropagation();
-    const f = elevFrames[idx];
-    if (!f.distToggles) f.distToggles = { ceiling: false, floor: false, left: false, right: false };
-    f.distToggles[which] = !f.distToggles[which];
-    // If enabling, make sure edge-gap dims are visible so it shows.
-    if (f.distToggles[which] && typeof dimVisibility !== 'undefined') {
-        dimVisibility.edgeGap = true;
-        saveDimVisibility();
-    }
-    initElevControls();
-    drawElevAll();
-    pushHistory();
-}
 
 // ──────────────────────────────────────────────────────────────────────────
 // EDGE GAP POPOVER
@@ -53900,7 +53769,7 @@ const HELP_REFERENCE_DATA = [
             },
             {
                 title: 'Saving your work',
-                body: `A project is one <strong>.json</strong> file carrying every piece, wall, page and setting.<br><br>In <strong>Chrome and Edge</strong>, <strong>Open Project</strong> opens the file and Farmhand remembers it, so <strong>Save Project</strong> (<span class="help-kbd">Ctrl+S</span>) writes straight back to that same file. The first save of a new project asks where to put it. <span class="help-kbd">Ctrl+Shift+S</span> saves a copy somewhere else and switches to it. The file you are working on is named in the browser tab.<br><br>In <strong>Firefox and Safari</strong>, and on a page opened straight from disk, Save downloads a new .json each time, so watch which copy is current.<br><br>Farmhand also autosaves to your browser as you work. If a tab crashes or closes you are offered the work back when you return. If the unsaved dot beside Save turns <strong>red</strong>, autosave has stopped: save to a file.<br><br><strong>Versions</strong> (in the menu beside Save) keeps named snapshots in this browser (for example "V1 sent to client") that you can compare and restore.`
+                body: `A project is one <strong>.json</strong> file carrying every piece, wall, page and setting.<br><br>In <strong>Chrome and Edge</strong>, <strong>Open Project</strong> opens the file and Farmhand remembers it, so <strong>Save Project</strong> (<span class="help-kbd">Ctrl+S</span>) writes straight back to that same file. The first save of a new project asks where to put it. <span class="help-kbd">Ctrl+Shift+S</span> saves a copy somewhere else and switches to it. The file you are working on is named in the browser tab.<br><br>In <strong>Firefox and Safari</strong>, and on a page opened straight from disk, Save downloads a new .json each time, so watch which copy is current.<br><br>Farmhand also autosaves to your browser as you work. If a tab crashes or closes you are offered the work back when you return. If the unsaved dot beside Save turns <strong>red</strong>, autosave has stopped: save to a file.<br><br><strong>Versions</strong> (in the menu beside Save) keeps named snapshots in this browser (for example "V1 sent to client") that you can compare and restore.<br><br><strong>Project folders</strong> keep your work on this computer, filed the same way as Dropbox, until a presentation is done. <strong>Set up my work folder</strong> (menu beside Save) is done once: pick Documents (or wherever you keep work) and Farmhand uses its <strong>00 ACTIVE PROJECTS</strong>, or makes one. <strong>New project folder</strong> (same menu, or tick it on the New project screen) asks for the client folder and project folder, named the same as on Dropbox (FORD MOTOR COMPANY (FORD), FORD - HUB PHASE 1B), and optional levels (01-04), and builds the studio template: 00. BDQ, 01. Design, 02. Project Management, 03. Production &amp; Procurement, 04. References and 05. Transfer Out, with 06. FARMHAND in 01. Design. Tick <strong>ARTWORK and EGD folders</strong> for separate art and EGD presentations. Before anything is made it lists every folder as <strong>new</strong> or <strong>already there</strong>: folders you already have are used (00. Active Projects counts as 00 ACTIVE PROJECTS), and nothing is renamed, moved or replaced. Already have the client or project folder? <strong>Pick an existing folder</strong> and Farmhand starts from there. Choose where to save the project and it goes into that 06. FARMHAND as YYMMDD.JOBCODE.V1.json; Save writes there and deck PDFs go to its 01. PDF for the rest of the session. <strong>Farmhand never writes into Dropbox</strong> and refuses a folder that looks like the studio Dropbox: copy finished presentations across yourself. Names that Windows does not allow (a colon, a slash) are changed to a dash. Chrome and Edge on Mac and Windows; Safari and Firefox download the empty folders as a zip.`
             },
             {
                 title: 'Undo',
@@ -54260,7 +54129,9 @@ The <strong>image size with bleed</strong> is worked out at RFI and never shown 
             },
             {
                 title: `What's new`,
-                body: `<strong>20.79</strong> Help's Video guides has <b>7. Preflight and Generate PDF</b>. Fixed while filming it: Preflight's <b>Page</b> button opened Deck Studio on the Project tab instead of the page; it now opens that page on the Pages tab. Preflight's spelling check no longer lists the starter deck's own filler text (a new project showed dozens of "possible misspellings" nobody wrote); text you have edited is still checked. The PDF carries its file name as its title, so the preview, Acrobat and Preview show <b>261119.Project.V1</b> instead of a random id.<br><br><strong>20.78</strong> In Help's <b>6. Deck Studio pages</b> video, the split screen now shows the Project tab's Include pages on the left and the Pages rail on the right: untick a page and its thumbnail leaves the deck.<br><br><strong>20.77</strong> Help's <b>6. Deck Studio pages</b> video is rebuilt and longer (about 80 seconds): the four Deck Studio buttons, adding a page with <b>+</b> and turning it into Keywords, a dark page, Group A/B/C, an elevation breaker, making your own template category, and a split screen of Include pages beside the page preview. Fixed while filming it: a spec page could show an old render (a default black frame and no artwork) after a piece was changed outside the Frame Dashboard, and Frame Recommendations could show old frames, until something rebuilt every preview; previews are now keyed on the piece itself. A new elevation breaker could say <b>Elevation capture failed</b> while the wall was only busy being drawn for another page; it now waits its turn. A page added with <b>+</b> takes the name of the template you apply (Keywords instead of New Page). The spec page panel says <b>Presentation layout (whole deck)</b>, and when one set differs from the deck (its own <b>One page</b>) it says so under the set.<br><br><strong>20.76</strong> Help's Video guides has <b>6. Deck Studio pages</b>: edit text on a page, drag a page in the rail, put a set on one page, and choose the presentation type and the pages it includes, in 30 seconds. Fixed while filming it: a page edited on the Pages tab (a retyped cover heading) still showed its old words in the Project tab's page preview until <b>Refresh preview</b>; the preview now redraws when you open the tab.<br><br><strong>20.75</strong> Help's Video guides has <b>5. The Elevation, start to finish</b> (about 2 minutes, in chapters): adding frames to a blank wall, spacing tips, every guide on the Guides tab, dragging the figure and dimensions clear of the art, a 7-piece salon hang, the Wall, Context and Glass tabs, and Elevation settings. Video 4 was re-recorded with a corrected caption.<br><br><strong>20.74</strong> <b>Spacing shows the gaps when you switch it on.</b> On the Elevation tab, Guides, <b>Spacing</b> on a wall with no gaps picked now dimensions every gap between neighbouring frames (the same as <b>Auto space</b> for that wall). It used to show nothing until a gap was picked with the letter chips on the Art tab; the chips still add or remove single gaps.<br><br><strong>20.73</strong> Help's Video guides has <b>4. Lay out the wall</b>: even gaps, hang height, centring, and the dimensions the install page prints, in 30 seconds. A gap is dimensioned by picking the next frame's letter on the Art tab, with <b>Spacing</b> on in Guides.<br><br><strong>20.72</strong> Help's Video guides has <b>3. Spec a piece</b>: on the Frame Dashboard, the overall size, a moulding from the frame library, the mat and the artwork, in 30 seconds.<br><br><strong>20.71</strong> <b>The footer updates as you type it.</b> In Deck Studio's <b>Project</b> tab, the page preview now shows the footer change the moment you type the Project Name, Project Code, Location or Version (it used to wait for <b>Refresh preview</b>). The footer reads: page number, PROJECT NAME – LOCATION | CODE.VERSION. Help's Video guides has a new one: <b>0. Start a new project</b>.<br><br><strong>20.70</strong> <b>Video guides in Help.</b> Help has a new <b>Video guides</b> section with short screen recordings: <b>1. Build the floor plan</b> (upload the plan, pin a placement, draw its wall line, pick a triptych) and <b>2. Add the client elevation</b> (add the sheet, crop what prints, scale it off a printed dimension, fit the art wall, measure the art). The Floor plan guide's Start here tab opens with the first one. They are recorded by Farmhand itself on a made-up hotel, so they can be re-made whenever the screens change.<br><br><strong>20.69</strong> <b>Build your own code style.</b> Categories tab, Item codes, <b>Build your own code…</b> (or Custom in the menu) opens the <b>code builder</b>: put a client's code together from parts, Category, Level (L1, 1 or 01), Plan fields you name yourself (Sector, Zone, Building, Wing...; up to four, each with its own letters such as S or Z), Fixed text and the Number (1, 01 or 001), with the separator you want between each. Drag a part by its grip to move it. A live preview and a table of plans, one column per plan field, show the first code on every plan. <b>Start from</b> has House, Category + number, Level, Level + Sector, Level + Zone and Building + Level. To turn Sector S16 into Zone Z16, rename the part and change its letters. A plan named Level 02 | Building A fills Building A by itself, and + Add code on a plan with no value asks once and keeps it. Item codes shows a column for each new field. The Floor plan guide's Code styles tab explains it, with examples from other kinds of projects.<br><br><strong>20.68</strong> <b>The floor plan says what to do first, and how codes are made.</b> The Items tab on a floor plan page now opens with <b>Set up this floor plan</b>: three steps that tick themselves off. <b>Plans</b> (one plan page per level, or per sector; <b>Plans…</b> opens the markup tool), <b>Code style</b> (<b>Codes…</b> goes to Item codes) and <b>Add and pin</b> (how many on this plan still need a pin, and <b>Show them</b>). It folds to one line once all three are done. Its <b>Guide</b> button opens the <b>Floor plan guide</b>, a small window that stays beside your work: Start here, Plans and sectors, Code styles (which to use for which kind of deck) and the Ford Hub L01 deck as a worked example; it is in Help too. Item codes on the Categories tab says what it does, says when to use the style you picked, and has <b>Which style?</b>. A plan named <b>Level 01 | Sector 10</b> now takes sector 10 the moment you name it (it used to wait until the project was opened again). <b>Size</b>, <b>Sketch</b> and the rate card line are off the floor plan: they are a PM's budget tool, and now appear only after <b>Budget sketch on the floor plan</b> in Production, Pricing (<b>Done budgeting</b> puts them away). The Categories tab's Quick set buttons read <b>Product types</b> and <b>Tiers</b>, so they fit.<br><br><strong>20.67</strong> <b>Fit the crop and the art wall with handles, and a clearer Client elevation panel.</b> The client sheet window no longer asks for one-shot clicks. <b>Crop the elevation</b> opens with a red box: drag it onto the elevation, drag its handles to trim, or drag on the sheet for a new box. In <b>Scale</b>, drag either end of the measure to fine-tune it. <b>The art wall</b> is now a green box at the wall's current size: drag it onto the wall in the drawing and drag its handles so the bottom edge sits on the floor, or type the width and height. A magnifier follows the handle you drag, and the arrow keys nudge (Shift for ten). On the Elevation tab, Wall tab, the Client elevation panel shows <b>Calibrated</b> or <b>Not calibrated</b> at the top and has one button, <b>Edit crop, scale &amp; wall</b>, which reopens the window with everything where you left it (a picture added on its own opens the same way). Page settings are grouped under <b>On the page</b>; the numbers and Place by hand are under <b>Advanced</b>. The red handles round the print area on the wall are gone (crop in the window instead); the wall-size handles stay. <b>Add a cropped image instead</b> is now a readable button.<br><br><strong>20.66</strong> <b>Crop the client drawing on the wall, give it a grey border, and drop a sheet straight in.</b> On the Elevation tab, Wall tab, a drawing that prints whole has <b>Crop the print area</b>: the whole sheet appears faded on the wall with the print area as a red box; drag an edge or corner to trim it (a long elevation trimmed down prints bigger, so its dimensions read), drag inside to slide to another part, then <b>Done cropping</b>. It is cut again from the full sheet, and the scale never changes. Or skip the button: the dashed box on the wall has <b>handles</b>; grab one, drag, and let go. The wall has handles too, on its right edge, top edge and top-right corner: drag to size the wall (quarter inches; the left end and the floor stay put). <b>Grey border</b> puts a thin light grey line round the drawing on the page, like the plan border (on by default; untick per wall, or <b>All walls</b>). Drag a sheet image from Finder onto the Client elevation panel to add it.<br><br><strong>20.65</strong> <b>Add the client's full sheet, pick the elevation on it, and calibrate: always.</b> On the Elevation tab, Wall tab, <b>+ Add client sheet</b> takes the whole elevation sheet as it came (a PNG or JPG of the PDF page) and opens it full screen in three steps: <b>Pick the elevation</b> (drag a box round it; the box is exactly what prints on the page), <b>Scale</b> (click both ends of a dimension printed on the drawing and type it, 11'-0" or 132"), and <b>The art wall</b> (click the floor at the wall's left and right ends, then the ceiling). Finish puts the drawing on the wall to scale, its floor on the wall's floor, and can set the wall to the drawing's size. The sheet is kept whole in the project; <b>Re-crop or recalibrate</b> reopens it, and other walls can <b>Use a sheet in this project</b> without adding it again. On the Elevations tab a dashed red box shows what <b>prints on the page</b>. <b>Calibration is required:</b> a client elevation added any way is marked <b>Not calibrated</b> (a red banner on the wall, Preflight lists it) and cannot be shown in the deck until it is. <b>Calibrate</b> now says on the wall what to click, draws the line it measured, and stops after two clicks.<br><br><strong>20.64</strong> <b>Frames printed as outlines show what's inside them again.</b> On a wall set to <b>Frames as outlines</b>, the install page printed empty black boxes with the client drawing showing through, while the Elevations tab showed the grey blocks lettered A, B, C. Each outline now has a white inside with the grey block and its letter when Wireframe is on, or the artwork once it's placed, the same as the Elevations tab. The frame itself is still a plain black outline with no shadow.<br><br><strong>20.63</strong> <b>The client elevation is cropped to the wall in the editor too, and the caption is plain Elevation again.</b> On a wall whose client elevation prints cropped to the wall, the Elevations tab now crops it at the wall the same way, so the editor shows what the page prints (the whole image still shows while you Place or Calibrate it). The caption under the drawing reads just <b>Elevation</b>; the source sheet is only added when you type one on the Wall tab.<br><br><strong>20.62</strong> <b>A wall page can print the client's whole drawing, with the art as outlines.</b> On the Elevation tab, Wall tab, once a client elevation is <b>Shown in deck</b>: choose <b>Print the whole drawing</b> to print everything you placed (the doors, returns and cabinets either side of the art wall) instead of cutting it off at the wall, so the install team sees the wall in its room and a wrong elevation is easy to spot. Beside it, <b>Frames as outlines</b> prints each piece as a plain black outline so the drawing reads through. The caption under the drawing now names the source sheet (Elevation \u00b7 AI4101-02), read off the drawing's name; type your own, or clear it to print just Elevation. <b>All walls</b> sets the drawing and the frame style on every wall at once.<br><br><strong>20.61</strong> <b>A border on a picture box now prints in the PDF.</b> A stroke set on an image box (a plan, a site photo) showed in Deck Studio but was left out of the exported PDF; it now prints in the same colour and weight.<br><br><strong>20.60</strong> <b>A thin grey border round the plan on floorplan pages.</b> A plan cropped to a section used to end in lines running off into space; a light 0.5 pt grey line round it now shows the crop is on purpose. It is on by default. To turn it off, open a floorplan page in Deck Studio, Plan tab: untick <b>Border round the plan</b> for that page, or use <b>All plans</b> to switch it on or off on every floorplan page at once.<br><br><strong>20.59</strong> <b>The red ELEVATION REQUIRED stamp no longer runs into the plan, and you can click it.</b> On a wall page, a note under the stamp that wraps to two lines now lifts the stamp up instead of growing down into the floor plan thumbnail. In Deck Studio, click the stamp for three choices: <b>Edit the note on this wall</b> (opens the wall in Elevations with the note ready to type), <b>Remove Elevation required</b>, or <b>Make it a movable note on this page</b>, which turns this page's stamp into two ordinary notes you can drag, nudge and retype (the wall's own stamp steps aside on that page).<br><br><strong>20.58</strong> <b>A client or brand logo uploaded as an SVG prints sharp at any zoom.</b> If the logo is one colour, the footer draws it as shapes, the same way it draws the Farmboy logo: in its own colour on light pages, white on dark ones. Logos exported from Illustrator work, rounded corners, circles and transforms included. An SVG with more than one colour, outlines (strokes), gradients, clipping masks or embedded pictures prints as a picture, as before. PNG and JPG logos still print as pictures; for the sharpest footer, upload a one-colour SVG.<br><br><strong>20.57</strong> <b>The Farmboy logo in the PDF is now vector.</b> It used to go in as a picture, which some PDF viewers drew with jagged edges at normal zoom (zoomed in it looked fine). The footer and cover logo are now drawn as shapes, so they stay sharp at any zoom, in any viewer and in print. A client or brand logo you add to the footer is now smoothly scaled to print size when it's added, instead of going in at full upload size, and its white version on dark pages keeps soft edges instead of a stair-stepped outline.<br><br><strong>20.56</strong> <b>Order workbook: one Excel file a PM can start the purchase order from.</b> Frame Dashboard, Export menu, <b>Order workbook (Excel)</b> (also on Production, Pricing). The first tab is a Farmboy-branded order sheet: our logo, the project and client, yellow cells for the PM (Salesforce opportunity, PO, status, dates), then every piece with its picture, item and image code, title, location, sizes, frame, mat, glass, paper, vendor, quantity and prices, with totals that stay live in Excel (shipping, installation and tax are yellow for the PM). The second tab is the Salesforce SF Import Template, its 11 columns at the top and nothing else, so it can be imported as it stands or saved as a CSV; the third is the Vendor codes list. The Salesforce CSV button still works and matches the tab line for line.<br><br><strong>20.55</strong> <b>Clicking a pin on a floor plan highlights it instead of opening its spec page.</b> In Deck Studio, a click on a pin lights it up along with its line in the legend, so a small nudge while moving a pin no longer jumps you to the spec page. The highlighted legend line gets a diamond grip on the left (drag it up or down the list) and up and down arrows on the right (move it one place per click). The pin number and the legend update together and stay highlighted as the code changes. Click the legend line itself to open the spec page. Click the picked pin again, click empty plan, or press Esc to let it go. Hover a legend line to see its pin. Pins in the exported PDF still link to their spec pages.<br><br><strong>20.54</strong> <b>The Coding cheat sheet opens as a popup.</b> The <b>Coding cheat sheet</b> button at the top of Help (or <b>Open as a popup</b> in its Reference section) opens the sheet in a small window that floats over your work and stays open: drag it by its title bar, pick a part from its tabs (naming supporting files, art types, public domain sources and rules, remixing, new asset codes, spec page fields), close it with the x or Esc. Supporting file names now say why the date is the drawing set's: a client's updated set shows at a glance which plan or elevation is current.
+                body: `<strong>20.83</strong> <b>Leftover code cleared out.</b> 82 functions nothing in the app could reach any more are gone (about 800 lines): the old + LAYOUT and + SET buttons' chooser (options are made in Deck Studio), the toolbar fit and align menus, the dimension drag handles from before the current ones, and thin wrappers left by earlier redesigns. Nothing you can click changes. A new check fails the build if a function is left with no caller.<br><br><strong>20.82</strong> <b>Works with no signal, everywhere.</b> Elevation PNG export, the Oswald display type and the scale figure no longer download from the internet: they ship with the app and are kept on the device, so PNG export works on a site with no signal the first time. Prompts, tooltips and Preflight messages lose their long dashes. Tidy-up: a duplicate JSZip copy is gone, npm test runs the suite, and the README says what the app is.<br><br><strong>20.81</strong> <b>Project folders on your computer, filed like Dropbox.</b> <b>Set up my work folder</b> (once) finds or makes 00 ACTIVE PROJECTS in Documents or wherever you pick. <b>New project folder</b> takes the client and project folder names from Dropbox and optional levels (01-04, with ARTWORK and EGD folders if you want them) and builds the studio template, showing every folder as new or already there before Create. Existing folders are reused, even with slightly different names, and nothing is replaced. Pick an existing client or project folder to start from there. Farmhand <b>never writes into Dropbox</b> and refuses a folder that looks like it. New project also asks for the <b>Job code</b> (like BEYE-HILT-WAIL-2024, filled into the Project code so PDF names come out right). Choose a level to save into and the project is saved in its 06. FARMHAND, and deck PDFs go to its 01. PDF. Chrome and Edge on Mac and Windows; Safari downloads the folders as a zip.<br><br>
+<strong>20.80</strong> <b>18 new moodboard templates.</b> Templates > Moodboard has the studio's real moodboard layouts, measured from 144 pages across 27 projects: Bleed Mosaic (with or without artist captions), Inset Mosaic, Framed Row 3-Up and 4-Up, Featured Artists 4-Up, Even Grid 2x3, Free Collage + Notes, Gallery Wall, Hero + Stack, Reference Inset + Feature Artworks, Narrative Split, Style Wall, Palette Strip + Interiors, Keyword Overlay, Object Curation, Concept Columns and Material Bands. Each one uses the house heading, keyword line and image area, so pages made from different templates line up. The disclaimer on the older moodboard templates now reads "reference only" (it said "refernence").
+<strong>20.79</strong> Help's Video guides has <b>7. Preflight and Generate PDF</b>. Fixed while filming it: Preflight's <b>Page</b> button opened Deck Studio on the Project tab instead of the page; it now opens that page on the Pages tab. Preflight's spelling check no longer lists the starter deck's own filler text (a new project showed dozens of "possible misspellings" nobody wrote); text you have edited is still checked. The PDF carries its file name as its title, so the preview, Acrobat and Preview show <b>261119.Project.V1</b> instead of a random id.<br><br><strong>20.78</strong> In Help's <b>6. Deck Studio pages</b> video, the split screen now shows the Project tab's Include pages on the left and the Pages rail on the right: untick a page and its thumbnail leaves the deck.<br><br><strong>20.77</strong> Help's <b>6. Deck Studio pages</b> video is rebuilt and longer (about 80 seconds): the four Deck Studio buttons, adding a page with <b>+</b> and turning it into Keywords, a dark page, Group A/B/C, an elevation breaker, making your own template category, and a split screen of Include pages beside the page preview. Fixed while filming it: a spec page could show an old render (a default black frame and no artwork) after a piece was changed outside the Frame Dashboard, and Frame Recommendations could show old frames, until something rebuilt every preview; previews are now keyed on the piece itself. A new elevation breaker could say <b>Elevation capture failed</b> while the wall was only busy being drawn for another page; it now waits its turn. A page added with <b>+</b> takes the name of the template you apply (Keywords instead of New Page). The spec page panel says <b>Presentation layout (whole deck)</b>, and when one set differs from the deck (its own <b>One page</b>) it says so under the set.<br><br><strong>20.76</strong> Help's Video guides has <b>6. Deck Studio pages</b>: edit text on a page, drag a page in the rail, put a set on one page, and choose the presentation type and the pages it includes, in 30 seconds. Fixed while filming it: a page edited on the Pages tab (a retyped cover heading) still showed its old words in the Project tab's page preview until <b>Refresh preview</b>; the preview now redraws when you open the tab.<br><br><strong>20.75</strong> Help's Video guides has <b>5. The Elevation, start to finish</b> (about 2 minutes, in chapters): adding frames to a blank wall, spacing tips, every guide on the Guides tab, dragging the figure and dimensions clear of the art, a 7-piece salon hang, the Wall, Context and Glass tabs, and Elevation settings. Video 4 was re-recorded with a corrected caption.<br><br><strong>20.74</strong> <b>Spacing shows the gaps when you switch it on.</b> On the Elevation tab, Guides, <b>Spacing</b> on a wall with no gaps picked now dimensions every gap between neighbouring frames (the same as <b>Auto space</b> for that wall). It used to show nothing until a gap was picked with the letter chips on the Art tab; the chips still add or remove single gaps.<br><br><strong>20.73</strong> Help's Video guides has <b>4. Lay out the wall</b>: even gaps, hang height, centring, and the dimensions the install page prints, in 30 seconds. A gap is dimensioned by picking the next frame's letter on the Art tab, with <b>Spacing</b> on in Guides.<br><br><strong>20.72</strong> Help's Video guides has <b>3. Spec a piece</b>: on the Frame Dashboard, the overall size, a moulding from the frame library, the mat and the artwork, in 30 seconds.<br><br><strong>20.71</strong> <b>The footer updates as you type it.</b> In Deck Studio's <b>Project</b> tab, the page preview now shows the footer change the moment you type the Project Name, Project Code, Location or Version (it used to wait for <b>Refresh preview</b>). The footer reads: page number, PROJECT NAME – LOCATION | CODE.VERSION. Help's Video guides has a new one: <b>0. Start a new project</b>.<br><br><strong>20.70</strong> <b>Video guides in Help.</b> Help has a new <b>Video guides</b> section with short screen recordings: <b>1. Build the floor plan</b> (upload the plan, pin a placement, draw its wall line, pick a triptych) and <b>2. Add the client elevation</b> (add the sheet, crop what prints, scale it off a printed dimension, fit the art wall, measure the art). The Floor plan guide's Start here tab opens with the first one. They are recorded by Farmhand itself on a made-up hotel, so they can be re-made whenever the screens change.<br><br><strong>20.69</strong> <b>Build your own code style.</b> Categories tab, Item codes, <b>Build your own code…</b> (or Custom in the menu) opens the <b>code builder</b>: put a client's code together from parts, Category, Level (L1, 1 or 01), Plan fields you name yourself (Sector, Zone, Building, Wing...; up to four, each with its own letters such as S or Z), Fixed text and the Number (1, 01 or 001), with the separator you want between each. Drag a part by its grip to move it. A live preview and a table of plans, one column per plan field, show the first code on every plan. <b>Start from</b> has House, Category + number, Level, Level + Sector, Level + Zone and Building + Level. To turn Sector S16 into Zone Z16, rename the part and change its letters. A plan named Level 02 | Building A fills Building A by itself, and + Add code on a plan with no value asks once and keeps it. Item codes shows a column for each new field. The Floor plan guide's Code styles tab explains it, with examples from other kinds of projects.<br><br><strong>20.68</strong> <b>The floor plan says what to do first, and how codes are made.</b> The Items tab on a floor plan page now opens with <b>Set up this floor plan</b>: three steps that tick themselves off. <b>Plans</b> (one plan page per level, or per sector; <b>Plans…</b> opens the markup tool), <b>Code style</b> (<b>Codes…</b> goes to Item codes) and <b>Add and pin</b> (how many on this plan still need a pin, and <b>Show them</b>). It folds to one line once all three are done. Its <b>Guide</b> button opens the <b>Floor plan guide</b>, a small window that stays beside your work: Start here, Plans and sectors, Code styles (which to use for which kind of deck) and the Ford Hub L01 deck as a worked example; it is in Help too. Item codes on the Categories tab says what it does, says when to use the style you picked, and has <b>Which style?</b>. A plan named <b>Level 01 | Sector 10</b> now takes sector 10 the moment you name it (it used to wait until the project was opened again). <b>Size</b>, <b>Sketch</b> and the rate card line are off the floor plan: they are a PM's budget tool, and now appear only after <b>Budget sketch on the floor plan</b> in Production, Pricing (<b>Done budgeting</b> puts them away). The Categories tab's Quick set buttons read <b>Product types</b> and <b>Tiers</b>, so they fit.<br><br><strong>20.67</strong> <b>Fit the crop and the art wall with handles, and a clearer Client elevation panel.</b> The client sheet window no longer asks for one-shot clicks. <b>Crop the elevation</b> opens with a red box: drag it onto the elevation, drag its handles to trim, or drag on the sheet for a new box. In <b>Scale</b>, drag either end of the measure to fine-tune it. <b>The art wall</b> is now a green box at the wall's current size: drag it onto the wall in the drawing and drag its handles so the bottom edge sits on the floor, or type the width and height. A magnifier follows the handle you drag, and the arrow keys nudge (Shift for ten). On the Elevation tab, Wall tab, the Client elevation panel shows <b>Calibrated</b> or <b>Not calibrated</b> at the top and has one button, <b>Edit crop, scale &amp; wall</b>, which reopens the window with everything where you left it (a picture added on its own opens the same way). Page settings are grouped under <b>On the page</b>; the numbers and Place by hand are under <b>Advanced</b>. The red handles round the print area on the wall are gone (crop in the window instead); the wall-size handles stay. <b>Add a cropped image instead</b> is now a readable button.<br><br><strong>20.66</strong> <b>Crop the client drawing on the wall, give it a grey border, and drop a sheet straight in.</b> On the Elevation tab, Wall tab, a drawing that prints whole has <b>Crop the print area</b>: the whole sheet appears faded on the wall with the print area as a red box; drag an edge or corner to trim it (a long elevation trimmed down prints bigger, so its dimensions read), drag inside to slide to another part, then <b>Done cropping</b>. It is cut again from the full sheet, and the scale never changes. Or skip the button: the dashed box on the wall has <b>handles</b>; grab one, drag, and let go. The wall has handles too, on its right edge, top edge and top-right corner: drag to size the wall (quarter inches; the left end and the floor stay put). <b>Grey border</b> puts a thin light grey line round the drawing on the page, like the plan border (on by default; untick per wall, or <b>All walls</b>). Drag a sheet image from Finder onto the Client elevation panel to add it.<br><br><strong>20.65</strong> <b>Add the client's full sheet, pick the elevation on it, and calibrate: always.</b> On the Elevation tab, Wall tab, <b>+ Add client sheet</b> takes the whole elevation sheet as it came (a PNG or JPG of the PDF page) and opens it full screen in three steps: <b>Pick the elevation</b> (drag a box round it; the box is exactly what prints on the page), <b>Scale</b> (click both ends of a dimension printed on the drawing and type it, 11'-0" or 132"), and <b>The art wall</b> (click the floor at the wall's left and right ends, then the ceiling). Finish puts the drawing on the wall to scale, its floor on the wall's floor, and can set the wall to the drawing's size. The sheet is kept whole in the project; <b>Re-crop or recalibrate</b> reopens it, and other walls can <b>Use a sheet in this project</b> without adding it again. On the Elevations tab a dashed red box shows what <b>prints on the page</b>. <b>Calibration is required:</b> a client elevation added any way is marked <b>Not calibrated</b> (a red banner on the wall, Preflight lists it) and cannot be shown in the deck until it is. <b>Calibrate</b> now says on the wall what to click, draws the line it measured, and stops after two clicks.<br><br><strong>20.64</strong> <b>Frames printed as outlines show what's inside them again.</b> On a wall set to <b>Frames as outlines</b>, the install page printed empty black boxes with the client drawing showing through, while the Elevations tab showed the grey blocks lettered A, B, C. Each outline now has a white inside with the grey block and its letter when Wireframe is on, or the artwork once it's placed, the same as the Elevations tab. The frame itself is still a plain black outline with no shadow.<br><br><strong>20.63</strong> <b>The client elevation is cropped to the wall in the editor too, and the caption is plain Elevation again.</b> On a wall whose client elevation prints cropped to the wall, the Elevations tab now crops it at the wall the same way, so the editor shows what the page prints (the whole image still shows while you Place or Calibrate it). The caption under the drawing reads just <b>Elevation</b>; the source sheet is only added when you type one on the Wall tab.<br><br><strong>20.62</strong> <b>A wall page can print the client's whole drawing, with the art as outlines.</b> On the Elevation tab, Wall tab, once a client elevation is <b>Shown in deck</b>: choose <b>Print the whole drawing</b> to print everything you placed (the doors, returns and cabinets either side of the art wall) instead of cutting it off at the wall, so the install team sees the wall in its room and a wrong elevation is easy to spot. Beside it, <b>Frames as outlines</b> prints each piece as a plain black outline so the drawing reads through. The caption under the drawing now names the source sheet (Elevation \u00b7 AI4101-02), read off the drawing's name; type your own, or clear it to print just Elevation. <b>All walls</b> sets the drawing and the frame style on every wall at once.<br><br><strong>20.61</strong> <b>A border on a picture box now prints in the PDF.</b> A stroke set on an image box (a plan, a site photo) showed in Deck Studio but was left out of the exported PDF; it now prints in the same colour and weight.<br><br><strong>20.60</strong> <b>A thin grey border round the plan on floorplan pages.</b> A plan cropped to a section used to end in lines running off into space; a light 0.5 pt grey line round it now shows the crop is on purpose. It is on by default. To turn it off, open a floorplan page in Deck Studio, Plan tab: untick <b>Border round the plan</b> for that page, or use <b>All plans</b> to switch it on or off on every floorplan page at once.<br><br><strong>20.59</strong> <b>The red ELEVATION REQUIRED stamp no longer runs into the plan, and you can click it.</b> On a wall page, a note under the stamp that wraps to two lines now lifts the stamp up instead of growing down into the floor plan thumbnail. In Deck Studio, click the stamp for three choices: <b>Edit the note on this wall</b> (opens the wall in Elevations with the note ready to type), <b>Remove Elevation required</b>, or <b>Make it a movable note on this page</b>, which turns this page's stamp into two ordinary notes you can drag, nudge and retype (the wall's own stamp steps aside on that page).<br><br><strong>20.58</strong> <b>A client or brand logo uploaded as an SVG prints sharp at any zoom.</b> If the logo is one colour, the footer draws it as shapes, the same way it draws the Farmboy logo: in its own colour on light pages, white on dark ones. Logos exported from Illustrator work, rounded corners, circles and transforms included. An SVG with more than one colour, outlines (strokes), gradients, clipping masks or embedded pictures prints as a picture, as before. PNG and JPG logos still print as pictures; for the sharpest footer, upload a one-colour SVG.<br><br><strong>20.57</strong> <b>The Farmboy logo in the PDF is now vector.</b> It used to go in as a picture, which some PDF viewers drew with jagged edges at normal zoom (zoomed in it looked fine). The footer and cover logo are now drawn as shapes, so they stay sharp at any zoom, in any viewer and in print. A client or brand logo you add to the footer is now smoothly scaled to print size when it's added, instead of going in at full upload size, and its white version on dark pages keeps soft edges instead of a stair-stepped outline.<br><br><strong>20.56</strong> <b>Order workbook: one Excel file a PM can start the purchase order from.</b> Frame Dashboard, Export menu, <b>Order workbook (Excel)</b> (also on Production, Pricing). The first tab is a Farmboy-branded order sheet: our logo, the project and client, yellow cells for the PM (Salesforce opportunity, PO, status, dates), then every piece with its picture, item and image code, title, location, sizes, frame, mat, glass, paper, vendor, quantity and prices, with totals that stay live in Excel (shipping, installation and tax are yellow for the PM). The second tab is the Salesforce SF Import Template, its 11 columns at the top and nothing else, so it can be imported as it stands or saved as a CSV; the third is the Vendor codes list. The Salesforce CSV button still works and matches the tab line for line.<br><br><strong>20.55</strong> <b>Clicking a pin on a floor plan highlights it instead of opening its spec page.</b> In Deck Studio, a click on a pin lights it up along with its line in the legend, so a small nudge while moving a pin no longer jumps you to the spec page. The highlighted legend line gets a diamond grip on the left (drag it up or down the list) and up and down arrows on the right (move it one place per click). The pin number and the legend update together and stay highlighted as the code changes. Click the legend line itself to open the spec page. Click the picked pin again, click empty plan, or press Esc to let it go. Hover a legend line to see its pin. Pins in the exported PDF still link to their spec pages.<br><br><strong>20.54</strong> <b>The Coding cheat sheet opens as a popup.</b> The <b>Coding cheat sheet</b> button at the top of Help (or <b>Open as a popup</b> in its Reference section) opens the sheet in a small window that floats over your work and stays open: drag it by its title bar, pick a part from its tabs (naming supporting files, art types, public domain sources and rules, remixing, new asset codes, spec page fields), close it with the x or Esc. Supporting file names now say why the date is the drawing set's: a client's updated set shows at a glance which plan or elevation is current.
 <strong>20.53</strong> <b>The studio's Coding cheat sheet is in Help.</b> Help > Reference has a <b>Coding cheat sheet</b> section: how to name supporting files (PLAN, ELEV, REND, MOCK, FINISH, FRAME and REF codes), the art types and their image codes with Medium or Application, the approved public domain sources, the public domain and Creative Commons rules, which assets can be remixed and under what code, how a new asset is coded, and what each spec page row holds.
 <strong>20.52</strong> <b>A placement left on the wrong sector's plan is easy to fix.</b> When a plan holds placements still coded for another sector (moved by an older build, or by pinning before 20.51), its Items tab says so at the top with <b>Recode</b> (or <b>Recode all</b>): each takes the next code in this plan's sector and its pin comes across, in one Ctrl+Z. Picking the plan it already sits on under <b>Move to level</b> now recodes it too, instead of doing nothing.\n<strong>20.51</strong> <b>Set the order of the pages, and the codes follow.</b> On a floor plan page, drag a line of the legend up or down: drop 12 between 04 and 05 and it becomes 05, the old 05 to 11 become 06 to 12, and the pins, the legend and the spec pages all follow (Ctrl+Z undoes it). Rows on the Items tab drag the same way, now in sector projects too. <b>Order</b> on the Items tab (also on each placement's arrows menu, the floor plans button and Ctrl+K) opens a full-screen window of a plan's spec pages to drag into the order the story runs; drop a page on another plan's tab to move it there. <b>Gaps ask first.</b> When removing or moving a placement leaves a gap in a sector's codes (S16-01, 02, 04), Farmhand asks: keep the gap so every code matches what the client has, or close it and renumber. <b>Floor plans print in level, then sector order</b> (Sector 16, 23, 24), however they were added; Manual plan order still overrides. <b>Getting around:</b> the floor plans button beside Project, Pages and Templates jumps to any plan's page; the Items tab has a button per plan and shows <b>This plan</b> or <b>All plans</b> (each under its own heading), so a three-sector project no longer lists 01 to 10 three times. <b>Pinning a piece on another sector's plan asks</b>: Move it there (it takes the next code in that sector and its old pin comes off) or show it on both plans with its code unchanged. Fixed: in a project saved before item code patterns, moving a placement to another sector kept its old code; Farmhand now reads the pattern your codes follow and each plan's sector from its name. A placement left on the wrong plan by an older build is listed in Preflight with <b>Recode</b>.\n<strong>20.50</strong> <b>A moved placement brings its pin, and says when the spot needs you.</b> <b>Move to level</b> takes the pin off the old plan and drops an amber <b>?</b> pin on the new one, in the middle of that sector's pieces (or the middle of the plan). Drag it to its spot, or click it to keep it where it landed. Until then it is not printed, it counts as unplaced, the Items row shows an amber <b>?</b>, and Preflight lists it (an error in a final spec or install guide). Changing a placement's <b>sector</b> keeps its pin but rings it in amber with <b>Check</b> on the Items row until you confirm it or drag it. Fixed: pinning a moved piece on its new plan used to snap it back to its old level.\n<strong>20.49</strong> <b>Move and remove from the floorplan's Items list.</b> Each row has two new buttons. The <b>arrows</b> between the code and the category open one menu for moving or changing that placement: rename or swap its code, move it to another level (its code follows), change its sector, move its art to another piece or put it on hold, and open Art on hold. The <b>x</b> at the far right removes the placement and asks what to do with its art: <b>Remove, keep the art on hold</b> for another placement later, or <b>Delete everything, art too</b>. The list of set-aside art is now called <b>Art on hold</b>, so it is not confused with pieces not yet pinned on the plan (Unplaced). Fixed: in a sector project, <b>+ Add code</b> on the floorplan made a house code (ART.1) when the plan had no sector set. A new code now takes the plan's sector, else the sector of the last piece on that plan, and asks only when there is none anywhere.\n<strong>20.48</strong> <b>Art on hold: nothing you picked is lost when a placement goes.</b> Deleting a piece, deleting a placement, deleting a wall with its pieces, making a set smaller or pressing Remove on the artwork used to throw the picture away. Now it goes to <b>Art on hold</b> (Frame Dashboard, Edit menu; the floorplan's Items tab shows how many are waiting), with its title, artist, image code and where it came from. From there put it on another piece (that piece's art takes its place in the list), start a <b>New placement</b> for it, or delete it for good. <b>Delete placement…</b> on the Edit menu removes every piece of the selected code at once. Beside Remove on the artwork, <b>Move</b> puts the art on another piece, swapping if that piece already has art. Changing an item's <b>Level</b> moves its whole placement, its sector follows the plan, and a level code updates (L3.ART.S16-04 becomes L4.ART.S16-01). Art on hold is in the project file, Ctrl+Z, and Images and Package.\n<strong>20.47</strong> <b>One coding system per project, and switching it recodes everything.</b> Pick another pattern under Item codes (ART.1, level, level and sector, or your own) and every placement takes a code in it at once, in the order they were in, so a project never mixes L1.ART.S22-02 with L1.ART-01. If the new pattern needs a sector and some pieces have none, Farmhand asks which sector they are in first (Cancel keeps the old system). Changing a level's code or Sector updates its pieces' codes, keeping their numbers. Changing an item's Sector moves it to the end of that sector. A code typed by hand has to fit the pattern. In a sector project, + Add Item will not create a code until it has a sector. <b>+ Add Item picks its frame set from pictures</b>, the same grid as on the floorplan, and a set of more than one piece is hung on its own wall (untick <b>Hang it on its own wall</b> to skip), so the elevation and the spec page's As hung layout show the real arrangement instead of a straight row.\n<strong>20.46</strong> <b>Sectors fill themselves in, and two codes can swap.</b> Under <b>Item codes</b> on the Deck Studio floorplan's Categories tab, each plan level now has a <b>Sector</b> box beside its code. Every piece on that plan with no Sector of its own is in that sector, so + Add Item makes L3.ART.S16-01 straight away and <b>Recode</b> works without typing a sector on every item (a piece's own Sector still wins). The box that names the sector now says <b>{zone} is called</b>, so it is clear it holds a word like Sector or Zone, not a number. To swap two codes, double-click a code on the Items tab (or edit it in the item's code field) and type the other placement's code: Farmhand asks, then the two trade codes, each keeping its artwork, frame, wall and plan pin. For ART.1-style codes, <b>Move to</b> is still there to move a piece to that number and renumber the rest.\n<strong>20.45</strong> <b>FRAME is now Farmhand everywhere you read it.</b> The browser tab, the home-screen app name, the start screen, Help, the tour, messages and file pickers all say Farmhand. Project files are unchanged: files saved before open as they always did, and older builds still open new ones. On the start screen, <b>New to Farmhand? Take the guided tour</b> is now a button with a play mark and a ring that pulses a few times once the screen has settled, so it is easy to find.\n<strong>20.44</strong> <b>The start screen quote is bigger.</b> “Many hands make light work” now runs wider than the Farmhand logo beneath it, with – Thomas Gordon Towers set right-aligned under it.\n<strong>20.43</strong> <b>Farmhand.</b> The start screen and the header carry the new FARMHAND logo, one drawing that follows the theme (dark ink in light mode, light ink in dark mode). The start screen opens with a quote that fades in above the logo as it comes together: “Many hands make light work”, Thomas Gordon Towers.\n<strong>20.42</strong> <b>Frame Recommendations keeps its picture size at 3 and 4 columns.</b> The frame profile drawing (and the corner) used to shrink as you added columns. At 3 and 4 columns each frame now shows its corner and profile at the same size as in 1 column, with the name, vendor and size underneath at full width, so the size line is no longer cut off. A stacked card is taller, so a page holds 6 frames at 3 columns and 8 at 4 columns. 1 and 2 columns are unchanged.\n<strong>20.41</strong> <b>A Wall tab, and every wall setting has All walls.</b> On the Elevation tab, the wall type, the client elevation, Elevation required, the wall finish and the paint are together on a new <b>Wall</b> tab (they were above the tabs and on Context). Only the wall size, zoom and export stay above the tabs, so the Art tab has more room. Wall finish now prints per wall (the <b>Print</b> tick), and <b>All walls</b> beside it, beside Elevation required and beside Show in deck sets every wall at once. Adding a client elevation to a wall marked Elevation required offers to untick it. Deck Studio's breaker page has the same Print wall finish tick for that wall, with All walls.\n<strong>20.40</strong> <b>Wall finish can be switched off.</b> The WALL: line under ELEVATION DETAIL (WALL: WOOD · WD-1) has an on/off switch for the whole deck: <b>Print on pages</b> beside WALL FINISH on the Elevation tab, or <b>Print wall finish</b> on an elevation breaker page in Deck Studio. Off hides it on every wall page; each wall keeps what you typed, so turning it back on brings it all back.\n<strong>20.39</strong> <b>Drag a project file in to open it.</b> Drop a FRAME project .json from Finder anywhere on the FRAME window (the start screen or the app) and it opens, the same as Open Project. If the open project has unsaved changes, FRAME asks first. In Chrome, Save then writes back to the file you dropped.\n<strong>20.38</strong> <b>Client groupings.</b> In the frame browser, Team groupings is now <b>Client groupings</b>, and a client opens like a vendor: click <b>Ford</b> to see all of Ford's frames, with <b>Standard</b>, <b>Floater</b> and <b>Shadowbox</b> listed under it. Framerica's BW26-409 Gallery White is now in the library and in Ford Standard.\n<strong>20.37</strong> <b>See every image in the project, and package them.</b> The Save menu (the arrow beside Save Project) has <b>Images</b>: every picture in the project, grouped as client elevations, artwork, floorplans, Deck Studio images and so on, each with its image code or name, where it is used, its size, and whether it can be exported (in the file, linked, or missing). <b>Package</b> downloads one zip with the project file, every image in a folder per kind, and a list of what is in it, like packaging an InDesign file. Client elevations now keep the name of the file you added, shown and editable on the Context tab.\n<strong>20.36</strong> <b>The client elevation shows in the spec page thumbnail too.</b> A wall set to <b>Show in deck</b> now has its client elevation in the small Elevation picture on its spec pages, cropped to the wall and behind the art, the same as on the wall's own page. Before, only the wall page and the exports showed it.\n<strong>20.35</strong> <b>Wall paint uses the usual colour picker, and stops at the baseboard.</b> Under Wall Finish, <b>Paint</b> is now a row of round swatches like every other colour choice in FRAME: no paint, whites, greys, charcoal, navy, light oak and walnut, then the colour wheel for anything else. The paint covers the wall down to the top of the baseboard; the baseboard itself stays unpainted, in the editor, on the pages and in exports.\n<strong>20.34</strong> <b>Elevation required sits clear of the size legend.</b> On wall pages the stamp now prints low in the left column, just above the floorplan thumbnail, instead of straight under the WALL: line, where an install page's size legend is and the two overlapped.\n<strong>20.33</strong> <b>Elevation required, stamped for you.</b> When the client has not sent an elevation for a wall, tick <b>Elevation required</b> under Wall Finish. That wall's pages and the spec pages of the art on it print <b>ELEVATION REQUIRED</b> in red with a line under it (Artwork size to be confirmed, or your own words): top right on spec pages, under the title on wall pages, where it stays clear of the drawing. Untick it when the drawing arrives and every page is clean again; nothing is left behind on the pages.\n<strong>20.32</strong> <b>Walls can be painted.</b> Under Wall Finish there is a <b>Wall colour</b> swatch. Pick the wall's paint and the wall shows in that colour in the editor, on its deck pages, in the elevation thumbnail on spec pages, and in SVG, PDF and PNG exports, so the art is seen against the wall it hangs on. <b>Clear</b> puts it back to a plain wall. Catalogue options take it from their wall like the finish.\n<strong>20.31</strong> <b>The client's elevation can be the drawing.</b> On a wall's Context tab, a client elevation you have dropped in and calibrated has a new <b>Show in deck</b> switch. With it on, the drawing prints behind your art on that wall's deck pages and exports, at full strength and cropped to the wall, so the page shows the architect's wall with the art on it and no InDesign step is needed. Off, it stays a faded tracing guide that never prints, as before. Calibrate first (click the two ends of a dimension printed on the drawing and type it) so the art is to scale.\n<strong>20.30</strong> <b>Item codes can follow the client's pattern.</b> On the Deck Studio floorplan, the Categories tab has <b>Item codes</b>: pick a pattern such as <b>L3.ART.S16-01</b> (level, type, sector) or type your own with {level}, {type}, {zone} and {nn}. New codes follow it: <b>+ Add Item</b> asks for the sector and shows the code it will make, and each level's code (Level 03 is L3) can be changed there. Each category has its own prefix box, so a project can call glass GLA. Items have a <b>Sector</b> field beside Location, and <b>Recode</b> moves a project's ART.1 codes to the pattern in one go (pieces keep their letters; walls named after a code follow).\n<strong>20.29</strong> <b>A client's level-first codes sort and duplicate properly.</b> Codes like <b>L3.ART.S16-10A</b> (level, type, sector, placement, piece) were read as type L, number 3, so the item list and the deck listed every A piece first, then every B. They now sort by sector and placement. Duplicating one gives the next placement in that code (L3.ART.S16-11), not L3.1.
 <strong>20.28</strong> <b>Install heights say what they are measured from, and the install page says more.</b> On the Guides tab, <b>Heights from</b> sets what a wall's heights are measured from when the client's markup says (Chair rail at 36", Counter at 34"): the hang dimension then runs from it, is labelled 46" ABOVE CHAIR RAIL instead of AFF, the datum is drawn across the wall with its own height, and the install note says so. Blank is the floor, as before. On an install page's <b>This page</b> panel, <b>Install sequence</b> (B, C, A, D) and <b>Typical gap</b> print as notes. A piece's <b>Weight (lb)</b> (Hardware & Notes) prints in the install legend on any wall where a piece has one. Changing a piece's picture to a different image code now clears its artist, title, medium and year, so one artist's piece is never credited to another. Preflight also flags another project's file stamp in typed text (a footer copied from another job), Frame Code, Colour / CITY, COUNTRY / CODE-XXXX / 0"W x 0"H left from a template, and in an IFS a typed "Elevation Pending" or a title or artist of N/A. The version box takes a scope prefix (GR.V4, CORR.V1), and the PDF downloads as date.project.version.pdf instead of FRAME_Presentation.pdf.
@@ -54677,15 +54548,6 @@ function toggleElevLayer(id, btn) {
     try { _elevGuidesMasterSync(); } catch (e) {}
 }
 
-function selectAllElevFrames() {
-    elevFrames.forEach(f => f.active = true);
-    initElevControls(); drawElevAll(); recalculateDashboardQuantities();
-}
-
-function deselectAllElevFrames() {
-    elevFrames.forEach(f => f.active = false);
-    initElevControls(); drawElevAll(); recalculateDashboardQuantities();
-}
 
 function toggleGroupAllElevFrames(e) {
     e.stopPropagation();
@@ -54734,7 +54596,7 @@ async function batchDownloadAllFramesAsZip() {
         return _toast('Nothing to Pack', 'There are no frames in the project yet. Add some via the Dashboard before running a batch export.');
     }
     if (typeof JSZip === 'undefined') {
-        return showInfoModal('Library Not Loaded', 'JSZip failed to load (network issue?). Refresh the page and try again — if it keeps failing the CDN may be blocked by your network.');
+        return showInfoModal('Library Not Loaded', 'JSZip failed to load (network issue?). Refresh the page and try again.');
     }
 
     // Reset cancel flag for this run; show modal in 'running' state
@@ -56516,8 +56378,6 @@ function _elevDualPart(val) {
 // memory has to live in its OWN variable: elevDualUnit becomes '' when off, so
 // reading the choice back out of it would always give the default.
 let _elevDualLast = 'mm';
-function toggleElevDualUnit(on) { setProjectDualUnit(on ? (_elevDualLast || 'mm') : ''); }
-function setElevDualUnit(mode) { setProjectDualUnit(mode); }
 // THE one writer for the project's second unit: the header chip, the Elevations
 // Settings modal and anything else all come through here, so every view repaints.
 function setProjectDualUnit(mode) {
@@ -56551,10 +56411,6 @@ function seedElevDualUnitInputs() {
 
 
 // ── Annotation style modal ──
-function openAnnotationStyleModal() {
-    // The standalone style modal was merged into Settings. Redirect.
-    openPrecisionModal();
-}
 
 function closeAnnotationStyleModal() {
     document.getElementById('precisionModal').style.display = 'none';
@@ -58006,7 +57862,7 @@ function _printOutputHintText(row) {
     return {
         warn: !n,
         text: n
-            ? n + ' print file' + (n === 1 ? '' : 's') + ' — panel ' + letters + '. Edit in Elevations, Window Panels.'
+            ? n + ' print file' + (n === 1 ? '' : 's') + ': panel ' + letters + '. Edit in Elevations, Window Panels.'
             : 'No window panels on this wall yet. Add them in Elevations, Window Panels, then this graphic splits to match.'
     };
 }
@@ -60151,7 +60007,7 @@ function _underlayCalPreflight() {
     const out = [];
     (elevations || []).forEach((e, i) => {
         const u = _elevUnderlay(e);
-        if (u && !_underlayCalibrated(u)) out.push({ sev: 'warn', text: String((e && e.name) || ('Wall ' + (i + 1))) + ' — client elevation not calibrated, so its scale is a guess. Calibrate it on the Elevation tab, Wall tab, before placing art.', idx: null });
+        if (u && !_underlayCalibrated(u)) out.push({ sev: 'warn', text: String((e && e.name) || ('Wall ' + (i + 1))) + ': client elevation not calibrated, so its scale is a guess. Calibrate it on the Elevation tab, Wall tab, before placing art.', idx: null });
     });
     return out;
 }
@@ -60476,7 +60332,7 @@ function renderUnderlayControls() {
             <div class="gz-run-head"><span class="gz-run-name">Calibrating</span>
               <button class="gz-btn" onclick="_ulCancelCalibrate()">Cancel</button></div>
             <div class="gz-sub" style="margin:0;">Click the two ends of something on the image whose real
-               size you know — the baseboard, a door width, a ceiling height. ${_ulCalFirst ? 'Now click the second point.' : ''}</div>
+               size you know: the baseboard, a door width, a ceiling height. ${_ulCalFirst ? 'Now click the second point.' : ''}</div>
           </div>`;
     }
     const _uncal = !_underlayCalibrated(u);
@@ -60603,7 +60459,7 @@ function renderContextControls() {
         const len = p.lengthIn ? ', ' + _gzFmt(p.lengthIn) + '&quot; long' : '';
         html += `<button class="ctx-chip${armed ? ' ctx-chip-on' : ''}" onclick="armContextShape('${p.key}')"
                     ondblclick="addContextBlock('${p.key}')"
-                    title="${_svgEsc(p.name)} — ${_gzFmt(p.w)}&times;${_gzFmt(p.h)}&quot;${aff}${len}. Click it, then CLICK the wall to place it at exactly this size, or DRAG to give it your own.">
+                    title="${_svgEsc(p.name)}: ${_gzFmt(p.w)}&times;${_gzFmt(p.h)}&quot;${aff}${len}. Click it, then CLICK the wall to place it at exactly this size, or DRAG to give it your own.">
                   <span class="ctx-chip-ico ctx-ico-${p.shape} ctx-ico-fill-${p.fill || 'plain'}"></span><span>${_svgEsc(p.name)}</span>
                 </button>`;
     });
@@ -60617,7 +60473,7 @@ function renderContextControls() {
                   title="Every block in the library on one sheet, drawn to one scale. Click one to place it.">See all blocks</button></div>`;
     if (!blocks.length) {
         html += `<div class="gz-hint">Nothing on this wall but art. Add a block for a door, window,
-                 TV or run of millwork — art draws in front of it, and it prints on the elevation so
+                 TV or run of millwork: art draws in front of it, and it prints on the elevation so
                  the client can see what the art is working around.</div>`;
     } else {
         // Bulk actions, above the list rather than at the bottom of it: the whole point
@@ -60658,7 +60514,7 @@ function renderContextControls() {
                 ${CONTEXT_SHAPES.map(s => `<option value="${s}"${s === shape ? ' selected' : ''}>${s === 'rect' ? 'Box' : s === 'ellipse' ? 'Circle' : s === 'shelf' ? 'Shelf' : 'TV'}</option>`).join('')}
               </select>
               <select class="gz-in ctx-shape-pick" onchange="setContextFill(${ci}, this.value)"
-                      title="Surface — what this thing is made of">
+                      title="Surface: what this thing is made of">
                 ${CONTEXT_FILLS.map(s => `<option value="${s}"${s === fill ? ' selected' : ''}>${s === 'plain' ? 'Plain' : s === 'wood' ? 'Wood' : 'Glass'}</option>`).join('')}
               </select>
               <!-- Disabled rather than hidden when an item has no side: a control that
@@ -60690,7 +60546,7 @@ function renderContextControls() {
             </div>
             <div class="gz-count" style="margin-top:6px;">
               <button class="gz-btn${_ctxLocked(b) ? ' gz-btn-on' : ''}" onclick="toggleContextLock(${ci})"
-                      title="Keep this object's true proportions when either dimension changes — scaling it up can then never stretch or squash the drawing">${_ctxLocked(b) ? '&#128274;' : '&#128275;'} Aspect</button>
+                      title="Keep this object's true proportions when either dimension changes: scaling it up can then never stretch or squash the drawing">${_ctxLocked(b) ? '&#128274;' : '&#128275;'} Aspect</button>
               <button class="gz-btn" onclick="resetContextAspect(${ci})"
                       title="Undo any stretch, keeping the current width">Un-stretch</button>
               <button class="gz-btn${_ctxAvoid(b) ? ' gz-btn-on' : ''}" data-ctx-avoid="${ci}" onclick="toggleContextAvoid(${ci})"
@@ -60878,11 +60734,6 @@ function hideDim(id) {
     if (typeof pushHistory === 'function') pushHistory();
     drawElevAll();
 }
-function restoreHiddenDims() {
-    const ce = elevations[currentElevIndex];
-    if (ce) ce.hiddenDims = {};
-    drawElevAll();
-}
 // Offset stored in INCHES (unit-independent). Returns offset in the CURRENT
 // elevation unit for use in rendering math.
 function getDimOffset(id) {
@@ -60935,10 +60786,6 @@ function resetDimOffsets() {
     if (ce) { ce.dimOffsets = {}; ce.hiddenDims = {}; delete ce.dimLiftSide; (ce.customLines || []).forEach(l => { if (l) delete l.lblSide; }); }
     drawElevAll();
     if (typeof pushHistory === 'function') pushHistory();
-}
-function anyDimOffsetsSet() {
-    const offs = getElevDimOffsets();
-    return Object.keys(offs).some(k => Math.abs(offs[k]) > 0.001);
 }
 
 // ──────────────────────────────────────────────────────────────────────────
@@ -63531,119 +63378,6 @@ function buildDimControls(opts) {
 // Drag the number/label ALONG the line (h-dim: left/right; v-dim: up/down) to
 // separate overlapping numbers. Updates the label-along offset for dimId.
 
-// Drag the number/label ALONG the line (h-dim: left/right; v-dim: up/down) to
-// separate overlapping numbers. Updates the label-along offset for dimId.
-function attachLabelDrag(lblEl, type, dimId) {
-    lblEl.addEventListener('mousedown', (e) => {
-        e.preventDefault(); e.stopPropagation();
-        const startX = e.clientX, startY = e.clientY;
-        const startOff = getLabelOffset(dimId); // current unit
-        document.body.style.cursor = 'move';
-        const onMove = (mv) => {
-            let deltaPx, newOff;
-            if (type === 'h') {
-                deltaPx = mv.clientX - startX;       // along x
-                newOff = startOff + deltaPx / elevScale;
-            } else {
-                deltaPx = mv.clientY - startY;       // screen down → along -y(up=+)
-                newOff = startOff - deltaPx / elevScale;
-            }
-            setLabelOffset(dimId, newOff);
-            drawElevAll();
-        };
-        const onUp = () => {
-            document.removeEventListener('mousemove', onMove);
-            document.removeEventListener('mouseup', onUp);
-            document.body.style.cursor = '';
-            if (typeof pushHistory === 'function') pushHistory();
-        };
-        document.addEventListener('mousemove', onMove);
-        document.addEventListener('mouseup', onUp);
-    });
-}
-
-// Attach an arrow-style drag handle to a dimension line. Horizontal lines
-// (drag up/down) get stacked up/down chevrons at the midpoint. Vertical lines
-// (drag left/right) get left/right chevrons flanking the number. Faded at
-// rest, prominent on hover. Excluded from exports. Value never changes.
-function attachDimDragHandle(dim, type, dimId, lblOffPx) {
-    lblOffPx = lblOffPx || 0;
-    const grip = document.createElement('div');
-    grip.className = 'dim-drag-grip';
-    grip.setAttribute('data-export-skip', '1');
-    grip.setAttribute('data-html2canvas-ignore', 'true');
-    grip.title = 'Drag to reposition this dimension';
-
-    const chevron = (dir) => {
-        // dir: 'up','down','left','right'
-        const pts = {
-            up:    '4,11 8,5 12,11',
-            down:  '4,5 8,11 12,5',
-            left:  '11,4 5,8 11,12',
-            right: '5,4 11,8 5,12',
-        }[dir];
-        return `<svg viewBox="0 0 16 16" width="13" height="13" style="display:block;"><polyline points="${pts}" fill="none" stroke="var(--dim-color)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-    };
-
-    if (type === 'h') {
-        // Stacked up/down chevrons, centered on the line + label offset so they
-        // follow the number when it's slid along the line.
-        grip.style.cssText =
-            `position:absolute; left:calc(50% + ${lblOffPx}px); top:50%; transform:translate(-50%,-50%);` +
-            'display:flex; flex-direction:column; align-items:center; line-height:0;' +
-            'cursor:ns-resize; z-index:50; pointer-events:auto; opacity:0.35; transition:opacity 0.12s;';
-        grip.innerHTML = chevron('up') + chevron('down');
-    } else {
-        // Left/right chevrons flanking the number; gap sized to the label
-        // width so the arrows stay just OUTSIDE the white box as it grows or
-        // shrinks (e.g. unit changes). Measured once the dim is in the DOM.
-        // top offset follows the number along the vertical line (up = +).
-        grip.style.cssText =
-            `position:absolute; left:50%; top:calc(50% - ${lblOffPx}px); transform:translate(-50%,-50%);` +
-            'display:flex; flex-direction:row; align-items:center; gap:30px; line-height:0;' +
-            'cursor:ew-resize; z-index:50; pointer-events:auto; opacity:0.35; transition:opacity 0.12s;';
-        grip.innerHTML = chevron('left') + chevron('right');
-        // After layout, set the gap to the label's width + margin.
-        requestAnimationFrame(() => {
-            const lbl = dim.querySelector('.arch-label-new');
-            if (lbl) {
-                const w = lbl.getBoundingClientRect().width;
-                if (w > 0) grip.style.gap = (w + 14) + 'px';
-            }
-        });
-    }
-    grip.onmouseenter = () => { grip.style.opacity = '1'; };
-    grip.onmouseleave = () => { grip.style.opacity = '0.35'; };
-
-    grip.onmousedown = (e) => {
-        e.preventDefault(); e.stopPropagation();
-        const startX = e.clientX, startY = e.clientY;
-        const startOffset = getDimOffset(dimId); // current unit
-        document.body.style.cursor = (type === 'h') ? 'ns-resize' : 'ew-resize';
-        const onMove = (mv) => {
-            let deltaPx, newOffset;
-            if (type === 'h') {
-                deltaPx = mv.clientY - startY;
-                newOffset = startOffset - (deltaPx / elevScale); // screen-down → elevation-down
-            } else {
-                deltaPx = mv.clientX - startX;
-                newOffset = startOffset + (deltaPx / elevScale);
-            }
-            const snapped = snapDimOffset(newOffset, dimId);
-            setDimOffset(dimId, snapped.value);
-            drawElevAll();
-        };
-        const onUp = () => {
-            document.removeEventListener('mousemove', onMove);
-            document.removeEventListener('mouseup', onUp);
-            document.body.style.cursor = '';
-            if (typeof pushHistory === 'function') pushHistory();
-        };
-        document.addEventListener('mousemove', onMove);
-        document.addEventListener('mouseup', onUp);
-    };
-    dim.appendChild(grip);
-}
 
 // Arrow drag handle for a GROUP-BOX dimension line. Unlike spacing dims, the
 // group dim lines are loose elements in the group-dim-layer, so the handle is
@@ -63769,60 +63503,6 @@ function attachGroupLabelDrag(lblEl, type, lblId, halfSpanPx, groupId) {
     });
 }
 
-function attachGroupDimHandle(layer, type, id, cxPx, cyPx) {
-    const grip = document.createElement('div');
-    grip.className = 'dim-drag-grip';
-    grip.setAttribute('data-export-skip', '1');
-    grip.setAttribute('data-html2canvas-ignore', 'true');
-    grip.title = 'Drag to reposition this dimension';
-    const chevron = (dir) => {
-        const pts = { up:'4,11 8,5 12,11', down:'4,5 8,11 12,5', left:'11,4 5,8 11,12', right:'5,4 11,8 5,12' }[dir];
-        return `<svg viewBox="0 0 16 16" width="13" height="13" style="display:block;"><polyline points="${pts}" fill="none" stroke="var(--dim-color)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-    };
-    const common = `position:absolute; left:${cxPx}px; top:${cyPx}px; z-index:50; pointer-events:auto; opacity:0.35; transition:opacity 0.12s; line-height:0;`;
-    if (type === 'h') {
-        grip.style.cssText = common + 'transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; cursor:ns-resize;';
-        grip.innerHTML = chevron('up') + chevron('down');
-    } else {
-        grip.style.cssText = common + 'transform:translate(-50%,-50%); display:flex; flex-direction:row; align-items:center; gap:6px; cursor:ew-resize;';
-        grip.innerHTML = chevron('left') + chevron('right');
-    }
-    grip.onmouseenter = () => { grip.style.opacity = '1'; };
-    grip.onmouseleave = () => { grip.style.opacity = '0.35'; };
-    grip.onmousedown = (e) => {
-        e.preventDefault(); e.stopPropagation();
-        const startX = e.clientX, startY = e.clientY;
-        const startOffset = getDimOffset(id);
-        document.body.style.cursor = (type === 'h') ? 'ns-resize' : 'ew-resize';
-        const onMove = (mv) => {
-            let newOffset;
-            if (type === 'h') {
-                // drag UP (screen -clientY) → larger gap above box → larger offset
-                newOffset = startOffset + ((startY - mv.clientY) / elevScale);
-            } else {
-                // drag LEFT (screen -clientX) → larger gap left of box → larger offset
-                newOffset = startOffset + ((startX - mv.clientX) / elevScale);
-            }
-            if (newOffset < 0) newOffset = 0; // can't go inside the box
-            const snapped = snapDimOffset(newOffset, id);
-            setDimOffset(id, Math.max(0, snapped.value));
-            drawElevAll();
-        };
-        const onUp = () => {
-            document.removeEventListener('mousemove', onMove);
-            document.removeEventListener('mouseup', onUp);
-            document.body.style.cursor = '';
-            if (typeof pushHistory === 'function') pushHistory();
-        };
-        document.addEventListener('mousemove', onMove);
-        document.addEventListener('mouseup', onUp);
-    };
-    layer.appendChild(grip);
-}
-
-function setElevUnit(u) {
-    setUnit(u);
-}
 
 // Helper: load an image from a data URL and resolve when ready (or reject on error)
 // DECODED ONCE (18.80): one export decoded 43 images 218 times. A `data:` image is kept
@@ -65915,7 +65595,6 @@ function _sampleOf(kind, code) {
     const m = editorialContent && editorialContent.samples;
     return (m && m[_sampleKey(kind, code)]) || null;
 }
-function _sampleStatus(kind, code) { const s = _sampleOf(kind, code); return (s && s.st) || ''; }
 function _rowTakesFrameSample(r) {
     const p = r && r.product;
     return !!p && p !== 'Frameless Canvas (Wrapped)' && p !== 'Sourced Object' && !_isFlatGraphic(p);
@@ -66037,7 +65716,7 @@ function _samplePreflight() {
     items.forEach(it => {
         if (it.st !== 'rejected') return;
         const what = it.kind === 'f' ? 'frame' : 'mat';
-        out.push({ sev: 'err', text: it.code + ' — ' + what + ' rejected by the client, still on ' + it.ids.join(', ') + (it.use ? ' (replace with ' + it.use + ')' : ''), idx: null, prod: prod });
+        out.push({ sev: 'err', text: it.code + ': ' + what + ' rejected by the client, still on ' + it.ids.join(', ') + (it.use ? ' (replace with ' + it.use + ')' : ''), idx: null, prod: prod });
     });
     if (ifs) {
         const open = items.filter(it => it.st !== 'approved' && it.st !== 'rejected');
@@ -66071,8 +65750,8 @@ function _pinMovePreflight(pages) {
         seen[key] = true;
         const n = _deckLvlOf((tp || ck).lv), i = planIdx(n);
         out.push(tp
-            ? { sev: ifs ? 'err' : 'warn', pinMove: key, text: key + ' \u2014 moved to ' + lvName(n) + ' and has no spot on its plan yet (its amber ? pin is not printed). Drag it into place, or click it to keep it there.', idx: i >= 0 ? i : null }
-            : { sev: ifs ? 'err' : 'warn', pinMove: key, text: key + ' \u2014 changed sector; its pin on ' + lvName(n) + ' may be in the old spot. Check it, then Keep spot or drag it.', idx: i >= 0 ? i : null });
+            ? { sev: ifs ? 'err' : 'warn', pinMove: key, text: key + ': moved to ' + lvName(n) + ' and has no spot on its plan yet (its amber ? pin is not printed). Drag it into place, or click it to keep it there.', idx: i >= 0 ? i : null }
+            : { sev: ifs ? 'err' : 'warn', pinMove: key, text: key + ': changed sector; its pin on ' + lvName(n) + ' may be in the old spot. Check it, then Keep spot or drag it.', idx: i >= 0 ? i : null });
     });
     return out;
 }
@@ -66090,7 +65769,7 @@ function _readinessPreflight() {
     });
     order.forEach(g => {
         if (Object.keys(g.sigs).length < 2) return;
-        out.push({ sev: 'err', text: g.code + ' — one image code on different pictures (' + g.ids.join(', ') + '). Give the changed picture its own code.', idx: null, go: { kind: 'piece', label: 'Piece', rowId: g.ids[0] } });
+        out.push({ sev: 'err', text: g.code + ': one image code on different pictures (' + g.ids.join(', ') + '). Give the changed picture its own code.', idx: null, go: { kind: 'piece', label: 'Piece', rowId: g.ids[0] } });
     });
     if (!ifs) return out;
     const TBD = /\bTBD\b/i;
@@ -66101,12 +65780,12 @@ function _readinessPreflight() {
         if (!ic || TBD.test(ic)) bad.push('Image code');
         try { (buildSpecStrings(r).lines || []).forEach(l => { if (l && TBD.test(String(l.value || ''))) bad.push(l.label); }); } catch (e) {}
         if (TBD.test(String(r.notes || ''))) bad.push('Notes');
-        if (bad.length) out.push({ sev: 'err', text: r.id + ' — still TBD in an IFS: ' + bad.join(', '), idx: null, go: { kind: 'piece', label: 'Piece', rowId: r.id } });
+        if (bad.length) out.push({ sev: 'err', text: r.id + ': still TBD in an IFS: ' + bad.join(', '), idx: null, go: { kind: 'piece', label: 'Piece', rowId: r.id } });
     });
     try {
         _catPlaces().forEach(place => {
             const n = _catTree(place).reduce((a, t) => a + t.opts.length, 0);
-            if (n > 1) out.push({ sev: 'warn', text: place + ' — still shows ' + n + ' options in an IFS. Delete the ones the client did not choose.', idx: null });
+            if (n > 1) out.push({ sev: 'warn', text: place + ': still shows ' + n + ' options in an IFS. Delete the ones the client did not choose.', idx: null });
         });
     } catch (e) {}
     try {
@@ -66171,17 +65850,17 @@ function _leftoverPreflight(pages) {
                 if (code && body.indexOf(code) >= 0) continue;
                 if (pname.length >= 4 && body.indexOf(pname.slice(0, 12)) >= 0) continue;
                 flagged['s' + x.i] = 1;
-                out.push({ sev: ifs ? 'err' : 'warn', text: _dsPageLabel(x.d) + ' — says “' + m[0] + '”, which is not this project (' + (meta.code || (nmEl && nmEl.value) || 'Project tab') + '). Text copied from another job?', idx: x.i });
+                out.push({ sev: ifs ? 'err' : 'warn', text: _dsPageLabel(x.d) + ': says “' + m[0] + '”, which is not this project (' + (meta.code || (nmEl && nmEl.value) || 'Project tab') + '). Text copied from another job?', idx: x.i });
                 break;
             }
         }
         if (ifs && !flagged['p' + x.i] && /\b(?:elevation|floor ?plan|drawing)s? pending\b/i.test(x.t)) {
             flagged['p' + x.i] = 1;
-            out.push({ sev: 'warn', text: _dsPageLabel(x.d) + ' — says “Pending” in an IFS. If the drawing is on the page, delete the words; if it is missing, say ELEVATION REQUIRED in red and what is needed.', idx: x.i });
+            out.push({ sev: 'warn', text: _dsPageLabel(x.d) + ': says “Pending” in an IFS. If the drawing is on the page, delete the words; if it is missing, say ELEVATION REQUIRED in red and what is needed.', idx: x.i });
         }
         if (ifs && !flagged['n' + x.i] && /\b(?:title|artist)\s*:?\s*n\s*\/\s*a\b/i.test(x.t)) {
             flagged['n' + x.i] = 1;
-            out.push({ sev: 'warn', text: _dsPageLabel(x.d) + ' — a title or artist reads N/A in an IFS. Give the real credit, or delete the box for a piece that has none.', idx: x.i });
+            out.push({ sev: 'warn', text: _dsPageLabel(x.d) + ': a title or artist reads N/A in an IFS. Give the real credit, or delete the box for a piece that has none.', idx: x.i });
         }
     });
     return out;
@@ -66198,14 +65877,14 @@ function _ifsAuditPreflight(pages) {
         if (!c) return;
         (seen[c] = seen[c] || []).push(r.id);
     });
-    Object.keys(seen).forEach(c => { if (seen[c].length > 1) out.push({ sev: 'err', text: seen[c].join(' and ') + ' — two placements with the same code. Each code must mean one place.', idx: null, go: go({ id: seen[c][0] }) }); });
+    Object.keys(seen).forEach(c => { if (seen[c].length > 1) out.push({ sev: 'err', text: seen[c].join(' and ') + ': two placements with the same code. Each code must mean one place.', idx: null, go: go({ id: seen[c][0] }) }); });
     // Words left from a template, and OPTION headings once the deck is final.
     const ifs = _deckIsIFS();
     const flagged = {};
     _pfPageTexts(pages).forEach(x => {
         const m = PAGE_PLACEHOLDER_RE.exec(x.t);
-        if (m && !flagged['p' + x.i]) { flagged['p' + x.i] = 1; out.push({ sev: ifs ? 'err' : 'warn', text: _dsPageLabel(x.d) + ' — still says “' + m[0] + '” (template text)', idx: x.i }); }
-        if (ifs && /\bOPTION\b/.test(x.t) && !flagged['o' + x.i]) { flagged['o' + x.i] = 1; out.push({ sev: 'warn', text: _dsPageLabel(x.d) + ' — an OPTION heading in an IFS. Show only what the client chose.', idx: x.i }); }
+        if (m && !flagged['p' + x.i]) { flagged['p' + x.i] = 1; out.push({ sev: ifs ? 'err' : 'warn', text: _dsPageLabel(x.d) + ': still says “' + m[0] + '” (template text)', idx: x.i }); }
+        if (ifs && /\bOPTION\b/.test(x.t) && !flagged['o' + x.i]) { flagged['o' + x.i] = 1; out.push({ sev: 'warn', text: _dsPageLabel(x.d) + ': an OPTION heading in an IFS. Show only what the client chose.', idx: x.i }); }
     });
     if (!ifs) return out;
     rows.forEach(r => {
@@ -66222,8 +65901,8 @@ function _ifsAuditPreflight(pages) {
             if (bad(r.artworkTitle)) warns.push('title');
             if (bad(r.artist)) warns.push('artist');
         }
-        if (errs.length) out.push({ sev: 'err', text: r.id + ' — no ' + errs.join(' or ') + ' in an IFS', idx: null, go: go(r) });
-        if (warns.length) out.push(Object.assign({ sev: 'warn', text: r.id + ' — no ' + warns.join(', ') + ' in an IFS', idx: null, go: go(r) }, (warns.indexOf('title') >= 0 || warns.indexOf('artist') >= 0) ? { prod: { tab: 'labels' } } : {}));
+        if (errs.length) out.push({ sev: 'err', text: r.id + ': no ' + errs.join(' or ') + ' in an IFS', idx: null, go: go(r) });
+        if (warns.length) out.push(Object.assign({ sev: 'warn', text: r.id + ': no ' + warns.join(', ') + ' in an IFS', idx: null, go: go(r) }, (warns.indexOf('title') >= 0 || warns.indexOf('artist') >= 0) ? { prod: { tab: 'labels' } } : {}));
     });
     return out;
 }
@@ -66247,7 +65926,7 @@ function _artTypePreflight(pages) {
     _deckSpecRows().forEach(r => {
         if (!r || !r.id) return;
         const shop = _shopHostOf(r);
-        if (shop && _rowIsOriginalCode(r)) out.push({ sev: 'warn', text: r.id + ' — bought from ' + shop + ' but coded as an original. A shop piece is sourced (FSO); show its real colour and finish, not the seller’s render.', idx: null, go: { kind: 'piece', label: 'Piece', rowId: r.id } });
+        if (shop && _rowIsOriginalCode(r)) out.push({ sev: 'warn', text: r.id + ': bought from ' + shop + ' but coded as an original. A shop piece is sourced (FSO); show its real colour and finish, not the seller’s render.', idx: null, go: { kind: 'piece', label: 'Piece', rowId: r.id } });
     });
     // Notes against the work on their page: spec pages only, where the page IS the pieces.
     const notes = {};
@@ -66256,8 +65935,8 @@ function _artTypePreflight(pages) {
         if (d.kind !== 'spec' || d._install) return;
         const mem = (d.members && d.members.length) ? d.members : (d.row ? [d.row] : []);
         const comm = mem.filter(_rowIsCommission);
-        if (notes[i] && !comm.length) out.push({ sev: 'warn', text: _dsPageLabel(d) + ' — carries the commission note, but nothing on it is a commission. Use the note that fits the work.', idx: i });
-        if (!notes[i] && comm.length) out.push({ sev: 'warn', text: _dsPageLabel(d) + ' — ' + comm.map(r => r.id).join(', ') + (comm.length === 1 ? ' is a commission' : ' are commissions') + ' with no commission note (Text menu › Commission note).', idx: i });
+        if (notes[i] && !comm.length) out.push({ sev: 'warn', text: _dsPageLabel(d) + ': carries the commission note, but nothing on it is a commission. Use the note that fits the work.', idx: i });
+        if (!notes[i] && comm.length) out.push({ sev: 'warn', text: _dsPageLabel(d) + ': ' + comm.map(r => r.id).join(', ') + (comm.length === 1 ? ' is a commission' : ' are commissions') + ' with no commission note (Text menu › Commission note).', idx: i });
     });
     return out;
 }
@@ -66289,7 +65968,7 @@ function _printResPreflight() {
         if (ppi >= min) return;
         const sz = _rowOpeningAndPrint(r);
         const dims = _fmtUnitNum(sz.printW, dashUnit) + ' × ' + _fmtUnitNum(sz.printH, dashUnit) + ' ' + dashUnit;
-        out.push({ sev: ifs ? 'err' : 'warn', text: r.id + ' — the picture is ' + r.artLink.pw + ' × ' + r.artLink.ph + ' px: ' + Math.round(ppi) + ' ppi at its ' + dims + ' print. It needs about ' + min + ' to print sharp; ask for a bigger file.', idx: null, go: { kind: 'piece', label: 'Piece', rowId: r.id } });
+        out.push({ sev: ifs ? 'err' : 'warn', text: r.id + ': the picture is ' + r.artLink.pw + ' × ' + r.artLink.ph + ' px: ' + Math.round(ppi) + ' ppi at its ' + dims + ' print. It needs about ' + min + ' to print sharp; ask for a bigger file.', idx: null, go: { kind: 'piece', label: 'Piece', rowId: r.id } });
     });
     return out;
 }
@@ -66305,7 +65984,7 @@ function _sizeMathPreflight() {
         const sz = _rowOpeningAndPrint(r);
         if (!sz.short) return;
         const f = (v) => _fmtUnitNum(parseFloat(v) || 0, dashUnit);
-        out.push({ sev: ifs ? 'err' : 'warn', text: r.id + ' — the frame (' + f(r.fW) + ' ' + dashUnit + ' a side) and mats leave no opening in a ' + f(r.extW) + ' × ' + f(r.extH) + ' ' + dashUnit + ' overall. Check the overall size, frame width and mats.', idx: null, go: { kind: 'piece', label: 'Piece', rowId: r.id } });
+        out.push({ sev: ifs ? 'err' : 'warn', text: r.id + ': the frame (' + f(r.fW) + ' ' + dashUnit + ' a side) and mats leave no opening in a ' + f(r.extW) + ' × ' + f(r.extH) + ' ' + dashUnit + ' overall. Check the overall size, frame width and mats.', idx: null, go: { kind: 'piece', label: 'Piece', rowId: r.id } });
     });
     return out;
 }
@@ -66405,11 +66084,11 @@ function _canvasSidesPreflight() {
         const info = _canvasSidesInfo(r);
         if (!info) return;
         const go = { kind: 'piece', label: 'Piece', rowId: r.id };
-        if (!info.mode) { out.push({ sev: 'warn', text: r.id + ' — say how the canvas sides are made: the picture wraps (crop into it), mirror the edge, or extend it in production (Sides, on the dashboard).', idx: null, go: go }); return; }
+        if (!info.mode) { out.push({ sev: 'warn', text: r.id + ': say how the canvas sides are made: the picture wraps (crop into it), mirror the edge, or extend it in production (Sides, on the dashboard).', idx: null, go: go }); return; }
         if (info.short.length) {
             const f = (v) => _fmtUnitNum(Math.max(0, v), dashUnit) + ' ' + dashUnit;
             const least = Math.min.apply(null, info.short.map(k => info.spare[k]));
-            out.push({ sev: ifs ? 'err' : 'warn', text: r.id + ' — the picture wraps round the sides, but the crop leaves only ' + f(least) + ' of the ' + f(info.wrap) + ' it needs on the ' + info.short.join(', ') + '. Use Make room on the dashboard, or pick Mirror or Extend.', idx: null, go: go });
+            out.push({ sev: ifs ? 'err' : 'warn', text: r.id + ': the picture wraps round the sides, but the crop leaves only ' + f(least) + ' of the ' + f(info.wrap) + ' it needs on the ' + info.short.join(', ') + '. Use Make room on the dashboard, or pick Mirror or Extend.', idx: null, go: go });
         }
     });
     return out;
@@ -66419,7 +66098,7 @@ function _maxMakePreflight() {
     _deckSpecRows().forEach(r => {
         if (!r || !r.id) return;
         const cd = _canvasDepthIssue(r);
-        _maxMakeIssues(r).concat(cd ? [cd] : []).forEach(t => out.push({ sev: ifs ? 'err' : 'warn', text: r.id + ' — ' + t, idx: null, go: { kind: 'piece', label: 'Piece', rowId: r.id } }));
+        _maxMakeIssues(r).concat(cd ? [cd] : []).forEach(t => out.push({ sev: ifs ? 'err' : 'warn', text: r.id + ': ' + t, idx: null, go: { kind: 'piece', label: 'Piece', rowId: r.id } }));
     });
     return out;
 }
@@ -66436,7 +66115,7 @@ function _imgCodeShapePreflight() {
         if (!r || !r.id || !r.artworkUrl) return;
         const ic = _imgCodeClean(r.imageCode || '');
         if (!ic || /\bTBD\b/i.test(ic) || HOUSE_IMG_CODE_RE.test(ic)) return;
-        out.push({ sev: ifs ? 'err' : 'warn', text: r.id + ' — image code “' + ic + '” is not a house code (like FAO.010.00031). Give the picture its prefix and number so the vendor can find the file.', idx: null, go: { kind: 'piece', label: 'Piece', rowId: r.id } });
+        out.push({ sev: ifs ? 'err' : 'warn', text: r.id + ': image code “' + ic + '” is not a house code (like FAO.010.00031). Give the picture its prefix and number so the vendor can find the file.', idx: null, go: { kind: 'piece', label: 'Piece', rowId: r.id } });
     });
     return out;
 }
@@ -66479,7 +66158,7 @@ function _stagePreflight(pages) {
         const what = [wrongV, wrongStage.length ? wrongStage[0] : null].filter(Boolean).join(', ');
         const key = x.i + '|' + what;
         if (seen[key]) return; seen[key] = 1;
-        out.push({ sev: 'warn', text: _dsPageLabel(x.d) + ' — says ' + what + ', but this deck is ' + truth + ' (Project tab). Update the page or the Project tab.', idx: x.i });
+        out.push({ sev: 'warn', text: _dsPageLabel(x.d) + ': says ' + what + ', but this deck is ' + truth + ' (Project tab). Update the page or the Project tab.', idx: x.i });
     });
     return out;
 }

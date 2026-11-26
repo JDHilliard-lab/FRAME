@@ -58,8 +58,7 @@ const path = require('path');
       ['_drawProsePage', 'M, M + 14'],
       ['_drawStrategyPage', 'M, M + 14'],
       ['_drawArtIndexPage', 'M, M + 24'],
-      ['_drawThankYouPage', 'M, M + 18'],
-      ['_drawPlaceholderPage', 'M + 24, M + 44']
+      ['_drawThankYouPage', 'M, M + 18']
     ];
     OLD.forEach((p) => {
       if (codeOnly(fnBody(p[0])).indexOf(p[1]) >= 0) throw new Error(p[0] + ' still draws its title at ' + p[1]);
@@ -69,7 +68,7 @@ const path = require('path');
   check('every automated renderer goes through the one title drawer', () => {
     ['_drawFloorplanKeyPage', '_drawFrameRecPage', '_drawTimelinePagePills', '_drawTimelinePageDots',
      '_drawProsePage', '_drawStrategyPage', '_drawArtIndexPage', '_drawThankYouPage',
-     '_drawPlaceholderPage', '_drawFlatGraphicSpecPage', '_drawSpecSetPageBody',
+     '_drawFlatGraphicSpecPage', '_drawSpecSetPageBody',
      '_drawInstallGuidePage'].forEach(fn => {
       if (codeOnly(fnBody(fn)).indexOf('_drawPageTitle(') < 0) throw new Error(fn + ' does not call _drawPageTitle');
     });

@@ -141,7 +141,7 @@ const path = require('path');
     showConfirmModal = realConfirm;
 
     await __check('the page preview and the guide manager are on the shared shell', () => {
-      ['_dsShowPreviewModal', '_mbOpenGuideManager'].forEach(fn => {
+      ['_mbOpenGuideManager'].forEach(fn => {
         const b = S.slice(S.indexOf('function ' + fn), S.indexOf(String.fromCharCode(10) + '}', S.indexOf('function ' + fn)));
         if (b.indexOf('e.target === m') >= 0) throw new Error(fn + ' still closes on any click whose target is the overlay');
         if (b.indexOf('data-modal-close') < 0) throw new Error(fn + ' has no close control for Escape to press');

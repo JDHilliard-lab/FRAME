@@ -1466,18 +1466,6 @@ const path = require('path');
       if ((alt.customLines || []).length) throw new Error('a custom line crossed to another LAYOUT');
     });
 
-    __check('TWO buttons, one prompt, and each says what it will make', () => {
-      if (fnBody('catArrangementAction').indexOf("_catLayoutChooser(currentElevIndex, 'layout')") < 0) throw new Error('+ LAYOUT does not open the prompt');
-      if (fnBody('catFrameSetAction').indexOf("_catLayoutChooser(currentElevIndex, 'set')") < 0) throw new Error('+ SET does not open the prompt');
-      const c = fnBody('_catLayoutChooser');
-      // The two sentences a designer needs before the wall exists.
-      if (c.indexOf('A DIFFERENT SET OF FRAMES') < 0) throw new Error('the prompt does not explain a frame set');
-      if (c.indexOf('THE SAME FRAMES, REARRANGED') < 0) throw new Error('the prompt does not explain a layout');
-      // The NAME is collected at creation, when it is known.
-      if (c.indexOf('nameIn') < 0) throw new Error('the prompt does not collect a name');
-      if (c.indexOf('newSet: isSet') < 0) throw new Error('the prompt does not pass the kind through');
-    });
-
     __check('SET 1 IS SPELLED WITHOUT A NUMBER, so older projects parse unchanged', () => {
       // Every code that predates frame sets has no second number group, so it reads as
       // set 1 of its own placement and groups exactly as it did.

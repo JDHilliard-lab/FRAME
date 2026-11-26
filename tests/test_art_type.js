@@ -49,7 +49,7 @@ const any = (list, re) => list.some(t => re.test(t));
 
 check('EXACT BUG: an original (FAO) bought on Etsy is flagged as a shop piece', () => {
   const pf = fx.setup([R({ imageCode: 'FAO.010.00031', sourceUrl: 'https://www.etsy.com/listing/123/clay-panel' })]);
-  if (!any(pf, /ART\.1 — bought from etsy\.com but coded as an original/)) throw new Error(pf.join(' | '));
+  if (!any(pf, /ART\.1: bought from etsy\.com but coded as an original/)) throw new Error(pf.join(' | '));
 });
 
 check('the same piece coded FSO, or an FAO from a gallery, is fine', () => {

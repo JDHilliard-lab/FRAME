@@ -202,7 +202,7 @@ const fs = require('fs');
     __check('Deck Studio colour swatch families reach the Elevations Settings modal', () => {
       seedAnnotationStyleInputs();
       _syncImageCodeStyleControls();
-      const all = _frameSwatchList();
+      const all = []; FRAME_SWATCH_FAMILIES.forEach(f => f.colors.forEach(c => { if (all.indexOf(c) < 0) all.push(c); }));
       if (all.length < 8) throw new Error('swatch list too small');
       ['annotColorSwatches','imgCodeColorSwatches'].forEach(id => {
         const host = document.getElementById(id);

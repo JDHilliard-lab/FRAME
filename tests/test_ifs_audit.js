@@ -51,14 +51,14 @@ const OK_ROW = { id: 'ART.1', imageCode: 'FJH.010.00001', product: 'Framed Art',
 check('EXACT BUG: the starter deck’s filler is flagged on the page it sits on', () => {
   fx.setup([OK_ROW]); ver.value = '';
   const pf = fx.run();
-  if (!has(pf, /Cover — still says .CLIENT NAME/)) throw new Error(pf.map(x => x.text).join(' | '));
+  if (!has(pf, /Cover: still says .CLIENT NAME/)) throw new Error(pf.map(x => x.text).join(' | '));
   if (!has(pf, /still says .*HEADING/)) throw new Error('section headings not flagged');
 });
 
 check('EXACT BUG: a filler paragraph on a page is caught (a filler bio once went to a client)', () => {
   fx.setup([OK_ROW]); ver.value = '';
   fx.ec().layoutPages = [{ id: 'pgBio', type: 'custom', title: 'Featured artist', afterKey: 'fixed:cover', elements: [{ type: 'text', text: 'The oldest known paravian fossils come from the Jurassic.' }] }];
-  if (!has(fx.run(), /Featured artist — still says .paravian/i)) throw new Error('missed');
+  if (!has(fx.run(), /Featured artist: still says .paravian/i)) throw new Error('missed');
 });
 
 check('filler is a warning in a draft and an error in an IFS', () => {
@@ -70,7 +70,7 @@ check('filler is a warning in a draft and an error in an IFS', () => {
 
 check('two placements with one code, punctuation aside, are an error in any deck', () => {
   fx.setup([OK_ROW, Object.assign({}, OK_ROW, { id: 'ART-1' })], 'concept');
-  if (!has(fx.run(), /ART\.1 and ART-1 — two placements with the same code/, 'err')) throw new Error(fx.run().map(x => x.text).join(' | '));
+  if (!has(fx.run(), /ART\.1 and ART-1: two placements with the same code/, 'err')) throw new Error(fx.run().map(x => x.text).join(' | '));
 });
 
 check('EXACT BUG: Final Spec catches no size, no frame code, no glass, no stretcher depth', () => {
@@ -80,17 +80,17 @@ check('EXACT BUG: Final Spec catches no size, no frame code, no glass, no stretc
     Object.assign({}, OK_ROW, { id: 'ART.3', product: 'Frameless Canvas (Wrapped)', canvasDepth: 0 }),
   ], 'final');
   const pf = fx.run();
-  if (!has(pf, /ART\.1 — no overall size or frame code in an IFS/, 'err')) throw new Error(pf.map(x => x.text).join(' | '));
-  if (!has(pf, /ART\.2 — no glass in an IFS/, 'warn')) throw new Error('glass');
-  if (!has(pf, /ART\.3 — no stretcher depth in an IFS/, 'warn')) throw new Error('stretcher depth');
-  if (has(pf, /ART\.3 — .*glass/)) throw new Error('a wrapped canvas was asked for glass');
+  if (!has(pf, /ART\.1: no overall size or frame code in an IFS/, 'err')) throw new Error(pf.map(x => x.text).join(' | '));
+  if (!has(pf, /ART\.2: no glass in an IFS/, 'warn')) throw new Error('glass');
+  if (!has(pf, /ART\.3: no stretcher depth in an IFS/, 'warn')) throw new Error('stretcher depth');
+  if (has(pf, /ART\.3: .*glass/)) throw new Error('a wrapped canvas was asked for glass');
 });
 
 check('EXACT BUG: an original or commission with no title or artist is flagged in an IFS (labels, invoices)', () => {
   fx.setup([Object.assign({}, OK_ROW, { id: 'ART.4', imageCode: 'FAO.010.00007', artworkTitle: 'N/A', artist: '' })], 'final');
-  if (!has(fx.run(), /ART\.4 — no title, artist in an IFS/)) throw new Error(fx.run().map(x => x.text).join(' | '));
+  if (!has(fx.run(), /ART\.4: no title, artist in an IFS/)) throw new Error(fx.run().map(x => x.text).join(' | '));
   fx.setup([Object.assign({}, OK_ROW, { id: 'ART.4', imageCode: 'FJH.010.00007', artworkTitle: '', artist: '' })], 'final');
-  if (has(fx.run(), /ART\.4 — no title/)) throw new Error('a licensed print was asked for a title');
+  if (has(fx.run(), /ART\.4: no title/)) throw new Error('a licensed print was asked for a title');
 });
 
 check('none of the IFS data checks fire before the IFS', () => {
@@ -111,7 +111,7 @@ check('Final Spec and Install Guide are an IFS even when the footer box just say
 check('an OPTION heading is flagged in an IFS, not in development', () => {
   const opt = [{ id: 'pgO', type: 'custom', title: 'Lobby', afterKey: 'fixed:cover', elements: [{ type: 'text', text: 'LOBBY OPTION TWO' }] }];
   fx.setup([OK_ROW], 'final'); fx.ec().layoutPages = opt;
-  if (!has(fx.run(), /Lobby — an OPTION heading in an IFS/)) throw new Error('missed');
+  if (!has(fx.run(), /Lobby: an OPTION heading in an IFS/)) throw new Error('missed');
   fx.setup([OK_ROW], 'artdev'); fx.ec().layoutPages = opt;
   if (has(fx.run(), /OPTION heading/)) throw new Error('flagged in development');
 });
@@ -120,7 +120,7 @@ check('EXACT BUG: a stale version or stage on the cover is flagged against the P
   fx.setup([OK_ROW], 'final'); ver.value = 'V6';
   fx.cover().elements = [{ type: 'text', text: 'CAESARS PALACE VILLAS' }, { type: 'text', text: 'V2 ART DEVELOPMENT' }];
   const pf = fx.run();
-  if (!has(pf, /Cover — says V2, .ART DEVELOPMENT., but this deck is V6 Final Spec/)) throw new Error(pf.map(x => x.text).join(' | '));
+  if (!has(pf, /Cover: says V2, .ART DEVELOPMENT., but this deck is V6 Final Spec/)) throw new Error(pf.map(x => x.text).join(' | '));
   fx.cover().elements = [{ type: 'text', text: 'V6 ISSUED FOR SPECIFICATION' }];
   if (has(fx.run(), /but this deck is/)) throw new Error('a correct cover was flagged');
   ver.value = '';
@@ -129,7 +129,7 @@ check('EXACT BUG: a stale version or stage on the cover is flagged against the P
 check('a version-like word in body copy is not a version (a V8 engine in a Ford narrative)', () => {
   fx.setup([OK_ROW], 'final'); ver.value = 'V6';
   fx.ec().layoutPages = [{ id: 'pgN', type: 'custom', title: 'Narrative', afterKey: 'fixed:cover', elements: [{ type: 'text', text: 'The plant built the V8 that changed everything.' }] }];
-  if (has(fx.run(), /Narrative — says V8/)) throw new Error('flagged body copy');
+  if (has(fx.run(), /Narrative: says V8/)) throw new Error('flagged body copy');
   ver.value = '';
 });
 

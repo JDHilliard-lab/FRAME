@@ -4,9 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
     <title>Farmhand</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Favicon: served from the repo root alongside index.html. PNG works in
          all modern browsers; apple-touch-icon covers iOS home-screen
          bookmarks. Same file used for both since we only have one image. -->
@@ -23,7 +20,10 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="Farmhand">
     <meta name="theme-color" content="#1e1e1e">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- html2canvas 1.4.1: vendored locally (lib-html2canvas.min.js, 20.82) like JSZip and
+         jsPDF, so Elevation PNG export works with no signal. It came from cdnjs, and the
+         offline cache could drop it during a long frame-library browse. -->
+    <script src="lib-html2canvas.min.js"></script>
     <!-- JSZip: vendored locally (lib-jszip.min.js) so the batch ZIP export
          works even when CDNs are unreachable. ~95KB. Used by
          batchDownloadAllFramesAsZip() to bundle PNGs + CSV into one download. -->
@@ -38,7 +38,7 @@
          anything driven by a new CSS rule is simply absent. That is exactly how the
          gradient-painted dashes went missing on screen while still exporting fine
          from the JS side. -->
-    <link rel="stylesheet" href="style.css?v=20.79">
+    <link rel="stylesheet" href="style.css?v=20.83">
 </head>
 <body>
 <!-- BOOT COVER (18.17): the first thing painted, so the dashboard behind it never flashes
@@ -78,7 +78,7 @@
                  until a URL is plugged in) and a Reference section explaining
                  every feature. Lives next to the theme toggle so help is always
                  reachable, never blocks workflow. -->
-            <button id="helpBtn" class="action-btn btn-secondary" style="width:auto;" onclick="openHelpModal()" title="Help — features, shortcuts, and tutorial">
+            <button id="helpBtn" class="action-btn btn-secondary" style="width:auto;" onclick="openHelpModal()" title="Help: features, shortcuts, and tutorial">
                 <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             </button>
             <!-- 18.57: no units chip in the header. Units live in Settings (the gear), Units tab. -->
@@ -1069,7 +1069,7 @@
                         <div id="figure-dim-layer" class="dim-layer" style="z-index:43; pointer-events:none;"></div>
 
                         <div id="person-wrap" class="draggable" style="position:absolute; bottom:0; left:-60px; z-index:10; display:none; opacity:1;">
-                            <img src="Character_Lady_walk.svg" id="person" class="person" style="display:block; opacity:1;" alt="Person" onerror="this.src='https://cdn-icons-png.flaticon.com/512/10/10522.png'">
+                            <img src="Character_Lady_walk.svg" id="person" class="person" style="display:block; opacity:1;" alt="Person">
                         </div>
                         <!-- Glazing panel runs (window film): the glass outline and its
                              mullions. z-index 9 puts it ABOVE #frame-layer (6) and above
@@ -2295,6 +2295,11 @@
     @font-face { font-family: 'Druk'; src: url('fonts/Druk-Bold.ttf') format('truetype'); font-weight: 700; font-display: swap; }
     @font-face { font-family: 'Messina'; src: url('fonts/MessinaSerif-Regular.ttf') format('truetype'); font-weight: 400; font-display: swap; }
     @font-face { font-family: 'Messina'; src: url('fonts/MessinaSerif-Bold.ttf') format('truetype'); font-weight: 700; font-display: swap; }
+    /* Oswald (SIL Open Font License), the --ui-display fallback. Vendored in 20.82 instead of
+       Google Fonts so the app looks the same offline. It is a variable font: one file per
+       subset covers every weight from 200 to 700. */
+    @font-face { font-family: 'Oswald'; src: url('fonts/Oswald-latin-ext.woff2') format('woff2'); font-weight: 200 700; font-display: swap; unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+    @font-face { font-family: 'Oswald'; src: url('fonts/Oswald-latin.woff2') format('woff2'); font-weight: 200 700; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
     #libraryDropZone.drag-over { border-color: var(--accent); background: rgba(74, 144, 226, 0.08); }
     #libraryDropZone.processing { opacity: 0.5; pointer-events: none; }
     /* The top nav is three fixed tabs plus the right-hand button group, so it
@@ -2316,9 +2321,9 @@
      FRAME_HTML_VERSION is what this file EXPECTS. app.js compares it with
      APP_VERSION at boot and says so if the two disagree, because the query
      string alone cannot help once a browser has already cached the pair. -->
-<script>window.FRAME_HTML_VERSION = '20.79';</script>
-<script src="templates.js?v=20.79"></script>
-<script src="app.js?v=20.79"></script>
+<script>window.FRAME_HTML_VERSION = '20.83';</script>
+<script src="templates.js?v=20.83"></script>
+<script src="app.js?v=20.83"></script>
 
 </body>
 </html>

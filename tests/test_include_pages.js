@@ -159,7 +159,7 @@ const path = require('path');
 
   check('_dsTypeSection survives the move — the four controls are not rebuilt by hand', () => {
     if (src.indexOf('function _dsTypeSection') < 0) throw new Error('_dsTypeSection was deleted with the popup');
-    const body = bodyOf('function _dsTypeDefaultsInto', 'function _dsAnnCycleAlign');
+    const body = bodyOf('function _dsTypeDefaultsInto', 'function _dsBumpLeading');
     const uses = body.split('_dsTypeSection(').length - 1;
     if (uses !== 4) throw new Error('expected 4 _dsTypeSection rows (titles, subheadings, paragraphs, captions), found ' + uses);
     if (body.indexOf('_specFont()') < 0) throw new Error('the spec-text font control did not come across');

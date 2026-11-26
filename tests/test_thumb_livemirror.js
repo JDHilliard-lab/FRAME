@@ -25,9 +25,9 @@ const fs = require('fs');
       const count = (S.match(/h\\.className = '_dsChrome';/g) || []).length;
       if (count < 2) throw new Error('expected both _mbHandles and _dsAnnHandles to mark their handles, found ' + count);
     });
-    __check('SOURCE GUARD: corner-radius handle, marquee box, move grip, zoom pill, pan handle, arrow dot, and image-placeholder hint are all marked chrome', () => {
+    __check('SOURCE GUARD: corner-radius handle, marquee box, move grip, zoom pill, arrow dot, and image-placeholder hint are all marked chrome', () => {
       const S = window.__appSrc;
-      ["rHandle.className = '_dsChrome';", "box.className = '_dsChrome';", "g.className = '_dsChrome';", "zWrap.className = '_dsChrome';", "ph.className = '_dsChrome';", "hnd.className = '_dsChrome';", "hint.className = '_dsChrome';"].forEach(snippet => {
+      ["rHandle.className = '_dsChrome';", "box.className = '_dsChrome';", "g.className = '_dsChrome';", "zWrap.className = '_dsChrome';", "hnd.className = '_dsChrome';", "hint.className = '_dsChrome';"].forEach(snippet => {
         if (S.indexOf(snippet) < 0) throw new Error('missing chrome marker: ' + snippet);
       });
     });

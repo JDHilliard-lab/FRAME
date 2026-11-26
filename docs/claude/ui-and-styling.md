@@ -232,7 +232,7 @@ Same format as `CLAUDE.md`: the rule, the names, the trap, one clause of why. Ad
 - **ONE SETTINGS GEAR (18.47): `#appSettingsBtn` -> `openAppSettings(tab)`**, in every
   view (no `data-views`). Tabs `APP_SETTINGS_TABS`: `units` (`_unitControlsInto`), `fx`
   (`_frameFxInto`), `elev` (hands off to `openPrecisionModal`, closing Settings first).
-  `openFrameFx` / `openUnitMenu` / the units chip / `projFrameFxBtn` all land on their tab;
+  `openFrameFx` / `openAppSettings('units')` / `projFrameFxBtn` all land on their tab;
   there is no separate Frame effects modal (`#frameFxModal` is gone) or units popover.
 - **TOUCH IS ONE LAYER OVER THE MOUSE HANDLERS (19.18, `_touchInstall`, `_touchArms`).** iPad
   landscape is the touch target (iPhone not yet). A finger sends a synthetic mousedown; if its

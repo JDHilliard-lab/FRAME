@@ -97,7 +97,7 @@ check('the rail button counts with the same predicate as reset', () => {
   // 20.03: both go through _dsHandPlacedCount (inserted pages + moved standard pages),
   // which itself counts inserted pages with _dsPageHandPlaced.
   if (near.indexOf('_dsHandPlacedCount()') < 0) throw new Error('the rail counts hand-placed pages its own way');
-  const rs = APP.slice(APP.indexOf('function _dsResetLayoutOrder'), APP.indexOf('function _dsDeleteInserted'));
+  const rs = APP.slice(APP.indexOf('function _dsResetLayoutOrder'), APP.indexOf('function _dsThumbImgInto'));
   if (rs.indexOf('_dsHandPlacedCount()') < 0) throw new Error('reset counts hand-placed pages its own way');
   const hc = APP.slice(APP.indexOf('function _dsHandPlacedCount'), APP.indexOf('function _dsResetLayoutOrder'));
   if (hc.indexOf('_dsPageHandPlaced') < 0) throw new Error('the shared count no longer uses _dsPageHandPlaced');

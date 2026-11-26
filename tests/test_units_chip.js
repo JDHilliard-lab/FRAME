@@ -43,7 +43,7 @@ const path = require('path');
     });
     __check('the chip Settings tab and the Project tab are the same controls, and they work', () => {
       // 18.47: the chip opens Settings on its Units tab (was a popover).
-      openUnitMenu();
+      openAppSettings('units');
       const m = document.getElementById('appSettingsModal');
       if (!m || _appSettingsTab !== 'units') throw new Error('the chip did not open Settings on Units');
       const b = m.querySelector('[data-unit-opt="Second unit:mm"]');
