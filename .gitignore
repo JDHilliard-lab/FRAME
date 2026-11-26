@@ -4,3 +4,9 @@ node_modules/
 # macOS folder metadata, and client PDFs dropped in for reference (never published).
 .DS_Store
 .github/PDFs/
+
+# Client files (emails, PDFs, zips) never go in this repo: the site is public.
+*.pdf
+*.zip
+*.eml
+*.msg
