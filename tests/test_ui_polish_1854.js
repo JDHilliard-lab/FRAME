@@ -35,11 +35,12 @@ console.error = quiet; console.log = qlog;
 const fx = window.__fx;
 const doc = window.document;
 
-check('EXACT BUG: the EQ tile caption is not just the icon again', () => {
+// 20.86: EQ is a tick box in Elevation settings now, so its words are its label.
+check('EXACT BUG: the EQ control says what it does, not just EQ', () => {
   const b = doc.getElementById('spacingEQToggle');
-  const cap = b && b.querySelector('.lg-cap');
-  if (!cap) throw new Error('no caption');
-  if (cap.textContent.trim() === 'EQ') throw new Error('caption repeats the icon');
+  const lbl = b && b.closest('label');
+  if (!lbl) throw new Error('no label');
+  if (lbl.textContent.trim() === 'EQ' || lbl.textContent.indexOf('spacing') < 0) throw new Error('label is ' + lbl.textContent.trim());
 });
 
 check('EXACT BUG: a faded guide tile says why and how, and un-fading restores the plain tooltip', () => {

@@ -215,7 +215,11 @@ const path = require('path');
       elevHangIn = 57; setUnit('cm');
       restoreProjectState(snap);
       if (elevHangIn !== 62) throw new Error('restore gave ' + elevHangIn + ' inches');
-      if (__hangBox().value !== '157.48') throw new Error('the input after restore in cm reads ' + __hangBox().value);
+      // CHANGED (20.84): the snapshot now carries its unit, so restoring an inch snapshot
+      // puts the project back in inches (its piece sizes are inch numbers). The box reads
+      // the stored 62" in that unit.
+      if (dashUnit !== 'in') throw new Error('restoring an inch snapshot left the unit at ' + dashUnit);
+      if (__hangBox().value !== '62') throw new Error('the input after restore reads ' + __hangBox().value);
       __seed('in');
     });
 

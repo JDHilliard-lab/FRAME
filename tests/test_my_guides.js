@@ -4,7 +4,7 @@
 // the buttons I currently have selected. Maybe I need two on off buttons."
 //   - free lines are a guide: All off hides them, and they have their own button
 //   - My guides: off remembers the selection (in the project), on puts exactly it back
-//   - All: every guide on or off (its off remembers too)
+//   - All: every guide on or off (its off remembers too). Removed in 20.86: one switch.
 const { JSDOM } = require('jsdom');
 const fs = require('fs');
 const path = require('path');
@@ -26,12 +26,11 @@ const path = require('path');
       ['dim-layer', 'guide-layer', 'mark-layer'].forEach(id => { document.getElementById(id).style.display = 'block'; });
       dimVisibility.wallDims = true; saveDimVisibility();
     };
-    __check('EXACT BUG: All guides off hides the free lines (a drawn CL)', () => {
+    __check('EXACT BUG: My guides off hides the free lines (a drawn CL)', () => {
       pick();
       if (!L('mark-layer')) throw new Error('fixture: free lines not shown');
-      toggleAllElevGuides();
-      if (L('mark-layer')) throw new Error('free lines still showing with all guides off');
-      if (document.getElementById('markLayerToggle').classList.contains('active')) throw new Error('its button still lit');
+      toggleMyElevGuides();
+      if (L('mark-layer')) throw new Error('free lines still showing with guides off');
     });
     __check('EXACT ASK: My guides off then on puts back exactly the selection, not grid / letters / frame dims', () => {
       pick();
@@ -43,54 +42,35 @@ const path = require('path');
       if (!dimVisibility.wallDims) throw new Error('wall dims not back');
       if (dimVisibility.edgeGap) throw new Error('edge gaps came on');
     });
-    __check('All off remembers too, so My guides on brings the selection back after it', () => {
-      pick();
-      toggleAllElevGuides();                 // all off
-      toggleMyElevGuides();                  // mine back
-      if (!L('guide-layer') || L('grid-layer')) throw new Error('not the selection');
+    __check('with nothing remembered yet, My guides on shows every guide, and that is never remembered as mine', () => {
+      _elevGuidesAllSet(false);
+      editorialContent.elevGuidesMine = null;
+      toggleMyElevGuides();    // nothing remembered: everything
+      ['dim-layer', 'guide-layer', 'grid-layer'].forEach(id => { if (!L(id)) throw new Error(id + ' not on'); });
+      toggleMyElevGuides();    // off: "everything" is not a selection
+      if (editorialContent.elevGuidesMine) throw new Error('remembered the everything state as mine');
     });
-    __check('EXACT BUG: All off, All on, All off, then My guides on still brings back MY selection', () => {
-      pick();
-      toggleAllElevGuides();   // All off (remembers the selection)
-      toggleAllElevGuides();   // All on  (everything)
-      toggleAllElevGuides();   // All off (must NOT remember "everything" as mine)
-      toggleMyElevGuides();    // My guides on
-      if (L('grid-layer') || L('label-layer') || L('od-layer')) throw new Error('My guides on brought back everything: the All on state overwrote the selection');
-      if (!L('guide-layer') || !L('mark-layer')) throw new Error('the selection did not come back');
-    });
-    __check('My guides off after All on keeps the earlier selection too', () => {
-      pick();
-      toggleMyElevGuides();    // off, remembers
-      toggleAllElevGuides();   // All on
-      toggleMyElevGuides();    // My guides off: everything was on by All, not by choice
-      toggleMyElevGuides();    // on
-      if (L('grid-layer')) throw new Error('grid came back');
-      if (!L('guide-layer')) throw new Error('selection lost');
-    });
-    __check('a guide switched by hand after All on IS the new selection', () => {
-      pick();
-      toggleAllElevGuides(); toggleAllElevGuides();          // off, then All on
+    __check('a guide switched by hand after that IS the new selection', () => {
+      _elevGuidesAllSet(false); editorialContent.elevGuidesMine = null;
+      toggleMyElevGuides();    // everything
       toggleElevLayer('grid-layer', document.getElementById('gridToggle'));   // grid off by hand: a real choice
       toggleMyElevGuides();    // off, remembers this hand-made state
       toggleMyElevGuides();    // on
       if (L('grid-layer')) throw new Error('grid back though it was switched off by hand');
       if (!L('label-layer')) throw new Error('the hand-made selection (all but grid) was not remembered');
     });
-    __check('All on is still every guide', () => {
-      _elevGuidesAllSet(false);
-      toggleAllElevGuides();
-      ['dim-layer', 'guide-layer', 'mark-layer', 'grid-layer', 'label-layer', 'od-layer'].forEach(id => { if (!L(id)) throw new Error(id + ' not on'); });
-    });
     __check('the remembered selection is saved in the project', () => {
       pick(); toggleMyElevGuides();
       const m = editorialContent.elevGuidesMine;
       if (!m || !m.layers || m.layers['guide-layer'] !== true || m.layers['grid-layer'] !== false) throw new Error(JSON.stringify(m));
     });
-    __check('the two buttons say what they will do next', () => {
+    __check('20.86: one master switch, and it says what it will do next', () => {
+      if (document.getElementById('allGuidesToggle')) throw new Error('the All on / off button is back');
+      if (typeof toggleAllElevGuides !== 'undefined') throw new Error('toggleAllElevGuides is back');
       pick(); _elevGuidesMasterSync();
-      if (document.getElementById('myGuidesLbl').textContent !== 'My guides off' || document.getElementById('allGuidesLbl').textContent !== 'All off') throw new Error('labels while on');
+      if (document.getElementById('myGuidesLbl').textContent !== 'My guides off') throw new Error('label while on');
       toggleMyElevGuides();
-      if (document.getElementById('myGuidesLbl').textContent !== 'My guides on' || document.getElementById('allGuidesLbl').textContent !== 'All on') throw new Error('labels while off');
+      if (document.getElementById('myGuidesLbl').textContent !== 'My guides on') throw new Error('label while off');
     });
     __check('arming the Lines tool shows free lines if they were hidden', () => {
       _elevGuidesAllSet(false);

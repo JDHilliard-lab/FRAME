@@ -132,12 +132,14 @@ check('EXPORT is one menu with the six choices, each wired to the real exporter'
   if (called.join(',') !== 'png,svg,svg,all-png,all-svg,all-svg') throw new Error('menu items call: ' + called.join(','));
 });
 
-check('layout guides are three foldable groups and every one of the 15 buttons has a caption (Units went in 18.60)', () => {
+// 20.86: four groups (Drafting aids holds grid and centres); Auto space is a labelled button, not a
+// tile; Free lines merged into Lines; EQ moved to Elevation settings.
+check('layout guides are four foldable groups and every one of the 13 tiles has a caption (Units went in 18.60)', () => {
   const groups = doc.querySelectorAll('#elev-sec-layout details.lg-group');
-  if (groups.length !== 3) throw new Error(groups.length + ' groups');
+  if (groups.length !== 4) throw new Error(groups.length + ' groups');
   const ids = ['labelToggle', 'odToggle', 'dimToggle', 'personToggle', 'guideToggle', 'gridToggle', 'frameCenterToggle',
-    'wallDimToggle', 'groupBoxToggle', 'edgeGapToggle', 'autoSpacingToggle', 'customLinesToggle',
-    'artworkToggle', 'imageCodeToggle', 'spacingEQToggle'];
+    'wallDimToggle', 'groupBoxToggle', 'edgeGapToggle', 'customLinesToggle',
+    'artworkToggle', 'imageCodeToggle'];
   ids.forEach(id => {
     const b = doc.getElementById(id);
     if (!b) throw new Error(id + ' is missing');

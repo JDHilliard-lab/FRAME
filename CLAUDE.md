@@ -96,7 +96,9 @@ run but passes alone is usually load timing: rerun before chasing it.
 - **The product-type model.** `FRAME_PRODUCTS` (app.js) and `<select id="m_product">`
   (index.html) are hand-synced: update both. ~20 branch sites use inconsistent local names
   (`isC`/`isCanvas`/`isFloater`, `isFL`/`isFrameless`/`iFL`); find them all.
-  **`"Sourced Object"` has no branch anywhere** and renders/specs as Framed Art; not a precedent.
+  **Sourced Object (20.85, `_isSourcedObject`)** is bought, not framed: W x H + `objDepth`, Hardware
+  (custom), no frame/mat/glass/mount/backing/bleed. Dashed outline (`OBJECT_EDGE`) while no photo
+  shows, the photo alone when one does, in all five render paths. Sourcing fields: see production.md.
   **Flat graphics** (`FLAT_GRAPHIC_PRODUCTS` + `_isFlatGraphic()`): wallcovering (EGD) and
   window film (WF). Overall size IS the graphic: no moulding, mat, glass, rabbet, stretcher
   or drop shadow. Next flat product is an array entry. Extra field: `material` (free text).

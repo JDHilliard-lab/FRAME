@@ -110,7 +110,8 @@ check('npm test runs the suite', () => {
 // ── no em dashes in UI text ─────────────────────────────────────────────
 check('index.html shows no em dash (comments aside)', () => {
   const nc = LIVE_HTML.replace(/\/\*[\s\S]*?\*\//g, '');
-  const lines = nc.split('\n').filter(l => l.indexOf('—') >= 0);
+  // 20.85: the entity form too. Nine &mdash; in option text and tooltips passed the 20.82 sweep.
+  const lines = nc.split('\n').filter(l => l.indexOf('—') >= 0 || l.indexOf('&mdash;') >= 0 || l.indexOf('&#8212;') >= 0);
   if (lines.length) throw new Error(lines.length + ' line(s), e.g. ' + lines[0].trim().slice(0, 100));
 });
 

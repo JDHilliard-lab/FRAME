@@ -149,3 +149,12 @@ Same format as `CLAUDE.md`: the rule, the names, the trap, one clause of why. Ad
   `false` to remove a slot, `caption` in `describePage`; an API PNG stays PNG only with real alpha. `exportPDF` passes
   what Generate PDF passes (`meta`, `include`, `all`, `preset`), or the footer loses location/code/version.
   `test_frame_driver` runs real Chrome (skips with none).
+- **SOURCED OBJECT SOURCING (20.85, the studio's FSO tracker).** Row fields `vendorName`, `sourceUrl`,
+  `unitCost` (through `setRowPrice`, so it is a quote Production prices with), `leadTime`, `stockQty`,
+  `altLinks`, written by `_objSourcingSet` (empty deletes the key), shown by `_objectFieldsUI`.
+  `objDepth` is a size field: in every unit-conversion list and `SIXTEENTH_ROW_FIELDS`.
+  `_objStockText` flags under `OBJECT_LOW_STOCK` (10) or under the wall qty; `_objectPreflight`
+  lists an object with no link or no cost. `_purchaseTrackerCSV` uses the tracker's column order
+  (design half filled, Ordered / Tracking Link / Delivered left for procurement).
+  The tracker's Preferred Vendors tab holds logins: only the shop NAMES are in the code
+  (`OBJECT_VENDOR_SUGGEST`). Never copy credentials into this public repo.

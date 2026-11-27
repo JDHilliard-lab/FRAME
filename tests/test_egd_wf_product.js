@@ -428,7 +428,7 @@ const path = require('path');
 
     __check('the flat branch runs BEFORE the frameless one, and both survive', () => {
       const i = S.indexOf('function renderFrameToCanvas');
-      const body = S.slice(i, i + 6000);
+      const body = S.slice(i, S.indexOf('\\nfunction ', i + 10));   // to the next function, not a char count
       const flatAt = body.indexOf('if (isFlat) {');
       const flAt = body.indexOf('if (isFrameless) {');
       if (flatAt < 0) throw new Error('no flat-graphic branch in renderFrameToCanvas');
@@ -722,7 +722,7 @@ const path = require('path');
     });
 
     __check('EXACT ASK: the dashboard placeholder says to drag a graphic in, per product', () => {
-      const i = S.indexOf('if (!dashHasArt && _flatDash) {');
+      const i = S.indexOf('if (!dashHasArt && _flatDash');   // 20.85 added '&& !_isObjDash' (an object takes the plain add-photo button)
       if (i < 0) throw new Error('the dashboard still uses the framed-art placeholder — a bare size in an empty opening');
       const body = S.slice(i, i + 1800);
       if (body.indexOf('Drag ') < 0) throw new Error('it does not say to drag anything in');
@@ -855,7 +855,7 @@ const path = require('path');
       // <img src="data:..."> per pass meant the browser re-decoding every artwork ~60
       // times a second. A 24" print hid it; a full-wall wallcovering did not.
       const i = S.indexOf('function drawElevAll');
-      const body = S.slice(i, i + 32000);
+      const body = S.slice(i, S.indexOf('\\nfunction ', i + 10));   // to the next function, not a char count
       if (body.indexOf('_elevArtImgCache[_aKey]') < 0) throw new Error('THE BUG: the artwork <img> is still rebuilt from its data URL on every redraw');
       if (!/let aimg = _elevArtImgCache\\[_aKey\\]/.test(body)) throw new Error('the cached node is not reused');
       // Geometry must still be rewritten each pass — only the decoded pixels are reused,

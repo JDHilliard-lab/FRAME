@@ -6,7 +6,11 @@
 // Update APP_VERSION on each release. APP_BUILD is derived from the URL (see
 // below) — the version pill turns orange on the dev site to make it obvious at a
 // glance which build you are looking at.
-const APP_VERSION = '20.83';
+const APP_VERSION = '20.87';
+// Tape measure state (20.87). Up here because _elevLoadWall and the wall listeners, far above
+// the tool's own code, read it, and a let read before its declaration throws.
+let tapeToolActive = false;
+let _tapeA = null, _tapeB = null, _tapeHover = null;
 const IDML_STYLE_SEED = [{"id":"sty_cover_title","name":"Cover Title","group":"Cover","font":"display","size":0.1111,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"upper","track":0.01},{"id":"sty_cover_title_centered","name":"Cover Title (Centered)","group":"Cover","font":"display","size":0.1111,"bold":true,"italic":false,"color":"#ffffff","align":"center","caps":"upper","track":0.01},{"id":"sty_cover_location","name":"Cover Location","group":"Cover","font":"serif","size":0.0222,"bold":false,"italic":false,"color":"#ffffff","align":"right","caps":"none","track":0.0},{"id":"sty_cover_project_code","name":"Cover Project Code","group":"Cover","font":"serif","size":0.0222,"bold":false,"italic":false,"color":"#ffffff","align":"right","caps":"none","track":0.0},{"id":"sty_toc_section_title","name":"TOC Section Title","group":"Table of Contents","font":"serif","size":0.0241,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.0},{"id":"sty_toc_entry","name":"TOC Entry","group":"Table of Contents","font":"serif","size":0.0185,"bold":false,"italic":false,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_section_heading","name":"Section Heading","group":"Header","font":"display","size":0.0556,"bold":true,"italic":false,"color":"#000000","align":"left","caps":"upper","track":0.01},{"id":"sty_header_one_xl","name":"Header One (XL)","group":"Header","font":"display","size":0.0444,"bold":true,"italic":false,"color":"#000000","align":"left","caps":"upper","track":0.01},{"id":"sty_paragraph_heading_right","name":"Paragraph Heading (Right)","group":"Header","font":"display","size":0.0333,"bold":true,"italic":false,"color":"#1a1a1a","align":"right","caps":"upper","track":0.01},{"id":"sty_body_copy_standard","name":"Body Copy (Standard)","group":"Body Copy","font":"serif","size":0.0148,"bold":false,"italic":false,"color":"#222222","align":"justify","caps":"none","track":0.0},{"id":"sty_body_copy_large_+_bold","name":"Body Copy (Large + Bold)","group":"Body Copy","font":"serif","size":0.0185,"bold":true,"italic":false,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_body_copy_primary","name":"Body Copy (Primary)","group":"Body Copy","font":"serif","size":0.0148,"bold":false,"italic":false,"color":"#222222","align":"justify","caps":"none","track":0.0},{"id":"sty_body_description","name":"Body Description","group":"Body Text","font":"serif","size":0.0167,"bold":false,"italic":false,"color":"#333333","align":"left","caps":"none","track":0.0},{"id":"sty_body_subheading","name":"Body Subheading","group":"Body Text","font":"serif","size":0.0204,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.0},{"id":"sty_spec_copy","name":"Spec Copy","group":"Spec Page","font":"serif","size":0.0148,"bold":false,"italic":false,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_spec_subject","name":"Spec Subject","group":"Spec Page","font":"serif","size":0.0148,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.01},{"id":"sty_spec_notes","name":"Spec Notes","group":"Spec Page","font":"serif","size":0.013,"bold":false,"italic":true,"color":"#939597","align":"left","caps":"none","track":0.005},{"id":"sty_spec_static_caption","name":"Spec Static Caption","group":"Spec Page","font":"serif","size":0.013,"bold":false,"italic":true,"color":"#999999","align":"left","caps":"none","track":0.0},{"id":"sty_image_code","name":"Image Code","group":"Captions","font":"serif","size":0.012,"bold":false,"italic":true,"color":"#7f7f7f","align":"right","caps":"none","track":0.01},{"id":"sty_caption_image_code","name":"Caption Image Code","group":"Captions","font":"serif","size":0.0111,"bold":false,"italic":false,"color":"#bfbfbf","align":"left","caps":"none","track":0.0},{"id":"sty_artist_name","name":"Artist Name","group":"Captions","font":"serif","size":0.0139,"bold":true,"italic":false,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_artwork_title","name":"Artwork Title","group":"Captions","font":"serif","size":0.013,"bold":false,"italic":true,"color":"#222222","align":"left","caps":"none","track":0.0},{"id":"sty_thank_you_\u2014_name","name":"Thank You \u2014 Name","group":"Thank You","font":"display","size":0.0417,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"upper","track":0.0},{"id":"sty_thank_you_\u2014_role","name":"Thank You \u2014 Role","group":"Thank You","font":"serif","size":0.0148,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"none","track":0.0},{"id":"sty_thank_you_\u2014_contact","name":"Thank You \u2014 Contact","group":"Thank You","font":"serif","size":0.013,"bold":false,"italic":false,"color":"#ffffff","align":"left","caps":"none","track":0.0},{"id":"sty_subhead","name":"Subhead","group":"Subheadings","font":"display","size":0.0204,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"upper","track":0.035},{"id":"sty_section_subheading_left","name":"Section Subheading (Left)","group":"Subheadings","font":"display","size":0.0333,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"upper","track":0.01},{"id":"sty_section_subheading_right","name":"Section Subheading (Right)","group":"Subheadings","font":"display","size":0.0333,"bold":true,"italic":false,"color":"#1a1a1a","align":"right","caps":"upper","track":0.01},{"id":"sty_section_subheading_serif","name":"Section Subheading (Serif)","group":"Subheadings","font":"serif","size":0.0139,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.0},{"id":"sty_subheading_white,_center","name":"Subheading (White, Center)","group":"Subheadings","font":"serif","size":0.013,"bold":false,"italic":false,"color":"#ffffff","align":"center","caps":"none","track":0.0},{"id":"sty_quote_\u2014_druk","name":"Quote \u2014 Druk","group":"Quotes","font":"display","size":0.0694,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.025},{"id":"sty_quote_\u2014_druk_alt","name":"Quote \u2014 Druk (Alt)","group":"Quotes","font":"display","size":0.0444,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"none","track":0.0},{"id":"sty_quote_\u2014_serif","name":"Quote \u2014 Serif","group":"Quotes","font":"serif","size":0.0417,"bold":false,"italic":false,"color":"#ffffff","align":"left","caps":"none","track":0.0},{"id":"sty_quote_\u2014_serif_white,_cap","name":"Quote \u2014 Serif (White, Caps)","group":"Quotes","font":"display","size":0.0333,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"upper","track":0.01},{"id":"sty_display_keyword","name":"Display Keyword","group":"Keywords","font":"display","size":0.1111,"bold":true,"italic":false,"color":"#000000","align":"left","caps":"upper","track":0.01},{"id":"sty_keywords_full_page","name":"Keywords (Full Page)","group":"Keywords","font":"display","size":0.0556,"bold":true,"italic":false,"color":"#ffffff","align":"justify-all","caps":"none","track":0.02},{"id":"sty_brand_keyword","name":"Brand Keyword","group":"Keywords","font":"display","size":0.1852,"bold":true,"italic":false,"color":"#1a1a1a","align":"left","caps":"upper","track":0.01},{"id":"sty_moodboard_keyword","name":"Moodboard Keyword","group":"Keywords","font":"display","size":0.0833,"bold":true,"italic":false,"color":"#ffffff","align":"left","caps":"upper","track":0.0}];
 // The default fill for a placeholder shape, and the ONE definition of it. It was
 // written out nine times: the starter deck, the shape creator, the duplicate
@@ -944,9 +948,8 @@ const FRAME_PRODUCTS = [
 // Adding a member to this array is the whole change — ART-1 Backlit Image
 // ("Backlit Vinyl Graphic") is the obvious next one.
 //
-// Deliberately NOT modelled on "Sourced Object", which is in the enum and in
-// buildPngFilename but has no branch anywhere: it silently renders and specs as
-// Framed Art, so the help text describing it is already untrue. "Frameless
+// Deliberately NOT modelled on "Sourced Object", which had no branch anywhere when this
+// was written (it has its own since 20.85, see SOURCED_OBJECT below). "Frameless
 // Canvas (Wrapped)" is the only working precedent for a product with no frame,
 // and even that one ignores opts.wireframe — see renderFrameToCanvas.
 const FLAT_GRAPHIC_PRODUCTS = [
@@ -958,6 +961,23 @@ const FLAT_GRAPHIC_PRODUCTS = [
     "Didactic Panel"
 ];
 function _isFlatGraphic(product) { return FLAT_GRAPHIC_PRODUCTS.indexOf(product) >= 0; }
+// ── SOURCED OBJECT (20.85): something BOUGHT, not framed or printed ─────────
+// A sculpture, a vase, a bowl, books by the foot. It has a width, a height and a DEPTH,
+// custom hardware notes (it is never hung on 3-point security by default) and no frame,
+// mat, glass, rabbet, backing, bleed or print file. On a wall it is a DASHED outline
+// until a designer drops a photo of the object on it; with a photo showing, the photo
+// alone (no outline, no shadow). That one rule is drawn by every renderer: the dashboard
+// preview, the wall, renderFrameToCanvas (PNG, spec pages, thumbnails) and the SVG/PDF.
+// It was in the enum since the start with no branch anywhere, so it rendered and specced
+// as Framed Art. Sourcing (vendor, link, cost, lead time, stock, alternatives) follows the
+// studio's FSO tracker; see _objectSourcingInto.
+const SOURCED_OBJECT = 'Sourced Object';
+function _isSourcedObject(product) { return product === SOURCED_OBJECT; }
+// The outline is drawn whenever no photo is showing: none dropped, the Artwork guide off,
+// or a wireframe wall.
+const OBJECT_EDGE = '#5f5f5f';
+// The studio flags a product with fewer than 10 units in stock (FSO tracker guidelines).
+const OBJECT_LOW_STOCK = 10;
 // ── WALL LAYERS (19.71) ─────────────────────────────────────────────────────
 // A wall is built up in three layers, bottom to top: the printed GRAPHIC (wallcovering,
 // window film), the FRAMED ART hung on it, and what goes ON TOP of both (didactic panels
@@ -2388,6 +2408,7 @@ function _migrateLoadedProject(data) {
             }
         }
     } catch (e) { /* never let migration block a load */ }
+    try { if ((data.dashUnit || data.elevUnit || 'in') === 'in') _unroundSixteenths(data.dashProjectData, data.elevations); } catch (e) {}
     return data;
 }
 
@@ -3781,6 +3802,10 @@ function snapshotProjectState(opts) {
         // both reuse this snapshot, so they pick these up for free.
         hangHeightIn: elevHangIn,
         baseboardIn: elevBaseboardIn,
+        // THE UNIT THE NUMBERS ARE IN (20.84). Without it, Continue on a cm project put
+        // its numbers back under a fresh boot's inches (61 cm became 61"), and so did a
+        // version restore, or an undo across a unit switch.
+        dashUnit: dashUnit,
     };
     if (opts && opts.plans) snap.floorplanLevels = _cloneData(floorplanLevels || []);
     return snap;
@@ -3813,6 +3838,10 @@ function restoreProjectState(snap) {
     // live values alone in that case rather than resetting to the standard.
     if (typeof cloned.hangHeightIn === 'number' && cloned.hangHeightIn > 0) elevHangIn = cloned.hangHeightIn;
     if (typeof cloned.baseboardIn === 'number' && cloned.baseboardIn >= 0) elevBaseboardIn = cloned.baseboardIn;
+    // The numbers mean nothing without their unit (20.84). An older snapshot has none:
+    // leave the live unit alone, as before.
+    if (cloned.dashUnit && UNIT_INFO[cloned.dashUnit]) { dashUnit = cloned.dashUnit; elevUnit = cloned.dashUnit; try { _syncUnitChip(); } catch (e) {} }
+    if (dashUnit === 'in') _unroundSixteenths(dashProjectData, elevations);
     // Absent on autosave and version snapshots, which install the levels themselves.
     if (Array.isArray(cloned.floorplanLevels)) {
         floorplanLevels = cloned.floorplanLevels;
@@ -5217,6 +5246,7 @@ function _autosavePayload() {
             editorial: editorialContent,
             hangHeightIn: elevHangIn,
             baseboardIn: elevBaseboardIn,
+            dashUnit: dashUnit,   // 20.84: see snapshotProjectState
         },
     };
 }
@@ -5706,6 +5736,7 @@ function initMasterApp() {
     const wallEl = document.getElementById('wall');
     if (wallEl) {
         wallEl.addEventListener('mousedown', function (e) {
+            if (tapeToolActive) { _tapeClick(e); return; }
             if (lineToolActive) { handleLineToolClick(e); return; }
             if (markToolActive) { handleMarkToolClick(e); return; }
             // Click on empty space (not a dim/line) deselects.
@@ -5720,6 +5751,7 @@ function initMasterApp() {
         // Live anchor-point indicator: blue dot snaps to the nearest anchor
         // while the measure tool is active.
         wallEl.addEventListener('mousemove', function (e) {
+            if (tapeToolActive) { _tapeMove(e); return; }
             if (markToolActive) { _markPreview(e); return; }
             if (!lineToolActive) return;
             updateAnchorHoverDot(e);
@@ -5749,6 +5781,12 @@ function initMasterApp() {
             toggleLineTool();
         } else if ((e.key === 'l' || e.key === 'L') && !e.ctrlKey && !e.metaKey && !e.altKey) {
             toggleMarkTool();   // free lines (19.47)
+        } else if ((e.key === 't' || e.key === 'T') && !e.ctrlKey && !e.metaKey && !e.altKey) {
+            toggleTapeTool();   // tape measure (20.87)
+        } else if (e.key === 'Escape' && tapeToolActive) {
+            // A held or half-taken reading clears first; then the tape goes down.
+            if (_tapeA) { _tapeA = null; _tapeB = null; _tapeRender(); }
+            else toggleTapeTool(false);
         } else if ((e.key === 'Delete' || e.key === 'Backspace') && selectedMark) {
             e.preventDefault();
             deleteMark(selectedMark);
@@ -6479,16 +6517,17 @@ function syncLayoutGuideButtonStates() {
     // Custom lines toggle: blue when lines exist + visible; dim when none.
     const clBtn = document.getElementById('customLinesToggle');
     if (clBtn) {
-        const exists = (typeof getElevCustomLines === 'function') && getElevCustomLines().length > 0;
-        clBtn.classList.toggle('active', exists && dimVisibility.customLines);
-        _lgAvail(clBtn, exists, 'press M on the wall to draw a measurement line.');
+        const exists = _elevLinesExist();
+        clBtn.classList.toggle('active', exists && _elevLinesShown());
+        _lgAvail(clBtn, exists, 'press M to draw a measurement line, or L for a free line.');
     }
     // Image-code caption toggle: active when the flag is on.
     const icBtn = document.getElementById('imageCodeToggle');
     if (icBtn) icBtn.classList.toggle('active', dimVisibility.imageCode);
     // EQ mode on spacing / edge-gap dims.
+    // 20.86: a tick box in Elevation settings, no longer a Layout Guides tile.
     const eqBtn = document.getElementById('spacingEQToggle');
-    if (eqBtn) eqBtn.classList.toggle('active', dimVisibility.spacingEQ);
+    if (eqBtn) eqBtn.checked = !!dimVisibility.spacingEQ;
     // EGD wall: PER-ELEVATION, not a global preference, so it reads the current wall
     // rather than a dimVisibility flag. Every other button in this row is deck-wide,
     // which is exactly why it would be easy to add it to the wrong list.
@@ -6645,14 +6684,30 @@ function toggleWallDims(btn) {
     drawElevAll();
 }
 
-// Toggle custom measure-tool line visibility (Layout Guides ruler button).
+// ONE LINES BUTTON (20.86). Measurement lines (M) and free lines (L: CL, level, arrows) had a
+// button each, and in the studio's saved projects free lines were never drawn while Lines sat
+// beside them. One button shows or hides every line drawn on the wall. Two stores stay under
+// it: measure lines are dimVisibility.customLines + #custom-lines-layer, free lines are
+// #mark-layer, so both go on or off together. Pages still hide them separately (IG_PAGE_HIDE).
 function toggleCustomLinesVisibility(btn) {
-    const anyLines = getElevCustomLines().length > 0;
-    if (!anyLines) return;
-    dimVisibility.customLines = !dimVisibility.customLines;
+    if (!_elevLinesExist()) return;
+    const on = !_elevLinesShown();
+    dimVisibility.customLines = on;
     saveDimVisibility();
-    if (btn) btn.classList.toggle('active', dimVisibility.customLines);
+    ['custom-lines-layer', 'mark-layer'].forEach(id => { const l = document.getElementById(id); if (l) l.style.display = on ? 'block' : 'none'; });
+    if (btn) btn.classList.toggle('active', on);
+    // saveDimVisibility stops early when only the free-line layer changed, so say it here.
+    try { _elevGuideVisChanged(); _elevGuidesRecord(); _elevGuidesFromAll = false; } catch (e) {}
     drawElevAll();
+    try { _elevGuidesMasterSync(); } catch (e) {}
+}
+function _elevLinesExist() {
+    return getElevCustomLines().length > 0 || getElevMarks().length > 0;
+}
+function _elevLinesShown() {
+    const cl = document.getElementById('custom-lines-layer'), ml = document.getElementById('mark-layer');
+    const measure = !!dimVisibility.customLines && !!cl && cl.style.display === 'block';
+    return measure || (!!ml && ml.style.display === 'block');
 }
 
 function toggleArtworkVisibility(btn) {
@@ -6665,9 +6720,10 @@ function toggleArtworkVisibility(btn) {
 // other entry in dimVisibility, and saveDimVisibility drops the cached elevation
 // captures so install-guide and breaker pages pick it up too.
 function toggleSpacingEQ(btn) {
-    dimVisibility.spacingEQ = !dimVisibility.spacingEQ;
+    // 20.86: a tick box in Elevation settings; read its state rather than flip, so they never disagree.
+    dimVisibility.spacingEQ = (btn && btn.type === 'checkbox') ? !!btn.checked : !dimVisibility.spacingEQ;
     saveDimVisibility();
-    if (btn) btn.classList.toggle('active', dimVisibility.spacingEQ);
+    if (btn && btn.type === 'checkbox') btn.checked = !!dimVisibility.spacingEQ;
     drawElevAll();
 }
 function toggleImageCodeVisibility(btn) {
@@ -8471,6 +8527,8 @@ function _elevLoadWall(index) {
     currentElevIndex = Math.max(0, Math.min(index || 0, elevations.length - 1));
     const elev = elevations[currentElevIndex];
     if (!elev) return;
+    // A tape reading belongs to the wall it was taken on (20.87).
+    if (typeof tapeToolActive !== 'undefined' && tapeToolActive) { _tapeA = null; _tapeB = null; _tapeHover = null; _tapeRender(); }
     document.getElementById('elev-title-input').value = elev.name;
     document.getElementById('wallW').value = elev.wallW;
     document.getElementById('wallH').value = elev.wallH;
@@ -9625,6 +9683,7 @@ function toggleBulkDropdown(e) {
 // Add & Arrange tools, codes and shortcuts. Select is lit whenever no wall tool is armed,
 // so there is always one lit button saying what a click on the wall will do.
 function _elevDockSelect() {
+    if (typeof tapeToolActive !== 'undefined' && tapeToolActive) toggleTapeTool(false);
     if (typeof lineToolActive !== 'undefined' && lineToolActive) toggleLineTool(false);
     if (typeof contextToolActive !== 'undefined' && contextToolActive) toggleContextTool(false);
     if (typeof markToolActive !== 'undefined' && markToolActive) toggleMarkTool(false);
@@ -9641,7 +9700,7 @@ function _elevDockContext() {
 function _elevDockSync() {
     const sel = document.getElementById('elevDockSelect');
     const armed = (typeof lineToolActive !== 'undefined' && lineToolActive) || (typeof contextToolActive !== 'undefined' && contextToolActive)
-        || (typeof markToolActive !== 'undefined' && markToolActive);
+        || (typeof markToolActive !== 'undefined' && markToolActive) || (typeof tapeToolActive !== 'undefined' && tapeToolActive);
     if (sel) sel.classList.toggle('active', !armed);
     const ce = (typeof elevations !== 'undefined') ? elevations[currentElevIndex] : null;
     const n = {
@@ -11927,7 +11986,7 @@ const CAT_ROW_SPEC_FIELDS = ['product', 'material', 'printOutput', 'extW', 'extH
     'swatchDataUrl', 'swatchName',
     'm1A', 'm1T', 'm1B', 'm1L', 'm1R', 'm1Locked', 'm1ColorName', 'm1ColorHex',
     'm2A', 'm2', 'm2ColorName', 'm2ColorHex', 'matsLinked',
-    'useFloatMount', 'useFauxMat', 'paperType', 'canvasDepth', 'canvasWrap', 'floaterInset', '_faceWidth',
+    'useFloatMount', 'useFauxMat', 'paperType', 'canvasDepth', 'canvasWrap', 'floaterInset', '_faceWidth', 'objDepth',
     'sbBackerColorName', 'sbBackerColorHex', 'sbPaperColorName', 'sbPaperColorHex',
     'sbPaperMargin', 'sbPaperBorder', 'sbPaperEdge', 'sbPaperEdgeSeed',
     'glass', 'hardware', 'mount', 'backing'];
@@ -13091,11 +13150,36 @@ function pushUpdatesToElevations(dashIndex) {
 // =========================================================================
 // DASHBOARD LOGIC
 // =========================================================================
+// FOUR PLACES, NOT THREE (20.84): every sixteenth of an inch has at most four (13/16 is
+// 0.8125), and three turned it into 0.813 the moment a frame was picked, then wrote the
+// rounded figure back from the form on the next edit of anything. Walls and wall frames
+// already converted at four. Display rounding is _fmtUnitNum's job, not this.
 const dashFmt = (num) => {
     let n = Number(num);
     if (num === "" || num === undefined || num === null || isNaN(n)) return 0; 
-    return parseFloat(n.toFixed(3)); 
+    return parseFloat(n.toFixed(4)); 
 };
+// UNDO THE OLD THREE-PLACE ROUNDING (20.84), inch projects only. A value that is EXACTLY
+// what toFixed(3) made of an odd sixteenth (0.813 from 0.8125, 24.063 from 24.0625) goes
+// back to the sixteenth. Nothing else qualifies: 24.06 is not the rounding of any
+// sixteenth, and an even sixteenth (0.875) was never rounded.
+const SIXTEENTH_ROW_FIELDS = ['extW', 'extH', 'fW', 'fHeight', 'rabbetDepth', 'bleed', 'canvasDepth', 'canvasWrap', 'floaterInset', 'sbPaperMargin', 'sbPaperBorder', 'm1T', 'm1B', 'm1L', 'm1R', 'm2', '_faceWidth', 'objDepth'];
+const SIXTEENTH_FRAME_FIELDS = ['w', 'h', 'fW', 'fHeight', 'rabbetDepth', 'floaterInset', 'sbPaperMargin', 'sbPaperBorder', 'm1T', 'm1B', 'm1L', 'm1R', 'm2'];
+function _unroundSixteenth(v) {
+    const n = (typeof v === 'number') ? v : parseFloat(v);
+    if (!isFinite(n) || (typeof v === 'string' && String(n) !== v.trim())) return v;
+    const k = Math.round(n * 16);
+    if (k % 2 === 0) return v;
+    const exact = k / 16;
+    return (exact !== n && parseFloat(exact.toFixed(3)) === n) ? exact : v;
+}
+function _unroundSixteenths(rows, elevs) {
+    let n = 0;
+    const fix = (o, fields) => fields.forEach(p => { if (o && o[p] != null && o[p] !== '') { const v = _unroundSixteenth(o[p]); if (v !== o[p]) { o[p] = v; n++; } } });
+    (Array.isArray(rows) ? rows : []).forEach(r => fix(r, SIXTEENTH_ROW_FIELDS));
+    (Array.isArray(elevs) ? elevs : []).forEach(e => (e && Array.isArray(e.frames) ? e.frames : []).forEach(f => fix(f, SIXTEENTH_FRAME_FIELDS)));
+    return n;
+}
 
 // THE CODE SCHEME: PREFIX.N (ART.1, EGD.1, WF.1), a set's pieces lettered on the end
 // (ART.4A, ART.4B). Numbers count per prefix. A project already written with padded
@@ -13421,7 +13505,7 @@ function setUnit(newUnit) {
 
     // Convert dashboard rows
     dashProjectData.forEach(row => {
-        ['extW', 'extH', 'fW', 'fHeight', 'rabbetDepth', 'bleed', 'canvasDepth', 'canvasWrap', 'floaterInset', 'sbPaperMargin', 'sbPaperBorder', 'm1T', 'm1B', 'm1L', 'm1R', 'm2'].forEach(prop => {
+        ['extW', 'extH', 'fW', 'fHeight', 'rabbetDepth', 'bleed', 'canvasDepth', 'canvasWrap', 'floaterInset', 'sbPaperMargin', 'sbPaperBorder', 'm1T', 'm1B', 'm1L', 'm1R', 'm2', 'objDepth'].forEach(prop => {
             if (row[prop] !== "" && row[prop] !== undefined && !isNaN(row[prop])) {
                 row[prop] = dashFmt(row[prop] * f);
             }
@@ -14313,13 +14397,14 @@ function _rowOpeningAndPrint(r) {
     r = r || {};
     const n = (v) => parseFloat(v) || 0;
     const flat = _isFlatGraphic(r.product);
+    const obj = _isSourcedObject(r.product);
     const isC = (r.product === "Framed Canvas (Floater)");
     const isFL = (r.product === "Frameless Canvas (Wrapped)");
-    const useFM = !isC && !isFL && !flat && (r.useFloatMount === true);
-    // Mats are inactive on a floater, a wrapped canvas, a flat graphic, or a
+    const useFM = !isC && !isFL && !flat && !obj && (r.useFloatMount === true);
+    // Mats are inactive on a floater, a wrapped canvas, a flat graphic, an object or a
     // float mount. m1A is tested `!== false` (absent means on); m2A must be true.
-    const matsOn = (r.m1A !== false) && !isC && !isFL && !flat && !useFM;
-    const m2On = (r.m2A === true) && !isC && !isFL && !flat && !useFM;
+    const matsOn = (r.m1A !== false) && !isC && !isFL && !flat && !obj && !useFM;
+    const m2On = (r.m2A === true) && !isC && !isFL && !flat && !obj && !useFM;
     const extW = n(r.extW), extH = n(r.extH), fW = n(r.fW);
     const mT = matsOn ? n(r.m1T) : 0, mB = matsOn ? n(r.m1B) : 0;
     const mL = matsOn ? n(r.m1L) : 0, mR = matsOn ? n(r.m1R) : 0;
@@ -14333,7 +14418,7 @@ function _rowOpeningAndPrint(r) {
     if (isC) { openW = extW - inset * 2; openH = extH - inset * 2; }
     // A flat graphic and a wrapped canvas share this: nothing surrounds the
     // image, so the overall size IS the opening.
-    else if (isFL || flat) { openW = extW; openH = extH; }
+    else if (isFL || flat || obj) { openW = extW; openH = extH; }
     else if (useFM) { openW = extW - fW * 2 - sbPM * 2 - sbPB * 2; openH = extH - fW * 2 - sbPM * 2 - sbPB * 2; }
     else { openW = extW - fW * 2 - mL - mR - m2v * 2; openH = extH - fW * 2 - mT - mB - m2v * 2; }
     // 20.11: frame and mats wider than the overall leave no opening; say so (Preflight).
@@ -14347,6 +14432,8 @@ function _rowOpeningAndPrint(r) {
     if (isC) { const wrap = _canvasWrapOf(r); printW = openW + wrap * 2; printH = openH + wrap * 2; }
     // A wrapped canvas needs enough image to fold around the stretcher bars.
     else if (isFL) { const wrap = n(r.canvasWrap); printW = openW + wrap * 2; printH = openH + wrap * 2; }
+    // An object is bought, not printed: no bleed, so no print file bigger than it.
+    else if (obj) { printW = openW; printH = openH; }
     // Everything printed on paper or vinyl — including flat graphics — needs
     // trim bleed. This is where a flat graphic parts company with isFL.
     else { const bl = n(r.bleed); printW = openW + bl * 2; printH = openH + bl * 2; }
@@ -14495,6 +14582,12 @@ function syncDashAndCalculate(opts) {
     // other plans (planPins) went that way, silently, on every piece ever edited here.
     // A list of carry-throughs only works until the next field is added; this does not.
     for (const k in row) { if (!(k in _assembledRow)) _assembledRow[k] = row[k]; }
+    // A sourced object's DEPTH (20.85): owned by the form only while the product is an
+    // object (its box is hidden otherwise, and the carry-through above keeps the value).
+    if (_isSourcedObject(_assembledRow.product) && document.getElementById('m_objDepth')) {
+        const _od = String(getRaw('m_objDepth')).trim();
+        if (_od === '' || !(parseFloat(_od) > 0)) delete _assembledRow.objDepth; else _assembledRow.objDepth = parseFloat(_od);
+    }
 
     // BULK EDIT scratch mode: the moved-in dashboard form edits a standalone
     // scratch object — NOT real project data. We only refresh the live preview;
@@ -14544,14 +14637,16 @@ function updateDashVisualsFromDOM() {
 
     const isCanvas = (data.product === "Framed Canvas (Floater)");
     const isFrameless = (data.product === "Frameless Canvas (Wrapped)");
+    // A sourced object (20.85) has no frame, mat or paper: the face is the photo.
+    const _isObjDash = _isSourcedObject(data.product);
     // Float Mount runs on any non-canvas product when the row's toggle is set.
     // (Shadow Box auto-flips this to true; regular Framed Art respects user choice.)
-    const useFM = !isCanvas && !isFrameless && (data.useFloatMount === true);
+    const useFM = !isCanvas && !isFrameless && !_isObjDash && (data.useFloatMount === true);
 
     // Strict Boolean Enforcment to clear dead visual layers
-    // Mats are inactive when float mount, floater, or frameless canvas are active.
-    const effM1A = (data.m1A !== false && !isCanvas && !isFrameless && !useFM);
-    const effM2A = (data.m2A === true && !isCanvas && !isFrameless && !useFM);
+    // Mats are inactive when float mount, floater, frameless canvas or an object are active.
+    const effM1A = (data.m1A !== false && !isCanvas && !isFrameless && !useFM && !_isObjDash);
+    const effM2A = (data.m2A === true && !isCanvas && !isFrameless && !useFM && !_isObjDash);
     
     const effM1T = effM1A ? data.m1T : 0; const effM1B = effM1A ? data.m1B : 0; const effM1L = effM1A ? data.m1L : 0; const effM1R = effM1A ? data.m1R : 0;
     const effM2 = effM2A ? data.m2 : 0;
@@ -14599,7 +14694,14 @@ function updateDashVisualsFromDOM() {
     // (For floaters the opening will overlap the inner part of the rails — see below.)
     const effFw_dash = data.fW;
 
-    if (_isFlatGraphic(data.product)) {
+    if (_isObjDash) {
+        // SOURCED OBJECT: no rails, no edge, no shadow. The opening below carries the
+        // dashed outline while there is no photo.
+        fVis.className = 'frame-vis';
+        fVis.style.border = 'none';
+        fVis.style.background = 'transparent';
+        fVis.style.boxShadow = 'none';
+    } else if (_isFlatGraphic(data.product)) {
         // FLAT GRAPHIC: the face IS the graphic and it sits flush, so no rails, no
         // border and — unlike a wrapped canvas — NO drop shadow. A hairline outline
         // marks the trim line, which is otherwise indistinguishable from the wall.
@@ -14636,11 +14738,11 @@ function updateDashVisualsFromDOM() {
     // A FRAMED piece casts the same drop shadow on screen as in its PNG (18.41): the
     // canvas renderer's recipe (35px blur, 18px drop at 72dpi) converted to this preview's
     // px-per-inch. It had none here, so the preview and the export disagreed.
-    if (!_isFlatGraphic(data.product) && !isFrameless) {
+    if (!_isFlatGraphic(data.product) && !isFrameless && !_isObjDash) {
         const _pxIn = ratio / 72;
         fVis.style.boxShadow = dashOuterShadowsOn ? _fxCss('outer', 0, 18 * _pxIn, 35 * _pxIn, 0.55) : 'none';
     }
-    let offsetW = (data.fType === 'color' || isFrameless) ? 0 : (effFw_dash * ratio);
+    let offsetW = (data.fType === 'color' || isFrameless || _isObjDash) ? 0 : (effFw_dash * ratio);
 
     if(effM1A) { 
         const m1Vis = document.createElement('div'); m1Vis.className = 'mat-visual'; m1Vis.id = 'dash-mat1-visual';
@@ -14664,7 +14766,7 @@ function updateDashVisualsFromDOM() {
     // around the image area. Sits inside whatever opening is above (mat 2 if on,
     // mat 1 if on, frame if no mats). Only active in standard mat mode — float
     // mount uses its own paper rendering above.
-    const effFauxOn = (data.useFauxMat === true && !isCanvas && !isFrameless && !useFM);
+    const effFauxOn = (data.useFauxMat === true && !isCanvas && !isFrameless && !useFM && !_isObjDash);
     if (effFauxOn) {
         const border = parseFloat(data.sbPaperBorder) || 0;
         if (border > 0) {
@@ -14723,12 +14825,14 @@ function updateDashVisualsFromDOM() {
         fVis.appendChild(paperVis);
     }
     
-    const _flatDash = _isFlatGraphic(data.product);
+    const _flatDash = _isFlatGraphic(data.product) || _isObjDash;
     const artVis = document.createElement('div'); artVis.className = 'art-visual'; artVis.id = 'dash-art-visual';
     // For floater, frameless, & float mount: subtle dashed border (suggests transparent opening) instead of a heavy 4px black stroke.
     // A flat graphic carries its trim line on the face itself, so the opening adds none.
-    artVis.style.border = _flatDash ? 'none'
+    artVis.style.border = _isObjDash ? (data.artworkUrl ? 'none' : '1.5px dashed ' + OBJECT_EDGE)
+        : _flatDash ? 'none'
         : (isCanvas || isFrameless || useFM) ? "1px dashed rgba(0,0,0,0.25)" : "1px solid #aaa";
+    if (_isObjDash) { artVis.style.background = 'transparent'; artVis.style.boxSizing = 'border-box'; }
     // Float mount / frameless: opaque print fill so the white paper beneath
     // doesn't bleed through (keeps dashboard + elevation identical).
     if (isFrameless || useFM) artVis.style.background = 'rgb(120,120,120)';
@@ -14841,7 +14945,7 @@ function updateDashVisualsFromDOM() {
     }
     // Suffix matches the unit. unitInfo() gives '"' for IN, ' cm' for CM, ' mm' for MM.
     const dashSuf = unitInfo(dashUnit).suffix;
-    if (!dashHasArt && _flatDash) {
+    if (!dashHasArt && _flatDash && !_isObjDash) {
         // A flat graphic with nothing dropped on it yet. The framed-art treatment —
         // a bare size in the middle of an empty opening — read as "a frame with the
         // frame missing", because that is literally what it was. This is a DROP
@@ -15204,6 +15308,84 @@ function _flatGraphicFieldsUI(hide) {
     });
 }
 // RESTORED SYNC & DB FUNCTIONS
+// ── SOURCED OBJECT FORM (20.85) ─────────────────────────────────────────────
+// The studio's approved sources (FSO tracker, Preferred Vendors), offered as suggestions
+// in the Source box. Names only; anything typed is fine. Source from the project's own
+// country first: most Canadian shops will not ship to the USA.
+const OBJECT_VENDOR_SUGGEST = ['Global Views', 'Phillips Collective', 'Crate and Barrel + CB2', 'Jamie Young', 'Books by the Foot', 'Indigo', 'Gabriel Ross Shop'];
+// Shows (or puts away) everything that is the object's own: Depth in place of the three
+// frame boxes, the Sourcing panel, Hardware relabelled as custom. Glass, Mount and Backing
+// Board are hidden, never wiped, so switching back restores them. Fills from `data`.
+function _objectFieldsUI(on, data) {
+    const show = (el, v) => { if (el) el.style.display = v; };
+    document.querySelectorAll('.frame-dim-cell').forEach(el => show(el, on ? 'none' : ''));
+    document.querySelectorAll('.obj-dim-cell').forEach(el => show(el, on ? '' : 'none'));
+    show(document.getElementById('objectSettings'), on ? 'block' : 'none');
+    ['m_glass', 'm_backing', 'm_mount'].forEach(id => { const el = document.getElementById(id); if (el && el.parentElement) show(el.parentElement, on ? 'none' : ''); });
+    const hw = document.getElementById('m_hardware');
+    if (hw) {
+        const lb = hw.parentElement && hw.parentElement.querySelector('label');
+        if (lb) lb.textContent = on ? 'Hardware (custom)' : 'Hardware';
+        // Glass and Mount share its row; with them hidden it takes the whole row.
+        if (hw.parentElement) hw.parentElement.style.gridColumn = on ? '1 / -1' : '';
+        hw.placeholder = on ? 'e.g. French cleat, pin mount, on a plinth' : '';
+    }
+    if (!on || !data) return;
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = (v == null ? '' : v); };
+    set('m_objDepth', parseFloat(data.objDepth) > 0 ? dashFmt(data.objDepth) : '');
+    set('m_objVendor', data.vendorName || '');
+    set('m_objLink', data.sourceUrl || '');
+    set('m_objLead', data.leadTime || '');
+    set('m_objStock', (data.stockQty === undefined || data.stockQty === null || data.stockQty === '') ? '' : data.stockQty);
+    set('m_objAlts', data.altLinks || '');
+    // The stored quote only: an estimate from the rate card is Production's, not typed here.
+    set('m_objCost', (data.unitCost === undefined || data.unitCost === null || data.costSrc === 'estimate') ? '' : data.unitCost);
+    const cl = document.getElementById('objCostLabel');
+    if (cl) { let cur = 'USD'; try { cur = _pricing().currency || 'USD'; } catch (e) {} cl.textContent = 'Cost each (' + cur + ')'; }
+    const dl = document.getElementById('objVendorList');
+    if (dl && !dl.children.length) OBJECT_VENDOR_SUGGEST.forEach(n => { const o = document.createElement('option'); o.value = n; dl.appendChild(o); });
+    _objStockNote(data);
+}
+// FEWER THAN 10 IN STOCK IS FLAGGED (the tracker's rule for designers), and so is less
+// stock than the walls need.
+function _objStockText(r) {
+    if (!r || r.stockQty === undefined || r.stockQty === null || r.stockQty === '') return '';
+    const n = Number(r.stockQty), need = Math.max(1, parseInt(r.qty, 10) || 0);
+    if (!isFinite(n)) return '';
+    if (n < need) return 'Not enough stock: ' + n + ' in stock, ' + need + ' needed. Flag it to the PM and procurement, and add alternatives.';
+    if (n < OBJECT_LOW_STOCK) return 'Low stock: only ' + n + ' left. Flag it to the PM and procurement in the notes.';
+    return '';
+}
+function _objStockNote(r) {
+    const el = document.getElementById('objStockNote'); if (!el) return;
+    const t = _objStockText(r);
+    el.textContent = t; el.style.display = t ? '' : 'none';
+}
+// The Sourcing panel writes straight to the row (it is not part of the form's rebuild).
+// The cost goes through setRowPrice, so Production's pricing sees the same quote.
+function _objSourcingSet(field, value) {
+    const row = _bulkEditing ? _bulkScratch : dashProjectData[dashSelectedRowIndex];
+    if (!row) return;
+    const v = String(value == null ? '' : value).trim();
+    if (field === 'unitCost' && !_bulkEditing) {
+        setRowPrice(row.id, { unitCost: v });
+    } else if (field === 'unitCost' || field === 'stockQty') {
+        const n = parseFloat(v);
+        if (v === '' || !(n >= 0)) delete row[field]; else row[field] = (field === 'stockQty') ? Math.round(n) : n;
+        if (!_bulkEditing) pushHistory();
+    } else {
+        if (v) row[field] = v; else delete row[field];
+        if (!_bulkEditing) pushHistory();
+    }
+    _objStockNote(row);
+    if (!_bulkEditing) { try { scheduleAutosave(); } catch (e) {} }
+}
+function _objOpenLink() {
+    const el = document.getElementById('m_objLink');
+    const u = String((el && el.value) || '').trim();
+    if (/^https?:\/\//i.test(u)) window.open(u, '_blank', 'noopener');
+    else _toast('Paste the product page link first (it starts with https://).');
+}
 function handleDashProductChange(shouldSync = true) {
     const val = document.getElementById('m_product').value;
     const matWrapper = document.getElementById('matWrapper');
@@ -15239,6 +15421,29 @@ function handleDashProductChange(shouldSync = true) {
     document.querySelectorAll('.frame-dim-cell').forEach(el => {
         el.classList.toggle('fl-disabled', _noFrameUI);
     });
+
+    // SOURCED OBJECT (20.85): W x H x Depth, Hardware (custom) and Sourcing. No frame,
+    // mats, canvas, bleed or print file, and no flat-graphic fields. Returns early like the
+    // flat and canvas branches: everything below is their plumbing.
+    if (_isSourcedObject(val)) {
+        matWrapper.style.display = 'none';
+        canvasSettings.style.display = 'none'; _canvasSidesRowShow(false);
+        bleedSettings.style.display = 'none';
+        if (egdSettings) egdSettings.style.display = 'none';
+        if (frameStyleSection) frameStyleSection.style.display = 'none';
+        _flatGraphicFieldsUI(false);
+        const _objRow = _bulkEditing ? _bulkScratch : data;
+        // An object never hangs on the framed-art default; its hardware is custom. Only the
+        // untouched default is cleared, never anything typed.
+        if (_objRow && String(_objRow.hardware || '').trim() === dashDefaultData.hardware) {
+            _objRow.hardware = '';
+            const hw = document.getElementById('m_hardware'); if (hw) hw.value = '';
+        }
+        _objectFieldsUI(true, _objRow);
+        if (shouldSync) syncDashAndCalculate();
+        return;
+    }
+    _objectFieldsUI(false);
 
     // FLAT GRAPHIC (wallcovering / window film): the overall size IS the graphic,
     // so the only things that matter are that size, the bleed, and the substrate.
@@ -18172,7 +18377,7 @@ function loadFramePreset(e) {
                     // Preset stores its source unit; convert to current dash unit.
                     // unitFactor handles all 6 transitions for in/cm/mm.
                     const factor = unitFactor(d.unit, dashUnit);
-                    ['extW','extH','fW','fHeight','rabbetDepth','bleed','canvasDepth','canvasWrap','m1T','m1B','m1L','m1R','m2'].forEach(p => { if(d.frame[p] !== undefined && !isNaN(d.frame[p])) d.frame[p] = dashFmt(d.frame[p]*factor); });
+                    ['extW','extH','fW','fHeight','rabbetDepth','bleed','canvasDepth','canvasWrap','m1T','m1B','m1L','m1R','m2','objDepth'].forEach(p => { if(d.frame[p] !== undefined && !isNaN(d.frame[p])) d.frame[p] = dashFmt(d.frame[p]*factor); });
                 }
                 dashProjectData[dashSelectedRowIndex] = d.frame; loadDashDataIntoControls(d.frame); renderDashTable(); pushUpdatesToElevations(dashSelectedRowIndex);
             } else showInfoModal('Not a preset file', 'That file does not look like a Farmhand preset, so nothing was changed.');
@@ -18239,6 +18444,51 @@ function renderFrameToCanvas(d, swatchImg, opts) {
     //      should be, and wireframe decks lose the grey placement block. So this
     //      branch draws its own artwork and honours the wireframe look, like the
     //      framed path does.
+    // SOURCED OBJECT (20.85): the photo fills the box (computeArtDrawRect, as everywhere);
+    // with no photo showing, a dashed outline on a transparent box, so the wall reads
+    // through. No frame, no shadow. Above the frameless branch for the flat branch's
+    // reason 2: it must draw its own artwork and wireframe.
+    if (_isSourcedObject(d.product)) {
+        const c = document.createElement('canvas');
+        c.width = w + (pad * 2);
+        c.height = h + (pad * 2);
+        const x = c.getContext('2d');
+        x.translate(pad, pad);
+        let shown = false;
+        if (opts.wireframe) {
+            x.fillStyle = ELEV_WF_FILL;
+            x.fillRect(0, 0, w, h);
+            if (opts.wireframeLetter) {
+                const fs = _elevWfLetterPx(w, h);
+                x.fillStyle = ELEV_WF_INK;
+                x.font = `${_elevWfFontStyle()} ${_elevWfFontWeight()} ${fs}px ${_elevWfFontCss()}`;
+                x.textAlign = 'center'; x.textBaseline = 'middle';
+                x.fillText(String(opts.wireframeLetter), w / 2, h / 2);
+            }
+        } else if (opts.artworkImg) {
+            const iw = opts.artworkImg.naturalWidth || opts.artworkImg.width;
+            const ih = opts.artworkImg.naturalHeight || opts.artworkImg.height;
+            if (iw && ih) {
+                x.save();
+                x.beginPath(); x.rect(0, 0, w, h); x.clip();
+                const crop = opts.artCrop || {};
+                const rr = computeArtDrawRect(w, h, iw / ih, crop.zoom, crop.panX, crop.panY);
+                x.drawImage(opts.artworkImg, rr.dx, rr.dy, rr.dw, rr.dh);
+                x.restore();
+                shown = true;
+            }
+        }
+        if (!shown) {
+            const lw = Math.max(1, dpi / 60);
+            x.save();
+            x.strokeStyle = OBJECT_EDGE;
+            x.lineWidth = lw;
+            x.setLineDash([Math.max(4, dpi / 8), Math.max(3, dpi / 12)]);
+            x.strokeRect(lw / 2, lw / 2, Math.max(0, w - lw), Math.max(0, h - lw));
+            x.restore();
+        }
+        return { canvas: c, pad: pad, frameW: w, frameH: h };
+    }
     if (isFlat) {
         const c = document.createElement('canvas');
         c.width = w + (pad * 2);
@@ -26505,6 +26755,8 @@ function _dsRunPreflight() {
     try { issues.push.apply(issues, _leftoverPreflight(pages)); } catch (e) {}
     try { issues.push.apply(issues, _stagePreflight(pages)); } catch (e) {}
     try { issues.push.apply(issues, _artTypePreflight(pages)); } catch (e) {}
+    // A sourced object with no link, no price or short stock (20.85, the FSO procedure).
+    try { issues.push.apply(issues, _objectPreflight()); } catch (e) {}
     // A picture too small for the size it prints (20.10).
     try { issues.push.apply(issues, _printResPreflight()); } catch (e) {}
     // A client elevation nobody calibrated (20.65).
@@ -36144,6 +36396,7 @@ function _elevGuideGroupsInit() {
     document.querySelectorAll('details.lg-group[data-lg]').forEach(d => {
         const k = d.getAttribute('data-lg');
         if (st[k] === false) d.open = false;
+        else if (st[k] === true) d.open = true;   // Drafting aids starts folded (20.86)
         d.addEventListener('toggle', () => {
             st[k] = d.open;
             try { localStorage.setItem(ELEV_GUIDE_GROUPS_KEY, JSON.stringify(st)); } catch (e) {}
@@ -50132,7 +50385,10 @@ function buildSpecStrings(r, opts) {
     // `noFrame` is what the frame rows actually key off — a flat graphic and a
     // wrapped canvas suppress exactly the same set, so guarding on both names at
     // every site is how one of them gets missed.
-    const noFrame = isFL || isFlat;
+    // A sourced object (20.85) has no frame either: Application, Hardware and its three
+    // dimensions are its whole spec.
+    const isObj = _isSourcedObject(r.product);
+    const noFrame = isFL || isFlat || isObj;
     const isFM = !isC && !noFrame && (r.useFloatMount === true);
     const m1On = (r.m1A !== false) && !isC && !noFrame && !isFM;
     const m2On = m1On && r.m2A === true;
@@ -50190,6 +50446,7 @@ function buildSpecStrings(r, opts) {
     // field feeds it directly; the product's default stands in when it's blank, so
     // the row is never empty.
     else if (isFlat) application = (r.material || '').trim() || FLAT_GRAPHIC_APPLICATION[r.product] || 'Applied Graphic';
+    else if (isObj) application = 'Sourced Object';
     else if (isFM)  application = (r.product === "Framed Art (Shadow Box)") ? "Framed Art (Shadow Box)" : "Framed Art";
     else            application = "Framed Art";
 
@@ -50457,6 +50714,8 @@ function buildSpecStrings(r, opts) {
         // everything else (glass, hardware, backing, mount, and the bleed-inflated
         // image size) is production data that belongs in the CSV, not on the page.
         if (artTypeLine) lines.push({ label: 'Art Type', value: artTypeLine });
+    } else if (isObj) {
+        // Nothing between Application and Hardware: no mat, paper or stretcher.
     } else {
         // Standard framed art: Mat 1, optional Mat 2, optional Faux Mat (paper with border)
         if (mat1Line) lines.push({ label: 'Mat 1', value: mat1Line });
@@ -50494,10 +50753,11 @@ function buildSpecStrings(r, opts) {
     // Mount survives on a flat graphic — how it goes on the wall is the single most
     // useful production note for one ("Paste the wall", "Dry apply, squeegee"). Glass
     // and Hardware do not: there is no glazing and nothing to hang it from.
-    if (mountLine && !isFlat) lines.push({ label: 'Mount', value: mountLine });
+    // An object keeps Hardware (it is custom on every one) and drops Mount and Glass.
+    if (mountLine && !isFlat && !isObj) lines.push({ label: 'Mount', value: mountLine });
     if (!isFlat && (r.hardware || '').trim()) lines.push({ label: 'Hardware', value: r.hardware.trim() });
-    // Glass is not meaningful for canvas products or flat graphics
-    if (!isC && !isFL && !isFlat && (r.glass || '').trim()) {
+    // Glass is not meaningful for canvas products, flat graphics or objects
+    if (!isC && !isFL && !isFlat && !isObj && (r.glass || '').trim()) {
         lines.push({ label: 'Glass', value: r.glass.trim() });
     }
 
@@ -50508,7 +50768,7 @@ function buildSpecStrings(r, opts) {
     // for consistency.
     // Suppressed on a flat graphic — it is stuck to a wall, there is nothing
     // behind it, and it already carries its substrate as the Material row.
-    if (substrateLine && !isFlat) {
+    if (substrateLine && !isFlat && !isObj) {
         lines.push({ label: 'Backing Board', value: substrateLine });
     }
 
@@ -50564,8 +50824,10 @@ function buildSpecStrings(r, opts) {
         // Overall Dimensions and nothing else. The CSV still carries both numbers for
         // production. Same reasoning that moved this row off the print size in the first
         // place: a bleed-inflated figure on a client page invites ordering that much.
-        if (!isFlat && _iW > 0 && _iH > 0) lines.push({ label: 'Art Dimensions', value: _dim(_iW, _iH) });
-        if (_eW > 0 && _eH > 0) lines.push({ label: 'Overall Dimensions', value: _dim(_eW, _eH) });
+        if (!isFlat && !isObj && _iW > 0 && _iH > 0) lines.push({ label: 'Art Dimensions', value: _dim(_iW, _iH) });
+        // An object states its depth too: W x H x D, the depth only when given.
+        const _oD = isObj ? (parseFloat(r.objDepth) || 0) : 0;
+        if (_eW > 0 && _eH > 0) lines.push({ label: 'Overall Dimensions', value: _dim(_eW, _eH) + (_oD > 0 ? ` × ${fmt(_oD)}${sfxT(_oD)}D` : '') });
     }
 
     return { application, matboard, lines };
@@ -53737,8 +53999,8 @@ let _helpActiveSection = 'getting-started';
 // had stopped being true: walls as "tabs at the top" (they are a rail inside the
 // Elevation view now), multi-select as Shift-click (it is Ctrl+click; Shift is
 // the fine-drag modifier), Sort A-Z "leaving the wall unchanged" (it re-letters
-// the frames), and a Sourced Object "hiding the frame fields" (it behaves as
-// Framed Art, which the Product Type entry already said).
+// the frames), and a Sourced Object "hiding the frame fields" (it behaved as
+// Framed Art then; since 20.85 it really does, see SOURCED_OBJECT).
 //
 // BODIES ARE TEMPLATE LITERALS so the copy can carry apostrophes and HTML
 // attributes without escapes. Nothing here may contain a backtick or a dollar
@@ -53809,7 +54071,7 @@ const HELP_REFERENCE_DATA = [
         intro: `Build and edit individual pieces. The selected row fills the form and preview on the right.`,
         entries: [
             { title: '+ Add (new row)', body: `Creates a new row with default values in the current unit. Each row gets an item code like <strong>ART.001</strong>.` },
-            { title: 'Product type', body: `Seven options: <strong>Framed Art</strong>, <strong>Framed Art (Shadow Box)</strong>, <strong>Framed Canvas (Floater)</strong>, <strong>Frameless Canvas (Wrapped)</strong>, <strong>Sourced Object</strong>, <strong>Wallcovering (EGD)</strong> and <strong>Window Film (WF)</strong>. A canvas hides the mat controls. The two flat graphics hide the mats and dim the frame fields, because the overall size IS the graphic, and add a Material field. Sourced Object currently behaves as Framed Art.` },
+            { title: 'Product type', body: `Seven options: <strong>Framed Art</strong>, <strong>Framed Art (Shadow Box)</strong>, <strong>Framed Canvas (Floater)</strong>, <strong>Frameless Canvas (Wrapped)</strong>, <strong>Sourced Object</strong>, <strong>Wallcovering (EGD)</strong> <strong>Window Film (WF)</strong> and <strong>Didactic Panel</strong>. A canvas hides the mat controls. The flat graphics hide the mats and dim the frame fields, because the overall size IS the graphic, and add a Material field. A Sourced Object has a Depth instead of frame sizes, and a Sourcing panel.` },
             { title: 'Artwork', body: `Click the empty opening in the preview, or drag a picture onto it. To swap a picture, drop another one on it, or hover it and press <strong>Replace</strong>; <strong>Remove</strong> takes it off. Drag the picture to pan it; the row under the sizes has its zoom, <strong>Reset</strong>, <strong>1:1</strong> (fit the frame to the picture) and <strong>Remove</strong>.` },
             { title: 'Frame', body: `The square under <strong>Frame</strong> shows the item's moulding, with Frame Code and Color / Texture beside it and its colour, width and vendor on the heading. Click it (or <strong>Change</strong>) to open the frame browser and pick from every vendor's library, this project's frames or a saved grouping. Picking a frame fills in its width, depth and rabbet, and the Color / Texture line unless you typed your own. New items start in <strong>MICH-132-29</strong>. For a frame no vendor lists, use <strong>Custom swatch…</strong> at the foot of the frame browser.` },
             { title: 'Mat 1, Mat 2, Faux Mat', body: `<strong>Mat 1</strong> is the main mat (set top, bottom, left and right, or all around). <strong>Mat 2</strong> adds a reveal under it. <strong>Faux Mat</strong> is a printed white border on the paper instead of a mat board.` },
@@ -53833,14 +54095,14 @@ const HELP_REFERENCE_DATA = [
             { title: 'Measuring to the graphic', body: `With the measure tool or a free line out, a point near an edge in a wallcovering's picture (the bottom of a printed year, the side of a shape) snaps onto it and shows a <strong>magenta</strong> dot; a point near the edge of a frame or panel lands on that edge anywhere along it. So: click under the printed 1938, then on the top of the panel, for the gap between them. The reach is a few screen pixels: zoom in for finer picking. Hold <strong>Alt</strong> to place a point exactly where you click. A point on the graphic moves with it. <strong>Guide box</strong> (Lines menu) draws an empty to space things against; frames snap to its edges, level lines and centre lines. Any free line can be <strong>Guide only</strong>: on the wall, never printed.` },
             { title: 'Wall layers', body: `A wall is built up in three layers, bottom to top: <strong>Wallcovering</strong> (the printed graphic), <strong>Framed art</strong>, and <strong>On top</strong> (didactic panels, labels, signage). The wall, the PDF and the spec-page thumbnails all draw in that order. Each piece takes its product's layer; a <strong>Didactic Panel</strong> goes on top. Once a wall has more than one layer, the Art list is grouped by layer and clicking a piece's letter moves it to another layer.` },
             { title: 'Wall mode: ART, EGD, WF', body: `<strong>ART WALL</strong> is the default: framed art hangs on it. <strong>EGD WALL</strong> makes the wall a graphic surface: a wallcovering fills it and stays inside it, above the baseboard. <strong>WF WALL</strong> builds a standard window elevation for window film and opens the Glass tab. A wall with glass on it normally stays an ART wall.` },
-            { title: 'The tool bar', body: `The bar to the left of the wall holds the elevation tools. <strong>Select</strong> (<span class="help-kbd">V</span>) puts a tool down, <strong>Measure</strong> (<span class="help-kbd">M</span>) draws your own dimension line and <strong>Context block</strong> (<span class="help-kbd">C</span>) draws a door, window or piece of furniture. Below them: Add frames, Sort A&ndash;Z, Align, Group dimension, Fit to wall, Item codes, and the keyboard shortcuts.` },
+            { title: 'The tool bar', body: `The bar to the left of the wall holds the elevation tools. <strong>Select</strong> (<span class="help-kbd">V</span>) puts a tool down, <strong>Measure</strong> (<span class="help-kbd">M</span>) draws your own dimension line, <strong>Tape</strong> (<span class="help-kbd">T</span>) checks a distance without drawing anything, and <strong>Context block</strong> (<span class="help-kbd">C</span>) draws a door, window or piece of furniture. Below them: Add frames, Sort A&ndash;Z, Align, Group dimension, Fit to wall, Item codes, and the keyboard shortcuts.` },
             { title: 'Adding pieces', body: `<strong>Add frames</strong> (the framed plus in the tool bar, or the button over the frame list) adds the pieces you tick in one go. From the dashboard, pick a piece in <strong>Push to Wall</strong> and press <strong>Send</strong>.` },
             { title: 'Moving and selecting', body: `Drag a frame to move it; it snaps to the grid and to the other frames. <span class="help-kbd">Ctrl+click</span> adds a frame to the selection, or drag a box around several. Hold <span class="help-kbd">Shift</span> while dragging for fine movement. <span class="help-kbd">Esc</span> deselects.` },
             { title: 'Grouping and aligning', body: `Select frames and press <span class="help-kbd">Ctrl+G</span> to group them so they move as one. The <strong>Align</strong> icon opens equal-gap, align-edge and distribute tools for the selection.` },
             { title: 'Sort A&ndash;Z', body: `Re-letters the frames by their position from left to right, so A is the leftmost piece. The letters print on the drawings and the spec pages, so sort before the deck goes out.` },
             { title: 'Wall size and Settings', body: `The W and H fields set the wall. The gear beside them opens <strong>Settings</strong>: units, hang height, baseboard, label and dimension style, grid, drag snap and nudge steps.` },
-            { title: 'Layout guides', body: `The guide toggles switch on-drawing overlays: frame letters, outside dimensions, spacing dimensions, the scale figure, the centre and hang lines, the grid, centre marks and more. They are shared by every wall, and Deck Studio's breaker and install pages show the same ones.` },
-            { title: 'Dimensions', body: `Every dimension line works the same way: click it, drag its arrows to move the line, drag the number to slide it along, and use the &times; to hide it. Press <span class="help-kbd">M</span> to draw your own; its ends snap to frame corners, frame edges and the wall.` },
+            { title: 'Layout guides', body: `The guide toggles switch on-drawing overlays: frame letters, outside dimensions, spacing dimensions, the lines you drew, the scale figure, and the centre and hang lines. Grid and Centers are under <strong>Drafting aids</strong>. <strong>Auto space every gap</strong> adds a spacing dimension to every gap (or clears them), and <strong>My guides off</strong> hides them all and brings back the ones you had on. They are shared by every wall, and Deck Studio's breaker and install pages show the same ones.` },
+            { title: 'Dimensions', body: `Every dimension line works the same way: click it, drag its arrows to move the line, drag the number to slide it along, and use the &times; to hide it. Press <span class="help-kbd">M</span> to draw your own; its ends snap to frame corners, frame edges and the wall. <strong>Double-click a spacing or edge-gap number to type it</strong>: the frame on the far side (right or upper, or the frame itself for an edge gap) moves to match. Inches, 1'6", 3 1/2 or 10cm all work; Enter sets it, Esc leaves it.` },
             { title: 'Baseboard, hang height, units on labels', body: `The baseboard (4" by default) and hang height (57") are in Elevation settings (the gear in Layout Guides, or Settings, Elevations). Every number on an elevation carries its unit mark. How many decimal places each unit prints is <strong>Rounding</strong> in Settings, Units.` },
             { title: 'Exporting walls', body: `The download icon beside the wall size exports this wall as a PNG. <strong>ALL PNG</strong> and <strong>ALL SVG</strong> put every wall in one ZIP, named like the walls. The SVG opens as real line work in Illustrator.` },
             { title: 'Zoom and fit', body: `The slider zooms. <strong>Fit</strong> fits the wall to the window.` }
@@ -54099,6 +54361,7 @@ The <strong>image size with bleed</strong> is worked out at RFI and never shown 
             { title: 'Floor plan wall lines', body: `Pick a line style from a code's Line button, then press on the wall and drag along it (Custom and Wrap: click each end). The magnifier shows the line as thick as it prints, as a square where it will land, and the line itself while you draw; <span class="help-kbd">Shift</span> keeps it straight and <span class="help-kbd">Esc</span> cancels. With no tool armed, click a drawn line to select it: drag it to move it, drag an end to adjust that end, arrow keys nudge it (<span class="help-kbd">Shift</span> for 10), <span class="help-kbd">Delete</span> removes it.` },
             { title: 'Lines', body: `The Lines button in the elevation dock offers four kinds: <strong>Line / arrow</strong> (two clicks, any angle), <strong>Centre line</strong> (one click on a frame, an object or the middle of the wall: a full-height CL through its centre), <strong>Centre between</strong> (click two things: a CL halfway between them) and <strong>Level line</strong> (one click on a top, bottom or centre: a full-width line through it). Each follows what it was placed on. <span class="help-kbd">L</span> arms the kind used last.` },
             { title: 'Free line', body: `<span class="help-kbd">L</span> draws a free line on the wall: click where it starts and where it ends. Ends snap to frames, context blocks and the wall and stay attached when those move; hold Shift for 0, 45 or 90 degrees. The selected line has a label box, arrowheads (none, one end, both) and Dashed. <span class="help-kbd">Delete</span> removes it and <span class="help-kbd">Esc</span> backs out.` },
+            { title: 'Tape measure', body: `<span class="help-kbd">T</span> picks up the tape: click a point, move, and it reads the distance across, up or down, and direct. A second click holds the reading, a third starts again. It snaps like Measure (hold Alt for exactly where you click), draws nothing and never prints. <span class="help-kbd">Esc</span> clears the reading, then puts the tape down.` },
             { title: 'Measure line', body: `<span class="help-kbd">M</span> toggles the measure-line tool. With a line selected, arrow keys move it and <span class="help-kbd">Esc</span> clears it. Double-click a measure line's number to print EQ instead (and again to bring the number back); a small * over two numbers that read the same marks them both EQ in one click.` },
             { title: 'Undo and save', body: `<span class="help-kbd">Ctrl+Z</span> undoes, <span class="help-kbd">Ctrl+Shift+Z</span> or <span class="help-kbd">Ctrl+Y</span> redoes. <span class="help-kbd">Ctrl+S</span> saves and <span class="help-kbd">Ctrl+Shift+S</span> saves a copy somewhere else.` },
             { title: 'Dialogs', body: `<span class="help-kbd">Esc</span> closes the dialog on top, and on a question it means Cancel. <span class="help-kbd">Tab</span> stays inside an open dialog. The full-screen tools (the floorplan markup and the layout editor) keep <span class="help-kbd">Esc</span> for their own tools instead.` },
@@ -54113,7 +54376,7 @@ The <strong>image size with bleed</strong> is worked out at RFI and never shown 
         entries: [
             { title: 'A white mat with a thin black reveal', body: `Set Mat 1 to white, turn the chain off, and give Mat 2 a 0.25" black reveal.` },
             { title: 'Float mounts need rabbet', body: `A float mount stack needs at least <strong>0.625"</strong> of rabbet. Farmhand warns when the moulding is too shallow.` },
-            { title: 'Sourced Object', body: `For sculptures, objects and pieces framed elsewhere. It currently renders and specs as Framed Art, so clear the frame and mat fields yourself if they should not print.` },
+            { title: 'Sourced Object', body: `For things bought rather than framed or printed: sculpture, vases, bowls, books by the foot. It has a width, a height and a <strong>Depth</strong>, and <strong>Hardware (custom)</strong> for how it is fixed; frame, mat, glass, mount, backing and bleed do not apply and do not print. Its spec reads Application, Hardware and Overall Dimensions (W x H x D). On a wall it is a dashed outline until you drop a photo of the object on it. The <strong>Sourcing</strong> panel keeps the studio's FSO tracker details: Source, Purchasing link (Open goes to it), Lead time, Cost each (the same quote Production prices with), In stock (under 10 is flagged for the PM and procurement) and Alternatives. Preflight lists any object with no link or no cost, and the Production pack's Purchases sheet carries all of it in the tracker's columns.` },
             { title: 'Your own moulding profiles', body: `Put one image per profile in a folder and choose it from the Frame Library. The file name carries the code, width, depth and rabbet: <strong>MICH-41-12_1.75_0.625.png</strong> is code MICH-41-12, 1.75" wide, 0.625" rabbet.` },
             { title: 'Light and dark', body: `The sun and moon button switches theme. The drawings and pages stay print colours either way.` }
         ]
@@ -54129,7 +54392,7 @@ The <strong>image size with bleed</strong> is worked out at RFI and never shown 
             },
             {
                 title: `What's new`,
-                body: `<strong>20.83</strong> <b>Leftover code cleared out.</b> 82 functions nothing in the app could reach any more are gone (about 800 lines): the old + LAYOUT and + SET buttons' chooser (options are made in Deck Studio), the toolbar fit and align menus, the dimension drag handles from before the current ones, and thin wrappers left by earlier redesigns. Nothing you can click changes. A new check fails the build if a function is left with no caller.<br><br><strong>20.82</strong> <b>Works with no signal, everywhere.</b> Elevation PNG export, the Oswald display type and the scale figure no longer download from the internet: they ship with the app and are kept on the device, so PNG export works on a site with no signal the first time. Prompts, tooltips and Preflight messages lose their long dashes. Tidy-up: a duplicate JSZip copy is gone, npm test runs the suite, and the README says what the app is.<br><br><strong>20.81</strong> <b>Project folders on your computer, filed like Dropbox.</b> <b>Set up my work folder</b> (once) finds or makes 00 ACTIVE PROJECTS in Documents or wherever you pick. <b>New project folder</b> takes the client and project folder names from Dropbox and optional levels (01-04, with ARTWORK and EGD folders if you want them) and builds the studio template, showing every folder as new or already there before Create. Existing folders are reused, even with slightly different names, and nothing is replaced. Pick an existing client or project folder to start from there. Farmhand <b>never writes into Dropbox</b> and refuses a folder that looks like it. New project also asks for the <b>Job code</b> (like BEYE-HILT-WAIL-2024, filled into the Project code so PDF names come out right). Choose a level to save into and the project is saved in its 06. FARMHAND, and deck PDFs go to its 01. PDF. Chrome and Edge on Mac and Windows; Safari downloads the folders as a zip.<br><br>
+                body: `<strong>20.87</strong> <b>Type a gap, and a tape measure.</b> Double-click a spacing or edge-gap number on the wall and type the size you want: the frame on the far side moves to make it so, the way SketchUp and Revit let you type a distance instead of dragging until the number reads right. Grouped or selected frames move together. Inches, feet and inches (1'6"), fractions (3 1/2) and a typed unit (10cm) all work. New <b>Tape</b> tool (<b>T</b>, in the tool bar under Measure): click two points to read the distance across, up or down, and direct, without drawing a line; it snaps like Measure and never prints.<br><br><strong>20.86</strong> <b>Layout Guides, trimmed.</b> Lines and Free lines are one <b>Lines</b> button that shows or hides every line you drew (measurement lines and free lines, CL and level lines). <b>Auto space</b> is a labelled button under the Dimensions tiles, since it adds or clears spacing rather than showing it, and it says which it will do. <b>EQ</b> on spacing moved to Elevation settings (the gear), as a tick box under Dimensions. Grid and Centers are in a <b>Drafting aids</b> group that starts folded. One <b>My guides</b> switch hides every guide and brings back exactly the ones you had on; All on / off is gone, since it also lit the grid, centres and outlines. Nothing in a saved project changes.<br><br><strong>20.85</strong> <b>Sourced Object is its own product.</b> It used to draw and spec as Framed Art. Now it has a width, a height and a <b>Depth</b>, <b>Hardware (custom)</b>, and no frame, mat, glass, mount, backing or bleed; its spec reads Application, Hardware and Overall Dimensions (W x H x D). On a wall, and in every export, it is a dashed outline until a photo of the object is dropped on it. A <b>Sourcing</b> panel follows the studio's FSO tracker: Source (approved shops suggested), Purchasing link with an Open button, Lead time, Cost each (the same quote Production prices with), In stock (under 10, or fewer than the walls need, is flagged) and Alternatives. Preflight lists an object with no link or no cost, and the Production pack's Purchases sheet now uses the tracker's columns with the design half filled in. Also: nine em dashes written as HTML entities are gone from option text and tooltips.<br><br><strong>20.84</strong> <b>Sixteenths stay sixteenths, and Continue keeps your units.</b> Sizes were rounded to three decimals as they were stored, so a 13/16" rabbet became 0.813 the moment a frame was picked, and a 24-1/16" piece became 24.063 the next time anything on it was edited. They are kept exactly now, and a project with values the old rounding changed is put back when it opens. <b>Continue</b>, a restored version and undo now bring back the units the numbers were in: a centimetre project used to come back reading its sizes as inches. The Project Code example no longer runs out of its box.<br><br><strong>20.83</strong> <b>Leftover code cleared out.</b> 82 functions nothing in the app could reach any more are gone (about 800 lines): the old + LAYOUT and + SET buttons' chooser (options are made in Deck Studio), the toolbar fit and align menus, the dimension drag handles from before the current ones, and thin wrappers left by earlier redesigns. Nothing you can click changes. A new check fails the build if a function is left with no caller.<br><br><strong>20.82</strong> <b>Works with no signal, everywhere.</b> Elevation PNG export, the Oswald display type and the scale figure no longer download from the internet: they ship with the app and are kept on the device, so PNG export works on a site with no signal the first time. Prompts, tooltips and Preflight messages lose their long dashes. Tidy-up: a duplicate JSZip copy is gone, npm test runs the suite, and the README says what the app is.<br><br><strong>20.81</strong> <b>Project folders on your computer, filed like Dropbox.</b> <b>Set up my work folder</b> (once) finds or makes 00 ACTIVE PROJECTS in Documents or wherever you pick. <b>New project folder</b> takes the client and project folder names from Dropbox and optional levels (01-04, with ARTWORK and EGD folders if you want them) and builds the studio template, showing every folder as new or already there before Create. Existing folders are reused, even with slightly different names, and nothing is replaced. Pick an existing client or project folder to start from there. Farmhand <b>never writes into Dropbox</b> and refuses a folder that looks like it. New project also asks for the <b>Job code</b> (like BEYE-HILT-WAIL-2024, filled into the Project code so PDF names come out right). Choose a level to save into and the project is saved in its 06. FARMHAND, and deck PDFs go to its 01. PDF. Chrome and Edge on Mac and Windows; Safari downloads the folders as a zip.<br><br>
 <strong>20.80</strong> <b>18 new moodboard templates.</b> Templates > Moodboard has the studio's real moodboard layouts, measured from 144 pages across 27 projects: Bleed Mosaic (with or without artist captions), Inset Mosaic, Framed Row 3-Up and 4-Up, Featured Artists 4-Up, Even Grid 2x3, Free Collage + Notes, Gallery Wall, Hero + Stack, Reference Inset + Feature Artworks, Narrative Split, Style Wall, Palette Strip + Interiors, Keyword Overlay, Object Curation, Concept Columns and Material Bands. Each one uses the house heading, keyword line and image area, so pages made from different templates line up. The disclaimer on the older moodboard templates now reads "reference only" (it said "refernence").
 <strong>20.79</strong> Help's Video guides has <b>7. Preflight and Generate PDF</b>. Fixed while filming it: Preflight's <b>Page</b> button opened Deck Studio on the Project tab instead of the page; it now opens that page on the Pages tab. Preflight's spelling check no longer lists the starter deck's own filler text (a new project showed dozens of "possible misspellings" nobody wrote); text you have edited is still checked. The PDF carries its file name as its title, so the preview, Acrobat and Preview show <b>261119.Project.V1</b> instead of a random id.<br><br><strong>20.78</strong> In Help's <b>6. Deck Studio pages</b> video, the split screen now shows the Project tab's Include pages on the left and the Pages rail on the right: untick a page and its thumbnail leaves the deck.<br><br><strong>20.77</strong> Help's <b>6. Deck Studio pages</b> video is rebuilt and longer (about 80 seconds): the four Deck Studio buttons, adding a page with <b>+</b> and turning it into Keywords, a dark page, Group A/B/C, an elevation breaker, making your own template category, and a split screen of Include pages beside the page preview. Fixed while filming it: a spec page could show an old render (a default black frame and no artwork) after a piece was changed outside the Frame Dashboard, and Frame Recommendations could show old frames, until something rebuilt every preview; previews are now keyed on the piece itself. A new elevation breaker could say <b>Elevation capture failed</b> while the wall was only busy being drawn for another page; it now waits its turn. A page added with <b>+</b> takes the name of the template you apply (Keywords instead of New Page). The spec page panel says <b>Presentation layout (whole deck)</b>, and when one set differs from the deck (its own <b>One page</b>) it says so under the set.<br><br><strong>20.76</strong> Help's Video guides has <b>6. Deck Studio pages</b>: edit text on a page, drag a page in the rail, put a set on one page, and choose the presentation type and the pages it includes, in 30 seconds. Fixed while filming it: a page edited on the Pages tab (a retyped cover heading) still showed its old words in the Project tab's page preview until <b>Refresh preview</b>; the preview now redraws when you open the tab.<br><br><strong>20.75</strong> Help's Video guides has <b>5. The Elevation, start to finish</b> (about 2 minutes, in chapters): adding frames to a blank wall, spacing tips, every guide on the Guides tab, dragging the figure and dimensions clear of the art, a 7-piece salon hang, the Wall, Context and Glass tabs, and Elevation settings. Video 4 was re-recorded with a corrected caption.<br><br><strong>20.74</strong> <b>Spacing shows the gaps when you switch it on.</b> On the Elevation tab, Guides, <b>Spacing</b> on a wall with no gaps picked now dimensions every gap between neighbouring frames (the same as <b>Auto space</b> for that wall). It used to show nothing until a gap was picked with the letter chips on the Art tab; the chips still add or remove single gaps.<br><br><strong>20.73</strong> Help's Video guides has <b>4. Lay out the wall</b>: even gaps, hang height, centring, and the dimensions the install page prints, in 30 seconds. A gap is dimensioned by picking the next frame's letter on the Art tab, with <b>Spacing</b> on in Guides.<br><br><strong>20.72</strong> Help's Video guides has <b>3. Spec a piece</b>: on the Frame Dashboard, the overall size, a moulding from the frame library, the mat and the artwork, in 30 seconds.<br><br><strong>20.71</strong> <b>The footer updates as you type it.</b> In Deck Studio's <b>Project</b> tab, the page preview now shows the footer change the moment you type the Project Name, Project Code, Location or Version (it used to wait for <b>Refresh preview</b>). The footer reads: page number, PROJECT NAME – LOCATION | CODE.VERSION. Help's Video guides has a new one: <b>0. Start a new project</b>.<br><br><strong>20.70</strong> <b>Video guides in Help.</b> Help has a new <b>Video guides</b> section with short screen recordings: <b>1. Build the floor plan</b> (upload the plan, pin a placement, draw its wall line, pick a triptych) and <b>2. Add the client elevation</b> (add the sheet, crop what prints, scale it off a printed dimension, fit the art wall, measure the art). The Floor plan guide's Start here tab opens with the first one. They are recorded by Farmhand itself on a made-up hotel, so they can be re-made whenever the screens change.<br><br><strong>20.69</strong> <b>Build your own code style.</b> Categories tab, Item codes, <b>Build your own code…</b> (or Custom in the menu) opens the <b>code builder</b>: put a client's code together from parts, Category, Level (L1, 1 or 01), Plan fields you name yourself (Sector, Zone, Building, Wing...; up to four, each with its own letters such as S or Z), Fixed text and the Number (1, 01 or 001), with the separator you want between each. Drag a part by its grip to move it. A live preview and a table of plans, one column per plan field, show the first code on every plan. <b>Start from</b> has House, Category + number, Level, Level + Sector, Level + Zone and Building + Level. To turn Sector S16 into Zone Z16, rename the part and change its letters. A plan named Level 02 | Building A fills Building A by itself, and + Add code on a plan with no value asks once and keeps it. Item codes shows a column for each new field. The Floor plan guide's Code styles tab explains it, with examples from other kinds of projects.<br><br><strong>20.68</strong> <b>The floor plan says what to do first, and how codes are made.</b> The Items tab on a floor plan page now opens with <b>Set up this floor plan</b>: three steps that tick themselves off. <b>Plans</b> (one plan page per level, or per sector; <b>Plans…</b> opens the markup tool), <b>Code style</b> (<b>Codes…</b> goes to Item codes) and <b>Add and pin</b> (how many on this plan still need a pin, and <b>Show them</b>). It folds to one line once all three are done. Its <b>Guide</b> button opens the <b>Floor plan guide</b>, a small window that stays beside your work: Start here, Plans and sectors, Code styles (which to use for which kind of deck) and the Ford Hub L01 deck as a worked example; it is in Help too. Item codes on the Categories tab says what it does, says when to use the style you picked, and has <b>Which style?</b>. A plan named <b>Level 01 | Sector 10</b> now takes sector 10 the moment you name it (it used to wait until the project was opened again). <b>Size</b>, <b>Sketch</b> and the rate card line are off the floor plan: they are a PM's budget tool, and now appear only after <b>Budget sketch on the floor plan</b> in Production, Pricing (<b>Done budgeting</b> puts them away). The Categories tab's Quick set buttons read <b>Product types</b> and <b>Tiers</b>, so they fit.<br><br><strong>20.67</strong> <b>Fit the crop and the art wall with handles, and a clearer Client elevation panel.</b> The client sheet window no longer asks for one-shot clicks. <b>Crop the elevation</b> opens with a red box: drag it onto the elevation, drag its handles to trim, or drag on the sheet for a new box. In <b>Scale</b>, drag either end of the measure to fine-tune it. <b>The art wall</b> is now a green box at the wall's current size: drag it onto the wall in the drawing and drag its handles so the bottom edge sits on the floor, or type the width and height. A magnifier follows the handle you drag, and the arrow keys nudge (Shift for ten). On the Elevation tab, Wall tab, the Client elevation panel shows <b>Calibrated</b> or <b>Not calibrated</b> at the top and has one button, <b>Edit crop, scale &amp; wall</b>, which reopens the window with everything where you left it (a picture added on its own opens the same way). Page settings are grouped under <b>On the page</b>; the numbers and Place by hand are under <b>Advanced</b>. The red handles round the print area on the wall are gone (crop in the window instead); the wall-size handles stay. <b>Add a cropped image instead</b> is now a readable button.<br><br><strong>20.66</strong> <b>Crop the client drawing on the wall, give it a grey border, and drop a sheet straight in.</b> On the Elevation tab, Wall tab, a drawing that prints whole has <b>Crop the print area</b>: the whole sheet appears faded on the wall with the print area as a red box; drag an edge or corner to trim it (a long elevation trimmed down prints bigger, so its dimensions read), drag inside to slide to another part, then <b>Done cropping</b>. It is cut again from the full sheet, and the scale never changes. Or skip the button: the dashed box on the wall has <b>handles</b>; grab one, drag, and let go. The wall has handles too, on its right edge, top edge and top-right corner: drag to size the wall (quarter inches; the left end and the floor stay put). <b>Grey border</b> puts a thin light grey line round the drawing on the page, like the plan border (on by default; untick per wall, or <b>All walls</b>). Drag a sheet image from Finder onto the Client elevation panel to add it.<br><br><strong>20.65</strong> <b>Add the client's full sheet, pick the elevation on it, and calibrate: always.</b> On the Elevation tab, Wall tab, <b>+ Add client sheet</b> takes the whole elevation sheet as it came (a PNG or JPG of the PDF page) and opens it full screen in three steps: <b>Pick the elevation</b> (drag a box round it; the box is exactly what prints on the page), <b>Scale</b> (click both ends of a dimension printed on the drawing and type it, 11'-0" or 132"), and <b>The art wall</b> (click the floor at the wall's left and right ends, then the ceiling). Finish puts the drawing on the wall to scale, its floor on the wall's floor, and can set the wall to the drawing's size. The sheet is kept whole in the project; <b>Re-crop or recalibrate</b> reopens it, and other walls can <b>Use a sheet in this project</b> without adding it again. On the Elevations tab a dashed red box shows what <b>prints on the page</b>. <b>Calibration is required:</b> a client elevation added any way is marked <b>Not calibrated</b> (a red banner on the wall, Preflight lists it) and cannot be shown in the deck until it is. <b>Calibrate</b> now says on the wall what to click, draws the line it measured, and stops after two clicks.<br><br><strong>20.64</strong> <b>Frames printed as outlines show what's inside them again.</b> On a wall set to <b>Frames as outlines</b>, the install page printed empty black boxes with the client drawing showing through, while the Elevations tab showed the grey blocks lettered A, B, C. Each outline now has a white inside with the grey block and its letter when Wireframe is on, or the artwork once it's placed, the same as the Elevations tab. The frame itself is still a plain black outline with no shadow.<br><br><strong>20.63</strong> <b>The client elevation is cropped to the wall in the editor too, and the caption is plain Elevation again.</b> On a wall whose client elevation prints cropped to the wall, the Elevations tab now crops it at the wall the same way, so the editor shows what the page prints (the whole image still shows while you Place or Calibrate it). The caption under the drawing reads just <b>Elevation</b>; the source sheet is only added when you type one on the Wall tab.<br><br><strong>20.62</strong> <b>A wall page can print the client's whole drawing, with the art as outlines.</b> On the Elevation tab, Wall tab, once a client elevation is <b>Shown in deck</b>: choose <b>Print the whole drawing</b> to print everything you placed (the doors, returns and cabinets either side of the art wall) instead of cutting it off at the wall, so the install team sees the wall in its room and a wrong elevation is easy to spot. Beside it, <b>Frames as outlines</b> prints each piece as a plain black outline so the drawing reads through. The caption under the drawing now names the source sheet (Elevation \u00b7 AI4101-02), read off the drawing's name; type your own, or clear it to print just Elevation. <b>All walls</b> sets the drawing and the frame style on every wall at once.<br><br><strong>20.61</strong> <b>A border on a picture box now prints in the PDF.</b> A stroke set on an image box (a plan, a site photo) showed in Deck Studio but was left out of the exported PDF; it now prints in the same colour and weight.<br><br><strong>20.60</strong> <b>A thin grey border round the plan on floorplan pages.</b> A plan cropped to a section used to end in lines running off into space; a light 0.5 pt grey line round it now shows the crop is on purpose. It is on by default. To turn it off, open a floorplan page in Deck Studio, Plan tab: untick <b>Border round the plan</b> for that page, or use <b>All plans</b> to switch it on or off on every floorplan page at once.<br><br><strong>20.59</strong> <b>The red ELEVATION REQUIRED stamp no longer runs into the plan, and you can click it.</b> On a wall page, a note under the stamp that wraps to two lines now lifts the stamp up instead of growing down into the floor plan thumbnail. In Deck Studio, click the stamp for three choices: <b>Edit the note on this wall</b> (opens the wall in Elevations with the note ready to type), <b>Remove Elevation required</b>, or <b>Make it a movable note on this page</b>, which turns this page's stamp into two ordinary notes you can drag, nudge and retype (the wall's own stamp steps aside on that page).<br><br><strong>20.58</strong> <b>A client or brand logo uploaded as an SVG prints sharp at any zoom.</b> If the logo is one colour, the footer draws it as shapes, the same way it draws the Farmboy logo: in its own colour on light pages, white on dark ones. Logos exported from Illustrator work, rounded corners, circles and transforms included. An SVG with more than one colour, outlines (strokes), gradients, clipping masks or embedded pictures prints as a picture, as before. PNG and JPG logos still print as pictures; for the sharpest footer, upload a one-colour SVG.<br><br><strong>20.57</strong> <b>The Farmboy logo in the PDF is now vector.</b> It used to go in as a picture, which some PDF viewers drew with jagged edges at normal zoom (zoomed in it looked fine). The footer and cover logo are now drawn as shapes, so they stay sharp at any zoom, in any viewer and in print. A client or brand logo you add to the footer is now smoothly scaled to print size when it's added, instead of going in at full upload size, and its white version on dark pages keeps soft edges instead of a stair-stepped outline.<br><br><strong>20.56</strong> <b>Order workbook: one Excel file a PM can start the purchase order from.</b> Frame Dashboard, Export menu, <b>Order workbook (Excel)</b> (also on Production, Pricing). The first tab is a Farmboy-branded order sheet: our logo, the project and client, yellow cells for the PM (Salesforce opportunity, PO, status, dates), then every piece with its picture, item and image code, title, location, sizes, frame, mat, glass, paper, vendor, quantity and prices, with totals that stay live in Excel (shipping, installation and tax are yellow for the PM). The second tab is the Salesforce SF Import Template, its 11 columns at the top and nothing else, so it can be imported as it stands or saved as a CSV; the third is the Vendor codes list. The Salesforce CSV button still works and matches the tab line for line.<br><br><strong>20.55</strong> <b>Clicking a pin on a floor plan highlights it instead of opening its spec page.</b> In Deck Studio, a click on a pin lights it up along with its line in the legend, so a small nudge while moving a pin no longer jumps you to the spec page. The highlighted legend line gets a diamond grip on the left (drag it up or down the list) and up and down arrows on the right (move it one place per click). The pin number and the legend update together and stay highlighted as the code changes. Click the legend line itself to open the spec page. Click the picked pin again, click empty plan, or press Esc to let it go. Hover a legend line to see its pin. Pins in the exported PDF still link to their spec pages.<br><br><strong>20.54</strong> <b>The Coding cheat sheet opens as a popup.</b> The <b>Coding cheat sheet</b> button at the top of Help (or <b>Open as a popup</b> in its Reference section) opens the sheet in a small window that floats over your work and stays open: drag it by its title bar, pick a part from its tabs (naming supporting files, art types, public domain sources and rules, remixing, new asset codes, spec page fields), close it with the x or Esc. Supporting file names now say why the date is the drawing set's: a client's updated set shows at a glance which plan or elevation is current.
 <strong>20.53</strong> <b>The studio's Coding cheat sheet is in Help.</b> Help > Reference has a <b>Coding cheat sheet</b> section: how to name supporting files (PLAN, ELEV, REND, MOCK, FINISH, FRAME and REF codes), the art types and their image codes with Medium or Application, the approved public domain sources, the public domain and Creative Commons rules, which assets can be remixed and under what code, how a new asset is coded, and what each spec page row holds.
@@ -55455,7 +55718,10 @@ function drawElevAll() {
         const isFloater = (f.product === "Framed Canvas (Floater)");
         const isFrameless = (f.product === "Frameless Canvas (Wrapped)");
         // Wallcovering / window film applied flush to the wall or the glass.
-        const isFlat = _isFlatGraphic(f.product);
+        // A sourced object (20.85) shares every "no frame, the face is the picture" rule
+        // here; only its edge and its empty state differ (isObj below).
+        const isObj = _isSourcedObject(f.product);
+        const isFlat = _isFlatGraphic(f.product) || isObj;
         // Float mount runs on any non-canvas frame when toggle is set on the row.
         const useFM = !isFloater && !isFrameless && !isFlat && (f.useFloatMount === true);
         const floaterInsetVal = isFloater ? (parseFloat(f.floaterInset) || 0.75) : 0;
@@ -55483,6 +55749,9 @@ function drawElevAll() {
             // against the wall fill.
             el.classList.add('frame-vis-solid');
             el.style.border = '1px solid rgba(60,60,60,0.55)';
+            // An object: no edge of its own. The dashed outline is drawn on the opening
+            // below, and only while no photo shows.
+            if (isObj) { el.style.border = 'none'; el.classList.add('frame-vis-object'); }
             el.style.background = 'transparent';
             el.style.boxShadow = 'none';
         } else if (isFrameless) {
@@ -55682,7 +55951,11 @@ function drawElevAll() {
             // outline. The face's own hairline is the only edge.
             art.style.boxShadow = 'none';
             art.style.border = 'none';
-            if (!f.artworkUrl && !_wf) {
+            if (isObj) {
+                // SOURCED OBJECT: a dashed outline while no photo shows (wireframe
+                // included); the empty-opening icon below says a photo can be dropped on it.
+                if (!hasArtwork) { art.style.border = '1.5px dashed ' + OBJECT_EDGE; art.style.background = 'transparent'; art.style.boxSizing = 'border-box'; }
+            } else if (!f.artworkUrl && !_wf) {
                 // The "not designed yet" panel — see FLAT_PH_FILL. Same look the
                 // canvas and SVG paths draw, so the editor and every export agree.
                 const _ins = Math.max(2, Math.min(artW, artH) * elevScale * 0.03);
@@ -55925,6 +56198,7 @@ function drawElevAll() {
     wall.onmousedown = function(e) {
         if (e.button !== 0) return;
         if (typeof lineToolActive !== 'undefined' && lineToolActive) return; // measure tool owns clicks
+        if (typeof tapeToolActive !== 'undefined' && tapeToolActive) return; // so does the tape (20.87)
         // Calibrating the client elevation owns the wall outright: both clicks land
         // anywhere, including on top of a frame or a block, because the thing being
         // pointed at is the image UNDERNEATH all of them.
@@ -58649,6 +58923,7 @@ function toggleContextTool(on, presetKey) {
     // The wall modes are mutually exclusive — they all want the same mousedown, and
     // whichever bound last would silently win.
     if (contextToolActive) {
+        if (typeof tapeToolActive !== 'undefined' && tapeToolActive) toggleTapeTool(false);
         if (typeof lineToolActive !== 'undefined' && lineToolActive) toggleLineTool(false);
         if (typeof markToolActive !== 'undefined' && markToolActive) {
             markToolActive = false; markFirstAnchor = null;
@@ -60820,6 +61095,7 @@ function toggleLineTool(on) {
     lineToolFirstPt = null;
     lineToolFirstAnchor = null;
     // One wall tool at a time: they all want the same mousedown.
+    if (lineToolActive && typeof tapeToolActive !== 'undefined' && tapeToolActive) toggleTapeTool(false);
     if (lineToolActive && typeof markToolActive !== 'undefined' && markToolActive) {
         markToolActive = false; markFirstAnchor = null;
         const mb = document.getElementById('markToolBtn'); if (mb) mb.classList.remove('active');
@@ -61541,10 +61817,11 @@ function toggleMarkTool(on, kind) {
     }
     markToolActive = (typeof on === 'boolean') ? on : !markToolActive;
     markFirstAnchor = null;
+    if (markToolActive && typeof tapeToolActive !== 'undefined' && tapeToolActive) toggleTapeTool(false);
     if (markToolActive) {
         // Drawing into a hidden layer looks like a dead tool: show free lines first.
         const ml = document.getElementById('mark-layer');
-        if (ml && ml.style.display !== 'block') { ml.style.display = 'block'; const mb = document.getElementById('markLayerToggle'); if (mb) mb.classList.add('active'); try { _elevGuideVisChanged(); _elevGuidesRecord(); } catch (e) {} }
+        if (ml && ml.style.display !== 'block') { ml.style.display = 'block'; const mb = document.getElementById('customLinesToggle'); if (mb) mb.classList.add('active'); try { _elevGuideVisChanged(); _elevGuidesRecord(); } catch (e) {} }
         if (typeof lineToolActive !== 'undefined' && lineToolActive) toggleLineTool(false);
         if (typeof contextToolActive !== 'undefined' && contextToolActive) toggleContextTool(false);
         markToolActive = true;
@@ -62329,6 +62606,9 @@ function _syncMagnetBtn() {
     const btn = document.getElementById('autoSpacingToggle'); if (!btn) return;
     const anyDims = elevFrames.some(f => f.active && Array.isArray(f.dimTo) && f.dimTo.length);
     btn.classList.toggle('active', anyDims);
+    // 20.86: a labelled action now, so it says what the next click does.
+    const lbl = document.getElementById('autoSpacingLbl');
+    if (lbl) lbl.textContent = anyDims ? 'Clear spacing on this wall' : 'Auto space every gap';
 }
 // Magnet quick-button: if any spacing dims exist, clear them all; otherwise
 // auto-dimension the gap between every pair of ADJACENT frames — each frame to
@@ -62343,8 +62623,9 @@ const _ELEV_GUIDE_LAYERS = [
     ['label-layer', 'labelToggle'], ['od-layer', 'odToggle'], ['dim-layer', 'dimToggle'],
     ['person-wrap', 'personToggle'], ['guide-layer', 'guideToggle'], ['grid-layer', 'gridToggle'],
     ['frame-center-layer', 'frameCenterToggle'], ['custom-lines-layer', 'customLinesToggle'],
-    // Free lines (19.53): a guide like the rest, so All guides off hides a drawn CL too.
-    ['mark-layer', 'markLayerToggle'],
+    // Free lines (19.53): a guide like the rest, so My guides off hides a drawn CL too. No
+    // button of its own since 20.86: the Lines button covers both (syncLayoutGuideButtonStates).
+    ['mark-layer', ''],
     ['outline-layer', 'outlineToggle']
 ];
 function _elevGuidesAllSet(on) {
@@ -62375,7 +62656,7 @@ function _elevAnyGuideOn() {
     try { if (dimVisibility.wallDims || dimVisibility.groupBox || dimVisibility.edgeGap || dimVisibility.imageCode) return true; } catch (e) {}
     return false;
 }
-// TWO MASTER SWITCHES (19.53). "All guides on" used to switch on EVERYTHING (grid, letters,
+// ONE MASTER SWITCH (20.86; 19.53 had two). "All guides on" used to switch on EVERYTHING (grid, letters,
 // frame dims) when a designer only wanted back the few they use. MY GUIDES remembers the
 // selection when it turns guides off (editorialContent.elevGuidesMine, saved with the
 // project) and puts exactly that back; ALL is every guide on or off, and its off also
@@ -62384,6 +62665,8 @@ function _elevAnyGuideOn() {
 // My guides off) remembered "everything" as the selection and My guides on brought back the
 // grid and letters. Set by All on, cleared by any single guide flipped by hand (that is a
 // choice again) and by My guides on. Module state: a fresh open starts as a choice.
+// 20.86: the All button is gone (it lit grid, centres and outlines nobody keeps on). "Everything"
+// still happens once: My guides on with nothing remembered yet, so the flag stays.
 let _elevGuidesFromAll = false;
 function _elevGuidesRemember() {
     if (typeof editorialContent === 'undefined' || !editorialContent) return;
@@ -62391,14 +62674,6 @@ function _elevGuidesRemember() {
     editorialContent.elevGuidesMine = _elevGuidesState();
     try { if (typeof markDirty === 'function') markDirty(); } catch (e) {}
     try { if (typeof scheduleAutosave === 'function') scheduleAutosave(); } catch (e) {}
-}
-function toggleAllElevGuides() {
-    // If ANYTHING is currently visible → remember it and turn everything off; else all on.
-    const anyOn = _elevAnyGuideOn();
-    if (anyOn) _elevGuidesRemember();
-    _elevGuidesAllSet(!anyOn);
-    _elevGuidesFromAll = !anyOn;   // set AFTER: the set itself goes through the single-guide paths
-    _elevGuidesMasterSync();
 }
 function toggleMyElevGuides() {
     if (_elevAnyGuideOn()) { _elevGuidesRemember(); _elevGuidesAllSet(false); _elevGuidesFromAll = false; }
@@ -62409,12 +62684,10 @@ function toggleMyElevGuides() {
     }
     _elevGuidesMasterSync();
 }
-// The two buttons say what they will do next.
+// The button says what it will do next.
 function _elevGuidesMasterSync() {
     const on = _elevAnyGuideOn();
     const ml = document.getElementById('myGuidesLbl'); if (ml) ml.textContent = on ? 'My guides off' : 'My guides on';
-    const al = document.getElementById('allGuidesLbl'); if (al) al.textContent = on ? 'All off' : 'All on';
-    const ab = document.getElementById('allGuidesToggle'); if (ab) ab.classList.toggle('active', on);
     const mb = document.getElementById('myGuidesToggle'); if (mb) mb.classList.toggle('active', on);
 }
 function _spacingScopePopup() {
@@ -62623,6 +62896,222 @@ function _spacingAutoPlace(o) {
     if (!best) return null;
     return { off: best.P - o.base, side: best.side, rect: parts(best.P, best.side)[0] };
 }
+// ── TYPE A SIZE TO MOVE A FRAME (20.87) ────────────────────────────────────
+// SketchUp and Revit both let you set a distance by typing it: drag, then type, or click
+// a dimension and change its number. Here a gap was set by dragging until the number
+// read right. Double-click a spacing or edge-gap number, type the size, press Enter, and
+// the frame on the far side moves to make it so (the right or upper frame of a pair, the
+// frame itself for an edge gap). A grouped frame takes its group, a multi-selection moves
+// together, but never the frame the gap is measured FROM, or the gap could not change.
+// The number is read in the unit the drawing prints (inches under dual units); feet and
+// inches (1'6"), fractions (3 1/2, 3-1/2) and a typed unit (10cm, 250mm) all work.
+// Returns the value in `unit`, or null for anything that is not a size >= 0.
+function _parseLenInput(str, unit) {
+    let s = String(str == null ? '' : str).trim().toLowerCase()
+        .replace(/[”″]/g, '"').replace(/[’′]/g, "'").replace(/''/g, '"');
+    if (!s) return null;
+    const num = (t) => {
+        t = String(t || '').trim();
+        if (t === '') return 0;
+        let m = /^(\d*\.?\d+)$/.exec(t); if (m) return parseFloat(m[1]);
+        m = /^(\d+)\s*\/\s*(\d+)$/.exec(t); if (m) return +m[2] ? (+m[1]) / (+m[2]) : NaN;
+        m = /^(\d+)(?:\s+|\s*-\s*)(\d+)\s*\/\s*(\d+)$/.exec(t); if (m) return +m[3] ? (+m[1]) + (+m[2]) / (+m[3]) : NaN;
+        return NaN;
+    };
+    let v;
+    const ft = /^([^']*)'(.*)$/.exec(s);
+    if (ft) {
+        const inchPart = ft[2].replace(/^[\s-]+/, '').replace(/(?:"|in|inch|inches)\s*$/, '');
+        const f = num(ft[1]), i = num(inchPart);
+        v = (f * 12 + i) * unitFactor('in', unit);
+    } else {
+        const m = /^(.*?)\s*(mm|cm|in|inch|inches|")$/.exec(s);
+        if (m) v = num(m[1]) * unitFactor(m[2] === 'mm' || m[2] === 'cm' ? m[2] : 'in', unit);
+        else v = num(s);
+    }
+    return (typeof v === 'number' && isFinite(v) && v >= 0) ? v : null;
+}
+// What a dimension id measures and how to change it: { cur, apply(v) }, both in elevUnit,
+// or null for a dim that is not a gap between things that can move.
+function _dimTypeTarget(id) {
+    const live = (letter) => elevFrames.find(f => f && f.active && f.letter === letter) || null;
+    const movers = (far, near) => {
+        let set = [far];
+        const sel = elevFrames.filter(f => f && f.active && f.selected);
+        if (far.isGrouped) set = elevFrames.filter(f => f && f.active && f.isGrouped);
+        else if (far.selected && sel.length > 1) set = sel;
+        if (near && set.indexOf(near) >= 0) set = [far];
+        return set;
+    };
+    const shift = (set, axis, d) => set.forEach(f => { f[axis] = parseFloat((f[axis] + d).toFixed(6)); });
+    let m = /^spacing-(h|v)-([A-Z]+)-([A-Z]+)$/.exec(String(id || ''));
+    if (m) {
+        const a = live(m[2]), b = live(m[3]);
+        if (!a || !b) return null;
+        if (m[1] === 'h') {
+            const near = a.x < b.x ? a : b, far = near === a ? b : a;
+            return { cur: far.x - (near.x + near.w), apply: (v) => shift(movers(far, near), 'x', v - (far.x - (near.x + near.w))) };
+        }
+        const near = a.y < b.y ? a : b, far = near === a ? b : a;
+        return { cur: far.y - (near.y + near.h), apply: (v) => shift(movers(far, near), 'y', v - (far.y - (near.y + near.h))) };
+    }
+    m = /^edge-([A-Z]+)-(left|right|floor|ceiling)$/.exec(String(id || ''));
+    if (m) {
+        const f = live(m[1]);
+        if (!f) return null;
+        const W = elevResolvedWallW, H = elevResolvedWallH;
+        const side = m[2];
+        const cur = side === 'left' ? f.x : side === 'right' ? W - (f.x + f.w) : side === 'floor' ? f.y : H - (f.y + f.h);
+        const axis = (side === 'left' || side === 'right') ? 'x' : 'y';
+        const sign = (side === 'left' || side === 'floor') ? 1 : -1;
+        return { cur, apply: (v) => shift(movers(f, null), axis, sign * (v - cur)) };
+    }
+    return null;
+}
+function _dimTypeClose() {
+    const old = document.getElementById('dimTypeInput');
+    if (old) old.remove();
+}
+// The box sits over the number it replaces. Enter or clicking away sets it; Esc leaves it.
+function _dimTypeOpen(id, lblEl) {
+    const t = _dimTypeTarget(id);
+    if (!t) return;
+    _dimTypeClose();
+    const pu = _elevPrimaryUnit();
+    const inp = document.createElement('input');
+    inp.id = 'dimTypeInput'; inp.type = 'text'; inp.className = 'dim-type-input';
+    inp.setAttribute('data-export-skip', '1'); inp.setAttribute('data-html2canvas-ignore', 'true');
+    inp.setAttribute('inputmode', 'decimal'); inp.setAttribute('aria-label', 'New size');
+    inp.value = _fmtUnitNum(t.cur * unitFactor(elevUnit, pu), pu);
+    inp.title = 'Type the size and press Enter (Esc leaves it). ' + (pu === 'in' ? 'Inches, or 1\'6", 3 1/2, 10cm.' : pu + ', or a size with its unit, like 4in.');
+    const r = lblEl && lblEl.getBoundingClientRect ? lblEl.getBoundingClientRect() : { left: 0, top: 0, width: 0, height: 0 };
+    inp.style.left = (r.left + r.width / 2) + 'px';
+    inp.style.top = (r.top + r.height / 2) + 'px';
+    document.body.appendChild(inp);
+    let done = false;
+    const finish = (commit) => {
+        if (done) return; done = true;
+        const val = inp.value;
+        _dimTypeClose();
+        if (commit) _dimTypeCommit(id, val);
+    };
+    inp.addEventListener('keydown', (e) => {
+        e.stopPropagation();
+        if (e.key === 'Enter') { e.preventDefault(); finish(true); }
+        else if (e.key === 'Escape') { e.preventDefault(); finish(false); }
+    });
+    inp.addEventListener('blur', () => finish(true));
+    try { inp.focus(); inp.select(); } catch (e) {}
+}
+function _dimTypeCommit(id, text) {
+    const t = _dimTypeTarget(id);
+    if (!t) return false;
+    const pu = _elevPrimaryUnit();
+    const vP = _parseLenInput(text, pu);
+    if (vP == null) { _toast('Not a size', 'Type a number like 4, 3 1/2, 1\'6" or 10cm.'); return false; }
+    const v = vP * unitFactor(pu, elevUnit);
+    if (Math.abs(v - t.cur) < 1e-9) return true;
+    t.apply(v);
+    try { initElevControls(); } catch (e) {}
+    drawElevAll();
+    if (typeof pushHistory === 'function') pushHistory();
+    return true;
+}
+
+// ── TAPE MEASURE (20.87, T) ────────────────────────────────────────────────
+// SketchUp's tape measure: check a distance without drawing anything. Measure (M) puts a
+// line in the drawing, so every quick check became mark-up to delete. Click a point, move,
+// and the readout shows the distance across, up or down, and direct; a second click holds
+// it, a third starts again. It snaps like Measure (Alt for exactly where you click).
+// Nothing is stored, nothing exports (#tape-layer is export-skipped), and Esc or T puts
+// it down. One wall tool at a time, like the others.
+// tapeToolActive / _tapeA / _tapeB / _tapeHover are declared at the top of the file (TDZ: _elevLoadWall reads them).
+function toggleTapeTool(on) {
+    tapeToolActive = (typeof on === 'boolean') ? on : !tapeToolActive;
+    _tapeA = null; _tapeB = null; _tapeHover = null;
+    if (tapeToolActive) {
+        if (typeof lineToolActive !== 'undefined' && lineToolActive) toggleLineTool(false);
+        if (typeof markToolActive !== 'undefined' && markToolActive) toggleMarkTool(false);
+        if (typeof contextToolActive !== 'undefined' && contextToolActive) toggleContextTool(false);
+    }
+    const btn = document.getElementById('tapeToolBtn');
+    if (btn) btn.classList.toggle('active', tapeToolActive);
+    const wall = document.getElementById('wall');
+    if (wall) wall.style.cursor = tapeToolActive ? 'crosshair' : '';
+    _tapeRender();
+    try { _elevDockSync(); } catch (e) {}
+}
+// A point where the cursor is, snapped as Measure snaps.
+function _tapePoint(e) {
+    const pt = eventToElevInches(e);
+    const a = _elevSnapPoint(pt.x, pt.y, e);
+    if (a) return { x: a.x, y: a.y, snap: true };
+    if (e && e.altKey) return { x: pt.x, y: pt.y, snap: false };
+    const tg = customLineSnapTargets();
+    return { x: snapCoord(pt.x, tg.xs), y: snapCoord(pt.y, tg.ys), snap: false };
+}
+function _tapeClick(e) {
+    if (e.button !== undefined && e.button !== 0) return;
+    e.preventDefault(); e.stopPropagation();
+    const p = _tapePoint(e);
+    if (!_tapeA || _tapeB) { _tapeA = p; _tapeB = null; }
+    else _tapeB = p;
+    _tapeHover = p;
+    _tapeRender();
+}
+function _tapeMove(e) {
+    _tapeHover = _tapePoint(e);
+    _tapeRender();
+}
+// The words on the readout, in the unit the drawing prints, exact (project rounding).
+function _tapeReadout(a, b) {
+    const pu = _elevPrimaryUnit();
+    const sfx = pu === 'in' ? '"' : ' ' + pu;
+    const fmt = (v) => _fmtUnitNum(v * unitFactor(elevUnit, pu), pu) + sfx;
+    const dx = Math.abs(b.x - a.x), dy = Math.abs(b.y - a.y), d = Math.hypot(dx, dy);
+    const tiny = 1e-6;
+    if (dx < tiny && dy < tiny) return fmt(0);
+    if (dy < tiny) return fmt(dx) + ' across';
+    if (dx < tiny) return fmt(dy) + (b.y > a.y ? ' up' : ' down');
+    return fmt(dx) + ' across · ' + fmt(dy) + (b.y > a.y ? ' up' : ' down') + ' · ' + fmt(d) + ' direct';
+}
+function _tapeRender() {
+    const wall = document.getElementById('wall');
+    if (!wall) return;
+    let layer = document.getElementById('tape-layer');
+    if (!tapeToolActive) { if (layer) layer.remove(); return; }
+    if (!layer) {
+        layer = document.createElement('div');
+        layer.id = 'tape-layer';
+        layer.setAttribute('data-export-skip', '1');
+        layer.setAttribute('data-html2canvas-ignore', 'true');
+        wall.appendChild(layer);
+    }
+    const sc = elevScale || 1;
+    const W = (elevResolvedWallW || 0) * sc, H = (elevResolvedWallH || 0) * sc;
+    const X = (p) => (p.x * sc).toFixed(2), Y = (p) => (H - p.y * sc).toFixed(2);
+    const end = _tapeB || _tapeHover;
+    let svg = '';
+    if (_tapeA && end) {
+        const corner = { x: end.x, y: _tapeA.y };
+        if (Math.abs(end.x - _tapeA.x) > 1e-6 && Math.abs(end.y - _tapeA.y) > 1e-6) {
+            svg += '<path class="tape-leg" d="M' + X(_tapeA) + ' ' + Y(_tapeA) + ' L' + X(corner) + ' ' + Y(corner) + ' L' + X(end) + ' ' + Y(end) + '"/>';
+        }
+        svg += '<line class="tape-line" x1="' + X(_tapeA) + '" y1="' + Y(_tapeA) + '" x2="' + X(end) + '" y2="' + Y(end) + '"/>';
+        svg += '<circle class="tape-end" cx="' + X(_tapeA) + '" cy="' + Y(_tapeA) + '" r="3.5"/>';
+        if (_tapeB) svg += '<circle class="tape-end" cx="' + X(_tapeB) + '" cy="' + Y(_tapeB) + '" r="3.5"/>';
+    }
+    if (_tapeHover && !_tapeB) svg += '<circle class="tape-dot' + (_tapeHover.snap ? ' snapped' : '') + '" cx="' + X(_tapeHover) + '" cy="' + Y(_tapeHover) + '" r="5"/>';
+    let html = '<svg class="tape-svg" width="' + W.toFixed(2) + '" height="' + H.toFixed(2) + '" viewBox="0 0 ' + W.toFixed(2) + ' ' + H.toFixed(2) + '">' + svg + '</svg>';
+    if (_tapeA && end) {
+        const mx = (_tapeA.x + end.x) / 2, my = Math.max(_tapeA.y, end.y);
+        html += '<div class="tape-readout' + (_tapeB ? ' held' : '') + '" style="left:' + (mx * sc).toFixed(2) + 'px; bottom:' + (my * sc + 12).toFixed(2) + 'px;">' + _svgEsc(_tapeReadout(_tapeA, end)) + '</div>';
+    } else {
+        html += '<div class="tape-hint">Click a point to measure from. Esc or T to stop.</div>';
+    }
+    layer.innerHTML = html;
+}
+
 function drawElevTargetedSpacing() {
     const layer = document.getElementById('dim-layer'); layer.innerHTML = '';
     let drawnPairs = new Set();
@@ -62968,6 +63457,9 @@ function createElevArchSpacing(x1, y1, x2, y2, type, container, label, dimId, of
             setLiftSide: (s) => setDimLiftSide(dimId, s),
             onDelete: () => hideDim(dimId),
             spanPx,
+            // 20.87: double-click a gap's number to type it.
+            onDoubleTap: _dimTypeTarget(dimId) ? () => _dimTypeOpen(dimId, dim.querySelector('.arch-label-new')) : undefined,
+            tapHint: _dimTypeTarget(dimId) ? 'Double-click to type a new size' : '',
         });
     }
     container.appendChild(dim);
@@ -64770,6 +65262,22 @@ async function exportElevSVG(opts) {
             // not on the page, and the client drawing read straight through the frame. The
             // frame is paper white, the opening goes through _maybeAddArtworkToSvg (grey block
             // + letter in wireframe, else the artwork), then the outline on top.
+            // SOURCED OBJECT (20.85): vector, never a raster. The photo (or the wireframe
+            // block) through _maybeAddArtworkToSvg, and the dashed outline while no photo
+            // shows. No shadow, no outline-frame box: it has no frame.
+            if (_isSourcedObject(f.product)) {
+                let _oh = null;
+                try { _oh = await _artHref(f, el); } catch (e) { _oh = null; }
+                _maybeAddArtworkToSvg(f, el, backLayer, rectToSvg, _oh);
+                const _wfObj = (typeof _curElevIsWireframe === 'function') && _curElevIsWireframe();
+                const _photo = !_wfObj && !!f.artworkUrl && (typeof _showArtwork === 'undefined' || _showArtwork);
+                if (!_photo && pos.w > 0 && pos.h > 0) {
+                    const sw = Math.max(1, 0.06 * elevScale * unitFactor('in', elevUnit));
+                    const h2 = sw / 2;
+                    backLayer.push(`<rect data-object-outline="1" x="${(pos.x + h2).toFixed(1)}" y="${(pos.y + h2).toFixed(1)}" width="${Math.max(0, pos.w - sw).toFixed(1)}" height="${Math.max(0, pos.h - sw).toFixed(1)}" fill="none" stroke="${OBJECT_EDGE}" stroke-width="${sw.toFixed(2)}" stroke-dasharray="${(sw * 4).toFixed(1)},${(sw * 3).toFixed(1)}"/>`);
+                }
+                continue;
+            }
             if (_outline && !_isFlatGraphic(f.product)) {
                 const sw = Math.max(1, ELEV_OUTLINE_IN * elevScale * unitFactor('in', elevUnit));
                 const h2 = sw / 2;
@@ -65921,6 +66429,22 @@ function _shopHostOf(r) {
     let h = ''; try { h = new URL(/^https?:/i.test(u) ? u : 'https://' + u).hostname.replace(/^www\./i, ''); } catch (e) { return ''; }
     return SHOP_HOST_RE.test(h) ? h : '';
 }
+// THE FSO PROCEDURE, CHECKED (20.85): every sourced object has where to buy it and what it
+// costs, and stock under 10 (or under what the walls need) is flagged.
+function _objectPreflight() {
+    const out = [];
+    _deckSpecRows().forEach(r => {
+        if (!r || !r.id || !_isSourcedObject(r.product)) return;
+        const go = { kind: 'piece', label: 'Piece', rowId: r.id };
+        const miss = [];
+        if (!String(r.sourceUrl || '').trim()) miss.push('purchasing link');
+        if (!(Number(r.unitCost) > 0) || r.costSrc === 'estimate') miss.push('cost');
+        if (miss.length) out.push({ sev: 'warn', text: r.id + ': sourced object with no ' + miss.join(' and no ') + '. Add it on the dashboard under Sourcing.', idx: null, go: go });
+        const st = _objStockText(r);
+        if (st) out.push({ sev: 'warn', text: r.id + ': ' + st, idx: null, go: go });
+    });
+    return out;
+}
 function _artTypePreflight(pages) {
     const out = [];
     _deckSpecRows().forEach(r => {
@@ -66244,12 +66768,26 @@ function _contactSheetCaption(r) {
     const code = String(r.imageCode || '').trim() || String(r.id || '');
     return code + '_' + _fmtUnitNum(sz.printW, dashUnit) + 'x' + _fmtUnitNum(sz.printH, dashUnit);
 }
+// THE STUDIO'S FSO TRACKER, DESIGN HALF FILLED (20.85). Columns follow the tracker
+// (251021 FSO TRACKER TEMPLATE): Source, Units, Item Code, Purchasing Link, Lead Time,
+// Custom Notes, Cost, then procurement's Ordered, Tracking Link, Delivered, Hardware and
+// Alternatives. What the designer entered on the Sourcing panel fills its half; Ordered,
+// Tracking Link and Delivered are left for procurement.
 function _purchaseTrackerCSV(rows) {
     const q = (s) => '"' + String(s == null ? '' : s).replace(/"/g, '""') + '"';
     const u = ' (' + dashUnit + ')';
-    let csv = ['Item Code', 'Image Code', 'Product', 'Art Type', 'Location', 'Qty', 'Overall Width' + u, 'Overall Height' + u, 'Vendor / Seller', 'Source URL', 'Unit Price', 'Shipping', 'Lead Time', 'Order Date', 'Tracking', 'Notes'].map(q).join(',') + '\n';
+    let cur = 'USD'; try { cur = _pricing().currency || 'USD'; } catch (e) {}
+    const num = (v) => (v === undefined || v === null || v === '' || !isFinite(Number(v))) ? '' : Number(v);
+    let csv = ['Source', 'Units', 'Item Code', 'Image Code', 'Product', 'Location', 'Purchasing Link', 'Lead Time', 'In Stock',
+        'Width' + u, 'Height' + u, 'Depth' + u, 'Custom Notes', 'Cost Each (' + cur + ')',
+        'Ordered', 'Tracking Link', 'Delivered', 'Hardware', 'Alternatives For Reselection'].map(q).join(',') + '\n';
     rows.forEach(r => {
-        csv += [r.id, r.imageCode, r.product, r.artType, r.location, r.qty, r.extW, r.extH, _rowVendor(r), r.sourceUrl || '', '', '', '', '', '', r.prodNotes || ''].map(q).join(',') + '\n';
+        const flag = _objStockText(r);
+        const notes = [r.prodNotes || '', flag].filter(Boolean).join(' ');
+        const cost = (r.costSrc === 'estimate') ? '' : num(r.unitCost);
+        csv += [_rowVendor(r), r.qty, r.id, r.imageCode, r.product, r.location, r.sourceUrl || '', r.leadTime || '', num(r.stockQty),
+            r.extW, r.extH, _isSourcedObject(r.product) ? num(r.objDepth) : '', notes, cost,
+            '', '', '', r.hardware || '', String(r.altLinks || '').split(/\n+/).map(x => x.trim()).filter(Boolean).join(' | ')].map(q).join(',') + '\n';
     });
     return csv;
 }

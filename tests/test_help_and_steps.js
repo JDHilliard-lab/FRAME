@@ -85,7 +85,9 @@ check('the claims that had stopped being true are gone', async () => {
     const sort = fx.help.find((s) => s.id === 'elevation').entries.find((e) => /Sort/.test(e.title));
     if (!sort || sort.body.indexOf('Re-letters') < 0) throw new Error('Sort A-Z is still described as only reordering the list; it re-letters the frames');
     const tip = fx.help.find((s) => s.id === 'tips').entries.find((e) => /Sourced Object/.test(e.title));
-    if (!tip || tip.body.indexOf('hides frame') >= 0 || tip.body.indexOf('Framed Art') < 0) throw new Error('the Sourced Object tip still contradicts what the product actually does');
+    // 20.85: the object became its own product, so the tip now has to say what it does
+    // (Depth, dashed outline, Sourcing), and must no longer say it behaves as Framed Art.
+    if (!tip || /(renders|specs|behaves) as Framed Art/.test(tip.body) || tip.body.indexOf('Depth') < 0 || tip.body.indexOf('dashed') < 0 || tip.body.indexOf('Sourcing') < 0) throw new Error('the Sourced Object tip does not describe what the product actually does');
 });
 
 check('every control Help names by its label exists in the app', async () => {

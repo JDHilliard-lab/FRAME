@@ -599,9 +599,20 @@ Same format as `CLAUDE.md`: the rule, the names, the trap, one clause of why. Ad
   **19.54: "everything" is never remembered** (`_elevGuidesFromAll`, set AFTER All on's own set,
   cleared by any single-guide toggle and by My guides on), or All on then All off overwrote the
   selection with every guide.
-  **Free lines are a guide now** (`mark-layer` in `_ELEV_GUIDE_LAYERS` + `#markLayerToggle`, in
+  **Free lines are a guide now** (`mark-layer` in `_ELEV_GUIDE_LAYERS`, in
   `_elevGuideVis`, NOT in `_CAP_BASE_BOXES`); the layer starts `display:block`, and arming the
   Lines tool shows it.
+- **THE GUIDES PANEL, TRIMMED (20.86, `test_layout_guides_trim`).** Read from saved projects, not guessed:
+  ONE master switch (`toggleMyElevGuides`; `toggleAllElevGuides` and `#allGuidesToggle` are gone,
+  `_elevGuidesFromAll` stays for My guides on with nothing remembered). ONE Lines button
+  (`toggleCustomLinesVisibility`) covers measure lines (`dimVisibility.customLines` + `#custom-lines-layer`)
+  AND free lines (`#mark-layer`, button slot `''` in `_ELEV_GUIDE_LAYERS`); available when either exists
+  (`_elevLinesExist`), lit when either shows (`_elevLinesShown`). It records itself because
+  `saveDimVisibility` returns early when only the free-line layer changed. Pages still hide the two
+  separately (`IG_PAGE_HIDE`). Auto space is a labelled action (`.lg-action`, `#autoSpacingLbl` set by
+  `_syncMagnetBtn`), not a tile. EQ is a tick box in Elevation settings (`#spacingEQToggle`, `.checked`).
+  Grid and Centers are in `details[data-lg="aids"]`, folded by default (`_elevGuideGroupsInit` reopens
+  on a stored `true`). Don't put a style or an action back among the show/hide tiles.
 - **WALLCOVERING COORDINATION (19.80).** SPACER is a mark kind (`kind:'spacer'`, `a` an edge point,
   `axis` the edge's fixed axis, `dir`, `size` INCHES, `len` off a point): geometry `_markSpacerGeo`, rect
   `_markRectOf` (box too). Anchors may be `ref:'mark', mid` (resolveAnchor / stripAnchor), so a measure line
@@ -698,3 +709,20 @@ Same format as `CLAUDE.md`: the rule, the names, the trap, one clause of why. Ad
   gaps named in `f.dimTo` (Art tab letter chips). Switching Spacing on when NO active frame on this wall has a `dimTo`
   runs `_autoSpacePairs(elevFrames)` (the magnet's pairing, this wall only) and pushes one history entry; a wall with
   any gap picked keeps exactly its chips. Off never clears pairs. Test `tests/test_spacing_toggle_pairs.js`.
+- **A SOURCED OBJECT IS A DASHED OUTLINE UNTIL IT HAS A PHOTO (20.85).** `_isSourcedObject`. No frame,
+  mat or shadow anywhere; the photo fills the box through `computeArtDrawRect`. Outline shown when
+  no photo is showing (none dropped, Artwork guide off, or wireframe, where it sits on the grey
+  block). `renderFrameToCanvas` has its own branch ABOVE the flat one (it must draw art and
+  wireframe); `drawElevAll` folds it into its local `isFlat` and overrides only the edge and the
+  empty state (`isObj`); the dashboard preview uses `_isObjDash`; `exportElevSVG` emits it as
+  VECTOR (`data-object-outline` rect with a dasharray, art via `_maybeAddArtworkToSvg`) before the
+  outline-frames branch, never a raster and never `_frameShadowCanvas`. Test `test_sourced_object`.
+- **TYPE A GAP, TAPE MEASURE (20.87, `test_type_gap_and_tape`).** A spacing (`spacing-h|v-A-B`) or edge-gap
+  (`edge-A-left|right|floor|ceiling`) number's `onDoubleTap` opens `#dimTypeInput` (`_dimTypeOpen`); `_dimTypeTarget(id)`
+  is the ONE map from a dim id to `{cur, apply}` (null = no box, e.g. glazing). The FAR frame moves (right / upper; the
+  frame itself for an edge gap), with its group or multi-selection, never the frame measured FROM. Typed text goes
+  through `_parseLenInput(text, _elevPrimaryUnit())` (feet-inches, fractions, a typed unit), then into `elevUnit`.
+  Enter or blur sets, Esc leaves. Tape (`T`, `#tapeToolBtn`, `toggleTapeTool`): state `tapeToolActive` / `_tapeA` /
+  `_tapeB` / `_tapeHover` is declared at the TOP of app.js (`_elevLoadWall` reads it far above the tool's code);
+  `#tape-layer` is created in `#wall`, export-skipped, and stores nothing. It joins the one-wall-tool-at-a-time set:
+  Measure, Lines, Context and Select all put it down, and it puts them down.

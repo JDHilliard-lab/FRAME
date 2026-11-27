@@ -40,7 +40,7 @@ const doc = window.document;
 
 const GUIDE_IDS = ['labelToggle', 'odToggle', 'dimToggle', 'personToggle', 'guideToggle', 'gridToggle', 'frameCenterToggle',
   'wallDimToggle', 'groupBoxToggle', 'edgeGapToggle', 'autoSpacingToggle', 'customLinesToggle',
-  'artworkToggle', 'imageCodeToggle', 'spacingEQToggle', 'wireframeToggle', 'allGuidesToggle', 'resetDimPosBtn'];
+  'artworkToggle', 'imageCodeToggle', 'wireframeToggle', 'myGuidesToggle', 'resetDimPosBtn'];   // 20.86: EQ is in Elevation settings, All went
 
 check('EXACT BUG: the sidebar header no longer holds the layout guides', () => {
   const hdr = doc.querySelector('.elev-sidebar-header');
@@ -58,7 +58,7 @@ check('every guide control lives in the Guides pane', () => {
     if (!el) throw new Error('#' + id + ' is missing');
     if (!pane.contains(el)) throw new Error('#' + id + ' is outside the guides pane');
   });
-  if (pane.querySelectorAll('details.lg-group').length !== 3) throw new Error('the three guide groups did not all move');
+  if (pane.querySelectorAll('details.lg-group').length !== 4) throw new Error('the four guide groups did not all move');
 });
 
 check('the tab strip follows the header directly, and its order is Art, Wall, Guides, Context, Glass (20.41 added Wall)', () => {
